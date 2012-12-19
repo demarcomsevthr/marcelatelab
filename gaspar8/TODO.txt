@@ -1,0 +1,243 @@
+    ______________________________________________________________________________________
+
+		>>> TO DO <<<
+    ______________________________________________________________________________________
+    
+
+		__________________________________________________________________________________
+
+		SNAPSHOTS
+		__________________________________________________________________________________
+
+
+		SNAPSHOT 14/12/2012
+			> gestione Order.importoTotale
+				>> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateImportoTotale(Order, Double, boolean)
+				>> it.mate.econyx.shared.model.Order.Utils.computeImportoTotale(Order, boolean) >> restituisce il calcolato solo se lo si richiede espressamente
+				
+				>>> RIFARE UN TEST COMPLETO (anche su gaspar8est)
+				
+			> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates
+				>> credo ci sia qualche problema con PortalSessionStateServerUtils
+
+
+		SNAPSHOT 02/12/2012 - RPC INTERCEPTORS
+			> TEST it.mate.gwtcommons.rpc.client.RpcServiceInterceptor >> SEMBRA FUNZIONARE
+			  (preso da http://code.google.com/p/gwt-rpc-interceptor)
+			> provato su GeneralService
+			> it.mate.econyx.main.gwt.xml
+			> it.mate.econyx.client.factories.AppGinModule >> commentata applyInterceptors (anche se vedo che lo fa lo stesso!)
+			
+			>> TODO:
+				- vedere se si riesce a parametrizzare il comportamento di RpcServiceInterceptorDefault
+				  impostando semplicemente delle properties da .gwt.xml
+				  (ho incominciato a vedere, sembra che le properties arrivino solo al generator, non al proxy)
+				  > non sembra possibile, quelle properties sono solo sul server
+				  > utilizzare econyx.properties
+				    > vedi it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault.getServiceProperty(String)
+		
+			
+
+		SNAPSHOT 23/11/2012
+			> iniziato scaffolding (it.mate.econyx.client.view.admin.scaffold)
+			  ma lasciato in sospeso perchè non funziona (in compilazione sulla create di AdminTabPanel)
+
+		
+		__________________________________________________________________________________
+
+		IN EVIDENZA
+		__________________________________________________________________________________
+
+
+		PRESENTAZIONE
+
+		>> INVIATA 29/11/2012 10:38 (https://mail.google.com/mail/u/0/?hl=it&shva=1#sent/13b4b8833315e210)
+		
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		CONSULTAZIONE LOG (https://appengine.google.com/logs?&app_id=s~gaspar8net&version_id=2b.363509964354483203#)
+			si possono filtrare i log con: regexp = PortalSessionState | PortalUserTx
+			e si trovano tutti gli accessi e i login
+		
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		
+		>>>>>>>>>>>>>>>>>>
+		>>>>  DEPLOY  <<<<
+		<<<<<<<<<<<<<<<<<<
+		
+			> ricordarsi di cambiare sempre la property shared.buildId
+
+		
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		
+		DA FARE
+		
+		-- RETTIFICHE AGLI ORDINI
+		    >> POSSIBILITA' DI INSERIRE DATI ALLA CONSEGNA:
+				> importo spese di spedizione
+				> data / ora, luogo di consegna, referente/i alla distribuzione (nome e telefono)
+				> nota alla consegna (da integrare nella mail)
+				> importo alla consegna che sostituisce l'importo calcolato, comunque visibile		>>  13/12/2012
+				  (se c'è la Order.Utils.getImportoTotale deve restituire quello)
+				  >> servirebbe per gestire caso come consegna lazzarelle del 13/12/2012 (mail 13/12/2012 12:23)
+
+
+		-- DATE ORDINI 
+			> forse va gestita una DATA DI APERTURE e DATA CHIUSURA ORDINE, ovvero un range entro il quale è possibile fare nuovi ordini
+			>> attributo su producer: data inizio e fine inserimento nuovi ordini >> check in orderProduct >> ritorna un messaggio di alert
+			>> [PRIO 9] extended attribute sulla pagina 
+							> portalPageServ.findExtendedAnnotations(page.extAttr) return HTML 
+								> accodato al contenuto della view
+								
+		-- RPC WRAPPER
+			> vedi it.mate.gwtcommons.client.utils.RPCWrapper<T>
+			> prova template google rpc wrapper (a casa)
+			>> ALTRA STRADA > vedi RpcServiceInterceptor
+			
+		-- INTEGRAZIONE Google Spreadsheet
+			- > https://developers.google.com/google-apps/spreadsheets/
+			- > http://mvnrepository.com/artifact/com.google.api.client/google-api-data-spreadsheet-v3
+			- > ESEMPIO su appengine: https://developers.google.com/appengine/articles/java/retrieving_gdata_feeds?hl=it
+			
+		-- LISTA ORDINI
+			> riportare bottone 'Conferma ordini multipli' dalla ProducerView (anche no)
+		
+		-- TABELLA UTENTI
+			> lista ordini per utente
+		
+		-- EXPORT AdminTabPanel su Google Spreadsheet [PRIO 3] 	
+		
+			
+		-------------------------------------------------------------------	
+		
+		IN TEST
+		
+		-- EXPORT IN EXCEL > IN TEST [30/11/2012]
+
+		-- RETTIFICHE AGLI ORDINI (21/11/2012) > IN TEST [30/11/2012]
+			- possibilità di rettificare le quantità degli ordini in consegna
+
+		-- TABELLA PRODUTTORI > IN TEST [30/11/2012]
+			> STAMPA ORDINE AL PRODUTTORE
+			
+		-- STATI ORDINE > IN TEST [30/11/2012]
+			- 'confermato': serve per mandare mail a utente, e fare stampa ordine al produttore
+			- 'inserito': togliere invio mail
+			- list ordini > caricamento stati da ds [30/11/2012]
+			>> come aggiornare gli stati su appspot ????
+			
+		-- OTTIMIZZAZIONE PAGER >> IN TEST [30/11/2012]
+			>> vedi
+				- it.mate.econyx.client.view.admin.PortalPageListGeneralView.setModel
+				- it.mate.econyx.client.view.admin.OrderListGeneralView.setModel
+			>> eliminare: 
+				it.mate.gwtcommons.client.ui.CellTableExt.adaptToViewHeight(Composite, Delegate<SimplePager>)
+				it.mate.gwtcommons.client.ui.CellTableExt.adaptToViewHeight(int, Delegate<SimplePager>)
+
+		
+		-- SITE LOGIN CON Google accounts [PRIO 1]  >>  IN TEST [22/11/2012]
+			> PROVARE CREAZIONE ACCOUNT Google con email già esistente (demarco.m@melograno.it) >> IN TEST [22/11/2012]
+				>> miglioramenti:
+					- nella retrievePortalSession controllo account googl non abilitato >> non restiruire serviceexc, ma un warning
+			> DISABILITATO 29/11/2012 [nel modulo site forse non serve, cristof mi ha detto che non tutti si sono registrati su gdocs,
+									   forse risulterebbe un deterrente per alcuni...] 
+			
+		-- CONTO UTENTE [PRIO 2]
+			> verifica utilizzo quote > DA FARE [PRIO 2]
+			> controllo disponibilità alla chiusura dell'ordine [PRIO 2]
+			> STORNO [PRIO 2]
+				> deve inserire un movimento con segno opposto
+			
+		________________________________________________________________________________
+		
+		FATTE
+
+		-- TEST ACCOUNT GOOGLE NON ABILITATO
+			magellanic1098@gmail.com / p21103118
+			>> OK [28/11/2012]
+			
+		-- TEST MASSIVO UTENTI / ORDINI
+			> generatore di ordini / utenti >> FATTO [26/11/2012]
+			
+		-- AGGIORNAMENTO STATI ORDINE
+			>> NON SEGNA BENE IL PortalUser che registra >> sembra risolto [27/11/2012]
+		
+		-- TABELLA UTENTI: saldo da ContoUtente [25/11/2012]
+		
+		-- CHIUSURA ORDINE: ONE CLICK e TOTALE ORDINE [25/11/2012]
+		
+		-- DATI SETUP: TOGLIERE ARVALIA E METTERE ORTO DEI TERZI >> FATTO 25/11/2012
+		
+		-- TABELLA PRODUTTORI
+			> conferma ordini per produttore [PRIO 2] >> FATTO 24/11/2012
+			> filtro per stato [PRIO 2] >> FATTO 24/11/2012
+			
+		-- STAMPA ORDINE
+			>> tabella itext >> FATTO 24/11/2012
+			
+		-- INSERIMENTO ARTICOLO
+			- QUANTITA' DECIMALI 
+				attributo sull'unita di misura >> FATTO [23/11/2012]
+			- DOPPIA CONFERMA >> FATTO [23/11/2012]
+			
+		-- SCARICO DELL'ORDINE >> FATTO [22/11/2012]
+			>>> it.mate.econyx.server.services.impl.CustomAdapterImpl.orderStateChanged
+			> 22/11/2012
+ 			  -- impedito l'inserimento di prodotti di produttori diversi su ordine aperto >> OK
+			     (it.mate.econyx.server.services.impl.OrderAdapterImpl.orderProduct) 
+			
+
+			
+    ______________________________________________________________________________________
+
+		>>> CHANGES LOG <<<
+    ______________________________________________________________________________________
+
+
+    22/11/2012
+    
+   				- it.mate.econyx.shared.model.Order
+   					sostituito order.producers in order.producer (l'ordine è MONO PRODUTTORE)
+   				- it.mate.econyx.server.services.impl.OrderAdapterImpl 
+   					orderProduct: impedita apertura ordine con produttori diversi
+   					updateStates: chiamata a customAdapter.orderStateChanged
+   				- it.mate.econyx.server.services.impl.OrderServiceImpl
+   					spostato PortalSessionStateServerUtils.setInThread in onBeforeRequestDeserialized
+   					
+   				- it.mate.econyx.client.factories.CustomClientFactory
+   					gestione di ContoUtente	
+   					
+   				> gestione account google su site module:
+   				- it.mate.econyx.client.activities.PortalUserActivity
+   				- it.mate.econyx.client.factories.SiteClientFactoryImpl
+   				- it.mate.econyx.client.view.PortalUserView
+   				- it.mate.econyx.server.services.impl.GeneralServiceImpl
+   				- it.mate.econyx.server.services.impl.PortalUserServiceImpl
+   				- 
+   				
+   	23/11/2012			
+   				- it.mate.econyx.client.activities.ProductActivity >> gest tabellare produttori
+   				- it.mate.econyx.client.view.ProducerListView
+   				- it.mate.econyx.client.view.ProducerEditView
+   	
+   	
+   	24/11/2012
+   				- it.mate.econyx.client.view.admin.ProducerEditOrderListView >> conferma ordini in blocco
+   				- it.mate.econyx.server.services.impl.CustomerAdapterImpl >> cacnellazione conto utente
+   				- it.mate.econyx.server.services.impl.CustomAdapterImpl >> cancellazione conto utente
+   				
+   	28/11/2012
+   				> revisione admin login:
+   				- /econyx-base-app/src/main/webapp/secureAdmin.html (nuovo, copia identica di admin.html)
+   				- /econyx-base-app/src/main/webapp/WEB-INF/web.xml (spostato admin constraint su secureAdmin.html)
+   				- it.mate.econyx.client.view.admin.AdminLayoutView
+   				- it.mate.econyx.server.services.impl.GeneralServiceImpl.retrievePortalSessionState
+   				- it.mate.econyx.client.factories.AdminClientFactoryImpl.onPortalSessionStateChange
+   				
+    29/11/2012
+    			> disabilitata verifica google account in site module
+    			- it.mate.econyx.shared.util.PropertyConstants.SITE_GOOGLE_ACCOUNT_AUTHENTICATION_ENABLED
+    			- it.mate.econyx.client.view.site.PortalUserViewImpl
+    			- it.mate.econyx.server.services.impl.GeneralServiceImpl
+
