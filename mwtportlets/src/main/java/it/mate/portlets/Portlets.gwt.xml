@@ -1,0 +1,12 @@
+
+<module>
+  <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.http.HTTP" />
+
+  <stylesheet src="mwt-portlets.css" />
+
+  <source path='client' />
+  <source path='shared' />
+  <public path="public" />
+
+</module>
