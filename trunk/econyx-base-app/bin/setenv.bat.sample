@@ -1,0 +1,9 @@
+
+set JAVA_HOME=P:\OPT\java\jdk1.6.0_30
+
+::set GAE_HOME=P:\OPT\gwt\appengine\appengine-java-sdk-1.6.2.1
+
+::set GAE_HOME=P:\OPT\gwt\appengine\appengine-java-sdk-1.6.4.1
+
+set GAE_HOME=P:\opt\gwt\appengine\appengine-java-sdk-1.6.6
+
