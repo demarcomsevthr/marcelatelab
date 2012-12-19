@@ -1,0 +1,613 @@
+    ______________________________________________________________________________________
+
+		>>> TO DO <<<
+    ______________________________________________________________________________________
+
+
+		---------------------------------------
+
+		VERSIONE CORRENTE MERGIATA SUL trunk DA copycart-beta, econyx-base-app-beta, econyx-core-beta, gwtcommons-beta
+
+		IL 19/11/2012
+		
+		[vedi readme-issues-and-tips.txt]
+		
+		
+		>>> RITORNARE SUI BRANCHE **-beta
+		
+		
+		---------------------------------------
+		
+		
+		SNAPSHOT 19/11/2012
+		
+			>> ATTENZIONE
+				CASO: vado in site home, visualizzo l'ordine aperto, faccio la prima modifica di un articolo
+				>> non aggiorna la quantità nel riepilogo
+				>> se esco e ricarico l'ordine, da quel momento in poi tutte le modifica si aggiornano correttamente !!!!
+		
+			- orderds in cache >> FATTO, IN TEST
+				>> CacheableEntity (expiration=x) >> DA FARE
+			
+			- >> una volta in cache, forse non serve la gestione dell'ordine aperto sul client (OpenOrderClientUtils.CACHE_ENABLED_KEY), 
+					 >>> nella orderProduct se l'ordine sta in cache, non si aggiorna il datastore, ma solo la cache (eventualmente utilizzando
+					     direttamente CacheUtils dall'adapter)
+					 >>> nella updateOrderItem si aggiorna l'ordine in cache
+					 >>> IN TEST
+					 
+			- TUTTE LE ENTITY CON Blob:
+				>> CacheableEntity (instanceCache=true)
+					>>> mantiene l'entity non in memcache, ma in cache statica di istanza (per aggiornarla occorre distruggere l'istanza)
+					    (aggira la limitazione di memcache con i blob)
+				>> provare con ImageWebContentDs >> IN TEST
+					    
+			- it.mate.gwtcommons.server.dao.JdoDaoWithCache.internalFind
+				>> è possibile (usando le api lowlevel) fare una find solo delle keys delle entity ?	
+				
+			- it.mate.econyx.shared.model.impl.OrderTx.getProducers
+			    >> con TxUtils va in errore solo compilata con maven !!!	
+				
+		
+		
+		SNAPSHOT 14/11/2012
+		
+			>> Cookie Utente
+				>> In Admin disabilitare (fa la fetch dell'ordine aperto!)
+		
+			>> GESTIONE ORDINE APERTO IN SESSIONE
+				>> IPOTESI 2
+				    > client.UserOrderClientUtils.cacheEnabled
+					> gestire la feature solo sul client
+						-- ricerca di tutti gli utilizzi "sospetti" di OrderServiceAsync:
+							--- it.mate.econyx.client.activities.OrderActivity.fetchItems
+							--- it.mate.econyx.client.activities.OrderActivity.closeOrder
+							--- it.mate.econyx.client.activities.OrderActivity.update
+							--- it.mate.econyx.client.activities.ProductActivity.orderProduct
+							--- it.mate.econyx.client.activities.ShoppingCartActivity.fetchItems
+							--- it.mate.econyx.client.activities.ShoppingCartActivity.updateOrderItem
+							--- it.mate.econyx.client.activities.ShoppingCartActivity.deleteOrderItem
+							--- it.mate.econyx.client.activities.ShoppingCartActivity.closeOrder
+						>> mi sembra la strada più praticabile
+						>> creare una UserOrderClientUtils, iniziato, metodi fatti:
+							--- it.mate.econyx.client.util.UserOrderClientUtils.fetchItems
+							--- it.mate.econyx.client.util.UserOrderClientUtils.closeOrder
+							--- it.mate.econyx.client.util.UserOrderClientUtils.update
+							--- it.mate.econyx.client.util.UserOrderClientUtils.orderProduct
+									>>> modificato metodo it.mate.econyx.server.services.impl.OrderAdapterImpl.orderProduct
+							--- it.mate.econyx.client.util.UserOrderClientUtils.updateOrderItem
+							
+						>>> 14/11/2012 18:00 >>> FINO A QUI PARE CHE FUNZIONA!!!
+						                         MA VA TESTATA ANCORA MEGLIO.
+						
+						>> alla chiusura del browser (come si intercetta?)
+						   si chiama it.mate.econyx.client.util.UserOrderClientUtils.updateOrderInCache()
+			
+
+
+		SNAPSHOT 13/11/2012
+			>> TEST QUOTE
+				-- monitoraggio utilizzo quote
+				-- tolta transazione in dao.find
+				-- ottimizzazione in PortalSessionState
+				>> TEST APP STATS
+					-- /econyx-base-app/src/main/webapp/WEB-INF/web.xml
+					-- /econyx-base-app/pom.xml
+					
+		SNAPSHOT 09/11/2012
+			>> [SOLO SU IE IN DEV MODE]
+				> it.mate.econyx.client.ui.StampPreviewPanel.update - riga 77
+					>> java.lang.IllegalStateException: com.google.gwt.user.client.ui.AbsolutePanel is missing CSS 'position:{relative,absolute,fixed}'
+
+		SNAPSHOT 19/10/2012
+			>> STAMPA DELL'ORDINE >> DA FINIRE
+				> it.mate.econyx.server.servlets.RestController.testOrder
+				> it.mate.econyx.server.services.impl.ReportAdapterImpl.printOrder
+				> it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItem
+
+		SNAPSHOT 19/10/2012
+			> PROVA LAZY INIT (che ho riportato indietro su svn)
+				> /econyx-base-app/src/main/webapp/WEB-INF/econyx-web-context.xml >> default-lazy-init="true"
+				> /econyx-base-app/src/main/webapp/WEB-INF/re-servlet.xml >> default-lazy-init="true"
+				> /econyx-base-app/src/main/webapp/WEB-INF/web.xml >> tolti load-on-startup (vedi web.xml.NO_LAZY_INIT)
+				> /copycart/src/main/webapp/WEB-INF/cron.xml >> commentato
+				> copycartest >> Frontend Instance Class = F4
+				> deploy 19/10/2012 15:28
+				> tempi di caricamento da istanza spenta: 
+				
+		
+		______________________________________________________________________________________________________
+
+		STRUMENTI UTILI
+		
+			http://findicons.com/
+		
+		______________________________________________________________________________________________________
+
+
+		IN EVIDENZA
+
+		-----------------------------------------------------------------------------		
+		
+		>> UTENTE PER INVIO MAIL DA APPENGINE: noreply.copycart@gmail.com / vertigine
+		
+		-----------------------------------------------------------------------------		
+		
+
+		-- OTTIMIZZAZIONI
+		
+			JdoDaoWithCache
+				> find con filtro in cache
+				
+		-- ORDINI - DA VALUTARE
+ 			> inserire producerId su Order
+ 			>> questo implica che:
+ 				- gli ordini aperti possono essere n (> UserOrderClientUtils)
+ 				- 
+ 						
+		
+		-- loading page:
+			search: free javascript carousel, slider, slideshow widget
+				> http://graficare.blogspot.it/2008/09/10-script-per-slider-carousel-e.html
+				> http://www.tripwiremagazine.com/2012/10/jquery-carousel.html
+
+		-- view gestione profilo utente [prio 1]
+			> modifica dati anagrafici (fatto 02/11/2012)
+			> lista ordini effettuati (iniziato 02/11/2012)
+			
+		-- completare gestione carrello [prio 1]
+			> bottone modifica indirizzi >> migliorare la navigazione "di ritorno"
+			> chiusura ordine >> popup modal "elaborazione in corso" [altrimenti può cliccare su qualche altra parte]
+			
+		-- input timbro: aggiungi riga [prio 2]
+		
+		-- zoom logo timbro [prio 2]
+			
+		-- footer [prio 2]
+		
+		- - - - - - - - - - - - - - - - - - - - - 
+		
+		-- salvataggio properties su ds [prio 3]
+			> gestire properties.version=<number>
+			> in InitService se file.properties.version < ds.properties.version >> copia file su db e carica PropertiesHolder
+			                 se file.properties.version < ds.properties.version >> copia db su file e carica PropertiesHolder
+			                 
+		-- scaffholding di OrderState, ModalitaSpedizione, ModalitaPagamenton [prio 3]
+		
+		
+		______________________________________________________________________________________________________
+
+
+		DETAILS
+		
+		-- CARRELLO DELLA SPESA
+			> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+				>> modifica dettagli riga (timbro) >> 
+					salvataggio sul server > fatto
+				>> DA FINIRE
+					- subtotale
+					- spese di spedizione (modalità di spedizione)
+					- IVA ??? 	>>  GIANFRANCO
+				>> COMPLETAMENTO ORDINE
+					- revisione e modifica indirizzi (???)
+					- mail di conferma
+					- fattura ??? >> NO
+					
+		-->> PUNTI DISCUSSI CON G IL 13/08/2012
+			> workflow ordini: approvazione bozza timbro
+			> acquisizione logo timbro (posizione??)
+				>> opzione riga: aggiungi logo > zoom logo, cancella logo
+			> stati ordine: aperto, inserito, da confermare (invio mail all'acqui), confermato, 
+				in pagamento (invio estremi bonifico), pagato, in spedizione, spedito, annullato
+			> modalità di pagamento: con bonifico
+			> tipologie di timbro (datari, per farmacie, ....)
+			> finire gestione editing pagine
+			> porting dati
+			> dominio
+			> registrazione su motori di ricerca
+			
+			> mail di conferma:
+				- testo
+				- pdf allegato
+				- link di conferma
+				
+		-- REGISTRAZIONE UTENTI
+			>> gestione tabella comuni   ???
+			>> from extsio SelectComuni **
+		
+		-- VIEWER PROFILO UTENTE
+			>> VIEW LISTA ORDINI (stato ordine, dettagli ordine)
+			>> MODIFICA DATI ANAGRAFICI
+
+		-- STAMPE
+			ATTENZIONE
+			iText è compatibile (v. 5.2.0+)
+			PERO' jasperreports (4.6.0) utilizza ancora la v. 2.1.7 !!!!
+
+		-- GOOGLE RANKING >> SEO (search engine optimization)
+			>> cerca SEO (search engine optimization)
+			>> copiare i meta tag da xoom, o altri siti
+			>> SEGNALAZIONE SITO SU MOTORI DI RICERCA
+			   - http://www.posizionamentoo.com/segnala-sito-segnalazione-del-sito-ai-motori-di-ricerca.html
+		
+		-- BACKUP / RESTORE
+		    > funzionano in python
+			> backup funziona su ubuntu:
+			    python2.6 /usr/local/google_appengine/bulkloader.py --dump --url http://copycartest.appspot.com/remote_api --filename dump1.bin
+			    (occorre aspettare che siano aggiornate le stats > datastore admin)
+			> provare la restore
+			    (vedi http://stackoverflow.com/questions/2364310/gae-j-datastore-backup
+			        e http://stackoverflow.com/questions/1965622/whats-the-best-way-to-back-up-data-on-google-app-engine)
+			>> NUOVO MARSHALLER
+				- fa lo scan di tutte le it.mate.econyx.server.model.impl/*.class
+				- per ognuna ricava le properties persistent
+				- costruisce la query che seleziona tutte le properties
+				- il result swet lo mette in una generica List<Object> che poi serializza tramite xstream
+				- reverse per l'unmarshalling
+
+
+		-- EXPLORER: affinamento css (vedi sito eni - http://www.famiglia.eni.it/dommPortalWEB/appmanager/resid/public - 2111872671)
+			 (vedi copycart/it.mate.econyx.client.view.site.custom.PortalPageExplorerViewCustomizerImpl)
+		
+	    -- http://copycartsanremo.xoom.it/virgiliowizard/home
+
+
+
+    ______________________________________________________________________________________
+
+		>>> CHANGES LOG <<<
+    ______________________________________________________________________________________
+
+
+
+	29/05/2012
+					> IMAGES: inserimento, editing, salvataggio immagine
+					> PORTAL PAGES: inserimento nuove pagine
+					
+	30/05/2012
+					> PortalPageListGeneralView: checkbox, selection model
+					> AdminTabPage.getSelectedObject
+					> AbstractAdminTabPage
+					> ColumnUtil.Options
+					> PageBreadcrumb: risolta eccezione in home link in admin
+					> ResourceServlet: risolta eccezione in caso image.content = null 
+
+	31/05/2010
+					> TestRemoteApi				
+
+					
+	01/06/2012
+					> it.mate.econyx.client.activities.PortalPageActivity.registerHandlers
+							gestione del cambio template name per la pagina corrente
+					> it.mate.econyx.client.activities.PortalUserActivity: registration view
+					> it.mate.econyx.client.util.TemplateUtils: gestione cambio template
+					> it.mate.econyx.client.view.PortalUserRegistrationView: new
+					> it.mate.econyx.shared.model.PortalPage: aggiunto templateName
+					
+					
+	04/06/2012
+					> ClienteActivity
+					> ClientePlace
+					> ClienteEditor
+					> IndirizzoEditor
+					> ProtalUserRegistrationEditor
+					> ClienteRegistrationView
+					> Cliente
+					> ClienteTx
+					> ClienteDs
+					> Indirizzo
+					> IndirizzoTx
+					> IndirizzoDs
+	
+					
+	08/06/2012
+					> it.mate.econyx.client.factories.SiteClientFactoryImpl.initPortal:
+							introdotto in via sperimentale la feature STORE_PORTAL_STATE_IN_HTTP_SESSION
+							>>> ATTENZIONE: se da problemi disabilitare in econyx.properties
+					> it.mate.econyx.client.view.site.PortalUserViewImpl
+							introdotto logout ma da rivedere 
+					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
+							ckConfig.setEnterMode("2") >> ATTENZIONE in doc ckeditor è sconsigliato !!!
+					> it.mate.econyx.shared.services.GeneralService
+							aggiunti metodi getPropertiesFromServer, storePortalSessionState, retrievePortalSessionState
+							
+							
+	11/06/2012
+					> it.mate.econyx.client.view.site.TestViewImpl					
+							
+	
+	12/06/2012
+					> it.mate.econyx.client.css.CoreClientBundle
+					> it/mate/econyx/client/css/core.css
+					> it.mate.econyx.client.ui.TextControlBar
+	
+
+	
+	14/06/2012
+					> it.mate.econyx.shared.model.OrderItemStamp
+					> it.mate.econyx.shared.model.OrderItemDetail
+					> it.mate.econyx.server.services.impl.OrderAdapterImpl
+						gestione details
+					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
+						salvataggio details
+						
+						
+	15/06/2012
+					> it.mate.econyx.shared.model.OrderItemStamp rimosso
+
+					
+					
+    20/06/2012
+    				> it.mate.econyx.client.view.OrderItemEditView
+    				> it.mate.econyx.client.view.custom.OrderItemEditViewCustomizer
+    				> it.mate.econyx.client.view.custom.ProductOrderDetailCustomizer
+    				> it.mate.econyx.client.ui.StampPreviewPanel
+    				> it.mate.econyx.shared.utils.StampUtils
+    				> it.mate.econyx.client.css.CustomClientBundle
+    									
+    21/06/2012
+    				> it.mate.econyx.server.model.impl.CustomerDs
+    				> it.mate.econyx.shared.model.PortalSessionState.customer
+    				> it.mate.econyx.shared.services.CustomerService
+    				> it.mate.econyx.server.model.impl.AbstractArticoloDs
+    				> it.mate.econyx.server.model.impl.ImageWebContentDs
+    					tolto dalla cache (con il blob non funziona, prima funzionava perchè utilizzato in relazione stretta dentro ArticoloDs)
+    				> it.mate.econyx.server.services.ProductAdapter
+    					aggiunto updateDs con flag per salvataggio images e htmls
+    				> it.mate.gwtcommons.server.dao.JdoDao
+    					.checkSubClassesResults(FindContext<E>) sostituito la vecchia con argomento FindContext
+    					
+	22/06/2012
+					> it.mate.econyx.shared.model.Timbro (in copycart)
+					> /copycart/src/main/webapp/site.html
+						messo title e alcuni meta tag
+					> it.mate.econyx.server.services.impl.PortalDataMarshallerImpl
+						aggiunto customers
+					> it.mate.econyx.client.ui.StampPreviewPanel
+						dimensionamento in base al timbro
+    					
+    					
+	24/06/2012
+					> it.mate.econyx.client.activities.ShoppingCartActivity
+					> it.mate.econyx.client.factories.SiteClientFactoryImpl
+						onPortalSessionStateChange
+						onPortalPageChange
+					> it.mate.econyx.client.places.ShoppingCartPlace
+					> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+					> it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl
+					
+					
+					
+	26/06/2012
+					> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+
+	28/06/2012
+					> it.mate.econyx.client.ui.editors.CustomerEditor
+					> it.mate.econyx.client.view.CustomerView
+					> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+					> it.mate.gwtcommons.client.ui.StatePanel
+					> it.mate.gwtcommons.client.utils.StatePanelUtil
+
+
+
+
+	13/07/2012
+					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl >> modalitaSpedizione box
+					> it.mate.econyx.shared.model.ModalitaSpedizione
+					> it.mate.econyx.server.services.impl.PortalDataMarshallerImpl
+					> it.mate.econyx.server.services.impl.OrderServiceImpl >> modalita spedizione
+
+
+    20/07/2012
+    				> it.mate.econyx.client.ui.StampPreviewPanel
+    				> it.mate.econyx.client.view.site.custom.ProductOrderDetailCustomizerImpl
+    				> it.mate.econyx.shared.model.Timbro
+    				> it.mate.econyx.client.activities.ShoppingCartActivity
+    				> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+    				
+    21/07/2012
+    				> /gwtcommons/pom.xml
+    					>> settato gae.version = 1.6.6 >> ok a casa
+    				> /econyx-base-app/pom.xml
+    					>> settato gae.version = 1.6.6 >> ok a casa
+    				
+    				
+    23/07/2012
+    				> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+    				
+    24/07/2012
+    				> it.mate.econyx.client.ui.StampPreviewPanel
+    				> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl
+    				> it.mate.econyx.shared.utils.StampUtils
+    				> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
+    				
+    26/07/2012
+    				> it.mate.econyx.server.services.impl.MailAdapterImpl    				    				   				
+    				
+    				
+    27/07/2012
+    				> it.mate.econyx.client.activities.PortalUserActivity.sendRegistrationMail
+    				> it.mate.econyx.shared.model.PortalUser
+    				> it.mate.econyx.server.services.impl.PortalUserAdapterImpl
+    				> it.mate.econyx.server.servlets.UserActivationServlet
+    				
+    				
+    24/08/2012
+    				> it.mate.econyx.server.services.impl.PortalDataMarshallerImpl >> aggiunto java.util.logging e unmarshal da xml
+    				> it.mate.econyx.client.ui.StampPreviewPanel
+    				> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl
+    				> it.mate.econyx.client.activities.PortalPageActivity
+    				> it.mate.econyx.client.activities.ProductActivity
+    				> it.mate.econyx.client.ui.UploadFileDialog
+    				> it.mate.econyx.client.view.PortalPageView
+    				> it.mate.econyx.client.view.ProductListView
+    				> it.mate.econyx.server.model.converters.ImageContentConverter
+    				> it.mate.econyx.shared.model.ImageContent
+    				> it.mate.econyx.server.servlets.RestController >> aggiunto startProbe
+    				
+	28/08/2012
+					> it.mate.econyx.client.view.admin.PortalPageEditGeneralView >> BUGFIX PortalPageAdapterImpl@20120828
+					> it.mate.econyx.server.model.PortalDataExportModel
+					> it.mate.econyx.server.model.converters.ProductPageConverter
+					> it.mate.econyx.server.model.impl.AbstractWebContentPageDs
+											>> da @Persistent List<HtmlWebContentDs> htmls a @Persistent List<Key> htmlKeys
+					> it.mate.econyx.server.model.impl.HtmlContentDs >> setEntity
+					> it.mate.econyx.server.services.impl.PortalPageAdapterImpl >> BUGFIX PortalPageAdapterImpl@20120828
+
+	29/08/2012
+					> it.mate.econyx.client.activities.PortalPageActivity
+					> it.mate.econyx.client.ui.HtmlContentEditor
+					> it.mate.econyx.server.model.impl.AbstractArticoloDs >> relazione htmls
+					> it.mate.econyx.server.services.impl.PortalPageAdapterImpl
+							>> htmlRelationshipSupport
+					> it.mate.econyx.server.services.impl.ProductAdapterImpl
+							>> htmlRelationshipSupport
+							>> imageRelationshipSupport (DA FINIRE)
+					> it.mate.gwtcommons.server.model.utils.OneToManyAdapterSupport
+					> it.mate.gwtcommons.server.utils.DynamicInvocationUtils
+					
+					
+    19/09/2012
+    				> /copycart/src/main/resources/META-INF/pages/pages.xml >> aggiunto home2ColumnsTemplate (pagina 
+    				> /copycart/src/main/webapp/site.html >> commentato static centralLoadingPanel
+    				> it.mate.econyx.client.factories.SiteClientFactoryImpl >> onPortalPageChange (patch 14/09/2012)
+    				> it.mate.econyx.client.portlets.PortalPageExplorerPortlet >> metto in cache il widget inizializzato in initMvp 
+     				> it.mate.econyx.client.portlets.PortalPageMenuPortlet >> metto in cache il widget inizializzato in initMvp 
+     				> it.mate.econyx.client.util.TemplateUtils >> patch 14/09/2012
+     				> it.mate.econyx.client.util.PortalUtils >> nuovo (rinominato)
+     				> it.mate.portlets.client.util.TemplatesUtils >> rinominato
+
+
+    21/09/2012
+    				> /econyx-core/src/main/java/it/mate/econyx/public/econyx.css >> body.overflowY = scroll 
+    																				 per evitare flip-flop su pagine corte
+					
+
+	23/09/2012
+					> /gwtcommons/pom.xml >> PORTING gae 1.7.2
+					> /econyx-base-app/pom.xml >> PORTING gae 1.7.2
+					> /econyx-base-app/bin/setenv.bat >> PORTING gae 1.7.2
+					
+	24/09/2012
+					> it.mate.econyx.client.view.site.custom.PortalCustomizerImpl
+ 		
+
+ 	29/09/2012
+ 					> /gwtcommons/pom.xml >> com.itextpdf.itextpdf:5.3.0
+ 					> it.mate.econyx.server.servlets.RestController.testPdf
+ 					> it.mate.gwtcommons.server.utils.PdfUtil
+ 					
+ 					
+ 	05/10/2012
+ 					> it.mate.econyx.server.services.impl.OrderAdapterImpl >> metodi per la gestione di OrderState
+ 					
+ 	08/10/2012
+ 					> it.mate.econyx.client.activities.ProductActivity
+ 					> it.mate.econyx.client.model.ArticoloDaOrdinare
+ 					> it.mate.econyx.client.view.site.ProductViewImpl
+ 					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
+ 					> it.mate.econyx.server.services.impl.OrderAdapterImpl
+ 									
+ 					
+ 	10/10/2012
+ 					> it.mate.gwtcommons.server.utils.BeanUtils >> BUG FIX controllo already cloned beans (put prima della cloneProperties)
+ 					> /econyx-core/pom.xml >> maven-datanucleus-plugin fork = false (per evitare errore nella build - line too long)
+ 					> it.mate.econyx.client.view.admin.OrderEditStateView >> NEW
+ 					> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStatesWithOrderStateConfig >> confronto stati già salvati
+ 					> it.mate.econyx.server.util.PortalSessionStateThreadUtil
+ 					> it.mate.gwtcommons.server.utils.CloneUtils >> RENAMED from BeanUtils !!!
+ 					> it.mate.econyx.client.factories.SiteClientFactoryImpl >> gestione PortalSessionState event
+
+    11/10/2012
+    				> it.mate.econyx.client.view.admin.PortalUserListGeneralView >> activation link
+    				
+    				
+    12/10/2012
+    				> it.mate.econyx.server.services.impl.CustomerServiceImpl >> send activation mail
+    				> it.mate.econyx.server.servlets.UploadServlet >> deferred task
+    				> it.mate.econyx.server.tasks.PortalDataInitializeDeferredTask
+    				> it.mate.econyx.server.tasks.PortalDataUploadDeferredTask
+    				
+    				
+    15/10/2012
+    				> it.mate.econyx.server.servlets.RestController.forwardToPage >> setto il template della pagina in portalSessionState
+    				> it.mate.econyx.client.view.site.CustomerEditViewImpl >> rounded panel 
+    				
+    				
+    16/10/2012
+    				IMPORTANTI CORREZIONI SULLA GESTIONE DELLE ACTIVITY
+					>> PROBLEMA: noto un eccessiva produzione di activities e non funziona la cache di PageTemplate in SiteClientFactoryImpl
+					
+					>> CORREZIONI EFFETTUATE:
+					-- it.mate.econyx.client.factories.SiteClientFactoryImpl.pageTamplateCache >> GESTIONE CACHE DI PAGE TEMPLATE
+							>> per disabilitare it.mate.econyx.client.factories.SiteClientFactoryImpl.PAGE_TEMPLATE_CACHE_ENABLED = false
+					-- it.mate.gwtcommons.client.mvp.BaseActivity.onDispose >> ripristinato corretto funzionamento (annullo la view)
+					-- it.mate.gwtcommons.client.mvp.BaseActivity.getView >> se la view è nulla restituisco una view fittizia
+					-- in tutti i discendenti di BaseActivity nel metodo .onDispose >> call super.onDispose
+					-- it.mate.gwtcommons.client.factories.BaseClientFactoryImpl.historyHandlerRegistrationMap >> mappa dei MappedPlaceHistoryHandler creati per historyName
+					-- it.mate.gwtcommons.client.factories.BaseClientFactoryImpl.activityManagerMap >> mappa dei MappedActivityManager creati per historyName
+					-- it.mate.gwtcommons.client.history.MappedPlaceHistoryHandler.setMapper >> serve per riutilizzare gli stessi MappedPlaceHistoryHandler
+					-- it.mate.portlets.client.util.CommonTemplatesUtils
+					-- it.mate.portlets.shared.model.Page rename in it.mate.portlets.shared.model.PageTemplate
+					-- it.mate.portlets.client.events.PageTemplateChangeCompleteEvent << rename di PageTemplateChangeOccurredEvent
+					-- it.mate.portlets.client.events.PageTemplateRenderRequestEvent << rename di PageTemplateChangeEvent
+					
+					
+					
+	18/10/2012
+					-- it.mate.gwtcommons.server.utils.PropertiesHolder >> sostituito con:
+					-- it.mate.gwtcommons.shared.utils.PropertiesHolder (nuovo)
+					-- it.mate.gwtcommons.server.utils.PropertiesHolderConfigurer (nuovo) 					
+					
+    08/11/2012
+					-- /copycart/src/main/resources/META-INF/setup-data/portaldata.xml  
+							>> from copycartsnc + timbri trodat
+					-- it.mate.econyx.client.activities.PortalPageActivity
+							>> passaggio a PortalPageNavigationUtil
+					-- it.mate.econyx.client.factories.SiteClientFactoryImpl
+							>> initHashChangeListener
+					-- it.mate.econyx.client.ui.PageBreadcrumb
+							>> goToPage: use PortalPageUtils
+					-- it.mate.econyx.client.view.site.ProductViewImpl
+							>> tolto dimensionamento product image a 120x120
+					-- it.mate.econyx.server.services.impl.GeneralAdapterImpl.storePortalSessionState
+							>> pulisco portalSessionState.currentPage (htmls, children) per evitare exc "size too large"
+					-- it.mate.econyx.server.services.impl.PortalDataMarshallerImpl
+							>> caricamento di dataModel.products
+					-- it.mate.gwtcommons.client.utils.HashChangeUtil
+					
+    	
+    12/11/2012
+    				-- /copycart/src/main/java/it/mate/econyx/shared/model/impl/OrderItemStampDetailTx.java [spostato in copycart]
+    				-- /copycart/src/main/java/it/mate/econyx/server/model/impl/OrderItemStampDetailDs.java [spostato in copycart]
+    
+
+	14/11/2012
+					>> tolto currentPage e reso transient userOrder in PortalSessionState
+					   (per evitare Task size too large error in storePortalSessionState) 
+        			>> questo ha comportato un diverso utilizzo delle quote (ripeteva la fetch dell'ordine ad ogni cambio pagina!)
+        			>> che ha richiesto: 
+        			>> l'introduzione di appstats (poi commentata) (web.xml, econyx-base-app/pom.xml:appengine-api-labs) 
+        			>> un ottimizzazione ulteriore nella gestione di PortalSessionState
+        			>> la rimozione della transazione nelle dao.find (it.mate.gwtcommons.server.dao.JdoDao.internalFind e jdoconfig.xml)
+        			>> la cache dei prodotti sul client (it.mate.econyx.client.util.ProductCacheUtil)
+        			
+        			- it.mate.econyx.client.events.UserOrderChangeEvent
+        			- it.mate.econyx.client.activities.ShoppingCartActivity
+        			- it.mate.econyx.client.util.EconyxUtils
+        			- it.mate.econyx.client.util.ProductCacheUtil
+        			- it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById
+        			- it.mate.econyx.shared.model.PortalSessionState
+        			- it.mate.gwtcommons.server.dao.JdoDao (tolta transazione in internalFind)
+        			- it.mate.gwtcommons.server.dao.JdoDaoWithCache.getCacheableEntityAnnotation (cerca l'annotazione nelle sub classes)
+        			
+    19/11/2012
+    				>> MERGE DA branches/*-beta A trunk/
+    				- it.mate.gwtcommons.server.model.CacheableEntity.instanceCache
+    				- it.mate.gwtcommons.server.utils.CacheUtils (instanceCache) 
+    				- it.mate.econyx.server.model.impl.ImageWebContentDs
+    				- it.mate.econyx.server.services.impl.OrderAdapterImpl
+    					- orderProduct: se openOrderId != null lavora solo in memcache
+    					- updateOrderItem: aggiorna order in memcache
+    					
+    					
+    					
