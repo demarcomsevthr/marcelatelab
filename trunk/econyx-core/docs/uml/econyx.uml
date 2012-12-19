@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_I6nGsZmoEeG6ncQraSC7NA">
+  <packagedElement xmi:type="uml:Package" xmi:id="_QS9NQJmoEeG6ncQraSC7NA" name="it.mate.econyx.model">
+    <packagedElement xmi:type="uml:Class" xmi:id="_hzivIJmoEeG6ncQraSC7NA" name="PortalPage">
+      <ownedAttribute xmi:id="_wD2zEJmoEeG6ncQraSC7NA" name="id"/>
+      <ownedAttribute xmi:id="_FVdvgJmpEeG6ncQraSC7NA" name="name"/>
+      <ownedAttribute xmi:id="_JyulAJmpEeG6ncQraSC7NA" name="url"/>
+      <ownedAttribute xmi:id="_Me1l8JmpEeG6ncQraSC7NA" name="orderSequence"/>
+      <ownedAttribute xmi:id="_VKjY4JmpEeG6ncQraSC7NA" name="parent" type="_hzivIJmoEeG6ncQraSC7NA"/>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_2GDmEJmoEeG6ncQraSC7NA" name="string"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_4AQo8JmoEeG6ncQraSC7NA" name="integer"/>
+</uml:Model>

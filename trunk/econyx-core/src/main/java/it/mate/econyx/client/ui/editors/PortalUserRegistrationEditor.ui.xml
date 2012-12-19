@@ -1,0 +1,22 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:t="urn:import:it.mate.econyx.client.text" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <g:HTMLPanel>
+    <g:VerticalPanel>
+      <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+        <g:Label text="Email:" width="10em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="emailAddress" width="25em"/>
+      </g:HorizontalPanel>
+      <g:HTMLPanel ui:field="passwordGroupPanel">
+        <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+          <g:Label text="Password:" width="10em" horizontalAlignment="ALIGN_RIGHT"/><g:PasswordTextBox ui:field="password" width="10em"/>
+        </g:HorizontalPanel>
+        <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+          <g:Label text="Conferma:" width="10em" horizontalAlignment="ALIGN_RIGHT"/><g:PasswordTextBox ui:field="passwordConfirmation" width="10em"/>
+        </g:HorizontalPanel>
+      </g:HTMLPanel>
+    </g:VerticalPanel>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

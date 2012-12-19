@@ -1,0 +1,37 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors"
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:ck="urn:import:com.axeiya.gwtckeditor.client">
+       
+  <ui:style>
+    @external htmlEditorlabel;
+    .htmlEditorlabel {
+	  width: 400px;
+	  float: left;
+	}
+	
+	@external htmlEditorViewer;
+	.htmlEditorViewer {
+	  overflow: auto;
+
+	}
+	
+  
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:VerticalPanel>
+      <g:HTMLPanel>
+        <span class="htmlEditorlabel"><gc:Spacer height="6px"/><g:Label ui:field="htmlEditorLabel"/></span><g:Button ui:field="modifyTextBtn"/>
+      </g:HTMLPanel>
+      <g:HTML ui:field="htmlViewer" visible="false" styleName="{style.htmlEditorViewer}"/>
+      <g:SimplePanel ui:field="htmlEditorContainer">
+      <!-- 
+        <ck:CKEditor visible="false"/>
+         -->
+      </g:SimplePanel>
+    </g:VerticalPanel>
+  </g:HTMLPanel>
+
+</ui:UiBinder>
