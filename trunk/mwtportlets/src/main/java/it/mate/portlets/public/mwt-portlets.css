@@ -1,0 +1,48 @@
+BODY {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.mwt-PagePortlet * {
+  font: 11px Verdana;
+}
+
+
+.mwt-BoxLayoutPanel {
+
+}
+
+.mwt-BoxLayoutPanelVertical {
+
+}
+
+.mwt-BoxLayoutPanelHorizontal {
+  display: table-row;
+}
+
+.mwt-BoxLayoutPanelHorizontalCell {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.mwt-BoxLayoutPanelVerticalCell {
+  display: table-row;
+  width: 100%;
+}
+
+/*
+  border: 2px solid blue;
+*/
+.mwt-BoxLayoutPanelCell {
+  text-align: left;
+}
+
+.mwt-portletBoundary {
+	
+}
+
+.mwt-PortalPageBody {
+  padding-left: 6px;
+  padding-right: 2px;
+}
