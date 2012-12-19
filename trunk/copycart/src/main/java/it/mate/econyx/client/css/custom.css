@@ -1,0 +1,12 @@
+
+@external previewPanel;
+
+.previewPanel {
+  border: 1px solid #CCCCCC;
+  width: 320px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font: 11px Verdana;
+}
+
