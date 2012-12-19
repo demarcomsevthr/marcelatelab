@@ -1,0 +1,23 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors" 
+       xmlns:v="urn:import:it.mate.econyx.client.view" xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <ui:style>
+    .ordersToProducerReportFrame {
+    visibility: hidden;
+  }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <v:OrderListView ui:field="orderListView"/>
+    <iframe id="ordersToProducerReportFrame" class="{style.ordersToProducerReportFrame}"></iframe>
+    <!-- 30/11/2012
+    <gc:Spacer height="35px"/>
+    <g:HorizontalPanel visible="false">
+      <g:Button ui:field="confermaBtn" text="Conferma gli ordini in blocco!"/>
+    </g:HorizontalPanel>
+     -->
+  </g:HTMLPanel>
+
+</ui:UiBinder>

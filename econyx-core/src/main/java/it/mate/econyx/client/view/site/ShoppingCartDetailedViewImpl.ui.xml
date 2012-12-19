@@ -1,0 +1,161 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:s="urn:import:it.mate.econyx.client.view.site">
+
+  <ui:style type="it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl.Style">
+  
+    @external basketTable, basketTableHeader, basketTableCell;
+    @external cartHeader;
+    
+    .basketTable {
+	  width: 625px;
+	  font: 11px Arial,Verdana,Helvetica;
+	}
+  
+    .basketTableHeader {
+	  background: none repeat scroll 0 0 #D9DCDF;
+	  border-right: 1px solid #EFF1F2;
+	  padding: 6px 12px;
+	  font-weight: bold;
+	}
+	
+    .basketTableCell {
+	  padding: 12px 6px;
+	}
+	
+	.cartHeader {
+	  font-size: 18px;
+	  font-weight: bold;
+	  font-family: Arial,Verdana,Helvetica;
+	}
+
+	.cartBtn span {
+	  font: bold 11px Arial;
+	  padding-left: 10px;
+	}
+  
+	.itemDetailStatePanel {
+	  padding-left: 15px;
+	}
+  
+	.itemDetailNameLabel {
+	  font: bold 16px Arial;
+	  padding-bottom: 20px;
+	  padding-left: 15px;
+	}
+	
+	.qtaBox {
+	  font-size: 14px;
+	  font-weight: bold;
+	}
+	
+  </ui:style>
+
+  <g:VerticalPanel>
+    <g:HTMLPanel>
+      <h1 class="cartHeader">Carrello</h1>
+      <gc:Spacer height="8px"/>
+      
+      <gc:StatePanel stateId="step0" ui:field="step0StatePanel">
+        <g:VerticalPanel>
+          <g:Label text="Il carrello è vuoto"/>
+        </g:VerticalPanel>
+      </gc:StatePanel>
+      
+      <!--
+            REVIEW 
+       -->
+      <gc:StatePanel stateId="step1" ui:field="step1StatePanel">
+        <g:VerticalPanel>
+          <g:Label text="Verifica gli articoli nel carrello e procedi con l'acquisto"/>
+          <g:Label text="Clicca sull'articolo se vuoi modificarne la quantità"/>
+          <gc:Spacer height="15px"/>
+          <g:FlexTable ui:field="orderTable1"/>
+          <gc:Spacer height="20px"/>
+          <gc:ImageButton ui:field="step1OkBtn" url="/images/ecommerce/shopcart.png" text="Procedi con l'acquisto" addStyleNames="{style.cartBtn}"/>
+        </g:VerticalPanel>
+      </gc:StatePanel>
+      
+      <!--
+            DETTAGLIO ARTICOLO 
+       -->
+      <gc:StatePanel stateId="itemDetailState" ui:field="itemDetailStatePanel" addStyleNames="{style.itemDetailStatePanel}">
+        <g:VerticalPanel>
+          <g:Label ui:field="itemDetailNameLabel" addStyleNames="{style.itemDetailNameLabel}"/>
+          <g:VerticalPanel horizontalAlignment="CENTER">
+            <g:HTMLPanel ui:field="itemDetailPanel"/>
+          </g:VerticalPanel>
+          <gc:Spacer height="20px"/>
+          <g:HorizontalPanel verticalAlignment="MIDDLE">
+            <g:HorizontalPanel ui:field="qtaBoxPanel" addStyleNames="{style.qtaBox}"/>
+            <!-- 
+            <gc:SpinnerIntegerBox ui:field="qtaBox" width="3em" addStyleNames="{style.qtaBox}"/>
+             -->
+            <gc:Spacer width="5px"/>
+            <gc:ImageButton ui:field="itemDetailStateOkBtn" url="/images/ecommerce/shopcart.png" text="Conferma articolo" addStyleNames="{style.cartBtn}"/>
+          </g:HorizontalPanel>
+        </g:VerticalPanel>
+      </gc:StatePanel>
+      
+      <!--
+            REVIEW INDIRIZZI 
+       -->
+      <gc:StatePanel stateId="step2" ui:field="step2StatePanel">
+        <g:VerticalPanel>
+          <g:Label text="Controlla gli indirizzi e completa l'ordine"/>
+          <gc:Spacer height="15px"/>
+          <g:HorizontalPanel>
+            <gc:Spacer width="20px"/>
+            <gc:ImageButton ui:field="step2BackBtn" url="/images/commons/arrow-left.gif" text="Indietro" addStyleNames="{style.cartBtn}"/>
+            <gc:Spacer width="20px"/>
+            <gc:ImageButton ui:field="step2OkBtn" url="/images/ecommerce/shopcart.png" text="Completa l'ordine" addStyleNames="{style.cartBtn}"/>
+            <gc:Spacer width="20px"/>
+            <gc:ImageButton ui:field="step2AddressUpdateBtn" url="/images/commons/contact-address.png" text="Modifica indirizzi" addStyleNames="{style.cartBtn}"/>
+          </g:HorizontalPanel>
+          <s:CustomerEditViewImpl ui:field="customerView"/>
+        </g:VerticalPanel>
+      </gc:StatePanel>
+      
+      <!--
+            SCELTA MODALITA DI SPEDIZIONE E CHIUSURA ORDINE 
+       -->
+      <gc:StatePanel stateId="step3" ui:field="step3StatePanel">
+        <g:HTMLPanel width="100%">
+          <g:Label text="Scegli la modalità di spedizione e completa l'ordine"/>
+          <gc:Spacer height="15px"/>
+          <g:HorizontalPanel>
+            <gc:Spacer width="20px"/>
+            <gc:ImageButton ui:field="step3BackBtn" url="/images/commons/arrow-left.gif" text="Indietro" addStyleNames="{style.cartBtn}"/>
+            <gc:Spacer width="60px"/>
+            <gc:ImageButton ui:field="step3OkBtn" url="/images/ecommerce/shopcart.png" text="Chiudi l'ordine" addStyleNames="{style.cartBtn}"/>
+          </g:HorizontalPanel>
+          <gc:Spacer height="20px"/>
+          <g:FlexTable ui:field="orderTable3"/>
+          <gc:Spacer height="20px"/>
+          <g:HorizontalPanel>
+            <g:HTMLPanel width="210px">
+              <g:Label text="Scegli la modalità di spedizione:"/>
+            </g:HTMLPanel>
+            <g:VerticalPanel>
+              <g:ListBox ui:field="modalitaSpedizioneBox"></g:ListBox>
+            </g:VerticalPanel>
+            <gc:Spacer width="40px"/>
+            <g:Label ui:field="prezzoModalitaSpedizioneLabel"></g:Label>
+          </g:HorizontalPanel>
+        </g:HTMLPanel>
+      </gc:StatePanel>
+      
+      <gc:StatePanel stateId="finalState" ui:field="finalStatePanel">
+        <g:HTMLPanel>
+          Ordine chiuso.
+          <span>A breve riceverai una mail di conferma dell'ordine</span>
+        </g:HTMLPanel>
+      </gc:StatePanel>
+      
+      
+      
+    </g:HTMLPanel>
+  </g:VerticalPanel>
+
+</ui:UiBinder>

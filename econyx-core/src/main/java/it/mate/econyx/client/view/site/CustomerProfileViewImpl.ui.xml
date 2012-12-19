@@ -1,0 +1,70 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <ui:style>
+    .profilePanel {
+	  padding-left: 30px;
+	}
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:VerticalPanel addStyleNames="{style.profilePanel}">
+      <g:VerticalPanel>
+        <gc:Spacer height="10px"/>
+        <g:HorizontalPanel>
+          <g:Image url="/main/images/commons/rightbullet.png"/>
+          <g:VerticalPanel>
+            <gc:Spacer height="3px"/>
+            <g:Anchor ui:field="shoppingCartBtn" text="Visualizza il carrello"/>
+          </g:VerticalPanel>
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+      <g:VerticalPanel ui:field="updateAddressPanel">
+        <gc:Spacer height="10px"/>
+        <g:HorizontalPanel>
+          <g:Image url="/main/images/commons/rightbullet.png"/>
+          <g:VerticalPanel>
+            <gc:Spacer height="3px"/>
+            <g:Anchor ui:field="updateBtn" text="Modifica indirizzi"/>
+          </g:VerticalPanel>
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+      <g:VerticalPanel>
+        <gc:Spacer height="10px"/>
+        <g:HorizontalPanel>
+          <g:Image url="/main/images/commons/rightbullet.png"/>
+          <g:VerticalPanel>
+            <gc:Spacer height="3px"/>
+            <g:Anchor ui:field="updatePasswordBtn" text="Cambia password"/>
+          </g:VerticalPanel>
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+      <g:VerticalPanel>
+        <gc:Spacer height="10px"/>
+        <g:HorizontalPanel>
+          <g:Image url="/main/images/commons/rightbullet.png"/>
+          <g:VerticalPanel>
+            <gc:Spacer height="3px"/>
+            <g:Anchor ui:field="viewOrderBtn" text="Visualizza ordini"/>
+          </g:VerticalPanel>
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+      <g:VerticalPanel>
+        <gc:Spacer height="10px"/>
+        <g:HorizontalPanel ui:field="customProfileView1Panel" visible="false">
+          <g:Image url="/main/images/commons/rightbullet.png"/>
+          <g:VerticalPanel>
+            <gc:Spacer height="3px"/>
+            <g:Anchor ui:field="customProfileView1Btn" text="Custom view 1"/>
+          </g:VerticalPanel>
+        </g:HorizontalPanel>
+        <gc:Spacer height="40px"/>
+      </g:VerticalPanel>
+      <g:VerticalPanel ui:field="customProfileView1"/>
+    </g:VerticalPanel>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

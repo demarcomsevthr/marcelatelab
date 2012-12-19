@@ -1,0 +1,66 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <g:HTMLPanel>
+    <g:VerticalPanel>
+      <gc:Spacer height="1em"/>
+      
+      <g:Label ui:field="buildIdLabel"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="resetAllBtn" width="12em" text="Reset all data"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="resetCacheBtn" width="12em" text="Reset cache"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="importPortalDataBtn" width="12em" text="Initialize portal data"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="exportPortalDataBtn" width="12em" text="Export portal data"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="exportPortalDataXmlBtn" width="12em" text="Export portal data XML"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:FormPanel action="/.upload" method="POST" encoding="multipart/form-data" ui:field="uploadForm">
+        <g:HorizontalPanel>
+          <g:Button ui:field="importPortalDataFileBtn" width="12em" text="Import portal data File"/>
+          <g:FileUpload name="file" width="60em"/>
+          <g:Hidden name="op" value="PORTAL_DATA_UPLOAD"/>
+        </g:HorizontalPanel>
+      </g:FormPanel>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="getServerContextUrlBtn" width="12em" text="Get server context url"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="reloadPropertiesBtn" width="12em" text="Reload properties"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:HorizontalPanel>
+        <g:Button ui:field="generateRandomCustomersBtn" width="12em" text="Random customers"/>
+        <g:IntegerBox ui:field="generateRandomCustomersNumberBox"/>
+      </g:HorizontalPanel>
+      
+      <gc:Spacer height="2px"/>
+      <g:HorizontalPanel>
+        <g:Button ui:field="generateRandomOrdersBtn" width="12em" text="Random orders"/>
+        <g:IntegerBox ui:field="generateRandomOrdersNumberBox"/>
+      </g:HorizontalPanel>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="gdataSpreadsheetTestBtn" width="12em" text="Spreadsheet Test"/>
+      
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="exceptionTestBtn" width="12em" text="Exception Test"/>
+      
+    </g:VerticalPanel>
+    
+    <g:FormPanel ui:field="exportForm" visible="false"/>
+    
+  </g:HTMLPanel>
+
+</ui:UiBinder>

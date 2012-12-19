@@ -1,0 +1,12 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors">
+
+  <g:HTMLPanel>
+    <e:PortalUserEditor ui:field="editor"/>
+    
+    <g:Button text="Test mail registrazione" ui:field="registrationMailBtn"/>
+    
+  </g:HTMLPanel>
+
+</ui:UiBinder>

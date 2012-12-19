@@ -1,0 +1,56 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <ui:style type="it.mate.econyx.client.view.site.ProductViewImpl.Style">
+  
+    .productScreenName {
+	  font: bold 12px Verdana;
+	}
+	
+	.productMediumImagePanel {
+	  width: 192px;
+      overflow-x: hidden;
+	}
+	
+	.cartBtn span {
+	  font: bold 11px Arial;
+	  padding-left: 10px;
+	}
+	
+	.qtaBox {
+	  font-size: 15px;
+	  font-weight: bold;
+	}
+	
+  </ui:style>
+  
+  <g:VerticalPanel width="100%">
+    <g:HTMLPanel width="100%">
+      <g:HorizontalPanel>
+        <g:HTMLPanel ui:field="mediumImagePanel" addStyleNames="{style.productMediumImagePanel}"/>
+        <gc:Spacer width="12px"/>
+        <g:VerticalPanel>
+          <gc:Spacer height="12px"/>
+          <g:Label ui:field="screenName" addStyleNames="{style.productScreenName}" width="100%"/>
+          <gc:Spacer height="6px"/>
+          <g:HTMLPanel ui:field="shortHtmlPanel"/>
+          <gc:Spacer height="6px"/>
+          <g:HTMLPanel ui:field="mediumHtmlPanel"/>
+          <gc:Spacer height="12px"/>
+          <g:HorizontalPanel ui:field="ordinaPanel" visible="true" verticalAlignment="MIDDLE">
+            <g:HorizontalPanel ui:field="qtaBoxPanel" addStyleNames="{style.qtaBox}"/>
+            <!-- 23/11/2012
+            <gc:SpinnerIntegerBox ui:field="qtaBox" width="3em" addStyleNames="{style.qtaBox}" value="1"/>
+             -->
+            <gc:Spacer width="5px"/>
+            <gc:ImageButton ui:field="cartBtn" url="/images/ecommerce/shopcart.png" text="Aggiungi al carrello" addStyleNames="{style.cartBtn}"/>
+          </g:HorizontalPanel>
+        </g:VerticalPanel>
+        <gc:Spacer width="12px"/>
+      </g:HorizontalPanel>
+    </g:HTMLPanel>
+  </g:VerticalPanel>
+
+</ui:UiBinder>

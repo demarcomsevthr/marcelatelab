@@ -1,0 +1,147 @@
+
+	INDICE:
+	  ToDo
+	  Issues
+
+    ______________________________________________________________________________________
+
+		>>> LINKS <<<
+    ______________________________________________________________________________________
+
+	
+	gdoc: https://docs.google.com/document/d/16KOyoCNWg_amHQY-AYzKEU0lM-IXBiF-IunqvV8L_fo/edit
+	
+	ECommerce demo:
+		Shop admin URL: https://ecom.amenworld.com/epages/295556.admin
+		Login: ecom295556
+		Password: ipY69X5_
+
+	
+    ______________________________________________________________________________________
+
+		>>> TO DO <<<
+    ______________________________________________________________________________________
+
+	Agg. 27/04/2012
+		
+		PRIORITA:
+			1) prototipo gestione ordini
+			2) portal pages
+			3) backend > availability
+
+
+
+	> PROBLEMA IN ENTITY CACHE		>> RISOLTO 21/05/2012
+	    -- vedi it.mate.gwtcommons.server.utils.EntityCacheUtils
+	    -- In memcache le entry vengono serializzate, se metto un ds perdo le proprietà transient (vedi unownedrelationships)
+           quindi in cache ci devono finire i tx, quindi trasformo in tx class (definita sull'annotation) e mi salvo la classe del ds di provenienza
+           per fare la trasformazione al contrario nella retrieve
+        -- tenere qualche tempo sott'occhio poi mettere tra le issues risolte
+        
+        -- ho dovuto introdurre:
+               protected <E extends Serializable> Object internalFind(FindContext<E> context)
+               e it.mate.gwtcommons.server.dao.FindContext.skipCache
+               per impedire in alcune find di utilizzare la cache (es: product.fetchImages: faceva casino perchè passando in cache con il tx, perdeva il contenuto blob che sul tx
+                                                                   ho deciso di non gestire)
+
+
+
+	>>> PROTOTIPO GESTIONE ORDINI
+
+		-- conto utente
+		
+		-- product >> italiano
+		
+		-- gestione dell'ordine
+			>>> suddivisione per produttore
+			>>> chiusura ordine
+			>>> cassettone della spesa
+
+
+		
+
+	>>> PROTOTIPO GP8
+		>>> BREADCRUMB 
+
+
+	>> REFACTORING CATEGORIE >> RENAME CATEGORY FATTO
+		> SVILUPPO IN CORSO >> RIPRESO
+			> TODO 1:
+				- test images
+				- export to xml >> OK
+				- PageBodyPortlet
+			> TODO 2:
+				- PageBodyPortlet > lavora su PortalPage invece che su Category/Product
+				- PortalPageChangeEvent > serve veramente o basta la history mvp ?
+				- PortalState (>> vedi CupState: monitoring in sessione?)
+		
+	>>> SALVATAGGIO DI HtmlContent: SITUAZIONE STABILE MA DA RIPULIRE !!!
+		- it.mate.econyx.server.model.impl.HtmlProductContentDs
+				ho dovuto crearlo per far funzionare il salvataggio, altrimenti va in conflitto con HtmlContentDs
+				>> ogni entity master deve avere il suo specifico e unico archivio di dettaglio
+				>> forse un altro modo per risolverlo è utilizzare id stringa
+		- it.mate.econyx.server.services.ProductServiceImpl
+		  it.mate.econyx.server.services.CategoryServiceImpl
+		  		>> SISTEMARE le cose inutili sulla gestione HtmlContent
+		  		>> CREARE UNA CLASS util > HtmlContentUtils
+		- it.mate.econyx.client.view.admin.CategoryEditHtmlView.updateModel
+		  it.mate.econyx.client.view.admin.ProductEditHtmlView.updateModel
+		  		>> RISOLTO BACO DEL SALVATAGGIO:
+                   deve tornare indietro l'entity updatata (trovare una soluzione più elegante)
+
+	>>> PROVARE INSERIMENTO ENTITY PRIMARIA
+		> PROVATO Product >> SEMBRA FUNZIONARE
+		>> PERO' HO RITOCCATO ProductEditHtmlView, ProductServiceImpl.updateHtmlContent, ProductActivity.updateHtmlContent
+		>>> RIPORTARE IN gestione Category
+
+	>>> CONFIGURAZIONE Category -> lista Prodotti
+		> sezione con dentro la lista dei prodotti associati
+		> predisporre un dialog generico con dentro un mvppanel che si attiva on the fly per la selezione di un nuovo prodotto
+		> serve per riutilizzare view mvp già fatte
+		> in questo caso si dovrebbe riuscire a creare un dialog con dentro la ProductListView a cui viene settato un presenter 
+		  creato on the fly che si occupa solo di implementare la edit
+		
+	> gestione testi (admin view)
+		view:
+			finire con testo large
+			
+	> gestione immagini (admin view)
+		finire editor (vedi ecommerce demo)
+		>>> it.mate.econyx.client.ui.UploadFileDialog
+			posizionamento di fileupdBtn:
+				timer (gwtutil) e onavailable
+				e allineamento a caricaFileBtn
+
+		
+	> breadcrumb
+
+
+	> NOME
+	
+		- econiix		> logo con faccetta!
+
+
+
+    ______________________________________________________________________________________
+
+		>>> ISSUES <<<
+    ______________________________________________________________________________________
+
+
+	NOTA BENE
+	
+	quando risolti riportare in https://docs.google.com/document/d/16KOyoCNWg_amHQY-AYzKEU0lM-IXBiF-IunqvV8L_fo/edit
+
+
+	> PROBLEMA NEL MAPPED ACTIVITY MANAGER		>> RISOLTO 10/03/2012
+		> it.mate.gwtcommons.client.history.MappedActivityManager.onPlaceChange(PlaceChangeEvent)
+		> quando viene richiamata la super.onPlaceChange viene richiamata la mapper.getActivity, quindi viene chiamata due volte, ogni volta crea una nuova istanza dell'activity
+		  che da problemi perchè si ottengono in memoria due activity che lavorano sullo stesso panel e hanno gli stessi event handler
+		> RISOLTO IN
+			it.mate.gwtcommons.client.history.BaseActivityMapper.setActivityAlreadyInstantiated
+			it.mate.econyx.client.activities.mapper.BodyActivityMapper.getActivity
+
+
+    ______________________________________________________________________________________
+
+
