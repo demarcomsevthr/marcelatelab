@@ -17,7 +17,7 @@
 			> gestione utenti > attivazione utente in manuale >> invio mail
 				> invio mail di notifica agli admins
 				
-			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> FINIRE
+			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> FINIRE (font!)
 				> invertire ordine timbro, order product
 					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
 					> it.mate.econyx.client.view.site.ProductViewImpl
