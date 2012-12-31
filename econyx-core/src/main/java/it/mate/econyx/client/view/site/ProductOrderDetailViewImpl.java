@@ -74,35 +74,41 @@ public class ProductOrderDetailViewImpl extends AbstractBaseView<ProductView.Pre
       this.portalSessionState = (PortalSessionState)model;
     } else if (model instanceof ArticoloDaOrdinare) {
       ArticoloDaOrdinare articoloDaOrdinare = (ArticoloDaOrdinare)model;
-      this.articolo = articoloDaOrdinare.getArticolo();
-      screenName.setText(articolo.getName());
-      if (articolo instanceof ArticoloTx) {
-        ArticoloTx productTx = (ArticoloTx)articolo;
-        if (productTx.hasImageOfType(ImageContent.Type.MEDIUM)) {
-          Image image = new Image(UrlUtils.getProductImageUrl(articolo.getId(), "medium"));
-          image.setWidth("120px");
-          image.setHeight("120px");
-          mediumImagePanel.add(image);
-          mediumImagePanel.add(new Spacer("1px", "10px"));
-        }
-        if (productTx.hasHtmlOfType(HtmlContent.Type.SHORT)) {
-          HTML html = new HTML(SafeHtmlUtils.fromTrustedString(productTx.getHtmlOfType(HtmlContent.Type.SHORT).getContent()));
-          shortHtmlPanel.add(html);
-          shortHtmlPanel.add(new Spacer("1px", "10px"));
-        }
-      }
-      customizer.setArticolo(articolo);
-      
+      setArticolo(articoloDaOrdinare.getArticolo());
       qtaBox.setValue(articoloDaOrdinare.getQuantity().intValue());
-      
+    } else if (model instanceof Articolo) {
+      setArticolo((Articolo)model);
+      qtaBox.setVisible(false);
     }
+  }
+  
+  private void setArticolo(Articolo articolo) {
+    this.articolo = articolo;
+    screenName.setText(articolo.getName());
+    if (articolo instanceof ArticoloTx) {
+      ArticoloTx productTx = (ArticoloTx)articolo;
+      if (productTx.hasImageOfType(ImageContent.Type.MEDIUM)) {
+        Image image = new Image(UrlUtils.getProductImageUrl(articolo.getId(), "medium"));
+        image.setWidth("120px");
+        image.setHeight("120px");
+        mediumImagePanel.add(image);
+        mediumImagePanel.add(new Spacer("1px", "10px"));
+      }
+      if (productTx.hasHtmlOfType(HtmlContent.Type.SHORT)) {
+        HTML html = new HTML(SafeHtmlUtils.fromTrustedString(productTx.getHtmlOfType(HtmlContent.Type.SHORT).getContent()));
+        shortHtmlPanel.add(html);
+        shortHtmlPanel.add(new Spacer("1px", "10px"));
+      }
+    }
+    customizer.setArticolo(articolo);
   }
   
   @UiHandler ("cartBtn")
   public void onCartBtn(ClickEvent event) {
     // 23/11/2012
     List<OrderItemDetail> details = customizer.getDetails();
-    getPresenter().orderProduct(articolo, (double)qtaBox.getValue(), details);
+    Double qta = qtaBox.isVisible() ? (double)qtaBox.getValue() : null;
+    getPresenter().orderProduct(articolo, qta, details);
     /*
     if (checkPortalSessionState()) {
       List<OrderItemDetail> details = customizer.getDetails();

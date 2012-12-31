@@ -123,49 +123,12 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     
     int numRighe = timbro.getNumRighe() != null ? timbro.getNumRighe() : 3;
     
+    if (details != null) {
+      numRighe = Math.max(numRighe, details.size());
+    }
+    
     for (int it = 0; it < numRighe; it++) {
-      HorizontalPanel hPanel = new HorizontalPanel();
-      hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-
-      final TextBox textBox = new TextBox();
-      textBox.setWidth("240px");
-      textBox.setHeight("26px");
-      hPanel.add(textBox);
-      textBoxs.add(textBox);
-      
-      textBox.addChangeHandler(new ChangeHandler() {
-        public void onChange(ChangeEvent event) {
-          updatePreview();
-        }
-      });
-      
-      TextControlBar.Settings initalSettings = new TextControlBar.Settings(true);    
-      
-      if (this.details != null && it < this.details.size()) {
-        OrderItemDetail orderItemDetail = this.details.get(it);
-        if (orderItemDetail != null && orderItemDetail instanceof OrderItemStampDetailTx) {
-          OrderItemStampDetailTx orderItemStampDetail = (OrderItemStampDetailTx)orderItemDetail;
-          if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(orderItemStampDetail.getType())) {
-            textBox.setText(orderItemStampDetail.getText());
-            initalSettings = StampUtils.convertOrderItemDetailToSettings(orderItemStampDetail);
-          }
-        }
-      }
-      
-      TextControlBar textControlBar = new TextControlBar(initalSettings);
-      textControlBar.setSettingsChangeDelegate(new Delegate<TextControlBar.Settings>() {
-        public void execute(Settings settings) {
-          StampUtils.applySettingsOnWidget(textBox, settings);
-          updatePreview();
-        }
-      });
-      hPanel.add(textControlBar);
-      
-      textControlBars.add(textControlBar);
-      
-      detailListPanel.add(hPanel);
-      
-      
+      addDetailListRow(detailListPanel, it);
     }
     
     detailPanel.add(detailListPanel);
@@ -207,6 +170,49 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     });
     
   }
+  
+  private void addDetailListRow(ListPanel detailListPanel, int index) {
+    HorizontalPanel hPanel = new HorizontalPanel();
+    hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+    final TextBox textBox = new TextBox();
+    textBox.setWidth("240px");
+    textBox.setHeight("26px");
+    hPanel.add(textBox);
+    textBoxs.add(textBox);
+    
+    textBox.addChangeHandler(new ChangeHandler() {
+      public void onChange(ChangeEvent event) {
+        updatePreview();
+      }
+    });
+    
+    TextControlBar.Settings initalSettings = new TextControlBar.Settings(true);    
+    
+    if (this.details != null && index < this.details.size()) {
+      OrderItemDetail orderItemDetail = this.details.get(index);
+      if (orderItemDetail != null && orderItemDetail instanceof OrderItemStampDetailTx) {
+        OrderItemStampDetailTx orderItemStampDetail = (OrderItemStampDetailTx)orderItemDetail;
+        if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(orderItemStampDetail.getType())) {
+          textBox.setText(orderItemStampDetail.getText());
+          initalSettings = StampUtils.convertOrderItemDetailToSettings(orderItemStampDetail);
+        }
+      }
+    }
+    
+    TextControlBar textControlBar = new TextControlBar(initalSettings);
+    textControlBar.setSettingsChangeDelegate(new Delegate<TextControlBar.Settings>() {
+      public void execute(Settings settings) {
+        StampUtils.applySettingsOnWidget(textBox, settings);
+        updatePreview();
+      }
+    });
+    hPanel.add(textControlBar);
+    
+    textControlBars.add(textControlBar);
+    
+    detailListPanel.add(hPanel);
+  }
 
   private void updatePreview () {
     if (stampPreviewPanel == null)
@@ -220,6 +226,12 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
       }
     }
     if (logoDetail != null) {
+      if (stampPreviewPanel.getDragX() > -1) {
+        logoX.setValue(stampPreviewPanel.getDragX());
+      }
+      if (stampPreviewPanel.getDragY() > -1) {
+        logoY.setValue(stampPreviewPanel.getDragY());
+      }
       logoDetail.setLogoX(logoX.getValue());
       logoDetail.setLogoY(logoY.getValue());
       details.add(logoDetail);

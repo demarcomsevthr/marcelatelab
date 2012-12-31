@@ -4,46 +4,48 @@
     ______________________________________________________________________________________
 
 
-		---------------------------------------
-
-		VERSIONE CORRENTE MERGIATA SUL trunk DA copycart-beta, econyx-base-app-beta, econyx-core-beta, gwtcommons-beta
-
-		IL 19/11/2012
+		SNAPSHOT 27/12/2012
 		
-		[vedi readme-issues-and-tips.txt]
+		    >>> UPG GWT 2.5.0 > IN TEST
+		    	> /gwtcommons/pom.xml
+		    		gwt.version
+		    		gquery-dnd-bundle version
+		    	> /econyx-base-app/pom.xml
+		    		gwt.version
+		    	> it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator
 		
-		
-		>>> RITORNARE SUI BRANCHE **-beta
-		
-		
-		---------------------------------------
+			> gestione utenti > attivazione utente in manuale >> invio mail
+				> invio mail di notifica agli admins
+				
+			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> FINIRE
+				> invertire ordine timbro, order product
+					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
+					> it.mate.econyx.client.view.site.ProductViewImpl
+					> it.mate.econyx.client.activities.ProductActivity.orderProduct
+					
+			> finire catalogo timbri (???)
+			> attendere prego >> waiting gif
+			> hai dimenticato la pwd
+			
+			> timbro: aggiungi/cancella riga
+				>> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl.initDetailPanel
+				
+			> timbro: default font: 10px > OK
+			> timbro: logo dnd > OK
+				> it.mate.econyx.client.ui.StampPreviewPanel.update
+				> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl.updatePreview
+			> pagina sito in costruzione >> site.html (site-buono.html) > OK
+			
 		
 		
 		SNAPSHOT 19/11/2012
 		
-			>> ATTENZIONE
-				CASO: vado in site home, visualizzo l'ordine aperto, faccio la prima modifica di un articolo
-				>> non aggiorna la quantità nel riepilogo
-				>> se esco e ricarico l'ordine, da quel momento in poi tutte le modifica si aggiornano correttamente !!!!
-		
-			- orderds in cache >> FATTO, IN TEST
-				>> CacheableEntity (expiration=x) >> DA FARE
-			
-			- >> una volta in cache, forse non serve la gestione dell'ordine aperto sul client (OpenOrderClientUtils.CACHE_ENABLED_KEY), 
-					 >>> nella orderProduct se l'ordine sta in cache, non si aggiorna il datastore, ma solo la cache (eventualmente utilizzando
-					     direttamente CacheUtils dall'adapter)
-					 >>> nella updateOrderItem si aggiorna l'ordine in cache
-					 >>> IN TEST
-					 
 			- TUTTE LE ENTITY CON Blob:
 				>> CacheableEntity (instanceCache=true)
 					>>> mantiene l'entity non in memcache, ma in cache statica di istanza (per aggiornarla occorre distruggere l'istanza)
 					    (aggira la limitazione di memcache con i blob)
 				>> provare con ImageWebContentDs >> IN TEST
 					    
-			- it.mate.gwtcommons.server.dao.JdoDaoWithCache.internalFind
-				>> è possibile (usando le api lowlevel) fare una find solo delle keys delle entity ?	
-				
 			- it.mate.econyx.shared.model.impl.OrderTx.getProducers
 			    >> con TxUtils va in errore solo compilata con maven !!!	
 				
@@ -54,67 +56,7 @@
 			>> Cookie Utente
 				>> In Admin disabilitare (fa la fetch dell'ordine aperto!)
 		
-			>> GESTIONE ORDINE APERTO IN SESSIONE
-				>> IPOTESI 2
-				    > client.UserOrderClientUtils.cacheEnabled
-					> gestire la feature solo sul client
-						-- ricerca di tutti gli utilizzi "sospetti" di OrderServiceAsync:
-							--- it.mate.econyx.client.activities.OrderActivity.fetchItems
-							--- it.mate.econyx.client.activities.OrderActivity.closeOrder
-							--- it.mate.econyx.client.activities.OrderActivity.update
-							--- it.mate.econyx.client.activities.ProductActivity.orderProduct
-							--- it.mate.econyx.client.activities.ShoppingCartActivity.fetchItems
-							--- it.mate.econyx.client.activities.ShoppingCartActivity.updateOrderItem
-							--- it.mate.econyx.client.activities.ShoppingCartActivity.deleteOrderItem
-							--- it.mate.econyx.client.activities.ShoppingCartActivity.closeOrder
-						>> mi sembra la strada più praticabile
-						>> creare una UserOrderClientUtils, iniziato, metodi fatti:
-							--- it.mate.econyx.client.util.UserOrderClientUtils.fetchItems
-							--- it.mate.econyx.client.util.UserOrderClientUtils.closeOrder
-							--- it.mate.econyx.client.util.UserOrderClientUtils.update
-							--- it.mate.econyx.client.util.UserOrderClientUtils.orderProduct
-									>>> modificato metodo it.mate.econyx.server.services.impl.OrderAdapterImpl.orderProduct
-							--- it.mate.econyx.client.util.UserOrderClientUtils.updateOrderItem
-							
-						>>> 14/11/2012 18:00 >>> FINO A QUI PARE CHE FUNZIONA!!!
-						                         MA VA TESTATA ANCORA MEGLIO.
-						
-						>> alla chiusura del browser (come si intercetta?)
-						   si chiama it.mate.econyx.client.util.UserOrderClientUtils.updateOrderInCache()
-			
 
-
-		SNAPSHOT 13/11/2012
-			>> TEST QUOTE
-				-- monitoraggio utilizzo quote
-				-- tolta transazione in dao.find
-				-- ottimizzazione in PortalSessionState
-				>> TEST APP STATS
-					-- /econyx-base-app/src/main/webapp/WEB-INF/web.xml
-					-- /econyx-base-app/pom.xml
-					
-		SNAPSHOT 09/11/2012
-			>> [SOLO SU IE IN DEV MODE]
-				> it.mate.econyx.client.ui.StampPreviewPanel.update - riga 77
-					>> java.lang.IllegalStateException: com.google.gwt.user.client.ui.AbsolutePanel is missing CSS 'position:{relative,absolute,fixed}'
-
-		SNAPSHOT 19/10/2012
-			>> STAMPA DELL'ORDINE >> DA FINIRE
-				> it.mate.econyx.server.servlets.RestController.testOrder
-				> it.mate.econyx.server.services.impl.ReportAdapterImpl.printOrder
-				> it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItem
-
-		SNAPSHOT 19/10/2012
-			> PROVA LAZY INIT (che ho riportato indietro su svn)
-				> /econyx-base-app/src/main/webapp/WEB-INF/econyx-web-context.xml >> default-lazy-init="true"
-				> /econyx-base-app/src/main/webapp/WEB-INF/re-servlet.xml >> default-lazy-init="true"
-				> /econyx-base-app/src/main/webapp/WEB-INF/web.xml >> tolti load-on-startup (vedi web.xml.NO_LAZY_INIT)
-				> /copycart/src/main/webapp/WEB-INF/cron.xml >> commentato
-				> copycartest >> Frontend Instance Class = F4
-				> deploy 19/10/2012 15:28
-				> tempi di caricamento da istanza spenta: 
-				
-		
 		______________________________________________________________________________________________________
 
 		STRUMENTI UTILI
@@ -134,30 +76,14 @@
 		
 
 		-- OTTIMIZZAZIONI
-		
 			JdoDaoWithCache
 				> find con filtro in cache
 				
-		-- ORDINI - DA VALUTARE
- 			> inserire producerId su Order
- 			>> questo implica che:
- 				- gli ordini aperti possono essere n (> UserOrderClientUtils)
- 				- 
- 						
-		
 		-- loading page:
 			search: free javascript carousel, slider, slideshow widget
 				> http://graficare.blogspot.it/2008/09/10-script-per-slider-carousel-e.html
 				> http://www.tripwiremagazine.com/2012/10/jquery-carousel.html
 
-		-- view gestione profilo utente [prio 1]
-			> modifica dati anagrafici (fatto 02/11/2012)
-			> lista ordini effettuati (iniziato 02/11/2012)
-			
-		-- completare gestione carrello [prio 1]
-			> bottone modifica indirizzi >> migliorare la navigazione "di ritorno"
-			> chiusura ordine >> popup modal "elaborazione in corso" [altrimenti può cliccare su qualche altra parte]
-			
 		-- input timbro: aggiungi riga [prio 2]
 		
 		-- zoom logo timbro [prio 2]

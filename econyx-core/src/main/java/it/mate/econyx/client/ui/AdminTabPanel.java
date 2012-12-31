@@ -170,6 +170,7 @@ public abstract class AdminTabPanel <P extends BasePresenter> extends Composite 
     this.sections = sections;
     for (Section<P> section : sections) {
       tabLayoutPanel.add(section.view, section.text);
+      section.setAdminTabPanel(this);
     }
   }
 
@@ -203,6 +204,12 @@ public abstract class AdminTabPanel <P extends BasePresenter> extends Composite 
     public Section<A> setText(String text) {
       this.text = text;
       return this;
+    }
+    private void setAdminTabPanel(AdminTabPanel adminTabPanel) {
+      if (view instanceof AbstractAdminTabPage) {
+        AbstractAdminTabPage abstractAdminTabPage = (AbstractAdminTabPage)view;
+        abstractAdminTabPage.setAdminTabPanel(adminTabPanel);
+      }
     }
   }
   

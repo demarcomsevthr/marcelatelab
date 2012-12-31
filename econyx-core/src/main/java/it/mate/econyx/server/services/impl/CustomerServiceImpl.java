@@ -7,6 +7,7 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.services.CustomerService;
 import it.mate.gwtcommons.server.utils.HttpUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.List;
 
@@ -62,7 +63,9 @@ public class CustomerServiceImpl extends RemoteServiceServlet implements Custome
       HttpServletRequest request = getThreadLocalRequest();
       String activationUrl = HttpUtils.getContextUrl(request) + "/userActivation?tid=" + user.getActivationToken();
       logger.debug("activation url = " + activationUrl);
-      AdaptersUtil.getMailAdapter().sendActivationMail(user, activationUrl);
+      if (PropertiesHolder.getBoolean("customerService.register.sendActivationMail")) {
+        AdaptersUtil.getMailAdapter().sendActivationMail(user, activationUrl);
+      }
     } catch (MessagingException ex) {
       throw new ServiceException(ex);
     }

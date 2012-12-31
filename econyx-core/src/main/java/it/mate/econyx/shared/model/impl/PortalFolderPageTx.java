@@ -18,6 +18,8 @@ public class PortalFolderPageTx extends WebContentPageTx implements PortalFolder
 
   private List<PortalPageTx> childreen = new ArrayList<PortalPageTx>();
   
+  private Boolean hideChildreen;
+  
   public List<PortalPage> getChildreen() {
     if (childreen == null)
       return null;
@@ -67,6 +69,14 @@ public class PortalFolderPageTx extends WebContentPageTx implements PortalFolder
         }
       }
     }
+  }
+
+  public Boolean getHideChildreen() {
+    return hideChildreen != null ? hideChildreen : false;
+  }
+
+  public void setHideChildreen(Boolean hideChildreen) {
+    this.hideChildreen = hideChildreen;
   }
   
 }

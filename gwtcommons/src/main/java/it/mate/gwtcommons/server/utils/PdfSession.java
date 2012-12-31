@@ -169,8 +169,13 @@ public class PdfSession {
   }
   
   public void addRectangle(float x, float y, float w, float h) {
+    addRectangle(x, y, w, h, 1f, BaseColor.BLACK);
+  }
+  
+  public void addRectangle(float x, float y, float w, float h, float lw, BaseColor color) {
     PdfContentByte dc = writer.getDirectContent();
-    dc.setColorStroke(BaseColor.BLACK);
+    dc.setColorStroke(color);
+    dc.setLineWidth(lw);
     dc.rectangle(x, y, w, (-1) * h);
     dc.stroke();
   }

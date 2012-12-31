@@ -11,8 +11,10 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
 
+    <!-- 31/12/2012
     <gwt.version>2.4.0</gwt.version>
     <gin.version>1.5.0</gin.version>
+     -->
    
   </properties>
   
@@ -154,6 +156,7 @@
         </dependencies>
       </plugin>
 
+      <!-- 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -163,6 +166,7 @@
           <webappDirectory>${webappDirectory}</webappDirectory>
         </configuration>
       </plugin>
+       -->
 
     </plugins>
 

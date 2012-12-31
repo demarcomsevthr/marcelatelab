@@ -1,5 +1,7 @@
 package it.mate.econyx.client.ui;
 
+import gwtquery.plugins.draggable.client.events.DragEvent;
+import gwtquery.plugins.draggable.client.gwt.DraggableWidget;
 import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.Timbro;
 import it.mate.econyx.shared.model.impl.OrderItemStampDetailTx;
@@ -11,19 +13,32 @@ import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 
 public class StampPreviewPanel extends HTMLPanel {
 
+  AbsolutePanel absolutePanel = null;
+  
+  private Image logoImg;
+  
+  private DraggableWidget<Image> draggableLogoImg;
+  
   private int logoWidth = 0;
   
   private int logoHeight = 0;
+  
+  private int dragX = -1;
+  private int dragY = -1;
   
   public StampPreviewPanel() {
     super("");
@@ -44,13 +59,7 @@ public class StampPreviewPanel extends HTMLPanel {
     }
   }
 
-  private Image logoImg;
-  
-  AbsolutePanel absolutePanel = null;
-  
   public void update (List<OrderItemDetail> details) {
-//  clear();
-//  AbsolutePanel absolutePanel = new AbsolutePanel();
     if (absolutePanel == null) {
       absolutePanel = new AbsolutePanel();
       absolutePanel.setSize("100%", "100%");
@@ -83,10 +92,36 @@ public class StampPreviewPanel extends HTMLPanel {
             int v = Random.nextInt();
             String url = "/re/cu/oil/" + (stampDetail.getId() != null ? stampDetail.getId() : "session") + "?v="+v;
             logoImg = new Image(url);
+            
+            // 28/12/2012
+            draggableLogoImg = new DraggableWidget<Image>(logoImg);
+            draggableLogoImg.setDraggingCursor(Cursor.MOVE);
+            draggableLogoImg.setDraggingOpacity(0.8f);
+            
+            draggableLogoImg.addDragHandler(new DragEvent.DragEventHandler() {
+              public void onDrag(DragEvent event) {
+                dragX = draggableLogoImg.getAbsoluteLeft() - absolutePanel.getAbsoluteLeft();
+                dragY = draggableLogoImg.getAbsoluteTop() - absolutePanel.getAbsoluteTop();
+              }
+            });
+            
+            logoImg.addMouseDownHandler(new MouseDownHandler() {
+              public void onMouseDown(MouseDownEvent event) {
+                GwtUtils.setStyleAttribute(logoImg, "cursor", Cursor.MOVE.getCssName());
+              }
+            });
+            
+            logoImg.addMouseUpHandler(new MouseUpHandler() {
+              public void onMouseUp(MouseUpEvent event) {
+                GwtUtils.setStyleAttribute(logoImg, "cursor", Cursor.DEFAULT.getCssName());
+              }
+            });
+            
           }
           int left = stampDetail.getLogoX();
           int top = stampDetail.getLogoY();
-          absolutePanel.add(logoImg, left, top);
+//        absolutePanel.add(logoImg, left, top);
+          absolutePanel.add(draggableLogoImg, left, top);
           logoWidth = logoImg.getOffsetWidth();
           logoHeight = logoImg.getOffsetHeight();
         }
@@ -106,6 +141,15 @@ public class StampPreviewPanel extends HTMLPanel {
     return (stampDetail.getFontSize() != null && stampDetail.getFontSize() > 0) ? stampDetail.getFontSize() : 10;
   }
   
+  public int getDragX() {
+    return dragX;
+  }
+  
+  public int getDragY() {
+    return dragY;
+  }
+  
+  /*
   public void update_SAVE (List<OrderItemDetail> details) {
     clear();
     this.getElement().setId("marcello");
@@ -132,6 +176,6 @@ public class StampPreviewPanel extends HTMLPanel {
       }
     }
   }
-  
+  */
   
 }

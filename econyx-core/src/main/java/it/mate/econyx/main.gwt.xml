@@ -21,16 +21,22 @@
     value="it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault" />
   
   <generate-with class="it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator">
-    <when-type-assignable class="it.mate.econyx.shared.services.OrderService" />
-  </generate-with>
-  
-  <generate-with class="it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator">
-    <when-type-assignable class="it.mate.econyx.shared.services.GeneralService" />
+    <any>
+      <when-type-assignable class="it.mate.econyx.shared.services.CustomerService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.GeneralService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.ImageService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.OrderService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.PortalPageService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.PortalUserService" />
+      <when-type-assignable class="it.mate.econyx.shared.services.ProductService" />
+    </any>
   </generate-with>
   
   
   <!-- IN TEST -->  
   <inherits name='com.google.gwt.query.Query'/>
+  
+  <inherits name='gwtquery.plugins.droppable.Droppable'/>
   
   
   <entry-point class='it.mate.econyx.client.EconyxEP' />

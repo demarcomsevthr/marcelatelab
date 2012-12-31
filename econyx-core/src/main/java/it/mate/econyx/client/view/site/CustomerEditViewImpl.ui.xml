@@ -48,13 +48,7 @@
     <g:HTMLPanel ui:field="successRegistrationStatePanel" visible="false" addStyleNames="{style.registrationCompletePanel}">
       <g:SimplePanel width="600px" addStyleNames="{style.paddedPanel}">
         <g:HTMLPanel ui:field="roundedPanel">
-          <g:HTMLPanel addStyleNames="{style.paddedPanel}">
-            <div>Apri la tua posta in arrivo.</div>
-            <div><br/>
-            Hai ricevuto un messaggio e-mail all'indirizzo specificato.<br/> 
-            Devi selezionare il collegamento contenuto in questo messaggio per completare la registrazione.<br/>
-            Quindi potrai accedere all'area clienti di questo sito.</div>
-          </g:HTMLPanel>
+          <g:HTMLPanel ui:field="successRegistrationHtmlPanel" addStyleNames="{style.paddedPanel}"/>
         </g:HTMLPanel>
       </g:SimplePanel>
     </g:HTMLPanel>

@@ -4,9 +4,6 @@
 
   <g:HTMLPanel>
     <e:PortalUserEditor ui:field="editor"/>
-    
-    <g:Button text="Test mail registrazione" ui:field="registrationMailBtn"/>
-    
   </g:HTMLPanel>
 
 </ui:UiBinder>
