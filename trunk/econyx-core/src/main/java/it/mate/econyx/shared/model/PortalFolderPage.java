@@ -8,4 +8,8 @@ public interface PortalFolderPage extends PortalPage {
   
   public void setChildreen(List<PortalPage> childreen);
   
+  public Boolean getHideChildreen();
+  
+  public void setHideChildreen (Boolean flag);
+  
 }

@@ -74,8 +74,15 @@ public class ProductActivity extends BaseActivity implements
       retrieveModel();
     }
     if (place.getToken().equals(ProductPlace.VIEW)) {
-      initView(AppClientFactory.IMPL.getGinjector().getProductView(), panel);
-      retrieveModel();
+      
+      // 31/12/2012
+      if (AppClientFactory.isSiteModule && !(place.getModel() instanceof ArticoloDaOrdinare) && PropertiesHolder.getBoolean("client.productActivity.orderProduct.detailsMandatory", false)) {
+        goTo(new ProductPlace(ProductPlace.ORDER_DETAIL, place.getModel()));
+      } else {
+        initView(AppClientFactory.IMPL.getGinjector().getProductView(), panel);
+        retrieveModel();
+      }
+      
     }
     if (place.getToken().equals(ProductPlace.ORDER_DETAIL)) {
       initView(AppClientFactory.IMPL.getGinjector().getProductOrderDetailView(), panel);
@@ -115,7 +122,16 @@ public class ProductActivity extends BaseActivity implements
       getView().setModel(place.getModel());
       
     } else if (place.getToken().equals(ProductPlace.VIEW)) {
-      if (place.getModel() instanceof Articolo) {
+      // 31/12/2012
+      if (place.getModel() instanceof ArticoloDaOrdinare) {
+        Articolo product = ((ArticoloDaOrdinare)place.getModel()).getArticolo();
+        fetchHtmls(product, new Delegate<Articolo>() {
+          public void execute(Articolo product) {
+            ((ArticoloDaOrdinare)place.getModel()).setArticolo(product);
+            getView().setModel(place.getModel());
+          }
+        });
+      } else if (place.getModel() instanceof Articolo) {
         Articolo product = (Articolo)place.getModel();
         fetchHtmls(product, new Delegate<Articolo>() {
           public void execute(Articolo product) {
@@ -249,22 +265,32 @@ public class ProductActivity extends BaseActivity implements
     
     // 23/11/2012
     if (details == null && PropertiesHolder.getBoolean("client.productActivity.orderProduct.detailsMandatory", false)) {
-      
       if (articolo instanceof ArticoloDaOrdinare) {
         goToProductOrderDetailView((ArticoloDaOrdinare)articolo);
       } else {
         Window.alert("Errore interno 01 in productActivity.orderProduct (contattare gli amministratori)");
       }
       return;
-      
     }
-    if (checkLoggedCustomerUser()) {
 
+    // 31/12/2012
+    if (quantity == null) {
+      if (checkLoggedCustomerUser()) {
+        ArticoloDaOrdinare articoloDaOrdinare = new ArticoloDaOrdinare();
+        articoloDaOrdinare.setArticolo(articolo);
+        articoloDaOrdinare.setDetails(details);
+        goTo(new ProductPlace(ProductPlace.VIEW, articoloDaOrdinare));
+      } else {
+        Window.alert("Devi registrarti o inserire il tuo account per procedere");
+      }
+      return;
+    }
+    
+    if (checkLoggedCustomerUser()) {
       Articolo wrappedArticolo = articolo;
       if (articolo instanceof ArticoloDaOrdinare) {
         wrappedArticolo = ((ArticoloDaOrdinare)articolo).getArticolo();
       }
-      
       PortalSessionState portalSessionState = AppClientFactory.IMPL.getPortalSessionState();
       ClientOrderUtils.orderProduct(wrappedArticolo, portalSessionState.getCustomer(), quantity, details, new Delegate<Order>() {
         public void execute(Order order) {

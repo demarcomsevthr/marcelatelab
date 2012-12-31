@@ -9,13 +9,16 @@ import it.mate.econyx.shared.model.impl.IndirizzoSpedizioneTx;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,6 +39,8 @@ public class CustomerEditViewImpl extends AbstractBaseView<CustomerEditView.Pres
   
   @UiField CustomerEditor customerEditor;
   
+  @UiField HTMLPanel successRegistrationHtmlPanel;
+  
   private int mode;
 
   public CustomerEditViewImpl() {
@@ -45,14 +50,14 @@ public class CustomerEditViewImpl extends AbstractBaseView<CustomerEditView.Pres
 
   private void initUI() {
     initWidget(uiBinder.createAndBindUi(this));
-    
     GwtUtils.setStyleAttribute(roundedPanel, "border", "2px solid lightblue");
     GwtUtils.setBorderRadius(roundedPanel, "8px");
-    
-//  GwtUtils.setBorderRadius(okBtn, "2px");
-    
+    String successRegistrationHtmlPanelContent = PropertiesHolder.getString("customerEditView.successRegistrationHtmlPanelContent");
+    if (successRegistrationHtmlPanelContent != null) {
+      successRegistrationHtmlPanel.add(new HTMLPanel(SafeHtmlUtils.fromTrustedString(successRegistrationHtmlPanelContent)));
+    }
   }
-
+  
   @Override
   public void setModel(Object model, String tag) {
     if (Presenter.REGISTRATION_SUCCESS.equals(tag)) {

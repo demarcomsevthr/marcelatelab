@@ -47,8 +47,9 @@ public class StampUtils {
   public static void applySettingsOnWidget(Widget widget, TextControlBar.Settings settings) {
     if (settings.getFontFamily() != null)
       GwtUtils.setStyleAttribute(widget, "fontFamily", settings.getFontFamily());
-    if (settings.getFontSize() > 0)
-      GwtUtils.setStyleAttribute(widget, "fontSize", settings.getFontSize()+"px");
+    if (settings.getFontSize() == 0)
+      settings.setFontSize(10);
+    GwtUtils.setStyleAttribute(widget, "fontSize", settings.getFontSize()+"px");
     GwtUtils.setStyleAttribute(widget, "fontWeight", settings.isBold() ? "bold" : "normal");
     GwtUtils.setStyleAttribute(widget, "fontStyle", settings.isItalic() ? "italic" : "normal");
     GwtUtils.setStyleAttribute(widget, "textDecoration", settings.isUnderline() ? "underline" : "none");

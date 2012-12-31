@@ -7,11 +7,16 @@ import it.mate.econyx.client.view.ProductView;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.ImageContent;
+import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.ImageButton;
 import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
+
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -50,6 +55,10 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
   // 23/11/2012
 //@UiField SpinnerIntegerBox qtaBox;
   
+  @UiField Panel prezzoGroupPanel;
+  @UiField Label prezzoLabel;
+  @UiField Label totaleLabel;
+  
   /* 30/11/2012
   SpinnerIntegerBox integerQtaBox;
   DecimalBox decimalQtaBox;
@@ -57,6 +66,8 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
   QuantitaBox quantitaBox;
   
   private Articolo articolo;
+  
+  private List<OrderItemDetail> details;
   
   public ProductViewImpl() {
     super();
@@ -66,6 +77,10 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
   private void initUI() {
     initProvided();
     initWidget(uiBinder.createAndBindUi(this));
+    
+    if (PropertiesHolder.getBoolean("productView.prezzoGroupPanel.visible")) {
+      prezzoGroupPanel.setVisible(true);
+    }
 
   }
   
@@ -75,6 +90,10 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
   public void setModel(Object model, String tag) {
     if (model instanceof PortalSessionState) {
 
+    } else if (model instanceof ArticoloDaOrdinare) {
+      this.details = ((ArticoloDaOrdinare)model).getDetails();
+      setModel(((ArticoloDaOrdinare)model).getArticolo());
+      
     } else if (model instanceof Articolo) {
       this.articolo = (Articolo)model;
       screenName.setText(articolo.getName());
@@ -101,6 +120,10 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
         createQtaBox(articolo.getUnitaDiMisura().getNome(), articolo.getUnitaDiMisura().getDecimali());
       } else {
         createQtaBox("PZ", 0);
+      }
+      
+      if (prezzoGroupPanel.isVisible()) {
+        prezzoLabel.setText(GwtUtils.formatCurrency(articolo.getPrezzo()));
       }
       
     }
@@ -153,11 +176,10 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
     articoloDaOrdinare.setArticolo(articolo);
     articoloDaOrdinare.setQuantity(qta);
 
+    // 31/11/2012
+    getPresenter().orderProduct(articoloDaOrdinare, qta, this.details);
     // 23/11/2012
-    getPresenter().orderProduct(articoloDaOrdinare, qta, null);
-    /*
-    getPresenter().goToProductOrderDetailView(articoloDaOrdinare);
-    */
+    //getPresenter().orderProduct(articoloDaOrdinare, qta, null);
     
   }
 }

@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.appengine.api.datastore.Blob;
+import com.itextpdf.text.BaseColor;
 
 @Service
 public class CustomAdapterImpl implements CustomAdapter {
@@ -170,10 +171,12 @@ public class CustomAdapterImpl implements CustomAdapter {
       float currentY = detailY;
       
       pdfSession.addAbsoluteText("Anteprima del timbro:", FontTypes.ARIAL, 13, 116, 400, currentY, PdfSession.ALIGN_LEFT);
-
-      currentY -= 28;
       
-      pdfSession.addRectangle(detailX, currentY , detailW, detailH);
+      detailY -= 28;
+
+      currentY = detailY;
+      
+      pdfSession.addRectangle(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
       
       for (OrderItemDetail orderItemDetail : orderItem.getDetails()) {
         if (orderItemDetail instanceof OrderItemStampDetailDs) {

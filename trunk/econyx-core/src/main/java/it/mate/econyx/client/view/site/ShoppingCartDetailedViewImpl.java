@@ -190,11 +190,12 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
       }
       
       row++;
-      Label totLab = new Label("TOTALE :     ");
+      Label totLab = new Label("TOTALE ARTICOLI :     ");
       GwtUtils.setStyleAttribute(totLab, "fontWeight", "bold");
       GwtUtils.setStyleAttribute(totLab, "textAlign", "right");
-      setCellContent(orderTable, row, 2, totLab);
-      setCellContent(orderTable, row, 3, GwtUtils.formatCurrency(Order.Utils.computeImportoTotale(order)));
+      setCellContent(orderTable, row, 1, totLab);
+      GwtUtils.setFlexCellColSpan(orderTable, row, 1, 2);
+      setCellContent(orderTable, row, 2, GwtUtils.formatCurrency(Order.Utils.computeImportoTotale(order,true)));
       
       
     }

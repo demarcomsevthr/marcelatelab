@@ -1,7 +1,10 @@
 package it.mate.econyx.client.model;
 
 import it.mate.econyx.shared.model.Articolo;
+import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
+
+import java.util.List;
 
 // 23/11/2012
 //public class ArticoloDaOrdinare {
@@ -9,7 +12,9 @@ public class ArticoloDaOrdinare extends ArticoloTx {
   
   private Articolo articolo;
   
-  Double quantity;
+  private Double quantity;
+  
+  private List<OrderItemDetail> details;
   
   public Articolo getArticolo() {
     return articolo;
@@ -25,6 +30,14 @@ public class ArticoloDaOrdinare extends ArticoloTx {
 
   public void setQuantity(Double quantity) {
     this.quantity = quantity;
+  }
+
+  public List<OrderItemDetail> getDetails() {
+    return details;
+  }
+
+  public void setDetails(List<OrderItemDetail> details) {
+    this.details = details;
   }
 
 }

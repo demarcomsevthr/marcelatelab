@@ -9,7 +9,9 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
-    <gwt.version>2.4.0</gwt.version>
+    
+    <gwt.version>2.5.0</gwt.version>
+    
     <gin.version>1.5.0</gin.version>
     <gae.version>1.7.2</gae.version>
   </properties>

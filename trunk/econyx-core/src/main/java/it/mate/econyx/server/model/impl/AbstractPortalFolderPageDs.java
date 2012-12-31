@@ -31,6 +31,9 @@ public abstract class AbstractPortalFolderPageDs extends AbstractWebContentPageD
   @UnownedRelationship (key="childreenKeys", itemClass=AbstractPortalPageDs.class)
   transient List<AbstractPortalPageDs> childreen;
   transient private boolean childreenResolved = false;
+
+  @Persistent
+  private Boolean hideChildreen;
   
   @Override
   public void setId(String id) {
@@ -94,6 +97,14 @@ public abstract class AbstractPortalFolderPageDs extends AbstractWebContentPageD
         }
       }
     }
+  }
+
+  public Boolean getHideChildreen() {
+    return hideChildreen;
+  }
+
+  public void setHideChildreen(Boolean hideChildreen) {
+    this.hideChildreen = hideChildreen;
   }
   
 }
