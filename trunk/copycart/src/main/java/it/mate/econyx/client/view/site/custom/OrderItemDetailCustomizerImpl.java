@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -48,7 +49,10 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
   SpinnerIntegerBox logoX;
   SpinnerIntegerBox logoY;
   
+  SpinnerIntegerBox borderSizeBox;
+  
   OrderItemStampDetailTx logoDetail = null;
+  OrderItemStampDetailTx borderDetail = null;
   
   public void setDetailPanel(Panel detailPanel) {
     this.detailPanel = detailPanel;
@@ -72,6 +76,9 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
           if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO.equals(stampDetail.getType())) {
             logoDetail = stampDetail;
           }
+          if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER.equals(stampDetail.getType())) {
+            borderDetail = stampDetail;
+          }
         }
       }
       initDetailPanel();
@@ -90,6 +97,10 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
       logoDetail.setLogoX(logoX.getValue());
       logoDetail.setLogoY(logoY.getValue());
       details.add(logoDetail);
+    }
+    if (borderDetail != null) {
+      borderDetail.setBorderSize(borderSizeBox.getValue());
+      details.add(borderDetail);
     }
     return details;
   }
@@ -136,22 +147,38 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     detailPanel.add(new Spacer("1px", "20px"));
     
     HorizontalPanel logoHPanel = new HorizontalPanel();
+    logoHPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
     logoHPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+    
+    logoHPanel.add(new Label("Bordo:"));
+    logoHPanel.add(new Spacer("10px"));
+    borderSizeBox = new SpinnerIntegerBox(0, 1, 0);
+    borderSizeBox.setWidth("3em");
+    if (borderDetail != null) {
+      borderSizeBox.setValue(borderDetail.getBorderSize());
+    }
+    logoHPanel.add(borderSizeBox);
+    logoHPanel.add(new Spacer("20px"));
+    
     logoHPanel.add(logoUploadBtn);
     logoUpdatePanel = new HorizontalPanel();
     logoUpdatePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     logoUpdatePanel.setVisible(logoDetail != null);
     logoUpdatePanel.add(new Spacer("10px"));
-    logoUpdatePanel.add(new Label("Posizione:"));
+    /*
     logoUpdatePanel.add(logoX);
     logoUpdatePanel.add(logoY);
-    logoUpdatePanel.add(new Spacer("10px"));
+    */
     logoUpdatePanel.add(new Button("rimuovi logo", new ClickHandler() {
       public void onClick(ClickEvent event) {
         logoDetail = null;
         logoUpdatePanel.setVisible(false);
       }
     }));
+    logoUpdatePanel.add(new Spacer("10px"));
+    Label logoNote = new Label("Trascina l'immagine con il mouse per posizionarla dove vuoi");
+    GwtUtils.setStyleAttribute(logoNote, "fontSize", "9px");
+    logoUpdatePanel.add(logoNote);
     logoHPanel.add(logoUpdatePanel);
     detailPanel.add(logoHPanel);
     

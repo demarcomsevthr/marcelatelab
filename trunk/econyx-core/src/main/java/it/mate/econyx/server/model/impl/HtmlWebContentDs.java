@@ -7,7 +7,7 @@ import it.mate.gwtcommons.server.model.HasKey;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-@CacheableEntity (txClass=HtmlContentTx.class)
+@CacheableEntity (txClass=HtmlContentTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 public class HtmlWebContentDs extends HtmlContentDs implements HtmlContent, HasKey {

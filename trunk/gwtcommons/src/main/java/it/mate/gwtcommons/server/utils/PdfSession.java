@@ -180,6 +180,16 @@ public class PdfSession {
     dc.stroke();
   }
   
+  public void addEllipse(float x, float y, float w, float h, float lw, BaseColor color) {
+    PdfContentByte dc = writer.getDirectContent();
+    dc.setColorStroke(color);
+    dc.setLineWidth(lw);
+    float x2 = x + w;
+    float y2 = y - h;
+    dc.ellipse(x, y, x2, y2);
+    dc.stroke();
+  }
+  
   public void createFont(String fontName, byte[] ttfAfm) {
     try {
       if (!fontMap.containsKey(fontName)) {

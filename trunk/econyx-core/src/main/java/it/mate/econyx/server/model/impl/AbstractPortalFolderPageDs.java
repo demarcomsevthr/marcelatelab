@@ -35,6 +35,9 @@ public abstract class AbstractPortalFolderPageDs extends AbstractWebContentPageD
   @Persistent
   private Boolean hideChildreen;
   
+  @Persistent
+  private Boolean showChildreenContent;
+  
   @Override
   public void setId(String id) {
     super.setId(id);
@@ -105,6 +108,14 @@ public abstract class AbstractPortalFolderPageDs extends AbstractWebContentPageD
 
   public void setHideChildreen(Boolean hideChildreen) {
     this.hideChildreen = hideChildreen;
+  }
+
+  public Boolean getShowChildreenContent() {
+    return showChildreenContent;
+  }
+
+  public void setShowChildreenContent(Boolean showChildreenContent) {
+    this.showChildreenContent = showChildreenContent;
   }
   
 }

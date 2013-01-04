@@ -4,7 +4,11 @@ BODY {
     border: none;
 }
 
-.mwt-PagePortlet * {
+/*
+  02/01/2013 cambiato il selettore da * a td
+*/
+
+.mwt-PagePortlet td {
   font: 11px Verdana;
 }
 

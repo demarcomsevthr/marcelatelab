@@ -10,6 +10,12 @@
 		__________________________________________________________________________________
 
 
+		SNAPSHOT 04/01/2013
+			> RIPROVARE A FRONTE DEI SEGUENTI CAMBIAMENTI:
+				> attivazione instance cahce su tutti i ds portalpage e collegati
+				> passaggio a gwt 2.5
+				> modifiche in PortalPageView per copycart (PortalFolderPage.showChildreenContent)
+
 		SNAPSHOT 14/12/2012
 			> gestione Order.importoTotale
 				>> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateImportoTotale(Order, Double, boolean)

@@ -28,8 +28,10 @@ import it.mate.econyx.shared.model.UnitaDiMisura;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.DataNotFoundException;
 import it.mate.gwtcommons.server.dao.FindCallback;
+import it.mate.gwtcommons.server.dao.JdoDao;
 import it.mate.gwtcommons.server.dao.JdoDaoWithCache;
 import it.mate.gwtcommons.server.dao.UpdateCallback;
+import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
@@ -173,12 +175,28 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   }
   
   public void deleteAll () {
-    deleteOrders();
-    deletePages();
-    deleteCustomers();
-    deleteUsers();
-    deleteImages();
-    deleteProducts();
+    try {
+      // serve fare due clear delle cache, prima e dopo
+      CacheUtils.clearAll();
+      JdoDao.setSuppressExceptionThrowOnInternalFind(true);
+      deleteOrders();
+      deletePages();
+      deleteCustomers();
+      deleteUsers();
+      deleteImages();
+      deleteProducts();
+      CacheUtils.clearAll();
+
+      // 04/01/2013
+      // workaround: una sola passata lascia dati sporchi >> DA APPROFONDIRE!
+      List<PortalPage> pages = portalPageAdapter.findAll();
+      if (pages != null && pages.size() > 0) {
+        deleteAll();
+      }
+      
+    } finally {
+      JdoDao.setSuppressExceptionThrowOnInternalFind(false);
+    }
   }
   
   private void deleteUsers() {

@@ -85,6 +85,10 @@ public abstract class PortalPageTx implements PortalPage {
     return parent;
   }
   
+  public void setParent(PortalPageTx parent) {
+    this.parent = parent;
+  }
+  
   public String getParentId() {
     return parentId;
   }

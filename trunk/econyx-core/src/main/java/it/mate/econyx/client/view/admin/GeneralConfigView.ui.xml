@@ -57,6 +57,9 @@
       <gc:Spacer height="2px"/>
       <g:Button ui:field="exceptionTestBtn" width="12em" text="Exception Test"/>
       
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="customTest1Btn" width="12em" text="Wait Panel"/>
+      
     </g:VerticalPanel>
     
     <g:FormPanel ui:field="exportForm" visible="false"/>

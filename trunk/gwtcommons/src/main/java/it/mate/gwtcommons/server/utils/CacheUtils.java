@@ -3,6 +3,7 @@ package it.mate.gwtcommons.server.utils;
 import it.mate.gwtcommons.server.dao.JdoDao;
 import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,38 +43,24 @@ public class CacheUtils {
   
   @SuppressWarnings("unchecked")
   public static Object get (Object key) {
+    Object result = null;
     if (key != null) {
-      
-      Object result = null;
-      
       result = getInstCache().get(keyToString(key));
-      
       if (result == null) {
+        logger.debug(String.format("INSTCACHE MISSED entity with key %s", formatKeyToString(key)));
         result = getMemCache().get(keyToString(key));
       }
-      
-      if (result instanceof CacheEntry) {
+      if (result == null) {
+        logger.debug(String.format("MEMCACHE  MISSED entity with key %s", formatKeyToString(key)));
+      }
+      if (result != null && result instanceof CacheEntry) {
         CacheEntry cacheEntry = (CacheEntry)result;
         if (cacheEntry.dsClass != null) {
           result = CloneUtils.clone(cacheEntry.entity, cacheEntry.dsClass);
         }
       }
-      if (result == null) {
-        Key kk = null;
-        if (key instanceof Key) {
-          kk = (Key)key;
-        } else {
-          kk = KeyFactory.stringToKey((String)key);
-        }
-        String k = kk.getKind()+"."+kk.getId();
-        logger.debug(String.format("MISSING entity in cache with key %s", k));
-      }
-      if (result != null) {
-//      logger.debug(String.format("retrieved from cache object %s with key %s", result, key));
-      }
-      return result;
     }
-    return null;
+    return result;
   }
   
   public static void put (Object entity) {
@@ -81,30 +68,18 @@ public class CacheUtils {
       Serializable serializableEntity = (Serializable)entity;
       CacheableEntity cacheableEntityAnnotation = getCacheableEntityAnnotation(serializableEntity.getClass());
       if (entity instanceof HasKey && cacheableEntityAnnotation != null) {
-        
         HasKey hasKeyEntity = (HasKey)entity;
-        
         Class<?> txClass = cacheableEntityAnnotation.txClass();
-        
-        Key k = hasKeyEntity.getKey();
-//      logger.debug("updating entity in cache with key "+k.getKind()+"."+k.getId());
-
-//      applyBlobPatch(entity);
-
         Object entityClone = entity;
         if (txClass != null) {
           entityClone = CloneUtils.clone(entity, txClass);
         }
-        
         CacheEntry cacheEntry = new CacheEntry(entityClone, txClass, entity.getClass());
-        
         if (cacheableEntityAnnotation.instanceCache()) {
           getInstCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
         } else {
           getMemCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
         }
-        
-//      logger.debug(String.format("updated in cache object %s", entity));
       }
     }
   }
@@ -114,7 +89,6 @@ public class CacheUtils {
       try {
         HasKey hasKeyEntity = (HasKey)entity;
         deleteByKey(hasKeyEntity.getKey());
-//      logger.debug(String.format("deleted from cache object %s", entity));
       } catch (Exception ex) {
         logger.error("error", ex);
       }
@@ -128,6 +102,7 @@ public class CacheUtils {
   }
   
   public static void clearAll() {
+    getInstCache().clear();
     getMemCache().clearAll();
   }
   
@@ -160,22 +135,6 @@ public class CacheUtils {
     }
   }
 
-  /*
-  private static void applyBlobPatch (Object entity) {
-    List<Field> entityFields = ReflectionUtils.getAllPrivateFields(entity.getClass(), null);
-    for (Field field : entityFields) {
-      if (field.getType().equals(Blob.class)) {
-        field.setAccessible(true);
-        try {
-          field.set(entity, null);
-        } catch (Exception ex) {
-          logger.error("error", ex);
-        }
-      }
-    }
-  }
-  */
-  
   private static boolean existsInCacheByKey (Object key) {
     return getMemCache().contains(keyToString(key));
   }
@@ -185,10 +144,15 @@ public class CacheUtils {
   }
   
   private synchronized static Map<Object, Object> getInstCache() {
-    if (instanceCache == null) {
-      instanceCache = new HashMap<Object, Object>();
+    if (PropertiesHolder.getBoolean("it.mate.gwtcommons.server.utils.CacheUtils.useInstanceCache", true)) {
+      if (instanceCache == null) {
+        instanceCache = new HashMap<Object, Object>();
+      }
+      return instanceCache;
+    } else {
+      // se voglio annullare la cache globalmente restituisco sempre una map vuota
+      return new HashMap<Object, Object>();
     }
-    return instanceCache;
   }
   
   private static String keyToString(Object key) {
@@ -196,6 +160,17 @@ public class CacheUtils {
       key = KeyFactory.keyToString((Key)key);
     }
     return key.toString();
+  }
+  
+  private static String formatKeyToString(Object key) {
+    Key kk = null;
+    if (key instanceof Key) {
+      kk = (Key)key;
+    } else {
+      kk = KeyFactory.stringToKey((String)key);
+    }
+    String k = kk.getKind()+"."+kk.getId();
+    return k;
   }
   
 }

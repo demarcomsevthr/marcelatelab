@@ -7,7 +7,7 @@ import it.mate.econyx.client.places.CustomerPlace;
 import it.mate.econyx.client.places.ShoppingCartPlace;
 import it.mate.econyx.client.util.EconyxUtils;
 import it.mate.econyx.client.util.ClientOrderUtils;
-import it.mate.econyx.client.util.PortalPageCacheUtil;
+import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.view.ShoppingCartView;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
@@ -188,7 +188,7 @@ public class ShoppingCartActivity extends BaseActivity implements
             AppClientFactory.IMPL.getPortalSessionState().setOpenOrder(updatedOrder);
             if (updatedOrder.getItems() == null || updatedOrder.getItems().size() == 0) {
               GwtUtils.messageBox("L'ordine &egrave; stato annullato");
-              PortalPageCacheUtil.reloadCurrentPage();
+              PortalPageClientUtil.reloadCurrentPage();
             }
             getView().setModel(updatedOrder);
           }

@@ -46,6 +46,9 @@ public class OrderItemStampDetailDs extends AbstractOrderItemDetailDs {
   @Persistent
   Integer logoY;
   
+  @Persistent
+  Integer borderSize;
+  
   
   @Override
   public String toString() {
@@ -147,6 +150,14 @@ public class OrderItemStampDetailDs extends AbstractOrderItemDetailDs {
 
   public void setLogoY(Integer logoY) {
     this.logoY = logoY;
+  }
+  
+  public Integer getBorderSize() {
+    return borderSize;
+  }
+
+  public void setBorderSize(Integer borderSize) {
+    this.borderSize = borderSize;
   }
   
 }

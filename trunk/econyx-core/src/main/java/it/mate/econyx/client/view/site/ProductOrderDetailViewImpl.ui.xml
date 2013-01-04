@@ -36,7 +36,7 @@
   
     <g:HTMLPanel width="100%">
       <g:HorizontalPanel>
-        <g:HTMLPanel ui:field="mediumImagePanel" width="180px"/>
+        <g:HTMLPanel ui:field="mediumImagePanel" />
         <g:VerticalPanel>
           <gc:Spacer height="12px"/>
           <g:Label ui:field="screenName" addStyleNames="{style.productScreenName}" width="100%"/>
@@ -55,12 +55,13 @@
 
     <gc:Spacer height="40px"/>
 
-    <g:VerticalPanel width="100%" horizontalAlignment="RIGHT">
+    <g:VerticalPanel width="100%" horizontalAlignment="CENTER">
       <g:HorizontalPanel ui:field="ordinaPanel" verticalAlignment="MIDDLE">
+        <!-- 
         <gc:SpinnerIntegerBox ui:field="qtaBox" width="3em" addStyleNames="{style.qtaBox}"/>
         <gc:Spacer width="5px"/>
-        <gc:ImageButton ui:field="cartBtn" url="/images/ecommerce/shopcart.png" text="Aggiungi al carrello" addStyleNames="{style.cartBtn}"/>
-        <gc:Spacer width="140px"/>
+         -->
+        <gc:ImageButton ui:field="cartBtn" url="/images/ecommerce/shopcart.png" text="Procedi con l'acquisto" addStyleNames="{style.cartBtn}"/>
       </g:HorizontalPanel>
     </g:VerticalPanel>
           

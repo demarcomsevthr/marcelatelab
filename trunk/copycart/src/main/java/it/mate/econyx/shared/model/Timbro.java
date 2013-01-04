@@ -14,4 +14,10 @@ public interface Timbro extends Articolo {
   
   public void setNumRighe(Integer numRighe);
   
+  public Boolean getOval();
+
+  public void setOval(Boolean oval);
+  
+  public boolean isOval();
+  
 }

@@ -37,6 +37,9 @@ public class JdoDao implements Dao {
   
   private static final boolean USE_FIND_BY_ID_ALL_OLD_VERSION = false;
   
+  // 04/01/2013
+  private static boolean suppressExceptionThrowOnInternalFind = false;
+  
   
   private static final Map<Class<? extends Serializable>, List<Class<? extends Serializable>>> entityClassSubTypesCache = 
       new HashMap<Class<? extends Serializable>, List<Class<? extends Serializable>>>();
@@ -157,7 +160,11 @@ public class JdoDao implements Dao {
             throw new DataNotFoundException();
           }
         } catch (Exception ne) {
-          throw new DataNotFoundException(ne);
+          if (suppressExceptionThrowOnInternalFind) {
+            results = null;
+          } else {
+            throw new DataNotFoundException(ne);
+          }
         }
       } else {
         
@@ -491,6 +498,14 @@ public class JdoDao implements Dao {
       pm.close();
     }
     return (List<E>)resolveUnownedRelationships(results, null);
+  }
+  
+  public static void setSuppressExceptionThrowOnInternalFind(boolean suppressExceptionThrowOnInternalFind) {
+    JdoDao.suppressExceptionThrowOnInternalFind = suppressExceptionThrowOnInternalFind;
+  }
+  
+  public static boolean isSuppressExceptionThrowOnInternalFind() {
+    return JdoDao.suppressExceptionThrowOnInternalFind;
   }
   
 }

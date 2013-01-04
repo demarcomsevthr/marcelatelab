@@ -12,14 +12,17 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class PortalPageCacheUtil {
+public class PortalPageClientUtil {
   
   private static Map<String, PortalPage> pagesCache;
   
   private static PortalPageServiceAsync portalPageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
+  
+  private static String pageContentRenderFinishedDivId;
   
   public static void goToPageByCode(String pageCode) {
     ensureCache();
@@ -62,6 +65,14 @@ public class PortalPageCacheUtil {
   public static void goToPage(String pageId, final boolean forceReloadPage) {
     ensureCache();
     
+    pageContentRenderFinishedDivId = "pageContentRenderFinishedDiv" + System.currentTimeMillis();
+    GwtUtils.showWaitPanel();
+    GwtUtils.onAvailable(pageContentRenderFinishedDivId, new Delegate<Element>() {
+      public void execute(Element element) {
+        GwtUtils.hideWaitPanel();
+      }
+    });
+    
     PortalPage cachedPage = pagesCache.get(pageId);
     if (cachedPage != null && cachedPage instanceof PortalFolderPage) {
       PortalFolderPage portalFolderPage = (PortalFolderPage)cachedPage;
@@ -97,11 +108,15 @@ public class PortalPageCacheUtil {
     };
     
     if (cachedPage != null) {
-      GwtUtils.log(PortalPageCacheUtil.class, "goToPage", "found page in cache " + cachedPage);
+      GwtUtils.log(PortalPageClientUtil.class, "goToPage", "found page in cache " + cachedPage);
       pageRetrievedDelegate.execute(cachedPage);
     } else {
       findById(pageId, true, true, true, pageRetrievedDelegate);
     }
+  }
+  
+  public static String getPageContentRenderFinishedDivId() {
+    return pageContentRenderFinishedDivId;
   }
   
   public static void putInCache(PortalPage page) {
@@ -122,22 +137,22 @@ public class PortalPageCacheUtil {
   
   @SuppressWarnings("unchecked")
   private static void ensureCache() {
-    String cacheAttrName = PortalPageCacheUtil.class.getName()+".pagesCache";
+    String cacheAttrName = PortalPageClientUtil.class.getName()+".pagesCache";
     pagesCache = (Map<String, PortalPage>) GwtUtils.getClientAttribute(cacheAttrName);
     if (pagesCache == null) {
       pagesCache = new HashMap<String, PortalPage>();
-      GwtUtils.setClientAttribute(cacheAttrName, PortalPageCacheUtil.pagesCache);
+      GwtUtils.setClientAttribute(cacheAttrName, PortalPageClientUtil.pagesCache);
     }
   }
 
   private static void findById(String id, final boolean fetchChildreen, final boolean fetchProducts, final boolean fetchHtmls, final Delegate<PortalPage> delegate) {
-    GwtUtils.log(PortalPageCacheUtil.class, "findById", "before portalPageService.findById");
+    GwtUtils.log(PortalPageClientUtil.class, "findById", "before portalPageService.findById");
     portalPageService.findById(id, fetchChildreen, fetchProducts, fetchHtmls, new AsyncCallback<PortalPage>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }
       public void onSuccess(PortalPage page) {
-        GwtUtils.log(PortalPageCacheUtil.class, "findById", "after portalPageService.findById");
+        GwtUtils.log(PortalPageClientUtil.class, "findById", "after portalPageService.findById");
         delegate.execute(page);
       }
     });

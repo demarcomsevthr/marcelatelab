@@ -15,7 +15,7 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-@CacheableEntity (txClass=ImageTx.class)
+@CacheableEntity (txClass=ImageTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 public class ImageDs implements Image, HasKey {

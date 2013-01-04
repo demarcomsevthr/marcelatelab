@@ -4,37 +4,67 @@
     ______________________________________________________________________________________
 
 
-		SNAPSHOT 27/12/2012
-		
+		SNAPSHOT 04/01/2013
+
 		    >>> UPG GWT 2.5.0 > IN TEST
-		    	> /gwtcommons/pom.xml
-		    		gwt.version
-		    		gquery-dnd-bundle version
-		    	> /econyx-base-app/pom.xml
-		    		gwt.version
+		    	> /gwtcommons/pom.xml (gwt.version, gquery-dnd-bundle version)
+		    	> /econyx-base-app/pom.xml (gwt.version)
 		    	> it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator
-		
+		    	
+		    >> INSTANT CACHE
+		    	>> settato instanceCache=true sui ds
+		    	>> TENERE SOTTO CONTROLLO E PROVARE SU GP8
+		    		> it.mate.gwtcommons.server.dao.JdoDao.suppressExceptionThrowOnInternalFind
+		    	
+		    >>> TIMBRO PDF
+		    	> caso TR46019, voglio centrare il testo in verticale:
+		    	> scrivo CENTRO sulla 3^ riga, e metto a 8px la 1^ e la 2^
+		    	  > a video viene centrato, sul pdf NO !!!!	
+		    	>> CAMPO BORDO NUMERICO ??? (viene utilizzato per abbassare il testo di x px)
+		    		>>> it.mate.econyx.shared.model.impl.OrderItemStampDetailTx.borderSize
+		    	  
+		    >>> DATARI !!!!
+		    	
+		    >>> TIMBRI OVALI
+		    	> it.mate.econyx.shared.model.Timbro (.oval = true | false)
+		    	> it.mate.econyx.client.ui.StampPreviewPanel.setTimbro(Timbro)
+		    	>> PDF > it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItemDetails
+		    	
+		    >>> NOTE ALL'ORDINE
+		    	> nota di riga
+		    	> nota complessiva
+		    	
+		    >>> TIMBRO LOGO:
+		    	> indicare la dim max in pixel dell'immagine da caricare		
+		    	
+			> finire catalogo timbri (???)
+				>> portaldata.xml > TIMBRI DUE
+					> it.mate.econyx.client.view.site.PortalPageViewImpl.setModel
+			
 			> gestione utenti > attivazione utente in manuale >> invio mail
 				> invio mail di notifica agli admins
 				
-			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> FINIRE (font!)
-				> invertire ordine timbro, order product
-					> it.mate.econyx.client.view.site.ProductOrderDetailViewImpl
-					> it.mate.econyx.client.view.site.ProductViewImpl
-					> it.mate.econyx.client.activities.ProductActivity.orderProduct
-					
-			> finire catalogo timbri (???)
-			> attendere prego >> waiting gif
+			> chiusura ordine: totale con spese di spedizione
+			
+			> chiusura ordine: modalità di pagamento (nota html)
+			
 			> hai dimenticato la pwd
 			
 			> timbro: aggiungi/cancella riga
 				>> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl.initDetailPanel
 				
+			---------------------------------
+			
 			> timbro: default font: 10px > OK
 			> timbro: logo dnd > OK
 				> it.mate.econyx.client.ui.StampPreviewPanel.update
 				> it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl.updatePreview
 			> pagina sito in costruzione >> site.html (site-buono.html) > OK
+			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> OK
+			> attendere prego >> waiting gif
+			> pagina in evidenza (tnt) > OK
+				
+			---------------------------------
 			
 		
 		

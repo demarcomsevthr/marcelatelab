@@ -7,13 +7,11 @@ import it.mate.econyx.client.view.custom.OrderItemDetailCustomizer;
 import it.mate.econyx.client.view.custom.OrderItemEditViewCustomizer;
 import it.mate.econyx.client.view.custom.PortalPageExplorerViewCustomizer;
 import it.mate.econyx.client.view.custom.ProductEditViewCustomizer;
-import it.mate.econyx.client.view.custom.ProductListViewCustomizer;
 import it.mate.econyx.client.view.site.custom.OrderItemDetailCustomizerImpl;
 import it.mate.econyx.client.view.site.custom.OrderItemEditViewCustomizerImpl;
 import it.mate.econyx.client.view.site.custom.PortalPageExplorerViewCustomizerImpl;
 import it.mate.econyx.client.view.site.custom.PortalPageMenuViewCustomizerImpl;
 import it.mate.econyx.client.view.site.custom.ProductEditViewCustomizerImpl;
-import it.mate.econyx.client.view.site.custom.ProductListViewCustomizerImpl;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.event.shared.EventBus;
@@ -80,11 +78,6 @@ public class CustomClientFactory extends DefaultCustomClientFactory {
   @Override
   public PortalPageMenuViewCustomizerImpl getPortalPageMenuViewCustomizer() {
     return new PortalPageMenuViewCustomizerImpl();
-  }
-
-  @Override
-  public ProductListViewCustomizer getProductListViewCustomizer() {
-    return new ProductListViewCustomizerImpl();
   }
 
   @Override

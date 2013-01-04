@@ -16,7 +16,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-@CacheableEntity (txClass=PortalPageTx.class)
+@CacheableEntity (txClass=PortalPageTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true", identityType=IdentityType.APPLICATION)
 @Inheritance (strategy = InheritanceStrategy.SUBCLASS_TABLE)
