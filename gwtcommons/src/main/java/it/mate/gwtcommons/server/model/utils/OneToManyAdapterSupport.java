@@ -3,6 +3,7 @@ package it.mate.gwtcommons.server.model.utils;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindCallback;
 import it.mate.gwtcommons.server.dao.FindContext;
+import it.mate.gwtcommons.server.dao.JdoDao;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.utils.DynamicInvocationUtils;
 
@@ -72,6 +73,9 @@ public class OneToManyAdapterSupport <OWNER extends Serializable, ITEM extends S
   public void onBeforeDelete(OWNER detachedEntity) {
     try {
       List<ITEM> attachedItems = findAttachedItemsByEntityId(detachedEntity);
+      if (JdoDao.isSuppressExceptionThrowOnInternalFind() && attachedItems == null) {
+        return;
+      }
       for (ITEM attachedItem : attachedItems) {
         dao.delete(attachedItem);
       }
@@ -119,6 +123,9 @@ public class OneToManyAdapterSupport <OWNER extends Serializable, ITEM extends S
       });
       
       OWNER attachedEntity = dao.findById(context);
+      if (JdoDao.isSuppressExceptionThrowOnInternalFind() && attachedEntity == null) {
+        return null;
+      }
       List<ITEM> attachedItemList = (List<ITEM>) DynamicInvocationUtils.invokeMethod(attachedEntity, getItemsMethodName);
       return attachedItemList;
     } else {

@@ -23,6 +23,10 @@ public class TimbroDs extends AbstractArticoloDs implements Timbro {
   @Persistent
   Integer numRighe;
   
+  @Persistent
+  Boolean oval;
+  
+  
   @Override
   public String toString() {
     return "TimbroDs [ "+ super.toString() +" larghezza=" + larghezza + ", altezza=" + altezza + ", numRighe=" + numRighe + "]";
@@ -52,4 +56,16 @@ public class TimbroDs extends AbstractArticoloDs implements Timbro {
     this.numRighe = numRighe;
   }
 
+  public Boolean getOval() {
+    return oval;
+  }
+
+  public void setOval(Boolean oval) {
+    this.oval = oval;
+  }
+  
+  public boolean isOval() {
+    return oval != null ? oval : false;
+  }
+  
 }

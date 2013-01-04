@@ -18,7 +18,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
-@CacheableEntity (txClass=HtmlContentTx.class)
+@CacheableEntity (txClass=HtmlContentTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 @Inheritance (strategy = InheritanceStrategy.SUBCLASS_TABLE)

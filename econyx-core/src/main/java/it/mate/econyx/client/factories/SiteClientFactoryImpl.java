@@ -6,7 +6,7 @@ import it.mate.econyx.client.events.PortalPageChangingEvent;
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.places.AppPlaceHistoryMapper;
 import it.mate.econyx.client.places.PortalPagePlace;
-import it.mate.econyx.client.util.PortalPageCacheUtil;
+import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.util.PortalUtils;
 import it.mate.econyx.client.util.TemplatesUtils;
 import it.mate.econyx.shared.model.PortalPage;
@@ -31,9 +31,12 @@ import javax.annotation.PreDestroy;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -89,6 +92,15 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   
   @Override
   public void initModule(Panel portalPanel) {
+    
+    PopupPanel defaultWaitPanel = new PopupPanel();
+    GwtUtils.setStyleAttribute(defaultWaitPanel, "border", "none");
+    GwtUtils.setStyleAttribute(defaultWaitPanel, "background", "transparent");
+    defaultWaitPanel.setGlassEnabled(false);
+    defaultWaitPanel.setAnimationEnabled(true);
+    Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
+    defaultWaitPanel.setWidget(waitingImg);
+    GwtUtils.setDefaultWaitPanel(defaultWaitPanel);
     
     portalPanel.setVisible(false);
     
@@ -308,7 +320,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
           if (!(pageTemplate.getWidgetFactory() instanceof PagePortlet.Factory) && !initPortalContext.isPortalInitialized() && initPortalContext.enquePortalPageChangeEvent()) {
             initPortalContext.setPortalInitialized(true);
             if (portalSessionState.getCurrentPageId() != null) {
-              PortalPageCacheUtil.goToPage(portalSessionState.getCurrentPageId(), true);
+              PortalPageClientUtil.goToPage(portalSessionState.getCurrentPageId(), true);
             }
           }
         }
@@ -348,7 +360,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   private void initHashChangeListener() {
     HashChangeUtil.addHashChangeHandler(new Delegate<String>() {
       public void execute(String currentHash) {
-        PortalPageCacheUtil.goToPageByCode(currentHash);
+        PortalPageClientUtil.goToPageByCode(currentHash);
       }
     });
   }

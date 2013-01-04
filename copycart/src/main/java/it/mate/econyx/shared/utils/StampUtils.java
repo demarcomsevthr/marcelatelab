@@ -14,6 +14,8 @@ public class StampUtils {
   
   public static final String ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO = "L";
   
+  public static final String ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER = "B";
+  
   public static OrderItemDetail convertSettingsToOrderItemDetail (String text, TextControlBar.Settings settings) {
     OrderItemStampDetailTx detail = new OrderItemStampDetailTx();
     detail.setType(ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT);

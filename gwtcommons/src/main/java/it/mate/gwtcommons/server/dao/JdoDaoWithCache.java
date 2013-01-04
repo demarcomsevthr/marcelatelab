@@ -24,19 +24,6 @@ public class JdoDaoWithCache extends JdoDao {
     
     boolean useCache = (cacheableEntityAnnotation != null && !context.cacheDisabled());
     
-    /*
-
-    boolean useCache = (cacheableEntityAnnotation != null && context.getId() != null && !context.cacheDisabled());
-    
-    if (useCache) {
-      Object cachedResult = CacheUtils.retrieveFromCache(context.getId());
-      if (cachedResult != null) {
-        return cachedResult;
-      }
-    }
-    */
-    
-    // 17/11/2012
     if (useCache) {
       
       if (context.getId() != null) {
@@ -120,8 +107,6 @@ public class JdoDaoWithCache extends JdoDao {
     
     Object result = super.internalFind(context);
   
-    // 17/11/2012
-//  if (useCache) {
     if (useCache && context.getId() != null) {
       CacheUtils.put(result);
     }

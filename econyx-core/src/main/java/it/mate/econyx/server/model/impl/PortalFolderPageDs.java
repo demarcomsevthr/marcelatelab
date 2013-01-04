@@ -6,7 +6,7 @@ import it.mate.gwtcommons.shared.model.CloneableBean;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-@CacheableEntity (txClass=PortalFolderPageTx.class)
+@CacheableEntity (txClass=PortalFolderPageTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 @CloneableBean (overrideTargetClassName="it.mate.econyx.shared.model.impl.PortalFolderPageTx")

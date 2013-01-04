@@ -13,6 +13,9 @@ public class TimbroTx extends ArticoloTx implements Timbro {
   
   Integer numRighe;
   
+  Boolean oval;
+  
+  
   @Override
   public String toString() {
     return "TimbroTx [ "+ super.toString() +" larghezza=" + larghezza + ", altezza=" + altezza + ", numRighe=" + numRighe + "]";
@@ -40,6 +43,18 @@ public class TimbroTx extends ArticoloTx implements Timbro {
 
   public void setNumRighe(Integer numRighe) {
     this.numRighe = numRighe;
+  }
+
+  public Boolean getOval() {
+    return oval;
+  }
+
+  public void setOval(Boolean oval) {
+    this.oval = oval;
+  }
+
+  public boolean isOval() {
+    return oval != null ? oval : false;
   }
 
 }

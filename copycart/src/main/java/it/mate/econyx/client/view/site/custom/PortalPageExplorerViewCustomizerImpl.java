@@ -1,6 +1,6 @@
 package it.mate.econyx.client.view.site.custom;
 
-import it.mate.econyx.client.util.PortalPageCacheUtil;
+import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.view.PortalPageExplorerView.TreeModel;
 import it.mate.econyx.client.view.custom.PortalPageExplorerViewCustomizerDefaultImpl;
 import it.mate.econyx.shared.model.PortalPage;
@@ -54,7 +54,7 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
           }
           WaitingCursorUtil.setTargetElement(thisItem.getElement());
           WaitingCursorUtil.setPreviousCursor("pointer");
-          PortalPageCacheUtil.goToPage(thisItem.portalPage, true);
+          PortalPageClientUtil.goToPage(thisItem.portalPage, true);
         }
       });
       

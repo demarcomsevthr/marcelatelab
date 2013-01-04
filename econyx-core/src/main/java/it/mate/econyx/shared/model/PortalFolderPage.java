@@ -12,4 +12,8 @@ public interface PortalFolderPage extends PortalPage {
   
   public void setHideChildreen (Boolean flag);
   
+  public Boolean getShowChildreenContent();
+  
+  public void setShowChildreenContent(Boolean value);
+  
 }

@@ -107,10 +107,13 @@ public class AdminLayoutView extends Composite {
   
   protected void initUI() {
     initWidget(uiBinder.createAndBindUi(this));
-    
+
+    /*
     addMenu(menubar, "Generale", null, new MenuItemInfo[] {
         new MenuItemInfo("Impostazioni", new GeneralPlace())
       });
+      */
+    addMenu(menubar, "Generale", new GeneralPlace(), null);
     
     addMenu(menubar, "Ordini", new OrderPlace(OrderPlace.LIST).name("Ordini"), null);
     addMenu(menubar, "Pagine", new PortalPagePlace(PortalPagePlace.LIST).name("Pagine"), null);

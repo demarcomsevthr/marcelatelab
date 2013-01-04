@@ -15,7 +15,6 @@ import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.ImageButton;
 import it.mate.gwtcommons.client.ui.Spacer;
-import it.mate.gwtcommons.client.ui.SpinnerIntegerBox;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class ProductOrderDetailViewImpl extends AbstractBaseView<ProductView.Pre
   @UiField Panel shortHtmlPanel;
   @UiField Panel ordinaPanel;
   
-  @UiField SpinnerIntegerBox qtaBox;
+  //@UiField SpinnerIntegerBox qtaBox;
   
   @UiField ImageButton cartBtn;
   
@@ -75,10 +74,10 @@ public class ProductOrderDetailViewImpl extends AbstractBaseView<ProductView.Pre
     } else if (model instanceof ArticoloDaOrdinare) {
       ArticoloDaOrdinare articoloDaOrdinare = (ArticoloDaOrdinare)model;
       setArticolo(articoloDaOrdinare.getArticolo());
-      qtaBox.setValue(articoloDaOrdinare.getQuantity().intValue());
+//    qtaBox.setValue(articoloDaOrdinare.getQuantity().intValue());
     } else if (model instanceof Articolo) {
       setArticolo((Articolo)model);
-      qtaBox.setVisible(false);
+//    qtaBox.setVisible(false);
     }
   }
   
@@ -89,8 +88,10 @@ public class ProductOrderDetailViewImpl extends AbstractBaseView<ProductView.Pre
       ArticoloTx productTx = (ArticoloTx)articolo;
       if (productTx.hasImageOfType(ImageContent.Type.MEDIUM)) {
         Image image = new Image(UrlUtils.getProductImageUrl(articolo.getId(), "medium"));
+        /*
         image.setWidth("120px");
         image.setHeight("120px");
+        */
         mediumImagePanel.add(image);
         mediumImagePanel.add(new Spacer("1px", "10px"));
       }
@@ -105,23 +106,11 @@ public class ProductOrderDetailViewImpl extends AbstractBaseView<ProductView.Pre
   
   @UiHandler ("cartBtn")
   public void onCartBtn(ClickEvent event) {
-    // 23/11/2012
     List<OrderItemDetail> details = customizer.getDetails();
-    Double qta = qtaBox.isVisible() ? (double)qtaBox.getValue() : null;
+    // 31/12/2012
+//  Double qta = qtaBox.isVisible() ? (double)qtaBox.getValue() : null;
+    Double qta = null;
     getPresenter().orderProduct(articolo, qta, details);
-    /*
-    if (checkPortalSessionState()) {
-      List<OrderItemDetail> details = customizer.getDetails();
-      getPresenter().orderProduct(articolo, (double)qtaBox.getValue(), details);
-    } else {
-      Window.alert("Devi registrarti o inserire il tuo account per procedere");
-    }
-    */
   }
-  
-  private boolean checkPortalSessionState() {
-    return (portalSessionState != null && portalSessionState.getLoggedUser() != null && portalSessionState.getCustomer() != null);
-  }
-
   
 }

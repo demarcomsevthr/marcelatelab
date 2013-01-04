@@ -40,7 +40,6 @@ import it.mate.econyx.shared.model.impl.ProduttoreTx;
 import it.mate.econyx.shared.model.impl.UnitaDiMisuraTx;
 import it.mate.econyx.shared.model.impl.WebContentPageTx;
 import it.mate.gwtcommons.server.utils.BlobUtils;
-import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.server.utils.XStreamUtils;
 
@@ -140,9 +139,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   }
   
   private PortalDataExportModel load (PortalDataExportModel dataModel) {
-//  deleteAll();
     generalAdapter.deleteAll();
-    CacheUtils.clearAll();
     for (PortalUser user : dataModel.users) {
       visitPortalUser(dataModel, true, user);
     }

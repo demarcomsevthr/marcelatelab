@@ -40,6 +40,8 @@ public class StampPreviewPanel extends HTMLPanel {
   private int dragX = -1;
   private int dragY = -1;
   
+  float width, height;
+  
   public StampPreviewPanel() {
     super("");
     addStyleName("previewPanel");
@@ -52,10 +54,19 @@ public class StampPreviewPanel extends HTMLPanel {
   
   public void setTimbro(Timbro timbro) {
     if (timbro.getLarghezza() != null) {
-      setWidth((timbro.getLarghezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.xFactor")))+"cm");
+      width = ((float)timbro.getLarghezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.xFactor")));
+      setWidth(width+"cm");
     }
     if (timbro.getAltezza() != null) {
-      setHeight((timbro.getAltezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.yFactor")))+"cm");
+      height = ((float)timbro.getAltezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.yFactor")));
+      setHeight(height+"cm");
+    }
+    if (timbro.isOval()) {
+      int radX = StampPreviewPanel.this.getOffsetWidth() / 2;
+      int radY = StampPreviewPanel.this.getOffsetHeight() / 2;
+      String radius = radX+"px / "+radY+"px";
+      GwtUtils.setBorderRadius(StampPreviewPanel.this, radius);
+      GwtUtils.setBorderRadius(absolutePanel, radius);
     }
   }
 

@@ -175,8 +175,12 @@ public class CustomAdapterImpl implements CustomAdapter {
       detailY -= 28;
 
       currentY = detailY;
-      
-      pdfSession.addRectangle(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
+
+      if (timbro.isOval()) {
+        pdfSession.addEllipse(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
+      } else {
+        pdfSession.addRectangle(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
+      }
       
       for (OrderItemDetail orderItemDetail : orderItem.getDetails()) {
         if (orderItemDetail instanceof OrderItemStampDetailDs) {

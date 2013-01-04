@@ -11,14 +11,13 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 @CloneableBean (overrideTargetClassName="it.mate.econyx.server.model.impl.PortalFolderPageDs")
-/*
-public class PortalFolderPageTx extends PortalPageTx implements PortalFolderPage {
-*/
 public class PortalFolderPageTx extends WebContentPageTx implements PortalFolderPage {
 
   private List<PortalPageTx> childreen = new ArrayList<PortalPageTx>();
   
   private Boolean hideChildreen;
+  
+  private Boolean showChildreenContent;
   
   public List<PortalPage> getChildreen() {
     if (childreen == null)
@@ -77,6 +76,14 @@ public class PortalFolderPageTx extends WebContentPageTx implements PortalFolder
 
   public void setHideChildreen(Boolean hideChildreen) {
     this.hideChildreen = hideChildreen;
+  }
+
+  public Boolean getShowChildreenContent() {
+    return showChildreenContent != null ? showChildreenContent : false;
+  }
+
+  public void setShowChildreenContent(Boolean showChildreenContent) {
+    this.showChildreenContent = showChildreenContent;
   }
   
 }

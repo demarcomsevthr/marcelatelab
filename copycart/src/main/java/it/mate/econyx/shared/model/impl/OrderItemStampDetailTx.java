@@ -28,6 +28,8 @@ public class OrderItemStampDetailTx extends AbstractOrderItemDetailTx {
   
   private Integer logoY;
   
+  private Integer borderSize;
+  
   public OrderItemStampDetailTx() {
     super();
   }
@@ -123,6 +125,14 @@ public class OrderItemStampDetailTx extends AbstractOrderItemDetailTx {
 
   public void setLogoY(Integer logoY) {
     this.logoY = logoY;
+  }
+
+  public Integer getBorderSize() {
+    return borderSize;
+  }
+
+  public void setBorderSize(Integer borderSize) {
+    this.borderSize = borderSize;
   }
   
 }

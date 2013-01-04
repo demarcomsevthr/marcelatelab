@@ -13,6 +13,7 @@ import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,9 +22,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
@@ -167,6 +170,30 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
         Window.alert("Siamo nella onFailure con " + caught.getMessage());
       }
     });
+  }
+  
+  private boolean waiting = false;
+  
+  @UiHandler ("customTest1Btn")
+  public void customTest1Btn (ClickEvent event) {
+    
+    if (waiting) {
+      GwtUtils.hideWaitPanel();
+      waiting = false;
+    } else {
+      PopupPanel defaultWaitPanel = new PopupPanel();
+      GwtUtils.setStyleAttribute(defaultWaitPanel, "border", "none");
+      GwtUtils.setStyleAttribute(defaultWaitPanel, "background", "transparent");
+      defaultWaitPanel.setGlassEnabled(false);
+      defaultWaitPanel.setAnimationEnabled(true);
+      Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
+      defaultWaitPanel.setWidget(waitingImg);
+      GwtUtils.setDefaultWaitPanel(defaultWaitPanel);
+      
+      GwtUtils.showWaitPanel();
+      waiting = true;
+    }
+    
   }
   
   private void askSecretCode(final Delegate<Void> delegate) {

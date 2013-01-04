@@ -57,7 +57,8 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
   
   @UiField Panel prezzoGroupPanel;
   @UiField Label prezzoLabel;
-  @UiField Label totaleLabel;
+  
+  @UiField Panel productViewPanel;
   
   /* 30/11/2012
   SpinnerIntegerBox integerQtaBox;
@@ -78,9 +79,11 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
     initProvided();
     initWidget(uiBinder.createAndBindUi(this));
     
-    if (PropertiesHolder.getBoolean("productView.prezzoGroupPanel.visible")) {
+    if (PropertiesHolder.getBoolean("client.ProductView.prezzoGroupPanel.visible")) {
       prezzoGroupPanel.setVisible(true);
     }
+    
+    productViewPanel.getElement().setId("productViewPanel");
 
   }
   

@@ -1,9 +1,7 @@
 package it.mate.econyx.client.view.site;
 
-import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.util.UrlUtils;
 import it.mate.econyx.client.view.ProductListView;
-import it.mate.econyx.client.view.custom.ProductListViewCustomizer;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -11,6 +9,7 @@ import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,6 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
   
   private static final int NUMERO_COLONNE = 1;
   
-  private ProductListViewCustomizer customizer = AppClientFactory.Customizer.cast().getProductListViewCustomizer();
-
   private class ProductRow {
     int index;
     Articolo product;
@@ -67,23 +64,30 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
   @SuppressWarnings("unchecked")
   public void setModel(Object model, String tag) {
     if (model instanceof String) {
-      headerLabel.setText("Elenco prodotti " + model);
+      String headerText = (String)model;
+      if (headerText.equals("")) {
+        headerLabel.setVisible(false);
+        headerLabel.setHeight("0px");
+      } else {
+        headerLabel.setText("Elenco prodotti " + model);
+      }
     } else if (model instanceof PortalSessionState) {
       //
     } else if (model instanceof List) {
       pTable.removeAllRows();
       int row = 0;
       int col = 0;
-      if (customizer.showImage())
+      if (PropertiesHolder.getBoolean("client.ProductListView.showImage", true))
         pTable.setText(row, col++, "");
-      pTable.setText(row, col++, "Prodotto");
-      if (customizer.showPrezzo())
+      if (!PropertiesHolder.getString("client.ProductListView.prodottoHeader", "Prodotto").equals(""))
+        pTable.setText(row, col++, PropertiesHolder.getString("client.ProductListView.prodottoHeader", "Prodotto"));
+      if (PropertiesHolder.getBoolean("client.ProductListView.showPrezzo", true))
         pTable.setText(row, col++, "Prezzo");
-      if (customizer.showUdM())
+      if (PropertiesHolder.getBoolean("client.ProductListView.showUdM", true))
         pTable.setText(row, col++, "U.d.M.");
-      if (customizer.showConfezione())
+      if (PropertiesHolder.getBoolean("client.ProductListView.showConfezione", true))
         pTable.setText(row, col++, "Conf.");
-      if (customizer.showPezziOrdinati())
+      if (PropertiesHolder.getBoolean("client.ProductListView.showPezziOrdinati", true))
         pTable.setText(row, col++, "Ordinati");
       if (model instanceof ProductPageList) {
         ProductPageList productPageList = (ProductPageList)model;
@@ -101,7 +105,7 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
       for (OrderItem item : order.getItems()) {
         for (ProductRow productRow : productRows) {
           if (productRow.product.equals(item.getProduct())) {
-            if (customizer.showPezziOrdinati())
+            if (PropertiesHolder.getBoolean("client.ProductListView.showPezziOrdinati", true))
               pTable.setText(productRow.index, ordinatiColIndex, GwtUtils.formatCurrency(item.getQuantity()));
           }
         }
@@ -113,7 +117,7 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
     int row = it / NUMERO_COLONNE + 1;
     int col = it % NUMERO_COLONNE;
     
-    if (customizer.showImage()) {
+    if (PropertiesHolder.getBoolean("client.ProductListView.showImage", true)) {
       Image smallImage = new Image(UrlUtils.getProductImageUrl(product.getId(), "small"));
       smallImage.setWidth("42px");
       smallImage.setHeight("42px");
@@ -133,15 +137,15 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
     });
     pTable.setWidget(row, col++, screenNameAnchor);
     
-    if (customizer.showPrezzo())
+    if (PropertiesHolder.getBoolean("client.ProductListView.showPrezzo", true))
       pTable.setText(row, col++, GwtUtils.formatCurrency(product.getPrezzo() != null ? product.getPrezzo() : 0));
-    if (customizer.showUdM())
+    if (PropertiesHolder.getBoolean("client.ProductListView.showUdM", true))
       pTable.setText(row, col++, product.getUnitaDiMisura() != null ? product.getUnitaDiMisura().getNome() : "");
-    if (customizer.showConfezione())
+    if (PropertiesHolder.getBoolean("client.ProductListView.showConfezione", true))
       pTable.setText(row, col++, product.getConfezione() != null ? product.getConfezione().toString() : "");
     
     ordinatiColIndex = col++;
-    if (customizer.showPezziOrdinati())
+    if (PropertiesHolder.getBoolean("client.ProductListView.showPezziOrdinati", true))
       pTable.setText(row, ordinatiColIndex, "");
     
     ordinaColIndex = col++;

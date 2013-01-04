@@ -5,7 +5,7 @@ import it.mate.econyx.client.events.PortalPageExplorerRetrieveEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.PortalPagePlace;
 import it.mate.econyx.client.places.ProductPlace;
-import it.mate.econyx.client.util.PortalPageCacheUtil;
+import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.util.PortalUtils;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
@@ -19,6 +19,7 @@ import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProductFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.WebContentPage;
+import it.mate.econyx.shared.model.impl.PortalPageTx;
 import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -180,7 +181,7 @@ public class PortalPageActivity extends BaseActivity implements
         
         AsyncCallback<PortalFolderPage> callback = new AsyncCallback<PortalFolderPage>() {
           public void onSuccess(PortalFolderPage parent) {
-            PortalPageCacheUtil.putInCache(parent);
+            PortalPageClientUtil.putInCache(parent);
             PortalPageExplorerView.TreeModel model = new PortalPageExplorerView.TreeModel();
             model.parent = parent;
             model.childreen = parent.getChildreen();
@@ -191,7 +192,7 @@ public class PortalPageActivity extends BaseActivity implements
           }
         };
         
-        PortalFolderPage cachedPage = (PortalFolderPage)PortalPageCacheUtil.getFromCache(parentPage.getId());
+        PortalFolderPage cachedPage = (PortalFolderPage)PortalPageClientUtil.getFromCache(parentPage.getId());
         if (cachedPage != null && cachedPage.getChildreen() != null && cachedPage.getChildreen().size() > 0) {
           GwtUtils.log(getClass(), "retrieveChildreen", "found page in cache " + cachedPage);
           callback.onSuccess(cachedPage);
@@ -218,7 +219,7 @@ public class PortalPageActivity extends BaseActivity implements
     
     // 06/11/2012 sostituito con PortalPageUtils.goToPage
     
-    PortalPageCacheUtil.goToPage(page, true);
+    PortalPageClientUtil.goToPage(page, true);
     
   }
   
@@ -322,12 +323,12 @@ public class PortalPageActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(WebContentPage page) {
-        PortalPageCacheUtil.putInCache(page);
+        PortalPageClientUtil.putInCache(page);
         delegate.execute(page);
       }
     };
     
-    WebContentPage cachedPage = (WebContentPage)PortalPageCacheUtil.getFromCache(page.getId());
+    WebContentPage cachedPage = (WebContentPage)PortalPageClientUtil.getFromCache(page.getId());
     if (cachedPage != null && cachedPage.getHtmls() != null && cachedPage.getHtmls().size() > 0) {
       GwtUtils.log(getClass(), "fetchHtmls", "found page in cache " + cachedPage);
       callback.onSuccess(cachedPage);
@@ -353,7 +354,7 @@ public class PortalPageActivity extends BaseActivity implements
     }
   }
   
-  public void initProductListView (AcceptsOneWidget panel, ProductFolderPage productFolderPage, boolean useProductPageList) {
+  public void initProductListView (AcceptsOneWidget panel, ProductFolderPage productFolderPage, boolean useProductPageList, String productListHeader) {
     Object model = null;
     if (useProductPageList) {
       ProductListView.ProductPageList productPageList = new ProductListView.ProductPageList();
@@ -370,7 +371,10 @@ public class PortalPageActivity extends BaseActivity implements
       }
       model = products;
     }
-    startProductActivity(panel, new ProductPlace(ProductPlace.LIST, model));
+    ProductActivity childActivity = startProductActivity(panel, new ProductPlace(ProductPlace.LIST, model));
+    if (productListHeader != null) {
+      childActivity.getView().setModel(productListHeader);
+    }
   }
   
   public void initProductView (AcceptsOneWidget panel, ProductPage productPage) {
@@ -378,9 +382,24 @@ public class PortalPageActivity extends BaseActivity implements
     startProductActivity(panel, new ProductPlace(ProductPlace.VIEW, product));
   }
   
-  private void startProductActivity(AcceptsOneWidget panel, ProductPlace place) {
+  private ProductActivity startProductActivity(AcceptsOneWidget panel, ProductPlace place) {
     ProductActivity productActivity = new ProductActivity(place, AppClientFactory.IMPL);
     productActivity.start(panel, AppClientFactory.IMPL.getEventBus());
+    return productActivity;
+  }
+  
+  public void initChildPortalPageView(final AcceptsOneWidget panel, PortalPage childPage, final PortalPage parentPage) {
+    findById(childPage.getId(), true, false, false, new Delegate<PortalPage>() {
+      public void execute(PortalPage childPage) {
+        // bug-fix perche' con la fetch si perde il riferimento al parent
+        if (childPage instanceof PortalPageTx && childPage.getParent() == null) {
+          PortalPageTx childPageTx = (PortalPageTx)childPage;
+          childPageTx.setParent((PortalPageTx)parentPage);
+        }
+        PortalPageActivity childActivity = new PortalPageActivity(new PortalPagePlace(PortalPagePlace.VIEW, childPage), AppClientFactory.IMPL);
+        childActivity.start(panel, AppClientFactory.IMPL.getEventBus());
+      }
+    });
   }
 
   @Override

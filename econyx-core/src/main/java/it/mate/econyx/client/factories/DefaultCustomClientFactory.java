@@ -13,8 +13,6 @@ import it.mate.econyx.client.view.custom.PortalPageExplorerViewCustomizerDefault
 import it.mate.econyx.client.view.custom.PortalPageMenuViewCustomizerImpl;
 import it.mate.econyx.client.view.custom.ProductEditViewCustomizer;
 import it.mate.econyx.client.view.custom.ProductEditViewCustomizerDefaultImpl;
-import it.mate.econyx.client.view.custom.ProductListViewCustomizer;
-import it.mate.econyx.client.view.custom.ProductListViewCustomizerDefaultImpl;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 
@@ -63,10 +61,6 @@ public class DefaultCustomClientFactory implements AbstractCustomClientFactory {
   
   public PortalPageMenuViewCustomizerImpl getPortalPageMenuViewCustomizer() {
     return new PortalPageMenuViewCustomizerImpl();
-  }
-  
-  public ProductListViewCustomizer getProductListViewCustomizer() {
-    return new ProductListViewCustomizerDefaultImpl();
   }
   
   public PortalPageExplorerViewCustomizer getPortalPageExplorerViewCustomizer() {

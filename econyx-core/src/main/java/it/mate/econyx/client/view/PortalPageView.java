@@ -18,9 +18,11 @@ public interface PortalPageView extends BaseView<PortalPageView.Presenter> {
     
     void goToPage (PortalPage page);
     
-    public void initProductListView (AcceptsOneWidget panel, ProductFolderPage productFolderPage, boolean useProductPageList);
+    public void initProductListView (AcceptsOneWidget panel, ProductFolderPage productFolderPage, boolean useProductPageList, String productListHeader);
     
     public void initProductView (AcceptsOneWidget panel, ProductPage productPage);
+    
+    public void initChildPortalPageView(AcceptsOneWidget panel, PortalPage childPage, PortalPage parentPage);
     
   }
   

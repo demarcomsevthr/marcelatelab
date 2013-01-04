@@ -10,7 +10,7 @@
 	}
 	
 	.productMediumImagePanel {
-	  width: 192px;
+	  /* width: 192px; */
       overflow-x: hidden;
 	}
 	
@@ -24,14 +24,14 @@
 	  font-weight: bold;
 	}
 	
-	.prezzoGroupPanel {
-	  font-size: 15px;
+	.prezzoGroupPanel td {
+	  font-size: 12px;
 	  font-weight: bold;
 	}
 	
   </ui:style>
   
-  <g:VerticalPanel width="100%">
+  <g:VerticalPanel width="100%" ui:field="productViewPanel">
     <g:HTMLPanel width="100%">
       <g:HorizontalPanel>
         <g:HTMLPanel ui:field="mediumImagePanel" addStyleNames="{style.productMediumImagePanel}"/>
@@ -52,17 +52,13 @@
             <gc:Spacer width="5px"/>
             <gc:ImageButton ui:field="cartBtn" url="/images/ecommerce/shopcart.png" text="Aggiungi al carrello" addStyleNames="{style.cartBtn}"/>
           </g:HorizontalPanel>
-          <g:VerticalPanel ui:field="prezzoGroupPanel" visible="false" addStyleNames="${style.prezzoGroupPanel}">
-            <gc:Spacer height="1.4em"/>
+          <g:VerticalPanel ui:field="prezzoGroupPanel" visible="false" addStyleNames="{style.prezzoGroupPanel}">
+            <gc:Spacer height="1em"/>
             <g:HorizontalPanel>
-              <g:Label text="Prezzo articolo: " addStyleNames="${style.prezzoGroupPanel}"/>
+              <g:Label text="Prezzo articolo: "/>
               <gc:Spacer width="1em"/>
-              <g:Label ui:field="prezzoLabel" addStyleNames="${style.prezzoGroupPanel}"/>
+              <g:Label ui:field="prezzoLabel"/>
               <g:Label text="€"/>
-            </g:HorizontalPanel>
-            <g:HorizontalPanel>
-              <g:Label text="Totale articolo:" addStyleNames="${style.prezzoGroupPanel}"/>
-              <g:Label ui:field="totaleLabel" addStyleNames="${style.prezzoGroupPanel}"/>
             </g:HorizontalPanel>
           </g:VerticalPanel>
         </g:VerticalPanel>

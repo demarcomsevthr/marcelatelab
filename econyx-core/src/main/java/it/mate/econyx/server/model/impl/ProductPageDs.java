@@ -13,7 +13,7 @@ import javax.jdo.annotations.Persistent;
 
 import com.google.appengine.api.datastore.Key;
 
-@CacheableEntity (txClass=ProductPageTx.class)
+@CacheableEntity (txClass=ProductPageTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 @CloneableBean (overrideTargetClassName="it.mate.econyx.shared.model.impl.ProductPageTx")

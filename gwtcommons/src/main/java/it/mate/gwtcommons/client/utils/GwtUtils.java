@@ -56,6 +56,8 @@ public class GwtUtils {
 
   private static final String ATTR_CLIENT_WAIT_PANEL = "common.client.waitPanel";
   
+  private static final String ATTR_CLIENT_DEFAULT_WAIT_PANEL = "common.client.defaultWaitPanel";
+  
   public static String getPortletContextPath() {
     return GwtUtils.getJSVar("contextPath","");
   }
@@ -475,6 +477,10 @@ public class GwtUtils {
     return getDictionary().get(name);
   }
   
+  public static boolean existsClientAttribute(String name) {
+    return getDictionary().containsKey(name);
+  }
+  
   public static void setParentWidth (Widget widget, String width) {
     DOM.setStyleAttribute((com.google.gwt.user.client.Element)widget.getElement().getParentElement(), "width", width); 
   }
@@ -673,13 +679,33 @@ public class GwtUtils {
     System.out.println(dts + " DEBUG " + "["+type.getName()+ ":"+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message);
   }
   
+  public static void showWait() {
+    showWait(null);
+  }
+  
+  public static void showWait(PopupPanel defaultWaitPanel) {
+    DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", "wait");
+    showWaitPanel(defaultWaitPanel);
+  }
+  
   public static void showWaitPanel() {
     showWaitPanel(null);
   }
   
+  public static void setDefaultWaitPanel(PopupPanel popup) {
+    setClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL, popup);
+  }
+  
+  // 02/01/2013
+  private static int showWaitPanelRequestCounter = 0;
+  
   public static void showWaitPanel(PopupPanel defaultWaitPanel) {
+    showWaitPanelRequestCounter++;
     PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
     if (waitPanel == null) {
+      if (existsClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL)) {
+        defaultWaitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL);
+      }
       if (defaultWaitPanel != null) {
         waitPanel = defaultWaitPanel;
       } else {
@@ -697,26 +723,21 @@ public class GwtUtils {
     }
   }
   
-  public static void hideWaitPanel() {
-    PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
-    if (waitPanel != null) {
-      waitPanel.hide();
-      removeClientAttribute(ATTR_CLIENT_WAIT_PANEL);
-    }
-  }
-  
-  public static void showWait() {
-    showWait(null);
-  }
-  
-  public static void showWait(PopupPanel defaultWaitPanel) {
-    DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", "wait");
-    showWaitPanel(defaultWaitPanel);
-  }
-  
   public static void hideWait() {
     DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", "default");
     hideWaitPanel();
+  }
+  
+  public static void hideWaitPanel() {
+    showWaitPanelRequestCounter--;
+    if (showWaitPanelRequestCounter <= 0) {
+      PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
+      if (waitPanel != null) {
+        showWaitPanelRequestCounter--;
+        waitPanel.hide();
+        removeClientAttribute(ATTR_CLIENT_WAIT_PANEL);
+      }
+    }
   }
   
   public static void setLocationHash(String newHash) {
