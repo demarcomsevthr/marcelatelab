@@ -81,6 +81,17 @@ public class StampPreviewPanel extends HTMLPanel {
     int currentTop = 0;
     for (OrderItemDetail detail : details) {
       if (detail instanceof OrderItemStampDetailTx) {
+        OrderItemStampDetailTx borderDetail = (OrderItemStampDetailTx)detail;
+        if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER.equals(borderDetail.getType())) {
+          HTML border = new HTML(SafeHtmlUtils.fromTrustedString("&nbsp;"));
+          border.setHeight(borderDetail.getBorderSize()+"px");
+          absolutePanel.add(border, 0, currentTop);
+          currentTop += border.getOffsetHeight();
+        }
+      }
+    }
+    for (OrderItemDetail detail : details) {
+      if (detail instanceof OrderItemStampDetailTx) {
         OrderItemStampDetailTx stampDetail = (OrderItemStampDetailTx)detail;
         if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(stampDetail.getType())) {
           if (stampDetail.getText() != null && stampDetail.getText().length() > 0) {

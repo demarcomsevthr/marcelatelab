@@ -311,7 +311,7 @@ public class TextControlBar extends ContainerPanel {
   }
   
   public static class Settings {
-    private FontType fontType;
+    private FontType fontType = fontTypes.get(0);
     private int fontSize;
     private BooleanWrapper bold = new BooleanWrapper();
     private BooleanWrapper italic = new BooleanWrapper();
