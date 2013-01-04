@@ -184,21 +184,27 @@ public class CustomAdapterImpl implements CustomAdapter {
       
       for (OrderItemDetail orderItemDetail : orderItem.getDetails()) {
         if (orderItemDetail instanceof OrderItemStampDetailDs) {
+          OrderItemStampDetailDs orderItemStampDetail = (OrderItemStampDetailDs)orderItemDetail;
+          if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER.equals(orderItemStampDetail.getType())) {
+            currentY -= orderItemStampDetail.getBorderSize();
+          }
+        }
+      }
+      
+      for (OrderItemDetail orderItemDetail : orderItem.getDetails()) {
+        if (orderItemDetail instanceof OrderItemStampDetailDs) {
           
           OrderItemStampDetailDs orderItemStampDetail = (OrderItemStampDetailDs)orderItemDetail;
           logger.debug("printing detail " + orderItemStampDetail);
 
           if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(orderItemStampDetail.getType())) {
-            
-            float fontSize = (orderItemStampDetail.getFontSize() > 0 ? orderItemStampDetail.getFontSize() : 12 );
+            float fontSize = (orderItemStampDetail.getFontSize() > 0 ? orderItemStampDetail.getFontSize() : PropertiesHolder.getInt("timbro.defaultFontSize", 10) );
             String fontName = translateFontName(orderItemStampDetail);
             int textAlignment = translateTextAlignment(orderItemStampDetail);
-            
             pdfSession.addAbsoluteText(orderItemStampDetail.getText(), fontName, fontSize, detailX, detailX + detailW, currentY, textAlignment);
             currentY -= fontSize + PropertiesHolder.getInt("timbro.print.interlinea", 6);
             
           } else if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO.equals(orderItemStampDetail.getType())) {
-            
             byte[] content = orderItemStampDetail.getLogoAsBlob().getBytes();
             pdfSession.addAbsoluteImage(content, 
                 detailX + orderItemStampDetail.getLogoX(), 

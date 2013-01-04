@@ -49,7 +49,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
   SpinnerIntegerBox logoX;
   SpinnerIntegerBox logoY;
   
-  SpinnerIntegerBox borderSizeBox;
+  SpinnerIntegerBox borderSizeBox = new SpinnerIntegerBox(0, 1, 0);;
   
   OrderItemStampDetailTx logoDetail = null;
   OrderItemStampDetailTx borderDetail = null;
@@ -69,10 +69,14 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
   public void setOrderItem(OrderItem orderItem) {
     if (orderItem.getProduct() instanceof Timbro) {
       this.timbro = (Timbro)orderItem.getProduct();
-      this.details = orderItem.getDetails();
+//    this.details = orderItem.getDetails();
+      this.details = new ArrayList<OrderItemDetail>();
       for (OrderItemDetail detail : orderItem.getDetails()) {
         if (detail instanceof OrderItemStampDetailTx) {
           OrderItemStampDetailTx stampDetail = (OrderItemStampDetailTx)detail;
+          if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(stampDetail.getType())) {
+            this.details.add(stampDetail);
+          }
           if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO.equals(stampDetail.getType())) {
             logoDetail = stampDetail;
           }
@@ -98,10 +102,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
       logoDetail.setLogoY(logoY.getValue());
       details.add(logoDetail);
     }
-    if (borderDetail != null) {
-      borderDetail.setBorderSize(borderSizeBox.getValue());
-      details.add(borderDetail);
-    }
+    details.add(getBorderDetail());
     return details;
   }
   
@@ -143,22 +144,29 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     }
     
     detailPanel.add(detailListPanel);
+    
+    detailPanel.add(new Spacer("1px", "8px"));
+    
+    HorizontalPanel borderPanel = new HorizontalPanel();
+    GwtUtils.setStyleAttribute(borderPanel, "fontSize", "9px");
+    borderPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+    borderPanel.add(GwtUtils.setStyleAttribute(new Label("Bordo:"), "fontSize", "9px"));
+    borderPanel.add(new Spacer("10px"));
+    borderSizeBox = new SpinnerIntegerBox(0, 1, 0);
+    GwtUtils.setStyleAttribute(borderSizeBox, "fontSize", "9px");
+    borderSizeBox.setWidth("3em");
+    if (borderDetail != null) {
+      borderSizeBox.setValue(borderDetail.getBorderSize());
+    }
+    borderPanel.add(borderSizeBox);
+    borderPanel.add(new Spacer("30em"));
+    detailPanel.add(borderPanel);
 
     detailPanel.add(new Spacer("1px", "20px"));
     
     HorizontalPanel logoHPanel = new HorizontalPanel();
     logoHPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
     logoHPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-    
-    logoHPanel.add(new Label("Bordo:"));
-    logoHPanel.add(new Spacer("10px"));
-    borderSizeBox = new SpinnerIntegerBox(0, 1, 0);
-    borderSizeBox.setWidth("3em");
-    if (borderDetail != null) {
-      borderSizeBox.setValue(borderDetail.getBorderSize());
-    }
-    logoHPanel.add(borderSizeBox);
-    logoHPanel.add(new Spacer("20px"));
     
     logoHPanel.add(logoUploadBtn);
     logoUpdatePanel = new HorizontalPanel();
@@ -190,7 +198,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     
     stampPreviewPanel.setTimbro(timbro);
 
-    GwtUtils.createTimer(1000, new Delegate<Void>() {
+    GwtUtils.createTimer(500, new Delegate<Void>() {
       public void execute(Void element) {
         updatePreview();
       }
@@ -263,6 +271,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
       logoDetail.setLogoY(logoY.getValue());
       details.add(logoDetail);
     }
+    details.add(getBorderDetail());
     stampPreviewPanel.update(details);
     logoX.setMaxvalue(stampPreviewPanel.getOffsetWidth() - stampPreviewPanel.getLogoWidth());
     logoY.setMaxvalue(stampPreviewPanel.getOffsetHeight() - stampPreviewPanel.getLogoHeight());
@@ -286,6 +295,14 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
         logoUpdatePanel.setVisible(true);
       }
     });
+  }
+  
+  private OrderItemStampDetailTx getBorderDetail() {
+    if (borderDetail == null) {
+      borderDetail = new OrderItemStampDetailTx(StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER);
+    }
+    borderDetail.setBorderSize(borderSizeBox.getValue());
+    return borderDetail;
   }
   
 }

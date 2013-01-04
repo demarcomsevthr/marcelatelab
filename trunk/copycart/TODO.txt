@@ -16,13 +16,6 @@
 		    	>> TENERE SOTTO CONTROLLO E PROVARE SU GP8
 		    		> it.mate.gwtcommons.server.dao.JdoDao.suppressExceptionThrowOnInternalFind
 		    	
-		    >>> TIMBRO PDF
-		    	> caso TR46019, voglio centrare il testo in verticale:
-		    	> scrivo CENTRO sulla 3^ riga, e metto a 8px la 1^ e la 2^
-		    	  > a video viene centrato, sul pdf NO !!!!	
-		    	>> CAMPO BORDO NUMERICO ??? (viene utilizzato per abbassare il testo di x px)
-		    		>>> it.mate.econyx.shared.model.impl.OrderItemStampDetailTx.borderSize
-		    	  
 		    >>> DATARI !!!!
 		    	
 		    >>> TIMBRI OVALI
@@ -37,10 +30,6 @@
 		    >>> TIMBRO LOGO:
 		    	> indicare la dim max in pixel dell'immagine da caricare		
 		    	
-			> finire catalogo timbri (???)
-				>> portaldata.xml > TIMBRI DUE
-					> it.mate.econyx.client.view.site.PortalPageViewImpl.setModel
-			
 			> gestione utenti > attivazione utente in manuale >> invio mail
 				> invio mail di notifica agli admins
 				

@@ -4,7 +4,9 @@ import it.mate.econyx.client.ui.TextControlBar;
 import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.impl.OrderItemStampDetailTx;
 import it.mate.econyx.shared.util.FontAlignment;
+import it.mate.econyx.shared.util.FontTypes;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -50,7 +52,7 @@ public class StampUtils {
     if (settings.getFontFamily() != null)
       GwtUtils.setStyleAttribute(widget, "fontFamily", settings.getFontFamily());
     if (settings.getFontSize() == 0)
-      settings.setFontSize(10);
+      settings.setFontSize(PropertiesHolder.getInt("timbro.defaultFontSize", 10));
     GwtUtils.setStyleAttribute(widget, "fontSize", settings.getFontSize()+"px");
     GwtUtils.setStyleAttribute(widget, "fontWeight", settings.isBold() ? "bold" : "normal");
     GwtUtils.setStyleAttribute(widget, "fontStyle", settings.isItalic() ? "italic" : "normal");

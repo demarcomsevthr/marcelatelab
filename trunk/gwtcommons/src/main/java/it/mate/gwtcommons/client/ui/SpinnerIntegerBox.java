@@ -4,7 +4,6 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -113,11 +112,6 @@ public class SpinnerIntegerBox extends Composite implements HasValue<Integer> {
   }
   
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Integer> handler) {
-    inputBox.addChangeHandler(new ChangeHandler() {
-      public void onChange(ChangeEvent event) {
-
-      }
-    });
     return null;
   }
 
