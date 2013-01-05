@@ -15,6 +15,8 @@ public class TimbroTx extends ArticoloTx implements Timbro {
   
   Boolean oval;
   
+  Boolean datario;
+  
   
   @Override
   public String toString() {
@@ -55,6 +57,18 @@ public class TimbroTx extends ArticoloTx implements Timbro {
 
   public boolean isOval() {
     return oval != null ? oval : false;
+  }
+
+  public Boolean getDatario() {
+    return datario;
+  }
+
+  public void setDatario(Boolean datario) {
+    this.datario = datario;
+  }
+  
+  public boolean isDatario() {
+    return datario != null ? datario : false;
   }
 
 }

@@ -17,6 +17,7 @@
 		    		> it.mate.gwtcommons.server.dao.JdoDao.suppressExceptionThrowOnInternalFind
 		    	
 		    >>> DATARI !!!!
+		    	>> iniziato in it.mate.econyx.client.ui.StampPreviewPanel.update
 		    	
 		    >>> TIMBRI OVALI
 		    	> it.mate.econyx.shared.model.Timbro (.oval = true | false)

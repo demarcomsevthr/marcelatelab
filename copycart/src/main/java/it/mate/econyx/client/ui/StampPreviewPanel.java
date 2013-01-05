@@ -7,23 +7,28 @@ import it.mate.econyx.shared.model.Timbro;
 import it.mate.econyx.shared.model.impl.OrderItemStampDetailTx;
 import it.mate.econyx.shared.utils.StampUtils;
 import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 
 public class StampPreviewPanel extends HTMLPanel {
 
@@ -40,7 +45,11 @@ public class StampPreviewPanel extends HTMLPanel {
   private int dragX = -1;
   private int dragY = -1;
   
+  Timbro timbro;
+  
   float width, height;
+  
+  private int dataLblW = -1, dataLblH = -1;
   
   public StampPreviewPanel() {
     super("");
@@ -53,6 +62,7 @@ public class StampPreviewPanel extends HTMLPanel {
   }
   
   public void setTimbro(Timbro timbro) {
+    this.timbro = timbro;
     if (timbro.getLarghezza() != null) {
       width = ((float)timbro.getLarghezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.xFactor")));
       setWidth(width+"cm");
@@ -149,7 +159,35 @@ public class StampPreviewPanel extends HTMLPanel {
         }
       }
     }
+    
+    if (timbro != null && timbro.isDatario()) {
+      if (dataLblW > -1 && dataLblH > -1) {
+        Label dataLbl = createDataLbl();
+        int cX = StampPreviewPanel.this.getOffsetWidth() / 2;
+        int cY = StampPreviewPanel.this.getOffsetHeight() / 2;
+        absolutePanel.add(dataLbl, cX - (dataLblW / 2), cY - (dataLblH / 2));
+        GwtUtils.setStyleAttribute(dataLbl, "color", "red");
+      } else {
+        final Label dataLbl = createDataLbl();
+        GwtUtils.setStyleAttribute(dataLbl, "color", "white");
+        dataLbl.getElement().setId("dataLbl");
+        absolutePanel.add(dataLbl, 0, 0);
+        GwtUtils.onAvailable("dataLbl", new Delegate<Element>() {
+          public void execute(Element element) {
+            dataLblW = dataLbl.getOffsetWidth();
+            dataLblH = dataLbl.getOffsetHeight();
+          }
+        });
+      }
+    }
+    
   }
+  
+  private Label createDataLbl() {
+    Label dataLbl = new Label(GwtUtils.dateToString(new Date(), DateTimeFormat.getFormat("dd MMM yyyy")));
+    return dataLbl;
+  }
+  
   
   public int getLogoWidth() {
     return logoWidth;
@@ -170,34 +208,5 @@ public class StampPreviewPanel extends HTMLPanel {
   public int getDragY() {
     return dragY;
   }
-  
-  /*
-  public void update_SAVE (List<OrderItemDetail> details) {
-    clear();
-    this.getElement().setId("marcello");
-    for (OrderItemDetail detail : details) {
-      if (detail instanceof OrderItemStampDetailTx) {
-        OrderItemStampDetailTx stampDetail = (OrderItemStampDetailTx)detail;
-        if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT.equals(stampDetail.getType())) {
-          if (stampDetail.getText() != null && stampDetail.getText().length() > 0) {
-            Label label = new Label(stampDetail.getText());
-            StampUtils.applySettingsOnWidget(label, StampUtils.convertOrderItemDetailToSettings(stampDetail));
-            this.add(label);
-          } else {
-            this.add(new HTML(SafeHtmlUtils.fromTrustedString("&nbsp;")));
-          }
-        } else if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO.equals(stampDetail.getType()) && stampDetail.getId() != null) {
-          Image logoImg = new Image("/re/cu/oil/" + stampDetail.getId());
-          GwtUtils.setStyleAttribute(logoImg, "position", "relative");
-          int left = stampDetail.getLogoX() - (getOffsetWidth() / 2) + (logoImg.getWidth() / 2) + 2;
-          int top = stampDetail.getLogoY() ;
-          GwtUtils.setStyleAttribute(logoImg, "left", left + "px");
-          GwtUtils.setStyleAttribute(logoImg, "top", top + "px");
-          this.add(logoImg);
-        }
-      }
-    }
-  }
-  */
   
 }

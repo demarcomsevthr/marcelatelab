@@ -20,4 +20,10 @@ public interface Timbro extends Articolo {
   
   public boolean isOval();
   
+  public Boolean getDatario();
+  
+  public void setDatario(Boolean value);
+  
+  public boolean isDatario();
+  
 }

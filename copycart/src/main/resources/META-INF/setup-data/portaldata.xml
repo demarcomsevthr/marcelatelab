@@ -792,6 +792,24 @@
       <numRighe>6</numRighe>
       <oval>true</oval>
     </it.mate.econyx.shared.model.impl.TimbroTx>
+    <it.mate.econyx.shared.model.impl.TimbroTx>
+      <codice>TR4729</codice>
+      <nome>NUOVO PRINTY 4729 (50 x 30mm)</nome>
+      <prezzo>12.5</prezzo>
+      <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
+        <codice>PTC02</codice>
+      </tipoArticolo>
+      <unitaDiMisura class="it.mate.econyx.shared.model.impl.UnitaDiMisuraTx">
+        <codice>UMPZ</codice>
+      </unitaDiMisura>
+      <produttore class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+        <codice>CC</codice>
+      </produttore>
+      <larghezza>50</larghezza>
+      <altezza>30</altezza>
+      <numRighe>6</numRighe>
+      <datario>true</datario>
+    </it.mate.econyx.shared.model.impl.TimbroTx>
   </products>
   <productTypes/>
   <unitOfMeasures/>
@@ -1798,6 +1816,46 @@
               </entity>
             </it.mate.econyx.shared.model.impl.ProductPageTx>
             
+          </childreen>
+          <hideChildreen>false</hideChildreen>
+          <showChildreenContent>false</showChildreenContent>
+        </it.mate.econyx.shared.model.impl.ProductFolderPageTx>
+        
+        
+        <it.mate.econyx.shared.model.impl.ProductFolderPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+          <name>TIMBRI TRODAT OVALI</name>
+          <code>trodatovali</code>
+          <orderNm>520</orderNm>
+          <templateName>home</templateName>
+          <htmls>
+            <it.mate.econyx.shared.model.impl.HtmlContentTx>
+              <type>M</type>
+              <content>&lt;div style="height: 200px;"&gt;
+  &lt;p&gt;
+    &lt;img alt="" src="/re/im/trodat-group-compatti" style="width: 191px; height: 95px;" /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</content>
+            </it.mate.econyx.shared.model.impl.HtmlContentTx>
+            <it.mate.econyx.shared.model.impl.HtmlContentTx>
+              <type>S</type>
+              <content>&lt;p&gt;
+  &lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY PIASTRA OVALE&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+</content>
+            </it.mate.econyx.shared.model.impl.HtmlContentTx>
+          </htmls>
+          <childreen>
+          
+            <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+              <name>NUOVO PRINTY 4729 (50 x 30mm)</name>
+              <code>TR4729</code>
+              <orderNm>5729</orderNm>
+              <templateName>home</templateName>
+              <htmls/>
+              <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
+                <codice>TR4729</codice>
+              </entity>
+            </it.mate.econyx.shared.model.impl.ProductPageTx>
+          
           </childreen>
           <hideChildreen>false</hideChildreen>
           <showChildreenContent>false</showChildreenContent>
