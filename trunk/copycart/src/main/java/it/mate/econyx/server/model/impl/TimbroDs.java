@@ -26,6 +26,9 @@ public class TimbroDs extends AbstractArticoloDs implements Timbro {
   @Persistent
   Boolean oval;
   
+  @Persistent
+  Boolean datario;
+  
   
   @Override
   public String toString() {
@@ -68,4 +71,16 @@ public class TimbroDs extends AbstractArticoloDs implements Timbro {
     return oval != null ? oval : false;
   }
   
+  public Boolean getDatario() {
+    return datario;
+  }
+
+  public void setDatario(Boolean datario) {
+    this.datario = datario;
+  }
+  
+  public boolean isDatario() {
+    return datario != null ? datario : false;
+  }
+
 }
