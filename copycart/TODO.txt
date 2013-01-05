@@ -15,6 +15,12 @@
 		    	>> settato instanceCache=true sui ds
 		    	>> TENERE SOTTO CONTROLLO E PROVARE SU GP8
 		    		> it.mate.gwtcommons.server.dao.JdoDao.suppressExceptionThrowOnInternalFind
+		    		
+		    	>> DA SISTEMARE:
+		    		> it.mate.econyx.server.services.impl.PortalPageAdapterImpl >> utilizza CacheUtils
+		    		> it.mate.gwtcommons.server.utils.CacheUtils
+		    			> .put: gli aggiornamenti in memcache vanno sempre fatti
+		    			> .deleteByKey: manca la delete in instcache
 		    	
 		    >>> DATARI !!!!
 		    	>> iniziato in it.mate.econyx.client.ui.StampPreviewPanel.update
