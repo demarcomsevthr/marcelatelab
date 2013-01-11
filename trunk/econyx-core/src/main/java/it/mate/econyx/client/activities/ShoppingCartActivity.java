@@ -5,10 +5,11 @@ import it.mate.econyx.client.events.UserOrderChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.CustomerPlace;
 import it.mate.econyx.client.places.ShoppingCartPlace;
-import it.mate.econyx.client.util.EconyxUtils;
 import it.mate.econyx.client.util.ClientOrderUtils;
+import it.mate.econyx.client.util.EconyxUtils;
 import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.view.ShoppingCartView;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -68,6 +69,7 @@ public class ShoppingCartActivity extends BaseActivity implements
         getView().setModel(place.getModel());
       }
       findAllModalitaSpedizione();
+      findAllModalitaPagamento();
     } else {
       getView().setModel(null);
     }
@@ -154,6 +156,17 @@ public class ShoppingCartActivity extends BaseActivity implements
     });
   }
   
+  private void findAllModalitaPagamento() {
+    orderService.findAllModalitaPagamento(new AsyncCallback<List<ModalitaPagamento>>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(List<ModalitaPagamento> results) {
+        getView().setModel(results, LISTA_MODALITA_PAGAMENTO);
+      }
+    });
+  }
+  
   public void updateOrderItem (OrderItem item) {
     ClientOrderUtils.updateOrderItem(item, new Delegate<OrderItem>() {
       public void execute(OrderItem item) {
@@ -213,8 +226,8 @@ public class ShoppingCartActivity extends BaseActivity implements
     }
   }
   
-  public void closeOrder(Order order, final Delegate<Void> delegate) {
-    ClientOrderUtils.closeOrder(order.getId(), new Delegate<Order>() {
+  public void closeOrder(Order order, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento, final Delegate<Void> delegate) {
+    ClientOrderUtils.closeOrder(order.getId(), modalitaSpedizione, modalitaPagamento, new Delegate<Order>() {
       public void execute(Order result) {
         AppClientFactory.IMPL.getPortalSessionState().setOpenOrder(null);
         delegate.execute(null);

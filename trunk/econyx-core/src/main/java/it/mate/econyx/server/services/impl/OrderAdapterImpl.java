@@ -1,6 +1,7 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.model.impl.AbstractOrderItemDetailDs;
+import it.mate.econyx.server.model.impl.ModalitaPagamentoDs;
 import it.mate.econyx.server.model.impl.ModalitaSpedizioneDs;
 import it.mate.econyx.server.model.impl.OrderDs;
 import it.mate.econyx.server.model.impl.OrderItemDs;
@@ -19,6 +20,7 @@ import it.mate.econyx.server.tasks.OrderStateChangeDeferredTask;
 import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -26,6 +28,7 @@ import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.impl.ModalitaPagamentoTx;
 import it.mate.econyx.shared.model.impl.ModalitaSpedizioneTx;
 import it.mate.econyx.shared.model.impl.OrderItemTx;
 import it.mate.econyx.shared.model.impl.OrderStateConfigTx;
@@ -268,10 +271,10 @@ public class OrderAdapterImpl implements OrderAdapter {
     return castTx(itemDs);
   }
   
-  public void closeOrder (String id) {
+  public void closeOrder (String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento) {
+    // 15/11/2012
     // non faccio la fetch degli items
     final OrderDs detachedEntity = internalFindById(id, false);
-    // 15/11/2012
 //  final OrderDs detachedEntity = internalFindById(id, true);
     updateStatesWithInsertedState(detachedEntity);
 //  update(order);
@@ -279,6 +282,8 @@ public class OrderAdapterImpl implements OrderAdapter {
       public OrderDs updateEntityValues(PersistenceManager pm, OrderDs attachedEntity) {
         attachedEntity.setStates(detachedEntity.getStates());
         attachedEntity.setCurrentState(detachedEntity.getCurrentState());
+        attachedEntity.setModalitaSpedizione(CloneUtils.clone(modalitaSpedizione, ModalitaSpedizioneDs.class));
+        attachedEntity.setModalitaPagamento(CloneUtils.clone(modalitaPagamento, ModalitaPagamentoDs.class));
         return attachedEntity;
       }
     });
@@ -604,6 +609,17 @@ public class OrderAdapterImpl implements OrderAdapter {
     return CloneUtils.clone(dao.create(CloneUtils.clone(entity, ModalitaSpedizioneDs.class)), ModalitaSpedizioneTx.class);
   }
   
+  public List<ModalitaPagamento> findAllModalitaPagamento() {
+    return CloneUtils.clone(dao.findAll(ModalitaPagamentoDs.class), ModalitaPagamentoTx.class, ModalitaPagamento.class);
+  }
+  
+  public void delete (ModalitaPagamento entity) {
+    dao.delete(CloneUtils.clone(entity, ModalitaPagamentoDs.class));
+  }
+
+  public ModalitaPagamento create (ModalitaPagamento entity) {
+    return CloneUtils.clone(dao.create(CloneUtils.clone(entity, ModalitaPagamentoDs.class)), ModalitaPagamentoTx.class);
+  }
   
   public List<OrderStateConfig> findAllOrderStates() {
     List<OrderStateConfigDs> allStates = dao.findAll(OrderStateConfigDs.class);

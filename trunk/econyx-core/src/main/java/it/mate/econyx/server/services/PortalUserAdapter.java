@@ -26,4 +26,6 @@ public interface PortalUserAdapter {
   
   public PortalUser findByEmail(String email);
   
+  public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword);
+  
 }

@@ -9,6 +9,8 @@ import it.mate.econyx.client.view.OrderEditView;
 import it.mate.econyx.client.view.OrderItemEditView;
 import it.mate.econyx.client.view.OrderListView;
 import it.mate.econyx.client.view.OrderView;
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderStateConfig;
@@ -160,8 +162,8 @@ public class OrderActivity extends BaseActivity implements
   }
 
   @Override
-  public void closeOrder(String id) {
-    ClientOrderUtils.closeOrder(id, new Delegate<Order>() {
+  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento) {
+    ClientOrderUtils.closeOrder(id, modalitaSpedizione, modalitaPagamento, new Delegate<Order>() {
       public void execute(Order element) {
         Window.alert("Ordine chiuso");
       }

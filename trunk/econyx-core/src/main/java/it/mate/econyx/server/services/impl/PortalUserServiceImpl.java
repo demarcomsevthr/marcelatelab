@@ -117,4 +117,8 @@ public class PortalUserServiceImpl extends RemoteServiceServlet implements Porta
     return userService.createLogoutURL(redirectURL);
   }
   
+  public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) {
+    return adapter.updatePassword(portalUser, passwordAttuale, nuovaPassword, confermaPassword);
+  }
+  
 }

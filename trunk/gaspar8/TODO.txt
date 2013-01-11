@@ -15,12 +15,12 @@
 				> attivazione instance cahce su tutti i ds portalpage e collegati
 				> passaggio a gwt 2.5
 				> modifiche in PortalPageView per copycart (PortalFolderPage.showChildreenContent)
+				>> FATTO 07/01/2013
 
 		SNAPSHOT 14/12/2012
 			> gestione Order.importoTotale
 				>> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateImportoTotale(Order, Double, boolean)
 				>> it.mate.econyx.shared.model.Order.Utils.computeImportoTotale(Order, boolean) >> restituisce il calcolato solo se lo si richiede espressamente
-				
 				>>> RIFARE UN TEST COMPLETO (anche su gaspar8est)
 				
 			> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates

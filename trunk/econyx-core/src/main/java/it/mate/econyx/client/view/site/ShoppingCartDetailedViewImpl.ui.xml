@@ -143,6 +143,16 @@
             <gc:Spacer width="40px"/>
             <g:Label ui:field="prezzoModalitaSpedizioneLabel"></g:Label>
           </g:HorizontalPanel>
+          <gc:Spacer height="20px"/>
+          <g:HorizontalPanel>
+            <g:HTMLPanel width="210px">
+              <g:Label text="Scegli la modalità di pagamento:"/>
+            </g:HTMLPanel>
+            <g:VerticalPanel>
+              <g:ListBox ui:field="modalitaPagamentoBox"></g:ListBox>
+              <g:SimplePanel ui:field="modalitaPagamentoNotePanel"></g:SimplePanel>
+            </g:VerticalPanel>
+          </g:HorizontalPanel>
         </g:HTMLPanel>
       </gc:StatePanel>
       

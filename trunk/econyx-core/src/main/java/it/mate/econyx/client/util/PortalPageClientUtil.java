@@ -69,7 +69,7 @@ public class PortalPageClientUtil {
     GwtUtils.showWaitPanel();
     GwtUtils.onAvailable(pageContentRenderFinishedDivId, new Delegate<Element>() {
       public void execute(Element element) {
-        GwtUtils.hideWaitPanel();
+        GwtUtils.hideWaitPanel(true);
       }
     });
     

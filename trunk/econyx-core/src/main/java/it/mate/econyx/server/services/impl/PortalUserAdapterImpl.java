@@ -112,6 +112,30 @@ public class PortalUserAdapterImpl implements PortalUserAdapter {
   }
   
   @Override
+  public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) {
+    PortalUserDs portalUserDs = dao.findSingle(PortalUserDs.class, String.format("emailAddress == '%s'", portalUser.getEmailAddress()), null, null);
+    if (portalUserDs == null) {
+      throw new ServiceException("Utente inesistente");
+    }
+    String encryptedPwd = null;
+    try {
+      encryptedPwd = CodecUtils.encryptMD5(passwordAttuale);
+    } catch (Exception ex) {
+      throw new ServiceException(ex);
+    }
+    if (!encryptedPwd.equals(portalUserDs.getPassword())) {
+      throw new ServiceException("Password attuale errata");
+    }
+    if (!nuovaPassword.equals(confermaPassword)) {
+      throw new ServiceException("La password di conferma deve essere uguale alla nuova password");
+    }
+    portalUserDs.setPassword(nuovaPassword);
+    portalUserDs.setPasswordEncrypted(false);
+    portalUserDs = (PortalUserDs)encryptUserPassword(portalUserDs);
+    return update(portalUserDs);
+  }
+  
+  @Override
   public PortalUser findByEmail(String email) {
     PortalUserDs portalUserDs = dao.findSingle(PortalUserDs.class, String.format("emailAddress == '%s'", email), null, null);
     return CloneUtils.clone(portalUserDs, PortalUserTx.class);

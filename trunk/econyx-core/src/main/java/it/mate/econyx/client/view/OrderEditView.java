@@ -1,5 +1,7 @@
 package it.mate.econyx.client.view;
 
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -9,7 +11,7 @@ public interface OrderEditView extends BaseView<OrderEditView.Presenter> {
 
   public interface Presenter extends BasePresenter {
     
-    public void closeOrder(String id);
+    public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento);
     
     public void editItem(OrderItem orderItem);
     

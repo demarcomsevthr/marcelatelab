@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -709,6 +711,8 @@ public class GwtUtils {
       if (defaultWaitPanel != null) {
         waitPanel = defaultWaitPanel;
       } else {
+        
+        /* 11/01/2013
         waitPanel = new PopupPanel();
         waitPanel.setGlassEnabled(false);
         waitPanel.setAnimationEnabled(true);
@@ -717,6 +721,16 @@ public class GwtUtils {
         GwtUtils.setStyleAttribute(lb, "padding", "30px");
         GwtUtils.setStyleAttribute(lb, "color", "red");
         waitPanel.setWidget(lb);
+        */
+        
+        waitPanel = new PopupPanel();
+        GwtUtils.setStyleAttribute(defaultWaitPanel, "border", "none");
+        GwtUtils.setStyleAttribute(defaultWaitPanel, "background", "transparent");
+        waitPanel.setGlassEnabled(false);
+        waitPanel.setAnimationEnabled(true);
+        Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
+        waitPanel.setWidget(waitingImg);
+        
       }
       waitPanel.center();
       setClientAttribute(ATTR_CLIENT_WAIT_PANEL, waitPanel);
@@ -729,11 +743,17 @@ public class GwtUtils {
   }
   
   public static void hideWaitPanel() {
+    hideWaitPanel(false);
+  }
+  
+  public static void hideWaitPanel(boolean forceRequestCounter) {
+    if (forceRequestCounter)
+      showWaitPanelRequestCounter = 1;
     showWaitPanelRequestCounter--;
     if (showWaitPanelRequestCounter <= 0) {
+      showWaitPanelRequestCounter = 0;
       PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
       if (waitPanel != null) {
-        showWaitPanelRequestCounter--;
         waitPanel.hide();
         removeClientAttribute(ATTR_CLIENT_WAIT_PANEL);
       }

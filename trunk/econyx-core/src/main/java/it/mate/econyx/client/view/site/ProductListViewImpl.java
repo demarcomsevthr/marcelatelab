@@ -119,10 +119,14 @@ public class ProductListViewImpl extends AbstractBaseView<ProductListView.Presen
     
     if (PropertiesHolder.getBoolean("client.ProductListView.showImage", true)) {
       Image smallImage = new Image(UrlUtils.getProductImageUrl(product.getId(), "small"));
+      /*
       smallImage.setWidth("42px");
       smallImage.setHeight("42px");
+      */
       pTable.setWidget(row, col++, smallImage);
+      /*
       GwtUtils.setFlexCellHeight(pTable, row, col - 1, "45px");
+      */
     }
     
     Anchor screenNameAnchor = new Anchor(product.getName());

@@ -13,6 +13,7 @@ import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.services.GeneralService;
 import it.mate.econyx.shared.util.PropertyConstants;
@@ -373,6 +374,15 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   }
   
   
+  @Override
+  public List<CacheDumpEntry> instanceCacheDump () {
+    return generalAdapter.instanceCacheDump();
+  }
   
+  
+  @Override
+  public void cobraTest() {
+    generalAdapter.cobraTest();
+  }
 
 }

@@ -2,11 +2,14 @@ package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.GeneralPlace;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+
+import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
@@ -209,5 +212,28 @@ public class GeneralActivity extends BaseActivity {
       }
     });
   }
+  
+  public void instanceCacheDump (final Delegate<List<CacheDumpEntry>> delegate) {
+    generalService.instanceCacheDump(new AsyncCallback<List<CacheDumpEntry>>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(List<CacheDumpEntry> results) {
+        delegate.execute(results);
+      }
+    });
+  }
+  
+  public void cobraTest() {
+    generalService.cobraTest(new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Void result) {
+        Window.alert("Test completato");
+      }
+    });
+  }
+  
   
 }

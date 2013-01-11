@@ -3,6 +3,8 @@ package it.mate.econyx.client.util;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderItemDetail;
@@ -39,14 +41,14 @@ public class ClientOrderUtils {
     }
   }
   
-  public static void closeOrder(String id, final Delegate<Order> delegate) {
+  public static void closeOrder(String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento, final Delegate<Order> delegate) {
     if (isCacheEnabled() && isUserOrderInCache(id)) {
       getOrderService().update(getUserOrderInCache(), new AsyncCallback<Order>() {
         public void onFailure(Throwable caught) {
           Window.alert(caught.getMessage());
         }
         public void onSuccess(final Order order) {
-          getOrderService().closeOrder(order.getId(), new AsyncCallback<Void>() {
+          getOrderService().closeOrder(order.getId(), modalitaSpedizione, modalitaPagamento, new AsyncCallback<Void>() {
             public void onFailure(Throwable caught) {
               Window.alert(caught.getMessage());
             }
@@ -58,7 +60,7 @@ public class ClientOrderUtils {
         }
       });
     } else {
-      getOrderService().closeOrder(id, new AsyncCallback<Void>() {
+      getOrderService().closeOrder(id, modalitaSpedizione, modalitaPagamento, new AsyncCallback<Void>() {
         public void onFailure(Throwable caught) {
           Window.alert(caught.getMessage());
         }

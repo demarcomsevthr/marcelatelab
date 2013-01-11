@@ -1,6 +1,8 @@
 package it.mate.econyx.server.model.impl;
 
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderState;
@@ -72,6 +74,18 @@ public class OrderDs implements Order, HasKey {
   
   @Persistent
   Double importoTotale;
+  
+  
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
+  Key modalitaSpedizioneKey;
+  @UnownedRelationship (key="modalitaSpedizioneKey")
+  ModalitaSpedizioneDs modalitaSpedizione;
+
+
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
+  Key modalitaPagamentoKey;
+  @UnownedRelationship (key="modalitaPagamentoKey")
+  ModalitaPagamentoDs modalitaPagamento;
 
   
 
@@ -231,5 +245,24 @@ public class OrderDs implements Order, HasKey {
   }
 
   
+  public ModalitaSpedizione getModalitaSpedizione() {
+    return modalitaSpedizione;
+  }
+
+  @CloneableProperty (targetClass=ModalitaSpedizioneDs.class)
+  public void setModalitaSpedizione(ModalitaSpedizione modalitaSpedizione) {
+    this.modalitaSpedizione = (ModalitaSpedizioneDs)modalitaSpedizione;
+    this.modalitaSpedizioneKey = modalitaSpedizione != null ? this.modalitaSpedizione.getKey() : null;
+  }
+
+  public ModalitaPagamento getModalitaPagamento() {
+    return modalitaPagamento;
+  }
+
+  @CloneableProperty (targetClass=ModalitaPagamentoDs.class)
+  public void setModalitaPagamento(ModalitaPagamento modalitaPagamento) {
+    this.modalitaPagamento = (ModalitaPagamentoDs)modalitaPagamento;
+    this.modalitaPagamentoKey = modalitaPagamento != null ? this.modalitaPagamento.getKey() : null;
+  }
   
 }

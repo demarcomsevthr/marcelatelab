@@ -9,6 +9,7 @@ import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.server.util.ServletThreadUtils;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -101,8 +102,8 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   }
 
   @Override
-  public void closeOrder(String id) {
-    adapter.closeOrder(id);
+  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento) {
+    adapter.closeOrder(id, modalitaSpedizione, modalitaPagamento);
   }
   
   @Override
@@ -118,6 +119,11 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   @Override
   public List<ModalitaSpedizione> findAllModalitaSpedizione() {
     return adapter.findAllModalitaSpedizione();
+  }
+  
+  @Override
+  public List<ModalitaPagamento> findAllModalitaPagamento() {
+    return adapter.findAllModalitaPagamento();
   }
   
   public Order findById(String id) {

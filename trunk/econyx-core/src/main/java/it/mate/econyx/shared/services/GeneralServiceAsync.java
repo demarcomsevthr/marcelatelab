@@ -1,8 +1,10 @@
 package it.mate.econyx.shared.services;
 
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -46,5 +48,9 @@ public interface GeneralServiceAsync {
   void gdataSpreadsheetTest(AsyncCallback<String> callback);
 
   void testServiceException(AsyncCallback<Void> callback);
+
+  void instanceCacheDump(AsyncCallback<List<CacheDumpEntry>> callback);
+
+  void cobraTest(AsyncCallback<Void> callback);
 
 }

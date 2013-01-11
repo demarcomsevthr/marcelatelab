@@ -4,6 +4,7 @@ import it.mate.econyx.server.model.impl.OrderDs;
 import it.mate.econyx.server.model.impl.ProduttoreDs;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -34,7 +35,7 @@ public interface OrderAdapter {
   
   public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details);
   
-  public void closeOrder(String id);
+  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento);
   
   public OrderItem updateOrderItem (OrderItem item);
   
@@ -46,6 +47,11 @@ public interface OrderAdapter {
   public ModalitaSpedizione create (ModalitaSpedizione entity);
 
   
+  public List<ModalitaPagamento> findAllModalitaPagamento();
+  
+  public void delete (ModalitaPagamento entity);
+  
+  public ModalitaPagamento create (ModalitaPagamento entity);
   
   
   public OrderStateConfig create(OrderStateConfig entity);

@@ -28,4 +28,7 @@ public interface PortalUserServiceAsync {
 
   void getGoogleLogoutURL(String redirectURL, AsyncCallback<String> callback);
 
+  void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword,
+      AsyncCallback<PortalUser> callback);
+
 }

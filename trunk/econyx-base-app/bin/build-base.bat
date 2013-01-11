@@ -18,8 +18,13 @@ if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 
 set SAVE_SKIP_PAUSE=%SKIP_PAUSE%
 set SKIP_PAUSE=true
+
 cd %BASEAPPDIR%\..\econyx-core
-cmd /C bin\build-base.bat %DEP_CLEAN% compile datanucleus:enhance package install
+cmd /C bin\build-core.bat %DEP_CLEAN% compile datanucleus:enhance package install
+
+cd %BASEAPPDIR%\..\econyx-core
+cmd /C bin\install-ext-lib-core.bat
+
 set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 
 :NO_DEPENDENCIES

@@ -1,5 +1,7 @@
 package it.mate.econyx.client.view;
 
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -12,6 +14,8 @@ public interface ShoppingCartView extends BaseView<ShoppingCartView.Presenter> {
     
     public static final String LISTA_MODALITA_SPEDIZIONE = "listaModalitaSpedizione";
     
+    public static final String LISTA_MODALITA_PAGAMENTO = "listaModalitaPagamento";
+    
     public static final String ORDER_ITEM = "orderItem";
 
     public void goToDetailedView();
@@ -20,7 +24,7 @@ public interface ShoppingCartView extends BaseView<ShoppingCartView.Presenter> {
     
     public void deleteOrderItem (Order order, OrderItem itemToDelete);
     
-    public void closeOrder(Order order, final Delegate<Void> delegate);
+    public void closeOrder(Order order, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, final Delegate<Void> delegate);
     
     public void goToUpdateCustomerInformations();
     

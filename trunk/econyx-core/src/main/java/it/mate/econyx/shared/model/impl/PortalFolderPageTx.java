@@ -19,6 +19,13 @@ public class PortalFolderPageTx extends WebContentPageTx implements PortalFolder
   
   private Boolean showChildreenContent;
   
+  @Override
+  public String toString() {
+    return "PortalFolderPageTx [name=" + getName() + ", parentName=" + (getParent() != null ? getParent().getName() : "null") +
+        ", childreen count=" + (childreen != null ? (""+childreen.size()) : "null" )+
+        "]";
+  }
+  
   public List<PortalPage> getChildreen() {
     if (childreen == null)
       return null;
