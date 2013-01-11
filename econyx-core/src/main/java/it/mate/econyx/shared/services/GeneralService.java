@@ -1,9 +1,11 @@
 package it.mate.econyx.shared.services;
 
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -54,5 +56,10 @@ public interface GeneralService extends RemoteService {
   
   public void testServiceException () throws ServiceException;
   
+
+  public List<CacheDumpEntry> instanceCacheDump ();
+  
+  
+  public void cobraTest();
   
 }

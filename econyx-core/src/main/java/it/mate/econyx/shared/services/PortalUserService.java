@@ -31,4 +31,6 @@ public interface PortalUserService extends RemoteService {
   
   public String getGoogleLogoutURL(String redirectURL);
   
+  public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) throws ServiceException;
+  
 }

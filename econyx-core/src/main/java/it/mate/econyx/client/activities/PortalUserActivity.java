@@ -240,4 +240,17 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
     return EconyxUtils.getCompleteUrl("site.html");
   }
   
+  @Override
+  public void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) {
+    portalUserService.updatePassword(portalUser, passwordAttuale, nuovaPassword, confermaPassword, new AsyncCallback<PortalUser>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(PortalUser result) {
+        Window.alert("Password modificata");
+        edit(result);
+      }
+    });
+  }
+  
 }

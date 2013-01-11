@@ -16,6 +16,7 @@ import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Image;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderStateConfig;
@@ -25,6 +26,7 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.TipoArticolo;
 import it.mate.econyx.shared.model.UnitaDiMisura;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.DataNotFoundException;
 import it.mate.gwtcommons.server.dao.FindCallback;
@@ -36,7 +38,10 @@ import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.jdo.PersistenceManager;
@@ -255,6 +260,10 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     for (ModalitaSpedizione mod : modalitaSpediziones) {
       orderAdapter.delete(mod);
     }
+    List<ModalitaPagamento> modalitaPagamentos = orderAdapter.findAllModalitaPagamento();
+    for (ModalitaPagamento mod : modalitaPagamentos) {
+      orderAdapter.delete(mod);
+    }
     List<OrderStateConfig> orderStates = orderAdapter.findAllOrderStates();
     for (OrderStateConfig orderState : orderStates) {
       orderAdapter.delete(orderState);
@@ -283,6 +292,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       portalUser.setScreenName(cognome+" "+nome);
       portalUser.setEmailAddress(cognome.toLowerCase()+"."+nome.substring(0, 1).toLowerCase()+"@gmail.com");
       portalUser.setPassword("123");
+      portalUser.setPasswordEncrypted(false);
       portalUser.setActive(true);
       customer.setPortalUser(CloneUtils.clone(portalUserAdapter.create(portalUser, true), PortalUserDs.class));
       customerAdapter.create(customer);
@@ -324,7 +334,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
               openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null);
               numeroArticoliDaOrdinare --;
             }
-            orderAdapter.closeOrder(openOrder.getId());
+            orderAdapter.closeOrder(openOrder.getId(), null, null);
           } catch (ServiceException ex) {
             logger.error("error: " + ex.getMessage());
           }
@@ -335,17 +345,6 @@ public class GeneralAdapterImpl implements GeneralAdapter {
             break;
           customer = customers.get((int) (Math.random() * customers.size()));
 
-          /*
-          for (Articolo articolo : products) {
-            if (articolo.getProducer().getCodice().equals( openOrder.getProducer().getCodice())) {
-              if ( !(articolo.getCodice().equals( openOrder.getItems().get(0).getProduct().getCodice() ))) {
-                articoloDaOrdinare = articolo;
-                break;
-              }
-            }
-          }
-          */
-          
         }
       }
       
@@ -363,14 +362,28 @@ public class GeneralAdapterImpl implements GeneralAdapter {
         }
       }
       
-      /*
-      if (articoloDaOrdinare == null) {
-        articoloDaOrdinare = products.get((int) (Math.random() * products.size()));
-      }
-      openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null);
-      orderAdapter.closeOrder(openOrder.getId());
-      */
     }
   }
+  
+  public List<CacheDumpEntry> instanceCacheDump () {
+    List<CacheDumpEntry> results = new ArrayList<CacheDumpEntry>(); 
+    Set<Object> keys = CacheUtils.instKeySet();
+    for (Object key : keys) {
+      results.add(new CacheDumpEntry(CacheUtils.formatKeyToString(key), CacheUtils.instGet(key).toString()));
+    }
+    Collections.sort(results, new Comparator<CacheDumpEntry>() {
+      public int compare(CacheDumpEntry e1, CacheDumpEntry e2) {
+        return e1.getKey().compareTo(e2.getKey());
+      }
+    });
+    return results;
+  }
+  
+  
+  public void cobraTest() {
+    
+    
+  }
+  
   
 }

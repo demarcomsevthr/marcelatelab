@@ -17,6 +17,8 @@ public interface PortalUserEditView extends BaseView<Presenter> {
     
     public void editOrder(Order order);
     
+    public void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword);
+    
   }
 
   public class NotImpl extends UnimplementedView<PortalUserEditView.Presenter> implements PortalUserEditView {

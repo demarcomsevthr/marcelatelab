@@ -1,6 +1,8 @@
 package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
+import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderState;
@@ -35,6 +37,10 @@ public class OrderTx implements Order {
   ProduttoreTx producer;
   
   Double importoTotale;
+  
+  ModalitaSpedizioneTx modalitaSpedizione;
+
+  ModalitaPagamentoTx modalitaPagamento;
 
   
   
@@ -243,6 +249,24 @@ public class OrderTx implements Order {
 
   public void setImportoTotale(Double importo) {
     this.importoTotale = importo;
+  }
+
+  public ModalitaSpedizione getModalitaSpedizione() {
+    return modalitaSpedizione;
+  }
+
+  @CloneableProperty (targetClass=ModalitaSpedizioneTx.class)
+  public void setModalitaSpedizione(ModalitaSpedizione modalitaSpedizione) {
+    this.modalitaSpedizione = (ModalitaSpedizioneTx)modalitaSpedizione;
+  }
+
+  public ModalitaPagamento getModalitaPagamento() {
+    return modalitaPagamento;
+  }
+
+  @CloneableProperty (targetClass=ModalitaPagamentoTx.class)
+  public void setModalitaPagamento(ModalitaPagamento modalitaPagamento) {
+    this.modalitaPagamento = (ModalitaPagamentoTx)modalitaPagamento;
   }
   
 }

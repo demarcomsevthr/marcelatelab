@@ -1,6 +1,8 @@
 package it.mate.gwtcommons.shared.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PropertiesHolder {
@@ -44,6 +46,12 @@ public class PropertiesHolder {
     } else {
       return value;
     }
+  }
+  
+  public static List<String> getStringList(String name, String separator) {
+    String value = getString(name, "");
+    String[] values = value.split(separator);
+    return Arrays.asList(values);
   }
   
   public static String getString(String name) {

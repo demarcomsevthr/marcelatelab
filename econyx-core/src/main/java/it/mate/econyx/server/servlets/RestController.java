@@ -9,12 +9,16 @@ import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.server.services.ReportAdapter;
 import it.mate.econyx.server.services.ResourcesService;
+import it.mate.econyx.server.util.CacheConstants;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.Produttore;
+import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.PdfSession;
 import it.mate.gwtcommons.server.utils.StringUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
+import it.mate.portlets.server.services.PortalServiceAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -54,6 +58,9 @@ public class RestController {
   @Autowired private ReportAdapter reportAdapter;
   
   @Autowired private ExcelAdapter excelAdapter;
+  
+  @Autowired private PortalServiceAdapter portalServiceAdapter;
+  
   
   
   @RequestMapping ("/pg/{pageCode}")
@@ -126,6 +133,30 @@ public class RestController {
   
   @RequestMapping ("/ping")
   public void aliveCheck(HttpServletResponse response) throws Exception {
+    response.getOutputStream().print("PONG");
+  }
+
+  @RequestMapping ("/refreshCache")
+  public void refreshCache(HttpServletResponse response) throws Exception {
+    if (PropertiesHolder.getBoolean("server.refreshCache.enabled")) {
+      logger.debug("refresh cache check");
+      Long refreshTime = (Long)CacheUtils.instGet(CacheConstants.REFRESH_CACHE_CHECK);
+      if (refreshTime == null) {
+        refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.initialDelay", 120);
+        CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+      } else {
+        Long currentTime = System.currentTimeMillis();
+        if (currentTime > refreshTime) {
+          refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.nextDelay", 1800);
+          CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+          logger.debug("REFRESH CACHE CHECK >>>> RELOADING ALL DATA IN CACHE.......");
+          portalPageAdapter.findAllRoot();
+          imageAdapter.findAll();
+          portalServiceAdapter.getPage("root");
+          portalServiceAdapter.getPage("home");
+        }
+      }
+    }
     response.getOutputStream().print("PONG");
   }
 

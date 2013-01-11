@@ -6,6 +6,7 @@ import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.ShoppingCartView;
 import it.mate.econyx.client.view.custom.OrderItemDetailCustomizer;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -32,6 +33,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -67,10 +69,12 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   @UiField ListBox modalitaSpedizioneBox;
   @UiField Label prezzoModalitaSpedizioneLabel;
   
+  @UiField ListBox modalitaPagamentoBox;
+  @UiField Panel modalitaPagamentoNotePanel;
+  
   @UiField Panel itemDetailPanel;
   @UiField Label itemDetailNameLabel;
   @UiField HorizontalPanel qtaBoxPanel;
-//@UiField SpinnerIntegerBox qtaBox;
   QuantitaBox quantitaBox;
 
   StatePanelUtil statePanelUtil = new StatePanelUtil();
@@ -78,6 +82,10 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   private Order order;
   
   private List<ModalitaSpedizione> listaModalitaSpedizione;
+  private ModalitaSpedizione modalitaSpedizioneSelected;
+  
+  private List<ModalitaPagamento> listaModalitaPagamento;
+  private ModalitaPagamento modalitaPagamentoSelected;
   
   private OrderItem orderItemSelected = null;
   
@@ -125,7 +133,13 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
       for (ModalitaSpedizione modalitaSpedizione : listaModalitaSpedizione) {
         modalitaSpedizioneBox.addItem(modalitaSpedizione.getDescrizione(), modalitaSpedizione.getCodice());
       }
-      setPrezzoModalitaSpedizione(0);
+      onModalitaSpedizioneBoxChanged(0);
+    } else if (model instanceof List && Presenter.LISTA_MODALITA_PAGAMENTO.equals(tag)) {
+      this.listaModalitaPagamento = (List<ModalitaPagamento>)model;
+      for (ModalitaPagamento modalitaPagamento : listaModalitaPagamento) {
+        modalitaPagamentoBox.addItem(modalitaPagamento.getDescrizione(), modalitaPagamento.getCodice());
+      }
+      onModalitaPagamentoBoxChanged(0);
     } else if (model instanceof OrderItem && Presenter.ORDER_ITEM.equals(tag)) {
       OrderItem freshOrderItem = (OrderItem)model;
       for (int it = 0; it < order.getItems().size(); it++) {
@@ -255,7 +269,7 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   }
   
   private void closeOrder() {
-    getPresenter().closeOrder(order, new Delegate<Void>() {
+    getPresenter().closeOrder(order, modalitaSpedizioneSelected, modalitaPagamentoSelected, new Delegate<Void>() {
       public void execute(Void element) {
         statePanelUtil.setCurrentState(finalStatePanel.getStateId());
       }
@@ -266,7 +280,6 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   public void itemDetailStateOkBtn (ClickEvent event) {
     if (orderItemSelected != null) {
       orderItemSelected.setDetails(orderItemDetailCustomizer.getDetails());
-//    orderItemSelected.setQuantity((double)qtaBox.getValue());
       Double qta = quantitaBox.getQuantita();
       if (qta == null) {
         return;
@@ -294,17 +307,32 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   
   @UiHandler ("modalitaSpedizioneBox")
   public void onModalitaSpedizioneBoxChanged (ChangeEvent event) {
-    setPrezzoModalitaSpedizione(modalitaSpedizioneBox.getSelectedIndex());
+    onModalitaSpedizioneBoxChanged(modalitaSpedizioneBox.getSelectedIndex());
   }
   
-  private void setPrezzoModalitaSpedizione(int index) {
+  private void onModalitaSpedizioneBoxChanged(int index) {
     if (index >= 0) {
       if (listaModalitaSpedizione != null && listaModalitaSpedizione.size() > 0) {
-        ModalitaSpedizione modalitaSpedizione = listaModalitaSpedizione.get(index);
-        prezzoModalitaSpedizioneLabel.setText(GwtUtils.formatCurrency(modalitaSpedizione.getPrezzo()));
+        modalitaSpedizioneSelected = listaModalitaSpedizione.get(index);
+        prezzoModalitaSpedizioneLabel.setText(GwtUtils.formatCurrency(modalitaSpedizioneSelected.getPrezzo()));
       }
     }
   }
   
+  @UiHandler ("modalitaPagamentoBox")
+  public void onModalitaPagamentoBoxChanged (ChangeEvent event) {
+    onModalitaPagamentoBoxChanged(modalitaPagamentoBox.getSelectedIndex());
+  }
+  
+  private void onModalitaPagamentoBoxChanged(int index) {
+    if (index >= 0) {
+      if (listaModalitaPagamento != null && listaModalitaPagamento.size() > 0) {
+        modalitaPagamentoSelected = listaModalitaPagamento.get(index);
+        HTML html = new HTML(SafeHtmlUtils.fromTrustedString(modalitaPagamentoSelected.getNota()));
+        modalitaPagamentoNotePanel.clear();
+        modalitaPagamentoNotePanel.add(html);
+      }
+    }
+  }
   
 }

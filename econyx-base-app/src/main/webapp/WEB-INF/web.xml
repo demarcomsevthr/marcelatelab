@@ -12,6 +12,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   
+  <listener>
+    <listener-class>it.mate.econyx.server.servlets.AppServletContextListener</listener-class>
+  </listener>
+  
 
   <!--
           SERVICES CONFIGURATION 

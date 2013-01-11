@@ -8,7 +8,7 @@ import it.mate.gwtcommons.shared.model.CloneableBean;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-@CacheableEntity (txClass=TimbroTx.class)
+@CacheableEntity (txClass=TimbroTx.class, instanceCache=true)
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 @CloneableBean (overrideTargetClassName="it.mate.econyx.shared.model.impl.TimbroTx")

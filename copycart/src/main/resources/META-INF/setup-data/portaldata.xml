@@ -2173,6 +2173,13 @@
       <prezzo>15.0</prezzo>
     </it.mate.econyx.shared.model.impl.ModalitaSpedizioneTx>
   </listaModalitaSpedizione>
+  <listaModalitaPagamento>
+    <it.mate.econyx.shared.model.impl.ModalitaPagamentoTx>
+      <codice>BON</codice>
+      <descrizione>Bonifico bancario</descrizione>
+      <nota><![CDATA[Dovr&agrave; effettuare un bonifico bancario sul seguente IBAN:<br/>XX XX XX XXXXXXXXXX]]></nota>
+    </it.mate.econyx.shared.model.impl.ModalitaPagamentoTx>
+  </listaModalitaPagamento>
   <orderStates>
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>OPE</code>

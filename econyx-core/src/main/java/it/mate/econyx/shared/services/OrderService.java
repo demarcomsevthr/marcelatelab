@@ -2,6 +2,7 @@ package it.mate.econyx.shared.services;
 
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
@@ -39,10 +40,12 @@ public interface OrderService extends RemoteService {
   
   public OrderItem updateOrderItem (OrderItem item);
   
-  public void closeOrder(String id);
+  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento);
 
   
   public List<ModalitaSpedizione> findAllModalitaSpedizione() throws ServiceException;
+  
+  public List<ModalitaPagamento> findAllModalitaPagamento() throws ServiceException;
   
   public List<Order> findOrdersByProducer(Produttore produttore, String currentStateCode);
 

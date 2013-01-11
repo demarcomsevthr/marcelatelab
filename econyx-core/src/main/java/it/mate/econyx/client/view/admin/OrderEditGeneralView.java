@@ -104,7 +104,7 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
   
   @UiHandler ("closeBtn")
   public void onCloseBtn(ClickEvent event) {
-    getPresenter().closeOrder(order.getId());
+    getPresenter().closeOrder(order.getId(), null, null);
   }
   
 }

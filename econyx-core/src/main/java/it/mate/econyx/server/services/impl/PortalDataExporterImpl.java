@@ -19,6 +19,7 @@ import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Image;
+import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalFolderPage;
@@ -155,6 +156,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (ModalitaSpedizione modalitaSpedizione : dataModel.listaModalitaSpedizione) {
       visitModalitaSpedizione(dataModel, true, modalitaSpedizione);
     }
+    for (ModalitaPagamento modalitaPagamento : dataModel.listaModalitaPagamento) {
+      visitModalitaPagamento(dataModel, true, modalitaPagamento);
+    }
     for (OrderStateConfig orderState : dataModel.orderStates) {
       visitOrderState(dataModel, true, orderState);
     }
@@ -223,6 +227,13 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       modalitaSpedizione = orderAdapter.create(modalitaSpedizione);
     }
     return modalitaSpedizione;
+  }
+  
+  private ModalitaPagamento visitModalitaPagamento(VisitContext context, boolean createMode, ModalitaPagamento modalitaPagamento) {
+    if (createMode) {
+      modalitaPagamento = orderAdapter.create(modalitaPagamento);
+    }
+    return modalitaPagamento;
   }
   
   private OrderStateConfig visitOrderState(VisitContext context, boolean createMode, OrderStateConfig orderState) {

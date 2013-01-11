@@ -114,5 +114,15 @@ public interface Order extends Serializable {
   
   public void setImportoTotale(Double importo);
   
+  
+  public ModalitaSpedizione getModalitaSpedizione();
+  
+  public void setModalitaSpedizione(ModalitaSpedizione modalitaSpedizione);
+  
+  
+  public ModalitaPagamento getModalitaPagamento();
+  
+  public void setModalitaPagamento(ModalitaPagamento modalitaPagamento);
+  
 
 }

@@ -163,7 +163,9 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
     public ChildreenTableUpdater(PortalFolderPage portalFolderPage, FlexTable childreenTable) {
       this.portalFolderPage = portalFolderPage;
       this.childreenTableToUpdate = childreenTable;
+      GwtUtils.showWaitPanel();
       updateTable();
+      GwtUtils.hideWaitPanel(true);
     }
     private void updateTable() {
       updateNextChild(portalFolderPage.getChildreen().iterator());

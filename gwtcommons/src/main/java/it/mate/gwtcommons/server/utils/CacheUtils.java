@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -77,9 +78,9 @@ public class CacheUtils {
         CacheEntry cacheEntry = new CacheEntry(entityClone, txClass, entity.getClass());
         if (cacheableEntityAnnotation.instanceCache()) {
           getInstCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
-        } else {
-          getMemCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
         }
+        // in mem cache sempre
+        getMemCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
       }
     }
   }
@@ -96,9 +97,20 @@ public class CacheUtils {
   }
   
   public static void deleteByKey (Object key) {
-    if (existsInCacheByKey(key)) {
+    if (existsInInstCacheByKey(key)) {
+      getInstCache().remove(keyToString(key));
+    }
+    if (existsInMemCacheByKey(key)) {
       getMemCache().delete(keyToString(key));
     }
+  }
+  
+  private static boolean existsInMemCacheByKey (Object key) {
+    return getMemCache().contains(keyToString(key));
+  }
+  
+  private static boolean existsInInstCacheByKey (Object key) {
+    return getInstCache().containsKey(keyToString(key));
   }
   
   public static void clearAll() {
@@ -133,12 +145,11 @@ public class CacheUtils {
       this.txClass = txClass;
       this.dsClass = dsClass;
     }
+    public String toString() {
+      return "CacheEntry [txClass=" + txClass + ", dsClass=" + dsClass + ", entity=" + entity + "]";
+    }
   }
 
-  private static boolean existsInCacheByKey (Object key) {
-    return getMemCache().contains(keyToString(key));
-  }
-  
   private static MemcacheService getMemCache() {
     return MemcacheServiceFactory.getMemcacheService();
   }
@@ -162,15 +173,39 @@ public class CacheUtils {
     return key.toString();
   }
   
-  private static String formatKeyToString(Object key) {
-    Key kk = null;
+  public static String formatKeyToString(Object key) {
+    Key dsKey = null;
     if (key instanceof Key) {
-      kk = (Key)key;
+      dsKey = (Key)key;
     } else {
-      kk = KeyFactory.stringToKey((String)key);
+      try {
+        dsKey = KeyFactory.stringToKey((String)key);
+      } catch (Exception ex) {  }
     }
-    String k = kk.getKind()+"."+kk.getId();
-    return k;
+    String textKey = null;
+    if (dsKey != null) {
+      textKey = dsKey.getKind()+".";
+      if (dsKey.getName() == null) {
+        textKey += dsKey.getId();
+      } else {
+        textKey += dsKey.getName();
+      }
+    } else {
+      textKey = key.toString();
+    }
+    return textKey;
+  }
+  
+  public static Set<Object> instKeySet () {
+    return getInstCache().keySet();
+  }
+  
+  public static Object instGet (Object key) {
+    return getInstCache().get(key);
+  }
+  
+  public static Object instPut (Object key, Object value) {
+    return getInstCache().put(key, value);
   }
   
 }

@@ -2,6 +2,7 @@ package it.mate.econyx.client.view.admin;
 
 import it.mate.econyx.client.activities.GeneralActivity;
 import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.ui.MessageBox.Callbacks;
@@ -11,6 +12,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.UriUtils;
@@ -19,7 +22,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -41,6 +46,8 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   @UiField IntegerBox generateRandomOrdersNumberBox;
   @UiField Label buildIdLabel;
   
+  @UiField HTMLPanel outputPanel;
+  
   private String secretCode = PropertiesHolder.getString("client.GeneralConfigView.secretCode", "");
   
   public GeneralConfigView() {
@@ -56,6 +63,33 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   
   public void setModel(Object model, String tag) {
     
+  }
+  
+  
+  private void askSecretCode(final Delegate<Void> delegate) {
+    if (secretCode.equals(""))
+      delegate.execute(null);
+    HorizontalPanel popupPanel = new HorizontalPanel();
+    popupPanel.add(new Spacer("1px", "2em"));
+    Label label = new Label("Secret code:");
+    label.setWidth("6em");
+    popupPanel.add(label);
+    final PasswordTextBox secretBox = new PasswordTextBox();
+    popupPanel.add(secretBox);
+    MessageBoxUtils.popupOkCancel("Secret code", popupPanel, "400px", new Delegate<MessageBox.Callbacks>() {
+      public void execute(Callbacks callbacks) {
+        if (secretCode.equals(secretBox.getValue())) {
+          delegate.execute(null);
+        } else {
+          Window.alert("Secret code errato!");
+        }
+      }
+    });
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        secretBox.setFocus(true);
+      }
+    });
   }
   
   @UiHandler ("importPortalDataBtn")
@@ -172,6 +206,38 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
   
+  @UiHandler ("instCacheViewBtn")
+  public void instCacheViewBtn (ClickEvent event) {
+    askSecretCode(new Delegate<Void>() {
+      public void execute(Void element) {
+        getPresenter().instanceCacheDump(new Delegate<List<CacheDumpEntry>>() {
+          public void execute(List<CacheDumpEntry> results) {
+            outputPanel.clear();
+            FlexTable table = new FlexTable();
+            outputPanel.add(table);
+            int row = 0;
+            for (CacheDumpEntry entry : results) {
+              table.setText(row, 0, ""+(row+1));
+              table.setText(row, 1, entry.getKey());
+              table.setText(row, 2, entry.getValue());
+              row++;
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  @UiHandler ("cobraTestBtn")
+  public void cobraTestBtn (ClickEvent event) {
+    askSecretCode(new Delegate<Void>() {
+      public void execute(Void element) {
+        getPresenter().cobraTest();
+      }
+    });
+  }
+  
+  
   private boolean waiting = false;
   
   @UiHandler ("customTest1Btn")
@@ -196,30 +262,5 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     
   }
   
-  private void askSecretCode(final Delegate<Void> delegate) {
-    if (secretCode.equals(""))
-      delegate.execute(null);
-    HorizontalPanel popupPanel = new HorizontalPanel();
-    popupPanel.add(new Spacer("1px", "2em"));
-    Label label = new Label("Secret code:");
-    label.setWidth("6em");
-    popupPanel.add(label);
-    final PasswordTextBox secretBox = new PasswordTextBox();
-    popupPanel.add(secretBox);
-    MessageBoxUtils.popupOkCancel("Secret code", popupPanel, "400px", new Delegate<MessageBox.Callbacks>() {
-      public void execute(Callbacks callbacks) {
-        if (secretCode.equals(secretBox.getValue())) {
-          delegate.execute(null);
-        } else {
-          Window.alert("Secret code errato!");
-        }
-      }
-    });
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        secretBox.setFocus(true);
-      }
-    });
-  }
   
 }
