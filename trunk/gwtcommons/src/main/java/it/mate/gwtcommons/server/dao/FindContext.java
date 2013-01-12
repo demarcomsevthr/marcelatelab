@@ -14,6 +14,7 @@ public class FindContext <E extends Serializable> {
   private FindCallback<E> callback;
   private boolean cacheDisabled = false;
   private List<String> includedFields = new ArrayList<String>();
+  private List<String> excludedFields = new ArrayList<String>();
   private boolean relationshipsResolutionDisabled = false;
   private String whereClause;
   
@@ -86,6 +87,13 @@ public class FindContext <E extends Serializable> {
   }
   public List<String> getIncludedFields() {
     return includedFields;
+  }
+  public FindContext<E> excludedField(String name) {
+    this.excludedFields.add(name);
+    return this;
+  }
+  public List<String> getExcludedFields() {
+    return excludedFields;
   }
   public boolean isRelationshipsResolutionDisabled() {
     return relationshipsResolutionDisabled;
