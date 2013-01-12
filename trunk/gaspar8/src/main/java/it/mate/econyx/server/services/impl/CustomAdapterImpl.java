@@ -82,26 +82,26 @@ public class CustomAdapterImpl implements CustomAdapter {
     PdfPTable itemTable = new PdfPTable(5);
     
     itemTable.addCell(pdfSession.createCell("Articolo", FontTypes.ARIAL_BOLD, 10f));
-    itemTable.addCell(pdfSession.createCell("UdM", FontTypes.ARIAL_BOLD, 10f));
-    itemTable.addCell(pdfSession.createCell("Qta", FontTypes.ARIAL_BOLD, 10f));
-    itemTable.addCell(pdfSession.createCell("Prezzo", FontTypes.ARIAL_BOLD, 10f));
-    itemTable.addCell(pdfSession.createCell("Importo", FontTypes.ARIAL_BOLD, 10f));
+    itemTable.addCell(pdfSession.createCell("UdM", FontTypes.ARIAL_BOLD, 10f, PdfSession.ALIGN_CENTER));
+    itemTable.addCell(pdfSession.createCell("Qta", FontTypes.ARIAL_BOLD, 10f, PdfSession.ALIGN_CENTER));
+    itemTable.addCell(pdfSession.createCell("Prezzo", FontTypes.ARIAL_BOLD, 10f, PdfSession.ALIGN_CENTER));
+    itemTable.addCell(pdfSession.createCell("Importo", FontTypes.ARIAL_BOLD, 10f, PdfSession.ALIGN_CENTER));
     
     List<OrderItem> items = order.getItems();
     for (int it = 0; it < items.size(); it++) {
       OrderItem orderItem = items.get(it);
       itemTable.addCell(pdfSession.createCell(orderItem.getProduct().getName(), FontTypes.ARIAL, 10f));
-      itemTable.addCell(pdfSession.createCell(orderItem.getProduct().getUnitaDiMisura().getNome(), FontTypes.ARIAL, 10f));
-      itemTable.addCell(pdfSession.createCell(""+orderItem.getQuantity(), FontTypes.ARIAL, 10f));
-      itemTable.addCell(pdfSession.createCell(""+orderItem.getProduct().getPrezzo(), FontTypes.ARIAL, 10f));
-      itemTable.addCell(pdfSession.createCell(""+orderItem.getQuantity() * orderItem.getProduct().getPrezzo(), FontTypes.ARIAL, 10f));
+      itemTable.addCell(pdfSession.createCell(orderItem.getProduct().getUnitaDiMisura().getNome(), FontTypes.ARIAL, 10f, PdfSession.ALIGN_CENTER));
+      itemTable.addCell(pdfSession.createCell(""+orderItem.getQuantity(), FontTypes.ARIAL, 10f, PdfSession.ALIGN_CENTER));
+      itemTable.addCell(pdfSession.createCell(""+ String.format("%.2f", orderItem.getProduct().getPrezzo()), FontTypes.ARIAL, 10f, PdfSession.ALIGN_RIGHT));
+      itemTable.addCell(pdfSession.createCell(""+ String.format("%.2f", orderItem.getQuantity() * orderItem.getProduct().getPrezzo()), FontTypes.ARIAL, 10f, PdfSession.ALIGN_RIGHT));
     }
     
     itemTable.addCell(pdfSession.createCell(""));
     itemTable.addCell(pdfSession.createCell(""));
     itemTable.addCell(pdfSession.createCell(""));
     itemTable.addCell(pdfSession.createCell("TOTALE", FontTypes.ARIAL_BOLD, 13f));
-    itemTable.addCell(pdfSession.createCell("" + Order.Utils.computeImportoTotale(order), FontTypes.ARIAL_BOLD, 13f));
+    itemTable.addCell(pdfSession.createCell("" + String.format("%.2f", Order.Utils.computeImportoTotale(order)), FontTypes.ARIAL_BOLD, 13f, PdfSession.ALIGN_RIGHT));
     
     pdfSession.addTable(itemTable);
   }

@@ -13,7 +13,6 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -73,8 +72,10 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
 
     confermaBtn = new Button("Conferma ordini in blocco", new ClickHandler() {
       public void onClick(ClickEvent event) {
+        GwtUtils.showWaitPanel();
 //      confermaOrdineSuccessivo(ordini.iterator());
         confermaListaOrdini(ordini);
+        GwtUtils.hideWaitPanel(true);
       }
     });
     orderListView.addButton(confermaBtn);
@@ -174,12 +175,44 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     delegate.execute(model);
   }
   
+  private void confermaListaOrdini (List<Order> ordini) {
+    String stateCodeToUpdate = null;
+    if (selectedOrderStateCode != null) {
+      if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
+        stateCodeToUpdate = OrderStateConfig.CONFIRMED;
+      } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
+        stateCodeToUpdate = OrderStateConfig.SHIPPED;
+      } else {
+        return;
+      }
+    }
+    for (Order order : ordini) {
+      boolean updateOrder = false;
+      List<OrderState> statesToUpdate = new ArrayList<OrderState>();
+      for (OrderState stato : order.getStates()) {
+        if (stato.getCode().equals(stateCodeToUpdate) && !stato.getChecked()) {
+          stato.setChecked(true);
+          updateOrder = true;
+        }
+        statesToUpdate.add(stato);
+      }
+      if (updateOrder) {
+        order.setStates(statesToUpdate);
+      }
+    }
+    getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
+      public void execute(List<Order> updatedOrders) {
+        findOrdersByProducer();
+        Window.alert("Operazione completata");
+      }
+    });
+  }
+  
   /*
   @UiHandler ("confermaBtn")
   public void onConfermaBtn (ClickEvent event) {
     confermaOrdineSuccessivo(ordini.iterator());
   }
-  */
   
   private void confermaOrdineSuccessivo (final Iterator<Order> orderIterator) {
     String stateCodeToUpdate = null;
@@ -216,38 +249,6 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
       Window.alert("Operazione completata");
     }
   }
-  
-  private void confermaListaOrdini (List<Order> ordini) {
-    String stateCodeToUpdate = null;
-    if (selectedOrderStateCode != null) {
-      if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
-        stateCodeToUpdate = OrderStateConfig.CONFIRMED;
-      } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
-        stateCodeToUpdate = OrderStateConfig.SHIPPED;
-      } else {
-        return;
-      }
-    }
-    for (Order order : ordini) {
-      boolean updateOrder = false;
-      List<OrderState> statesToUpdate = new ArrayList<OrderState>();
-      for (OrderState stato : order.getStates()) {
-        if (stato.getCode().equals(stateCodeToUpdate) && !stato.getChecked()) {
-          stato.setChecked(true);
-          updateOrder = true;
-        }
-        statesToUpdate.add(stato);
-      }
-      if (updateOrder) {
-        order.setStates(statesToUpdate);
-      }
-    }
-    getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
-      public void execute(List<Order> updatedOrders) {
-        findOrdersByProducer();
-        Window.alert("Operazione completata");
-      }
-    });
-  }
+  */
   
 }

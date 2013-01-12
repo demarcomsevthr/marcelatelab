@@ -724,8 +724,8 @@ public class GwtUtils {
         */
         
         waitPanel = new PopupPanel();
-        GwtUtils.setStyleAttribute(defaultWaitPanel, "border", "none");
-        GwtUtils.setStyleAttribute(defaultWaitPanel, "background", "transparent");
+        GwtUtils.setStyleAttribute(waitPanel, "border", "none");
+        GwtUtils.setStyleAttribute(waitPanel, "background", "transparent");
         waitPanel.setGlassEnabled(false);
         waitPanel.setAnimationEnabled(true);
         Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
@@ -746,8 +746,8 @@ public class GwtUtils {
     hideWaitPanel(false);
   }
   
-  public static void hideWaitPanel(boolean forceRequestCounter) {
-    if (forceRequestCounter)
+  public static void hideWaitPanel(boolean forceCounterReset) {
+    if (forceCounterReset)
       showWaitPanelRequestCounter = 1;
     showWaitPanelRequestCounter--;
     if (showWaitPanelRequestCounter <= 0) {

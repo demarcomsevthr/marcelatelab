@@ -4,6 +4,10 @@
 
   <g:HTMLPanel>
     <e:OrderEditor ui:field="editor"/>
+    <gwtcommons:Spacer height="0.8em"/>
+    <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+      <g:Label text="Produttore:" width="12em" horizontalAlignment="ALIGN_RIGHT"/> <g:Label ui:field="produttoreLbl"/>
+    </g:HorizontalPanel>
     <gwtcommons:Spacer height="1em"/>
     <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
       <g:Label text="Importo listino:" width="12em" horizontalAlignment="ALIGN_RIGHT"/> <g:Label ui:field="importoCalcolatoLbl"/>

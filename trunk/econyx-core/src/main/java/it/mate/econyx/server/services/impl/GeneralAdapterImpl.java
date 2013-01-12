@@ -270,33 +270,41 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     }
   }
 
-  String[] cognomi = {"Rossi", "Russo", "Ferrari", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marino", "Greco"};
-  String[] nomi = {"Rodrigo", "Salvatore", "Oronzo", "Vittorio", "Ramiro", "Giancarlo", "Lara", "Pamela", "Pancrazio"};
+  String[] cognomi = {"Rossi", "Russo",     "Ferrari",  "Esposito", "Bianchi", "Romano",    "Colombo", "Ricci",  "Marino", "Greco",  "De Santis", "Farina", "Gatti", "Cattaneo",  "Amato",   "Basile", "Sartori", "Milano",  "Riva",   "Ferretti"};
+  String[] nomi = {"Antonio",  "Salvatore", "Federico", "Vittorio", "Mario",   "Giancarlo", "Lara",    "Pamela", "Paolo",  "Maria",  "Anna",      "Davide", "Luigi", "Maddalena", "Giuseppe", "Lucia", "Eleonora", "Giorgio", "Marco", "Simona"};
   
   public void generateRandomCustomers(int number) {
+    
+    List<PortalUser> utentiEsistenti = portalUserAdapter.findAll();
     List<String> nominativi = new ArrayList<String>();
+    for (PortalUser portalUser : utentiEsistenti) {
+      nominativi.add(portalUser.getScreenName());
+    }
+    
     int it = 0;
     while (it < number) {
-      String cognome = cognomi[(int) (Math.random() * cognomi.length)];
-      String nome = nomi[(int) (Math.random() * nomi.length)];
-      if (nominativi.contains(cognome+nome)) {
+      it++;
+      int rand = (int)(Math.random() * cognomi.length);
+      String cognome = cognomi[rand];
+      String nome = nomi[rand];
+      String nominativo = cognome+" "+nome;
+      if (nominativi.contains(nominativo)) {
         continue;
       }
-      nominativi.add(cognome+nome);
+      nominativi.add(nominativo);
       CustomerDs customer = new CustomerDs();
       IndirizzoSpedizioneDs indirizzoSpedizione = new IndirizzoSpedizioneDs();
       indirizzoSpedizione.setCognome(cognome);
       indirizzoSpedizione.setNome(nome);
       customer.setIndirizzoSpedizione(indirizzoSpedizione);
       PortalUserDs portalUser = new PortalUserDs();
-      portalUser.setScreenName(cognome+" "+nome);
+      portalUser.setScreenName(nominativo);
       portalUser.setEmailAddress(cognome.toLowerCase()+"."+nome.substring(0, 1).toLowerCase()+"@gmail.com");
       portalUser.setPassword("123");
       portalUser.setPasswordEncrypted(false);
       portalUser.setActive(true);
       customer.setPortalUser(CloneUtils.clone(portalUserAdapter.create(portalUser, true), PortalUserDs.class));
       customerAdapter.create(customer);
-      it++;
     }
   }
   
