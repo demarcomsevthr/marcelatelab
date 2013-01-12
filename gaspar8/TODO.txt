@@ -20,6 +20,8 @@
 		VERIFICA 12/01/2013 gaspar8est
 			> caricamento utenti (24) > un pò lento
 			> btn update stato ordini > non rimane wait panel
+			
+			>> TODO: stampa situazione di cassa > export di tutti i saldi utente in excel
 
 
 		SNAPSHOT 04/01/2013
