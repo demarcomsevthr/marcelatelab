@@ -15,6 +15,11 @@
 		Per me andrebbe bene già il prossimo venerdì 18 gennaio, altrimenti in generale tutti i venerdì e i martedì successivi (ma se serve e lo so con un pò di anticipo posso anche organizzarmi per altri giorni).
 		
 		-------------------------------------------------------------------------------------------------------
+		
+		
+		VERIFICA 12/01/2013 gaspar8est
+			> caricamento utenti (24) > un pò lento
+			> btn update stato ordini > non rimane wait panel
 
 
 		SNAPSHOT 04/01/2013
