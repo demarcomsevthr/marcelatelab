@@ -18,8 +18,9 @@
 		
 		
 		VERIFICA 12/01/2013 gaspar8est
-			> caricamento utenti (24) > un pò lento
+			> caricamento utenti (24) > un pò lento > un pò sistemato (find conto utente eclude orderId) > provare a metrre ContoUtente in cache !!!
 			> btn update stato ordini > non rimane wait panel
+			> btn aggiungi al carrello > wait panel
 			
 			>> TODO: stampa situazione di cassa > export di tutti i saldi utente in excel
 

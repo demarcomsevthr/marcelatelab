@@ -210,7 +210,7 @@ public class JdoDao implements Dao {
         if (!queryResult.isEmpty()) {
           for (Object result : queryResult) {
             detachedResults.add(result);
-            applyPatchDefaultFetchGroup(result, context);
+            applyDefaultFetchGroupPatches(result, context);
             if (context.getCallback() != null && !context.keysOnly()) {
               context.getCallback().processResultsInTransaction((E)result);
             }
@@ -240,7 +240,7 @@ public class JdoDao implements Dao {
         List resultsList = (List)results;
         resultsList.size();
         for (Object result : resultsList) {
-          applyPatchDefaultFetchGroup(result, context);
+          applyDefaultFetchGroupPatches(result, context);
           if (context.getCallback() != null && !context.keysOnly()) {
             context.getCallback().processResultsInTransaction((E)result);
           }
@@ -281,13 +281,13 @@ public class JdoDao implements Dao {
   
   @SuppressWarnings("rawtypes")
   // 16/11/2012
-  private <E extends Serializable> void applyPatchDefaultFetchGroup(Object result, FindContext<E> context) {
+  private <E extends Serializable> void applyDefaultFetchGroupPatches(Object result, FindContext<E> context) {
     if (result == null)
       return;
     if (result instanceof List) {
       List<?> results = (List)result;
       for (Object item : results) {
-        applyPatchDefaultFetchGroup(item, context);
+        applyDefaultFetchGroupPatches(item, context);
       }
       return;
     }
@@ -297,6 +297,15 @@ public class JdoDao implements Dao {
       Persistent persistentAnnotation = field.getAnnotation(Persistent.class);
       if (persistentAnnotation != null) {
         if ("false".equals(persistentAnnotation.defaultFetchGroup()) && !context.getIncludedFields().contains(field.getName())) {
+          field.setAccessible(true);
+          try {
+            field.set(result, null);
+          } catch (Exception ex) {
+            logger.error("error", ex);
+          }
+        }
+        // 12/01/2013
+        if ("true".equals(persistentAnnotation.defaultFetchGroup()) && context.getExcludedFields().contains(field.getName())) {
           field.setAccessible(true);
           try {
             field.set(result, null);

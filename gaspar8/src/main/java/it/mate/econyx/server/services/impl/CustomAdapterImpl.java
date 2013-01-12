@@ -170,7 +170,7 @@ public class CustomAdapterImpl implements CustomAdapter {
     PortalUser portalUser = dao.findById(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
     Customer customer = customerAdapter.findByPortalUser(portalUser);
     if (customer != null) {
-      ContoUtente contoUtente = findContoUtenteByCustomer(customer, true);
+      ContoUtente contoUtente = findContoUtenteByCustomer(customer, true, false);
       return CloneUtils.clone(contoUtente, ContoUtenteTx.class);
     }
     return null;
@@ -188,12 +188,19 @@ public class CustomAdapterImpl implements CustomAdapter {
   }
   
   private ContoUtente findContoUtenteByCustomer(Customer customer, boolean createIfNotFound) {
-    ContoUtente contoUtente = dao.findSingle(new FindContext<ContoUtenteDs>(ContoUtenteDs.class)
+    return findContoUtenteByCustomer(customer, createIfNotFound, true);
+  }
+  
+  private ContoUtente findContoUtenteByCustomer(Customer customer, boolean createIfNotFound, boolean excludeOrderId) {
+    FindContext<ContoUtenteDs> findContext = new FindContext<ContoUtenteDs>(ContoUtenteDs.class)
         .setFilter("customerId == customerIdParam")
         .setParameters(Key.class.getName() + " customerIdParam")
         .setParamValues(new Object[] {KeyUtils.serializableToKey(customer.getId())})
-        .includedField("movimentiKeys")
-      );
+        .includedField("movimentiKeys");
+    if (excludeOrderId) {
+      findContext.excludedField("orderId");
+    }
+    ContoUtente contoUtente = dao.findSingle(findContext);
     if (contoUtente == null && createIfNotFound) {
       contoUtente = new ContoUtenteDs();
       contoUtente.setCustomer(CloneUtils.clone(customer, CustomerDs.class));
