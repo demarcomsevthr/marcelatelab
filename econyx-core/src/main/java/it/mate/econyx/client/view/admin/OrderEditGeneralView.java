@@ -39,6 +39,7 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
   @UiField Label importoTotaleLbl;
   @UiField Anchor printAnchor;
   @UiField Panel importoTotalePanel;
+  @UiField Label produttoreLbl;
   
   private Order order;
   
@@ -49,6 +50,9 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
   protected void initUI() {
     initProvided();
     initWidget(uiBinder.createAndBindUi(this));
+    
+    // 12/01/2013
+    printAnchor.setVisible(false);
   }
   
   protected void initProvided() {
@@ -58,6 +62,8 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
   public void setModel(Object model, String tag) {
     this.order = (Order)model;
     editor.setModel(order);
+    if (order.getProducer() != null)
+      produttoreLbl.setText(order.getProducer().getNome());
     closeBtn.setVisible(OrderStateConfig.OPENED.equals(order.getCurrentState()));
     importoCalcolatoLbl.setText(GwtUtils.formatCurrency(Order.Utils.computeImportoTotale(order, true)));
     importoTotaleLbl.setText(GwtUtils.formatCurrency(order.getImportoTotale()));

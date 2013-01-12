@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -22,6 +26,8 @@ public class OrderEditViewImpl extends AbstractBaseView<OrderEditView.Presenter>
   
   @UiField Label nameLabel;
   @UiField (provided=true) AdminTabPanel<OrderEditView.Presenter> adminTab;
+  
+  private Order order;
 
   public OrderEditViewImpl() {
     initUI();
@@ -42,6 +48,12 @@ public class OrderEditViewImpl extends AbstractBaseView<OrderEditView.Presenter>
       @Override
       public void onNewModelRequested() { }
     };
+    
+    adminTab.addButton(new Button("Stampa ordine", new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        DOM.getElementById("orderReportFrame").setAttribute("src", "/re/pdf/order/" + order.getId());
+      }
+    }));
     
   }
 
@@ -64,7 +76,7 @@ public class OrderEditViewImpl extends AbstractBaseView<OrderEditView.Presenter>
   
   @Override
   public void setModel(Object model, String tag) {
-    Order order = (Order)model;
+    this.order = (Order)model;
     nameLabel.setText("Editing order: " + order.getCode());
     initSections(order);
     adminTab.setPresenter(getPresenter());

@@ -5,6 +5,7 @@
     <g:Label ui:field="nameLabel"/>
     <gc:Spacer height="8px"/>
     <e:AdminTabPanel ui:field="adminTab"/>
+    <iframe id="orderReportFrame" style="visibility: hidden;"></iframe>
   </g:HTMLPanel>
 
 </ui:UiBinder>

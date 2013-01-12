@@ -37,7 +37,7 @@ public class ContoUtenteMovimentoDs implements ContoUtenteMovimento, HasKey {
   @Persistent
   Date data;
 
-  @Persistent (dependentKey="false", defaultFetchGroup="false")
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
   Key orderId;
   @UnownedRelationship (key="orderId")
   transient OrderDs order;

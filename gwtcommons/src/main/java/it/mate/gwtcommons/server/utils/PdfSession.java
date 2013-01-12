@@ -74,6 +74,10 @@ public class PdfSession {
   }
   
   public PdfPCell createCell(String text, String fontName, float fontSize) {
+    return createCell(text, fontName, fontSize, ALIGN_LEFT);
+  }
+  
+  public PdfPCell createCell(String text, String fontName, float fontSize, int alignment) {
     PdfPCell cell;
     Font font = null;
     if (fontName != null) {
@@ -88,6 +92,7 @@ public class PdfSession {
     }
     Phrase phrase = new Phrase(chunk);
     cell = new PdfPCell(phrase);
+    cell.setHorizontalAlignment(alignment);
     return cell;
   }
   

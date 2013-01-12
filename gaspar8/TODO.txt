@@ -10,6 +10,13 @@
 		__________________________________________________________________________________
 
 
+		Ciao e buon anno a tutti, vorrei rispondere alla mail di Cristofaro e confermare la mia disponibilità per organizzare una demo della soluzione di gestione ordini da me proposta.
+		A tal proposito, chiederei conferma ad Antonio Di Bartolo sulla disponibilità ad utilizzare il suo laboratorio.
+		Per me andrebbe bene già il prossimo venerdì 18 gennaio, altrimenti in generale tutti i venerdì e i martedì successivi (ma se serve e lo so con un pò di anticipo posso anche organizzarmi per altri giorni).
+		
+		-------------------------------------------------------------------------------------------------------
+
+
 		SNAPSHOT 04/01/2013
 			> RIPROVARE A FRONTE DEI SEGUENTI CAMBIAMENTI:
 				> attivazione instance cahce su tutti i ds portalpage e collegati
@@ -247,3 +254,7 @@
     			- it.mate.econyx.client.view.site.PortalUserViewImpl
     			- it.mate.econyx.server.services.impl.GeneralServiceImpl
 
+	12/01/2013
+				> affinamenti in orderview
+				> visualizzazioen link movimento > ordine
+				> affinamenti in pdf order
