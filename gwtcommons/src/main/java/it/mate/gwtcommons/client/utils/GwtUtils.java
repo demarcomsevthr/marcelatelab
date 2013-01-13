@@ -60,6 +60,10 @@ public class GwtUtils {
   
   private static final String ATTR_CLIENT_DEFAULT_WAIT_PANEL = "common.client.defaultWaitPanel";
   
+  private static int showWaitPanelRequestCounter = 0;
+  
+  
+  
   public static String getPortletContextPath() {
     return GwtUtils.getJSVar("contextPath","");
   }
@@ -681,6 +685,10 @@ public class GwtUtils {
     System.out.println(dts + " DEBUG " + "["+type.getName()+ ":"+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message);
   }
   
+  public static void setDefaultWaitPanel(PopupPanel popup) {
+    setClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL, popup);
+  }
+  
   public static void showWait() {
     showWait(null);
   }
@@ -694,14 +702,15 @@ public class GwtUtils {
     showWaitPanel(null);
   }
   
-  public static void setDefaultWaitPanel(PopupPanel popup) {
-    setClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL, popup);
+  public static void showWaitPanel(boolean glassEnabled) {
+    showWaitPanel(null, glassEnabled);
   }
   
-  // 02/01/2013
-  private static int showWaitPanelRequestCounter = 0;
-  
   public static void showWaitPanel(PopupPanel defaultWaitPanel) {
+    showWaitPanel(defaultWaitPanel, false);
+  }
+  
+  public static void showWaitPanel(PopupPanel defaultWaitPanel, boolean glassEnabled) {
     showWaitPanelRequestCounter++;
     PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
     if (waitPanel == null) {
@@ -732,6 +741,7 @@ public class GwtUtils {
         waitPanel.setWidget(waitingImg);
         
       }
+      waitPanel.setGlassEnabled(glassEnabled);
       waitPanel.center();
       setClientAttribute(ATTR_CLIENT_WAIT_PANEL, waitPanel);
     }

@@ -3,6 +3,8 @@ package it.mate.econyx.server.model.impl;
 import it.mate.econyx.shared.model.ContoUtente;
 import it.mate.econyx.shared.model.ContoUtenteMovimento;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.impl.ContoUtenteTx;
+import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
@@ -20,6 +22,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
+@CacheableEntity (txClass=ContoUtenteTx.class)
 public class ContoUtenteDs implements ContoUtente, HasKey {
 
   @PrimaryKey

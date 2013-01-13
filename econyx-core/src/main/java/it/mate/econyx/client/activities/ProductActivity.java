@@ -371,6 +371,7 @@ public class ProductActivity extends BaseActivity implements
   public void updateOrders(List<Order> orders, final Delegate<List<Order>> delegate) {
     orderService.updateOrders(orders, new AsyncCallback<List<Order>>() {
       public void onFailure(Throwable caught) {
+        GwtUtils.hideWaitPanel(true);
         Window.alert(caught.getMessage());
       }
       public void onSuccess(List<Order> result) {

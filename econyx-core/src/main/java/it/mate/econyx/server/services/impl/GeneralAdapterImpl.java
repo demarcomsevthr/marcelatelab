@@ -313,11 +313,8 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     List<Customer> customers = customerAdapter.findAll();
     List<Articolo> products = productAdapter.findAll();
     int it = 0;
-    
     Customer customer = customers.get((int) (Math.random() * customers.size()));
-    
     while (it < number) {
-      
       String openOrderId = null;
       Order openOrder = orderAdapter.findOpenOrderByCustomer(customer);
       if (openOrder != null) {
@@ -326,16 +323,13 @@ public class GeneralAdapterImpl implements GeneralAdapter {
           openOrder = null;
           openOrderId = null;
         } else {
-          
           List<Articolo> articoliProduttore = new ArrayList<Articolo>();
           for (Articolo articolo : products) {
             if (articolo.getProducer().getCodice().equals( openOrder.getProducer().getCodice())) {
               articoliProduttore.add(articolo);
             }
           }
-          
           int numeroArticoliDaOrdinare = (int)(Math.random() * articoliProduttore.size());
-          
           try {
             while (numeroArticoliDaOrdinare > 0) {
               Articolo articoloDaOrdinare = articoliProduttore.get((int)(Math.random() * articoliProduttore.size()));
@@ -346,16 +340,13 @@ public class GeneralAdapterImpl implements GeneralAdapter {
           } catch (ServiceException ex) {
             logger.error("error: " + ex.getMessage());
           }
-          
           it ++;
           customers.remove(customer);
           if (customers.size() == 0)
             break;
           customer = customers.get((int) (Math.random() * customers.size()));
-
         }
       }
-      
       if (openOrder == null) {
         Articolo articoloDaOrdinare = products.get((int) (Math.random() * products.size()));
         try {
@@ -369,8 +360,19 @@ public class GeneralAdapterImpl implements GeneralAdapter {
           customer = customers.get((int) (Math.random() * customers.size()));
         }
       }
-      
     }
+    
+    // 13/01/2013
+    // chiudo tutti gli ordini che sono rimasti aperti
+    customers = customerAdapter.findAll();
+    for (Customer customer2 : customers) {
+      Order openOrder = orderAdapter.findOpenOrderByCustomer(customer2);
+      if (openOrder != null) {
+        orderAdapter.closeOrder(openOrder.getId(), null, null);
+      }
+    }
+    
+    
   }
   
   public List<CacheDumpEntry> instanceCacheDump () {

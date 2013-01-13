@@ -54,12 +54,14 @@ public class PortalUserEditViewImpl extends AbstractBaseView<PortalUserEditView.
       sections.add(customSection);
     }
     
-    if (PropertiesHolder.getStringList("shared.portalUserAdmins", "[\\|,;]").contains(AppClientFactory.IMPL.getPortalSessionState().getLoggedUser().getEmailAddress())) {
-      adminTab.addButton(new Button("Cambio password utente", new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          onCambioPasswordBtn(event);
-        }
-      }));
+    if (AppClientFactory.IMPL.getPortalSessionState() != null && AppClientFactory.IMPL.getPortalSessionState().getLoggedUser() != null) {
+      if (PropertiesHolder.getStringList("shared.portalUserAdmins", "[\\|,;]").contains(AppClientFactory.IMPL.getPortalSessionState().getLoggedUser().getEmailAddress())) {
+        adminTab.addButton(new Button("Cambio password utente", new ClickHandler() {
+          public void onClick(ClickEvent event) {
+            onCambioPasswordBtn(event);
+          }
+        }));
+      }
     }
     
     adminTab.setSections(sections);

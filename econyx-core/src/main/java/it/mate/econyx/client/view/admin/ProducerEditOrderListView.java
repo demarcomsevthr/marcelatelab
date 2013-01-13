@@ -72,10 +72,8 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
 
     confermaBtn = new Button("Conferma ordini in blocco", new ClickHandler() {
       public void onClick(ClickEvent event) {
-        GwtUtils.showWaitPanel();
 //      confermaOrdineSuccessivo(ordini.iterator());
         confermaListaOrdini(ordini);
-        GwtUtils.hideWaitPanel(true);
       }
     });
     orderListView.addButton(confermaBtn);
@@ -176,6 +174,7 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
   }
   
   private void confermaListaOrdini (List<Order> ordini) {
+    GwtUtils.showWaitPanel(true);
     String stateCodeToUpdate = null;
     if (selectedOrderStateCode != null) {
       if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
@@ -203,6 +202,7 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
       public void execute(List<Order> updatedOrders) {
         findOrdersByProducer();
+        GwtUtils.hideWaitPanel(true);
         Window.alert("Operazione completata");
       }
     });

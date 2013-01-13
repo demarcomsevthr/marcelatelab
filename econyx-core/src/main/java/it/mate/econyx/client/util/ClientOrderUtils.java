@@ -89,21 +89,26 @@ public class ClientOrderUtils {
   }
   
   public static void orderProduct(Articolo articolo, Customer customer, Double quantity, List<OrderItemDetail> details, final Delegate<Order> delegate) {
+    GwtUtils.showWaitPanel();
     if (isCacheEnabled() && getUserOrderInCache() != null) {
       getOrderService().orderProduct(getUserOrderInCache(), getUserOrderIdInCache(), articolo, customer, quantity, details, new AsyncCallback<Order>() {
         public void onFailure(Throwable caught) {
+          GwtUtils.hideWaitPanel(true);
           Window.alert(caught.getMessage());
         }
         public void onSuccess(Order order) {
+          GwtUtils.hideWaitPanel(true);
           delegate.execute(order);
         }
       });
     } else {
       getOrderService().orderProduct(null, getUserOrderIdInCache(), articolo, customer, quantity, details, new AsyncCallback<Order>() {
         public void onFailure(Throwable caught) {
+          GwtUtils.hideWaitPanel(true);
           Window.alert(caught.getMessage());
         }
         public void onSuccess(Order order) {
+          GwtUtils.hideWaitPanel(true);
           delegate.execute(order);
         }
       });
