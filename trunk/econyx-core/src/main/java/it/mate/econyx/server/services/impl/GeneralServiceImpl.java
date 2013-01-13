@@ -8,6 +8,7 @@ import it.mate.econyx.server.services.OrderAdapter;
 import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
+import it.mate.econyx.server.tasks.GenerateOperationTask;
 import it.mate.econyx.server.tasks.PortalDataInitializeDeferredTask;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Customer;
@@ -312,11 +313,13 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   }
 
   public void generateRandomCustomers(int numero) {
-    generalAdapter.generateRandomCustomers(numero);
+//  generalAdapter.generateRandomCustomers(numero);
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_CUSTOMERS, numero)));
   }
 
   public void generateRandomOrders(int number) {
-    generalAdapter.generateRandomOrders(number);
+//  generalAdapter.generateRandomOrders(number);
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number)));
   }
   
   public String gdataSpreadsheetTest() {

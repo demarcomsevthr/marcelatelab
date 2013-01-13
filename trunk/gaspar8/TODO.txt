@@ -17,12 +17,15 @@
 		-------------------------------------------------------------------------------------------------------
 		
 		
-		VERIFICA 12/01/2013 gaspar8est
-			> caricamento utenti (24) > un pò lento > un pò sistemato (find conto utente eclude orderId) > provare a metrre ContoUtente in cache !!!
-			> btn update stato ordini > non rimane wait panel
-			> btn aggiungi al carrello > wait panel
+		SNAPSHOT E VERIFICA 13/01/2013 gaspar8est
+		
+			> caricamento utenti (24) > OK (ContoUtente in memcache)
 			
-			>> TODO: stampa situazione di cassa > export di tutti i saldi utente in excel
+			> sistemare header lista ordini > si riesce a fare un clean completo ad ogni retrieve?
+			
+			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel
+			
+			> NEW: ordini per utente
 
 
 		SNAPSHOT 04/01/2013

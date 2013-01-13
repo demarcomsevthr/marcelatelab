@@ -248,7 +248,7 @@ public class CustomAdapterImpl implements CustomAdapter {
       movimento.setImporto(Order.Utils.computeImportoTotale(order));
       movimento.setSegno(ContoUtenteMovimento.NEGATIVO);
       movimento.setData(new Date());
-      movimento.setCausale("CONSEGNA ORDINE " + order.getCode());
+      movimento.setCausale("CONSEGNA ORDINE " + order.getCode() + " " + order.getProducer().getNome());
       movimento.setOrder(order);
       PortalSessionState portalSessionState = PortalSessionStateServerUtils.getFromThread();
       if (portalSessionState != null) {
