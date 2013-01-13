@@ -10,63 +10,21 @@
 		__________________________________________________________________________________
 
 
-		Ciao e buon anno a tutti, vorrei rispondere alla mail di Cristofaro e confermare la mia disponibilità per organizzare una demo della soluzione di gestione ordini da me proposta.
-		A tal proposito, chiederei conferma ad Antonio Di Bartolo sulla disponibilità ad utilizzare il suo laboratorio.
-		Per me andrebbe bene già il prossimo venerdì 18 gennaio, altrimenti in generale tutti i venerdì e i martedì successivi (ma se serve e lo so con un pò di anticipo posso anche organizzarmi per altri giorni).
-		
-		-------------------------------------------------------------------------------------------------------
-		
-		
 		SNAPSHOT E VERIFICA 13/01/2013 gaspar8est
-		
-			> caricamento utenti (24) > OK (ContoUtente in memcache)
-			
 			> sistemare header lista ordini > si riesce a fare un clean completo ad ogni retrieve?
-			
-			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel
-			
+			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel > FATTO (in test)
 			> NEW: ordini per utente
-
-
-		SNAPSHOT 04/01/2013
-			> RIPROVARE A FRONTE DEI SEGUENTI CAMBIAMENTI:
-				> attivazione instance cahce su tutti i ds portalpage e collegati
-				> passaggio a gwt 2.5
-				> modifiche in PortalPageView per copycart (PortalFolderPage.showChildreenContent)
-				>> FATTO 07/01/2013
+			
 
 		SNAPSHOT 14/12/2012
 			> gestione Order.importoTotale
 				>> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateImportoTotale(Order, Double, boolean)
 				>> it.mate.econyx.shared.model.Order.Utils.computeImportoTotale(Order, boolean) >> restituisce il calcolato solo se lo si richiede espressamente
 				>>> RIFARE UN TEST COMPLETO (anche su gaspar8est)
-				
 			> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates
 				>> credo ci sia qualche problema con PortalSessionStateServerUtils
 
 
-		SNAPSHOT 02/12/2012 - RPC INTERCEPTORS
-			> TEST it.mate.gwtcommons.rpc.client.RpcServiceInterceptor >> SEMBRA FUNZIONARE
-			  (preso da http://code.google.com/p/gwt-rpc-interceptor)
-			> provato su GeneralService
-			> it.mate.econyx.main.gwt.xml
-			> it.mate.econyx.client.factories.AppGinModule >> commentata applyInterceptors (anche se vedo che lo fa lo stesso!)
-			
-			>> TODO:
-				- vedere se si riesce a parametrizzare il comportamento di RpcServiceInterceptorDefault
-				  impostando semplicemente delle properties da .gwt.xml
-				  (ho incominciato a vedere, sembra che le properties arrivino solo al generator, non al proxy)
-				  > non sembra possibile, quelle properties sono solo sul server
-				  > utilizzare econyx.properties
-				    > vedi it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault.getServiceProperty(String)
-		
-			
-
-		SNAPSHOT 23/11/2012
-			> iniziato scaffolding (it.mate.econyx.client.view.admin.scaffold)
-			  ma lasciato in sospeso perchè non funziona (in compilazione sulla create di AdminTabPanel)
-
-		
 		__________________________________________________________________________________
 
 		IN EVIDENZA
@@ -82,15 +40,6 @@
 		CONSULTAZIONE LOG (https://appengine.google.com/logs?&app_id=s~gaspar8net&version_id=2b.363509964354483203#)
 			si possono filtrare i log con: regexp = PortalSessionState | PortalUserTx
 			e si trovano tutti gli accessi e i login
-		
-		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		
-		>>>>>>>>>>>>>>>>>>
-		>>>>  DEPLOY  <<<<
-		<<<<<<<<<<<<<<<<<<
-		
-			> ricordarsi di cambiare sempre la property shared.buildId
-
 		
 		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -114,11 +63,6 @@
 							> portalPageServ.findExtendedAnnotations(page.extAttr) return HTML 
 								> accodato al contenuto della view
 								
-		-- RPC WRAPPER
-			> vedi it.mate.gwtcommons.client.utils.RPCWrapper<T>
-			> prova template google rpc wrapper (a casa)
-			>> ALTRA STRADA > vedi RpcServiceInterceptor
-			
 		-- INTEGRAZIONE Google Spreadsheet
 			- > https://developers.google.com/google-apps/spreadsheets/
 			- > http://mvnrepository.com/artifact/com.google.api.client/google-api-data-spreadsheet-v3
@@ -137,20 +81,6 @@
 		
 		IN TEST
 		
-		-- EXPORT IN EXCEL > IN TEST [30/11/2012]
-
-		-- RETTIFICHE AGLI ORDINI (21/11/2012) > IN TEST [30/11/2012]
-			- possibilità di rettificare le quantità degli ordini in consegna
-
-		-- TABELLA PRODUTTORI > IN TEST [30/11/2012]
-			> STAMPA ORDINE AL PRODUTTORE
-			
-		-- STATI ORDINE > IN TEST [30/11/2012]
-			- 'confermato': serve per mandare mail a utente, e fare stampa ordine al produttore
-			- 'inserito': togliere invio mail
-			- list ordini > caricamento stati da ds [30/11/2012]
-			>> come aggiornare gli stati su appspot ????
-			
 		-- OTTIMIZZAZIONE PAGER >> IN TEST [30/11/2012]
 			>> vedi
 				- it.mate.econyx.client.view.admin.PortalPageListGeneralView.setModel

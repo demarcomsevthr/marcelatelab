@@ -119,7 +119,7 @@ public class ExcelAdapterImpl implements ExcelAdapter {
     return null;
   }
   
-  private CellView getCellViewSizeChars(int size) {
+  public static CellView getCellViewSizeChars(int size) {
     CellView cv = new CellView();
     cv.setSize(size * 256);
     return cv;

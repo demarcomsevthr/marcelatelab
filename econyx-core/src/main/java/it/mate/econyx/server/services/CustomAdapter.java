@@ -33,4 +33,6 @@ public interface CustomAdapter {
   
   public void validateProductToOrder(Order order) throws ServiceException;
   
+  public byte[] exportPortalUsersToExcel();
+  
 }
