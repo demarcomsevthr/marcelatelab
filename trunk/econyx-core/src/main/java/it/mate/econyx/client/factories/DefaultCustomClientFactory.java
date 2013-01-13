@@ -18,6 +18,7 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -84,6 +85,10 @@ public class DefaultCustomClientFactory implements AbstractCustomClientFactory {
   }
   
   public AbstractBaseView getCustomProfileView1 () {
+    return null;
+  }
+  
+  public Button getPortalUserEditListCustomButton() {
     return null;
   }
   

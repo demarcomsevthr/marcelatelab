@@ -1,5 +1,6 @@
 package it.mate.econyx.client.view.admin;
 
+import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.ui.AdminTabPanel;
 import it.mate.econyx.client.view.PortalUserListView;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
@@ -11,6 +12,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PortalUserListViewImpl extends AbstractBaseView<PortalUserListView.Presenter> implements PortalUserListView {
@@ -54,6 +56,12 @@ public class PortalUserListViewImpl extends AbstractBaseView<PortalUserListView.
         getPresenter().edit(new PortalUserTx());
       }
     };
+    
+    Button button = AppClientFactory.Customizer.cast().getPortalUserEditListCustomButton();
+    if (button != null) {
+      adminTab.addButton(button);
+    }
+    
   }
   
   @Override

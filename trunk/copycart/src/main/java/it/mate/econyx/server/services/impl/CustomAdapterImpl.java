@@ -294,5 +294,8 @@ public class CustomAdapterImpl implements CustomAdapter {
     
   }
   
+  public byte[] exportPortalUsersToExcel() {
+    return null;
+  }
 
 }

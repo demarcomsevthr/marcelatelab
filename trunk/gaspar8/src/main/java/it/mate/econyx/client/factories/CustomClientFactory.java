@@ -13,9 +13,13 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Button;
 
 
 @SuppressWarnings("serial")
@@ -75,6 +79,15 @@ public class CustomClientFactory extends DefaultCustomClientFactory {
   @Override
   public AbstractBaseView getCustomProfileView1() {
     return new ContoUtenteView("500px");
+  }
+  
+  @Override
+  public Button getPortalUserEditListCustomButton() {
+    return new Button("Sintesi prepagato", new ClickHandler() {
+      public void onClick(ClickEvent arg0) {
+        DOM.getElementById("reportFrame").setAttribute("src", "/re/cu/sintesiPrepagato");
+      }
+    });
   }
 
 }

@@ -9,6 +9,7 @@ import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.CustomAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.OrderAdapter;
+import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.ContoUtente;
 import it.mate.econyx.shared.model.ContoUtenteMovimento;
@@ -30,6 +31,7 @@ import it.mate.gwtcommons.server.utils.PdfSession;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +40,16 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+
+import jxl.Workbook;
+import jxl.format.Colour;
+import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.NumberFormat;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +67,8 @@ public class CustomAdapterImpl implements CustomAdapter {
   @Autowired CustomerAdapter customerAdapter;
   
   @Autowired OrderAdapter orderAdapter;
+  
+  @Autowired PortalUserAdapter portalUserAdapter;
   
   @Autowired private Dao dao;
   
@@ -318,6 +332,71 @@ public class CustomAdapterImpl implements CustomAdapter {
     if (contoUtente == null || contoUtente.getSaldo() < importoPrevisto) {
       throw new ServiceException("Non hai credito sufficiente per ordinare questo prodotto.");
     }
+  }
+  
+  @Override
+  public byte[] exportPortalUsersToExcel() {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      
+      WritableWorkbook workbook = Workbook.createWorkbook(baos);
+      WritableSheet sheet = workbook.createSheet("SintesiPrepagato", 0);
+      
+      WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 12, WritableFont.BOLD);
+      WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
+      headerFormat.setBackground(Colour.GREY_25_PERCENT);
+      
+      sheet.setColumnView(0, ExcelAdapterImpl.getCellViewSizeChars(25));
+      sheet.setColumnView(1, ExcelAdapterImpl.getCellViewSizeChars(12));
+      
+      sheet.addCell(new Label(0, 0, "Socio", headerFormat));
+      sheet.addCell(new Label(1, 0, "Saldo disponibile", headerFormat));
+      
+      List<PortalUser> portalUsers = portalUserAdapter.findAll();
+      
+      double saldoTotale = 0d;
+      
+      WritableFont dataFont = new WritableFont(WritableFont.ARIAL, 11);
+      WritableCellFormat dataFormat = new WritableCellFormat(dataFont);
+      
+      NumberFormat decimalNumberFormat = new NumberFormat("#.00");
+      WritableCellFormat decimalFormat = new WritableCellFormat(decimalNumberFormat);
+      decimalFormat.setFont(dataFont);
+      
+      Collections.sort(portalUsers, new Comparator<PortalUser>() {
+        public int compare(PortalUser u1, PortalUser u2) {
+          return u1.getScreenName().compareTo(u2.getScreenName());
+        }
+      });
+      
+      int row = 1;
+      for (PortalUser portalUser : portalUsers) {
+        Double saldo = getSaldoByPortalUser(portalUser.getId());
+        if (saldo == null) {
+          continue;
+        }
+        sheet.addCell(new Label(0, row, portalUser.getScreenName(), dataFormat));
+        sheet.addCell(new Number(1, row, saldo, decimalFormat));
+        saldoTotale += saldo;
+        row++;
+      }
+      
+      WritableCellFormat footerFormat = new WritableCellFormat(headerFont);
+      decimalFormat.setFont(headerFont);
+      
+      row++;
+      row++;
+      sheet.addCell(new Label(0, row, "TOTALE", footerFormat));
+      sheet.addCell(new Number(1, row, saldoTotale, decimalFormat));
+      
+      workbook.write();
+      workbook.close();
+      
+      return baos.toByteArray();
+    } catch (Exception ex) {
+      logger.error("error", ex);
+    }
+    return null;
   }
 
 }
