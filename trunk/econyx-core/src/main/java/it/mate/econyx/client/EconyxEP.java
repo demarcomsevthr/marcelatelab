@@ -3,8 +3,10 @@ package it.mate.econyx.client;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.view.admin.AdminLayoutView;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
+import it.mate.econyx.shared.services.PropertiesConstants;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.Map;
 
@@ -36,6 +38,7 @@ public class EconyxEP implements EntryPoint {
             }
             
             GwtUtils.logEnvironment(getClass(), "onModuleLoad");
+            GwtUtils.log(getClass(), "onModuleLoad", "developmentMode = " + PropertiesHolder.getBoolean(PropertiesConstants.SYSTEM_ENVIRONMENT_DEVELOPMENT_MODE));
             AppClientFactory.IMPL.setCustomClientFactory(customClientFactory);
             GwtUtils.log(getClass(), "getCustomClientFactory", "customClientFactory = " + AppClientFactory.Customizer.cast() + " - " + AppClientFactory.Customizer.cast().getCustomName());
             if (AppClientFactory.isAdminModule) {

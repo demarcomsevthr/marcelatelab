@@ -510,7 +510,6 @@ public class GwtUtils {
           public void execute(Void element) {
             TextBox textBox = dateBox.getTextBox();
             String text = textBox.getValue();
-            GwtUtils.log(getClass(), "dateBox.onKeyPress", "value = " + text);
             if (text.length() == 8 && isDigit(text)) {
               try {
                 Date date = dt8aFMT.parse(text);
@@ -678,6 +677,13 @@ public class GwtUtils {
   }
   
   public static void log (Class<?> type, int hashcode, String methodName, String message, Exception ex) {
+    
+    /*
+    if (!type.getName().equals("it.mate.gwtcommons.client.utils.GwtUtils")) {
+      return;
+    }
+    */
+    
     String dts = GwtUtils.dateToString(new Date(), logFMT); 
     if (ex != null) {
       message = message + " - " + ex.getClass().getName() + " - " + ex.getMessage();

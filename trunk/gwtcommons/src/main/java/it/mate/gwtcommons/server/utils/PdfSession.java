@@ -41,6 +41,19 @@ public class PdfSession {
 
   public static final int ALIGN_JUSTIFIED = Element.ALIGN_JUSTIFIED;
   
+  public static final BaseColor WHITE = BaseColor.WHITE;
+  public static final BaseColor LIGHT_GRAY = BaseColor.LIGHT_GRAY;
+  public static final BaseColor GRAY = BaseColor.GRAY;
+  public static final BaseColor DARK_GRAY = BaseColor.DARK_GRAY;
+  public static final BaseColor BLACK = BaseColor.BLACK;
+  public static final BaseColor RED = BaseColor.RED;
+  public static final BaseColor PINK = BaseColor.PINK;
+  public static final BaseColor ORANGE = BaseColor.ORANGE;
+  public static final BaseColor YELLOW = BaseColor.YELLOW;
+  public static final BaseColor GREEN = BaseColor.GREEN;
+  public static final BaseColor MAGENTA = BaseColor.MAGENTA;
+  public static final BaseColor CYAN = BaseColor.CYAN;
+  public static final BaseColor BLUE = BaseColor.BLUE;
   
   private static final Rectangle DEFAULT_PAGE_SIZE = PageSize.LETTER;
   
@@ -126,6 +139,10 @@ public class PdfSession {
   }
   
   public void addColumnText(String text, String fontName, float fontSize, float x1, float x2, float y, int textAlignment) {
+    addColumnText(text, fontName, fontSize, x1, x2, y, textAlignment, null);
+  }
+  
+  public void addColumnText(String text, String fontName, float fontSize, float x1, float x2, float y, int textAlignment, BaseColor color) {
     try {
       PdfContentByte dc = writer.getDirectContent();
       ColumnText ct = new ColumnText(dc);
@@ -133,6 +150,9 @@ public class PdfSession {
       if (fontName != null) {
         BaseFont baseFont = getBaseFont(fontName);
         font = new Font(baseFont, fontSize);
+        if (color != null) {
+          font.setColor(color);
+        }
       }
       Chunk chunk = null;
       if (font != null) {
@@ -157,20 +177,8 @@ public class PdfSession {
     addColumnText(text, fontName, fontSize, x1, x2, y, textAlignment);
   }
   
-  public void addAbsoluteText_OLD(String text, String fontName, float fontSize, float x1, float x2, float y, int textAlignment) {
-    try {
-      PdfContentByte dc = writer.getDirectContent();
-      BaseFont font = getBaseFont(fontName);
-      dc.beginText();
-      dc.setFontAndSize(font, fontSize);
-      float x = textAlignment == ALIGN_LEFT ? x1 :
-                  (textAlignment == ALIGN_RIGHT ? x2 :
-                    (textAlignment == ALIGN_CENTER ? (x1 + (x2 - x1) / 2) : x1));
-      dc.showTextAligned(textAlignment, text, x, y - fontSize, 0);
-      dc.endText();
-    } catch (Exception ex) {
-      throw new PdfException(ex);
-    }
+  public void addAbsoluteText(String text, String fontName, float fontSize, float x1, float x2, float y, int textAlignment, BaseColor color) {
+    addColumnText(text, fontName, fontSize, x1, x2, y, textAlignment, color);
   }
   
   public void addRectangle(float x, float y, float w, float h) {

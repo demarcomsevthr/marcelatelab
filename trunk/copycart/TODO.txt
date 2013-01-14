@@ -4,10 +4,21 @@
     ______________________________________________________________________________________
 
 
-		SNAPSHOT 04/01/2013
+		SNAPSHOT 14/01/2013
+
+			>> ANCORA PREVIEW TIMBRO!
+		    	
+		    	> PROVA DELLA CADREGA: 
+		    		inserire X             X  
+		    		allineare le X al bordo del timbro > in preview si vede una cosa, in pdf un'altra !!!!!!
+		    	
+			
 
 		    >>> DATARI > INIZIATO
+		        > it.mate.econyx.shared.model.impl.TimbroTx.datario
 		    	> it.mate.econyx.client.ui.StampPreviewPanel.update
+		    	
+		    	>> FINIRE: it.mate.econyx.server.services.impl.CustomAdapterCCImpl.printOrderItemDetails(PdfSession, OrderItem)
 		    	
 			> chiusura ordine: modalità di pagamento (nota html) > INIZIATO (08/01/2013)
 				> it.mate.econyx.shared.model.ModalitaPagamento

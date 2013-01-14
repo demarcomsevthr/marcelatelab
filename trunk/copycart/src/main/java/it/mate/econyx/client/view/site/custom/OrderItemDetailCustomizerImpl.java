@@ -49,7 +49,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
   SpinnerIntegerBox logoX;
   SpinnerIntegerBox logoY;
   
-  SpinnerIntegerBox borderSizeBox = new SpinnerIntegerBox(0, 1, 0);;
+  SpinnerIntegerBox borderSizeBox = null;
   
   OrderItemStampDetailTx logoDetail = null;
   OrderItemStampDetailTx borderDetail = null;
@@ -130,7 +130,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     init();
     
     detailPanel.clear();
-    
+
     ListPanel detailListPanel = new ListPanel();
     
     int numRighe = timbro.getNumRighe() != null ? timbro.getNumRighe() : 3;
@@ -152,12 +152,14 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     borderPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     borderPanel.add(GwtUtils.setStyleAttribute(new Label("Bordo:"), "fontSize", "9px"));
     borderPanel.add(new Spacer("10px"));
+    
     borderSizeBox = new SpinnerIntegerBox(0, 1, 0);
     GwtUtils.setStyleAttribute(borderSizeBox, "fontSize", "9px");
     borderSizeBox.setWidth("3em");
     if (borderDetail != null) {
       borderSizeBox.setValue(borderDetail.getBorderSize());
     }
+    
     borderPanel.add(borderSizeBox);
     borderPanel.add(new Spacer("30em"));
     detailPanel.add(borderPanel);
@@ -301,7 +303,9 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
     if (borderDetail == null) {
       borderDetail = new OrderItemStampDetailTx(StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER);
     }
-    borderDetail.setBorderSize(borderSizeBox.getValue());
+    if (borderSizeBox != null) {
+      borderDetail.setBorderSize(borderSizeBox.getValue());
+    }
     return borderDetail;
   }
   

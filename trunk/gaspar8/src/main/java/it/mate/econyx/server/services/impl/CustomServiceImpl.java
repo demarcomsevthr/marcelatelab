@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service ("customService")
 public class CustomServiceImpl implements CustomService {
   
-  @Autowired CustomAdapterImpl adapter;
+  @Autowired CustomAdapterGP8Impl adapter;
 
   @Override
   public ContoUtente findContoUtenteByPortalUser(String portalUserId) {

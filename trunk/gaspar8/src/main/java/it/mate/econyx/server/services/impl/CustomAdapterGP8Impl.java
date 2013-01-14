@@ -60,9 +60,9 @@ import com.google.appengine.api.datastore.Key;
 import com.itextpdf.text.pdf.PdfPTable;
 
 @Service
-public class CustomAdapterImpl implements CustomAdapter {
+public class CustomAdapterGP8Impl implements CustomAdapter {
   
-  private static Logger logger = Logger.getLogger(CustomAdapterImpl.class);
+  private static Logger logger = Logger.getLogger(CustomAdapterGP8Impl.class);
 
   @Autowired CustomerAdapter customerAdapter;
   
