@@ -22,6 +22,7 @@ import it.mate.gwtcommons.server.utils.PropertiesHolderConfigurer;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -32,12 +33,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.appengine.api.datastore.Blob;
-import com.itextpdf.text.BaseColor;
 
 @Service
-public class CustomAdapterImpl implements CustomAdapter {
+public class CustomAdapterCCImpl implements CustomAdapter {
 
-  private static Logger logger = Logger.getLogger(CustomAdapterImpl.class);
+  private static Logger logger = Logger.getLogger(CustomAdapterCCImpl.class);
   
   @Autowired private Dao dao;
   
@@ -177,9 +177,9 @@ public class CustomAdapterImpl implements CustomAdapter {
       currentY = detailY;
 
       if (timbro.isOval()) {
-        pdfSession.addEllipse(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
+        pdfSession.addEllipse(detailX, currentY , detailW, detailH, 0.7f, PdfSession.GRAY);
       } else {
-        pdfSession.addRectangle(detailX, currentY , detailW, detailH, 0.7f, BaseColor.GRAY);
+        pdfSession.addRectangle(detailX, currentY , detailW, detailH, 0.7f, PdfSession.GRAY);
       }
       
       for (OrderItemDetail orderItemDetail : orderItem.getDetails()) {
@@ -214,6 +214,15 @@ public class CustomAdapterImpl implements CustomAdapter {
           
         }
       }
+      
+      if (timbro.isDatario()) {
+        float fontSize = 10f;
+        String fontName = FontTypes.ARIAL_BOLD;
+        int textAlignment = PdfSession.ALIGN_CENTER;
+        pdfSession.addAbsoluteText(DateUtils.dateToString(new Date(), "dd MMM yyyy"), fontName, fontSize, detailX, 
+            detailX + detailW, detailY - (detailH / 2) + 8, textAlignment, PdfSession.RED);
+      }
+      
     }
     
   }

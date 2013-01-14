@@ -134,6 +134,9 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
                 }
               }
             });
+          } else {
+            String actualHtmlContent = "<div id='"+PortalPageClientUtil.getPageContentRenderFinishedDivId()+"'></div>";
+            htmlPanel.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
           }
         }
       }

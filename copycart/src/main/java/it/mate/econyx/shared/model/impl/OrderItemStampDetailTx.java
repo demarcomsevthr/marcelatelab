@@ -128,7 +128,7 @@ public class OrderItemStampDetailTx extends AbstractOrderItemDetailTx {
   }
 
   public Integer getBorderSize() {
-    return borderSize;
+    return borderSize != null ? borderSize : 0;
   }
 
   public void setBorderSize(Integer borderSize) {

@@ -1585,7 +1585,7 @@
             <it.mate.econyx.shared.model.impl.HtmlContentTx>
               <type>S</type>
               <content>&lt;p&gt;
-	&lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY PIASTRA RETTANGOLARE&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+	&lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY - PIASTRA RETTANGOLARE:&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
 </content>
             </it.mate.econyx.shared.model.impl.HtmlContentTx>
           </htmls>
@@ -1733,7 +1733,7 @@
             <it.mate.econyx.shared.model.impl.HtmlContentTx>
               <type>S</type>
               <content>&lt;p&gt;
-  &lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY PIASTRA OVALE&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY - PIASTRA OVALE:&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
 </content>
             </it.mate.econyx.shared.model.impl.HtmlContentTx>
           </htmls>
@@ -1823,8 +1823,8 @@
         
         
         <it.mate.econyx.shared.model.impl.ProductFolderPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
-          <name>TIMBRI TRODAT OVALI</name>
-          <code>trodatovali</code>
+          <name>TIMBRI TRODAT DATARI</name>
+          <code>trodatdatari</code>
           <orderNm>520</orderNm>
           <templateName>home</templateName>
           <htmls>
@@ -1839,7 +1839,7 @@
             <it.mate.econyx.shared.model.impl.HtmlContentTx>
               <type>S</type>
               <content>&lt;p&gt;
-  &lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY PIASTRA OVALE&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;span style="color:#ff0000;padding-left:30px;"&gt;&lt;strong&gt;NUOVO PRINTY - DATARI:&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
 </content>
             </it.mate.econyx.shared.model.impl.HtmlContentTx>
           </htmls>

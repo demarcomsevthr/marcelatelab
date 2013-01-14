@@ -17,6 +17,7 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.services.GeneralService;
+import it.mate.econyx.shared.services.PropertiesConstants;
 import it.mate.econyx.shared.util.PropertyConstants;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.server.utils.HttpUtils;
@@ -43,6 +44,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.gdata.client.authn.oauth.GoogleOAuthHelper;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;
 import com.google.gdata.client.authn.oauth.OAuthException;
@@ -102,16 +104,21 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public Map<String, String> getPropertiesFromServer() {
     Map<String, String> results = new HashMap<String, String>();
 
     PropertiesHolderConfigurer.reloadFromClassPathResource("econyx.properties");
-
+    
+    boolean devMode = (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
+    ((Map<Object, Object>)PropertiesHolder.getProperties()).put(PropertiesConstants.SYSTEM_ENVIRONMENT_DEVELOPMENT_MODE, ""+devMode);
+    
     Map<? extends Object, ? extends Object> properties = PropertiesHolder.getProperties();
     for (Object key : properties.keySet()) {
       String value = (String) properties.get(key);
       results.put((String) key, value);
     }
+    
     return results;
   }
 
