@@ -320,7 +320,7 @@ public class ProductActivity extends BaseActivity implements
 
   @Override
   public void edit(Produttore producer) {
-    goTo(new ProductPlace(ProductPlace.PRODUCER_EDIT, producer).name(producer.getNome()).setAppend());
+    goTo(new ProductPlace(ProductPlace.PRODUCER_EDIT, producer).setHistoryName(producer.getNome()).setHistoryAppend());
   }
 
   @Override
@@ -352,7 +352,7 @@ public class ProductActivity extends BaseActivity implements
 
   @Override
   public void editOrder(Order order) {
-    goTo(new OrderPlace(OrderPlace.EDIT, order).name(order.getCode()).setAppend());
+    goTo(new OrderPlace(OrderPlace.EDIT, order).setHistoryName(order.getCode()).setHistoryAppend());
   }
 
   @Override

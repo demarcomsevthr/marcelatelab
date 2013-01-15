@@ -115,12 +115,12 @@ public class AdminLayoutView extends Composite {
       */
     addMenu(menubar, "Generale", new GeneralPlace(), null);
     
-    addMenu(menubar, "Ordini", new OrderPlace(OrderPlace.LIST).name("Ordini"), null);
-    addMenu(menubar, "Pagine", new PortalPagePlace(PortalPagePlace.LIST).name("Pagine"), null);
+    addMenu(menubar, "Ordini", new OrderPlace(OrderPlace.LIST).setHistoryName("Ordini"), null);
+    addMenu(menubar, "Pagine", new PortalPagePlace(PortalPagePlace.LIST).setHistoryName("Pagine"), null);
     addMenu(menubar, "Immagini", new ImagePlace(ImagePlace.LIST), null);
-    addMenu(menubar, "Prodotti", new ProductPlace(ProductPlace.LIST).name("Prodotti"), null);
-    addMenu(menubar, "Produttori", new ProductPlace(ProductPlace.PRODUCER_LIST).name("Produttori"), null);
-    addMenu(menubar, "Utenti", new PortalUserPlace(PortalUserPlace.LIST).name("Utenti"), null);
+    addMenu(menubar, "Prodotti", new ProductPlace(ProductPlace.LIST).setHistoryName("Prodotti"), null);
+    addMenu(menubar, "Produttori", new ProductPlace(ProductPlace.PRODUCER_LIST).setHistoryName("Produttori"), null);
+    addMenu(menubar, "Utenti", new PortalUserPlace(PortalUserPlace.LIST).setHistoryName("Utenti"), null);
 
     /* 30/11/2012
     addMenu(menubar, "Ordini", null, new MenuItemInfo[] {

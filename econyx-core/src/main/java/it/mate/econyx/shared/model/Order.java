@@ -125,4 +125,8 @@ public interface Order extends Serializable {
   public void setModalitaPagamento(ModalitaPagamento modalitaPagamento);
   
 
+  public String getDeliveryInformations();
+
+  public void setDeliveryInformations(String deliveryInformations);
+  
 }

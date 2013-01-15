@@ -9,8 +9,11 @@ import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.gwtcommons.client.mvp.BaseView;
+import it.mate.gwtcommons.client.ui.MessageBox;
+import it.mate.gwtcommons.client.ui.MessageBoxUtils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEditView.Presenter> implements ProducerEditView, IsAdminTabPage<ProducerEditView.Presenter> {
@@ -72,7 +77,6 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
 
     confermaBtn = new Button("Conferma ordini in blocco", new ClickHandler() {
       public void onClick(ClickEvent event) {
-//      confermaOrdineSuccessivo(ordini.iterator());
         confermaListaOrdini(ordini);
       }
     });
@@ -173,82 +177,72 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     delegate.execute(model);
   }
   
-  private void confermaListaOrdini (List<Order> ordini) {
-    GwtUtils.showWaitPanel(true);
-    String stateCodeToUpdate = null;
+  private void confermaListaOrdini (final List<Order> ordini) {
+    
+    String newStateCode = null;
     if (selectedOrderStateCode != null) {
       if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
-        stateCodeToUpdate = OrderStateConfig.CONFIRMED;
+        newStateCode = OrderStateConfig.CONFIRMED;
       } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
-        stateCodeToUpdate = OrderStateConfig.SHIPPED;
+        newStateCode = OrderStateConfig.SHIPPED;
       } else {
         return;
       }
     }
-    for (Order order : ordini) {
-      boolean updateOrder = false;
-      List<OrderState> statesToUpdate = new ArrayList<OrderState>();
-      for (OrderState stato : order.getStates()) {
-        if (stato.getCode().equals(stateCodeToUpdate) && !stato.getChecked()) {
-          stato.setChecked(true);
-          updateOrder = true;
+    
+    final String fNewStateCode = newStateCode;
+    
+    Delegate<String> doUpdateDelegate = new Delegate<String>() {
+      public void execute(String deliveryInformations) {
+        GwtUtils.showWaitPanel(true);
+        for (Order order : ordini) {
+          boolean updateOrder = false;
+          List<OrderState> statesToUpdate = new ArrayList<OrderState>();
+          for (OrderState state : order.getStates()) {
+            if (state.getCode().equals(fNewStateCode) && !state.getChecked()) {
+              state.setChecked(true);
+              updateOrder = true;
+            }
+            statesToUpdate.add(state);
+          }
+          if (updateOrder) {
+            order.setStates(statesToUpdate);
+            order.setDeliveryInformations(deliveryInformations);
+          }
         }
-        statesToUpdate.add(stato);
-      }
-      if (updateOrder) {
-        order.setStates(statesToUpdate);
-      }
-    }
-    getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
-      public void execute(List<Order> updatedOrders) {
-        findOrdersByProducer();
-        GwtUtils.hideWaitPanel(true);
-        Window.alert("Operazione completata");
-      }
-    });
-  }
-  
-  /*
-  @UiHandler ("confermaBtn")
-  public void onConfermaBtn (ClickEvent event) {
-    confermaOrdineSuccessivo(ordini.iterator());
-  }
-  
-  private void confermaOrdineSuccessivo (final Iterator<Order> orderIterator) {
-    String stateCodeToUpdate = null;
-    if (selectedOrderStateCode != null) {
-      if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
-        stateCodeToUpdate = OrderStateConfig.CONFIRMED;
-      } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
-        stateCodeToUpdate = OrderStateConfig.SHIPPED;
-      } else {
-        return;
-      }
-    }
-    if (orderIterator.hasNext()) {
-      Order order = orderIterator.next();
-      boolean updateOrder = false;
-      List<OrderState> statesToUpdate = new ArrayList<OrderState>();
-      for (OrderState stato : order.getStates()) {
-        if (stato.getCode().equals(stateCodeToUpdate) && !stato.getChecked()) {
-          stato.setChecked(true);
-          updateOrder = true;
-        }
-        statesToUpdate.add(stato);
-      }
-      if (updateOrder) {
-        order.setStates(statesToUpdate);
-        getPresenter().updateOrder(order, new Delegate<Order>() {
-          public void execute(Order updatedOrder) {
-            confermaOrdineSuccessivo(orderIterator);
+        getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
+          public void execute(List<Order> updatedOrders) {
+            findOrdersByProducer();
+            GwtUtils.hideWaitPanel(true);
+            Window.alert("Operazione completata");
           }
         });
       }
+    };
+    
+    if (newStateCode.equals(OrderStateConfig.SHIPPED) && 
+        PropertiesHolder.getBoolean("client.ProducerEditOrderListView.askDeliveryInformations")) {
+      askDeliveryInformations(doUpdateDelegate);
     } else {
-      findOrdersByProducer();
-      Window.alert("Operazione completata");
+      doUpdateDelegate.execute(null);
     }
+    
   }
-  */
+  
+  private void askDeliveryInformations (final Delegate<String> doUpdateDelegate) {
+    VerticalPanel popupPanel = new VerticalPanel();
+    final TextBox deliveryInformationsBox = new TextBox();
+    deliveryInformationsBox.setWidth("20em");
+    String defaultDeliveryInformations = PropertiesHolder.getString("client.ProducerEditOrderListView.defaultDeliveryInformations");
+    if (defaultDeliveryInformations != null) {
+      deliveryInformationsBox.setText(defaultDeliveryInformations);
+    }
+    popupPanel.add(GwtUtils.createPopupPanelItem("Informazioni per la consegna:", deliveryInformationsBox, "2em", "16em"));
+    MessageBoxUtils.popupOkCancel("Inserire le informazioni per la consegna", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
+      public void execute(MessageBox.Callbacks callbacks) {
+        doUpdateDelegate.execute(deliveryInformationsBox.getText());
+      }
+    });
+  }
   
 }

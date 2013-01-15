@@ -41,6 +41,9 @@ public class OrderTx implements Order {
   ModalitaSpedizioneTx modalitaSpedizione;
 
   ModalitaPagamentoTx modalitaPagamento;
+  
+  
+  String deliveryInformations;
 
   
   
@@ -267,6 +270,14 @@ public class OrderTx implements Order {
   @CloneableProperty (targetClass=ModalitaPagamentoTx.class)
   public void setModalitaPagamento(ModalitaPagamento modalitaPagamento) {
     this.modalitaPagamento = (ModalitaPagamentoTx)modalitaPagamento;
+  }
+
+  public String getDeliveryInformations() {
+    return deliveryInformations;
+  }
+
+  public void setDeliveryInformations(String deliveryInformations) {
+    this.deliveryInformations = deliveryInformations;
   }
   
 }

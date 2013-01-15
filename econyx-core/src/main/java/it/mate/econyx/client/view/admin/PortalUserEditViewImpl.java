@@ -7,8 +7,8 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.ui.MessageBoxUtils;
-import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.ArrayList;
@@ -20,9 +20,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -95,34 +92,18 @@ public class PortalUserEditViewImpl extends AbstractBaseView<PortalUserEditView.
   
   
   private void onCambioPasswordBtn (ClickEvent event) {
-    
     VerticalPanel popupPanel = new VerticalPanel();
-    
     final PasswordTextBox passwordAttualeBox = new PasswordTextBox();
-    popupPanel.add(createPopupPanelItem("Password attuale:", passwordAttualeBox));
-    
+    popupPanel.add(GwtUtils.createPopupPanelItem("Password attuale:", passwordAttualeBox, "2em", "10em"));
     final PasswordTextBox nuovaPasswordBox = new PasswordTextBox();
-    popupPanel.add(createPopupPanelItem("Nuova password:", nuovaPasswordBox));
-    
+    popupPanel.add(GwtUtils.createPopupPanelItem("Nuova password:", nuovaPasswordBox, "2em", "10em"));
     final PasswordTextBox confermaPasswordBox = new PasswordTextBox();
-    popupPanel.add(createPopupPanelItem("Conferma password:", confermaPasswordBox));
-    
+    popupPanel.add(GwtUtils.createPopupPanelItem("Conferma password:", confermaPasswordBox, "2em", "10em"));
     MessageBoxUtils.popupOkCancel("Inserire gli estremi del movimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
       public void execute(MessageBox.Callbacks callbacks) {
         getPresenter().updatePassword(portalUser, passwordAttualeBox.getValue(), nuovaPasswordBox.getValue(), confermaPasswordBox.getValue());
       }
     });
-
-  }
-  
-  private Panel createPopupPanelItem(String labelText, Widget box) {
-    HorizontalPanel panel = new HorizontalPanel();
-    panel.add(new Spacer("1px", "2em"));
-    Label label = new Label(labelText);
-    label.setWidth("6em");
-    panel.add(label);
-    panel.add(box);
-    return panel;
   }
   
 }

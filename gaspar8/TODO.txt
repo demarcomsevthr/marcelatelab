@@ -10,10 +10,66 @@
 		__________________________________________________________________________________
 
 
-		SNAPSHOT E VERIFICA 13/01/2013 gaspar8est
+		PANIC ROOM
+			15/01/2013
+				https://appengine.google.com/
+				> An unexpected failure has occurred. Please try again.
+				>> Sia da ufficio che da casa!
+				>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
+				>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
+				>> in questa circostanza, si va in locale
+
+		SNAPSHOT E VERIFICA DEL 15/01/2013 gaspar8est
+		
+			>> consegna ordine
+				> la mail va mandata alla consegna, non alla conferma
+				>> PROVARE A FARE L'AGGIORNAMENTO SU ORDINI ESISTENTI (utilizzare gaspar8net)
+					> doppio deploy:
+					> prima di modificare gli order states
+					> inserimento ordini di test
+					> dopo la modifica degli order states
+					> verifica finale
+				
+				> it.mate.econyx.client.view.admin.ProducerEditOrderListView.confermaListaOrdini(List<Order>)
+					> se newState = SHIPPED > popup: informazioni per il ritiro
+					
+				>> IN TEST (gaspar8net)	
+		
+			> un pò di wait panel sparse qua e là (in genere ad ogni lettura pesante degli ordini):
+				> profilo utente > situazione ordini
+				> order list view > ad ogni retrieve
+				
+			> apertura ordine
+				> gestire su producer:
+					- data chiusura dell'ordine
+					- data consegna prevista
+					- luogo di consegna previsto	
+					>> btn in producer list view > update su producer
+				> site\portal page view
+					> tramite custom client factory
+					> se portal page code in {propeties}
+						> find producer [portal page.tags = producer code ...]
+						> aggiunge html con dati aggiuntivi producer
+				
+			>> lista ordini (consegnato) > non si vede l'importo modificato!
+				> è un casino!
+				> provato in locale, non riesco a simularlo
+				> sia it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
+				  che it.mate.econyx.client.view.admin.OrderListGeneralView
+				  utilizzano Order.Utils.computeImportoTotale(order)
+				>> DA RIVEDERE CON CALMA
+			
 			> sistemare header lista ordini > si riesce a fare un clean completo ad ogni retrieve?
-			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel > FATTO (in test)
+			
+			> IN GENERALE:
+				> se a inizio giornata vado in lista utenti, può capitare che si pianta
+				> gestire un timeout massimo su rpc {property.rpc.timeout}
+				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
+				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.replace({property.replaceUrl})
+			
 			> NEW: ordini per utente
+			
+			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel > FATTO (in test)
 			
 
 		SNAPSHOT 14/12/2012
@@ -24,12 +80,17 @@
 			> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates
 				>> credo ci sia qualche problema con PortalSessionStateServerUtils
 
-
 		__________________________________________________________________________________
 
 		IN EVIDENZA
 		__________________________________________________________________________________
 
+
+		RUNNING GAE APPLICATION ON YOUR OWN SERVER		
+
+		>> APPSCALE - http://code.google.com/p/appscale/
+
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		PRESENTAZIONE
 

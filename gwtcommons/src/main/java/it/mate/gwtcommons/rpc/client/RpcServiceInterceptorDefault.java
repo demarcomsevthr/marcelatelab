@@ -1,11 +1,11 @@
 package it.mate.gwtcommons.rpc.client;
 
-import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.rpc.impl.Serializer;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RpcServiceInterceptorDefault extends RpcServiceInterceptor {
@@ -49,6 +49,8 @@ public class RpcServiceInterceptorDefault extends RpcServiceInterceptor {
     if (getServicePropertyBoolean(context.getMethodName(), "showWaitPanel", false)) {
       GwtUtils.log(getClass(), "showWaitPanelIfRequired", "showWaitPanel = true");
       if (waitPanel == null) {
+        
+        /*
         waitPanel = new PopupPanel();
         waitPanel.setGlassEnabled(false);
         waitPanel.setAnimationEnabled(true);
@@ -56,6 +58,16 @@ public class RpcServiceInterceptorDefault extends RpcServiceInterceptor {
         GwtUtils.setStyleAttribute(lb, "font", "bold 16px Verdana");
         GwtUtils.setStyleAttribute(lb, "color", "red");
         waitPanel.setWidget(lb);
+        */
+        
+        waitPanel = new PopupPanel();
+        GwtUtils.setStyleAttribute(waitPanel, "border", "none");
+        GwtUtils.setStyleAttribute(waitPanel, "background", "transparent");
+        waitPanel.setGlassEnabled(false);
+        waitPanel.setAnimationEnabled(true);
+        Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
+        waitPanel.setWidget(waitingImg);
+        
         GwtUtils.showWait(waitPanel);
       }
     }

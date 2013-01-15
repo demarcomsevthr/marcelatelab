@@ -15,7 +15,6 @@ import it.mate.gwtcommons.client.ui.AnchorCell;
 import it.mate.gwtcommons.client.ui.CellTableExt;
 import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.ui.MessageBoxUtils;
-import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.ColumnUtil;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -38,7 +37,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
@@ -222,19 +220,19 @@ public class PortalUserEditContoView extends AbstractAdminTabPage<PortalUserEdit
     VerticalPanel popupPanel = new VerticalPanel();
     
     final CurrencyBox importoBox = new CurrencyBox();
-    popupPanel.add(createMovimentoItemPanel("Importo:", importoBox));
+    popupPanel.add(GwtUtils.createPopupPanelItem("Importo:", importoBox, "2em", "6em"));
     
     final ListBox segnoBox = new ListBox();
     segnoBox.addItem("ACCREDITO", ContoUtenteMovimento.POSITIVO);
     segnoBox.addItem("ADDEBITO", ContoUtenteMovimento.NEGATIVO);
-    popupPanel.add(createMovimentoItemPanel("Segno:", segnoBox));
+    popupPanel.add(GwtUtils.createPopupPanelItem("Segno:", segnoBox, "2em", "6em"));
     
     final TextBox causaleBox = new TextBox();
-    popupPanel.add(createMovimentoItemPanel("Causale:", causaleBox));
+    popupPanel.add(GwtUtils.createPopupPanelItem("Causale:", causaleBox, "2em", "6em"));
     
     final DateBox dataBox = new DateBox(new DatePicker(), new Date(), new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd/MM/yyyy")));
     dataBox.getTextBox().setReadOnly(true);
-    popupPanel.add(createMovimentoItemPanel("Data:", dataBox));
+    popupPanel.add(GwtUtils.createPopupPanelItem("Data:", dataBox, "2em", "6em"));
     
     MessageBoxUtils.popupOkCancel("Inserire gli estremi del movimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
       public void execute(MessageBox.Callbacks callbacks) {
@@ -273,56 +271,9 @@ public class PortalUserEditContoView extends AbstractAdminTabPage<PortalUserEdit
       }
     });
 
-    /*
-    MessageBox.create(new MessageBox.Configuration()
-      .setCaptionText("Inserire gli estremi del movimento")
-      .setButtonType(MessageBox.BUTTONS_OKCANCEL)
-      .setIconType(MessageBox.ICON_INFO)
-      .setBodyWidget(popupPanel)
-      .setBodyWidth("400px")
-      .setCallbacks(new MessageBox.Callbacks() {
-        public void onOk() {
-          ContoUtenteMovimento movimento = new ContoUtenteMovimentoTx();
-          movimento.setImporto(importoBox.getValue());
-          movimento.setSegno(segnoBox.getValue(segnoBox.getSelectedIndex()));
-          movimento.setCausale(causaleBox.getValue());
-          movimento.setData(dataBox.getValue());
-          PortalSessionState portalSessionState = AppClientFactory.IMPL.getPortalSessionState();
-          if (portalSessionState != null) {
-            movimento.setRegisteringPortalUser(portalSessionState.getLoggedUser());
-          }
-          
-          if (movimento.getImporto() == null || movimento.getImporto() == 0) {
-            Window.alert("Inserire un importo non nullo");
-            cancelClose();
-            return;
-          }
-          
-          if (movimento.getImporto() < 0) {
-            Window.alert("Impossibile inserire un importo negativo! (utilizzare la tipologia 'addebito' per indicare un'operazione negativa)");
-            cancelClose();
-            return;
-          }
-          
-          if (contoUtente.getMovimenti() == null) {
-            contoUtente.setMovimenti(new ArrayList<ContoUtenteMovimento>());
-          }
-          contoUtente.getMovimenti().add(movimento);
-          
-          customClientFactory.updateContoUtente(contoUtente, new Delegate<ContoUtente>() {
-            public void execute(ContoUtente result) {
-              setContoUtente(result);
-            }
-          });
-          
-        }
-      })
-    );
-    
-    */
-    
   }
   
+  /*
   private Panel createMovimentoItemPanel(String labelText, Widget box) {
     HorizontalPanel panel = new HorizontalPanel();
     panel.add(new Spacer("1px", "2em"));
@@ -332,5 +283,6 @@ public class PortalUserEditContoView extends AbstractAdminTabPage<PortalUserEdit
     panel.add(box);
     return panel;
   }
+  */
   
 }

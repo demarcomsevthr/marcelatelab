@@ -60,17 +60,6 @@ public class CustomerPlace extends Place implements ReversiblePlace, HasToken, H
     this.previousPlace = previousPlace;
   }
 
-  private String name;
-  
-  public String getName() {
-    return name;
-  }
-
-  public CustomerPlace name(String name) {
-    this.name = name;
-    return this;
-  }
-
   public static class Tokenizer implements PlaceTokenizer<CustomerPlace> {
 
     public String getToken(CustomerPlace place) {
@@ -83,14 +72,25 @@ public class CustomerPlace extends Place implements ReversiblePlace, HasToken, H
 
   }
 
-  private boolean append;
-
-  public boolean isAppend() {
-    return append;
+  private String historyName;
+  
+  public String getHistoryName() {
+    return historyName;
   }
 
-  public CustomerPlace setAppend() {
-    this.append = true;
+  public CustomerPlace setHistoryName(String name) {
+    this.historyName = name;
+    return this;
+  }
+
+  private boolean historyAppend = false;
+  
+  public boolean isHistoryAppend() {
+    return historyAppend;
+  }
+
+  public CustomerPlace setHistoryAppend() {
+    this.historyAppend = true;
     return this;
   }
 
