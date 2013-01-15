@@ -33,7 +33,9 @@
 					>> RICORDARSI DI FARE UN FLUSH DI MEMCACHE E INSTANCE CACHE
 				
 				> it.mate.econyx.client.view.admin.ProducerEditOrderListView.confermaListaOrdini(List<Order>)
-					> se newState = SHIPPED > popup: informazioni per il ritiro
+				
+				>> METTERE ANCHE IN stampa ordine:
+				> it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
 					
 				>> IN TEST (gaspar8net)	
 		
