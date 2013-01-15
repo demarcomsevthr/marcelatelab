@@ -145,7 +145,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
 
   @Override
   public void edit(PortalUser user) {
-    goTo(new PortalUserPlace(PortalUserPlace.EDIT, user));
+    goTo(new PortalUserPlace(PortalUserPlace.EDIT, user).setHistoryName(user.getScreenName()).setHistoryAppend());
   }
 
   @Override
@@ -173,7 +173,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
   }
   
   public void editOrder(Order order) {
-    goTo(new OrderPlace(OrderPlace.EDIT, order).name(order.getCode()).setAppend());
+    goTo(new OrderPlace(OrderPlace.EDIT, order).setHistoryName(order.getCode()).setHistoryAppend());
   }
 
   @Override
@@ -189,7 +189,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
   public void goToProfileView() {
     TemplatesUtils.changeCurrentTemplate("registrationTemplate", new Delegate<Void>() {
       public void execute(Void element) {
-        goTo(new CustomerPlace(CustomerPlace.PROFILE_VIEW).name("Profilo"));
+        goTo(new CustomerPlace(CustomerPlace.PROFILE_VIEW).setHistoryName("Profilo"));
       }
     });
   }

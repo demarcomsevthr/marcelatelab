@@ -148,11 +148,11 @@ public class OrderActivity extends BaseActivity implements
     if (order.getItems() == null || order.getItems().size() == 0) {
       fetchItems(order, new Delegate<Order>() {
         public void execute(Order order) {
-          goTo(new OrderPlace(OrderPlace.EDIT, order).name(order.getCode()).setAppend());
+          goTo(new OrderPlace(OrderPlace.EDIT, order).setHistoryName(order.getCode()).setHistoryAppend());
         }
       });
     } else {
-      goTo(new OrderPlace(OrderPlace.EDIT, order).name(order.getCode()).setAppend());
+      goTo(new OrderPlace(OrderPlace.EDIT, order).setHistoryName(order.getCode()).setHistoryAppend());
     }
   }
   

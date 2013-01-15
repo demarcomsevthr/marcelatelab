@@ -1075,7 +1075,7 @@
       <orderNm>30</orderNm>
       <description>confermato</description>
       <requiredOrderStateCodes>INS</requiredOrderStateCodes>
-      <emailToCustomerSendType>Y</emailToCustomerSendType>
+      <emailToCustomerSendType>N</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <emailContent>Buongiorno ${order.customer.portalUser.screenName},
       e' stato confermato il tuo ordine n. ${order.code} di ${order.producer.nome}.
@@ -1088,9 +1088,19 @@
       <orderNm>40</orderNm>
       <description>consegnato</description>
       <requiredOrderStateCodes>CON</requiredOrderStateCodes>
-      <emailToCustomerSendType>N</emailToCustomerSendType>
+      <emailToCustomerSendType>Y</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
-      <emailContent/>
+      <emailContent>Buongiorno ${order.customer.portalUser.screenName},
+      e' stato confermato il tuo ordine n. ${order.code} di ${order.producer.nome}.
+      
+      Informazioni per il ritiro:
+      
+      ${order.deliveryInformations}
+      
+      Grazie
+      Gaspar8.net
+      </emailContent>
+      <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>SHI</disablingOrderStateCodes>
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>

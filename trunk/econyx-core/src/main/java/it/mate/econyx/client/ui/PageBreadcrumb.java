@@ -66,7 +66,7 @@ public class PageBreadcrumb extends Composite {
           }
         } else if (place instanceof HistoryPlace) {
           HistoryPlace placeWithName = (HistoryPlace)place;
-          if (placeWithName.getName() != null) {
+          if (placeWithName.getHistoryName() != null) {
             addPlaceAndUpdate(place);
           } else {
             updateView();
@@ -122,7 +122,7 @@ public class PageBreadcrumb extends Composite {
   private void addPlaceAndUpdate(Place place) {
     if (place instanceof HistoryPlace) {
       HistoryPlace historyPlace = (HistoryPlace)place;
-      if (!((HistoryPlace)historyPlace).isAppend()) {
+      if (!((HistoryPlace)historyPlace).isHistoryAppend()) {
         history.clear();
       }
       if (history.size() > 0) {
@@ -130,7 +130,7 @@ public class PageBreadcrumb extends Composite {
           Place historyItem = history.get(it);
           if (historyItem instanceof HistoryPlace) {
             HistoryPlace placeInHistory = (HistoryPlace)historyItem;
-            if (placeInHistory.getName().equals(historyPlace.getName())) {
+            if (placeInHistory.getHistoryName().equals(historyPlace.getHistoryName())) {
               history = history.subList(0, it + 1);
               updateView();
               return;
@@ -175,7 +175,7 @@ public class PageBreadcrumb extends Composite {
         panel.add(anchor);
       } else if (historyPlace instanceof HistoryPlace) {
         HistoryPlace namedPlace = (HistoryPlace)historyPlace;
-        anchor = new Anchor(SafeHtmlUtils.fromTrustedString(namedPlace.getName()));
+        anchor = new Anchor(SafeHtmlUtils.fromTrustedString(namedPlace.getHistoryName()));
         anchor.addClickHandler(new ClickHandler() {
           public void onClick(ClickEvent event) {
             goToPlace(historyPlace);

@@ -4,12 +4,12 @@ import com.google.gwt.place.shared.Place;
 
 public interface HistoryPlace {
   
-  String getName();
+  String getHistoryName();
   
-  Place name(String name);
+  Place setHistoryName(String name);
   
-  boolean isAppend();
+  boolean isHistoryAppend();
   
-  Place setAppend();
+  Place setHistoryAppend();
   
 }

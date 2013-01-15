@@ -65,17 +65,6 @@ public class PortalPagePlace extends Place implements ReversiblePlace, HasToken,
     this.previousPlace = previousPlace;
   }
 
-  private String name;
-  
-  public String getName() {
-    return name;
-  }
-
-  public PortalPagePlace name(String name) {
-    this.name = name;
-    return this;
-  }
-
   public static class Tokenizer implements PlaceTokenizer<PortalPagePlace> {
 
     public String getToken(PortalPagePlace place) {
@@ -88,17 +77,28 @@ public class PortalPagePlace extends Place implements ReversiblePlace, HasToken,
 
   }
   
-  private boolean append;
-
-  public boolean isAppend() {
-    return append;
+  private String historyName;
+  
+  public String getHistoryName() {
+    return historyName;
   }
 
-  public PortalPagePlace setAppend() {
-    this.append = true;
+  public PortalPagePlace setHistoryName(String name) {
+    this.historyName = name;
     return this;
   }
+
+  private boolean historyAppend = false;
   
+  public boolean isHistoryAppend() {
+    return historyAppend;
+  }
+
+  public PortalPagePlace setHistoryAppend() {
+    this.historyAppend = true;
+    return this;
+  }
+
   public HistoryPlace historyPlace() {
     return this;
   }

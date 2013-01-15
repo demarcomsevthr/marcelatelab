@@ -56,16 +56,13 @@ public class OrderDs implements Order, HasKey {
   @UnownedRelationship (key="customerId")
   transient CustomerDs customer; 
   
-  
   @Persistent
   String currentStateCode;
-
   
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   List<Key> stateKeys;
   @UnownedRelationship (key="stateKeys", itemClass=OrderStateDs.class)
   transient List<OrderStateDs> states;
-  
   
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   Key producerKey;
@@ -75,19 +72,18 @@ public class OrderDs implements Order, HasKey {
   @Persistent
   Double importoTotale;
   
-  
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   Key modalitaSpedizioneKey;
   @UnownedRelationship (key="modalitaSpedizioneKey")
   ModalitaSpedizioneDs modalitaSpedizione;
-
 
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   Key modalitaPagamentoKey;
   @UnownedRelationship (key="modalitaPagamentoKey")
   ModalitaPagamentoDs modalitaPagamento;
 
-  
+  @Persistent
+  String deliveryInformations;
 
   public void resolveItems() {
     CollectionUtils.traverseCollection(this.itemKeys);
@@ -263,6 +259,14 @@ public class OrderDs implements Order, HasKey {
   public void setModalitaPagamento(ModalitaPagamento modalitaPagamento) {
     this.modalitaPagamento = (ModalitaPagamentoDs)modalitaPagamento;
     this.modalitaPagamentoKey = modalitaPagamento != null ? this.modalitaPagamento.getKey() : null;
+  }
+
+  public String getDeliveryInformations() {
+    return deliveryInformations;
+  }
+
+  public void setDeliveryInformations(String deliveryInformations) {
+    this.deliveryInformations = deliveryInformations;
   }
   
 }

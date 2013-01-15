@@ -11,6 +11,7 @@
 		    	> PROVA DELLA CADREGA: 
 		    		inserire X             X  
 		    		allineare le X al bordo del timbro > in preview si vede una cosa, in pdf un'altra !!!!!!
+		    		> non è che un problema di risoluzione video ....
 		    	
 			
 
@@ -26,6 +27,14 @@
 				> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
 					> modificare closeOrder (salvare su order modalitaSpedizione e modalitaPagamento)
 				
+			> chiusura ordine: totale con spese di spedizione
+			
+			> IN GENERALE:
+				> se a inizio giornata vado in lista utenti, può capitare che si pianta (gp8)
+				> gestire un timeout massimo su rpc {property.rpc.timeout}
+				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
+				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.replace({property.replaceUrl})
+			
 			
 		    >>> NOTE ALL'ORDINE
 		    	> nota di riga
@@ -34,8 +43,6 @@
 		    >>> TIMBRO LOGO:
 		    	> indicare la dim max in pixel dell'immagine da caricare		
 		    	
-			> chiusura ordine: totale con spese di spedizione
-			
 			> gestione utenti > attivazione utente in manuale
 				> invio mail di notifica agli admins
 				

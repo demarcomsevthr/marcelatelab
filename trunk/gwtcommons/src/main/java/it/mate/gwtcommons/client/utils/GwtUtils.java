@@ -1,6 +1,7 @@
 package it.mate.gwtcommons.client.utils;
 
 import it.mate.gwtcommons.client.ui.MessageBox;
+import it.mate.gwtcommons.client.ui.Spacer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +27,11 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -594,6 +597,16 @@ public class GwtUtils {
       return head;
     }
     return null;
+  }
+  
+  public static Panel createPopupPanelItem(String labelText, Widget box, String spacerHeight, String labelWidth) {
+    HorizontalPanel panel = new HorizontalPanel();
+    panel.add(new Spacer("1px", spacerHeight));
+    Label label = new Label(labelText);
+    label.setWidth(labelWidth);
+    panel.add(label);
+    panel.add(box);
+    return panel;
   }
   
   public static MessageBox messageBox(String bodyText) {

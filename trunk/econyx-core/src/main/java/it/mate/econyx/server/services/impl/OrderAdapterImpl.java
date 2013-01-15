@@ -396,9 +396,11 @@ public class OrderAdapterImpl implements OrderAdapter {
         }
         if (stateChangedAsChecked) {
           if (OrderStateConfig.YES.equals(newState.getConfig().getEmailToCustomerSendType())) {
-            // 15/11/2012
             Queue queue = QueueFactory.getDefaultQueue();
-            queue.add(TaskOptions.Builder.withPayload(new OrderStateChangeDeferredTask(order.getId(), newState.getCode())));
+            OrderStateChangeDeferredTask task = new OrderStateChangeDeferredTask(order.getId(), newState.getCode());
+            // 15/01/2013
+            // setto 10 secondi di delay per permettere al ds di aggiornarsi
+            queue.add(TaskOptions.Builder.withPayload(task).countdownMillis(10000));
           }
         }
       }

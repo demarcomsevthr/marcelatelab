@@ -65,17 +65,6 @@ public class ProductPlace extends Place implements ReversiblePlace, HasToken, Hi
     this.previousPlace = previousPlace;
   }
   
-  private String name;
-  
-  public String getName() {
-    return name;
-  }
-
-  public ProductPlace name(String name) {
-    this.name = name;
-    return this;
-  }
-
   public static class Tokenizer implements PlaceTokenizer<ProductPlace> {
 
     @Override
@@ -90,14 +79,29 @@ public class ProductPlace extends Place implements ReversiblePlace, HasToken, Hi
 
   }
   
-  private boolean append;
-
-  public boolean isAppend() {
-    return append;
+  private String historyName;
+  
+  public String getHistoryName() {
+    return historyName;
   }
 
-  public ProductPlace setAppend() {
-    this.append = true;
+  public ProductPlace setHistoryName(String name) {
+    this.historyName = name;
+    return this;
+  }
+
+  private boolean historyAppend = false;
+  
+  public boolean isHistoryAppend() {
+    return historyAppend;
+  }
+
+  public ProductPlace setHistoryAppend() {
+    this.historyAppend = true;
+    return this;
+  }
+
+  public HistoryPlace historyPlace() {
     return this;
   }
   
