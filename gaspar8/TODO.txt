@@ -29,6 +29,8 @@
 					> inserimento ordini di test
 					> dopo la modifica degli order states
 					> verifica finale
+					
+					>> RICORDARSI DI FARE UN FLUSH DI MEMCACHE E INSTANCE CACHE
 				
 				> it.mate.econyx.client.view.admin.ProducerEditOrderListView.confermaListaOrdini(List<Order>)
 					> se newState = SHIPPED > popup: informazioni per il ritiro
