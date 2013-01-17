@@ -40,6 +40,7 @@ import it.mate.gwtcommons.shared.services.ServiceException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -273,7 +274,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   String[] cognomi = {"Rossi", "Russo",     "Ferrari",  "Esposito", "Bianchi", "Romano",    "Colombo", "Ricci",  "Marino", "Greco",  "De Santis", "Farina", "Gatti", "Cattaneo",  "Amato",   "Basile", "Sartori", "Milano",  "Riva",   "Ferretti"};
   String[] nomi = {"Antonio",  "Salvatore", "Federico", "Vittorio", "Mario",   "Giancarlo", "Lara",    "Pamela", "Paolo",  "Maria",  "Anna",      "Davide", "Luigi", "Maddalena", "Giuseppe", "Lucia", "Eleonora", "Giorgio", "Marco", "Simona"};
   
-  public void generateRandomCustomers(int number) {
+  public void generateRandomCustomers(int number, Date date) {
     
     List<PortalUser> utentiEsistenti = portalUserAdapter.findAll();
     List<String> nominativi = new ArrayList<String>();
@@ -299,17 +300,18 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       customer.setIndirizzoSpedizione(indirizzoSpedizione);
       PortalUserDs portalUser = new PortalUserDs();
       portalUser.setScreenName(nominativo);
-      portalUser.setEmailAddress(cognome.toLowerCase()+"."+nome.substring(0, 1).toLowerCase()+"@gmail.com");
-      portalUser.setPassword("123");
+      portalUser.setEmailAddress(cognome.toLowerCase()+"."+nome.substring(0, 1).toLowerCase()+"@test.com");
+      portalUser.setPassword("vertigine");
       portalUser.setPasswordEncrypted(false);
       portalUser.setActive(true);
+      portalUser.setTestUser(true);
       customer.setPortalUser(CloneUtils.clone(portalUserAdapter.create(portalUser, true), PortalUserDs.class));
-      customerAdapter.create(customer);
+      customerAdapter.create(customer, date);
     }
   }
   
   
-  public void generateRandomOrders(int number) {
+  public void generateRandomOrders(int number, Date date) {
     List<Customer> customers = customerAdapter.findAll();
     List<Articolo> products = productAdapter.findAll();
     int it = 0;
@@ -336,7 +338,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
               openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null);
               numeroArticoliDaOrdinare --;
             }
-            orderAdapter.closeOrder(openOrder.getId(), null, null);
+            orderAdapter.closeOrder(openOrder.getId(), null, null, date);
           } catch (ServiceException ex) {
             logger.error("error: " + ex.getMessage());
           }
@@ -368,7 +370,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     for (Customer customer2 : customers) {
       Order openOrder = orderAdapter.findOpenOrderByCustomer(customer2);
       if (openOrder != null) {
-        orderAdapter.closeOrder(openOrder.getId(), null, null);
+        orderAdapter.closeOrder(openOrder.getId(), null, null, date);
       }
     }
     

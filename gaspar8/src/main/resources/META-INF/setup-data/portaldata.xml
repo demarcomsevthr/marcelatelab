@@ -1069,25 +1069,59 @@
       <emailToCustomerSendType>N</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <disablingOrderStateCodes>INS</disablingOrderStateCodes>
+      
+      <nextStateCode>CON</nextStateCode>
+      <nextStateDescription>ACQUISITO</nextStateDescription>
+      <printButtonEnabled>false</printButtonEnabled>
+      <askDeliveryInformations>false</askDeliveryInformations>
+      <quantityUpdatable>false</quantityUpdatable>
+      
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>CON</code>
       <orderNm>30</orderNm>
-      <description>confermato</description>
+      <description>acquisito</description>
       <requiredOrderStateCodes>INS</requiredOrderStateCodes>
       <emailToCustomerSendType>N</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <emailContent>Buongiorno ${order.customer.portalUser.screenName},
-      e' stato confermato il tuo ordine n. ${order.code} di ${order.producer.nome}.
+      e' stato acquisito il tuo ordine n. ${order.code} di ${order.producer.nome}.
       </emailContent>
       <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>CON</disablingOrderStateCodes>
+      
+      <nextStateCode>ISH</nextStateCode>
+      <nextStateDescription>CONSEGNA IN CORSO</nextStateDescription>
+      <printButtonEnabled>true</printButtonEnabled>
+      <askDeliveryInformations>true</askDeliveryInformations>
+      <quantityUpdatable>true</quantityUpdatable>
+      
+    </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
+    <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
+      <code>ISH</code>
+      <orderNm>40</orderNm>
+      <description>in consegna</description>
+      <requiredOrderStateCodes>CON</requiredOrderStateCodes>
+      <emailToCustomerSendType>N</emailToCustomerSendType>
+      <emailToAdminsSendType>N</emailToAdminsSendType>
+      <emailContent>Buongiorno ${order.customer.portalUser.screenName},
+      e' stato messo in consegna il tuo ordine n. ${order.code} di ${order.producer.nome}.
+      </emailContent>
+      <attachOrderReport>true</attachOrderReport>
+      <disablingOrderStateCodes>ISH</disablingOrderStateCodes>
+      
+      <nextStateCode>SHI</nextStateCode>
+      <nextStateDescription>CONSEGNA EFFETTUATA</nextStateDescription>
+      <printButtonEnabled>true</printButtonEnabled>
+      <askDeliveryInformations>true</askDeliveryInformations>
+      <quantityUpdatable>true</quantityUpdatable>
+      
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>SHI</code>
-      <orderNm>40</orderNm>
+      <orderNm>50</orderNm>
       <description>consegnato</description>
-      <requiredOrderStateCodes>CON</requiredOrderStateCodes>
+      <requiredOrderStateCodes>ISH</requiredOrderStateCodes>
       <emailToCustomerSendType>Y</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <emailContent>Buongiorno ${order.customer.portalUser.screenName},
@@ -1105,8 +1139,8 @@
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>CAN</code>
-      <orderNm>50</orderNm>
-      <description>cancellato</description>
+      <orderNm>60</orderNm>
+      <description>annullato</description>
       <requiredOrderStateCodes>INS</requiredOrderStateCodes>
       <emailToCustomerSendType>N</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>

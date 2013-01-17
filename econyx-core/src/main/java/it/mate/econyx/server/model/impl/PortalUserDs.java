@@ -45,6 +45,10 @@ public class PortalUserDs implements PortalUser, HasKey {
 
   @Persistent
   String activationToken;
+  
+  @Persistent
+  Boolean testUser;
+
 
   public Key getKey() {
     return id;
@@ -122,6 +126,18 @@ public class PortalUserDs implements PortalUser, HasKey {
 
   public void setActivationToken(String activationToken) {
     this.activationToken = activationToken;
+  }
+  
+  public Boolean getTestUser() {
+    return testUser;
+  }
+
+  public boolean isTestUser() {
+    return testUser != null ? testUser : false;
+  }
+
+  public void setTestUser(Boolean testUser) {
+    this.testUser = testUser;
   }
   
 }

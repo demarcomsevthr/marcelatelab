@@ -11,11 +11,10 @@
 		    	> PROVA DELLA CADREGA: 
 		    		inserire X             X  
 		    		allineare le X al bordo del timbro > in preview si vede una cosa, in pdf un'altra !!!!!!
-		    		> non è che un problema di risoluzione video ....
+		    		> non è che un problema di risoluzione video > cfr home | office ...
+		    		
 		    	
-			
-
-		    >>> DATARI > INIZIATO
+		    >>> DATARI > DA FINIRE
 		        > it.mate.econyx.shared.model.impl.TimbroTx.datario
 		    	> it.mate.econyx.client.ui.StampPreviewPanel.update
 		    	
@@ -29,16 +28,17 @@
 				
 			> chiusura ordine: totale con spese di spedizione
 			
-			> IN GENERALE:
+			> TIMEOUT RPC:
 				> se a inizio giornata vado in lista utenti, può capitare che si pianta (gp8)
 				> gestire un timeout massimo su rpc {property.rpc.timeout}
 				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
-				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.replace({property.replaceUrl})
+				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
 			
 			
 		    >>> NOTE ALL'ORDINE
-		    	> nota di riga
-		    	> nota complessiva
+		    	> input in carrello:
+			    	> nota di riga
+			    	> nota complessiva
 		    	
 		    >>> TIMBRO LOGO:
 		    	> indicare la dim max in pixel dell'immagine da caricare		
@@ -61,12 +61,10 @@
 		    		> it.mate.gwtcommons.server.dao.JdoDao.suppressExceptionThrowOnInternalFind
 		    		> it.mate.econyx.server.services.impl.PortalPageAdapterImpl >> utilizza CacheUtils
 		    		> it.mate.gwtcommons.server.utils.CacheUtils (.put e .deleteByKey)
-		    	
-		    >>> UPG GWT 2.5.0 > IN TEST
+		    >>> UPG GWT 2.5.0
 		    	> /gwtcommons/pom.xml (gwt.version, gquery-dnd-bundle version)
 		    	> /econyx-base-app/pom.xml (gwt.version)
 		    	> it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator
-		    	
 			> timbro: default font: 10px > OK
 			> timbro: logo dnd > OK
 				> it.mate.econyx.client.ui.StampPreviewPanel.update
@@ -75,33 +73,23 @@
 			> prezzo > solo a utenti registrati > PREZZO IN ProductView >> OK
 			> attendere prego >> waiting gif
 			> pagina in evidenza (tnt) > OK
-		    >>> TIMBRI OVALI > OK
+		    > TIMBRI OVALI > OK
 		    	> it.mate.econyx.shared.model.Timbro (.oval = true | false)
 		    	> it.mate.econyx.client.ui.StampPreviewPanel.setTimbro(Timbro)
-		    	>> PDF > it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItemDetails
-		    	
+		    	> PDF > it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItemDetails
 				
 			---------------------------------
 			
 		
-		
 		SNAPSHOT 19/11/2012
 		
-			- TUTTE LE ENTITY CON Blob:
+			- INSTANCE CACHE
 				>> CacheableEntity (instanceCache=true)
 					>>> mantiene l'entity non in memcache, ma in cache statica di istanza (per aggiornarla occorre distruggere l'istanza)
 					    (aggira la limitazione di memcache con i blob)
 				>> provare con ImageWebContentDs >> IN TEST
 					    
-			- it.mate.econyx.shared.model.impl.OrderTx.getProducers
-			    >> con TxUtils va in errore solo compilata con maven !!!	
-				
 		
-		
-		SNAPSHOT 14/11/2012
-		
-			>> Cookie Utente
-				>> In Admin disabilitare (fa la fetch dell'ordine aperto!)
 		
 
 		______________________________________________________________________________________________________

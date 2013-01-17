@@ -92,15 +92,16 @@
 			
 		2) Add Eclipse Appengine Sdk
 			set as default >> questo aggiorna la library su del progetto econyx, però la inverte rispetto a maven (quindi bisogna ripristinare il corretto ordine delle librerie)
-			
 			NOTA BENE
 			non dovrebbe più servire rimuovere datanucleus-appengine-x.x.x.jar dal appengine sdk
+			NOTA 16/01/2013
+			non serve più, perchè non uso più gae dal plugin di eclipse
 
 		3) Oggetti da modificare:
-		  gwtcommons/pom.xml	>> gae.version e plugin maven-gae-plugin e maven-datanucleus-plugin* (controllare versioni dei jar dipendenti)
-		  econyx/pom.xml		>> gae.version e plugin maven-datanucleus-plugin* (controllare versioni dei jar dipendenti)
+		  gwtcommons/pom.xml		>> gae.version e plugin maven-gae-plugin e maven-datanucleus-plugin* (controllare versioni dei jar dipendenti)
+		  econyx-base-app/pom.xml	>> gae.version e plugin maven-datanucleus-plugin* (controllare versioni dei jar dipendenti)
 		  
-		  setenv.bat            >> set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-X.X.X
+		  econyx-base-app/setenv.bat >> set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-X.X.X
 
 		* il plugin deve essere duplicato perchè l'enhancement va fatto sia su gwtcommons che su econyx
 

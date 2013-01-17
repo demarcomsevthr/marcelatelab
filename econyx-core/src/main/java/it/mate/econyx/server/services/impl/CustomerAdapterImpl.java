@@ -13,6 +13,7 @@ import it.mate.econyx.shared.model.impl.CustomerTx;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -68,8 +69,12 @@ public class CustomerAdapterImpl implements CustomerAdapter {
       dao.delete(CloneUtils.clone(customer.getIndirizzoFatturazione(), IndirizzoFatturazioneDs.class));
     dao.delete(customer);
   }
-
+  
   public Customer create(Customer entity) {
+    return create(entity, null);
+  }
+
+  public Customer create(Customer entity, Date date) {
     Customer customerDs = CloneUtils.clone(entity, CustomerDs.class);
     if (customerDs.getPortalUser().getId() == null) {
       customerDs.setPortalUser(CloneUtils.clone(portalUserAdapter.create(customerDs.getPortalUser()), PortalUserDs.class));
@@ -77,7 +82,7 @@ public class CustomerAdapterImpl implements CustomerAdapter {
     customerDs.setIndirizzoSpedizione(dao.create(CloneUtils.clone(customerDs.getIndirizzoSpedizione(), IndirizzoSpedizioneDs.class)));
     customerDs.setIndirizzoFatturazione(dao.create(CloneUtils.clone(customerDs.getIndirizzoFatturazione(), IndirizzoFatturazioneDs.class)));
     customerDs = dao.create(customerDs);
-    customAdapter.onCreateCustomer(customerDs);
+    customAdapter.onCreateCustomer(customerDs, date);
     return CloneUtils.clone(customerDs, CustomerTx.class);
   }
 

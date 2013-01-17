@@ -27,6 +27,7 @@ import it.mate.gwtcommons.server.utils.SpringUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -319,14 +320,14 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
     PropertiesHolderConfigurer.reloadFromClassPathResource("econyx.properties", true);
   }
 
-  public void generateRandomCustomers(int numero) {
-//  generalAdapter.generateRandomCustomers(numero);
-    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_CUSTOMERS, numero)));
+  @Override
+  public void generateRandomCustomers(int number, Date date) {
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_CUSTOMERS, number, date)));
   }
 
-  public void generateRandomOrders(int number) {
-//  generalAdapter.generateRandomOrders(number);
-    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number)));
+  @Override
+  public void generateRandomOrders(int number, Date date) {
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number, date)));
   }
   
   public String gdataSpreadsheetTest() {

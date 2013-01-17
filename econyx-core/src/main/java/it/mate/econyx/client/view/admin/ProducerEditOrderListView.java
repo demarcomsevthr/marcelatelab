@@ -50,6 +50,8 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
   
   private String selectedOrderStateCode;
   
+  private OrderStateConfig selectedOrderStateConfig;
+  
   public ProducerEditOrderListView() {
     initUI();
   }
@@ -110,23 +112,7 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     
     orderListView.setOrderStateFilterChangeDelegate(new Delegate<String>() {
       public void execute(String selectedOrderStateCode) {
-        ProducerEditOrderListView.this.selectedOrderStateCode = selectedOrderStateCode;
-        findOrdersByProducer();
-        if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
-          confermaBtn.setText("Metti tutti gli ordini in stato CONFERMATO");
-          confermaBtn.setVisible(true);
-          stampaBtn.setVisible(false);
-          excelBtn.setVisible(false);
-        } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
-          confermaBtn.setText("Metti tutti gli ordini in stato CONSEGNATO");
-          confermaBtn.setVisible(true);
-          stampaBtn.setVisible(true);
-          excelBtn.setVisible(true);
-        } else {
-          confermaBtn.setVisible(false);
-          stampaBtn.setVisible(false);
-          excelBtn.setVisible(false);
-        }
+        onSelectedOrderStateCode(selectedOrderStateCode);
       }
     });
     
@@ -177,17 +163,98 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     delegate.execute(model);
   }
   
+  private void onSelectedOrderStateCode (String selectedOrderStateCode) {
+    this.selectedOrderStateCode = selectedOrderStateCode;
+    getPresenter().findOrderStateConfig(selectedOrderStateCode, new Delegate<OrderStateConfig>() {
+      public void execute(OrderStateConfig orderStateConfig) {
+        selectedOrderStateConfig = orderStateConfig;
+        findOrdersByProducer();
+        if (!GwtUtils.isEmpty(orderStateConfig.getNextStateCode())) {
+          confermaBtn.setText("Metti tutti gli ordini in stato " + orderStateConfig.getNextStateDescription());
+          confermaBtn.setVisible(true);
+          stampaBtn.setVisible(orderStateConfig.isPrintButtonEnabled());
+          excelBtn.setVisible(orderStateConfig.isPrintButtonEnabled());
+        }
+      }
+    });
+    /*
+    OrderStateExtraConfig extraConfig = getOrderStateExtraConfig(selectedOrderStateCode);
+    if (extraConfig != null) {
+      confermaBtn.setText("Metti tutti gli ordini in stato " + extraConfig.nextStateDescription);
+      confermaBtn.setVisible(true);
+      stampaBtn.setVisible(extraConfig.printButtonEnabled);
+      excelBtn.setVisible(extraConfig.printButtonEnabled);
+    } else {
+      confermaBtn.setVisible(false);
+      stampaBtn.setVisible(false);
+      excelBtn.setVisible(false);
+    }
+    */
+  }
+
+  /*
+  private void onSelectedOrderStateCode (String selectedOrderStateCode) {
+    ProducerEditOrderListView.this.selectedOrderStateCode = selectedOrderStateCode;
+    findOrdersByProducer();
+    if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
+      confermaBtn.setText("Metti tutti gli ordini in stato ACQUISITO");
+      confermaBtn.setVisible(true);
+      stampaBtn.setVisible(false);
+      excelBtn.setVisible(false);
+    } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
+      confermaBtn.setText("Metti tutti gli ordini in stato CONSEGNA IN CORSO");
+      confermaBtn.setVisible(true);
+      stampaBtn.setVisible(true);
+      excelBtn.setVisible(true);
+    } else if (selectedOrderStateCode.equals(OrderStateConfig.SHIPPING)) {
+      confermaBtn.setText("Metti tutti gli ordini in stato CONSEGNATO");
+      confermaBtn.setVisible(true);
+      stampaBtn.setVisible(true);
+      excelBtn.setVisible(true);
+    } else {
+      confermaBtn.setVisible(false);
+      stampaBtn.setVisible(false);
+      excelBtn.setVisible(false);
+    }
+  }
+  */
+  
   private void confermaListaOrdini (final List<Order> ordini) {
     
+//  OrderStateExtraConfig extraConfig = null;
+    
     String newStateCode = null;
-    if (selectedOrderStateCode != null) {
+    
+    if (selectedOrderStateConfig != null && !GwtUtils.isEmpty(selectedOrderStateConfig.getNextStateCode())) {
+      
+      newStateCode = selectedOrderStateConfig.getNextStateCode();
+
+      /*
+      extraConfig = getOrderStateExtraConfig(selectedOrderStateCode);
+      if (extraConfig != null) {
+        newStateCode = extraConfig.nextStateCode;
+      } else {
+        return;
+      }
+      */
+      
+      
+      /*
       if (selectedOrderStateCode.equals(OrderStateConfig.INSERTED)) {
         newStateCode = OrderStateConfig.CONFIRMED;
       } else if (selectedOrderStateCode.equals(OrderStateConfig.CONFIRMED)) {
+        newStateCode = OrderStateConfig.SHIPPING;
+      } else if (selectedOrderStateCode.equals(OrderStateConfig.SHIPPING)) {
         newStateCode = OrderStateConfig.SHIPPED;
       } else {
         return;
       }
+      */
+      
+    } else {
+      
+      return;
+      
     }
     
     final String fNewStateCode = newStateCode;
@@ -207,7 +274,9 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
           }
           if (updateOrder) {
             order.setStates(statesToUpdate);
-            order.setDeliveryInformations(deliveryInformations);
+            if (!GwtUtils.isEmpty(deliveryInformations)) {
+              order.setDeliveryInformations(deliveryInformations);
+            }
           }
         }
         getPresenter().updateOrders(ordini, new Delegate<List<Order>>() {
@@ -220,8 +289,7 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
       }
     };
     
-    if (newStateCode.equals(OrderStateConfig.SHIPPED) && 
-        PropertiesHolder.getBoolean("client.ProducerEditOrderListView.askDeliveryInformations")) {
+    if (selectedOrderStateConfig.askDeliveryInformations()) {
       askDeliveryInformations(doUpdateDelegate);
     } else {
       doUpdateDelegate.execute(null);
@@ -234,6 +302,9 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     final TextBox deliveryInformationsBox = new TextBox();
     deliveryInformationsBox.setWidth("20em");
     String defaultDeliveryInformations = PropertiesHolder.getString("client.ProducerEditOrderListView.defaultDeliveryInformations");
+    if (ordini != null && ordini.size() > 0 && !GwtUtils.isEmpty(ordini.get(0).getDeliveryInformations())) {
+      defaultDeliveryInformations = ordini.get(0).getDeliveryInformations();
+    }
     if (defaultDeliveryInformations != null) {
       deliveryInformationsBox.setText(defaultDeliveryInformations);
     }
@@ -244,5 +315,52 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
       }
     });
   }
+  
+  
+  /*
+   * 
+   * 
+
+  private List<OrderStateExtraConfig> extraConfigs = initOrderStateExtraConfig();
+  
+  private List<OrderStateExtraConfig> initOrderStateExtraConfig() {
+//  String value = "INS;CON;ACQUISITO;false|CON;CONSEGNA IN CORSO;ISH;false|ISH;SHI;CONSEGNATO;false|SHI;;;true";
+    List<OrderStateExtraConfig> extraConfigs = new ArrayList<OrderStateExtraConfig>();
+    String value = PropertiesHolder.getString("client.ProducerEditOrderListView.orderStateExtraConfig");
+    if (value != null) {
+      String[] items = value.split("\\|");
+      for (String item : items) {
+        String[] tokens = item.split(";");
+        extraConfigs.add(new OrderStateExtraConfig(tokens[0], tokens[1], tokens[2], Boolean.parseBoolean(tokens[3]), Boolean.parseBoolean(tokens[4])));
+      }
+    }
+    return extraConfigs;
+  }
+  
+  private OrderStateExtraConfig getOrderStateExtraConfig(String stateCode) {
+    for (OrderStateExtraConfig extraConfig : extraConfigs) {
+      if (stateCode.equals(extraConfig.code)) {
+        return extraConfig;
+      }
+    }
+    return null;
+  }
+  
+  class OrderStateExtraConfig {
+    private String code;
+    private String nextStateCode;
+    private String nextStateDescription;
+    private boolean printButtonEnabled;
+    private boolean askDeliveryInformations;
+    public OrderStateExtraConfig(String code, String nextStateCode, String nextStateDescription, boolean printButtonEnabled,
+        boolean askDeliveryInformations) {
+      this.code = code;
+      this.nextStateCode = nextStateCode;
+      this.nextStateDescription = nextStateDescription;
+      this.printButtonEnabled = printButtonEnabled;
+      this.askDeliveryInformations = askDeliveryInformations;
+    }
+  }
+  */
   
 }

@@ -33,6 +33,12 @@ public interface PortalUser extends Serializable {
   public String getActivationToken();
 
   public void setActivationToken(String activationToken);
+
+  public void setTestUser(Boolean testUser);
+
+  public boolean isTestUser();
+
+  public Boolean getTestUser();
   
   
 }

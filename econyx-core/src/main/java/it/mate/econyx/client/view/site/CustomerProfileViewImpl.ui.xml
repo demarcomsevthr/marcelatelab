@@ -63,7 +63,7 @@
         </g:HorizontalPanel>
         <gc:Spacer height="40px"/>
       </g:VerticalPanel>
-      <g:VerticalPanel ui:field="customProfileView1"/>
+      <g:VerticalPanel ui:field="inlineProfileView"/>
     </g:VerticalPanel>
   </g:HTMLPanel>
 

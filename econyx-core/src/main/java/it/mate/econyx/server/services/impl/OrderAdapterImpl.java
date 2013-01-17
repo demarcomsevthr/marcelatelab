@@ -271,15 +271,26 @@ public class OrderAdapterImpl implements OrderAdapter {
     return castTx(itemDs);
   }
   
-  public void closeOrder (String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento) {
-    // 15/11/2012
+  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento) {
+    closeOrder(id, modalitaSpedizione, modalitaPagamento, null);
+  }
+  
+  public void closeOrder (String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento, final Date dataGenerazioneOrdine) {
     // non faccio la fetch degli items
     final OrderDs detachedEntity = internalFindById(id, false);
-//  final OrderDs detachedEntity = internalFindById(id, true);
     updateStatesWithInsertedState(detachedEntity);
-//  update(order);
+    if (dataGenerazioneOrdine != null) {
+      List<OrderState> detachedStates = detachedEntity.getStates();
+      for (OrderState detachedState : detachedStates) {
+        detachedState.setDate(dataGenerazioneOrdine);
+        dao.update(detachedState);
+      }
+    }
     dao.update(OrderDs.class, detachedEntity.getKey(), new UpdateCallback<OrderDs>() {
       public OrderDs updateEntityValues(PersistenceManager pm, OrderDs attachedEntity) {
+        if (dataGenerazioneOrdine != null) {
+          attachedEntity.setCreated(dataGenerazioneOrdine);
+        }
         attachedEntity.setStates(detachedEntity.getStates());
         attachedEntity.setCurrentState(detachedEntity.getCurrentState());
         attachedEntity.setModalitaSpedizione(CloneUtils.clone(modalitaSpedizione, ModalitaSpedizioneDs.class));
@@ -434,17 +445,22 @@ public class OrderAdapterImpl implements OrderAdapter {
     for (OrderState orderState : order.getStates()) {
       if (orderState.getCode().equals(orderStateCode)) {
         if (OrderStateConfig.YES.equals(orderState.getConfig().getEmailToCustomerSendType())) {
-          try {
-            Map<String, Object> templModel = new HashMap<String, Object>();
-            templModel.put("order", order);
-            String mailText = templatesAdapter.processTemplateToString(orderState.getCode()+"_orderStateTemplate", orderState.getConfig().getEmailContent(), templModel);
-            byte[] attachment = null;
-            if (BooleanUtils.isTrue(orderState.getConfig().getAttachOrderReport())) {
-              attachment = reportAdapter.printOrder(order);
+          // 16/01/2013
+          if (order.getCustomer().getPortalUser().isTestUser()) {
+            logger.debug(String.format("Order user %s is a test user >> SEND MAIL SKIPPED", order.getCustomer().getPortalUser().getScreenName()));
+          } else {
+            try {
+              Map<String, Object> templModel = new HashMap<String, Object>();
+              templModel.put("order", order);
+              String mailText = templatesAdapter.processTemplateToString(orderState.getCode()+"_orderStateTemplate", orderState.getConfig().getEmailContent(), templModel);
+              byte[] attachment = null;
+              if (BooleanUtils.isTrue(orderState.getConfig().getAttachOrderReport())) {
+                attachment = reportAdapter.printOrder(order);
+              }
+              mailAdapter.sendOrderStateMail(order.getCustomer().getPortalUser(), mailText, "ordine"+order.getCode()+".pdf" , attachment);
+            } catch (Exception ex) {
+              logger.error("error", ex);
             }
-            mailAdapter.sendOrderStateMail(order.getCustomer().getPortalUser(), mailText, "ordine"+order.getCode()+".pdf" , attachment);
-          } catch (Exception ex) {
-            logger.error("error", ex);
           }
         }
         break;
@@ -631,6 +647,16 @@ public class OrderAdapterImpl implements OrderAdapter {
       }
     });
     return CloneUtils.clone(allStates, OrderStateConfigTx.class, OrderStateConfig.class);
+  }
+  
+  public OrderStateConfig findOrderStateConfig(String code) {
+    List<OrderStateConfigDs> allStates = dao.findAll(OrderStateConfigDs.class);
+    for (OrderStateConfigDs orderStateConfig : allStates) {
+      if (orderStateConfig.getCode().equals(code)) {
+        return CloneUtils.clone(orderStateConfig, OrderStateConfigTx.class);
+      }
+    }
+    return null;
   }
   
   public OrderStateConfig create(OrderStateConfig entity) {

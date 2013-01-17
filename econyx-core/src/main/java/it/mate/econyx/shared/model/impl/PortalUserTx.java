@@ -20,6 +20,8 @@ public class PortalUserTx implements PortalUser {
   Boolean active;
   
   String activationToken;
+  
+  Boolean testUser;
 
   @Override
   public String toString() {
@@ -95,5 +97,19 @@ public class PortalUserTx implements PortalUser {
   public void setActivationToken(String activationToken) {
     this.activationToken = activationToken;
   }
+
+  public Boolean getTestUser() {
+    return testUser;
+  }
+
+  public boolean isTestUser() {
+    return testUser != null ? testUser : false;
+  }
+
+  public void setTestUser(Boolean testUser) {
+    this.testUser = testUser;
+  }
+  
+  
   
 }

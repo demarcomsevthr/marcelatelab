@@ -10,79 +10,107 @@
 		__________________________________________________________________________________
 
 
-		PANIC ROOM
-			15/01/2013
-				https://appengine.google.com/
-				> An unexpected failure has occurred. Please try again.
-				>> Sia da ufficio che da casa!
-				>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
-				>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
-				>> in questa circostanza, si va in locale
+		PANIC ROOM - 15/01/2013
+		
+			https://appengine.google.com/
+			> An unexpected failure has occurred. Please try again.
+			>> Sia da ufficio che da casa!
+			>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
+			>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
+			>> in questa circostanza, si va in locale
+			>>> IMPORTANTE: http://code.google.com/status/appengine >> SYSTEM STATUS GLOBALE (figo)
+				
+				
+		SNAPSHOT 16/01/2013
+		
+		  >> SOSPESI <<
 
-		SNAPSHOT E VERIFICA DEL 15/01/2013 gaspar8est
-		
-			>> consegna ordine
-				> la mail va mandata alla consegna, non alla conferma
-				>> PROVARE A FARE L'AGGIORNAMENTO SU ORDINI ESISTENTI (utilizzare gaspar8net)
-					> doppio deploy:
-					> prima di modificare gli order states
-					> inserimento ordini di test
-					> dopo la modifica degli order states
-					> verifica finale
+		- Configurazione order states [1]
+			> SEMPLIFICARE:
+				- in carrello
+				- inserito (stampa, mod. qta)
+				- in consegna (stampa, mod. qta, mail)
+				- consegnato (stampa, agg. prepagato)
+
+		- Data apertura ordine [2]
+			> gestire su producer:
+				- data apertura e chiusura dell'ordine
+				- data consegna prevista
+				- luogo di consegna previsto	
+			> btn in producer edit view > update su producer
+			> site\portal page view
+				> tramite custom client factory
+				> se portal page code in {propeties}
+					> find producer [portal page.tags = producer code ...]
+					> aggiunge html con dati aggiuntivi producer
 					
-					>> RICORDARSI DI FARE UN FLUSH DI MEMCACHE E INSTANCE CACHE
+		- Chiusura ordine [2]
+			> cambiare test 'Ordine inserito. Quando l'ordine verrà chiuso riceverai una mail di conferma.'
+			
+		- Invio multiplo mail agli utenti [2]
+			> in producer order list view > btn 'invia mail agli utenti' (input body)
+			> in order list view > check selezione utenti > btn 'invia mail agli utenti' (input body)			
 				
-				> it.mate.econyx.client.view.admin.ProducerEditOrderListView.confermaListaOrdini(List<Order>)
-				
-				>> METTERE ANCHE IN stampa ordine:
-				> it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
-					
-				>> IN TEST (gaspar8net)	
+		- Modifica quantità ordine da riepilogo carrelo > non scatta il controllo prepagato [2]
 		
-			> un pò di wait panel sparse qua e là (in genere ad ogni lettura pesante degli ordini):
-				> profilo utente > situazione ordini
-				> order list view > ad ogni retrieve
+		- Riepilogo carrello > sfasa alla terza riga [2]
+		
+		- Inserire informazioni di consegna anche nella stampa pdf dell'ordine [2]
+		
+		- Wait panel: profilo utente>situazione ordini, order list view>retrieve ordini [2]
+		
+		- NEW: ordini per utente [2]
 				
-			> apertura ordine
-				> gestire su producer:
-					- data chiusura dell'ordine
-					- data consegna prevista
-					- luogo di consegna previsto	
-					>> btn in producer list view > update su producer
-				> site\portal page view
-					> tramite custom client factory
-					> se portal page code in {propeties}
-						> find producer [portal page.tags = producer code ...]
-						> aggiunge html con dati aggiuntivi producer
-				
+		- Customizzazione pagina forbidden [3]
+			> Se voglio provare ad entrare su admin con utente non autorizzato 
+			> va sulla pagina forbidden default e lì rimane bloccato (non si riesce a fare logout)
+		   	> WORKAROUND con firebug > elimina cookie del sito e poi fare 'logout'
+		   	
+		- Popup 'Informazioni per il ritiro' > allargare [3]
+		
+		- Mail di conferma ordine [3]
+			> Subject = Consegna ordine XXX - YYYY > mettere codice e produttore nel subject 
+			(altrimenti il client gmail accorpa mail successive di conferma con lo stesso subject)
+			
+		- Errore aggiornamento importo alla consegna [3]	
 			>> lista ordini (consegnato) > non si vede l'importo modificato!
-				> è un casino!
 				> provato in locale, non riesco a simularlo
 				> sia it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
 				  che it.mate.econyx.client.view.admin.OrderListGeneralView
 				  utilizzano Order.Utils.computeImportoTotale(order)
 				>> DA RIVEDERE CON CALMA
+				
+		- header lista ordini [3]
+			> ogni tanto errore di rendering 
+			> si riesce a fare un clean completo ad ogni retrieve?
 			
-			> sistemare header lista ordini > si riesce a fare un clean completo ad ogni retrieve?
+		- timeout RPC [3]
+			> se a inizio giornata vado in lista utenti, può capitare che si pianta
+			> gestire un timeout massimo su rpc {property.rpc.timeout}
+			> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
+			> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
 			
-			> IN GENERALE:
-				> se a inizio giornata vado in lista utenti, può capitare che si pianta
-				> gestire un timeout massimo su rpc {property.rpc.timeout}
-				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
-				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.replace({property.replaceUrl})
+			-------------------------------------------------	
 			
-			> NEW: ordini per utente
-			
-			> NEW: stampa situazione di cassa > export di tutti i saldi utente in excel > FATTO (in test)
-			
-
-		SNAPSHOT 14/12/2012
-			> gestione Order.importoTotale
-				>> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateImportoTotale(Order, Double, boolean)
-				>> it.mate.econyx.shared.model.Order.Utils.computeImportoTotale(Order, boolean) >> restituisce il calcolato solo se lo si richiede espressamente
-				>>> RIFARE UN TEST COMPLETO (anche su gaspar8est)
-			> it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates
-				>> credo ci sia qualche problema con PortalSessionStateServerUtils
+		>> IMPORTANTISSIMO: blocco invio mail a utenti di test [16/01/2013]
+			> it.mate.econyx.shared.model.impl.PortalUserTx
+				> Boolean testUser >> se true NON INVIA MAIL!!!!
+				> it.mate.econyx.server.services.impl.OrderAdapterImpl.onOrderStateChange
+			>> DEPLOY SU GP8est > OK
+			>> RILASCIARE SU gp8net !!!!
+		>> REVISIONE GENERALE OrderStateConfig [16/01/2013]
+			  private String nextStateCode;
+			  private String nextStateDescription;
+			  private Boolean printButtonEnabled;
+			  private Boolean askDeliveryInformations;
+			  private Boolean quantityUpdatable;
+			>> DEPLOY SU gp8est >> OK
+		- Generazione ordini: input data ordine > FATTO [16/01/2013]
+		- Profile / storico ordini > CellTable > FATTO [16/01/2013]
+		- Etichetta stato 'confermato' > 'acquisito' > FATTO [16/01/2013]
+		- Etichetta stato 'cancellato' > 'annullato' > FATTO [16/01/2013]
+		- Aggiungere stato intermedio 'in consegna' > FATTO [16/01/2013]
+		
 
 		__________________________________________________________________________________
 

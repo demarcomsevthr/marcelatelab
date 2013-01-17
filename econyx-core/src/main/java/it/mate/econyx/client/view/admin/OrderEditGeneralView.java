@@ -41,6 +41,9 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
   @UiField Panel importoTotalePanel;
   @UiField Label produttoreLbl;
   
+  @UiField Panel deliveryInformationsPanel;
+  @UiField Label deliveryInformationsLbl;
+  
   private Order order;
   
   public OrderEditGeneralView() {
@@ -69,7 +72,14 @@ public class OrderEditGeneralView extends AbstractAdminTabPage<OrderEditView.Pre
     importoTotaleLbl.setText(GwtUtils.formatCurrency(order.getImportoTotale()));
     printAnchor.setHref("/re/pdf/order/" + order.getId());
     
-    if (Order.Utils.isOrderInState(order, OrderStateConfig.CONFIRMED)) {
+    if (order.getDeliveryInformations() != null) {
+      deliveryInformationsLbl.setText(order.getDeliveryInformations());
+    }
+    
+    // 16/01/2013
+//  if (Order.Utils.isOrderInState(order, OrderStateConfig.CONFIRMED) && !Order.Utils.isOrderInState(order, OrderStateConfig.SHIPPED)) {
+      
+    if (order.getCurrentState().getConfig().isQuantityUpdatable()) {
       
       importoTotalePanel.add(new Spacer("1em"));
       Anchor modificaImportoTotaleAnchor = new Anchor("modifica");

@@ -99,6 +99,11 @@ public class CustomerActivity extends BaseActivity implements
     goTo(new OrderPlace(OrderPlace.LIST));
   }
   
+  public void createOrderListView(AcceptsOneWidget panel) {
+    OrderActivity orderActivity = new OrderActivity(new OrderPlace(OrderPlace.LIST), AppClientFactory.IMPL);
+    orderActivity.start(panel, AppClientFactory.IMPL.getEventBus());
+  }
+  
   @Override
   public void updateCustomer(Customer cliente) {
     customerService.update(cliente, new AsyncCallback<Customer>() {

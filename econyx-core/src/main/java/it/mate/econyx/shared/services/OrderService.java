@@ -57,5 +57,7 @@ public interface OrderService extends RemoteService {
   public List<Order> updateOrders(List<Order> orders) throws ServiceException;
   
   public Order updateImportoTotale(Order order, Double importoTotale);
+
+  public abstract OrderStateConfig findOrderStateConfig(String code);
   
 }
