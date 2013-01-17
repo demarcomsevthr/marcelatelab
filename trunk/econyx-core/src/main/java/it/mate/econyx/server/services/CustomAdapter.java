@@ -7,6 +7,7 @@ import it.mate.econyx.shared.model.Produttore;
 import it.mate.gwtcommons.server.utils.PdfSession;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -27,7 +28,7 @@ public interface CustomAdapter {
   
   public Double getSaldoByPortalUser(String portalUserId);
   
-  public void onCreateCustomer(Customer customer);
+  public void onCreateCustomer(Customer customer, Date date);
 
   public AbstractOrderItemDetailDs findOrderItemDetailDs(String id, HttpSession session);
   

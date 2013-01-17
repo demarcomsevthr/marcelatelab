@@ -33,10 +33,18 @@ public interface Order extends Serializable {
       return imp;
     }
     
-    public static boolean isOrderInState (Order order, String stateCode) {
+    public static boolean isOrderInState (Order order, String stateCodeToCheck) {
+      List<OrderState> states = order.getStates();
+      if (states != null) {
+        for (OrderState state : states) {
+          if (state.getCode().equals(stateCodeToCheck)) {
+            return state.getChecked();
+          }
+        }
+      }
       OrderState state = getCurrentState(order);
       if (state != null) {
-        if (state.getCode().equals(stateCode)) {
+        if (state.getCode().equals(stateCodeToCheck)) {
           return true;
         }
       }

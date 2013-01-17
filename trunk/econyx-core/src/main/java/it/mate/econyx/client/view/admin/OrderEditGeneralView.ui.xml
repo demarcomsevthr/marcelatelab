@@ -16,6 +16,10 @@
     <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE" ui:field="importoTotalePanel">
       <g:Label text="Importo alla consegna:" width="12em" horizontalAlignment="ALIGN_RIGHT"/> <g:Label ui:field="importoTotaleLbl"/>
     </g:HorizontalPanel>
+    <gwtcommons:Spacer height="1em"/>
+    <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE" ui:field="deliveryInformationsPanel">
+      <g:Label text="Informazioni per il ritiro:" width="12em" horizontalAlignment="ALIGN_RIGHT"/> <g:Label ui:field="deliveryInformationsLbl"/>
+    </g:HorizontalPanel>
     <gwtcommons:Spacer height="2em"/>
     <g:Button ui:field="closeBtn" text="Chiudi ordine!"/>
     <g:Anchor ui:field="printAnchor" text="Stampa ordine"/>

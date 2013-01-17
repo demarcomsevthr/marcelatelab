@@ -9,6 +9,7 @@ import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
@@ -180,8 +181,8 @@ public class GeneralActivity extends BaseActivity {
     });
   }
   
-  public void generateRandomCustomers(int number) {
-    generalService.generateRandomCustomers(number, new AsyncCallback<Void>() {
+  public void generateRandomCustomers(int number, Date date) {
+    generalService.generateRandomCustomers(number, date, new AsyncCallback<Void>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }
@@ -191,8 +192,8 @@ public class GeneralActivity extends BaseActivity {
     });
   }
   
-  public void generateRandomOrders(int number) {
-    generalService.generateRandomOrders(number, new AsyncCallback<Void>() {
+  public void generateRandomOrders(int number, Date date) {
+    generalService.generateRandomOrders(number, date, new AsyncCallback<Void>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }

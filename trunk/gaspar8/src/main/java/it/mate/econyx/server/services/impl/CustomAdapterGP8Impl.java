@@ -294,7 +294,7 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
   }
 
   @Override
-  public void onCreateCustomer(Customer customer) {
+  public void onCreateCustomer(Customer customer, Date date) {
     ContoUtente contoUtente = findContoUtenteByCustomer(customer, true);
     int saldoIniziale = PropertiesHolder.getInt("customAdapter.debug.saldoIniziale", 0);
     if (saldoIniziale > 0) {
@@ -302,7 +302,10 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
       ContoUtenteMovimento movimento = new ContoUtenteMovimentoDs();
       movimento.setImporto((double)saldoIniziale);
       movimento.setSegno(ContoUtenteMovimento.POSITIVO);
-      movimento.setData(new Date());
+      if (date == null) {
+        date = new Date();
+      }
+      movimento.setData(date);
       movimento.setCausale("SALDO DI TEST GENERATO AUTOMATICAMENTE");
       PortalSessionState portalSessionState = PortalSessionStateServerUtils.getFromThread();
       if (portalSessionState != null) {

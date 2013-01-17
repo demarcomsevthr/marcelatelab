@@ -94,11 +94,17 @@ public class OrderEditItemsListView extends AbstractAdminTabPage<OrderEditView.P
             }
             protected void onConsumedEvent(NativeEvent event, final OrderItem item) {
               
-              if (Order.Utils.isOrderInState(item.getOrder(), OrderStateConfig.CONFIRMED)
-                  || Order.Utils.isOrderInState(item.getOrder(), OrderStateConfig.INSERTED)) {
+              if (item.getOrder().getCurrentState().getConfig().isQuantityUpdatable()) {
+
+              /*
+              if (Order.Utils.isOrderInState(item.getOrder(), OrderStateConfig.CONFIRMED) 
+                  && !Order.Utils.isOrderInState(item.getOrder(), OrderStateConfig.SHIPPED)) {
+               */
+
                 // OK
+                
               } else {
-                Window.alert("Modifica ammessa solo nello stato di ordine CONFERMATO");
+                Window.alert("Modifica ammessa solo nello stato di ordine CONFERMATO o IN CONSEGNA");
                 return;
               }
               

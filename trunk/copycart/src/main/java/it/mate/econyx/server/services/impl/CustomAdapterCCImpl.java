@@ -291,7 +291,7 @@ public class CustomAdapterCCImpl implements CustomAdapter {
     return null;
   }
 
-  public void onCreateCustomer(Customer customer) {
+  public void onCreateCustomer(Customer customer, Date date) {
     
   }
 

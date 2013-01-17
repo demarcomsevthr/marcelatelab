@@ -27,6 +27,8 @@ public interface ProducerEditView extends BaseView<ProducerEditView.Presenter> {
     
     public void findAllOrderStates (Delegate<List<OrderStateConfig>> delegate);
     
+    public void findOrderStateConfig (String code, Delegate<OrderStateConfig> delegate);
+    
   }
   
   public class NotImpl extends UnimplementedView<ProducerEditView.Presenter> implements ProducerEditView {

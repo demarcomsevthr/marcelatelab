@@ -85,10 +85,12 @@ public class OrderEditStateView extends AbstractAdminTabPage<OrderEditView.Prese
       stateCheckBox.setEnabled(checkRequiredOrderStateCodes(state, states) && !checkDisablingOrderStateCodes(state, states));
       statesTable.setWidget(row, 0, stateCheckBox);
       statesTable.setText(row, 1, state.getConfig().getDescription());
-      statesTable.setText(row, 2, GwtUtils.dateToString(state.getDate()));
-      if (state.getChecked() && state.getPortalUser() != null) {
-        statesTable.setText(row, 3, state.getPortalUser().getScreenName());
-        statesTable.setText(row, 4, state.getPortalUser().getEmailAddress());
+      if (state.getChecked()) {
+        statesTable.setText(row, 2, GwtUtils.dateToString(state.getDate()));
+        if (state.getPortalUser() != null) {
+          statesTable.setText(row, 3, state.getPortalUser().getScreenName());
+          statesTable.setText(row, 4, state.getPortalUser().getEmailAddress());
+        }
       }
       orderStateViewModels.add(new OrderStateViewModel(state, row));
       row++;

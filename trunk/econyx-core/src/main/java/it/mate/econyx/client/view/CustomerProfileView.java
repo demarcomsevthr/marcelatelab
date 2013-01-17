@@ -4,6 +4,8 @@ import it.mate.econyx.client.view.CustomerProfileView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
 
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
 
 public interface CustomerProfileView extends BaseView<Presenter> {
   
@@ -13,7 +15,9 @@ public interface CustomerProfileView extends BaseView<Presenter> {
     
     void goToListOrderView();
     
-    public void goToShoppingCartView();
+    void goToShoppingCartView();
+    
+    void createOrderListView(AcceptsOneWidget panel);
     
   }
   

@@ -4,7 +4,15 @@
 
   <g:VerticalPanel>
     <g:HTMLPanel>
+      <!-- 
       <g:FlexTable ui:field="orderTable"/>
+       -->
+      
+      <c:CellTable ui:field="orderCellTable"/>
+      <g:SimplePanel ui:field="pagerPanel"/>
+      
+      <iframe id="orderReportFrame" style="visibility: hidden;"></iframe>
+      
     </g:HTMLPanel>
   </g:VerticalPanel>
 

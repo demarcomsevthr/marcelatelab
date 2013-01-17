@@ -25,6 +25,22 @@ public class OrderStateConfigTx implements OrderStateConfig {
 
   String disablingOrderStateCodes;
   
+  
+  
+  // 16/01/2013
+  
+  private String nextStateCode;
+  private String nextStateDescription;
+  private Boolean printButtonEnabled;
+  private Boolean askDeliveryInformations;
+  private Boolean quantityUpdatable;
+  
+  
+  @Override
+  public String toString() {
+    return "OrderStateConfigTx [code=" + code + ", description=" + description + "]";
+  }
+
   public String getId() {
     return id;
   }
@@ -103,6 +119,61 @@ public class OrderStateConfigTx implements OrderStateConfig {
 
   public void setAttachOrderReport(Boolean attachOrderReport) {
     this.attachOrderReport = attachOrderReport;
+  }
+
+  
+  // 16/01/2013
+  
+  public String getNextStateCode() {
+    return nextStateCode;
+  }
+
+  public void setNextStateCode(String nextStateCode) {
+    this.nextStateCode = nextStateCode;
+  }
+
+  public String getNextStateDescription() {
+    return nextStateDescription;
+  }
+
+  public void setNextStateDescription(String nextStateDescription) {
+    this.nextStateDescription = nextStateDescription;
+  }
+
+  public Boolean getPrintButtonEnabled() {
+    return printButtonEnabled;
+  }
+  
+  public boolean isPrintButtonEnabled() {
+    return printButtonEnabled != null ? printButtonEnabled : false;
+  }
+  
+  public void setPrintButtonEnabled(Boolean printButtonEnabled) {
+    this.printButtonEnabled = printButtonEnabled;
+  }
+
+  public Boolean getAskDeliveryInformations() {
+    return askDeliveryInformations;
+  }
+
+  public boolean askDeliveryInformations() {
+    return askDeliveryInformations != null ? askDeliveryInformations : false;
+  }
+
+  public void setAskDeliveryInformations(Boolean askDeliveryInformations) {
+    this.askDeliveryInformations = askDeliveryInformations;
+  }
+
+  public Boolean getQuantityUpdatable() {
+    return quantityUpdatable;
+  }
+
+  public boolean isQuantityUpdatable() {
+    return quantityUpdatable != null ? quantityUpdatable : false;
+  }
+
+  public void setQuantityUpdatable(Boolean quantityUpdatable) {
+    this.quantityUpdatable = quantityUpdatable;
   }
   
 }

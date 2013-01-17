@@ -5,6 +5,7 @@ import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +47,9 @@ public interface GeneralService extends RemoteService {
   
   public void reloadProperties();
   
-  public void generateRandomCustomers(int numero);
+  public void generateRandomCustomers(int number, Date date);
   
-  public void generateRandomOrders(int number);
+  public void generateRandomOrders(int number, Date date);
   
   
   

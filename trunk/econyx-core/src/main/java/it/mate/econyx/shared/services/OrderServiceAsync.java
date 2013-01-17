@@ -53,4 +53,6 @@ public interface OrderServiceAsync {
 
   void findAllModalitaPagamento(AsyncCallback<List<ModalitaPagamento>> callback);
 
+  void findOrderStateConfig(String code, AsyncCallback<OrderStateConfig> callback);
+
 }

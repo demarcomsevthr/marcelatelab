@@ -11,6 +11,7 @@ import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.OrderStateConfig;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderAdapter {
@@ -36,6 +37,8 @@ public interface OrderAdapter {
   public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details);
   
   public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento);
+  
+  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, Date dataGenerazioneOrdine);
   
   public OrderItem updateOrderItem (OrderItem item);
   
@@ -68,6 +71,8 @@ public interface OrderAdapter {
   public List<OrderDs> findOrdersByState(String currentStateCode);
   
   public Order updateImportoTotale(Order order, Double importoRettificato, boolean doUpdateDs);
+
+  public abstract OrderStateConfig findOrderStateConfig(String code);
   
   
 }

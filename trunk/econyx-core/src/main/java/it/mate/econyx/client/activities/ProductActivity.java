@@ -384,5 +384,17 @@ public class ProductActivity extends BaseActivity implements
   public void findAllOrderStates(Delegate<List<OrderStateConfig>> delegate) {
     ClientOrderUtils.findAllOrderStates(delegate);
   }
+  
+  @Override
+  public void findOrderStateConfig(String code, final Delegate<OrderStateConfig> delegate) {
+    orderService.findOrderStateConfig(code, new AsyncCallback<OrderStateConfig>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(OrderStateConfig result) {
+        delegate.execute(result);
+      }
+    });
+  }
 
 }

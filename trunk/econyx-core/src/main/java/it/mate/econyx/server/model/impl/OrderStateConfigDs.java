@@ -15,7 +15,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
-@CacheableEntity (txClass=OrderStateConfigTx.class)
+@CacheableEntity (txClass=OrderStateConfigTx.class, instanceCache=true)
 public class OrderStateConfigDs implements OrderStateConfig, HasKey {
   
   @PrimaryKey
@@ -50,6 +50,23 @@ public class OrderStateConfigDs implements OrderStateConfig, HasKey {
   String disablingOrderStateCodes;
   
 
+  // 16/01/2013
+  
+  @Persistent
+  private String nextStateCode;
+  
+  @Persistent
+  private String nextStateDescription;
+  
+  @Persistent
+  private Boolean printButtonEnabled;
+  
+  @Persistent
+  private Boolean askDeliveryInformations;
+  
+  @Persistent
+  private Boolean quantityUpdatable;
+  
 
   public Key getKey() {
     return id;
@@ -134,5 +151,61 @@ public class OrderStateConfigDs implements OrderStateConfig, HasKey {
   public void setAttachOrderReport(Boolean attachOrderReport) {
     this.attachOrderReport = attachOrderReport;
   }
+  
+  
+  
+  
+  public String getNextStateCode() {
+    return nextStateCode;
+  }
+
+  public void setNextStateCode(String nextStateCode) {
+    this.nextStateCode = nextStateCode;
+  }
+
+  public String getNextStateDescription() {
+    return nextStateDescription;
+  }
+
+  public void setNextStateDescription(String nextStateDescription) {
+    this.nextStateDescription = nextStateDescription;
+  }
+
+  public Boolean getPrintButtonEnabled() {
+    return printButtonEnabled;
+  }
+  
+  public boolean isPrintButtonEnabled() {
+    return printButtonEnabled != null ? printButtonEnabled : false;
+  }
+  
+  public void setPrintButtonEnabled(Boolean printButtonEnabled) {
+    this.printButtonEnabled = printButtonEnabled;
+  }
+
+  public Boolean getAskDeliveryInformations() {
+    return askDeliveryInformations;
+  }
+
+  public boolean askDeliveryInformations() {
+    return askDeliveryInformations != null ? askDeliveryInformations : false;
+  }
+
+  public void setAskDeliveryInformations(Boolean askDeliveryInformations) {
+    this.askDeliveryInformations = askDeliveryInformations;
+  }
+
+  public Boolean getQuantityUpdatable() {
+    return quantityUpdatable;
+  }
+
+  public boolean isQuantityUpdatable() {
+    return quantityUpdatable != null ? quantityUpdatable : false;
+  }
+
+  public void setQuantityUpdatable(Boolean quantityUpdatable) {
+    this.quantityUpdatable = quantityUpdatable;
+  }
+  
   
 }

@@ -12,6 +12,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -32,7 +33,9 @@ import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
 
@@ -42,8 +45,6 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
 
   @UiField (provided=true) FormPanel exportForm;
   @UiField FormPanel uploadForm;
-  @UiField IntegerBox generateRandomCustomersNumberBox;
-  @UiField IntegerBox generateRandomOrdersNumberBox;
   @UiField Label buildIdLabel;
   
   @UiField HTMLPanel outputPanel;
@@ -171,7 +172,11 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   public void generateRandomCustomersBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
-        getPresenter().generateRandomCustomers(generateRandomCustomersNumberBox.getValue());
+        askGenerateInformations(new Delegate<GenerateInformations>() {
+          public void execute(GenerateInformations info) {
+            getPresenter().generateRandomCustomers(info.number, info.date);
+          }
+        });
       }
     });
   }
@@ -180,7 +185,35 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   public void generateRandomOrdersBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
-        getPresenter().generateRandomOrders(generateRandomOrdersNumberBox.getValue());
+        askGenerateInformations(new Delegate<GenerateInformations>() {
+          public void execute(GenerateInformations info) {
+            getPresenter().generateRandomOrders(info.number, info.date);
+          }
+        });
+      }
+    });
+  }
+  
+  class GenerateInformations {
+    int number;
+    Date date;
+    public GenerateInformations(int number, Date date) {
+      super();
+      this.number = number;
+      this.date = date;
+    }
+  }
+  
+  private void askGenerateInformations (final Delegate<GenerateInformations> delegate) {
+    VerticalPanel popupPanel = new VerticalPanel();
+    final IntegerBox numberBox = new IntegerBox();
+    popupPanel.add(GwtUtils.createPopupPanelItem("Numero:", numberBox, "2em", "8em"));
+    final DateBox dateBox = new DateBox();
+    dateBox.setValue(new Date());
+    popupPanel.add(GwtUtils.createPopupPanelItem("Data:", dateBox, "2em", "8em"));
+    MessageBoxUtils.popupOkCancel("Inserire gli estremi del movimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
+      public void execute(MessageBox.Callbacks callbacks) {
+        delegate.execute(new GenerateInformations(numberBox.getValue(), dateBox.getValue()));
       }
     });
   }
@@ -261,6 +294,7 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     }
     
   }
+  
   
   
 }

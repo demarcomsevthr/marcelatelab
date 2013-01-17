@@ -4,6 +4,7 @@ import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +42,9 @@ public interface GeneralServiceAsync {
 
   void reloadProperties(AsyncCallback<Void> callback);
 
-  void generateRandomCustomers(int numero, AsyncCallback<Void> callback);
+  void generateRandomCustomers(int number, Date date, AsyncCallback<Void> callback);
 
-  void generateRandomOrders(int number, AsyncCallback<Void> callback);
+  void generateRandomOrders(int number, Date date, AsyncCallback<Void> callback);
 
   void gdataSpreadsheetTest(AsyncCallback<String> callback);
 

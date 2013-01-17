@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CustomerProfileViewImpl extends AbstractBaseView<CustomerProfileView.Presenter> implements CustomerProfileView {
@@ -23,7 +24,7 @@ public class CustomerProfileViewImpl extends AbstractBaseView<CustomerProfileVie
   @UiField Panel updateAddressPanel;
   @UiField Panel customProfileView1Panel;
   @UiField Anchor customProfileView1Btn;
-  @UiField Panel customProfileView1;
+  @UiField Panel inlineProfileView;
   
   public CustomerProfileViewImpl() {
     super();
@@ -58,7 +59,11 @@ public class CustomerProfileViewImpl extends AbstractBaseView<CustomerProfileVie
   
   @UiHandler ("viewOrderBtn")
   public void onViewOrderBtn(ClickEvent event) {
-    getPresenter().goToListOrderView();
+//  getPresenter().goToListOrderView();
+    inlineProfileView.clear();
+    SimplePanel panel = new SimplePanel();
+    inlineProfileView.add(panel);
+    getPresenter().createOrderListView(panel);
   }
 
   @UiHandler ("customProfileView1Btn")
@@ -66,7 +71,8 @@ public class CustomerProfileViewImpl extends AbstractBaseView<CustomerProfileVie
     AbstractBaseView view = AppClientFactory.Customizer.cast().getCustomProfileView1();
     if (view != null) {
       view.setModel(AppClientFactory.IMPL.getPortalSessionState().getLoggedUser());
-      customProfileView1.add(view);
+      inlineProfileView.clear();
+      inlineProfileView.add(view);
     }
   }
   

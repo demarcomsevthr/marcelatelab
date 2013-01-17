@@ -70,4 +70,34 @@ public interface OrderStateConfig extends Serializable {
 
   public void setAttachOrderReport(Boolean attachOrderReport);
 
+  
+  
+  // 16/01/2013
+  
+  public void setQuantityUpdatable(Boolean quantityUpdatable);
+
+  public boolean isQuantityUpdatable();
+
+  public Boolean getQuantityUpdatable();
+
+  public void setAskDeliveryInformations(Boolean askDeliveryInformations);
+
+  public boolean askDeliveryInformations();
+
+  public Boolean getAskDeliveryInformations();
+
+  public void setPrintButtonEnabled(Boolean printButtonEnabled);
+
+  public boolean isPrintButtonEnabled();
+
+  public Boolean getPrintButtonEnabled();
+
+  public void setNextStateDescription(String nextStateDescription);
+
+  public String getNextStateDescription();
+
+  public void setNextStateCode(String nextStateCode);
+
+  public String getNextStateCode();
+
 }

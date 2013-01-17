@@ -149,5 +149,9 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   public Order updateImportoTotale(Order order, Double importoTotale) {
     return adapter.updateImportoTotale(order, importoTotale, true);
   }
+  
+  public OrderStateConfig findOrderStateConfig(String code) {
+    return adapter.findOrderStateConfig(code);
+  }
 
 }
