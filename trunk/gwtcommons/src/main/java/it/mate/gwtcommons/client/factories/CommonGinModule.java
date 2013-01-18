@@ -18,6 +18,9 @@ public class CommonGinModule extends AbstractGinModule {
     // 10/03/2012
 //  bind(PlaceController.class).to(InjectedPlaceController.class);
     bind(PlaceController.class).to(InjectedPlaceController.class).in(Singleton.class);
+    
+    bind(com.google.web.bindery.event.shared.EventBus.class).to(com.google.web.bindery.event.shared.SimpleEventBus.class).in(Singleton.class);
+    
   }
 
   

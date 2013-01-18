@@ -10,6 +10,6 @@ public interface CommonGinjector extends Ginjector {
   
   public PlaceController getPlaceController();
   
-//public PageServiceAsync getPageService();
+  public com.google.web.bindery.event.shared.EventBus getBinderyEventBus();
   
 }
