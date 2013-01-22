@@ -101,6 +101,10 @@ public abstract class PortalPageTx implements PortalPage {
     return visibleInExplorer;
   }
   
+  public boolean isVisibleInExplorer() {
+    return visibleInExplorer != null ? visibleInExplorer : false;
+  }
+  
   public void setVisibleInExplorer(Boolean visibleInExplorer) {
     this.visibleInExplorer = visibleInExplorer;
   }
