@@ -120,10 +120,6 @@ public abstract class AbstractPortalPageDs implements PortalPage, HasKey, Entity
     return visibleInExplorer;
   }
   
-  public boolean isVisibleInExplorer() {
-    return visibleInExplorer != null ? visibleInExplorer : false;
-  }
-  
   public void setVisibleInExplorer(Boolean visibleInExplorer) {
     this.visibleInExplorer = visibleInExplorer;
   }

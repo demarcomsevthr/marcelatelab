@@ -77,6 +77,8 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
   @UiField HorizontalPanel qtaBoxPanel;
   QuantitaBox quantitaBox;
 
+  @UiField Label totaleOrdineLbl;
+  
   StatePanelUtil statePanelUtil = new StatePanelUtil();
   
   private Order order;
@@ -214,6 +216,14 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
       
     }
   }
+
+  private void aggiornaTotaleOrdine() {
+    double totaleOrdine = Order.Utils.computeImportoTotale(order,true);
+    if (modalitaSpedizioneSelected != null) {
+      totaleOrdine += modalitaSpedizioneSelected.getPrezzo();
+    }
+    totaleOrdineLbl.setText(GwtUtils.formatCurrency(totaleOrdine));
+  }
   
   private void setHeaderHtml(FlexTable orderTable, int row, int col, String htmlText, String width) {
     orderTable.setHTML(row, col, SafeHtmlUtils.fromTrustedString(htmlText));
@@ -315,6 +325,7 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
       if (listaModalitaSpedizione != null && listaModalitaSpedizione.size() > 0) {
         modalitaSpedizioneSelected = listaModalitaSpedizione.get(index);
         prezzoModalitaSpedizioneLabel.setText(GwtUtils.formatCurrency(modalitaSpedizioneSelected.getPrezzo()));
+        aggiornaTotaleOrdine();
       }
     }
   }

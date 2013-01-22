@@ -6,6 +6,7 @@ import it.mate.econyx.client.view.custom.PortalPageExplorerViewCustomizerDefault
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProductFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
+import it.mate.econyx.shared.model.impl.PortalPageTx;
 import it.mate.gwtcommons.client.ui.BulletPanel;
 import it.mate.gwtcommons.client.ui.WaitingCursorUtil;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -126,7 +127,7 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
       panel.add(rootItem.getInnerPanel());
       
       for (PortalPage page : treeModel.childreen) {
-        if (page.isVisibleInExplorer()) {
+        if (((PortalPageTx)page).isVisibleInExplorer()) {
           ExplorerItem item = createExplorerItem(page, rootItem);
           item.setType("menu");
         }
@@ -136,12 +137,21 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
       
       ExplorerItem parentItem = findChildByPage(rootItem, treeModel.parent);
       if (parentItem != null) {
-        if (parentItem.getInnerPanel() == null) {
+
+        boolean hasVisibleChilds = false;
+        for (PortalPage page : treeModel.childreen) {
+          if (((PortalPageTx)page).isVisibleInExplorer()) {
+            hasVisibleChilds = true;
+            break;
+          }
+        }
+        
+        if (parentItem.getInnerPanel() == null && hasVisibleChilds) {
           parentItem.createInnerPanel();
         }
         
         for (PortalPage page : treeModel.childreen) {
-          if (page.isVisibleInExplorer()) {
+          if (((PortalPageTx)page).isVisibleInExplorer()) {
             ExplorerItem item = createExplorerItem(page, parentItem);
             item.setType("submenu2");
           }
@@ -150,8 +160,6 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
       }
       
     }
-    
-    
     
   }
   

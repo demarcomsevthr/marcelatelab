@@ -4,26 +4,21 @@
     ______________________________________________________________________________________
 
 
+		DA CHIEDERE A G
+		
+			- verifica timbri (codice, diciture, immagini)
+			- prezzi timbri
+			- link nel footer (fb, tw, lin, ...)
+
+
+		---------------------------------------------------
+
+
 		SNAPSHOT 22/01/2013
 
-		    >>> DATARI OVALI > DA FINIRE
-		    	>> non aggiorna la preview correttamente in modifica articolo
+		    >>> CATALOGO TIMBRI
+		    	>> DA FINIRE (tutti i datari, immagini)
 		    	
-			> chiusura ordine: modalità di pagamento (nota html) > INIZIATO (08/01/2013)
-				> it.mate.econyx.shared.model.ModalitaPagamento
-				> e tutti i punti che lo utilizzano
-				> it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl
-					> modificare closeOrder (salvare su order modalitaSpedizione e modalitaPagamento)
-				
-			> chiusura ordine: totale con spese di spedizione
-			
-			> TIMEOUT RPC:
-				> se a inizio giornata vado in lista utenti, può capitare che si pianta (gp8)
-				> gestire un timeout massimo su rpc {property.rpc.timeout}
-				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
-				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
-			
-			
 		    >>> NOTE ALL'ORDINE
 		    	> input in carrello:
 			    	> nota di riga
@@ -35,6 +30,12 @@
 			> gestione utenti > attivazione utente in manuale
 				> invio mail di notifica agli admins
 				
+			> TIMEOUT RPC:
+				> se a inizio giornata vado in lista utenti, può capitare che si pianta (gp8)
+				> gestire un timeout massimo su rpc {property.rpc.timeout}
+				> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
+				> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
+			
 			> 'password dimenticata?'
 			
 			> timbro: aggiungi/cancella riga
@@ -68,20 +69,9 @@
 		    	> PDF > it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItemDetails
 			>> ALLINEAMENTO PREVIEW TIMBRO
 				> sistemati timbro.preview.xFactor e timbro.preview.yFactor con timbro 50x30
-		    		
-				
-			---------------------------------
+			> chiusura ordine: modalità di pagamento (nota html) > OK (22/01/2013)
+			> chiusura ordine: totale con spese di spedizione > OK (22/01/2013)
 			
-		
-		SNAPSHOT 19/11/2012
-		
-			- INSTANCE CACHE
-				>> CacheableEntity (instanceCache=true)
-					>>> mantiene l'entity non in memcache, ma in cache statica di istanza (per aggiornarla occorre distruggere l'istanza)
-					    (aggira la limitazione di memcache con i blob)
-				>> provare con ImageWebContentDs >> IN TEST
-					    
-		
 		
 
 		______________________________________________________________________________________________________

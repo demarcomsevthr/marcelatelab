@@ -274,7 +274,7 @@ public class OrderItemDetailCustomizerImpl implements OrderItemDetailCustomizer 
       details.add(logoDetail);
     }
     details.add(getBorderDetail());
-    stampPreviewPanel.update(details);
+    stampPreviewPanel.setDetails(details);
     logoX.setMaxvalue(stampPreviewPanel.getOffsetWidth() - stampPreviewPanel.getLogoWidth());
     logoY.setMaxvalue(stampPreviewPanel.getOffsetHeight() - stampPreviewPanel.getLogoHeight());
   }

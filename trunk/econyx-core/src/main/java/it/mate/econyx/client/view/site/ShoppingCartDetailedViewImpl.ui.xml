@@ -50,6 +50,11 @@
 	  font-weight: bold;
 	}
 	
+	.totaleOrdineBox * {
+	  font-size: 14px;
+	  font-weight: bold;
+	}
+	
   </ui:style>
 
   <g:VerticalPanel>
@@ -152,6 +157,15 @@
               <g:ListBox ui:field="modalitaPagamentoBox"></g:ListBox>
               <g:SimplePanel ui:field="modalitaPagamentoNotePanel"></g:SimplePanel>
             </g:VerticalPanel>
+          </g:HorizontalPanel>
+          <gc:Spacer height="20px"/>
+          <g:HorizontalPanel addStyleNames="{style.totaleOrdineBox}">
+            <gc:Spacer width="300px"/>
+            <g:Label text="TOTALE ORDINE:"/>
+            <gc:Spacer width="12px"/>
+            <g:Label ui:field="totaleOrdineLbl"/>
+            <gc:Spacer width="6px"/>
+            <g:Label text="€"/>
           </g:HorizontalPanel>
         </g:HTMLPanel>
       </gc:StatePanel>
