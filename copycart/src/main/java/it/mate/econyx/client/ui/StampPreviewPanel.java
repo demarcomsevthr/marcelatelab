@@ -58,7 +58,7 @@ public class StampPreviewPanel extends HTMLPanel {
     details.add(new OrderItemStampDetailTx(StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT));
     details.add(new OrderItemStampDetailTx(StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT));
     details.add(new OrderItemStampDetailTx(StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_TEXT));
-    update(details);
+    setDetails(details);
   }
   
   public void setTimbro(Timbro timbro) {
@@ -71,16 +71,10 @@ public class StampPreviewPanel extends HTMLPanel {
       height = ((float)timbro.getAltezza() * Float.parseFloat(PropertiesHolder.getString("timbro.preview.yFactor")));
       setHeight(height+"cm");
     }
-    if (timbro.isOval()) {
-      int radX = StampPreviewPanel.this.getOffsetWidth() / 2;
-      int radY = StampPreviewPanel.this.getOffsetHeight() / 2;
-      String radius = radX+"px / "+radY+"px";
-      GwtUtils.setBorderRadius(StampPreviewPanel.this, radius);
-      GwtUtils.setBorderRadius(absolutePanel, radius);
-    }
+    setRadius();
   }
-
-  public void update (List<OrderItemDetail> details) {
+  
+  public void setDetails (List<OrderItemDetail> details) {
     if (absolutePanel == null) {
       absolutePanel = new AbsolutePanel();
       absolutePanel.setSize("100%", "100%");
@@ -181,8 +175,20 @@ public class StampPreviewPanel extends HTMLPanel {
       }
     }
     
+    setRadius();
+    
   }
   
+  private void setRadius() {
+    if (timbro != null && timbro.isOval()) {
+      int radX = StampPreviewPanel.this.getOffsetWidth() / 2;
+      int radY = StampPreviewPanel.this.getOffsetHeight() / 2;
+      String radius = radX+"px / "+radY+"px";
+      GwtUtils.setBorderRadius(StampPreviewPanel.this, radius);
+      GwtUtils.setBorderRadius(absolutePanel, radius);
+    }
+  }
+
   private Label createDataLbl() {
     Label dataLbl = new Label(GwtUtils.dateToString(new Date(), DateTimeFormat.getFormat("dd MMM yyyy")));
     return dataLbl;

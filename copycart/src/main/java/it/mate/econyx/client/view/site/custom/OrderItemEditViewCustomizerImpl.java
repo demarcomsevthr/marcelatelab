@@ -25,7 +25,7 @@ public class OrderItemEditViewCustomizerImpl implements OrderItemEditViewCustomi
       Timbro timbro = (Timbro)orderItem.getProduct();
       previewPanel.setTimbro(timbro);
       List<OrderItemDetail> details = orderItem.getDetails();
-      previewPanel.update(details);
+      previewPanel.setDetails(details);
       vPanel.add(previewPanel);
     }
     detailPanel.add(vPanel);
