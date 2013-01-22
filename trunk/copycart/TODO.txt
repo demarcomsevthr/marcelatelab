@@ -6,13 +6,6 @@
 
 		SNAPSHOT 14/01/2013
 
-			>> ANCORA PREVIEW TIMBRO!
-		    	
-		    	> PROVA DELLA CADREGA: 
-		    		inserire X             X  
-		    		allineare le X al bordo del timbro > in preview si vede una cosa, in pdf un'altra !!!!!!
-		    		> non è che un problema di risoluzione video > cfr home | office ...
-		    		
 		    	
 		    >>> DATARI > DA FINIRE
 		        > it.mate.econyx.shared.model.impl.TimbroTx.datario
@@ -77,6 +70,9 @@
 		    	> it.mate.econyx.shared.model.Timbro (.oval = true | false)
 		    	> it.mate.econyx.client.ui.StampPreviewPanel.setTimbro(Timbro)
 		    	> PDF > it.mate.econyx.server.services.impl.CustomAdapterImpl.printOrderItemDetails
+			>> ALLINEAMENTO PREVIEW TIMBRO
+				> sistemati timbro.preview.xFactor e timbro.preview.yFactor con timbro 50x30
+		    		
 				
 			---------------------------------
 			

@@ -20,6 +20,8 @@ public interface PortalPage extends PortalResource {
   
   public Boolean getVisibleInExplorer();
 
+  public boolean isVisibleInExplorer();
+
   public void setVisibleInExplorer(Boolean visibleInExplorer);
   
   public Boolean getVisibleInMenu();

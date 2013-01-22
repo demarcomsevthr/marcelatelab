@@ -126,9 +126,10 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
       panel.add(rootItem.getInnerPanel());
       
       for (PortalPage page : treeModel.childreen) {
-        ExplorerItem item = createExplorerItem(page, rootItem);
-//      item.addClassName("menu");
-        item.setType("menu");
+        if (page.isVisibleInExplorer()) {
+          ExplorerItem item = createExplorerItem(page, rootItem);
+          item.setType("menu");
+        }
       }
       
     } else {
@@ -139,12 +140,11 @@ public class PortalPageExplorerViewCustomizerImpl extends PortalPageExplorerView
           parentItem.createInnerPanel();
         }
         
-//      parentItem.addClassName("segue");
-        
         for (PortalPage page : treeModel.childreen) {
-          ExplorerItem item = createExplorerItem(page, parentItem);
-//        item.addClassName("submenu2");
-          item.setType("submenu2");
+          if (page.isVisibleInExplorer()) {
+            ExplorerItem item = createExplorerItem(page, parentItem);
+            item.setType("submenu2");
+          }
         }
         
       }
