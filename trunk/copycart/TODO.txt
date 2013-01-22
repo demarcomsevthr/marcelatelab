@@ -4,14 +4,10 @@
     ______________________________________________________________________________________
 
 
-		SNAPSHOT 14/01/2013
+		SNAPSHOT 22/01/2013
 
-		    	
-		    >>> DATARI > DA FINIRE
-		        > it.mate.econyx.shared.model.impl.TimbroTx.datario
-		    	> it.mate.econyx.client.ui.StampPreviewPanel.update
-		    	
-		    	>> FINIRE: it.mate.econyx.server.services.impl.CustomAdapterCCImpl.printOrderItemDetails(PdfSession, OrderItem)
+		    >>> DATARI OVALI > DA FINIRE
+		    	>> non aggiorna la preview correttamente in modifica articolo
 		    	
 			> chiusura ordine: modalità di pagamento (nota html) > INIZIATO (08/01/2013)
 				> it.mate.econyx.shared.model.ModalitaPagamento
