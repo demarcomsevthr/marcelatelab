@@ -812,6 +812,80 @@
       <datario>true</datario>
     </it.mate.econyx.shared.model.impl.TimbroTx>
     <it.mate.econyx.shared.model.impl.TimbroTx>
+      <codice>TR46140</codice>
+      <nome>NUOVO PRINTY 46140 (d. 40mm)</nome>
+      <prezzo>12.5</prezzo>
+      <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
+        <codice>PTC02</codice>
+      </tipoArticolo>
+      <unitaDiMisura class="it.mate.econyx.shared.model.impl.UnitaDiMisuraTx">
+        <codice>UMPZ</codice>
+      </unitaDiMisura>
+      <produttore class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+        <codice>CC</codice>
+      </produttore>
+      <larghezza>40</larghezza>
+      <altezza>40</altezza>
+      <numRighe>6</numRighe>
+      <oval>true</oval>
+      <datario>true</datario>
+    </it.mate.econyx.shared.model.impl.TimbroTx>
+    <it.mate.econyx.shared.model.impl.TimbroTx>
+      <codice>TR46145</codice>
+      <nome>NUOVO PRINTY 46145 (d. 45mm)</nome>
+      <prezzo>12.5</prezzo>
+      <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
+        <codice>PTC02</codice>
+      </tipoArticolo>
+      <unitaDiMisura class="it.mate.econyx.shared.model.impl.UnitaDiMisuraTx">
+        <codice>UMPZ</codice>
+      </unitaDiMisura>
+      <produttore class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+        <codice>CC</codice>
+      </produttore>
+      <larghezza>45</larghezza>
+      <altezza>45</altezza>
+      <numRighe>6</numRighe>
+      <oval>true</oval>
+      <datario>true</datario>
+    </it.mate.econyx.shared.model.impl.TimbroTx>
+    <it.mate.econyx.shared.model.impl.TimbroTx>
+      <codice>TR4726</codice>
+      <nome>NUOVO PRINTY 4726 (75 x 38mm)</nome>
+      <prezzo>12.5</prezzo>
+      <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
+        <codice>PTC02</codice>
+      </tipoArticolo>
+      <unitaDiMisura class="it.mate.econyx.shared.model.impl.UnitaDiMisuraTx">
+        <codice>UMPZ</codice>
+      </unitaDiMisura>
+      <produttore class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+        <codice>CC</codice>
+      </produttore>
+      <larghezza>75</larghezza>
+      <altezza>38</altezza>
+      <numRighe>6</numRighe>
+      <datario>true</datario>
+    </it.mate.econyx.shared.model.impl.TimbroTx>
+    <it.mate.econyx.shared.model.impl.TimbroTx>
+      <codice>TR4727</codice>
+      <nome>NUOVO PRINTY 4727 (60 x 40mm)</nome>
+      <prezzo>12.5</prezzo>
+      <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
+        <codice>PTC02</codice>
+      </tipoArticolo>
+      <unitaDiMisura class="it.mate.econyx.shared.model.impl.UnitaDiMisuraTx">
+        <codice>UMPZ</codice>
+      </unitaDiMisura>
+      <produttore class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+        <codice>CC</codice>
+      </produttore>
+      <larghezza>60</larghezza>
+      <altezza>40</altezza>
+      <numRighe>6</numRighe>
+      <datario>true</datario>
+    </it.mate.econyx.shared.model.impl.TimbroTx>
+    <it.mate.econyx.shared.model.impl.TimbroTx>
       <codice>TR4729</codice>
       <nome>NUOVO PRINTY 4729 (50 x 30mm)</nome>
       <prezzo>12.5</prezzo>
@@ -1918,6 +1992,26 @@
                 <codice>TR46130</codice>
               </entity>
             </it.mate.econyx.shared.model.impl.ProductPageTx>
+            <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+              <name>NUOVO PRINTY 46140 (d. 40mm)</name>
+              <code>TR46140</code>
+              <orderNm>56140</orderNm>
+              <templateName>home</templateName>
+              <htmls/>
+              <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
+                <codice>TR46140</codice>
+              </entity>
+            </it.mate.econyx.shared.model.impl.ProductPageTx>
+            <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+              <name>NUOVO PRINTY 46145 (d. 45mm)</name>
+              <code>TR46145</code>
+              <orderNm>56145</orderNm>
+              <templateName>home</templateName>
+              <htmls/>
+              <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
+                <codice>TR46145</codice>
+              </entity>
+            </it.mate.econyx.shared.model.impl.ProductPageTx>
           
           </childreen>
           <hideChildreen>false</hideChildreen>
@@ -1963,6 +2057,26 @@
           </htmls>
           <childreen>
           
+            <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+              <name>NUOVO PRINTY 4726 (75 x 38mm)</name>
+              <code>TR4726</code>
+              <orderNm>5726</orderNm>
+              <templateName>home</templateName>
+              <htmls/>
+              <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
+                <codice>TR4726</codice>
+              </entity>
+            </it.mate.econyx.shared.model.impl.ProductPageTx>
+            <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+              <name>NUOVO PRINTY 4727 (60 x 40mm)</name>
+              <code>TR4727</code>
+              <orderNm>5727</orderNm>
+              <templateName>home</templateName>
+              <htmls/>
+              <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
+                <codice>TR4727</codice>
+              </entity>
+            </it.mate.econyx.shared.model.impl.ProductPageTx>
             <it.mate.econyx.shared.model.impl.ProductPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
               <name>NUOVO PRINTY 4729 (50 x 30mm)</name>
               <code>TR4729</code>

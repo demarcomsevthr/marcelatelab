@@ -78,7 +78,11 @@
           <gc:Spacer height="15px"/>
           <g:FlexTable ui:field="orderTable1"/>
           <gc:Spacer height="20px"/>
-          <gc:ImageButton ui:field="step1OkBtn" url="/images/ecommerce/shopcart.png" text="Procedi con l'acquisto" addStyleNames="{style.cartBtn}"/>
+          <g:HorizontalPanel>
+            <gc:ImageButton ui:field="step1OkBtn" url="/images/ecommerce/shopcart.png" text="Procedi con l'acquisto" addStyleNames="{style.cartBtn}"/>
+            <gc:Spacer width="8px"/>
+            <gc:ImageButton ui:field="step1PrintBtn" url="/images/commons/print-preview.png" text="Stampa l'anteprima" addStyleNames="{style.cartBtn}"/>
+          </g:HorizontalPanel>
         </g:VerticalPanel>
       </gc:StatePanel>
       

@@ -258,6 +258,11 @@ public class ShoppingCartDetailedViewImpl extends AbstractBaseView<ShoppingCartV
     }
   }
   
+  @UiHandler ("step1PrintBtn")
+  public void step1PrintBtn (ClickEvent event) {
+    GwtUtils.printWithUrl("/re/pdf/order/" + order.getId());
+  }
+  
   @UiHandler ("step2BackBtn")
   public void step2BackBtn (ClickEvent event) {
     statePanelUtil.setCurrentState(step1StatePanel.getStateId());
