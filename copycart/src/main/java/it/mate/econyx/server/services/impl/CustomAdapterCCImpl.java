@@ -160,8 +160,12 @@ public class CustomAdapterCCImpl implements CustomAdapter {
       Timbro timbro = (Timbro)orderItem.getProduct();
       logger.debug("printing timbro " + timbro);
 
-      float xFactor = Float.parseFloat(PropertiesHolder.getString("timbro.print.xFactor", "5.25"));
-      float yFactor = Float.parseFloat(PropertiesHolder.getString("timbro.print.yFactor", "8.33"));
+      float xFactor = Float.parseFloat(PropertiesHolder.getString("timbro.print.xFactor", "2.84"));
+      float yFactor = Float.parseFloat(PropertiesHolder.getString("timbro.print.yFactor", "2.88"));
+      
+      float xFactorLogo = Float.parseFloat(PropertiesHolder.getString("timbro.print.logo.xFactor", "1"));
+      float yFactorLogo = Float.parseFloat(PropertiesHolder.getString("timbro.print.logo.yFactor", "1"));
+      float yFactorBorder = Float.parseFloat(PropertiesHolder.getString("timbro.print.border.yFactor", "1"));
       
       float detailW = xFactor * timbro.getLarghezza();
       float detailH = yFactor * timbro.getAltezza();
@@ -186,7 +190,7 @@ public class CustomAdapterCCImpl implements CustomAdapter {
         if (orderItemDetail instanceof OrderItemStampDetailDs) {
           OrderItemStampDetailDs orderItemStampDetail = (OrderItemStampDetailDs)orderItemDetail;
           if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_BORDER.equals(orderItemStampDetail.getType())) {
-            currentY -= orderItemStampDetail.getBorderSize();
+            currentY -= (orderItemStampDetail.getBorderSize() * yFactorBorder);
           }
         }
       }
@@ -207,9 +211,8 @@ public class CustomAdapterCCImpl implements CustomAdapter {
           } else if (StampUtils.ORDER_ITEM_STAMP_DETAIL_TYPE_LOGO.equals(orderItemStampDetail.getType())) {
             byte[] content = orderItemStampDetail.getLogoAsBlob().getBytes();
             pdfSession.addAbsoluteImage(content, 
-                detailX + orderItemStampDetail.getLogoX(), 
-                detailY - orderItemStampDetail.getLogoY());
-            
+                detailX + (orderItemStampDetail.getLogoX() * xFactorLogo), 
+                detailY - (orderItemStampDetail.getLogoY() * yFactorLogo));
           }
           
         }

@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -818,6 +820,20 @@ public class GwtUtils {
     } else {
       return null;
     }
+  }
+  
+  public static void printWithUrl (final String url) {
+    String reportElementId = "gwtUtilsReportFrame";
+    Element reportElement = DOM.getElementById(reportElementId);
+    if (reportElement == null) {
+      HTML reportHtml = new HTML(SafeHtmlUtils.fromTrustedString("<iframe id=\""+reportElementId+"\" style=\"visibility: hidden;\"></iframe>"));
+      RootPanel.get().add(reportHtml);
+    }
+    GwtUtils.onAvailable(reportElementId, new Delegate<Element>() {
+      public void execute(Element reportElement) {
+        reportElement.setAttribute("src", url);
+      }
+    });
   }
   
 }
