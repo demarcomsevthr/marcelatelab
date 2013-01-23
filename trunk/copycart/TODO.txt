@@ -16,6 +16,12 @@
 
 		SNAPSHOT 22/01/2013
 
+			> allineamento preview/stampa timbro
+				> facendo prove su ccest, sistemare ancora:
+					timbro.print.logo.xFactor=0.90
+					timbro.print.logo.yFactor=1.28
+					timbro.print.border.yFactor=1.18
+
 		    >>> CATALOGO TIMBRI
 		    	>> DA FINIRE (tutti i datari, immagini)
 		    	
