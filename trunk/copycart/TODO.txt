@@ -19,7 +19,11 @@
 		    >>> CATALOGO TIMBRI
 		    	>> DA FINIRE (tutti i datari, immagini)
 		    	
-		    >>> NOTE ALL'ORDINE
+		    >> MODALITA DI SPEDIZIONE E PAGAMENTO
+		    	> visualizzazione in admin
+		    	> da mettere in stampa ordine con totale complessivo
+		    	
+		    >> NOTE ALL'ORDINE
 		    	> input in carrello:
 			    	> nota di riga
 			    	> nota complessiva
