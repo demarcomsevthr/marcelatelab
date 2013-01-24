@@ -12,6 +12,7 @@ import it.mate.econyx.server.services.OrderAdapter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
+import it.mate.econyx.server.util.CacheConstants;
 import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
@@ -381,7 +382,12 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     List<CacheDumpEntry> results = new ArrayList<CacheDumpEntry>(); 
     Set<Object> keys = CacheUtils.instKeySet();
     for (Object key : keys) {
-      results.add(new CacheDumpEntry(CacheUtils.formatKeyToString(key), CacheUtils.instGet(key).toString()));
+      String valueAsString = CacheUtils.instGet(key).toString();
+      if (CacheConstants.REFRESH_CACHE_CHECK.equals(key)
+          || CacheConstants.REFRESH_CACHE_DEEPER_CHECK.equals(key)) {
+        valueAsString = new Date(Long.parseLong(valueAsString)).toString();
+      }
+      results.add(new CacheDumpEntry(CacheUtils.formatKeyToString(key), valueAsString));
     }
     Collections.sort(results, new Comparator<CacheDumpEntry>() {
       public int compare(CacheDumpEntry e1, CacheDumpEntry e2) {
