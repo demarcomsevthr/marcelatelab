@@ -11,8 +11,10 @@ import it.mate.econyx.server.services.ReportAdapter;
 import it.mate.econyx.server.services.ResourcesService;
 import it.mate.econyx.server.util.CacheConstants;
 import it.mate.econyx.shared.model.Order;
+import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.PdfSession;
@@ -158,6 +160,48 @@ public class RestController {
       }
     }
     response.getOutputStream().print("PONG");
+  }
+
+  @RequestMapping ("/refreshCacheDeeper/{pageCode}")
+  public void refreshCacheDeeper(@PathVariable ("pageCode") String pageCode, HttpServletResponse response) throws Exception {
+    if (PropertiesHolder.getBoolean("server.refreshCache.deeper.enabled")) {
+      logger.debug("refresh cache check deeper");
+      Long refreshTime = (Long)CacheUtils.instGet(CacheConstants.REFRESH_CACHE_CHECK);
+      if (refreshTime == null) {
+        refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.deeper.initialDelay", 120);
+        CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+      } else {
+        Long currentTime = System.currentTimeMillis();
+        if (currentTime > refreshTime) {
+          refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.deeper.nextDelay", 1800);
+          CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+          logger.debug("REFRESH CACHE CHECK >>>> RELOADING ALL DATA IN CACHE.......");
+          portalPageAdapter.findAllRoot();
+          imageAdapter.findAll();
+          portalServiceAdapter.getPage("root");
+          portalServiceAdapter.getPage("home");
+          if (pageCode != null) {
+            PortalPage refreshPage = portalPageAdapter.findByCode(pageCode);
+            pageTraverse(refreshPage);
+          }
+        }
+      }
+    }
+    response.getOutputStream().print("PONG");
+  }
+  
+  private void pageTraverse(PortalPage portalPage) {
+    portalPage = portalPageAdapter.findById(portalPage.getId(), true, true, true);
+    if (portalPage instanceof PortalFolderPage) {
+      PortalFolderPage portalFolderPage = (PortalFolderPage)portalPage;
+      for (PortalPage childPage : portalFolderPage.getChildreen()) {
+        pageTraverse(childPage);
+      }
+    }
+    if (portalPage instanceof ProductPage) {
+      ProductPage productPage = (ProductPage)portalPage;
+      productAdapter.findById(productPage.getEntity().getId());
+    }
   }
 
   @RequestMapping ("/pdf/img/{imgCode}.pdf")
