@@ -166,15 +166,15 @@ public class RestController {
   public void refreshCacheDeeper(@PathVariable ("pageCode") String pageCode, HttpServletResponse response) throws Exception {
     if (PropertiesHolder.getBoolean("server.refreshCache.deeper.enabled")) {
       logger.debug("refresh cache check deeper");
-      Long refreshTime = (Long)CacheUtils.instGet(CacheConstants.REFRESH_CACHE_CHECK);
+      Long refreshTime = (Long)CacheUtils.instGet(CacheConstants.REFRESH_CACHE_DEEPER_CHECK);
       if (refreshTime == null) {
         refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.deeper.initialDelay", 120);
-        CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+        CacheUtils.instPut(CacheConstants.REFRESH_CACHE_DEEPER_CHECK, refreshTime);
       } else {
         Long currentTime = System.currentTimeMillis();
         if (currentTime > refreshTime) {
           refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.deeper.nextDelay", 1800);
-          CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
+          CacheUtils.instPut(CacheConstants.REFRESH_CACHE_DEEPER_CHECK, refreshTime);
           logger.debug("REFRESH CACHE CHECK >>>> RELOADING ALL DATA IN CACHE.......");
           portalPageAdapter.findAllRoot();
           imageAdapter.findAll();
