@@ -14,7 +14,7 @@
     <constraints>
       <constraint size="50px" />
       <constraint size="200px" overflow="visible" />
-      <constraint size="50px" />
+      <constraint size="1px" />
     </constraints>
   </factory>
 
@@ -31,8 +31,8 @@
                 <beans:property name="html">
                   <beans:value><![CDATA[
                     <div style="background: url('/images/bgr_logo_copycart130.jpg') no-repeat scroll left top #DFDFDF; padding: 20px 0 20px 280px">
-                      <div style="font: 16px verdana; font-weight: 600; height:90px">
-                        Copy Cart Sanremo
+                      <div style="font: 18px verdana; font-weight: 600; height:90px">
+                        Copy Cart Sanremo Snc
                       </div>
                     </div>
                   ]]></beans:value>
@@ -236,9 +236,26 @@
     </widgets>
   </factory>
 
+  <!-- 
   <factory id="footer" type="it.mate.portlets.client.ui.LabelPortlet.Factory">
     <beans:property name="text">
       <beans:value>Footer</beans:value>
+    </beans:property>
+  </factory>
+   -->
+  
+  <factory id="footer" type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
+    <beans:property name="html">
+      <beans:value><![CDATA[
+        <div style="padding-top:20px; padding-left:20px; background-color: #7DC6D5; color:#FFFFFF;">
+          <span style="padding-left:20px;">
+            <a target="_blank" href="http://www.facebook.com/gianfrancoefederica.copycart"><img style="width: 18px; height: 18px; border:none;" src="/images/links/facebook.png" alt="Facebook"></a>
+          </span>
+          <span style="font-size: 10px; height:20px; vertical-align: super; padding-left:10px;">
+            Copy Cart Snc - Via Martiri della Libert&agrave;, 109 - 18038 Sanremo (IM) - Tel. 0184 532605 - P.IVA n. XXXX
+          </span>
+        </div>
+      ]]></beans:value>
     </beans:property>
   </factory>
 
