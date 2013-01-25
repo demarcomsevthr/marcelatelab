@@ -26,6 +26,7 @@ import it.mate.gwtcommons.server.utils.PropertiesHolderConfigurer;
 import it.mate.gwtcommons.server.utils.SpringUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
+import it.mate.portlets.server.services.PortalServiceAdapter;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -70,6 +71,8 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   private CustomerAdapter customerAdapter;
 
   private OrderAdapter orderAdapter;
+  
+  private PortalServiceAdapter portalServiceAdapter;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -82,6 +85,7 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
     this.portalUserAdapter = AdaptersUtil.getPortalUserAdapter();
     this.customerAdapter = AdaptersUtil.getCustomerAdapter();
     this.orderAdapter = AdaptersUtil.getOrderAdapter();
+    this.portalServiceAdapter = AdaptersUtil.getPortalServiceAdapter();
     logger.debug("initialized " + this);
   }
 
@@ -160,6 +164,7 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   @Override
   public void clearCache() {
     generalAdapter.clearCache();
+    portalServiceAdapter.clearCache();
   }
 
   @Override

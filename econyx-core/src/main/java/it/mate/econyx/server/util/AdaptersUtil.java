@@ -10,6 +10,7 @@ import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
+import it.mate.portlets.server.services.PortalServiceAdapter;
 
 import javax.servlet.ServletContext;
 
@@ -63,6 +64,10 @@ public class AdaptersUtil {
 
   public static ProductAdapter getProductAdapter() {
     return context.getBean(ProductAdapter.class);
+  }
+  
+  public static PortalServiceAdapter getPortalServiceAdapter() {
+    return context.getBean(PortalServiceAdapter.class);
   }
 
 }

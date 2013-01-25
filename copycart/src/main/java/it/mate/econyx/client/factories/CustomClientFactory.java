@@ -59,7 +59,7 @@ public class CustomClientFactory extends DefaultCustomClientFactory {
     eventBus.addHandler(PortalPageExplorerRetrieveEvent.TYPE, new PortalPageExplorerRetrieveEvent.Handler() {
       public void onPortalPageExplorerRetrieve(PortalPageExplorerRetrieveEvent event) {
         if (AppClientFactory.isSiteModule) {
-          GwtUtils.setStyleAttribute(RootPanel.get(), "background", "url('/images/wallp/alter_04alt_turq.jpg')");
+          GwtUtils.setStyleAttribute(RootPanel.get(), "background", "url('/images/wallp/alter_04alt_turq.jpg') no-repeat scroll 0 0 / cover transparent");
         }
       }
     });

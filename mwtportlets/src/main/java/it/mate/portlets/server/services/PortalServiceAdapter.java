@@ -5,5 +5,7 @@ import it.mate.portlets.shared.model.PageTemplate;
 public interface PortalServiceAdapter {
 
   public PageTemplate getPage(String historyToken);
+
+  public void clearCache();
   
 }

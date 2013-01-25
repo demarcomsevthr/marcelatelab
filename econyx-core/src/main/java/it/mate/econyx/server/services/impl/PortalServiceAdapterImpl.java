@@ -87,4 +87,8 @@ public class PortalServiceAdapterImpl implements PortalServiceAdapter {
     }
   }
   
+  public void clearCache() {
+    PortalServiceAdapterImpl.instanceCache = null;
+  }
+  
 }
