@@ -22,6 +22,9 @@
 
 		SNAPSHOT 22/01/2013
 
+			> STAMPA ORDINE
+				> SISTEMARE versione finale
+
 			> allineamento preview/stampa timbro
 				> facendo prove su ccest, sistemare ancora:
 					timbro.print.logo.xFactor=0.90

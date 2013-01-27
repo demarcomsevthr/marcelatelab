@@ -8,6 +8,7 @@ import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,12 +67,14 @@ public class PortalPageClientUtil {
     ensureCache();
     
     pageContentRenderFinishedDivId = "pageContentRenderFinishedDiv" + System.currentTimeMillis();
-    GwtUtils.showWaitPanel();
-    GwtUtils.onAvailable(pageContentRenderFinishedDivId, new Delegate<Element>() {
-      public void execute(Element element) {
-        GwtUtils.hideWaitPanel(true);
-      }
-    });
+    if (PropertiesHolder.getBoolean("client.PortalPageClientUtil.goToPage.showWaitPanel")) {
+      GwtUtils.showWaitPanel();
+      GwtUtils.onAvailable(pageContentRenderFinishedDivId, new Delegate<Element>() {
+        public void execute(Element element) {
+          GwtUtils.hideWaitPanel(true);
+        }
+      });
+    }
     
     PortalPage cachedPage = pagesCache.get(pageId);
     if (cachedPage != null && cachedPage instanceof PortalFolderPage) {

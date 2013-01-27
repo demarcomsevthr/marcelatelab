@@ -49,17 +49,6 @@ public class RpcServiceInterceptorDefault extends RpcServiceInterceptor {
     if (getServicePropertyBoolean(context.getMethodName(), "showWaitPanel", false)) {
       GwtUtils.log(getClass(), "showWaitPanelIfRequired", "showWaitPanel = true");
       if (waitPanel == null) {
-        
-        /*
-        waitPanel = new PopupPanel();
-        waitPanel.setGlassEnabled(false);
-        waitPanel.setAnimationEnabled(true);
-        Label lb = new Label("Attendere prego...");
-        GwtUtils.setStyleAttribute(lb, "font", "bold 16px Verdana");
-        GwtUtils.setStyleAttribute(lb, "color", "red");
-        waitPanel.setWidget(lb);
-        */
-        
         waitPanel = new PopupPanel();
         GwtUtils.setStyleAttribute(waitPanel, "border", "none");
         GwtUtils.setStyleAttribute(waitPanel, "background", "transparent");
@@ -67,9 +56,8 @@ public class RpcServiceInterceptorDefault extends RpcServiceInterceptor {
         waitPanel.setAnimationEnabled(true);
         Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
         waitPanel.setWidget(waitingImg);
-        
-        GwtUtils.showWait(waitPanel);
       }
+      GwtUtils.showWait(waitPanel);
     }
   }
   
