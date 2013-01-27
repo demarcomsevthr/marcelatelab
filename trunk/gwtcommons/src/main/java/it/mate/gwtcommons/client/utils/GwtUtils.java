@@ -67,7 +67,8 @@ public class GwtUtils {
   
   private static int showWaitPanelRequestCounter = 0;
   
-  
+
+  private static boolean devModeActive = Window.Location.getQueryString().contains("gwt.codesvr");
   
   public static String getPortletContextPath() {
     return GwtUtils.getJSVar("contextPath","");
@@ -104,6 +105,10 @@ public class GwtUtils {
 
   public static boolean isGecko () {
     return getNavigatorUserAgent().toLowerCase().contains("gecko");
+  }
+  
+  public static boolean isDevMode() {
+    return devModeActive;
   }
 
   @SuppressWarnings("deprecation")
@@ -679,6 +684,10 @@ public class GwtUtils {
     log(klass, methodName, "context path = " + getJSVar("contextPath", ""));
   }
   
+  public static void log (String message) {
+    log(null, -1, null, message, null);
+  }
+  
   public static void log (Class<?> type, String methodName, String message) {
     log(type, -1, methodName, message, null);
   }
@@ -691,10 +700,25 @@ public class GwtUtils {
     log(type, -1, methodName, message, ex);
   }
   
-  public static void log (Class<?> type, int hashcode, String methodName, String message, Exception ex) {
+  public static void log (Class<?> callingClass, int hashcode, String methodName, String message, Exception ex) {
     
+    if (!isDevMode()) {
+      return;
+    }
+
+    // 27/01/2013 - forzo il detecting del calling method tramite stack trace
+    callingClass = null;
+    
+    if (callingClass == null) {
+      methodName = getCallingMethodName("log");
+    }
+
     /*
-    if (!type.getName().equals("it.mate.gwtcommons.client.utils.GwtUtils")) {
+    if (methodName.contains("showWaitPanel") || methodName.contains("hideWaitPanel")) {
+      if (methodName.contains("showWaitPanelIfRequired")) {
+        return;
+      }
+    } else {
       return;
     }
     */
@@ -703,7 +727,22 @@ public class GwtUtils {
     if (ex != null) {
       message = message + " - " + ex.getClass().getName() + " - " + ex.getMessage();
     }
-    System.out.println(dts + " DEBUG " + "["+type.getName()+ ":"+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message);
+    String cls = callingClass != null ? (callingClass.getName()+".") : "";
+    System.out.println(dts + " DEBUG " + "["+cls+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message);
+  }
+  
+  private static String getCallingMethodName(String excludeMethodName) {
+    try {
+      throw new RuntimeException();
+    } catch (Exception ex) {
+      StackTraceElement[] stacktrace = ex.getStackTrace();
+      for (int it = 0; it < stacktrace.length; it++) {
+        if (!stacktrace[it].getMethodName().contains(excludeMethodName) && !stacktrace[it].getMethodName().equals("getCallingMethodName")) {
+          return stacktrace[it].getClassName()+"."+stacktrace[it].getMethodName()+"["+stacktrace[it].getLineNumber()+"]";
+        }
+      }
+    }
+    return null;
   }
   
   public static void setDefaultWaitPanel(PopupPanel popup) {
@@ -733,6 +772,7 @@ public class GwtUtils {
   
   public static void showWaitPanel(PopupPanel defaultWaitPanel, boolean glassEnabled) {
     showWaitPanelRequestCounter++;
+    GwtUtils.log("showWaitPanelRequestCounter = " + showWaitPanelRequestCounter + " callingMethod = " + getCallingMethodName("showWait"));
     PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
     if (waitPanel == null) {
       if (existsClientAttribute(ATTR_CLIENT_DEFAULT_WAIT_PANEL)) {
@@ -781,6 +821,7 @@ public class GwtUtils {
     if (forceCounterReset)
       showWaitPanelRequestCounter = 1;
     showWaitPanelRequestCounter--;
+    GwtUtils.log("showWaitPanelRequestCounter = " + showWaitPanelRequestCounter + " callingMethod = " + getCallingMethodName("hideWait"));
     if (showWaitPanelRequestCounter <= 0) {
       showWaitPanelRequestCounter = 0;
       PopupPanel waitPanel = (PopupPanel)getClientAttribute(ATTR_CLIENT_WAIT_PANEL);
