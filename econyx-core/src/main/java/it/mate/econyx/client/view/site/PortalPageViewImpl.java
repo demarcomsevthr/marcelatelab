@@ -12,6 +12,7 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.Iterator;
 
@@ -202,6 +203,10 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
                   HTML childHtml = new HTML(SafeHtmlUtils.fromTrustedString(content.getContent()));
                   childVerticalPanel.add(childHtml);
                   childreenTableToUpdate.setWidget(row, col, childVerticalPanel);
+                  String childHtmlContentWidth = PropertiesHolder.getString("client.PortalPageView.childreenTable.childHtmlContent.width");
+                  if (childHtmlContentWidth != null) {
+                    GwtUtils.setFlexCellWidth(childreenTableToUpdate, row, col, childHtmlContentWidth);
+                  }
                   col++;
                 }
               }

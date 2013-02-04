@@ -126,6 +126,10 @@
           <hostedWebapp>${webappDirectory}</hostedWebapp>
           <webappDirectory>${webappDirectory}</webappDirectory>
           <module>it.mate.econyx.main</module>
+          <!-- da usare per risolvere l'error in gquery-dnd-bundle:
+          <strict>true</strict>
+          <logLevel>ERROR</logLevel>
+           -->
         </configuration>
       </plugin>
 

@@ -1,5 +1,7 @@
 package it.mate.portlets.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.portlets.client.WidgetFactory;
 import it.mate.portlets.client.events.BroadcastListener;
 import it.mate.portlets.client.events.BroadcastManager;
@@ -63,6 +65,19 @@ public class PagePortlet extends ContainerDelegatePortlet implements HasLayout, 
         StyleUtil.applyStyle(contentPanel, layout.getStyle());
       }
     }
+    
+    /*
+    GwtUtils.createTimer(100, new Delegate<Void>() {
+      public void execute(Void element) {
+        if (portalPanel.getOffsetHeight() < 930) {
+          portalPanel.setHeight("930px");
+        } else {
+          portalPanel.getElement().getStyle().clearHeight();
+        }
+      }
+    });
+    */
+    
   }
 
   @Override

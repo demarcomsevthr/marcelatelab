@@ -13,7 +13,7 @@
     <layout vertical="true" width="950px" stylename="" />
     <constraints>
       <constraint size="50px" />
-      <constraint size="200px" overflow="visible" />
+      <constraint size="700px" overflow="visible" />
       <constraint size="1px" />
     </constraints>
   </factory>
@@ -32,7 +32,7 @@
                   <beans:value><![CDATA[
                     <div style="background: url('/images/bgr_logo_copycart130.jpg') no-repeat scroll left top #DFDFDF; padding: 20px 0 20px 280px">
                       <div style="font: 18px verdana; font-weight: 600; height:90px">
-                        Copy Cart Sanremo Snc
+                        Copy Cart Snc Sanremo
                       </div>
                     </div>
                   ]]></beans:value>
@@ -252,7 +252,7 @@
             <a target="_blank" href="http://www.facebook.com/gianfrancoefederica.copycart"><img style="width: 18px; height: 18px; border:none;" src="/images/links/facebook.png" alt="Facebook"></a>
           </span>
           <span style="font-size: 10px; height:20px; vertical-align: super; padding-left:10px;">
-            Copy Cart Snc - Via Martiri della Libert&agrave;, 109 - 18038 Sanremo (IM) - Tel. 0184 532605 - P.IVA n. XXXX
+            Copy Cart Snc - Via Martiri della Libert&agrave;, 109 - 18038 Sanremo (IM) - Tel. 0184 532605 - P.IVA n. 01500120082
           </span>
         </div>
       ]]></beans:value>
