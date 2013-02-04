@@ -37,7 +37,14 @@
   <inherits name='com.google.gwt.query.Query'/>
   
   <inherits name='gwtquery.plugins.droppable.Droppable'/>
-  
+
+  <!-- rimuove un warning durante la compilazione del modulo -->
+  <replace-with class="gwtquery.plugins.draggable.client.impl.DraggableHandlerImplIE8">
+    <when-type-is class="gwtquery.plugins.draggable.client.impl.DraggableHandlerImpl" />
+    <any>
+      <when-property-is name="user.agent" value="ie9" />
+    </any>
+  </replace-with>
   
   <entry-point class='it.mate.econyx.client.EconyxEP' />
 

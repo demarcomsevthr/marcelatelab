@@ -295,7 +295,11 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   
   public class PortalInitCompleteDelegate {
     public void onPortalInitComplete(StartingPortalContext initPortalContext) {
-      CommonTemplatesUtils.initTemplates(RootPanel.get(), initPortalContext.getInitialTemplateName(), new SitePageTemplateRetriever(initPortalContext));
+      RootPanel rootPortalPanel = RootPanel.get("rootPortalPanel");
+      if (rootPortalPanel == null) {
+        rootPortalPanel = RootPanel.get();
+      }
+      CommonTemplatesUtils.initTemplates(rootPortalPanel, initPortalContext.getInitialTemplateName(), new SitePageTemplateRetriever(initPortalContext));
     }
   }
   

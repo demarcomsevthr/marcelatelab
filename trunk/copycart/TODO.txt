@@ -20,10 +20,19 @@
 		---------------------------------------------------
 
 
-		SNAPSHOT 22/01/2013
+		SNAPSHOT 04/02/2013
 
-			> STAMPA ORDINE
-				> SISTEMARE versione finale
+			> GWT OPTIMIZATION:
+		
+				https://developers.google.com/web-toolkit/doc/latest/DevGuideOptimizing
+					- speed tracer
+					- code splitting
+					- compile report
+					- client bundle
+					- lightweight metrics
+
+
+		SNAPSHOT 22/01/2013
 
 			> allineamento preview/stampa timbro
 				> facendo prove su ccest, sistemare ancora:
