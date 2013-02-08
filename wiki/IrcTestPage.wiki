@@ -1,3 +1,5 @@
 Link me:
 
 [http://marcelatelab.googlecode.com/files/IrcTestDemo.plist demo]
+
+[itms-services://?action=download-manifest&url=http://marcelatelab.googlecode.com/files/IrcTestDemo.plist install]
