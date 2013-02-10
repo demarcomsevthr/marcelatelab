@@ -1,0 +1,92 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:gpg="urn:import:it.mate.abaco.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
+       
+  <ui:style>
+  
+    @external boxSpacer;
+
+    .homePanel {
+	  padding-top: 1em;
+	  padding-left: 1em;
+	  background-color: C0C0FE;
+	}
+	
+    .homePanel * {
+	  font-size: 16px;
+	  vertical-align: middle;
+	}
+	
+    .homePanel td {
+	  padding-top: 0.1em;
+	}
+	
+	.homePanel button {
+	  font-size: 16px;
+	  font-weight: bolder;
+    }
+	
+	.valoriLbl {
+	  font-size: 16px;
+	  font-weight: bolder;
+	  background-color: #666666;
+	  height: 1.6em;
+	  padding-top: 5px;
+    }
+	
+	.boxSpacer {
+	  width: 0.5em !important;
+	}
+	
+	.playBtn {
+	  background-color: red;
+	}
+  
+	.verLbl {
+	  font-size: 8px;
+    }
+	
+  </ui:style>
+
+  <g:HTMLPanel addStyleNames="{style.homePanel}">
+
+    <table>
+    
+      <tr>
+        <td>
+          <g:Label text="Presentazione qui"/>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>
+          <m:Button round="true" text="Play" addStyleNames="{style.playBtn}" ui:field="playBtn"/>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>
+          <gc:Spacer height="1em"/>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>
+          <g:Label text="(v. 0.01)" addStyleNames="{style.verLbl}"/>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <gc:Spacer height="1em"/>
+        </td>
+      </tr>
+    
+    </table>  
+  
+  
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

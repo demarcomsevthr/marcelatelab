@@ -1,0 +1,66 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:gpg="urn:import:it.mate.abaco.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
+       
+  <ui:style>
+  
+    @external boxSpacer;
+
+    .homePanel {
+	  padding-top: 1em;
+	  padding-left: 1em;
+	  background-color: C0C0FE;
+	}
+	
+    .homePanel * {
+	  font-size: 16px;
+	  vertical-align: middle;
+	}
+	
+    .homePanel td {
+	  padding-top: 0.1em;
+	}
+	
+	.homePanel button {
+	  font-size: 16px;
+	  font-weight: bolder;
+    }
+	
+	.boxSpacer {
+	  width: 0.5em !important;
+	}
+	
+	.playBtn {
+	  background-color: red;
+	}
+  
+	.verLbl {
+	  font-size: 8px;
+    }
+	
+  </ui:style>
+
+  <g:HTMLPanel addStyleNames="{style.homePanel}">
+
+    <table>
+    
+      <tr>
+        <td>
+          <g:Label text="Siamo in abaco"/>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>
+          <gc:Spacer height="1em"/>
+        </td>
+      </tr>
+    
+    </table>  
+  
+  
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
