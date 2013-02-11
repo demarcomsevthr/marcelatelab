@@ -32,10 +32,12 @@ public class AbacoView extends BaseMgwtView<Presenter> {
 
   private void initUI() {
     getTitle().setHTML("IRC Test Demo");
+    /*
     HorizontalPanel hp = new HorizontalPanel();
     hp.add(new Spacer("0.8em"));
     hp.add(new Image(UriUtils.fromTrustedString("images/kidneys1tr.jpg")));
     getHeaderPanel().setLeftWidget(hp);
+    */
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     

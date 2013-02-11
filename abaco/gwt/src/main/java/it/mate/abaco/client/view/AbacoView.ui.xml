@@ -45,22 +45,33 @@
   <g:HTMLPanel addStyleNames="{style.homePanel}">
 
     <table>
-    
+
+        <!-- 
       <tr>
         <td>
           <g:Label text="Siamo in abaco"/>
         </td>
       </tr>
-    
+        -->
+     
       <tr>
         <td>
+          <m:Button text="G"></m:Button>
           <gc:Spacer height="1em"/>
         </td>
       </tr>
     
     </table>  
   
-  
+      <div style="background: url('main/images/abaco-header.png') no-repeat 0px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 20px;"></div>
+      <div style="background: url('main/images/abaco-header.png') no-repeat -108px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 110px;"></div>
+      <div style="background: url('main/images/abaco-header.png') no-repeat -218px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 200px;"></div>
+      
+      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 60px;"></div>
+      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 150px;"></div>
+      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 240px;"></div>
+      
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>
