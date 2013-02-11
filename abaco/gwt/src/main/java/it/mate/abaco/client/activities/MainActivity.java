@@ -50,4 +50,9 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ABACO));
   }
 
+  @Override
+  public void goToHome() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
+  }
+
 }
