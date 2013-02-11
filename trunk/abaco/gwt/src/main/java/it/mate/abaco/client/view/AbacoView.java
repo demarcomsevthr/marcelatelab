@@ -2,25 +2,25 @@ package it.mate.abaco.client.view;
 
 import it.mate.abaco.client.view.AbacoView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 
 public class AbacoView extends BaseMgwtView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-
+    public void goToHome();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, AbacoView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
-
+  
   
   public AbacoView() {
     initUI();
@@ -32,23 +32,33 @@ public class AbacoView extends BaseMgwtView<Presenter> {
 
   private void initUI() {
     getTitle().setHTML("IRC Test Demo");
-    /*
-    HorizontalPanel hp = new HorizontalPanel();
-    hp.add(new Spacer("0.8em"));
-    hp.add(new Image(UriUtils.fromTrustedString("images/kidneys1tr.jpg")));
-    getHeaderPanel().setLeftWidget(hp);
-    */
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
-    // from mgwt quirks:
-//  getScrollPanel().setUsePos(MGWT.getOsDetection().isAndroid());
-    
+    getHeaderBackButton().addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        getPresenter().goToHome();
+      }
+    });
   }
   
   @Override
   public void setModel(Object model, String tag) {
 
+  }
+  
+  @UiHandler ("greenBtn")
+  public void onGreenBtn(TapEvent event) {
+    GwtUtils.log(getClass(), "onGreenBtn", "one green please");
+  }
+
+  @UiHandler ("redBtn")
+  public void onRedBtn(TapEvent event) {
+    GwtUtils.log(getClass(), "onRedBtn", "one red please");
+  }
+
+  @UiHandler ("blueBtn")
+  public void onBlueBtn(TapEvent event) {
+    GwtUtils.log(getClass(), "onBlueBtn", "one blue please");
   }
 
 }

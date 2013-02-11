@@ -72,6 +72,10 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     return headerPanel;
   }
   
+  protected HeaderButton getHeaderBackButton() {
+    return headerBackButton;
+  }
+  
   protected P getPresenter() {
     return presenter;
   }

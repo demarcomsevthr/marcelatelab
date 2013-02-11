@@ -1,77 +1,112 @@
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
-       xmlns:gpg="urn:import:it.mate.abaco.client.ui" 
-       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
-       
-  <ui:style>
-  
-    @external boxSpacer;
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:gc="urn:import:it.mate.gwtcommons.client.ui"
+  xmlns:gpg="urn:import:it.mate.abaco.client.ui" xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
 
+  <ui:style>
+    @external boxSpacer;
+    
     .homePanel {
-	  padding-top: 1em;
-	  padding-left: 1em;
-	  background-color: C0C0FE;
-	}
-	
+    	padding-top: 1em;
+    	padding-left: 1em;
+    	background-color: C0C0FE;
+    }
+    
     .homePanel * {
-	  font-size: 16px;
-	  vertical-align: middle;
-	}
-	
+    	font-size: 16px;
+    	vertical-align: middle;
+    }
+    
     .homePanel td {
-	  padding-top: 0.1em;
-	}
-	
-	.homePanel button {
-	  font-size: 16px;
-	  font-weight: bolder;
+    	padding-top: 0.1em;
     }
-	
-	.boxSpacer {
-	  width: 0.5em !important;
-	}
-	
-	.playBtn {
-	  background-color: red;
-	}
-  
-	.verLbl {
-	  font-size: 8px;
+    
+    .homePanel button {
+    	font-size: 16px;
+    	font-weight: bolder;
     }
-	
+    
+    .boxSpacer {
+    	width: 0.5em !important;
+    }
+    
+    .playBtn {
+    	background-color: red;
+    }
+    
+    .verLbl {
+    	font-size: 8px;
+    }
+    
+    .greenBtn {
+    	border: solid 1px rgba(0, 0, 0, 0.5);
+    	color: #000;
+    	font-weight: bold;
+    	-webkit-border-radius: 6px;
+    	background: url('main/images/abaco-header.png') no-repeat 0px 0px !important;
+    	width: 54px; 
+    	height: 58px;
+    }
+    
+    .redBtn {
+    	border: solid 1px rgba(0, 0, 0, 0.5);
+    	color: #000;
+    	font-weight: bold;
+    	-webkit-border-radius: 6px;
+    	background: url('main/images/abaco-header.png') no-repeat -108px 0px !important;
+    	width: 54px; 
+    	height: 58px;
+    }
+    
+    .blueBtn {
+    	border: solid 1px rgba(0, 0, 0, 0.5);
+    	color: #000;
+    	font-weight: bold;
+    	-webkit-border-radius: 6px;
+    	background: url('main/images/abaco-header.png') no-repeat -218px 0px !important;
+    	width: 54px; 
+    	height: 58px;
+    }
+    
+    .ball {
+   	  border: solid 2px rgba(0, 0, 0, 0.5);
+	  width: 32px; height: 32px; 
+	  position: absolute; 
+   	  -webkit-border-radius: 16px;
+	}
+    
   </ui:style>
 
   <g:HTMLPanel addStyleNames="{style.homePanel}">
 
     <table>
 
-        <!-- 
       <tr>
         <td>
-          <g:Label text="Siamo in abaco"/>
+          <g:HorizontalPanel spacing="0">
+            <m:Button text="" addStyleNames="{style.greenBtn}" ui:field="greenBtn"></m:Button>
+            <m:Button text="" addStyleNames="{style.redBtn}" ui:field="redBtn"></m:Button>
+            <m:Button text="" addStyleNames="{style.blueBtn}" ui:field="blueBtn"></m:Button>
+          </g:HorizontalPanel>
         </td>
       </tr>
-        -->
-     
-      <tr>
-        <td>
-          <m:Button text="G"></m:Button>
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-    
-    </table>  
-  
-      <div style="background: url('main/images/abaco-header.png') no-repeat 0px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 20px;"></div>
-      <div style="background: url('main/images/abaco-header.png') no-repeat -108px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 110px;"></div>
-      <div style="background: url('main/images/abaco-header.png') no-repeat -218px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 200px;"></div>
+
+    </table>
+
+      <div style="width: 2px; height: 300px; background-color: black; position: absolute; top: 102px; left: 64px;"></div> 
+      <div style="width: 2px; height: 300px; background-color: black; position: absolute; top: 102px; left: 156px;"></div> 
+      <div style="width: 2px; height: 300px; background-color: black; position: absolute; top: 102px; left: 248px;"></div> 
       
-      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 60px;"></div>
-      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 150px;"></div>
-      <div style="width: 2px; height: 200px; background-color: black; position: absolute; top: 124px; left: 240px;"></div>
+      <g:HTMLPanel ui:field="ballContainer">
+        <div class="{style.ball}" style="top: 102px; left: 48px; background-color: lightgreen;"></div>
+      </g:HTMLPanel>
       
-    
+
+    <!-- 
+      <div style="background: url('main/images/abaco-header.png') no-repeat 0px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 20px;"></div> 
+      <div style="background: url('main/images/abaco-header.png') no-repeat -108px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 110px;"></div> 
+      <div style="background: url('main/images/abaco-header.png') no-repeat -218px 0px; width: 80px; height: 90px; position: absolute; top: 44px; left: 200px;"></div> 
+      -->
+
+
   </g:HTMLPanel>
-  
+
 </ui:UiBinder>
