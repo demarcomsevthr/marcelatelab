@@ -6,6 +6,7 @@ import it.mate.gpg.client.places.AppHistoryObserver;
 import it.mate.gpg.client.places.MainPlace;
 import it.mate.gpg.client.places.MainPlaceHistoryMapper;
 import it.mate.gpg.client.ui.MvpPhonePanel;
+import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.utils.ZIndexPatch;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
@@ -30,6 +31,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
+import com.googlecode.mgwt.ui.client.MGWTStyle;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
 
@@ -105,6 +107,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     settings.setPreventScrolling(true);
 
     MGWT.applySettings(settings);
+    
+    MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
+    
+    MGWTCustomTheme customTheme = new MGWTCustomTheme();
+    customTheme.getMGWTClientBundle().getMainCss().ensureInjected();
 
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
