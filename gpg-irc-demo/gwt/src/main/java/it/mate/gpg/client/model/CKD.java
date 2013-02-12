@@ -6,6 +6,16 @@ public class CKD {
   
   public final static int PMOL_L_UNIT = 2;
   
+  public final static int VERY_LOW_RISK = 1;
+  
+  public final static int LOW_RISK = 2;
+  
+  public final static int MIDDLE_RISK = 3;
+  
+  public final static int HIGH_RISK = 4;
+  
+  public final static int VERY_HIGH_RISK = 5;
+  
   double scr;
   
   int scrUnit;
@@ -89,5 +99,103 @@ public class CKD {
     this.black = black;
     return this;
   }
+  
+  public static String getGFRStadium(double gfr) {
+    String stadioVfg = "";
+    if (gfr >= 90) {
+      stadioVfg = "G1";
+    } else if (gfr >= 60) {
+      stadioVfg = "G2";
+    } else if (gfr >= 30) {
+      stadioVfg = "G3";
+    } else if (gfr >= 15) {
+      stadioVfg = "G4";
+    } else {
+      stadioVfg = "G5";
+    }
+    return stadioVfg;
+  }
+  
+  public int getRiskStadium(double gfr) {
+    int risk = VERY_LOW_RISK;
+    if (albumin < 10) {
+      if (gfr >= 60) {
+        risk = VERY_LOW_RISK;
+      } else if (gfr >= 45) {
+        risk = LOW_RISK;
+      } else if (gfr >= 30) {
+        risk = MIDDLE_RISK;
+      } else if (gfr >= 15) {
+        risk = HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK;
+      }
+    } else if (albumin <= 29) {
+      if (gfr >= 60) {
+        risk = VERY_LOW_RISK;
+      } else if (gfr >= 45) {
+        risk = LOW_RISK;
+      } else if (gfr >= 30) {
+        risk = MIDDLE_RISK;
+      } else if (gfr >= 15) {
+        risk = HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK;
+      }
+    } else if (albumin <= 299) {
+      if (gfr >= 60) {
+        risk = LOW_RISK;
+      } else if (gfr >= 45) {
+        risk = MIDDLE_RISK;
+      } else if (gfr >= 15) {
+        risk = HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK;
+      }
+    } else if (albumin <= 1999) {
+      if (gfr >= 60) {
+        risk = MIDDLE_RISK;
+      } else if (gfr >= 15) {
+        risk = HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK;
+      }
+    } else {
+      risk = VERY_HIGH_RISK;
+    }
+    return risk;
+  }
 
+  public double getScr() {
+    return scr;
+  }
+
+  public int getScrUnit() {
+    return scrUnit;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public int getWeight() {
+    return weight;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public double getAlbumin() {
+    return albumin;
+  }
+
+  public boolean isFemale() {
+    return female;
+  }
+
+  public boolean isBlack() {
+    return black;
+  }
+  
 }

@@ -81,8 +81,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     this.increment = increment;
   }
   
-  public void setValue(Integer value) {
-    valueBox.setValue((double)value);
+  public void setValue(double value) {
+    valueBox.setValue(value);
   }
   
   public Double getValue() {

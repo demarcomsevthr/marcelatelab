@@ -7,8 +7,7 @@
     @external .gwt-Label, .boxSpacer;
 
     .homePanel {
-	  padding-top: 1em;
-	  padding-left: 1em;
+
 	}
 	
     .homePanel * {
@@ -46,10 +45,6 @@
 	  width: 0.5em !important;
 	}
   
-	.verLbl {
-	  font-size: 8px;
-    }
-	
   </ui:style>
 
   <g:HTMLPanel addStyleNames="{style.homePanel}">
@@ -75,7 +70,7 @@
         <td>
           <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <gpg:SpinnerDoubleBox ui:field="creatininaSpinBox" value="1"/>
+            <gpg:SpinnerDoubleBox ui:field="creatininaSpinBox"/>
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -128,12 +123,7 @@
         <td>
           <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-              <gpg:SpinnerIntegerBox ui:field="albuminuriaSpinBox" value="10"/>
-            <!-- 
-            <g:VerticalPanel spacing="0">
-              <gc:Spacer height="0.1em"/>
-            </g:VerticalPanel>
-             -->
+            <gpg:SpinnerIntegerBox ui:field="albuminuriaSpinBox" value="10"/>
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -146,53 +136,10 @@
     
       <tr>
         <td colspan="2">
-          <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
-            <!-- 
-            <m:Button text="Valori GFR e IRC:" ui:field="calcBtn"/>
-             -->
-             <g:Label text="Valori di GFR e IRC:" addStyleNames="{style.valoriLbl}" width="100%" ui:field="valoriLbl"/>
-          </g:HorizontalPanel>
+          <m:Button ui:field="ckdOutputBtn" text="Calcola"/>
         </td>
       </tr>
     
-      <tr>
-        <td>
-          <g:Label text="GFR (ml/min)"/>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:TextBox ui:field="vfgBox" enabled="false" width="5em" height="1.6em"/>
-            <gc:Spacer width="0.3em"/>
-            <g:TextBox ui:field="stadioVfgBox" enabled="false" width="2.2em" height="2.2em"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          <g:Label text="Rischio IRC"/>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:TextBox ui:field="ircBox" enabled="false" width="6em" height="1.6em"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan="2">
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-    
-      <tr>
-        <td colspan="2">
-          <g:Label text="(v. 0.003)" addStyleNames="{style.verLbl}"/>
-        </td>
-      </tr>
-      
       <tr>
         <td colspan="2">
           <gc:Spacer height="1em"/>
