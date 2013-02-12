@@ -1,5 +1,7 @@
 package it.mate.gpg.client.view;
 
+import it.mate.gwtcommons.client.mvp.BasePresenter;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.MGWT;
@@ -9,7 +11,7 @@ import com.googlecode.mgwt.ui.client.widget.HeaderPanel;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
-public abstract class BaseMgwtView {
+public abstract class BaseMgwtView <P extends BasePresenter> {
   
   protected LayoutPanel main;
   protected ScrollPanel scrollPanel;
@@ -17,6 +19,8 @@ public abstract class BaseMgwtView {
   protected HeaderButton headerBackButton;
   protected HeaderButton headerMainButton;
   protected HTML title;
+  
+  private P presenter;
   
   public BaseMgwtView() {
     initUI();
@@ -46,6 +50,8 @@ public abstract class BaseMgwtView {
     main.add(headerPanel);
     main.add(scrollPanel);
     
+    getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Calculator");
+    
   }
   
   public Widget asWidget() {
@@ -68,6 +74,18 @@ public abstract class BaseMgwtView {
     return headerPanel;
   }
   
+  protected HeaderButton getHeaderBackButton() {
+    return headerBackButton;
+  }
+  
+  protected P getPresenter() {
+    return presenter;
+  }
+
+  public void setPresenter(P presenter) {
+    this.presenter = presenter;
+  }
+
   public abstract void setModel(Object model, String tag);  
   
 }

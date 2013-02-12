@@ -1,53 +1,37 @@
 package it.mate.gpg.client.view;
 
-import it.mate.gpg.client.ui.SpinnerDoubleBox;
-import it.mate.gpg.client.ui.SpinnerIntegerBox;
+import it.mate.gpg.client.model.CKD;
+import it.mate.gpg.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 
-public class CKDParamsInsertView extends BaseMgwtView {
+public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
-    void goToNotificationsPlace();
+    void goToCkdInput();
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, CKDParamsInsertView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
-  @UiField SpinnerIntegerBox etaSpinBox;
-  @UiField SpinnerDoubleBox creatininaSpinBox;
-  @UiField SpinnerIntegerBox pesoSpinBox;
-//@UiField SpinnerIntegerBox altezzaSpinBox;
-  @UiField RadioButton mBtn;
-  @UiField RadioButton fBtn;
-  @UiField SpinnerIntegerBox albuminuriaSpinBox;
-  @UiField TextBox vfgBox;
-  @UiField TextBox stadioVfgBox;
-  @UiField TextBox ircBox;
-//@UiField Button calcBtn;
-  @UiField Label valoriLbl;
+  @UiField TextBox cockcroftGfrBox;
+  @UiField TextBox cockcroftGfrStadium;
+  @UiField TextBox cockcroftRiskBox;
   
-  private Timer calcTimer = null;
-
-  public CKDParamsInsertView() {
+  @UiField TextBox mdrdGfrBox;
+  @UiField TextBox mdrdGfrStadium;
+  @UiField TextBox mdrdRiskBox;
+  
+  public CKDOutputView() {
     initUI();
   }
 
@@ -56,79 +40,52 @@ public class CKDParamsInsertView extends BaseMgwtView {
   }
 
   private void initUI() {
-    getTitle().setHTML("IRC Test Demo");
-    HorizontalPanel hp = new HorizontalPanel();
-    hp.add(new Spacer("0.8em"));
-    hp.add(new Image(UriUtils.fromTrustedString("images/kidneys1tr.jpg")));
-    getHeaderPanel().setLeftWidget(hp);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    creatininaSpinBox.setIncrement(0.1);
-    
-    /*
-    calcBtn.addTapHandler(new TapHandler() {
+    getHeaderBackButton().setText("Parametri");
+    getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        onCalcBtn(null);
-        if (calcTimer == null) {
-          calcTimer = GwtUtils.createTimer(250, new Delegate<Void>() {
-            public void execute(Void element) {
-              onCalcBtn(null);
-            }
-          });
-        }
+        getPresenter().goToCkdInput();
       }
     });
-    */
-
-    /*
-    calcTimer = GwtUtils.createTimer(200, new Delegate<Void>() {
-      public void execute(Void element) {
-        onCalcBtn(null);
-      }
-    });
-    */
-    
-    vfgBox.getElement().getStyle().setFontSize(23, Unit.PX);
-    ircBox.getElement().getStyle().setFontSize(23, Unit.PX);
-    GwtUtils.setBorderRadius(valoriLbl, "5px");
-    
-    // from mgwt quirks:
-//  getScrollPanel().setUsePos(MGWT.getOsDetection().isAndroid());
-    
-    ValueChangeHandler<Integer> iHandler = new ValueChangeHandler<Integer>() {
-      public void onValueChange(ValueChangeEvent<Integer> event) {
-        onCalcBtn(null);
-      }
-    };
-    
-    ValueChangeHandler<Double> dHandler = new ValueChangeHandler<Double>() {
-      public void onValueChange(ValueChangeEvent<Double> event) {
-        onCalcBtn(null);
-      }
-    };
-    
-    ValueChangeHandler<Boolean> bHandler = new ValueChangeHandler<Boolean>() {
-      public void onValueChange(ValueChangeEvent<Boolean> event) {
-        onCalcBtn(null);
-      }
-    };
-    
-    etaSpinBox.addValueChangeHandler(iHandler);
-    creatininaSpinBox.addValueChangeHandler(dHandler);
-    pesoSpinBox.addValueChangeHandler(iHandler);
-    mBtn.addValueChangeHandler(bHandler);
-    fBtn.addValueChangeHandler(bHandler);
-    albuminuriaSpinBox.addValueChangeHandler(iHandler);
-    
-    onCalcBtn(null);
-    
   }
   
   @Override
   public void setModel(Object model, String tag) {
-
+    if (model instanceof CKD) {
+      CKD ckd = (CKD)model;
+      applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox);
+      applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox);
+    }
+  }
+  
+  private void applyCKD(CKD ckd, double gfr, TextBox gfrBox, TextBox gfrStadiumBox, TextBox riskBox) {
+    gfrBox.setValue(GwtUtils.formatDecimal(gfr, 2));
+    gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
+    int risk = ckd.getRiskStadium(gfr);
+    String irc = "";
+    String ircCol = "white";
+    if (risk == CKD.VERY_LOW_RISK) {
+      irc = "molto basso";
+      ircCol = "#00FF00";
+    } else if (risk == CKD.LOW_RISK) {
+      irc = "basso";
+      ircCol = "#FFFF00";
+    } else if (risk == CKD.MIDDLE_RISK) {
+      irc = "medio";
+      ircCol = "#FFCC00";
+    } else if (risk == CKD.HIGH_RISK) {
+      irc = "alto";
+      ircCol = "#FF0000";
+    } else if (risk == CKD.VERY_HIGH_RISK) {
+      irc = "molto alto";
+      ircCol = "#990000";
+    }
+    riskBox.setValue(irc);
+    riskBox.getElement().getStyle().setBackgroundColor(ircCol);
   }
 
+  /*
   public void onCalcBtn(ClickEvent event) {
     if (!isSet(etaSpinBox.getValue()))
       return;
@@ -232,5 +189,6 @@ public class CKDParamsInsertView extends BaseMgwtView {
   private boolean isSet(Double value) {
     return value != null && value > 0;
   }
+  */
 
 }

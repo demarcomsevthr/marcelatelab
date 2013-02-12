@@ -1,7 +1,7 @@
 package it.mate.gpg.client.activities.mapper;
 
 import it.mate.gpg.client.activities.MainActivity;
-import it.mate.gpg.client.places.HomePlace;
+import it.mate.gpg.client.places.MainPlace;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 
@@ -17,8 +17,8 @@ public class MainActivityMapper extends BaseActivityMapper {
 
   @Override
   public Activity getActivity(Place place) {
-    if (place instanceof HomePlace) {
-      return new MainActivity(clientFactory, (HomePlace)place);
+    if (place instanceof MainPlace) {
+      return new MainActivity(clientFactory, (MainPlace)place);
     }
     /*
     if (place instanceof NotificationsPlace) {
@@ -30,7 +30,7 @@ public class MainActivityMapper extends BaseActivityMapper {
 
   @Override
   public Place getDefaultPlace() {
-    return new HomePlace();
+    return new MainPlace();
   }
 
   @Override

@@ -4,7 +4,7 @@ import it.mate.gpg.client.activities.mapper.MainActivityMapper;
 import it.mate.gpg.client.activities.mapper.MainAnimationMapper;
 import it.mate.gpg.client.factories.AppClientFactory;
 import it.mate.gpg.client.places.AppHistoryObserver;
-import it.mate.gpg.client.places.HomePlace;
+import it.mate.gpg.client.places.MainPlace;
 import it.mate.gpg.client.places.MainPlaceHistoryMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -93,7 +93,7 @@ public class MainEntryPoint implements EntryPoint {
 
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new HomePlace());
+    historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
     historyHandler.handleCurrentHistory();
 
   }
