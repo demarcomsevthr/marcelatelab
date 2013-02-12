@@ -34,7 +34,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   private void initUI() {
     HorizontalPanel hp = new HorizontalPanel();
     hp.add(new Spacer("0.8em"));
-    hp.add(new Image(UriUtils.fromTrustedString("images/kidneys1tr.jpg")));
+    hp.add(new Image(UriUtils.fromTrustedString("images/creatinine.png")));
     getHeaderPanel().setLeftWidget(hp);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));

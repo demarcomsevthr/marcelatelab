@@ -1,0 +1,6 @@
+@url bgr bgrImage;
+
+body {
+  background-image: bgr ;
+  background-repeat: no-repeat;
+}
