@@ -55,7 +55,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    paramBtn.setText(AppMessages.IMPL.insertParameters());
+    paramBtn.setText(AppMessages.IMPL.HomeView_paramBtn_text());
     
   }
   
