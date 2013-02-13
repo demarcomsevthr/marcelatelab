@@ -1,12 +1,23 @@
 
 	SNAPSHOT 13/02/2013
+
+	> ANDROID Test
+
+	> iOS Phonegap Icons
+
+	______________________________________________________
+
+	HISTORY LOG	
 	
-	
-	I18n >> DA FINIRE IN CKDInput e CKDOutput
-	
+	> I18n >> fatto [13/02/2013]
 		https://developers.google.com/web-toolkit/doc/latest/tutorial/i18n
 		https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n
+		
+	> keyboard issue >> solved [12/02/2013]
 
+	> background-image >> solved [12/02/2013]
+
+		
 
 	______________________________________________________
 	
