@@ -1,5 +1,6 @@
 package it.mate.gpg.client.view;
 
+import it.mate.gpg.client.i18n.AppMessages;
 import it.mate.gpg.client.model.CKD;
 import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
 import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
@@ -47,7 +48,7 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    getHeaderBackButton().setText("Parametri");
+    getHeaderBackButton().setText(AppMessages.IMPL.CKDOutputView_headerBackButton_text());
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToCkdInput();
@@ -71,129 +72,23 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     String irc = "";
     String ircCol = "white";
     if (risk == CKD.VERY_LOW_RISK) {
-      irc = "molto basso";
+      irc = AppMessages.IMPL.CKDOutputView_veryLowRisk_text();
       ircCol = "#00FF00";
     } else if (risk == CKD.LOW_RISK) {
-      irc = "basso";
+      irc = AppMessages.IMPL.CKDOutputView_lowRisk_text();
       ircCol = "#FFFF00";
     } else if (risk == CKD.MIDDLE_RISK) {
-      irc = "medio";
+      irc = AppMessages.IMPL.CKDOutputView_middleRisk_text();
       ircCol = "#FFCC00";
     } else if (risk == CKD.HIGH_RISK) {
-      irc = "alto";
+      irc = AppMessages.IMPL.CKDOutputView_highRisk_text();
       ircCol = "#FF0000";
     } else if (risk == CKD.VERY_HIGH_RISK) {
-      irc = "molto alto";
+      irc = AppMessages.IMPL.CKDOutputView_veryHighRisk_text();
       ircCol = "#990000";
     }
     riskBox.setValue(irc);
     riskBox.getElement().getStyle().setBackgroundColor(ircCol);
   }
-
-  /*
-  public void onCalcBtn(ClickEvent event) {
-    if (!isSet(etaSpinBox.getValue()))
-      return;
-    if (!isSet(pesoSpinBox.getValue()))
-      return;
-    if (!isSet(creatininaSpinBox.getValue()))
-      return;
-    if (!isSet(albuminuriaSpinBox.getValue()))
-      return;
-    double vfg = (140 - etaSpinBox.getValue()) * pesoSpinBox.getValue() / (72d * creatininaSpinBox.getValue());
-    if (fBtn.getValue())
-      vfg *= 0.85;
-    vfgBox.setValue(GwtUtils.formatDecimal(vfg, 2));
-    String stadioVfg = "";
-    if (vfg >= 90) {
-      stadioVfg = "G1";
-    } else if (vfg >= 60) {
-      stadioVfg = "G2";
-    } else if (vfg >= 30) {
-      stadioVfg = "G3";
-    } else if (vfg >= 15) {
-      stadioVfg = "G4";
-    } else {
-      stadioVfg = "G5";
-    }
-    stadioVfgBox.setText(stadioVfg);
-    String irc = "";
-    int alb = albuminuriaSpinBox.getValue();
-    String ircCol = "white";
-    if (alb < 10) {
-      if (vfg >= 60) {
-        irc = "molto basso";
-        ircCol = "#00FF00";
-      } else if (vfg >= 45) {
-        irc = "basso";
-        ircCol = "#FFFF00";
-      } else if (vfg >= 30) {
-        irc = "medio";
-        ircCol = "#FFCC00";
-      } else if (vfg >= 15) {
-        irc = "alto";
-        ircCol = "#FF0000";
-      } else {
-        irc = "molto alto";
-        ircCol = "#990000";
-      }
-    } else if (alb <= 29) {
-      if (vfg >= 60) {
-        irc = "molto basso";
-        ircCol = "#00FF00";
-      } else if (vfg >= 45) {
-        irc = "basso";
-        ircCol = "#FFFF00";
-      } else if (vfg >= 30) {
-        irc = "medio";
-        ircCol = "#FFCC00";
-      } else if (vfg >= 15) {
-        irc = "alto";
-        ircCol = "#FF0000";
-      } else {
-        irc = "molto alto";
-        ircCol = "#990000";
-      }
-    } else if (alb <= 299) {
-      if (vfg >= 60) {
-        irc = "basso";
-        ircCol = "#FFFF00";
-      } else if (vfg >= 45) {
-        irc = "medio";
-        ircCol = "#FFCC00";
-      } else if (vfg >= 15) {
-        irc = "alto";
-        ircCol = "#FF0000";
-      } else {
-        irc = "molto alto";
-        ircCol = "#990000";
-      }
-    } else if (alb <= 1999) {
-      if (vfg >= 60) {
-        irc = "medio";
-        ircCol = "#FFCC00";
-      } else if (vfg >= 15) {
-        irc = "alto";
-        ircCol = "#FF0000";
-      } else {
-        irc = "molto alto";
-        ircCol = "#990000";
-      }
-    } else {
-      irc = "molto alto";
-      ircCol = "#990000";
-    }
-    ircBox.setValue(irc);
-    ircBox.getElement().getStyle().setBackgroundColor(ircCol);
-  }
   
-  private boolean isSet(Integer value) {
-    return value != null && value > 0;
-  }
-
-  private boolean isSet(Double value) {
-    return value != null && value > 0;
-  }
-  */
-
 }

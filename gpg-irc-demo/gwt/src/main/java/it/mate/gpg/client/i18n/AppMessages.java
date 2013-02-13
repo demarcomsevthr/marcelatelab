@@ -8,6 +8,24 @@ public interface AppMessages extends Messages {
   AppMessages IMPL = GWT.create(AppMessages.class);
   
   @DefaultMessage("Insert parameters")
-  String insertParameters();
+  String HomeView_paramBtn_text();
+  
+  @DefaultMessage("Params")
+  String CKDOutputView_headerBackButton_text();
+  
+  @DefaultMessage("VERY LOW")
+  String CKDOutputView_veryLowRisk_text();
+  
+  @DefaultMessage("LOW")
+  String CKDOutputView_lowRisk_text();
+  
+  @DefaultMessage("MIDDLE")
+  String CKDOutputView_middleRisk_text();
+  
+  @DefaultMessage("HIGH")
+  String CKDOutputView_highRisk_text();
+  
+  @DefaultMessage("VERY HIGH")
+  String CKDOutputView_veryHighRisk_text();
   
 }

@@ -1,6 +1,10 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:gpg="urn:import:it.mate.gpg.client.ui" xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:gpg="urn:import:it.mate.gpg.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"       
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default">
 
   <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
   
@@ -32,7 +36,9 @@
       
       <tr>
         <td>
-          <g:Label text="Rischio CKD"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="risk.text"/>
+          </g:Label>
         </td>
         <td>
            <g:HorizontalPanel>
@@ -72,7 +78,9 @@
       
       <tr>
         <td>
-          <g:Label text="Rischio CKD"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="risk.text"/>
+          </g:Label>
         </td>
         <td>
            <g:HorizontalPanel>
