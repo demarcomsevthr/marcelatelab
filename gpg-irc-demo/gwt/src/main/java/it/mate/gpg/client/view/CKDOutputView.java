@@ -1,6 +1,8 @@
 package it.mate.gpg.client.view;
 
 import it.mate.gpg.client.model.CKD;
+import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
+import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -23,6 +25,8 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
+  @UiField (provided=true) CustomMainCss style;
+
   @UiField TextBox cockcroftGfrBox;
   @UiField TextBox cockcroftGfrStadium;
   @UiField TextBox cockcroftRiskBox;
@@ -32,6 +36,7 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   @UiField TextBox mdrdRiskBox;
   
   public CKDOutputView() {
+    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
     initUI();
   }
 

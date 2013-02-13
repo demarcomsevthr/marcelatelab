@@ -3,14 +3,8 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:gpg="urn:import:it.mate.gpg.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
-       
-  <ui:style>
-  
-	.verLbl {
-	  font-size: 8px;
-    }
-	
-  </ui:style>
+
+  <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
 
   <g:HTMLPanel>
 

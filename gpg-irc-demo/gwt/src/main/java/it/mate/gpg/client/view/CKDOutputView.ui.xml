@@ -1,34 +1,28 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:gpg="urn:import:it.mate.gpg.client.ui" xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
-       
-  <ui:style>
-  
-    @external boxSpacer;
 
+  <!-- 
+  <ui:style>
+    @external boxSpacer;
     .homePanel {
 
 	}
-	
     .homePanel * {
 	  font-size: 16px;
 	  vertical-align: middle;
 	}
-	
     .homePanel td {
 	  padding-top: 0.1em;
 	}
-	
 	.homePanel input {
 	  width: 3em;
 	  text-align: center;
 	}
-	
 	.homePanel button {
 	  font-size: 16px;
 	  font-weight: bolder;
     }
-	
 	.valoriLbl {
 	  font-size: 16px;
 	  font-weight: bolder;
@@ -38,17 +32,17 @@
 	  padding-top: 5px;
       -webkit-border-radius: 6px;
     }
-	
 	.boxSpacer {
 	  width: 0.5em !important;
 	}
-  
 	.verLbl {
 	  font-size: 8px;
     }
-	
   </ui:style>
+   -->
 
+  <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
+  
   <g:HTMLPanel addStyleNames="{style.homePanel}">
 
     <table>
@@ -56,7 +50,7 @@
       <tr>
         <td colspan="2">
           <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
-             <g:Label text="Cockcroft" addStyleNames="{style.valoriLbl}" width="100%"/>
+             <g:Label text="Cockcroft" addStyleNames="{style.valoriLbl}"/>
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -70,7 +64,7 @@
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:TextBox ui:field="cockcroftGfrBox" enabled="false" width="5em" height="1.6em"/>
             <gc:Spacer width="0.3em"/>
-            <g:TextBox ui:field="cockcroftGfrStadium" enabled="false" width="2.2em" height="2.2em"/>
+            <g:TextBox ui:field="cockcroftGfrStadium" enabled="false" width="1.6em" height="1.6em"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -82,7 +76,7 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:TextBox ui:field="cockcroftRiskBox" enabled="false" width="6em" height="1.6em"/>
+            <g:TextBox ui:field="cockcroftRiskBox" enabled="false" width="7.2em" height="1.6em"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -110,7 +104,7 @@
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:TextBox ui:field="mdrdGfrBox" enabled="false" width="5em" height="1.6em"/>
             <gc:Spacer width="0.3em"/>
-            <g:TextBox ui:field="mdrdGfrStadium" enabled="false" width="2.2em" height="2.2em"/>
+            <g:TextBox ui:field="mdrdGfrStadium" enabled="false" width="1.6em" height="1.6em"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -122,7 +116,7 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:TextBox ui:field="mdrdRiskBox" enabled="false" width="6em" height="1.6em"/>
+            <g:TextBox ui:field="mdrdRiskBox" enabled="false" width="7.2em" height="1.6em"/>
            </g:HorizontalPanel>
         </td>
       </tr>

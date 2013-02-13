@@ -3,6 +3,8 @@ package it.mate.gpg.client.view;
 import it.mate.gpg.client.model.CKD;
 import it.mate.gpg.client.ui.SpinnerDoubleBox;
 import it.mate.gpg.client.ui.SpinnerIntegerBox;
+import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
+import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.utils.IPhoneScrollPatch;
 import it.mate.gpg.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -29,6 +31,8 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
+  @UiField (provided=true) CustomMainCss style;
+
   @UiField SpinnerIntegerBox etaSpinBox;
   @UiField SpinnerDoubleBox creatininaSpinBox;
   @UiField SpinnerIntegerBox pesoSpinBox;
@@ -38,6 +42,7 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   @UiField SpinnerIntegerBox albuminuriaSpinBox;
   
   public CKDInputView() {
+    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
     initUI();
   }
 

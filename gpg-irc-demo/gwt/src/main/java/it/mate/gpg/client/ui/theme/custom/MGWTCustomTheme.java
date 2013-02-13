@@ -2,24 +2,32 @@ package it.mate.gpg.client.ui.theme.custom;
 
 import com.google.gwt.core.shared.GWT;
 import com.googlecode.mgwt.ui.client.MGWT;
-import com.googlecode.mgwt.ui.client.theme.MGWTClientBundle;
 import com.googlecode.mgwt.ui.client.theme.MGWTTheme;
 
 public class MGWTCustomTheme implements MGWTTheme {
-
-  private MGWTClientBundle bundle;
   
-  public MGWTCustomTheme() {
+  private static MGWTCustomTheme instance;
+
+  private MGWTCustomClientBundle bundle;
+  
+  private MGWTCustomTheme() {
     if (MGWT.getOsDetection().isIOs()) {
-      bundle = GWT.create(MGWTCustomBundleIPhone.class);
+      bundle = GWT.create(MGWTCustomClientBundleIPhone.class);
     } else {
-      bundle = GWT.create(MGWTCustomBundleAndroid.class);
+      bundle = GWT.create(MGWTCustomClientBundleAndroid.class);
     }
   }
 
   @Override
-  public MGWTClientBundle getMGWTClientBundle() {
+  public MGWTCustomClientBundle getMGWTClientBundle() {
     return bundle;
+  }
+  
+  public static MGWTCustomTheme getInstance() {
+    if (instance == null) {
+      instance = new MGWTCustomTheme();
+    }
+    return instance;
   }
   
 }

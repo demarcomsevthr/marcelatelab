@@ -1,12 +1,14 @@
 package it.mate.gpg.client.view;
 
+import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
+import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -22,8 +24,11 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
+  
+  @UiField (provided=true) CustomMainCss style;
 
   public HomeView() {
+    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
     initUI();
   }
 
@@ -34,7 +39,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
   private void initUI() {
     HorizontalPanel hp = new HorizontalPanel();
     hp.add(new Spacer("0.8em"));
-    hp.add(new Image(UriUtils.fromTrustedString("images/creatinine.png")));
+//  hp.add(new Image(UriUtils.fromTrustedString("images/creatinine.png")));
+    hp.add(new Image(MGWTCustomTheme.getInstance().getMGWTClientBundle().headerImage()));
     getHeaderPanel().setLeftWidget(hp);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));

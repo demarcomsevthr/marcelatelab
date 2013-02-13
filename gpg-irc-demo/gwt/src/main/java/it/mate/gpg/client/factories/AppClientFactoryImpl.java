@@ -110,8 +110,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
     
-    MGWTCustomTheme customTheme = new MGWTCustomTheme();
-    customTheme.getMGWTClientBundle().getMainCss().ensureInjected();
+    MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss().ensureInjected();
 
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 

@@ -3,4 +3,5 @@
 body {
   background-image: bgr ;
   background-repeat: no-repeat;
+  background-size: cover;
 }
