@@ -1,38 +1,31 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:gpg="urn:import:it.mate.gpg.client.ui" xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
-       
-  <ui:style>
-  
-    @external .gwt-Label, .boxSpacer;
 
+  <!-- 
+  <ui:style>
+    @external .gwt-Label, .boxSpacer;
     .homePanel {
 
 	}
-	
     .homePanel * {
 	  font-size: 16px;
 	  vertical-align: middle;
 	}
-	
     .homePanel td {
 	  padding-top: 0.1em;
 	}
-	
 	.homePanel .gwt-Label {
 	  width: 4.2em;
 	}
-  
 	.homePanel input {
 	  width: 3em;
 	  text-align: center;
 	}
-	
 	.homePanel button {
 	  font-size: 16px;
 	  font-weight: bolder;
     }
-	
 	.valoriLbl {
 	  font-size: 16px;
 	  font-weight: bolder;
@@ -40,12 +33,13 @@
 	  height: 1.6em;
 	  padding-top: 5px;
     }
-	
 	.boxSpacer {
 	  width: 0.5em !important;
 	}
-  
   </ui:style>
+   -->
+
+  <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
 
   <g:HTMLPanel addStyleNames="{style.homePanel}">
 
