@@ -14,6 +14,9 @@ public class MainAnimationMapper implements AnimationMapper {
       MainPlace newMainPlace = (MainPlace)newPlace;
       MainPlace oldMainPlace = (MainPlace)oldPlace;
       if (newMainPlace.getToken().equals(MainPlace.HOME)) {
+        if (oldMainPlace == null || oldMainPlace.getToken().equals(MainPlace.HOME)) {
+          return null;
+        }
         return Animation.SLIDE_REVERSE;
       }
       if (oldMainPlace.getToken().equals(MainPlace.CKD_OUTPUT) && 

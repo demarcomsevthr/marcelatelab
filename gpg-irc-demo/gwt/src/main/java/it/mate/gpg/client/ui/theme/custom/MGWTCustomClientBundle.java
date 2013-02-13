@@ -9,4 +9,10 @@ public interface MGWTCustomClientBundle extends MGWTClientBundle {
   @Source("resources/creatinine.png")
   ImageResource headerImage();
   
+  @Source("resources/flag_en.png")
+  ImageResource flagEnImage();
+  
+  @Source("resources/flag_it.png")
+  ImageResource flagItImage();
+  
 }

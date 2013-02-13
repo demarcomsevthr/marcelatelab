@@ -48,6 +48,8 @@
   </replace-with>
   
   <entry-point class="it.mate.gpg.client.MainEntryPoint" />
+  
+  <extend-property name="locale" values="it"/>
 
   <source path="client" />
   <source path="shared" />
