@@ -66,6 +66,7 @@
           <hostedWebapp>${webappDirectory}</hostedWebapp>
           <webappDirectory>${webappDirectory}</webappDirectory>
           <module>it.mate.gpg.main</module>
+          <extra>target/extra</extra>
         </configuration>
       </plugin>
 

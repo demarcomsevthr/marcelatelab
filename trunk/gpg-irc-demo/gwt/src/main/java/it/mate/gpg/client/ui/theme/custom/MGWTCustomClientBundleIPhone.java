@@ -5,10 +5,10 @@ import com.googlecode.mgwt.ui.client.theme.base.MGWTClientBundleBaseThemeIPhone;
 
 public interface MGWTCustomClientBundleIPhone extends MGWTCustomClientBundle, MGWTClientBundleBaseThemeIPhone {
 
-  @Source("resources/bgr_iphone_a.jpg")
-  DataResource bgrImage();
-  
   @Source({"css/main.css", "css/iphone/main.css"})
   CustomMainCss getMainCss();
+  
+  @Source("resources/bgr_iphone_a.jpg")
+  DataResource bgrImage();
   
 }
