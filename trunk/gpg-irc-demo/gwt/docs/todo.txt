@@ -5,9 +5,17 @@
 	I18n >> DA FINIRE IN CKDInput e CKDOutput
 	
 		https://developers.google.com/web-toolkit/doc/latest/tutorial/i18n
-		https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n?hl=it
-		
+		https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n
 
+
+	______________________________________________________
+	
+	ADDITIONAL INFO
+
+	Clearance:
+		
+		https://itunes.apple.com/it/app/clearance-gfr-calculator/id443493892
+		
 	______________________________________________________
 	
 	UIBinder - Internationalization

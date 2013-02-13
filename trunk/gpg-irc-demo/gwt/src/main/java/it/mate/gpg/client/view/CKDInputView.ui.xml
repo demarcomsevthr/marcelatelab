@@ -1,6 +1,11 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:gpg="urn:import:it.mate.gpg.client.ui" xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget">
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:gpg="urn:import:it.mate.gpg.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"       
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default"
+       >
 
   <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
 
@@ -10,7 +15,9 @@
     
       <tr>
         <td>
-          <g:Label text="Età (anni)"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="age.text"/>
+          </g:Label>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -22,7 +29,9 @@
     
       <tr>
         <td>
-          <g:Label text="Creatinina (mg/dl)"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="creatinine.text"/>
+          </g:Label>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -34,7 +43,9 @@
     
       <tr>
         <td>
-          <g:Label text="Peso (kg)"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="weight.text"/>
+          </g:Label>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -57,25 +68,46 @@
         </td>
       </tr>
        -->
+       
+      <tr>
+        <td colspan="2">
+          <gc:Spacer height="0.6em"/>
+        </td>
+      </tr> 
     
       <tr>
         <td>
-          <g:Label text="Sesso"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="female.text"/>
+          </g:Label>
         </td>
         <td>
            <g:HorizontalPanel>
              <gc:Spacer width="24px"/>
              <g:VerticalPanel spacing="0">
+             
+               <g:CheckBox ui:field="fBtn" text=""/>
+             
+               <!-- 
                <g:RadioButton ui:field="mBtn" name="sex" text="maschio" checked="true"/>
                <g:RadioButton ui:field="fBtn" name="sex" text="femmina"/>
+                -->
              </g:VerticalPanel>
            </g:HorizontalPanel>
         </td>
       </tr>
       
       <tr>
+        <td colspan="2">
+          <gc:Spacer height="0.6em"/>
+        </td>
+      </tr> 
+    
+      <tr>
         <td>
-          <g:Label text="Albuminur. (mg)"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="albumine.text"/>
+          </g:Label>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -93,7 +125,9 @@
     
       <tr>
         <td colspan="2">
-          <m:Button ui:field="ckdOutputBtn" text="Calcola"/>
+          <m:Button ui:field="ckdOutputBtn" text="">
+            <ui:attribute name="text" description="text" key="estimate.text"/>
+          </m:Button>
         </td>
       </tr>
     
