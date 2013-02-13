@@ -1,0 +1,223 @@
+
+	>> GUIDA RIEPILOGATIVA IOS DEVELOPER WORKFLOW <<
+
+	AGG. 08/02/2013
+
+	CREAZIONE CERTIFICATO DEVELOPER
+	[vedi Adobe step by step]
+
+	- OSX: Keychain Access utility [ATTENZIONE: su questa macchina va completata la procedura fino all'export dei certificati da xcode]
+	- My Certificates
+	- Keychian Access > Certificate Assistant > Request a Certificate From a Certificate Authority...
+	- User Email Address = email del developer program
+	- Common name = nome del developer
+	- Save to disk
+	>>> certificate signing request file (CSR file)
+
+	- Provisioning Portal
+	- Certificates
+	- Development
+	- Request Certificate
+	- Choose file > CSR file
+	- Submit
+
+	> Certificate > Status = Pending Issuance
+	> qualche istante > refresh
+	> Certificate > Status = Issued
+
+
+
+
+	CREAZIONE CERTIFICATO DISTRIBUTION
+	[vedi Adobe step by step]
+
+	- OSX: Keychain Access utility [ATTENZIONE: su questa macchhina va completata la procedura fino all'export dei certificati da xcode]
+	- My Certificates
+	- Keychian Access > Certificate Assistant > Request a Certificate From a Certificate Authority...
+	- User Email Address = email del developer program
+	- Common name = nome del developer
+	- Save to disk
+	>>> certificate signing request file (CSR file)
+
+	- Provisioning Portal
+	- Certificates
+	- Distribution
+	- Request Certificate
+	- Choose file > CSR file
+	- Submit
+
+	> Certificate > Status = Pending Issuance
+	> qualche istante > refresh
+	> Certificate > Status = Issued
+
+
+
+	DOWNLOAD CERTIFICATI IN XCODE
+	[IMPORTANTE: STESSA MACCHINA SU CUI SI E' FATTA LA RICHIESTA DEL CERTIFICATO!]
+
+	- Xcode / Organizer / Devices / Library / Provisioning Prfiles > REFRESH
+
+	- Xcode / Organizer / Devices / Team > REFRESH
+
+	>> sotto Team
+	    - devlop certificate (iOS Development) - expiration date (1 year)
+	    - distrb certificate (iOS Distribution) - expiration date (1 year)
+
+	>> EXPORT
+
+	- Xcode / Organizer / Teams
+	- Marcello De Marco
+	- Export
+	- Save as: marcello_team_export / Documents
+	- Password: password per riaprire i file (eventuale import su altra macchina)
+
+   
+	ALTRA VERIFICA:
+
+	- Keychain Access
+	- login
+	- Keys:
+	    - Marcello De Marco - public key
+	    - Marcello De Marco - public key
+	    - Marcello De Marco - private key
+	    - Marcello De Marco - private key
+	  (perchè duplicati?)   
+   
+   
+
+
+
+	REPERIMENTO UDID DEL DEVICE DI TEST
+
+	- collegare il device a usb
+	- iTunes > devices > 'nome del device > info > click su serial number > UDID (ctrl-M copy)
+
+
+	AGGIUNTA DEVICE SU PROVISIONING PORTAL
+
+	- Provisioning portal: Devices
+	- Add:
+	    - Device name = ...
+	    - Device id = UDID [40 ch hex]
+
+	CREAZIONE DISTRIBUTION PROVISIONING PROFILE
+
+	- Provisionig portal: Provisioning / Distribution
+	- New Profile
+	    - Distrib method = Ad Hoc
+	    - Profile name = <dev> ad-hoc
+	    - Distribution cert = Marcello De Marco (distr certificate)
+	    - App id = select in combo
+	    - Devices = select device name to test
+
+
+	DOWNLOAD DEL PROVISIONG PROFILE PER L'UTENTE TEST
+
+	- Provisionig portal: Provisioning / Distribution
+	- select profile
+	- download > <profile name>.mobileprovisioning
+	- inviare email a user test
+	- click su allegato > 'Vuoi installare?'
+	- controllare Configurazione > Generale > Profilo > <profile name>
+
+
+	XCODE ASSETS REFRESH
+
+	- Xcode / Organizer / Devices
+	- Library / Provisiong Profiles > refresh
+	- questo deve scaricare il nuovo provisioning profile
+
+
+	XCODE BUILD AND ARCHIVE
+
+	- IrcTestDemo proj e CordovaLib proj > Build Settings > Build Active Architecture Only = Yes
+	- Scheme: IrcTestDemo
+	- Destnation: iOS Device
+	- Edit scheme
+	- Archive
+	    - Build config = <release>
+	    - Archive name = IrcTestDemo
+	- Product / Archive   
+
+
+
+	DISTRIBUZIONE APP TEST (OTA DISTRIBUTION)
+	(http://developer.apple.com/library/ios/#documentation/Xcode/Conceptual/ios_development_workflow/35-Distributing_Applications/distributing_applications.html)
+
+	- build mgwt (attenzione a volte da Xss error during javac)
+	- copy www.dir (togliere .js) in shared
+	- start osx
+	- copy www dir in Documents/irc-test-demo/www
+	- Xcode / Product / Archive
+	- Organizer / Archives > selezionare il nuovo archive prodotto
+        > Distribute
+        > Save for Enterpr or Ad-Hoc Deploy
+        > Code Sign Identity = Marcello De Marco (iOS Distribution)
+        > Save As IrcTestDemo
+        > in Documents
+        > Save for Enterprise Distribution
+        > Application url = http://marcelatelab.googlecode.com/files/IrcTestDemo3.ipa
+        > copy .ipa e .plist to shared
+        > NOTA: il file plist è testuale ed editabile in qualsiasi editor
+        > download .ipa e .plist su code.google.com
+        > direttamente in safari digitare:
+            itms-services://?action=download-manifest&url=http://marcelatelab.googlecode.com/files/IrcTestDemo3.plist
+           
+
+
+
+	====================================================================================
+
+	LINKS
+
+
+	IOS DEVELOPER GENERAL WORKFLOW:
+
+	http://developer.apple.com/library/ios/#documentation/Xcode/Conceptual/ios_development_workflow/00-About_the_iOS_Application_Development_Workflow/introduction.html
+
+
+	PUBLISHING APP FOR USER TESTING:
+
+	http://developer.apple.com/library/ios/#documentation/Xcode/Conceptual/ios_development_workflow/35-Distributing_Applications/distributing_applications.html
+
+
+	ADOBE STEP BY STEP [SOLO PER LA PARTE DI CREAZIONE CERTIFICATI]:
+
+	http://help.adobe.com/en_US/ppcompdoc/Step_by_step_guide_to_dps_se.pdf
+
+
+	PHONEGAP IOS STARTING:
+
+	http://docs.phonegap.com/en/2.3.0/guide_getting-started_ios_index.md.html
+
+
+	====================================================================================
+
+	OTA DISTRIBUTION METHOD
+
+	VEDI https://www.testflightapp.com/
+
+	http://marcelatelab.googlecode.com/files/IrcTestDemo.ipa
+
+	http://marcelatelab.googlecode.com/files/IrcTestDemo.plist
+
+	<a href="itms-services://?action=download-manifest&url=http://marcelatelab.googlecode.com/files/IrcTestDemo.plist">install</a>
+
+
+	_________________________________________________
+
+	METODO ALTERNATIVO
+
+	COLLEGAMENTO DEV A VMX E REGISTRAZIONE DEV COME DEVELOPMENT DEV
+
+	XCode > Organizer > Device > 'nome del device'
+
+	'Use as development device'
+
+	[fare un refresh]
+
+	>> Applications > Add > select .ipa >> alla fine si dovrebbe trovare l'app istallata
+
+	http://stackoverflow.com/questions/5063277/how-to-install-adhoc-ipa-file-to-iphone-without-backing-up-apps-of-iphone
+
+
