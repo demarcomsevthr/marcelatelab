@@ -1,21 +1,29 @@
 
-
-	VERIFICA ANDROID 14/02/2013
-	
-	> click locale it > 'Si è verificato un errore di rete (file:///android_asset/www/index.html?locale=it)'
-	
-	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
-	
-
-
-	SNAPSHOT 13/02/2013
-
-	> ANDROID Test
+	SNAPSHOT 14/02/2013
 
 	> iOS Phonegap Icons
 	
 	> reduce size .js (actual 2mb, after i18n!)
 	
+	> AppMessages > LocalizedMessages
+	
+	______________________________________________________
+
+	VERIFICA ANDROID 14/02/2013
+	
+	> click sui locale > msg 'Si è verificato un errore di rete (file:///android_asset/www/index.html?locale=it)'
+	
+	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
+	
+	______________________________________________________
+
+	IOS ICONS
+	
+	> ios/resources
+		- iniziato (14/2)
+		- forse bast alavora con 2 img di base: 
+			1 a 144x144 (sfondo grigio) e poi si riduce fino a 57x57 > cartella icons
+			1 a 320x300 (sfondo grigio con gradiente) e poi si costruiscono le altra solo ridimensionando la pagina > cartella splash
 
 	______________________________________________________
 
@@ -29,7 +37,6 @@
 
 	> background-image >> solved [12/02/2013]
 
-		
 
 	______________________________________________________
 	
