@@ -21,6 +21,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   private Button rightBtn;
   
   private double increment;
+  
+  private boolean needFireEvents = false;
 
   public SpinnerDoubleBox() {
     initUI();
@@ -51,30 +53,20 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       }
     });
 
-    /*
-    leftBtn.addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
-        inc(increment * -1);
-      }
-    });
-    rightBtn.addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
-        inc(increment);
-      }
-    });
-    */
-    
   }
   
   @Override
   public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
+    needFireEvents = true;
     return valueBox.addValueChangeHandler(handler);
   }
   
   private void inc(double increment) {
+    if (valueBox.getValue() == null)
+      return;
     double value = valueBox.getValue();
     value += increment;
-    valueBox.setValue(value, true);
+    valueBox.setValue(value, needFireEvents);
   }
   
   public void setIncrement(double increment) {

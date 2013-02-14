@@ -1,0 +1,13 @@
+@external mgwt-HeaderPanel;
+
+@url bgr bgrImage;
+
+body {
+  background-image: bgr ;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mgwt-HeaderPanel {
+  background-color: rgba(37, 66, 216, 0.68) !important;
+}
