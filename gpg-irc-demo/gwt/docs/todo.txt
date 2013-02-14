@@ -4,6 +4,8 @@
 	
 	> click locale it > 'Si è verificato un errore di rete (file:///android_asset/www/index.html?locale=it)'
 	
+	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
+	
 
 
 	SNAPSHOT 13/02/2013
