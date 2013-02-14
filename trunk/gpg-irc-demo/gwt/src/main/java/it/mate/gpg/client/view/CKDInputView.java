@@ -66,30 +66,6 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
     
     creatininaSpinBox.setIncrement(0.1);
 
-    /*
-    ValueChangeHandler<Integer> iHandler = new ValueChangeHandler<Integer>() {
-      public void onValueChange(ValueChangeEvent<Integer> event) {
-        onCalcBtn(null);
-      }
-    };
-    ValueChangeHandler<Double> dHandler = new ValueChangeHandler<Double>() {
-      public void onValueChange(ValueChangeEvent<Double> event) {
-        onCalcBtn(null);
-      }
-    };
-    ValueChangeHandler<Boolean> bHandler = new ValueChangeHandler<Boolean>() {
-      public void onValueChange(ValueChangeEvent<Boolean> event) {
-        onCalcBtn(null);
-      }
-    };
-    etaSpinBox.addValueChangeHandler(iHandler);
-    creatininaSpinBox.addValueChangeHandler(dHandler);
-    pesoSpinBox.addValueChangeHandler(iHandler);
-    mBtn.addValueChangeHandler(bHandler);
-    fBtn.addValueChangeHandler(bHandler);
-    albuminuriaSpinBox.addValueChangeHandler(iHandler);
-    */
-    
     GwtUtils.deferredExecution(200, new Delegate<Void>() {
       public void execute(Void element) {
         IPhoneScrollPatch.apply();

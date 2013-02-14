@@ -1,9 +1,19 @@
 
+
+	VERIFICA ANDROID 14/02/2013
+	
+	> click locale it > 'Si è verificato un errore di rete (file:///android_asset/www/index.html?locale=it)'
+	
+
+
 	SNAPSHOT 13/02/2013
 
 	> ANDROID Test
 
 	> iOS Phonegap Icons
+	
+	> reduce size .js (actual 2mb, after i18n!)
+	
 
 	______________________________________________________
 
