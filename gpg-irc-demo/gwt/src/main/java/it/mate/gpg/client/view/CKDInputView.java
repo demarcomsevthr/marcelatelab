@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 
 public class CKDInputView extends BaseMgwtView <Presenter> {
 
@@ -87,7 +88,7 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   }
 
   @UiHandler ("ckdOutputBtn")
-  public void onCalcBtn(TapEvent event) {
+  public void onCalcBtn(TouchStartEvent event) {
     if (!isSet(etaSpinBox.getValue()))
       return;
     if (!isSet(pesoSpinBox.getValue()))
