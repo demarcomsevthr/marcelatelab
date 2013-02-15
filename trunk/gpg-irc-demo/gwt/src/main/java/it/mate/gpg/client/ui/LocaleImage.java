@@ -1,6 +1,5 @@
 package it.mate.gpg.client.ui;
 
-import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.dom.client.Document;
@@ -36,23 +35,9 @@ public class LocaleImage extends TouchWidget {
     
     addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
-        
-        /*
-        MetaElement meta = (MetaElement)Document.get().getElementById("localeSetting");
-        meta.setContent("locale=" + LocaleImage.this.locale);
-        GwtUtils.log("tapped " + LocaleImage.this.locale);
-        */
-        
-        /*
-        UrlBuilder builder = Window.Location.createUrlBuilder();
-        builder.setParameter("locale", LocaleImage.this.locale);
-        Window.Location.assign(builder.buildString());
-        */
-        
         Document.get().getElementById("debugDiv").setInnerHTML("setting locale " + LocaleImage.this.locale);
-        Cookies.setCookie("mgwtLanguage", LocaleImage.this.locale);
+        Cookies.setCookie("mgwtLanguage", LocaleImage.this.locale, GwtUtils.getDate(31, 12, 2020));
         Window.Location.reload();
-        
       }
     });
     
