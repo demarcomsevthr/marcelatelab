@@ -1,6 +1,6 @@
 package it.mate.gpg.client.view;
 
-import it.mate.gpg.client.i18n.AppMessages;
+import it.mate.gpg.client.i18n.LocalizedMessages;
 import it.mate.gpg.client.model.CKD;
 import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
 import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
@@ -48,7 +48,7 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    getHeaderBackButton().setText(AppMessages.IMPL.CKDOutputView_headerBackButton_text());
+    getHeaderBackButton().setText(LocalizedMessages.IMPL.CKDOutputView_headerBackButton_text());
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToCkdInput();
@@ -72,19 +72,19 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     String irc = "";
     String ircCol = "white";
     if (risk == CKD.VERY_LOW_RISK) {
-      irc = AppMessages.IMPL.CKDOutputView_veryLowRisk_text();
+      irc = LocalizedMessages.IMPL.CKDOutputView_veryLowRisk_text();
       ircCol = "#00FF00";
     } else if (risk == CKD.LOW_RISK) {
-      irc = AppMessages.IMPL.CKDOutputView_lowRisk_text();
+      irc = LocalizedMessages.IMPL.CKDOutputView_lowRisk_text();
       ircCol = "#FFFF00";
     } else if (risk == CKD.MIDDLE_RISK) {
-      irc = AppMessages.IMPL.CKDOutputView_middleRisk_text();
+      irc = LocalizedMessages.IMPL.CKDOutputView_middleRisk_text();
       ircCol = "#FFCC00";
     } else if (risk == CKD.HIGH_RISK) {
-      irc = AppMessages.IMPL.CKDOutputView_highRisk_text();
+      irc = LocalizedMessages.IMPL.CKDOutputView_highRisk_text();
       ircCol = "#FF0000";
     } else if (risk == CKD.VERY_HIGH_RISK) {
-      irc = AppMessages.IMPL.CKDOutputView_veryHighRisk_text();
+      irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
       ircCol = "#990000";
     }
     riskBox.setValue(irc);

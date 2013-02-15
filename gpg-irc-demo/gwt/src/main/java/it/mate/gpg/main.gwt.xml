@@ -12,6 +12,9 @@
   <inherits name="com.google.gwt.inject.Inject"/>
 
   <inherits name='com.googlecode.gwtphonegap.PhoneGap' />
+  
+  <set-configuration-property name='locale.searchorder' value='queryparam,cookie,useragent' />
+  <set-configuration-property name="locale.cookie" value="mgwtLanguage"/>
 
   <!-- per velocizzare la build: -->
   <!-- 
@@ -21,11 +24,6 @@
 
   <add-linker name="xsiframe" />
   
-  <!-- DA APPROFONDIRE:
-  <inherits name="com.googlecode.mgwt.linker.Linker" />
-  <add-linker name="permutationmaplinker" />
-   -->  
-
   <!-- 
   <set-property name="mgwt.os" value="iphone" />
   <set-property name="mgwt.os" value="android" />
@@ -34,11 +32,6 @@
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 
-  <!-- <inherits name="com.google.gwt.core.Core" /> -->
-  <!-- <set-property name="compiler.emulatedStack" value="true"/> -->
-  <!-- <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true"/> -->
-  <!-- <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true"/> -->
-  
   <set-property name="compiler.stackMode" value="strip"/>
 
   <inherits name="it.mate.gwtcommons.Commons" />

@@ -1,6 +1,6 @@
 package it.mate.gpg.client.view;
 
-import it.mate.gpg.client.i18n.AppMessages;
+import it.mate.gpg.client.i18n.LocalizedMessages;
 import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
 import it.mate.gpg.client.ui.theme.custom.MGWTCustomClientBundle;
 import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
@@ -55,7 +55,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    paramBtn.setText(AppMessages.IMPL.HomeView_paramBtn_text());
+    paramBtn.setText(LocalizedMessages.IMPL.HomeView_paramBtn_text());
     
   }
   
@@ -69,6 +69,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     getPresenter().goToCkdInput();
   }
 
+  /*
   @UiHandler("enImg")
   public void onEnImg(ClickEvent event) {
     GwtUtils.log("en image!");
@@ -98,5 +99,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
     }
     Window.Location.replace(href);
   }
+  */
   
 }

@@ -25,16 +25,24 @@
       <gc:Spacer height="8em"/>
       <m:Button round="true" ui:field="paramBtn"/>
       
-      <gc:Spacer height="8em"/>
+      <gc:Spacer height="7em"/>
       
       <g:HorizontalPanel>
+        <!-- 
         <g:Image resource="{bundle.flagEnImage}" ui:field="enImg"/>
         <g:Image resource="{bundle.flagItImage}" ui:field="itImg"/>
+         -->
+         <gpg:LocaleImage resource="{bundle.flagEnImage}" locale="en"/>
+         <gc:Spacer width="0.4em"/>
+         <gpg:LocaleImage resource="{bundle.flagItImage}" locale="it"/>
       </g:HorizontalPanel>
        
       <gc:Spacer height="1em"/>
       <g:Label text="(ver. 0.008)" addStyleNames="{style.verLbl}"/>
       <g:Label text="1234567890123456789012345678901234567890123456789012345678901234567890" addStyleNames="{style.verLbl}"/>
+      <g:HTMLPanel>
+        <div id="debugDiv" class="{style.verLbl}"></div>
+      </g:HTMLPanel>
       
     </g:VerticalPanel>
 
