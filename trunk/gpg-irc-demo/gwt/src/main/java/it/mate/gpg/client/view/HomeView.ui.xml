@@ -30,7 +30,7 @@
       </g:HorizontalPanel>
        
       <gc:Spacer height="1em"/>
-      <g:Label text="(ver. 0.009)" addStyleNames="{style.verLbl}"/>
+      <g:Label text="(ver. 0.010)" addStyleNames="{style.verLbl}"/>
       <g:Label text="1234567890123456789012345678901234567890123456789012345678901234567890" addStyleNames="{style.verLbl}"/>
       <g:HTMLPanel>
         <div id="debugDiv" class="{style.verLbl}"></div>
