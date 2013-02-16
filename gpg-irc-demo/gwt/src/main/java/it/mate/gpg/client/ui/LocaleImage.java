@@ -37,11 +37,14 @@ public class LocaleImage extends TouchWidget {
       public void onTouchStart(TouchStartEvent event) {
         Document.get().getElementById("debugDiv").setInnerHTML("setting locale " + LocaleImage.this.locale);
         Cookies.setCookie("mgwtLanguage", LocaleImage.this.locale, GwtUtils.getDate(31, 12, 2020));
+        LocaleImage.setLocalLanguageCookie(LocaleImage.this.locale);
         Window.Location.reload();
       }
     });
     
     image = new Image();
+
+    GwtUtils.log("meta lang locale = " + GwtUtils.getJSVar("gDbLanguageCookieValue", "??"));
     
   }
   
@@ -58,5 +61,9 @@ public class LocaleImage extends TouchWidget {
     image.setResource(resource);
     elem.appendChild(image.getElement());
   }
+  
+  private static native void setLocalLanguageCookie(String value) /*-{
+    eval('$wnd.setLocalLanguageCookie("'+value+'")');
+  }-*/;
   
 }

@@ -12,10 +12,22 @@
 	
 
 
+	SNAPSHOT 16/02/2013
+
+	> prova su ios simul: language = it, spinnerdoublbox si sbianca con i tasti, con i decimali quando torna indietro da output perde i decimali
+
+
 
 	SNAPSHOT 15/02/2013
 
-	> android / cookie > settare expiration datetime
+	> android / cookie > settare expiration datetime > NON FUNZIONA!
+	
+	> android / cookie > utilizzo di html5 local storage OK > aggiunta di meta tag da js > NON FUNZIONA! 
+	
+	> DA PROVARE: 2 versioni di index.html, index-it.html > reaload da js
+		> su simulatore ios pare che funziona
+		> su htc (4.0.3sdk) non funziona!
+	
 	
 	
 

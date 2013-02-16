@@ -13,7 +13,9 @@
 
   <inherits name='com.googlecode.gwtphonegap.PhoneGap' />
   
+  <!-- 
   <set-configuration-property name='locale.searchorder' value='queryparam,cookie,useragent' />
+   -->
   <set-configuration-property name="locale.cookie" value="mgwtLanguage"/>
 
   <!-- per velocizzare la build: -->
@@ -28,7 +30,7 @@
   <set-property name="mgwt.os" value="iphone" />
   <set-property name="mgwt.os" value="android" />
    -->
-  <set-property name="mgwt.os" value="iphone" />
+  <set-property name="mgwt.os" value="android" />
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 
