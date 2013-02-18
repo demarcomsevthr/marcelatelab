@@ -36,6 +36,10 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   @UiField TextBox mdrdGfrStadium;
   @UiField TextBox mdrdRiskBox;
   
+  @UiField TextBox epiGfrBox;
+  @UiField TextBox epiGfrStadium;
+  @UiField TextBox epiRiskBox;
+  
   public CKDOutputView() {
     style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
     initUI();
@@ -62,6 +66,7 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
       CKD ckd = (CKD)model;
       applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox);
       applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox);
+      applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox);
     }
   }
   

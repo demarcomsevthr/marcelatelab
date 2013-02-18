@@ -30,7 +30,7 @@
   <set-property name="mgwt.os" value="iphone" />
   <set-property name="mgwt.os" value="android" />
    -->
-  <set-property name="mgwt.os" value="android" />
+  <set-property name="mgwt.os" value="iphone" />
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 

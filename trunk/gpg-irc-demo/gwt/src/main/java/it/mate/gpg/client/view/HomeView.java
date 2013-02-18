@@ -7,6 +7,8 @@ import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -63,7 +65,11 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler("paramBtn")
   public void onParamBtn(TouchStartEvent event) {
-    getPresenter().goToCkdInput();
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        getPresenter().goToCkdInput();
+      }
+    });
   }
 
   /*

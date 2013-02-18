@@ -1,4 +1,4 @@
-@external homePanel, verLbl, gwt-Label, boxSpacer, valoriLbl;
+@external homePanel, verLbl, gwt-Label, boxSpacer, valoriLbl, gwt-CheckBox;
 
 .homePanel {
 
@@ -10,11 +10,6 @@
 .homePanel td {
   padding-top: 0.1em;
 }
-/*
-.homePanel .gwt-Label {
-  width: 4.2em;
-}
-*/
 .homePanel input {
   width: 3em;
   text-align: center;
@@ -22,6 +17,10 @@
 .homePanel button {
   font-size: 16px;
   font-weight: bolder;
+}
+.gwt-CheckBox * {
+  width: 1em !important;
+  text-align: center;
 }
 
 .verLbl {

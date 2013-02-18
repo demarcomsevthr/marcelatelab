@@ -55,10 +55,11 @@
         </td>
       </tr>
     
-      <!-- 
       <tr>
         <td>
-          <g:Label text="Altezza (cm)"/>
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="heigth.text"/>
+          </g:Label>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -67,7 +68,6 @@
           </g:HorizontalPanel>
         </td>
       </tr>
-       -->
        
       <tr>
         <td colspan="2">
@@ -76,24 +76,20 @@
       </tr> 
     
       <tr>
-        <td>
-          <g:Label text="">
-            <ui:attribute name="text" description="text" key="female.text"/>
-          </g:Label>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-             <gc:Spacer width="24px"/>
-             <g:VerticalPanel spacing="0">
-             
-               <g:CheckBox ui:field="fBtn" text=""/>
-             
-               <!-- 
-               <g:RadioButton ui:field="mBtn" name="sex" text="maschio" checked="true"/>
-               <g:RadioButton ui:field="fBtn" name="sex" text="femmina"/>
-                -->
-             </g:VerticalPanel>
-           </g:HorizontalPanel>
+        <td colspan="2">
+          <g:HorizontalPanel>
+            <g:Label text="">
+              <ui:attribute name="text" description="text" key="female.text"/>
+            </g:Label>
+            <gc:Spacer width="24px"/>
+            <g:CheckBox ui:field="fBtn" text="" width="1em" checked="false"/>
+            <gc:Spacer width="60px"/>
+            <g:Label text="">
+              <ui:attribute name="text" description="text" key="black.text"/>
+            </g:Label>
+            <gc:Spacer width="24px"/>
+            <g:CheckBox ui:field="bBtn" text="" width="1em" checked="false"/>
+          </g:HorizontalPanel>
         </td>
       </tr>
       
@@ -125,9 +121,11 @@
     
       <tr>
         <td colspan="2">
-          <m:Button ui:field="ckdOutputBtn" text="">
-            <ui:attribute name="text" description="text" key="estimate.text"/>
-          </m:Button>
+          <g:HorizontalPanel horizontalAlignment="center" width="100%">
+            <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
+              <ui:attribute name="text" description="text" key="estimate.text"/>
+            </m:Button>
+          </g:HorizontalPanel>
         </td>
       </tr>
     
