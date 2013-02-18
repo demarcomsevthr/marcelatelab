@@ -11,6 +11,8 @@
 	> test su ipad
 	
 	> miglioramento l&f
+	
+	> pagina 'about'
 
 
 
