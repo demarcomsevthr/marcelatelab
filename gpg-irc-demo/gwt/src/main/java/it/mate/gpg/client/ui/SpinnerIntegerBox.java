@@ -1,6 +1,7 @@
 package it.mate.gpg.client.ui;
 
 import it.mate.gpg.client.utils.UIConstants;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -31,12 +32,14 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     HorizontalPanel hp = new HorizontalPanel();
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     leftBtn = new Button(" - ");
+    GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
     hp.add(leftBtn);
     valueBox = new IntegerBox();
     valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
     valueBox.getElement().setPropertyString("type", "number");
     hp.add(valueBox);
     rightBtn = new Button(" + ");
+    GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
     hp.add(rightBtn);
     initWidget(hp);
 

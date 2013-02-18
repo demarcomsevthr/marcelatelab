@@ -1,0 +1,22 @@
+	X INCONTRO 19/02/2013
+
+	> cose da preparare
+		> preparazione version e plist e upload su google code (serve prov profile)
+		> vedi IOS DEV WORKFL (https://docs.google.com/document/d/1gNDyzJDvNbaP6Q5jcyXYjYAACr2iaAh0isxD8yTkc3I/edit#heading=h.j1ryjrgveoml)
+		> xcode setup
+		> teamviewer setup
+
+	
+	> elenco cose da implementare 
+		- cambio unità di misura
+		- test su ipad
+		- affinamento l&f
+		- studiare procedura di pubblicazione
+
+	
+	> (elenco cose che possono andare storto)
+		- non funziona la distribution
+		- non parte
+		- su iphone fa schifo
+
+

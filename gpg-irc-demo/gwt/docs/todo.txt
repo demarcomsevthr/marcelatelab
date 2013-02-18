@@ -1,58 +1,33 @@
 
-	X INCONTRO GORINI
-	
-	> preparare le cose > preparazione version e plist e upload su google code
-	
-	> vedere come si setta iphone modem wifi
-	
-	> elenco cose da implementare 
-	
-	> (elenco cose che possono andare storto)
-	
-	
 
+	SNAPSHOT 18/02/2013
 
-	SNAPSHOT 16/02/2013
+	> [BUG] language = it, 
+	  spinnerdoublbox si sbianca con i tasti +/-, 
+	  perde i decimali quando torna indietro da output
 
-	> prova su ios simul: language = it, spinnerdoublbox si sbianca con i tasti, con i decimali quando torna indietro da output perde i decimali
+	> [ISSUE] cambio unità di misura
+	
+	> test su ipad
+	
+	> miglioramento l&f
 
 
 
-	SNAPSHOT 15/02/2013
-
-	> android / cookie > settare expiration datetime > NON FUNZIONA!
-	
-	> android / cookie > utilizzo di html5 local storage OK > aggiunta di meta tag da js > NON FUNZIONA! 
-	
-	> DA PROVARE: 2 versioni di index.html, index-it.html > reaload da js
-		> su simulatore ios pare che funziona
-		> su htc (4.0.3sdk) non funziona!
-	
-	
-	
-
-	SNAPSHOT 14/02/2013
-
-	> iOS Phonegap Icons > sembrano ok
-	
-	> reduce size .js (actual 2mb, after i18n!) > era il peso delle icone!
 	
 	______________________________________________________
 
 	VERIFICA ANDROID 14/02/2013
 	
-	> click sui locale > msg 'Si è verificato un errore di rete (file:///android_asset/www/index.html?locale=it)'
-		>> risolto con utilizzo cookie mgwtLanguage
-	
 	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
+
 	
 	______________________________________________________
 
 	IOS ICONS
 	
 	> ios/resources
-		- iniziato (14/2)
-		- forse bast alavora con 2 img di base: 
+		- 2 img di base:
 			1 a 144x144 (sfondo grigio) e poi si riduce fino a 57x57 > cartella icons
 			1 a 320x300 (sfondo grigio con gradiente) e poi si costruiscono le altra solo ridimensionando la pagina > cartella splash
 	

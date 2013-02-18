@@ -37,10 +37,9 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   @UiField SpinnerIntegerBox etaSpinBox;
   @UiField SpinnerDoubleBox creatininaSpinBox;
   @UiField SpinnerIntegerBox pesoSpinBox;
-//@UiField SpinnerIntegerBox altezzaSpinBox;
-//@UiField RadioButton mBtn;
-//@UiField RadioButton fBtn;
+  @UiField SpinnerIntegerBox altezzaSpinBox;
   @UiField CheckBox fBtn;
+  @UiField CheckBox bBtn;
   @UiField SpinnerIntegerBox albuminuriaSpinBox;
   
   public CKDInputView() {
@@ -84,29 +83,38 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
       creatininaSpinBox.setValue(ckd.getScr());
       albuminuriaSpinBox.setValue((int)ckd.getAlbumin());
       fBtn.setValue(ckd.isFemale());
+      bBtn.setValue(ckd.isBlack());
+      altezzaSpinBox.setValue(ckd.getHeight());
     }
   }
 
   @UiHandler ("ckdOutputBtn")
   public void onCalcBtn(TouchStartEvent event) {
-    if (!isSet(etaSpinBox.getValue()))
-      return;
-    if (!isSet(pesoSpinBox.getValue()))
-      return;
-    if (!isSet(creatininaSpinBox.getValue()))
-      return;
-    if (!isSet(albuminuriaSpinBox.getValue()))
-      return;
     
-    CKD ckd = new CKD()
-      .setAge(etaSpinBox.getValue())
-      .setWeight(pesoSpinBox.getValue())
-      .setScr(creatininaSpinBox.getValue())
-      .setAlbumin(albuminuriaSpinBox.getValue())
-      .setFemale(fBtn.getValue())
-      .setHeight(170);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        if (!isSet(etaSpinBox.getValue()))
+          return;
+        if (!isSet(pesoSpinBox.getValue()))
+          return;
+        if (!isSet(creatininaSpinBox.getValue()))
+          return;
+        if (!isSet(albuminuriaSpinBox.getValue()))
+          return;
+        if (!isSet(altezzaSpinBox.getValue()))
+          return;
+        CKD ckd = new CKD()
+          .setAge(etaSpinBox.getValue())
+          .setWeight(pesoSpinBox.getValue())
+          .setScr(creatininaSpinBox.getValue())
+          .setAlbumin(albuminuriaSpinBox.getValue())
+          .setFemale(fBtn.getValue())
+          .setBlack(bBtn.getValue())
+          .setHeight(altezzaSpinBox.getValue());
+        getPresenter().goToCkdOutput(ckd);
+      }
+    });
     
-    getPresenter().goToCkdOutput(ckd);
   }
   
   private boolean isSet(Integer value) {

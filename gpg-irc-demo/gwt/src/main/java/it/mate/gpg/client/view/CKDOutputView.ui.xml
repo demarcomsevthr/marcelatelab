@@ -12,9 +12,12 @@
 
     <table>
     
+      <!-- COCKCROFT SECTION -->
+    
       <tr>
         <td colspan="2">
           <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+             <gc:Spacer width="1.2em"/>
              <g:Label text="Cockcroft" addStyleNames="{style.valoriLbl}"/>
           </g:HorizontalPanel>
         </td>
@@ -22,7 +25,10 @@
     
       <tr>
         <td>
-          <g:Label text="GFR (ml/min)"/>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="GFR (ml/min)"/>
+          </g:HorizontalPanel>
         </td>
         <td>
            <g:HorizontalPanel>
@@ -36,9 +42,12 @@
       
       <tr>
         <td>
-          <g:Label text="">
-            <ui:attribute name="text" description="text" key="risk.text"/>
-          </g:Label>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="">
+              <ui:attribute name="text" description="text" key="risk.text"/>
+            </g:Label>
+          </g:HorizontalPanel>
         </td>
         <td>
            <g:HorizontalPanel>
@@ -54,9 +63,12 @@
         </td>
       </tr>
     
+      <!-- MDRD SECTION -->
+    
       <tr>
         <td colspan="2">
           <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+             <gc:Spacer width="0.2em"/>
              <g:Label text="MDRD" addStyleNames="{style.valoriLbl}" width="100%"/>
           </g:HorizontalPanel>
         </td>
@@ -64,7 +76,10 @@
     
       <tr>
         <td>
-          <g:Label text="GFR (ml/min)"/>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="GFR (ml/min)"/>
+          </g:HorizontalPanel>
         </td>
         <td>
            <g:HorizontalPanel>
@@ -78,14 +93,68 @@
       
       <tr>
         <td>
-          <g:Label text="">
-            <ui:attribute name="text" description="text" key="risk.text"/>
-          </g:Label>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="">
+              <ui:attribute name="text" description="text" key="risk.text"/>
+            </g:Label>
+          </g:HorizontalPanel>
         </td>
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:TextBox ui:field="mdrdRiskBox" enabled="false" width="7.2em" height="1.6em"/>
+           </g:HorizontalPanel>
+        </td>
+      </tr>
+      
+      <tr>
+        <td colspan="2">
+          <gc:Spacer height="1em"/>
+        </td>
+      </tr>
+    
+      <!-- EPI-GFR SECTION -->
+    
+      <tr>
+        <td colspan="2">
+          <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+             <gc:Spacer width="0.3em"/>
+             <g:Label text="CKD-EPI" addStyleNames="{style.valoriLbl}" width="100%"/>
+          </g:HorizontalPanel>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="GFR (ml/min)"/>
+          </g:HorizontalPanel>
+        </td>
+        <td>
+           <g:HorizontalPanel>
+            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+            <g:TextBox ui:field="epiGfrBox" enabled="false" width="5em" height="1.6em"/>
+            <gc:Spacer width="0.3em"/>
+            <g:TextBox ui:field="epiGfrStadium" enabled="false" width="1.6em" height="1.6em"/>
+           </g:HorizontalPanel>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <g:HorizontalPanel>
+            <gc:Spacer width="1.2em"/>
+            <g:Label text="">
+              <ui:attribute name="text" description="text" key="risk.text"/>
+            </g:Label>
+          </g:HorizontalPanel>
+        </td>
+        <td>
+           <g:HorizontalPanel>
+            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+            <g:TextBox ui:field="epiRiskBox" enabled="false" width="7.2em" height="1.6em"/>
            </g:HorizontalPanel>
         </td>
       </tr>
