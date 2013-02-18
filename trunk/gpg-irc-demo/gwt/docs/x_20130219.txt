@@ -11,6 +11,7 @@
 		- cambio unità di misura
 		- test su ipad
 		- affinamento l&f
+		- pagina 'about'
 		- studiare procedura di pubblicazione
 
 	
