@@ -12,7 +12,7 @@
   <g:HTMLPanel>
 
     <g:VerticalPanel width="100%" horizontalAlignment="center">
-      <gc:Spacer height="0.6em"/>
+      <gc:Spacer height="3.6em"/>
       
       <g:HTMLPanel>
         <div><ui:msg key="app.presentation" description="app presentation">App presentation here</ui:msg></div>

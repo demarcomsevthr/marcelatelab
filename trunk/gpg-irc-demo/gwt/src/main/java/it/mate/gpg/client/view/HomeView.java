@@ -46,11 +46,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
+    /*
     HorizontalPanel hp = new HorizontalPanel();
     hp.add(new Spacer("0.8em"));
-//  hp.add(new Image(UriUtils.fromTrustedString("images/creatinine.png")));
     hp.add(new Image(MGWTCustomTheme.getInstance().getMGWTClientBundle().headerImage()));
     getHeaderPanel().setLeftWidget(hp);
+    */
+    getHeaderPanel().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
@@ -72,36 +74,4 @@ public class HomeView extends BaseMgwtView <Presenter> {
     });
   }
 
-  /*
-  @UiHandler("enImg")
-  public void onEnImg(ClickEvent event) {
-    GwtUtils.log("en image!");
-    cc("en");
-  }
-  
-  @UiHandler("itImg")
-  public void onItImg(ClickEvent event) {
-    GwtUtils.log("it image!");
-    cc("it");
-  }
-  
-  private void cc(String newLoc) {
-    String href = Window.Location.getHref();
-    int qPos = href.indexOf("?");
-    if (qPos > -1) {
-      String qs = Window.Location.getQueryString();
-      int lPos = qs.indexOf("locale=");
-      if (lPos > -1) {
-        qs = qs.substring(0, lPos) + "locale="+newLoc;
-      } else {
-        qs = qs + "&locale="+newLoc;
-      }
-      href = href.substring(0, qPos) + qs;
-    } else {
-      href = href + "?locale=" + newLoc;
-    }
-    Window.Location.replace(href);
-  }
-  */
-  
 }

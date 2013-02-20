@@ -42,6 +42,10 @@
     <when-type-is class="it.mate.gpg.client.factories.AppClientFactory"/>
   </replace-with>
   
+  <replace-with class="it.mate.gpg.client.i18n.FixedNumberConstantsImpl">
+    <when-type-is class="com.google.gwt.i18n.client.constants.NumberConstantsImpl"/>
+  </replace-with>
+  
   <entry-point class="it.mate.gpg.client.MainEntryPoint" />
   
   <extend-property name="locale" values="it"/>
