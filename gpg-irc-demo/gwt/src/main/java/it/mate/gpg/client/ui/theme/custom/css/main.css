@@ -3,6 +3,8 @@
 
 @external inputPanel, firstColumn, secondColumn, spin-Button;
 
+@external outputPanel;
+
 @external gwt*;
 
 @external mgwt*;
@@ -49,6 +51,52 @@
   font-weight: 600;
   font-style: italic;
   color: rgba(255, 255, 0, 0.9);
+}
+
+.outputPanel {
+  
+}
+
+.ckd-Gfr {
+  font-size: 12pt;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 2px;
+  border: 1px solid black;
+  -webkit-border-radius: 4px;
+  background: lightgrey;
+}
+
+.ckd-Stadium {
+  font-size: 12pt;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 2px;
+  border: 1px solid black;
+  -webkit-border-radius: 4px;
+  background: lightgrey;
+}
+
+.ckd-Risk {
+  font-size: 14pt;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 2px;
+  border: 1px solid black;
+  -webkit-border-radius: 4px;
+}
+
+.ckd-Label {
+  
+}
+
+.outputPanel .ckd-Label {
+  font-weight: 600;  
+}
+
+.gwt-TextBox.ckd-Risk {
+  font-weight: 600;
+  font-size: 14pt;
 }
 
 .mgwt-Button.spin-Button {
@@ -102,5 +150,5 @@
   background-color: white;
   border: 1px solid grey;
   -webkit-border-radius: 4px;
-  padding: 2px;
+  padding: 2px 2px;
 }

@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -28,17 +29,17 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   @UiField (provided=true) CustomMainCss style;
 
-  @UiField TextBox cockcroftGfrBox;
-  @UiField TextBox cockcroftGfrStadium;
-  @UiField TextBox cockcroftRiskBox;
+  @UiField Label cockcroftGfrBox;
+  @UiField Label cockcroftGfrStadium;
+  @UiField Label cockcroftRiskBox;
   
-  @UiField TextBox mdrdGfrBox;
-  @UiField TextBox mdrdGfrStadium;
-  @UiField TextBox mdrdRiskBox;
+  @UiField Label mdrdGfrBox;
+  @UiField Label mdrdGfrStadium;
+  @UiField Label mdrdRiskBox;
   
-  @UiField TextBox epiGfrBox;
-  @UiField TextBox epiGfrStadium;
-  @UiField TextBox epiRiskBox;
+  @UiField Label epiGfrBox;
+  @UiField Label epiGfrStadium;
+  @UiField Label epiRiskBox;
   
   public CKDOutputView() {
     style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
@@ -70,30 +71,63 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     }
   }
   
+  private void applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox) {
+    gfrBox.setText(GwtUtils.formatDecimal(gfr, 2));
+    gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
+    int risk = ckd.getRiskStadium(gfr);
+    String irc = "";
+    String ircBckCol = "white";
+    String ircCol = "black";
+    if (risk == CKD.VERY_LOW_RISK) {
+      irc = LocalizedMessages.IMPL.CKDOutputView_veryLowRisk_text();
+      ircBckCol = "#00FF00";
+    } else if (risk == CKD.LOW_RISK) {
+      irc = LocalizedMessages.IMPL.CKDOutputView_lowRisk_text();
+      ircBckCol = "#FFFF00";
+    } else if (risk == CKD.MIDDLE_RISK) {
+      irc = LocalizedMessages.IMPL.CKDOutputView_middleRisk_text();
+      ircBckCol = "#FFCC00";
+    } else if (risk == CKD.HIGH_RISK) {
+      irc = LocalizedMessages.IMPL.CKDOutputView_highRisk_text();
+      ircBckCol = "#FF0000";
+    } else if (risk == CKD.VERY_HIGH_RISK) {
+      irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
+      ircBckCol = "#990000";
+      ircCol = "white";
+    }
+    riskBox.setText(irc);
+    riskBox.getElement().getStyle().setColor(ircCol);
+    riskBox.getElement().getStyle().setBackgroundColor(ircBckCol);
+  }
+  
   private void applyCKD(CKD ckd, double gfr, TextBox gfrBox, TextBox gfrStadiumBox, TextBox riskBox) {
     gfrBox.setValue(GwtUtils.formatDecimal(gfr, 2));
     gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
     int risk = ckd.getRiskStadium(gfr);
     String irc = "";
+    String ircBckCol = "white";
     String ircCol = "white";
     if (risk == CKD.VERY_LOW_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_veryLowRisk_text();
-      ircCol = "#00FF00";
+      ircBckCol = "#00FF00";
     } else if (risk == CKD.LOW_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_lowRisk_text();
-      ircCol = "#FFFF00";
+      ircBckCol = "#FFFF00";
     } else if (risk == CKD.MIDDLE_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_middleRisk_text();
-      ircCol = "#FFCC00";
+      ircBckCol = "#FFCC00";
     } else if (risk == CKD.HIGH_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_highRisk_text();
-      ircCol = "#FF0000";
+      ircBckCol = "#FF0000";
+      ircCol = "#FFFFFF";
     } else if (risk == CKD.VERY_HIGH_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
-      ircCol = "#990000";
+      ircBckCol = "#990000";
+      ircCol = "#FFFFFF";
     }
     riskBox.setValue(irc);
-    riskBox.getElement().getStyle().setBackgroundColor(ircCol);
+    riskBox.getElement().getStyle().setColor(ircCol);
+    riskBox.getElement().getStyle().setBackgroundColor(ircBckCol);
   }
   
 }
