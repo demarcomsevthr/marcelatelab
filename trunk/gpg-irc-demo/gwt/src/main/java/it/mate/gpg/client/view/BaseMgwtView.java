@@ -50,7 +50,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     main.add(headerPanel);
     main.add(scrollPanel);
     
-    getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Calculator");
+    getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Risk Calc");
     
   }
   

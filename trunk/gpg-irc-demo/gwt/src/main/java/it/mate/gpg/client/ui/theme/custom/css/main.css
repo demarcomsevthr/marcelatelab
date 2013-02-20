@@ -1,9 +1,13 @@
 
 @external homePanel, verLbl, boxSpacer, valoriLbl;
 
+@external inputPanel, firstColumn, secondColumn, spin-Button;
+
 @external gwt*;
 
 @external mgwt*;
+
+@external ckd*;
 
 .homePanel {
 
@@ -23,6 +27,39 @@
   font-size: 16px;
   font-weight: bolder;
 }
+
+.inputPanel .gwt-Label {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.inputPanel .firstColumn {
+  padding-left: 8px;
+  height: 44px;
+}
+
+.inputPanel .secondColumn {
+  text-align: center;
+  padding-left: 6px;
+  width: 6em;
+}
+
+.inputPanel .gwt-Anchor {
+  text-decoration: underline;
+  font-weight: 600;
+  font-style: italic;
+  color: rgba(255, 255, 0, 0.9);
+}
+
+.mgwt-Button.spin-Button {
+  padding: 6px 8px;
+  border: solid 1px !important;
+}
+
+.inputPanel .mgwt-InputBox-box {
+  -webkit-border-radius: 6px;
+}
+
 .gwt-CheckBox * {
   width: 1em !important;
   text-align: center;
@@ -50,4 +87,20 @@
   font: normal 28px Helvetica !important;
 }
 
+.mgwt-Button-round {
+  border-bottom-left-radius: 8px 8px !important;
+  border-bottom-right-radius: 8px 8px !important;
+  border-top-left-radius: 8px 8px !important;
+  border-top-right-radius: 8px 8px !important;
+}
 
+.mgwt-Button {
+  border: solid 3px rgba(0, 0, 0, 0.40) !important;
+}
+
+.ckd-CheckBox {
+  background-color: white;
+  border: 1px solid grey;
+  -webkit-border-radius: 4px;
+  padding: 2px;
+}

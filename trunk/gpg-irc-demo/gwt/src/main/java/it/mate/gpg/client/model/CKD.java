@@ -18,7 +18,7 @@ public class CKD {
   
   double scr;
   
-  int scrUnit;
+  int scrUnit = MG_DL_UNIT;
   
   int age;
   

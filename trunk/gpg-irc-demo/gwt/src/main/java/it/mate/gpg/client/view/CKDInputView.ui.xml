@@ -7,16 +7,28 @@
        ui:generateLocales="default"
        >
 
+  <ui:with field="bundle" type="it.mate.gpg.client.ui.theme.custom.MGWTCustomClientBundle"/>
   <ui:with field="style" type="it.mate.gpg.client.ui.theme.custom.CustomMainCss"/>
 
-  <g:HTMLPanel addStyleNames="{style.homePanel}">
+  <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}">
 
     <table>
     
       <tr>
-        <td>
+        <td colspan="2">
+          <gc:Spacer height="0.6em"/>
+        </td>
+      </tr> 
+    
+      <tr>
+        <td class="firstColumn">
           <g:Label text="">
             <ui:attribute name="text" description="text" key="age.text"/>
+          </g:Label>
+        </td>
+        <td class="secondColumn">
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="age.um.text"/>
           </g:Label>
         </td>
         <td>
@@ -28,10 +40,20 @@
       </tr>
     
       <tr>
-        <td>
+        <td class="firstColumn">
           <g:Label text="">
             <ui:attribute name="text" description="text" key="creatinine.text"/>
           </g:Label>
+        </td>
+        <td class="secondColumn">
+          <g:Anchor text="" ui:field="creatinineUmAnc">
+            <ui:attribute name="text" description="text" key="creatinine.um.text"/>
+          </g:Anchor>
+          <!-- 
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="creatinine.um.text"/>
+          </g:Label>
+           -->
         </td>
         <td>
           <g:HorizontalPanel>
@@ -42,9 +64,14 @@
       </tr>
     
       <tr>
-        <td>
+        <td class="firstColumn">
           <g:Label text="">
             <ui:attribute name="text" description="text" key="weight.text"/>
+          </g:Label>
+        </td>
+        <td class="secondColumn">
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="weight.um.text"/>
           </g:Label>
         </td>
         <td>
@@ -56,9 +83,14 @@
       </tr>
     
       <tr>
-        <td>
+        <td class="firstColumn">
           <g:Label text="">
             <ui:attribute name="text" description="text" key="heigth.text"/>
+          </g:Label>
+        </td>
+        <td class="secondColumn">
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="heigth.um.text"/>
           </g:Label>
         </td>
         <td>
@@ -76,19 +108,28 @@
       </tr> 
     
       <tr>
-        <td colspan="2">
+        <td colspan="3" class="firstColumn">
           <g:HorizontalPanel>
+            <gc:Spacer width="12px"/>
             <g:Label text="">
               <ui:attribute name="text" description="text" key="female.text"/>
             </g:Label>
-            <gc:Spacer width="24px"/>
+            <gc:Spacer width="12px"/>
+            <gpg:CkdCheckBox ui:field="fBtn" image="{bundle.checkImage}"/>
+            <!-- 
             <g:CheckBox ui:field="fBtn" text="" width="1em" checked="false"/>
+             -->
+            
             <gc:Spacer width="60px"/>
             <g:Label text="">
               <ui:attribute name="text" description="text" key="black.text"/>
             </g:Label>
-            <gc:Spacer width="24px"/>
+            <gc:Spacer width="12px"/>
+            <gpg:CkdCheckBox ui:field="bBtn" image="{bundle.checkImage}"/>
+            <!-- 
             <g:CheckBox ui:field="bBtn" text="" width="1em" checked="false"/>
+             -->
+            
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -100,9 +141,14 @@
       </tr> 
     
       <tr>
-        <td>
+        <td class="firstColumn">
           <g:Label text="">
             <ui:attribute name="text" description="text" key="albumine.text"/>
+          </g:Label>
+        </td>
+        <td class="secondColumn">
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="albumine.um.text"/>
           </g:Label>
         </td>
         <td>
@@ -120,7 +166,7 @@
       </tr>
     
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <g:HorizontalPanel horizontalAlignment="center" width="100%">
             <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
               <ui:attribute name="text" description="text" key="estimate.text"/>

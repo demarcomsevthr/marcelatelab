@@ -23,6 +23,34 @@
 	
 	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
 
+
+	
+	______________________________________________________
+
+	IOS RESOURCES
+
+
+	IOS APP THEMES
+
+	http://creativeoverflow.net/10-free-psd-resources-for-designing-iphone-apps/
+
+	>>> http://www.appdesignvault.com/portfolio/bizapp/ <<<
+
+	    >>> aprire le immagini in altra scheda
+
+
+	GRADIENT GENERATORS
+
+	http://www.colorzilla.com/gradient-editor/
+
+	http://www.visualcsstools.com/
+
+	http://www.html5today.it/tutorial/gradient-sfumature-css3-tutorial-completo
+
+	http://gradients.glrzad.com/
+
+	http://broken-links.com/tests/gradients/
+
 	
 	______________________________________________________
 
