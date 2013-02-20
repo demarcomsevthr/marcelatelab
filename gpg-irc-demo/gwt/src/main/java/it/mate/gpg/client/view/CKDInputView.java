@@ -4,6 +4,7 @@ import it.mate.gpg.client.model.CKD;
 import it.mate.gpg.client.ui.SpinnerDoubleBox;
 import it.mate.gpg.client.ui.SpinnerIntegerBox;
 import it.mate.gpg.client.ui.theme.custom.CustomMainCss;
+import it.mate.gpg.client.ui.theme.custom.MGWTCustomClientBundle;
 import it.mate.gpg.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gpg.client.utils.IPhoneScrollPatch;
 import it.mate.gpg.client.view.CKDInputView.Presenter;
@@ -12,10 +13,12 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
@@ -32,17 +35,22 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
+  @UiField (provided=true) MGWTCustomClientBundle bundle;
   @UiField (provided=true) CustomMainCss style;
 
   @UiField SpinnerIntegerBox etaSpinBox;
   @UiField SpinnerDoubleBox creatininaSpinBox;
   @UiField SpinnerIntegerBox pesoSpinBox;
   @UiField SpinnerIntegerBox altezzaSpinBox;
-  @UiField CheckBox fBtn;
-  @UiField CheckBox bBtn;
+  @UiField HasValue<Boolean> fBtn;
+  @UiField HasValue<Boolean> bBtn;
   @UiField SpinnerIntegerBox albuminuriaSpinBox;
+  @UiField Anchor creatinineUmAnc;
+  
+  private CKD ckd = new CKD();
   
   public CKDInputView() {
+    bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
     style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
     initUI();
   }
@@ -77,7 +85,7 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (model instanceof CKD) {
-      CKD ckd = (CKD)model;
+      this.ckd = (CKD)model;
       etaSpinBox.setValue(ckd.getAge());
       pesoSpinBox.setValue(ckd.getWeight());
       creatininaSpinBox.setValue(ckd.getScr());
@@ -86,6 +94,12 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
       bBtn.setValue(ckd.isBlack());
       altezzaSpinBox.setValue(ckd.getHeight());
     }
+  }
+  
+  @UiHandler ("creatinineUmAnc")
+  public void onCreatinineUmAnc (ClickEvent event) {
+    ckd.setScrUnit(ckd.getScrUnit() == CKD.MG_DL_UNIT ? CKD.PMOL_L_UNIT : CKD.MG_DL_UNIT);
+    creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "&micro;mol/l");
   }
 
   @UiHandler ("ckdOutputBtn")
@@ -103,8 +117,7 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
           return;
         if (!isSet(altezzaSpinBox.getValue()))
           return;
-        CKD ckd = new CKD()
-          .setAge(etaSpinBox.getValue())
+        ckd.setAge(etaSpinBox.getValue())
           .setWeight(pesoSpinBox.getValue())
           .setScr(creatininaSpinBox.getValue())
           .setAlbumin(albuminuriaSpinBox.getValue())

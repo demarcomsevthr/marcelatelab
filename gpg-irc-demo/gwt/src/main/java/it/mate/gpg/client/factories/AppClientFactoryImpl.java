@@ -42,34 +42,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private PhoneGap phoneGap;
   
   @Override
-  protected AppGinjector createGinjector() {
-    return GWT.create(AppGinjector.class);
-  }
-  
-  @Override
-  public PlaceHistoryMapper getPlaceHistoryMapper() {
-    if (placeHistoryMapper == null)
-      placeHistoryMapper = GWT.create(MainPlaceHistoryMapper.class);
-    return placeHistoryMapper;
-  }
-  
-  @Override
-  public EventBus getEventBus() {
-    throw new RuntimeException("Cannot use com.google.gwt.event.shared.EventBus in mgwt app, use instead injector.getBinderyEventBus");
-  }
-  
-  public com.google.web.bindery.event.shared.EventBus getBinderyEventBus() {
-    return getGinjector().getBinderyEventBus();
-  }
-  
-  @Override
-  public PlaceController getPlaceController() {
-    if (placeController == null)
-      placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
-    return placeController;
-  }
-  
-  @Override
   public void initModule(final Panel modulePanel) {
     
     this.phoneGap = GWT.create(PhoneGap.class);
@@ -122,6 +94,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       // StyleInjector.inject(AppBundle.INSTANCE.css().getText());
 
       createTabletDisplay(clientFactory);
+      
     } else {
 
       createPhoneDisplay(clientFactory);
@@ -138,6 +111,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   private void createPhoneDisplay(AppClientFactory clientFactory) {
+    
     AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
 
     MainActivityMapper activityMapper = new MainActivityMapper(clientFactory);
@@ -182,6 +156,34 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     super.initMvp(panel, getPlaceHistoryMapper(), activityMapper);
+  }
+  
+  @Override
+  protected AppGinjector createGinjector() {
+    return GWT.create(AppGinjector.class);
+  }
+  
+  @Override
+  public PlaceHistoryMapper getPlaceHistoryMapper() {
+    if (placeHistoryMapper == null)
+      placeHistoryMapper = GWT.create(MainPlaceHistoryMapper.class);
+    return placeHistoryMapper;
+  }
+  
+  @Override
+  public EventBus getEventBus() {
+    throw new RuntimeException("Cannot use com.google.gwt.event.shared.EventBus in mgwt app, use instead injector.getBinderyEventBus");
+  }
+  
+  public com.google.web.bindery.event.shared.EventBus getBinderyEventBus() {
+    return getGinjector().getBinderyEventBus();
+  }
+  
+  @Override
+  public PlaceController getPlaceController() {
+    if (placeController == null)
+      placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+    return placeController;
   }
   
 }

@@ -19,4 +19,7 @@ public interface MGWTCustomClientBundle extends MGWTClientBundle {
   @Source("resources/flag_it.png")
   ImageResource flagItImage();
   
+  @Source("resources/check.png")
+  ImageResource checkImage();
+  
 }

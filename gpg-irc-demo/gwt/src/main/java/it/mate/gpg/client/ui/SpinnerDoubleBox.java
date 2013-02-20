@@ -5,8 +5,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -35,6 +33,7 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     leftBtn = new Button("-");
     GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
+    leftBtn.addStyleName("spin-Button");
     hp.add(leftBtn);
     
 //  valueBox = new DoubleBox();
@@ -53,6 +52,7 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.add(valueBox);
     rightBtn = new Button("+");
     GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
+    rightBtn.addStyleName("spin-Button");
     hp.add(rightBtn);
     initWidget(hp);
 

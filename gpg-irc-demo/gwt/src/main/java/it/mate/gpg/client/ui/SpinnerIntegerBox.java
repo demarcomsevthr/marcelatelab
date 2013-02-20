@@ -29,6 +29,7 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     leftBtn = new Button(" - ");
     GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
+    leftBtn.addStyleName("spin-Button");
     hp.add(leftBtn);
 //  valueBox = new IntegerBox();
 //  valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
@@ -38,6 +39,7 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     hp.add(valueBox);
     rightBtn = new Button(" + ");
     GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
+    rightBtn.addStyleName("spin-Button");
     hp.add(rightBtn);
     initWidget(hp);
 

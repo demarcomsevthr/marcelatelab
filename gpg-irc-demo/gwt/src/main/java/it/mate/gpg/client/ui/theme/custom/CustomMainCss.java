@@ -16,4 +16,7 @@ public interface CustomMainCss extends MainCss {
   @ClassName("valoriLbl")
   public String valoriLbl();
 
+  @ClassName("inputPanel")
+  public String inputPanel();
+
 }
