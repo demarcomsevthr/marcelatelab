@@ -1,0 +1,42 @@
+@external homePanel, verLbl, gwt-Label, boxSpacer, valoriLbl, gwt-CheckBox;
+
+.homePanel {
+
+}
+.homePanel * {
+  font-size: 16px;
+  vertical-align: middle;
+}
+.homePanel td {
+  padding-top: 0.1em;
+}
+.homePanel input {
+  width: 3em;
+  text-align: center;
+}
+.homePanel button {
+  font-size: 16px;
+  font-weight: bolder;
+}
+.gwt-CheckBox * {
+  width: 1em !important;
+  text-align: center;
+}
+
+.verLbl {
+  font-size: 8px;
+}
+	
+.valoriLbl {
+  font-size: 16px;
+  font-weight: bolder;
+  background-color: #666666;
+  height: 1.6em;
+  width: 272px;
+  padding-top: 5px;
+  -webkit-border-radius: 6px;
+}
+
+.boxSpacer {
+  width: 0.5em !important;
+}

@@ -1,0 +1,72 @@
+
+
+	SNAPSHOT 18/02/2013
+
+	> [BUG] language = it, 
+	  spinnerdoublbox si sbianca con i tasti +/-, 
+	  perde i decimali quando torna indietro da output
+
+	> [ISSUE] cambio unità di misura
+	
+	> test su ipad
+	
+	> miglioramento l&f
+	
+	> pagina 'about'
+
+
+
+	
+	______________________________________________________
+
+	VERIFICA ANDROID 14/02/2013
+	
+	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
+
+	
+	______________________________________________________
+
+	IOS ICONS
+	
+	> ios/resources
+		- 2 img di base:
+			1 a 144x144 (sfondo grigio) e poi si riduce fino a 57x57 > cartella icons
+			1 a 320x300 (sfondo grigio con gradiente) e poi si costruiscono le altra solo ridimensionando la pagina > cartella splash
+	
+		LINK UTILI
+		
+		http://www.quirco.com/iPhoneIcon	-	Icon maker (a partire da un file)		
+
+	______________________________________________________
+
+	HISTORY LOG	
+	
+	> I18n >> fatto [13/02/2013]
+		https://developers.google.com/web-toolkit/doc/latest/tutorial/i18n
+		https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n
+		
+	> keyboard issue >> solved [12/02/2013]
+
+	> background-image >> solved [12/02/2013]
+
+
+	______________________________________________________
+	
+	ADDITIONAL INFO
+
+	Clearance:
+		
+		https://itunes.apple.com/it/app/clearance-gfr-calculator/id443493892
+		
+	______________________________________________________
+	
+	UIBinder - Internationalization
+	(https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n?hl=it)
+		
+	Compiler param:
+	
+	-extra target/extra
+	
+	>> produce i file di properties di default per i ui:msg contenuti nelle ui (vedi HomeView.ui.xml)
+	
+	>> ATTENZIONE: sembra che non funziona da maven, quindi utilizzare il google eclipse plugin
