@@ -37,7 +37,7 @@ public class CkdCheckBox extends TouchWidget implements HasValue<Boolean> {
     
     image = new Image();
     
-    spacer = new Spacer("20px", "20px");
+    spacer = new Spacer("20px", "22px");
     
     update();
     

@@ -19,4 +19,19 @@ public interface CustomMainCss extends MainCss {
   @ClassName("inputPanel")
   public String inputPanel();
 
+  @ClassName("outputPanel")
+  public String outputPanel();
+
+  @ClassName("ckd-Risk")
+  public String ckdRisk();
+
+  @ClassName("ckd-Stadium")
+  public String ckdStadium();
+
+  @ClassName("ckd-Gfr")
+  public String ckdGfr();
+
+  @ClassName("ckd-Label")
+  public String ckdLabel();
+
 }
