@@ -6,6 +6,10 @@ public class CKD {
   
   public final static int PMOL_L_UNIT = 2;
   
+  public final static int MG_G_UNIT = 3;
+  
+  public final static int MG_MMOL_UNIT = 4;
+  
   public final static int VERY_LOW_RISK = 1;
   
   public final static int LOW_RISK = 2;
@@ -27,6 +31,8 @@ public class CKD {
   int height;
   
   double albumin;
+  
+  int albUnit = MG_G_UNIT;
   
   boolean female;
   
@@ -196,6 +202,14 @@ public class CKD {
 
   public boolean isBlack() {
     return black;
+  }
+
+  public int getAlbUnit() {
+    return albUnit;
+  }
+
+  public void setAlbUnit(int albUnit) {
+    this.albUnit = albUnit;
   }
   
 }

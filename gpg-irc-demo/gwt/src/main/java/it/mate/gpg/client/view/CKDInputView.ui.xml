@@ -15,7 +15,7 @@
     <table>
     
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <gc:Spacer height="0.6em"/>
         </td>
       </tr> 
@@ -49,11 +49,6 @@
           <g:Anchor text="" ui:field="creatinineUmAnc">
             <ui:attribute name="text" description="text" key="creatinine.um.text"/>
           </g:Anchor>
-          <!-- 
-          <g:Label text="">
-            <ui:attribute name="text" description="text" key="creatinine.um.text"/>
-          </g:Label>
-           -->
         </td>
         <td>
           <g:HorizontalPanel>
@@ -102,7 +97,7 @@
       </tr>
        
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <gc:Spacer height="0.6em"/>
         </td>
       </tr> 
@@ -116,26 +111,18 @@
             </g:Label>
             <gc:Spacer width="12px"/>
             <gpg:CkdCheckBox ui:field="fBtn" image="{bundle.checkImage}"/>
-            <!-- 
-            <g:CheckBox ui:field="fBtn" text="" width="1em" checked="false"/>
-             -->
-            
             <gc:Spacer width="60px"/>
             <g:Label text="">
               <ui:attribute name="text" description="text" key="black.text"/>
             </g:Label>
             <gc:Spacer width="12px"/>
             <gpg:CkdCheckBox ui:field="bBtn" image="{bundle.checkImage}"/>
-            <!-- 
-            <g:CheckBox ui:field="bBtn" text="" width="1em" checked="false"/>
-             -->
-            
           </g:HorizontalPanel>
         </td>
       </tr>
       
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <gc:Spacer height="0.6em"/>
         </td>
       </tr> 
@@ -147,9 +134,9 @@
           </g:Label>
         </td>
         <td class="secondColumn">
-          <g:Label text="">
+          <g:Anchor text="" ui:field="albuminUmAnc">
             <ui:attribute name="text" description="text" key="albumine.um.text"/>
-          </g:Label>
+          </g:Anchor>
         </td>
         <td>
           <g:HorizontalPanel>
@@ -176,7 +163,7 @@
       </tr>
     
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <gc:Spacer height="1em"/>
         </td>
       </tr>

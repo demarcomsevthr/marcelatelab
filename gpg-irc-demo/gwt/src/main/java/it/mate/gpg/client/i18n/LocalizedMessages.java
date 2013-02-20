@@ -10,7 +10,7 @@ public interface LocalizedMessages extends Messages {
   @DefaultMessage("Insert parameters")
   String HomeView_paramBtn_text();
   
-  @DefaultMessage("Params")
+  @DefaultMessage("Parameters")
   String CKDOutputView_headerBackButton_text();
   
   @DefaultMessage("VERY LOW")

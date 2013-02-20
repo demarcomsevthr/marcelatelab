@@ -46,6 +46,7 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   @UiField HasValue<Boolean> bBtn;
   @UiField SpinnerIntegerBox albuminuriaSpinBox;
   @UiField Anchor creatinineUmAnc;
+  @UiField Anchor albuminUmAnc;
   
   private CKD ckd = new CKD();
   
@@ -100,6 +101,12 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
   public void onCreatinineUmAnc (ClickEvent event) {
     ckd.setScrUnit(ckd.getScrUnit() == CKD.MG_DL_UNIT ? CKD.PMOL_L_UNIT : CKD.MG_DL_UNIT);
     creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "&micro;mol/l");
+  }
+
+  @UiHandler ("albuminUmAnc")
+  public void onAlbuminUmAnc (ClickEvent event) {
+    ckd.setAlbUnit(ckd.getAlbUnit() == CKD.MG_G_UNIT ? CKD.MG_MMOL_UNIT : CKD.MG_G_UNIT);
+    albuminUmAnc.setHTML(ckd.getAlbUnit() == CKD.MG_G_UNIT ? "mg/g" : "mg/&micro;mol");
   }
 
   @UiHandler ("ckdOutputBtn")
