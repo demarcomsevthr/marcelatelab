@@ -1,24 +1,24 @@
 package it.mate.gpg.client.ui;
 
-import it.mate.gpg.client.utils.UIConstants;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 
 public class SpinnerDoubleBox extends Composite implements HasValueChangeHandlers<Double> {
   
   private Button leftBtn;
-  private DoubleBox valueBox;
+  private MDoubleBox valueBox;
   private Button rightBtn;
   
   private double increment;
@@ -36,9 +36,20 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     leftBtn = new Button("-");
     GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
     hp.add(leftBtn);
-    valueBox = new DoubleBox();
-    valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
+    
+//  valueBox = new DoubleBox();
+//  valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
+//  valueBox.getElement().setPropertyString("type", "number");
+
+    /** SEE:
+    NumberFormat.getDecimalFormat();
+    LocaleInfo.getCurrentLocale().getNumberConstants();
+    */
+    
+    valueBox = new MDoubleBox();
     valueBox.getElement().setPropertyString("type", "number");
+    
+    
     hp.add(valueBox);
     rightBtn = new Button("+");
     GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");

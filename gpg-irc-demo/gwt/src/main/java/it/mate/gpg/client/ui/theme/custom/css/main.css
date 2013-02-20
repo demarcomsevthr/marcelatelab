@@ -1,4 +1,9 @@
-@external homePanel, verLbl, gwt-Label, boxSpacer, valoriLbl, gwt-CheckBox;
+
+@external homePanel, verLbl, boxSpacer, valoriLbl;
+
+@external gwt*;
+
+@external mgwt*;
 
 .homePanel {
 
@@ -40,3 +45,9 @@
 .boxSpacer {
   width: 0.5em !important;
 }
+
+.mgwt-TextBox .mgwt-InputBox-box {
+  font: normal 28px Helvetica !important;
+}
+
+
