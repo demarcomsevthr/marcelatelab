@@ -30,7 +30,9 @@
       </g:HorizontalPanel>
        
       <gc:Spacer height="1em"/>
-      <g:Label text="Version 0.012 - Powered by XXX" addStyleNames="{style.verLbl}"/>
+      <g:Label text="" addStyleNames="{style.verLbl}">
+        <ui:attribute name="text" description="text" key="app.versionCredits"/>
+      </g:Label>
       <!-- 
       <g:Label text="1234567890123456789012345678901234567890123456789012345678901234567890" addStyleNames="{style.verLbl}"/>
        -->
