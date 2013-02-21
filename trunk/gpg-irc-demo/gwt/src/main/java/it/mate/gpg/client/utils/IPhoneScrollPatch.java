@@ -1,10 +1,14 @@
 package it.mate.gpg.client.utils;
 
+import com.googlecode.mgwt.ui.client.MGWT;
+
 
 public class IPhoneScrollPatch {
   
   public static void apply() {
-    applyImpl();
+    if (MGWT.getOsDetection().isIOs()) {
+      applyImpl();
+    }
   }
   
   private static native void applyImpl() /*-{

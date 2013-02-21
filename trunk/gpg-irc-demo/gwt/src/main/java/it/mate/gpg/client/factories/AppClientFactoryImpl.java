@@ -123,8 +123,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     activityManager.setDisplay(display);
 
     RootPanel.get().add(display);
-    
-    ZIndexPatch.apply();
+  
+    // 21/02/2013
+//  ZIndexPatch.apply();
     
   }
 

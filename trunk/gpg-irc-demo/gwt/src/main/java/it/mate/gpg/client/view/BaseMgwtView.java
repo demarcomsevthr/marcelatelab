@@ -35,7 +35,9 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
 
     headerBackButton = new HeaderButton();
     headerBackButton.setBackButton(true);
-    headerBackButton.setVisible(!MGWT.getOsDetection().isAndroid());
+  
+    // 21/02/2013
+//  headerBackButton.setVisible(!MGWT.getOsDetection().isAndroid());
 
     headerMainButton = new HeaderButton();
     headerMainButton.setRoundButton(true);

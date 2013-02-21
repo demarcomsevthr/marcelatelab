@@ -1,34 +1,34 @@
 
+	SNAPSHOT 21/02/2013
+	
+	
+	ESEMPIO DI SPLASH SCREEN:
+	
+		http://www.icoachmentor.com/wp-content/uploads/image/iniciored.png
+		> sfondo
+		> testo semplice senza riquadri
+		> un logo anche stilizzato semplice
+
+
+	------------------------
 
 	SNAPSHOT 18/02/2013
-
-	> [BUG] language = it, 
-	  spinnerdoublbox si sbianca con i tasti +/-, 
-	  perde i decimali quando torna indietro da output
-
-	> [ISSUE] cambio unità di misura
-	
 	> test su ipad
-	
-	> miglioramento l&f
-	
 	> pagina 'about'
-
-
 
 	
 	______________________________________________________
 
-	VERIFICA ANDROID 14/02/2013
+	VERIFICA ANDROID 20/02/2013
 	
-	> spinnerdoublebox > click su +/- > sparisce il valore (lo fa solo in chrome desktop, non sul device)
-
+	> text box senza bordo > messo a mano (main.css)
+	> i checkbox non funzionano
+	> la tastiera su albumina fa casino
 
 	
 	______________________________________________________
 
 	IOS RESOURCES
-
 
 	IOS APP THEMES
 
@@ -52,8 +52,6 @@
 	http://broken-links.com/tests/gradients/
 
 	
-	______________________________________________________
-
 	IOS ICONS
 	
 	> ios/resources
