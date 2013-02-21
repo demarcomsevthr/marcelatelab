@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class AbacoView extends BaseMgwtView<Presenter> {
 
@@ -43,6 +44,8 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   @UiField HTMLPanel linesContainer;
   @UiField Label numberLbl;
   
+  @UiField Button greenBtn;
+  
   private int gCount = 0;
   private int rCount = 0;
   private int bCount = 0;
@@ -56,7 +59,7 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   
   public AbacoView() {
     initUI();
-    
+    GwtUtils.log("init view");
   }
 
   private void initProvidedElements() {
