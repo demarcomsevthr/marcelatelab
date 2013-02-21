@@ -35,7 +35,7 @@
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:Label ui:field="cockcroftGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
             <gc:Spacer width="0.3em"/>
-            <g:Label ui:field="cockcroftGfrStadium" width="1.6em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+            <g:Label ui:field="cockcroftGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -52,7 +52,7 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="cockcroftRiskBox" width="9.0em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+            <g:Label ui:field="cockcroftRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -84,15 +84,9 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <!-- 
-            <g:TextBox ui:field="mdrdGfrBox" enabled="false" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
-             -->
             <g:Label ui:field="mdrdGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
             <gc:Spacer width="0.3em"/>
-            <!-- 
-            <g:TextBox ui:field="mdrdGfrStadium" enabled="false" width="1.6em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
-             -->
-            <g:Label ui:field="mdrdGfrStadium" width="1.6em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+            <g:Label ui:field="mdrdGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -109,7 +103,7 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="mdrdRiskBox" width="9.0em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+            <g:Label ui:field="mdrdRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -141,15 +135,9 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <!-- 
-            <g:TextBox ui:field="epiGfrBox" enabled="false" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
-             -->
             <g:Label ui:field="epiGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
             <gc:Spacer width="0.3em"/>
-            <!-- 
-            <g:TextBox ui:field="epiGfrStadium" enabled="false" width="1.6em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
-             -->
-            <g:Label ui:field="epiGfrStadium" width="1.6em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+            <g:Label ui:field="epiGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
@@ -166,7 +154,7 @@
         <td>
            <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="epiRiskBox" width="9.0em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+            <g:Label ui:field="epiRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
         </td>
       </tr>
