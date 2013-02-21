@@ -1,6 +1,8 @@
 package it.mate.gpg.client.ui;
 
 import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -11,6 +13,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Image;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
+import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 public class CkdCheckBox extends TouchWidget implements HasValue<Boolean> {
@@ -30,8 +33,17 @@ public class CkdCheckBox extends TouchWidget implements HasValue<Boolean> {
     
     addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
-        checked = !checked;
-        update();
+        if (MGWT.getOsDetection().isAndroid()) {
+          GwtUtils.deferredExecution(new Delegate<Void>() {
+            public void execute(Void element) {
+              checked = !checked;
+              update();
+            }
+          });
+        } else {
+          checked = !checked;
+          update();
+        }
       }
     });
     
