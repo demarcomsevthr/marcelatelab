@@ -38,6 +38,16 @@ mkdir target
 cd %BASEAPPDIR%
 call %~dp0\mvn2 %* -Dgwt.logLevel=%GWT_LOG_LEVEL%
 
+:COPY_DEPLOY
+
+if "%DEPLOY_TARGET%"=="" GOTO NO_COPY_DEPLOY
+set DEPLOY_SOURCE="%BASEAPPDIR%\..\assets\www"
+del /Q /S "%DEPLOY_TARGET%\*"
+rmdir /Q /S "%DEPLOY_TARGET%\main"
+xcopy /E /Y %DEPLOY_SOURCE%\* "%DEPLOY_TARGET%\"
+
+:NO_COPY_DEPLOY
+
 if "%SKIP_PAUSE%"=="true" GOTO NO_PAUSE
 pause
 
