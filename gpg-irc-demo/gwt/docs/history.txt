@@ -63,17 +63,25 @@
 		
 		http://www.quirco.com/iPhoneIcon	-	Icon maker (a partire da un file)		
 
+
+	______________________________________________________
+
+	ANDROID TIPS	
+
+	PERFORMANCE
+	
+	http://stackoverflow.com/questions/8213594/is-phonegap-slow-or-it-is-a-bug
+	
+	> AndroidManifest.xml:
+		android:minSdkVersion="14"
+	> MainActivity.init:	
+		super.appView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+		
+	
 	______________________________________________________
 
 	HISTORY LOG	
 	
-	> I18n >> fatto [13/02/2013]
-		https://developers.google.com/web-toolkit/doc/latest/tutorial/i18n
-		https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n
-		
-	> keyboard issue >> solved [12/02/2013]
-
-	> background-image >> solved [12/02/2013]
 
 
 	______________________________________________________
@@ -84,15 +92,3 @@
 		
 		https://itunes.apple.com/it/app/clearance-gfr-calculator/id443493892
 		
-	______________________________________________________
-	
-	UIBinder - Internationalization
-	(https://developers.google.com/web-toolkit/doc/latest/DevGuideUiBinderI18n?hl=it)
-		
-	Compiler param:
-	
-	-extra target/extra
-	
-	>> produce i file di properties di default per i ui:msg contenuti nelle ui (vedi HomeView.ui.xml)
-	
-	>> ATTENZIONE: sembra che non funziona da maven, quindi utilizzare il google eclipse plugin
