@@ -12,7 +12,7 @@
 
   <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}">
 
-    <table>
+    <table cellspacing="0" cellpadding="0">
     
       <tr>
         <td colspan="3">
@@ -27,7 +27,7 @@
           </g:Label>
         </td>
         <td class="secondColumn">
-          <g:Label text="">
+          <g:Label text="" width="50px">
             <ui:attribute name="text" description="text" key="age.um.text"/>
           </g:Label>
         </td>
@@ -105,18 +105,21 @@
       <tr>
         <td colspan="3" class="firstColumn">
           <g:HorizontalPanel>
-            <gc:Spacer width="12px"/>
+          
+            <gc:Spacer width="10px"/>
             <g:Label text="">
               <ui:attribute name="text" description="text" key="female.text"/>
             </g:Label>
-            <gc:Spacer width="12px"/>
+            <gc:Spacer width="10px"/>
             <gpg:CkdCheckBox ui:field="fBtn" image="{bundle.checkImage}"/>
-            <gc:Spacer width="60px"/>
+            
+            <gc:Spacer width="30px"/>
             <g:Label text="">
               <ui:attribute name="text" description="text" key="black.text"/>
             </g:Label>
-            <gc:Spacer width="12px"/>
+            <gc:Spacer width="10px"/>
             <gpg:CkdCheckBox ui:field="bBtn" image="{bundle.checkImage}"/>
+            
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -134,7 +137,10 @@
           </g:Label>
         </td>
         <td class="secondColumn">
-          <g:Anchor text="" ui:field="albuminUmAnc">
+          <g:Label text="">
+            <ui:attribute name="text" description="text" key="albumine.um.text"/>
+          </g:Label>
+          <g:Anchor text="" ui:field="albuminUmAnc" visible="false">
             <ui:attribute name="text" description="text" key="albumine.um.text"/>
           </g:Anchor>
         </td>
