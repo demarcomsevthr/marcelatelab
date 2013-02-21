@@ -1,13 +1,34 @@
-@external mgwt-HeaderPanel;
+@external mgwt*;
 
+* {
+  font-family: Helvetica, sans-serif;
+}
+
+/*
 @url bgr bgrImage;
-
 body {
   background-image: bgr ;
   background-repeat: no-repeat;
   background-size: cover;
 }
+*/
+
+body {
+  background-image: -webkit-gradient(linear , left top, left bottom, color-stop(0.20, rgba(64, 127, 221, 0.75)), color-stop(0.80, rgba(85, 184, 209, 0.72)), color-stop(0.90, rgba(5, 123, 252, 0.8))) ;
+  background-repeat: repeat;
+  background-size: 20px 500px;
+}
 
 .mgwt-HeaderPanel {
   background-color: rgba(37, 66, 216, 0.68) !important;
+}
+
+.mgwt-TextBox .mgwt-InputBox-box, .mgwt-PasswordTextBox .mgwt-InputBox-box, .mgwt-TextArea .mgwt-InputBox-box {
+  color: black !important;
+  background-color: white !important;
+  border: 1px solid black !important;
+}
+
+.mgwt-Button {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(234,234,234,0.90)), color-stop(0.5, rgba(195,195,195,0.70)), color-stop(0.5, rgba(166,166,166,0.70)), to(rgba(167,167,167,0.80))) !important;
 }
