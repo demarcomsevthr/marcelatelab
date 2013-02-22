@@ -1,0 +1,103 @@
+
+	SNAPSHOT 22/02/2013
+	
+		- udm su albuminuria
+		
+		- PROVARE phonegap ultima release
+		
+			> copia e incolla del progetto (con altro nome)
+			> link phonegap.jar e .js versione ultima (sia ver android / ios)
+			> test completo su IOS / ANDROID
+
+
+	SNAPSHOT 21/02/2013
+	
+		ESEMPIO DI SPLASH SCREEN:
+			http://www.icoachmentor.com/wp-content/uploads/image/iniciored.png
+			> sfondo
+			> testo semplice senza riquadri
+			> un logo anche stilizzato semplice
+
+
+	------------------------
+
+	SNAPSHOT 18/02/2013
+	> test su ipad
+	> pagina 'about'
+
+	
+	______________________________________________________
+
+	VERIFICA ANDROID 22/02/2013
+	
+	> text box senza bordo > sistemato da css (main.css) [21/02/2013]
+	> i checkbox non funzionano > sistemato [22/02/2013] [CkdCheckBox se android setto il clickhandler]
+	> la tastiera su albumina fa casino
+
+	
+	______________________________________________________
+
+	IOS RESOURCES
+
+	IOS APP THEMES
+
+	http://creativeoverflow.net/10-free-psd-resources-for-designing-iphone-apps/
+
+	>>> http://www.appdesignvault.com/portfolio/bizapp/ <<<
+
+	    >>> aprire le immagini in altra scheda
+
+
+	GRADIENT GENERATORS
+
+	http://www.colorzilla.com/gradient-editor/
+
+	http://www.visualcsstools.com/
+
+	http://www.html5today.it/tutorial/gradient-sfumature-css3-tutorial-completo
+
+	http://gradients.glrzad.com/
+
+	http://broken-links.com/tests/gradients/
+
+	
+	IOS ICONS
+	
+	> ios/resources
+		- 2 img di base:
+			1 a 144x144 (sfondo grigio) e poi si riduce fino a 57x57 > cartella icons
+			1 a 320x300 (sfondo grigio con gradiente) e poi si costruiscono le altra solo ridimensionando la pagina > cartella splash
+	
+		LINK UTILI
+		
+		http://www.quirco.com/iPhoneIcon	-	Icon maker (a partire da un file)		
+
+
+	______________________________________________________
+
+	ANDROID TIPS	
+
+	PERFORMANCE
+	
+	http://stackoverflow.com/questions/8213594/is-phonegap-slow-or-it-is-a-bug
+	
+	> AndroidManifest.xml:
+		android:minSdkVersion="14"
+	> MainActivity.init:	
+		super.appView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+		
+	
+	______________________________________________________
+
+	HISTORY LOG	
+	
+
+
+	______________________________________________________
+	
+	ADDITIONAL INFO
+
+	Clearance:
+		
+		https://itunes.apple.com/it/app/clearance-gfr-calculator/id443493892
+		
