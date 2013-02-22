@@ -94,19 +94,29 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
       fBtn.setValue(ckd.isFemale());
       bBtn.setValue(ckd.isBlack());
       altezzaSpinBox.setValue(ckd.getHeight());
+      updateCreatinineUmAnc();
+      updateAlbuminUmAnc();
     }
   }
+  
   
   @UiHandler ("creatinineUmAnc")
   public void onCreatinineUmAnc (ClickEvent event) {
     ckd.setScrUnit(ckd.getScrUnit() == CKD.MG_DL_UNIT ? CKD.PMOL_L_UNIT : CKD.MG_DL_UNIT);
-    creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "&micro;mol/l");
+    updateCreatinineUmAnc();
+  }
+  private void updateCreatinineUmAnc() {
+    // "&micro;mol/l"
+    creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "mmol/l");
   }
 
   @UiHandler ("albuminUmAnc")
   public void onAlbuminUmAnc (ClickEvent event) {
     ckd.setAlbUnit(ckd.getAlbUnit() == CKD.MG_G_UNIT ? CKD.MG_MMOL_UNIT : CKD.MG_G_UNIT);
-    albuminUmAnc.setHTML(ckd.getAlbUnit() == CKD.MG_G_UNIT ? "mg/g" : "mg/&micro;mol");
+    updateAlbuminUmAnc();
+  }
+  private void updateAlbuminUmAnc () {
+    albuminUmAnc.setHTML(ckd.getAlbUnit() == CKD.MG_G_UNIT ? "mg/g" : "<div>mg/</div><div>mmol</div>");
   }
 
   @UiHandler ("ckdOutputBtn")

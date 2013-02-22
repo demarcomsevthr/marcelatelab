@@ -42,8 +42,9 @@ call %~dp0\mvn2 %* -Dgwt.logLevel=%GWT_LOG_LEVEL%
 
 if "%DEPLOY_TARGET%"=="" GOTO NO_COPY_DEPLOY
 set DEPLOY_SOURCE="%BASEAPPDIR%\..\assets\www"
-del /Q /S "%DEPLOY_TARGET%\*"
+del /Q /S "%DEPLOY_TARGET%\*" >NUL
 rmdir /Q /S "%DEPLOY_TARGET%\main"
+echo COPYING DEPLOY TO %DEPLOY_TARGET%
 xcopy /E /Y %DEPLOY_SOURCE%\* "%DEPLOY_TARGET%\"
 
 :NO_COPY_DEPLOY

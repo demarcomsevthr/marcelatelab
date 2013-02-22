@@ -137,10 +137,7 @@
           </g:Label>
         </td>
         <td class="secondColumn">
-          <g:Label text="">
-            <ui:attribute name="text" description="text" key="albumine.um.text"/>
-          </g:Label>
-          <g:Anchor text="" ui:field="albuminUmAnc" visible="false">
+          <g:Anchor text="" ui:field="albuminUmAnc">
             <ui:attribute name="text" description="text" key="albumine.um.text"/>
           </g:Anchor>
         </td>
