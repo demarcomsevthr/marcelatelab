@@ -130,9 +130,17 @@ public class CKD {
     return stadioVfg;
   }
   
+  private double getAlbuminMgG() {
+    double albumin = this.albumin;
+    if (albUnit == MG_MMOL_UNIT) {
+      albumin = albumin * 10;
+    }
+    return albumin;
+  }
+  
   public int getRiskStadium(double gfr) {
     int risk = VERY_LOW_RISK;
-    if (albumin < 10) {
+    if (getAlbuminMgG() < 10) {
       if (gfr >= 60) {
         risk = VERY_LOW_RISK;
       } else if (gfr >= 45) {
@@ -144,7 +152,7 @@ public class CKD {
       } else {
         risk = VERY_HIGH_RISK;
       }
-    } else if (albumin <= 29) {
+    } else if (getAlbuminMgG() < 30) {
       if (gfr >= 60) {
         risk = VERY_LOW_RISK;
       } else if (gfr >= 45) {
@@ -156,7 +164,7 @@ public class CKD {
       } else {
         risk = VERY_HIGH_RISK;
       }
-    } else if (albumin <= 299) {
+    } else if (getAlbuminMgG() < 300) {
       if (gfr >= 60) {
         risk = LOW_RISK;
       } else if (gfr >= 45) {
@@ -166,7 +174,7 @@ public class CKD {
       } else {
         risk = VERY_HIGH_RISK;
       }
-    } else if (albumin <= 1999) {
+    } else if (getAlbuminMgG() < 2000) {
       if (gfr >= 60) {
         risk = MIDDLE_RISK;
       } else if (gfr >= 15) {

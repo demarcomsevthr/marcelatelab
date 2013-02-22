@@ -1,10 +1,10 @@
 package it.mate.gpg.client.ui;
 
 import it.mate.gwtcommons.client.ui.Spacer;
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
@@ -27,29 +27,30 @@ public class CkdCheckBox extends TouchWidget implements HasValue<Boolean> {
   private boolean checked = false;
   
   public CkdCheckBox() {
+    
     div = DOM.createDiv();
     setElement(div);
     addStyleName("ckd-CheckBox");
     
-    addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        if (MGWT.getOsDetection().isAndroid()) {
-          GwtUtils.deferredExecution(new Delegate<Void>() {
-            public void execute(Void element) {
-              checked = !checked;
-              update();
-            }
-          });
-        } else {
-          checked = !checked;
-          update();
-        }
-      }
-    });
-    
     image = new Image();
     
     spacer = new Spacer("20px", "22px");
+    
+    if (MGWT.getOsDetection().isAndroid()) {
+      addDomHandler(new ClickHandler() {
+        public void onClick(ClickEvent event) {
+          checked = !checked;
+          update();
+        }
+      }, ClickEvent.getType());
+    } else {
+      addTouchStartHandler(new TouchStartHandler() {
+        public void onTouchStart(TouchStartEvent event) {
+          checked = !checked;
+          update();
+        }
+      });
+    }
     
     update();
     

@@ -1,13 +1,22 @@
 
+	SNAPSHOT 22/02/2013
+	
+		- udm su albuminuria
+		
+		- PROVARE phonegap ultima release
+		
+			> copia e incolla del progetto (con altro nome)
+			> link phonegap.jar e .js versione ultima (sia ver android / ios)
+			> test completo su IOS / ANDROID
+
+
 	SNAPSHOT 21/02/2013
 	
-	
-	ESEMPIO DI SPLASH SCREEN:
-	
-		http://www.icoachmentor.com/wp-content/uploads/image/iniciored.png
-		> sfondo
-		> testo semplice senza riquadri
-		> un logo anche stilizzato semplice
+		ESEMPIO DI SPLASH SCREEN:
+			http://www.icoachmentor.com/wp-content/uploads/image/iniciored.png
+			> sfondo
+			> testo semplice senza riquadri
+			> un logo anche stilizzato semplice
 
 
 	------------------------
@@ -19,10 +28,10 @@
 	
 	______________________________________________________
 
-	VERIFICA ANDROID 20/02/2013
+	VERIFICA ANDROID 22/02/2013
 	
-	> text box senza bordo > messo a mano (main.css)
-	> i checkbox non funzionano
+	> text box senza bordo > sistemato da css (main.css) [21/02/2013]
+	> i checkbox non funzionano > sistemato [22/02/2013] [CkdCheckBox se android setto il clickhandler]
 	> la tastiera su albumina fa casino
 
 	
