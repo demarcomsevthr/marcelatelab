@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class AbacoView extends BaseMgwtView<Presenter> {
 
@@ -32,6 +31,8 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   
   private static final int BALLS_BOTTOM = LINES_TOP + (BALL_DIAM * 8);
   
+  private static final String BALL_PREFIX = "BallWidget";
+  
   public interface Presenter extends BasePresenter {
     public void goToHome();
   }
@@ -43,8 +44,6 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   @UiField HTMLPanel ballContainer;
   @UiField HTMLPanel linesContainer;
   @UiField Label numberLbl;
-  
-  @UiField Button greenBtn;
   
   private int gCount = 0;
   private int rCount = 0;
@@ -59,7 +58,7 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   
   public AbacoView() {
     initUI();
-    GwtUtils.log("init view");
+    
   }
 
   private void initProvidedElements() {
@@ -75,6 +74,8 @@ public class AbacoView extends BaseMgwtView<Presenter> {
         getPresenter().goToHome();
       }
     });
+    
+    getScrollPanel().setScrollingEnabledY(false);
 
     String linesHtml = "";
     linesHtml += "<div style=\"width: 2px; height: "+(BALL_DIAM * 9)+"px; background-color: black; position: absolute; top: "+LINES_TOP+"px; left: "+GREEN_LINE_X+"px;\"></div>"; 
@@ -121,26 +122,26 @@ public class AbacoView extends BaseMgwtView<Presenter> {
   
   private void ballContainerUpdate() {
     for (int g = 1; g <= gCount; g++) {
-      BallWidget ball = ballUpdate("ball$g", g, (GREEN_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.GREEN);
+      BallWidget ball = showBall(BALL_PREFIX+"-G-", g, (GREEN_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.GREEN);
       if (ball != null) {
         greenBalls[g - 1] = ball;
       }
     }
     for (int r = 1; r <= rCount; r++) {
-      BallWidget ball = ballUpdate("ball$r", r, (RED_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.RED);
+      BallWidget ball = showBall(BALL_PREFIX+"-R-", r, (RED_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.RED);
       if (ball != null) {
         redBalls[r - 1] = ball;
       }
     }
     for (int b = 1; b <= bCount; b++) {
-      BallWidget ball = ballUpdate("ball$b", b, (BLUE_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.BLUE);
+      BallWidget ball = showBall(BALL_PREFIX+"-B-", b, (BLUE_LINE_X - (BALL_DIAM - 2) / 2), BallWidget.BLUE);
       if (ball != null) {
         blueBalls[b - 1] = ball;
       }
     }
   }
   
-  private BallWidget ballUpdate(String prefix, int count, int left, int color) {
+  private BallWidget showBall(String prefix, int count, int left, int color) {
     Element el = DOM.getElementById(prefix+count);
     if (el == null) {
       int top = BALLS_BOTTOM - BALL_DIAM * (count - 1);
@@ -152,19 +153,19 @@ public class AbacoView extends BaseMgwtView<Presenter> {
           GwtUtils.log(getClass(), "tapEvent", "tap on " + ball);
           if (ball.getColor() == BallWidget.GREEN) {
             for (int g = ball.getCount(); g <= gCount; g++) {
-              greenBalls[g - 1].setVisible(false);
+              greenBalls[g - 1].getElement().removeFromParent();
               greenBalls[g - 1] = null;
             }
             gCount = ball.getCount() - 1;
           } else if (ball.getColor() == BallWidget.RED) {
             for (int r = ball.getCount(); r <= rCount; r++) {
-              redBalls[r - 1].setVisible(false);
+              redBalls[r - 1].getElement().removeFromParent();
               redBalls[r - 1] = null;
             }
             rCount = ball.getCount() - 1;
           } else if (ball.getColor() == BallWidget.BLUE) {
             for (int b = ball.getCount(); b <= bCount; b++) {
-              blueBalls[b - 1].setVisible(false);
+              blueBalls[b - 1].getElement().removeFromParent();
               blueBalls[b - 1] = null;
             }
             bCount = ball.getCount() - 1;
