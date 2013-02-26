@@ -4,5 +4,7 @@
     <string name="app_name">CKD Risk Calc</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-
+    
+    <string name="startup_url">file:///android_asset/www/index.html</string>
+    
 </resources>
