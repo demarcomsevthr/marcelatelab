@@ -90,7 +90,9 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
       etaSpinBox.setValue(ckd.getAge());
       pesoSpinBox.setValue(ckd.getWeight());
       creatininaSpinBox.setValue(ckd.getScr());
-      albuminuriaSpinBox.setValue((int)ckd.getAlbumin());
+      if (ckd.getAlbumin() != null) {
+        albuminuriaSpinBox.setValue(ckd.getAlbumin().intValue());
+      }
       fBtn.setValue(ckd.isFemale());
       bBtn.setValue(ckd.isBlack());
       altezzaSpinBox.setValue(ckd.getHeight());
@@ -130,10 +132,10 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
           return;
         if (!isSet(creatininaSpinBox.getValue()))
           return;
+        /*
         if (!isSet(albuminuriaSpinBox.getValue()))
           return;
-        if (!isSet(altezzaSpinBox.getValue()))
-          return;
+          */
         ckd.setAge(etaSpinBox.getValue())
           .setWeight(pesoSpinBox.getValue())
           .setScr(creatininaSpinBox.getValue())

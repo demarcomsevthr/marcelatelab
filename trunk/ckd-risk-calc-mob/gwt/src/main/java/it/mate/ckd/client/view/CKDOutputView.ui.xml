@@ -42,7 +42,7 @@
       
       <tr>
         <td>
-          <g:HorizontalPanel>
+          <g:HorizontalPanel ui:field="cockcroftRiskPanel1">
             <gc:Spacer width="1.2em"/>
             <g:Label text="" addStyleNames="{style.ckdLabel}">
               <ui:attribute name="text" description="text" key="risk.text"/>
@@ -50,7 +50,7 @@
           </g:HorizontalPanel>
         </td>
         <td>
-           <g:HorizontalPanel>
+           <g:HorizontalPanel ui:field="cockcroftRiskPanel2">
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:Label ui:field="cockcroftRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
@@ -93,7 +93,7 @@
       
       <tr>
         <td>
-          <g:HorizontalPanel>
+          <g:HorizontalPanel ui:field="mdrdRiskPanel1">
             <gc:Spacer width="1.2em"/>
             <g:Label text="" addStyleNames="{style.ckdLabel}">
               <ui:attribute name="text" description="text" key="risk.text"/>
@@ -101,7 +101,7 @@
           </g:HorizontalPanel>
         </td>
         <td>
-           <g:HorizontalPanel>
+           <g:HorizontalPanel ui:field="mdrdRiskPanel2">
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:Label ui:field="mdrdRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
@@ -144,7 +144,7 @@
       
       <tr>
         <td>
-          <g:HorizontalPanel>
+          <g:HorizontalPanel ui:field="epiRiskPanel1">
             <gc:Spacer width="1.2em"/>
             <g:Label text="" addStyleNames="{style.ckdLabel}">
               <ui:attribute name="text" description="text" key="risk.text"/>
@@ -152,7 +152,7 @@
           </g:HorizontalPanel>
         </td>
         <td>
-           <g:HorizontalPanel>
+           <g:HorizontalPanel ui:field="epiRiskPanel2">
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
             <g:Label ui:field="epiRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
            </g:HorizontalPanel>
@@ -164,6 +164,30 @@
           <gc:Spacer height="1em"/>
         </td>
       </tr>
+      
+      <tr>
+        <td colspan="2">
+          <g:HorizontalPanel verticalAlignment="MIDDLE" ui:field="bsaPanel1">
+            <gc:Spacer width="4em"/>
+            <g:Label text="Use" addStyleNames="{style.ckdLabel}">
+            </g:Label>
+            <gc:Spacer width="1em"/>
+            <m:Button text="BSA" addStyleNames="{style.ckdBsa}" ui:field="useBsaBtn"/>
+            <m:Button ui:field="useSbsBtn" addStyleNames="{style.ckdBsa}"/>
+          </g:HorizontalPanel>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td colspan="2">
+           <g:HorizontalPanel ui:field="bsaPanel2">
+            <gc:Spacer width="7.6em"/>
+            <g:HTML ui:field="bsaHtml" HTML="BSA = 0.00" addStyleNames="{style.ckdLabel}"></g:HTML>
+           </g:HorizontalPanel>
+        </td>
+      </tr>
+      
     
       </table>  
   

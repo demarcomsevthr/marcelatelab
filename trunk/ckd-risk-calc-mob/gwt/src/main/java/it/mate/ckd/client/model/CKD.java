@@ -26,11 +26,11 @@ public class CKD {
   
   int age;
   
-  int weight;
+  Integer weight;
   
-  int height;
+  Integer height;
   
-  double albumin;
+  Integer albumin;
   
   int albUnit = MG_G_UNIT;
   
@@ -38,11 +38,13 @@ public class CKD {
   
   boolean black;
   
+  boolean useBsa;
+  
   public double getCockcroftGFR() {
     double gfr = (140d - age) * weight;
     gfr /= (72d * getScrMgDl());
     gfr *= (female ? 0.85 : 1d);
-    return gfr;
+    return convertGfr(gfr);
   }
   
   public double getMdrdGFR() {
@@ -50,7 +52,7 @@ public class CKD {
     gfr *= Math.pow(age, -0.203);
     gfr *= (female ? 0.742 : 1d);
     gfr *= (black ? 1.210 : 1d);
-    return gfr;
+    return convertGfr(gfr);
   }
   
   public double getCkdEpiGFR() {
@@ -62,7 +64,30 @@ public class CKD {
     gfr *= Math.pow(0.993, age);
     gfr *= (female ? 1.018 : 1d);
     gfr *= (black ? 1.159 : 1d);
+    return convertGfr(gfr);
+  }
+  
+  private double convertGfr(double gfr) {
+    if (useBsa) {
+      Double bsa = getBSA();
+      if (bsa != null) {
+        gfr = gfr * bsa / 1.73;
+      }
+    }
     return gfr;
+  }
+  
+  public Double getBSA() {
+    if (weight == null || weight == 0) {
+      return null;
+    }
+    if (height == null || height == 0) {
+      return null;
+    }
+    double bsa = Math.pow(weight, 0.425);
+    bsa = bsa * Math.pow(height, 0.725);
+    bsa = bsa * 0.007184;
+    return bsa;
   }
   
   private double getScrMgDl() {
@@ -94,12 +119,12 @@ public class CKD {
     return this;
   }
 
-  public CKD setHeight(int height) {
+  public CKD setHeight(Integer height) {
     this.height = height;
     return this;
   }
 
-  public CKD setAlbumin(double albumin) {
+  public CKD setAlbumin(Integer albumin) {
     this.albumin = albumin;
     return this;
   }
@@ -130,8 +155,8 @@ public class CKD {
     return stadioVfg;
   }
   
-  private double getAlbuminMgG() {
-    double albumin = this.albumin;
+  private Integer getAlbuminMgG() {
+    Integer albumin = this.albumin;
     if (albUnit == MG_MMOL_UNIT) {
       albumin = albumin * 10;
     }
@@ -139,6 +164,9 @@ public class CKD {
   }
   
   public int getRiskStadium(double gfr) {
+    if (getAlbumin() == null || getAlbumin() == 0) {
+      return -1;
+    }
     int risk = VERY_LOW_RISK;
     if (getAlbuminMgG() < 10) {
       if (gfr >= 60) {
@@ -204,11 +232,11 @@ public class CKD {
     return weight;
   }
 
-  public int getHeight() {
+  public Integer getHeight() {
     return height;
   }
 
-  public double getAlbumin() {
+  public Integer getAlbumin() {
     return albumin;
   }
 
@@ -226,6 +254,14 @@ public class CKD {
 
   public void setAlbUnit(int albUnit) {
     this.albUnit = albUnit;
+  }
+
+  public void setUseBsa(boolean useBsa) {
+    this.useBsa = useBsa;
+  }
+  
+  public boolean isUseBsa() {
+    return useBsa;
   }
   
 }

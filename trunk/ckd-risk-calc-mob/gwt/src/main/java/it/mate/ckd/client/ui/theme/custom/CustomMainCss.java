@@ -34,4 +34,7 @@ public interface CustomMainCss extends MainCss {
   @ClassName("ckd-Label")
   public String ckdLabel();
 
+  @ClassName("ckd-Bsa")
+  public String ckdBsa();
+
 }
