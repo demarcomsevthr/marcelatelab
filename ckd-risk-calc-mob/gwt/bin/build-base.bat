@@ -46,6 +46,7 @@ del /Q /S "%DEPLOY_TARGET%\*" >NUL
 rmdir /Q /S "%DEPLOY_TARGET%\main"
 echo COPYING DEPLOY TO %DEPLOY_TARGET%
 xcopy /E /Y %DEPLOY_SOURCE%\* "%DEPLOY_TARGET%\"
+del /Q /S "%DEPLOY_TARGET%\cordova-*.js" >NUL
 
 :NO_COPY_DEPLOY
 

@@ -91,7 +91,7 @@
         <td>
           <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <ckd:SpinnerIntegerBox ui:field="altezzaSpinBox" value="170"/>
+            <ckd:SpinnerIntegerBox ui:field="altezzaSpinBox"/>
           </g:HorizontalPanel>
         </td>
       </tr>
@@ -144,7 +144,7 @@
         <td>
           <g:HorizontalPanel>
             <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <ckd:SpinnerIntegerBox ui:field="albuminuriaSpinBox" value="10"/>
+            <ckd:SpinnerIntegerBox ui:field="albuminuriaSpinBox"/>
           </g:HorizontalPanel>
         </td>
       </tr>

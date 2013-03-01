@@ -38,7 +38,7 @@
   font-family: Verdana;
   font-size: 11pt;
   font-weight: 600;
-  color: white;
+  color: rgba(26, 26, 0, 0.90);
 }
 
 .inputPanel .firstColumn {
@@ -69,7 +69,7 @@
 .outputPanel .gwt-Label {
   font-family: Verdana;
   font-size: 11pt;
-  color: white;
+  color: rgba(26, 26, 0, 0.90);
 }
 
 .outputPanel .ckd-Label {
@@ -97,6 +97,15 @@
   padding-top: 2px;
   border: 1px solid black;
   -webkit-border-radius: 4px;
+}
+
+.mgwt-Button.ckd-BsaBtnSelected {
+  border-color: yellow !important;
+}
+
+.mgwt-Button.ckd-Bsa {
+  padding: 4px;
+  font-size: 16px;
 }
 
 .ckd-Label {
