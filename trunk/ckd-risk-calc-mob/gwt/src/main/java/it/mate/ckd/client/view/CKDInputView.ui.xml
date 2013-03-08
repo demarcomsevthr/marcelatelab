@@ -106,14 +106,20 @@
         <td colspan="3" class="firstColumn">
           <g:HorizontalPanel>
           
-            <gc:Spacer width="10px"/>
+            <gc:Spacer width="10px">
+              <ui:attribute name="width" description="text" key="female.spacer.width"/>
+            </gc:Spacer>
+            
             <g:Label text="">
               <ui:attribute name="text" description="text" key="female.text"/>
             </g:Label>
             <gc:Spacer width="10px"/>
             <ckd:CkdCheckBox ui:field="fBtn" image="{bundle.checkImage}"/>
             
-            <gc:Spacer width="30px"/>
+            <gc:Spacer width="30px">
+              <ui:attribute name="width" description="text" key="black.spacer.width"/>
+            </gc:Spacer>
+            
             <g:Label text="">
               <ui:attribute name="text" description="text" key="black.text"/>
             </g:Label>
@@ -158,6 +164,7 @@
       <tr>
         <td colspan="3">
           <g:HorizontalPanel horizontalAlignment="center" width="100%">
+            <gc:Spacer width="42px"/>
             <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
               <ui:attribute name="text" description="text" key="estimate.text"/>
             </m:Button>

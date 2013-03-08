@@ -42,7 +42,7 @@
 }
 
 .inputPanel .firstColumn {
-  padding-left: 6px;
+  padding-left: 20px;
   height: 44px;
 }
 
@@ -74,6 +74,23 @@
 
 .outputPanel .ckd-Label {
   font-weight: 600;  
+}
+
+.outputPanel .ckd-LeftPaddingBox {
+  width: 1.6em;  
+}
+
+.outputPanel .gwt-Label.ckd-Label {
+  width: 120px;
+}
+
+.mgwt-Button.ckd-HelpBtn {
+  font-size: 12px;
+  width: 6em;
+  padding: 6px 6px;
+  position: absolute;
+  top: 370px;
+  left: 116px;
 }
 
 /*
@@ -175,3 +192,10 @@
   max-width: 74px !important;
 }
 
+.ckd-HelpPanel {
+  padding: 10px;
+}
+
+.gwt-HTML.ckd-HelpPanel * {
+  font-size: 12px;
+}

@@ -18,12 +18,13 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 
 public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
+    void goToCkdOutputHelp();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }
@@ -45,16 +46,16 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   @UiField Label epiRiskBox;
   
   @UiField Panel cockcroftRiskPanel1;
-  @UiField Panel cockcroftRiskPanel2;
+//@UiField Panel cockcroftRiskPanel2;
   @UiField Panel mdrdRiskPanel1;
-  @UiField Panel mdrdRiskPanel2;
+//@UiField Panel mdrdRiskPanel2;
   @UiField Panel epiRiskPanel1;
-  @UiField Panel epiRiskPanel2;
+//@UiField Panel epiRiskPanel2;
   
-  @UiField Panel bsaPanel1;
+//@UiField Panel bsaPanel1;
   @UiField Panel bsaPanel2;
-  @UiField Button useSbsBtn;
-  @UiField Button useBsaBtn;
+//@UiField Button useSbsBtn;
+//@UiField Button useBsaBtn;
   @UiField HTML bsaHtml;
   
   private CKD ckd;
@@ -77,23 +78,29 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
         getPresenter().goToCkdInput();
       }
     });
-    useSbsBtn.getElement().setInnerHTML("1.73 m&#178;");
+//  useSbsBtn.getElement().setInnerHTML("1.73 m&#178;");
   }
   
   @Override
   public void setModel(Object model, String tag) {
     if (model instanceof CKD) {
       this.ckd = (CKD)model;
-      applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel1, cockcroftRiskPanel2);
-      applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel1, mdrdRiskPanel2);
-      applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel1, epiRiskPanel2);
       
       Double bsa = ckd.getBSA();
+      
+      // 06/03/2013
+      ckd.setUseBsa(bsa != null);
+      
+      applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel1, null);
+      applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel1, 60d);
+      applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel1, null);
+      
       if (bsa != null) {
-        bsaPanel1.setVisible(true);
+//      bsaPanel1.setVisible(true);
         bsaPanel2.setVisible(true);
         bsaHtml.setHTML("BSA = " + GwtUtils.formatDecimal(bsa, 2) + " m&#178;");
 
+        /*
         useBsaBtn.removeStyleName("ckd-BsaBtnSelected");
         useSbsBtn.removeStyleName("ckd-BsaBtnSelected");
         if (ckd.isUseBsa()) {
@@ -101,28 +108,31 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
         } else {
           useSbsBtn.addStyleName("ckd-BsaBtnSelected");
         }
+        */
         
       } else {
-        bsaPanel1.setVisible(false);
+//      bsaPanel1.setVisible(false);
         bsaPanel2.setVisible(false);
       }
       
     }
   }
   
-  private void applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel1, Panel riskPanel2) {
-    gfrBox.setText(GwtUtils.formatDecimal(gfr, 2));
+  private void applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead) {
+    if (overhead != null && gfr > overhead) {
+      gfrBox.setText(">"+GwtUtils.formatDecimal(overhead, 0));
+    } else {
+      gfrBox.setText(GwtUtils.formatDecimal(gfr, 2));
+    }
     gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
     int risk = ckd.getRiskStadium(gfr);
     String irc = "";
     String ircBckCol = "white";
     String ircCol = "black";
     if (risk == -1) {
-      riskPanel1.setVisible(false);
-      riskPanel2.setVisible(false);
+      riskPanel.setVisible(false);
     } else {
-      riskPanel1.setVisible(true);
-      riskPanel2.setVisible(true);
+      riskPanel.setVisible(true);
     }
     if (risk == CKD.VERY_LOW_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_veryLowRisk_text();
@@ -146,6 +156,7 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     riskBox.getElement().getStyle().setBackgroundColor(ircBckCol);
   }
 
+  /*
   @UiHandler ("useBsaBtn")
   public void useBsaBtn(TapEvent event) {
     if (ckd != null) {
@@ -160,6 +171,12 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
       ckd.setUseBsa(false);
       setModel(ckd, null);
     }
+  }
+  */
+  
+  @UiHandler ("ckdHelpBtn")
+  public void onHelpBtn(TouchStartEvent event) {
+    getPresenter().goToCkdOutputHelp();
   }
   
 }
