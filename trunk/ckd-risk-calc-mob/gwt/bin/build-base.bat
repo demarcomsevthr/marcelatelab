@@ -6,6 +6,8 @@ echo.
 
 title BUILDING APP %APPNAME% [%*]
 
+%~d0
+
 call %~dp0\setenv.bat
 
 SET BASEAPPDIR=%~dp0\..
