@@ -145,7 +145,12 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   @UiHandler ("ckdHelpBtn")
   public void onHelpBtn(TouchStartEvent event) {
 //  getPresenter().goToCkdOutputHelp();
-    PhonegapUtils.openInAppBrowser("help.html");
+    String appLanguage = GwtUtils.getJSVar("appLanguage", null);
+    if ("it".equals(appLanguage)) {
+      PhonegapUtils.openInAppBrowser("help-it.html");
+    } else {
+      PhonegapUtils.openInAppBrowser("help.html");
+    }
   }
   
 }
