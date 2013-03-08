@@ -17,7 +17,8 @@ function getLocalLanguageCookie() {
       window.location.replace(href);
     }
   }
+  return lang;
 }
 
-getLocalLanguageCookie();
+var appLanguage = getLocalLanguageCookie();
 

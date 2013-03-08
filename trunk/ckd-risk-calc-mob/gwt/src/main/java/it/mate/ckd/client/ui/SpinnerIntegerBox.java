@@ -9,10 +9,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
+//import com.google.gwt.user.client.ui.Button;
 
 public class SpinnerIntegerBox extends Composite implements HasValueChangeHandlers<Integer> {
   
@@ -52,6 +53,17 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     initWidget(hp);
 
     if (!disableSpinButtons) {
+      leftBtn.addTapHandler(new TapHandler() {
+        public void onTap(TapEvent event) {
+          inc(-1);
+        }
+      });
+      rightBtn.addTapHandler(new TapHandler() {
+        public void onTap(TapEvent event) {
+          inc(+1);
+        }
+      });
+      /*
       leftBtn.addTouchStartHandler(new TouchStartHandler() {
         public void onTouchStart(TouchStartEvent event) {
           inc(-1);
@@ -62,6 +74,19 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
           inc(+1);
         }
       });
+      */
+      /*
+      leftBtn.addClickHandler(new ClickHandler() {
+        public void onClick(ClickEvent event) {
+          inc(-1);
+        }
+      });
+      rightBtn.addClickHandler(new ClickHandler() {
+        public void onClick(ClickEvent event) {
+          inc(+1);
+        }
+      });
+      */
     }
     
   }

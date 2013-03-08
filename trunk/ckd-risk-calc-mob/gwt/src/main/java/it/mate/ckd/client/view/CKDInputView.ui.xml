@@ -157,29 +157,18 @@
     
       <tr>
         <td>
-          <gc:Spacer height="0.6em"/>
+          <gc:Spacer height="0.8em"/>
         </td>
       </tr>
     
-      <tr>
-        <td colspan="3">
-          <g:HorizontalPanel horizontalAlignment="center" width="100%">
-            <gc:Spacer width="42px"/>
-            <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
-              <ui:attribute name="text" description="text" key="estimate.text"/>
-            </m:Button>
-          </g:HorizontalPanel>
-        </td>
-      </tr>
+    </table> 
     
-      <tr>
-        <td colspan="3">
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-    
-    </table>  
-  
+    <g:VerticalPanel horizontalAlignment="center" width="100%">
+       <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
+         <ui:attribute name="text" description="text" key="estimate.text"/>
+       </m:Button>
+       <gc:Spacer height="1em"/>
+    </g:VerticalPanel> 
   
   </g:HTMLPanel>
   

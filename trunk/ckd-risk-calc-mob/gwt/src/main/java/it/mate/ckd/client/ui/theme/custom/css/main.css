@@ -34,6 +34,14 @@
   font-weight: bolder;
 }
 
+.inputPanel button {
+  border: solid 1px rgb(192,192,192);
+  padding: 4px;
+  margin: 2px;
+  -webkit-border-radius: 2px;
+  background-color: rgb(230,230,230);
+}
+
 .inputPanel .gwt-Label {
   font-family: Verdana;
   font-size: 11pt;
@@ -42,7 +50,7 @@
 }
 
 .inputPanel .firstColumn {
-  padding-left: 20px;
+  padding-left: 12px;
   height: 44px;
 }
 
@@ -90,7 +98,7 @@
   padding: 6px 6px;
   position: absolute;
   top: 370px;
-  left: 116px;
+  left: 108px;
 }
 
 /*
