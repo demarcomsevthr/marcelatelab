@@ -4,6 +4,7 @@ import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.utils.PhonegapUtils;
 import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -36,26 +37,24 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   @UiField Label cockcroftGfrBox;
   @UiField Label cockcroftGfrStadium;
   @UiField Label cockcroftRiskBox;
+  @UiField Panel cockcroftRiskPanel;
   
   @UiField Label mdrdGfrBox;
   @UiField Label mdrdGfrStadium;
   @UiField Label mdrdRiskBox;
+  @UiField Panel mdrdRiskPanel;
+  
+  @UiField Label mdrdNcGfrBox;
+  @UiField Label mdrdNcGfrStadium;
+  @UiField Label mdrdNcRiskBox;
+  @UiField Panel mdrdNcRiskPanel;
   
   @UiField Label epiGfrBox;
   @UiField Label epiGfrStadium;
   @UiField Label epiRiskBox;
+  @UiField Panel epiRiskPanel;
   
-  @UiField Panel cockcroftRiskPanel1;
-//@UiField Panel cockcroftRiskPanel2;
-  @UiField Panel mdrdRiskPanel1;
-//@UiField Panel mdrdRiskPanel2;
-  @UiField Panel epiRiskPanel1;
-//@UiField Panel epiRiskPanel2;
-  
-//@UiField Panel bsaPanel1;
-  @UiField Panel bsaPanel2;
-//@UiField Button useSbsBtn;
-//@UiField Button useBsaBtn;
+  @UiField Panel bsaPanel;
   @UiField HTML bsaHtml;
   
   private CKD ckd;
@@ -78,7 +77,6 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
         getPresenter().goToCkdInput();
       }
     });
-//  useSbsBtn.getElement().setInnerHTML("1.73 m&#178;");
   }
   
   @Override
@@ -91,28 +89,16 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
       // 06/03/2013
       ckd.setUseBsa(bsa != null);
       
-      applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel1, null);
-      applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel1, 60d);
-      applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel1, null);
+      applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel, null);
+      applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel, 60d);
+      applyCKD(ckd, ckd.getMdrdNcGFR(), mdrdNcGfrBox, mdrdNcGfrStadium, mdrdNcRiskBox, mdrdNcRiskPanel, 60d);
+      applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel, null);
       
       if (bsa != null) {
-//      bsaPanel1.setVisible(true);
-        bsaPanel2.setVisible(true);
+        bsaPanel.setVisible(true);
         bsaHtml.setHTML("BSA = " + GwtUtils.formatDecimal(bsa, 2) + " m&#178;");
-
-        /*
-        useBsaBtn.removeStyleName("ckd-BsaBtnSelected");
-        useSbsBtn.removeStyleName("ckd-BsaBtnSelected");
-        if (ckd.isUseBsa()) {
-          useBsaBtn.addStyleName("ckd-BsaBtnSelected");
-        } else {
-          useSbsBtn.addStyleName("ckd-BsaBtnSelected");
-        }
-        */
-        
       } else {
-//      bsaPanel1.setVisible(false);
-        bsaPanel2.setVisible(false);
+        bsaPanel.setVisible(false);
       }
       
     }
@@ -156,27 +142,10 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     riskBox.getElement().getStyle().setBackgroundColor(ircBckCol);
   }
 
-  /*
-  @UiHandler ("useBsaBtn")
-  public void useBsaBtn(TapEvent event) {
-    if (ckd != null) {
-      ckd.setUseBsa(true);
-      setModel(ckd, null);
-    }
-  }
-  
-  @UiHandler ("useSbsBtn")
-  public void useSbsBtn(TapEvent event) {
-    if (ckd != null) {
-      ckd.setUseBsa(false);
-      setModel(ckd, null);
-    }
-  }
-  */
-  
   @UiHandler ("ckdHelpBtn")
   public void onHelpBtn(TouchStartEvent event) {
-    getPresenter().goToCkdOutputHelp();
+//  getPresenter().goToCkdOutputHelp();
+    PhonegapUtils.openInAppBrowser("help.html");
   }
   
 }
