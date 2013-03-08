@@ -1,5 +1,6 @@
 package it.mate.ckd.client.ui;
 
+import it.mate.ckd.client.config.ClientProperties;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -19,6 +20,8 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
   private MIntegerBox valueBox;
   private Button rightBtn;
   
+  private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerIntegerBox_disableSpinButtons(); 
+  
   public SpinnerIntegerBox() {
     initUI();
   }
@@ -27,32 +30,39 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     
     HorizontalPanel hp = new HorizontalPanel();
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-    leftBtn = new Button(" - ");
-    GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
-    leftBtn.addStyleName("spin-Button");
-    hp.add(leftBtn);
-//  valueBox = new IntegerBox();
-//  valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
-//  valueBox.getElement().setPropertyString("type", "number");
+    
+    if (!disableSpinButtons) {
+      leftBtn = new Button(" - ");
+      GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
+      leftBtn.addStyleName("spin-Button");
+      hp.add(leftBtn);
+    }
+    
     valueBox = new MIntegerBox();
     valueBox.getElement().setPropertyString("type", "number");
     hp.add(valueBox);
-    rightBtn = new Button(" + ");
-    GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
-    rightBtn.addStyleName("spin-Button");
-    hp.add(rightBtn);
+    
+    if (!disableSpinButtons) {
+      rightBtn = new Button(" + ");
+      GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
+      rightBtn.addStyleName("spin-Button");
+      hp.add(rightBtn);
+    }
+    
     initWidget(hp);
 
-    leftBtn.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        inc(-1);
-      }
-    });
-    rightBtn.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        inc(+1);
-      }
-    });
+    if (!disableSpinButtons) {
+      leftBtn.addTouchStartHandler(new TouchStartHandler() {
+        public void onTouchStart(TouchStartEvent event) {
+          inc(-1);
+        }
+      });
+      rightBtn.addTouchStartHandler(new TouchStartHandler() {
+        public void onTouchStart(TouchStartEvent event) {
+          inc(+1);
+        }
+      });
+    }
     
   }
   

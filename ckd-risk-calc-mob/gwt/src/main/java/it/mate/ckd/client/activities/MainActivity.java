@@ -4,6 +4,7 @@ import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.view.CKDInputView;
+import it.mate.ckd.client.view.CKDOutputHelpView;
 import it.mate.ckd.client.view.CKDOutputView;
 import it.mate.ckd.client.view.HomeView;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
@@ -16,7 +17,8 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, CKDInputView.Presenter, CKDOutputView.Presenter {
+  HomeView.Presenter, CKDInputView.Presenter, CKDOutputView.Presenter,
+  CKDOutputHelpView.Presenter {
   
   private MainPlace place;
   
@@ -48,6 +50,11 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       view.setModel(GwtUtils.getClientAttribute(CKD_ATTR), "ckd");
     }
+    if (place.getToken().equals(MainPlace.CKD_OUTPUT_HELP)) {
+      CKDOutputHelpView view = AppClientFactory.IMPL.getGinjector().getCKDOutputHelpView();
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
   }
 
   @Override
@@ -72,8 +79,15 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void goToCkdOutput(CKD ckd) {
-    GwtUtils.setClientAttribute(CKD_ATTR, ckd);
+    if (ckd != null) {
+      GwtUtils.setClientAttribute(CKD_ATTR, ckd);
+    }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_OUTPUT));
+  }
+
+  @Override
+  public void goToCkdOutputHelp() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_OUTPUT_HELP));
   }
 
 }

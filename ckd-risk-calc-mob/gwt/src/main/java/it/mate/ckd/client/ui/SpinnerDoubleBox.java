@@ -1,5 +1,6 @@
 package it.mate.ckd.client.ui;
 
+import it.mate.ckd.client.config.ClientProperties;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -22,6 +23,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   private double increment;
   
   private boolean needFireEvents = false;
+  
+  private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerDoubleBox_disableSpinButtons(); 
 
   public SpinnerDoubleBox() {
     initUI();
@@ -31,15 +34,14 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     
     HorizontalPanel hp = new HorizontalPanel();
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-    leftBtn = new Button("-");
-    GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
-    leftBtn.addStyleName("spin-Button");
-    hp.add(leftBtn);
     
-//  valueBox = new DoubleBox();
-//  valueBox.getElement().getStyle().setFontSize(UIConstants.DEFAULT_SPINNER_FONT_SIZE, Unit.PX);
-//  valueBox.getElement().setPropertyString("type", "number");
-
+    if (!disableSpinButtons) {
+      leftBtn = new Button("-");
+      GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
+      leftBtn.addStyleName("spin-Button");
+      hp.add(leftBtn);
+    }
+    
     /** SEE:
     NumberFormat.getDecimalFormat();
     LocaleInfo.getCurrentLocale().getNumberConstants();
@@ -48,24 +50,29 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     valueBox = new MDoubleBox();
     valueBox.getElement().setPropertyString("type", "number");
     
-    
     hp.add(valueBox);
-    rightBtn = new Button("+");
-    GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
-    rightBtn.addStyleName("spin-Button");
-    hp.add(rightBtn);
+    
+    if (!disableSpinButtons) {
+      rightBtn = new Button("+");
+      GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
+      rightBtn.addStyleName("spin-Button");
+      hp.add(rightBtn);
+    }
+    
     initWidget(hp);
 
-    leftBtn.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        inc(increment * -1);
-      }
-    });
-    rightBtn.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        inc(increment);
-      }
-    });
+    if (!disableSpinButtons) {
+      leftBtn.addTouchStartHandler(new TouchStartHandler() {
+        public void onTouchStart(TouchStartEvent event) {
+          inc(increment * -1);
+        }
+      });
+      rightBtn.addTouchStartHandler(new TouchStartHandler() {
+        public void onTouchStart(TouchStartEvent event) {
+          inc(increment);
+        }
+      });
+    }
 
   }
   

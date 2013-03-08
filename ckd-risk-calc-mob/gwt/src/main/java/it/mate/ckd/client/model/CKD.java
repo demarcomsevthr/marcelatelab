@@ -52,7 +52,7 @@ public class CKD {
     gfr *= Math.pow(age, -0.203);
     gfr *= (female ? 0.742 : 1d);
     gfr *= (black ? 1.210 : 1d);
-    return convertGfr(gfr);
+    return gfr;
   }
   
   public double getCkdEpiGFR() {
@@ -64,7 +64,7 @@ public class CKD {
     gfr *= Math.pow(0.993, age);
     gfr *= (female ? 1.018 : 1d);
     gfr *= (black ? 1.159 : 1d);
-    return convertGfr(gfr);
+    return gfr;
   }
   
   private double convertGfr(double gfr) {

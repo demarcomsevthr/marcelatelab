@@ -11,6 +11,8 @@ public class MainPlace extends Place {
   
   public static final String CKD_OUTPUT = "ckdOutput";
   
+  public static final String CKD_OUTPUT_HELP = "ckdOutputHelp";
+  
   private String token;
 
   public MainPlace() {

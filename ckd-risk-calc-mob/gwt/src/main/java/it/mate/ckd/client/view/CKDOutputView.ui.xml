@@ -9,187 +9,125 @@
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
   
   <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel}">
+  
+    <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
+      <ui:attribute name="text" description="text" key="helpBtn.text"/>
+    </m:Button>
+    
+    <g:VerticalPanel>
+    
+      <g:HorizontalPanel>
+        <gc:Spacer height="0.2em"/>
+      </g:HorizontalPanel>
+    
+      <!-- ==========    COCKCROFT SECTION    ========== -->
+    
+      <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+         <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+         <g:Label text="Cockcroft - Gault" addStyleNames="{style.valoriLbl}"/>
+      </g:HorizontalPanel>
+    
+      <g:HorizontalPanel>
+      
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="cockcroftGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
+        <gc:Spacer width="0.3em"/>
+        <g:Label ui:field="cockcroftGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel ui:field="cockcroftRiskPanel1">
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="" addStyleNames="{style.ckdLabel}">
+          <ui:attribute name="text" description="text" key="risk.text"/>
+        </g:Label>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="cockcroftRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel ui:field="bsaPanel2">
+        <gc:Spacer width="7.6em"/>
+        <g:HTML ui:field="bsaHtml" HTML="BSA = 0.00" addStyleNames="{style.ckdLabel}"></g:HTML>
+      </g:HorizontalPanel>
 
-    <table>
-    
-      <!-- COCKCROFT SECTION -->
-    
-      <tr>
-        <td colspan="2">
-          <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
-             <gc:Spacer width="1.2em"/>
-             <g:Label text="Cockcroft - Gault" addStyleNames="{style.valoriLbl}"/>
-          </g:HorizontalPanel>
-        </td>
-      </tr>
-    
-      <tr>
-        <td>
-          <g:HorizontalPanel>
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="cockcroftGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
-            <gc:Spacer width="0.3em"/>
-            <g:Label ui:field="cockcroftGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          <g:HorizontalPanel ui:field="cockcroftRiskPanel1">
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="" addStyleNames="{style.ckdLabel}">
-              <ui:attribute name="text" description="text" key="risk.text"/>
-            </g:Label>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel ui:field="cockcroftRiskPanel2">
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="cockcroftRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan="2">
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-    
-      <!-- MDRD SECTION -->
-    
-      <tr>
-        <td colspan="2">
-          <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
-             <gc:Spacer width="0.2em"/>
-             <g:Label text="MDRD" addStyleNames="{style.valoriLbl}" width="100%"/>
-          </g:HorizontalPanel>
-        </td>
-      </tr>
-    
-      <tr>
-        <td>
-          <g:HorizontalPanel>
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="mdrdGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
-            <gc:Spacer width="0.3em"/>
-            <g:Label ui:field="mdrdGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          <g:HorizontalPanel ui:field="mdrdRiskPanel1">
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="" addStyleNames="{style.ckdLabel}">
-              <ui:attribute name="text" description="text" key="risk.text"/>
-            </g:Label>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel ui:field="mdrdRiskPanel2">
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="mdrdRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan="2">
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-    
-      <!-- EPI-GFR SECTION -->
-    
-      <tr>
-        <td colspan="2">
-          <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
-             <gc:Spacer width="0.3em"/>
-             <g:Label text="CKD-EPI" addStyleNames="{style.valoriLbl}" width="100%"/>
-          </g:HorizontalPanel>
-        </td>
-      </tr>
-    
-      <tr>
-        <td>
-          <g:HorizontalPanel>
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel>
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="epiGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
-            <gc:Spacer width="0.3em"/>
-            <g:Label ui:field="epiGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          <g:HorizontalPanel ui:field="epiRiskPanel1">
-            <gc:Spacer width="1.2em"/>
-            <g:Label text="" addStyleNames="{style.ckdLabel}">
-              <ui:attribute name="text" description="text" key="risk.text"/>
-            </g:Label>
-          </g:HorizontalPanel>
-        </td>
-        <td>
-           <g:HorizontalPanel ui:field="epiRiskPanel2">
-            <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-            <g:Label ui:field="epiRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan="2">
-          <gc:Spacer height="1em"/>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan="2">
-          <g:HorizontalPanel verticalAlignment="MIDDLE" ui:field="bsaPanel1">
-            <gc:Spacer width="4em"/>
-            <g:Label text="Use" addStyleNames="{style.ckdLabel}">
-            </g:Label>
-            <gc:Spacer width="1em"/>
-            <m:Button text="BSA" addStyleNames="{style.ckdBsa}" ui:field="useBsaBtn"/>
-            <m:Button ui:field="useSbsBtn" addStyleNames="{style.ckdBsa}"/>
-          </g:HorizontalPanel>
-        </td>
-      </tr>
+      <g:HorizontalPanel>
+        <gc:Spacer height="1em"/>
+      </g:HorizontalPanel>
       
       
-      <tr>
-        <td colspan="2">
-           <g:HorizontalPanel ui:field="bsaPanel2">
-            <gc:Spacer width="7.6em"/>
-            <g:HTML ui:field="bsaHtml" HTML="BSA = 0.00" addStyleNames="{style.ckdLabel}"></g:HTML>
-           </g:HorizontalPanel>
-        </td>
-      </tr>
-      
+      <!-- ==========    MDRD SECTION    ========== -->
     
-      </table>  
+      <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="MDRD-4P" addStyleNames="{style.valoriLbl}"/>
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel>
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="mdrdGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
+        <gc:Spacer width="0.3em"/>
+        <g:Label ui:field="mdrdGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel ui:field="mdrdRiskPanel1">
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="" addStyleNames="{style.ckdLabel}">
+          <ui:attribute name="text" description="text" key="risk.text"/>
+        </g:Label>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="mdrdRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel>
+        <gc:Spacer height="1em"/>
+      </g:HorizontalPanel>
+      
+      
+      <!-- ==========    EPI-GFR SECTION    ========== -->
+    
+      <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+         <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+         <g:Label text="CKD-EPI" addStyleNames="{style.valoriLbl}"/>
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel>
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="epiGfrBox" width="7.1em" height="1.6em" addStyleNames="{style.ckdGfr}"/>
+        <gc:Spacer width="0.3em"/>
+        <g:Label ui:field="epiGfrStadium" width="2.0em" height="1.6em" addStyleNames="{style.ckdStadium}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel ui:field="epiRiskPanel1">
+        <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
+        <g:Label text="" addStyleNames="{style.ckdLabel}">
+          <ui:attribute name="text" description="text" key="risk.text"/>
+        </g:Label>
+        
+        <gc:Spacer addStyleNames="{style.boxSpacer}"/>
+        <g:Label ui:field="epiRiskBox" width="9.6em" height="1.6em" addStyleNames="{style.ckdRisk}"/>
+        
+      </g:HorizontalPanel>
+      
+      <g:HorizontalPanel>
+        <gc:Spacer height="1em"/>
+      </g:HorizontalPanel>
+    
+    </g:VerticalPanel>
   
   </g:HTMLPanel>
   
