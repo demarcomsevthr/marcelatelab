@@ -55,6 +55,14 @@ public class CKD {
     return gfr;
   }
   
+  public double getMdrdNcGFR() {
+    double gfr = 186d * Math.pow(getScrMgDl(), -1.154);
+    gfr *= Math.pow(age, -0.203);
+    gfr *= (female ? 0.742 : 1d);
+    gfr *= (black ? 1.210 : 1d);
+    return gfr;
+  }
+  
   public double getCkdEpiGFR() {
     double k = female ? 0.7 : 0.9;
     double a = female ? -0.329 : -0.411;
