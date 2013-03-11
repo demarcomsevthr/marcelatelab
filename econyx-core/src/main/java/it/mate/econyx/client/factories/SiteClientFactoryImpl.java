@@ -16,7 +16,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.gwtcommons.client.utils.HashChangeUtil;
+import it.mate.gwtcommons.client.utils.HashUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 import it.mate.portlets.client.ui.PagePortlet;
 import it.mate.portlets.client.util.CommonTemplatesUtils;
@@ -362,7 +362,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   }
   
   private void initHashChangeListener() {
-    HashChangeUtil.addHashChangeHandler(new Delegate<String>() {
+    HashUtils.addHashChangeHandler(new Delegate<String>() {
       public void execute(String currentHash) {
         PortalPageClientUtil.goToPageByCode(currentHash);
       }
