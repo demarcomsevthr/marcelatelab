@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
-public class HashChangeUtil {
+public class HashUtils {
 
   private static String previousHash = "";
   
@@ -36,6 +36,34 @@ public class HashChangeUtil {
     for (Delegate<String> delegate : delegates) {
       delegate.execute(newHash);
     }
+  }
+  
+  public static boolean hasTokens(String hash) {
+    return (hash.indexOf(',') > -1);
+  }
+  
+  public static String getPageCodeFromHash(String hash) {
+    if (hasTokens(hash)) {
+      String[] tokens = hash.split(",");
+      for (String token : tokens) {
+        if (token.startsWith("page=")) {
+          return token.substring(5);
+        }
+      }
+    }
+    return hash;
+  }
+  
+  public static String getArticleCodeFromHash(String hash) {
+    if (hasTokens(hash)) {
+      String[] tokens = hash.split(",");
+      for (String token : tokens) {
+        if (token.startsWith("article=")) {
+          return token.substring(5);
+        }
+      }
+    }
+    return hash;
   }
   
 }
