@@ -64,8 +64,8 @@
         <g:Label text="MDRD-4P (CREATININA CALIBRATA)" addStyleNames="{style.valoriLbl}"/>
          -->
         <g:HTMLPanel addStyleNames="{style.valoriLbl} ckd-MDRD" height="2.2em">
-          <p style="font-size:10pt">MDRD-4P</p>
-          <p style="font-size:8pt">(CREATININA CALIBRATA)</p>
+          <p style="font-size:10pt">MDRD 4P</p>
+          <p style="font-size:8pt"><ui:msg key="mdrd1.subtitle.text">mdrd1 subtitle</ui:msg></p>
         </g:HTMLPanel>
       </g:HorizontalPanel>
       
@@ -104,8 +104,8 @@
         <g:Label text="MDRD-4P" addStyleNames="{style.valoriLbl}"/>
          -->
         <g:HTMLPanel addStyleNames="{style.valoriLbl} ckd-MDRD" height="2.2em">
-          <p style="font-size:10pt">MDRD-4P</p>
-          <p style="font-size:8pt">(CREATININA NON CALIBRATA)</p>
+          <p style="font-size:10pt">MDRD 4P</p>
+          <p style="font-size:8pt"><ui:msg key="mdrd2.subtitle.text">mdrd2 subtitle</ui:msg></p>
         </g:HTMLPanel>
       </g:HorizontalPanel>
       
