@@ -1,0 +1,116 @@
+package it.mate.econyx.shared.model.impl;
+
+import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleGroup;
+import it.mate.gwtcommons.shared.model.CloneableProperty;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
+
+@SuppressWarnings("serial")
+public class ArticleGroupTx implements ArticleGroup {
+
+  String id;
+  
+  String code;
+  
+  String name;
+  
+  Integer orderNm;
+  
+  List<ArticleTx> articles;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Integer getOrderNm() {
+    return orderNm;
+  }
+
+  public void setOrderNm(Integer orderNm) {
+    this.orderNm = orderNm;
+  }
+
+  public List<Article> getArticles() {
+    
+    if (articles == null)
+      return null;
+    
+    return new AbstractList<Article>() {
+      public int size() {
+        return articles.size();
+      }
+      public Article get(int index) {
+        return articles.get(index);
+      }
+      public Article set(int index, Article element) {
+        if (element instanceof ArticleTx) {
+          return articles.set(index, (ArticleTx)element);
+        }
+        if (element == null) {
+          throw new IllegalArgumentException("null");
+        } else {
+          throw new IllegalArgumentException(element.getClass().getName());
+        }
+      }
+      public boolean add(Article element) {
+        if (element instanceof ArticleTx) {
+          return articles.add((ArticleTx)element);
+        }
+        if (element == null) {
+          throw new IllegalArgumentException("null");
+        } else {
+          throw new IllegalArgumentException(element.getClass().getName());
+        }
+      }
+      public boolean remove(Object o) {
+        return articles.remove(o);
+      }
+      public Article remove(int index) {
+        return articles.remove(index);
+      }
+    };
+    
+    
+  }
+  
+
+  @CloneableProperty (targetClass=ArticleTx.class)
+  public void setArticles(List<Article> articles) {
+    if (articles != null) {
+      this.articles = new ArrayList<ArticleTx>();
+      for (Article article : articles) {
+        if (article instanceof ArticleTx) {
+          this.articles.add((ArticleTx)article);
+        } else {
+          throw new IllegalArgumentException("cannot add item of type " + article.getClass() + ", must use CloneableProperty annotation");
+        }
+      }
+    } else {
+      this.articles = null;
+    }
+  }
+  
+}
