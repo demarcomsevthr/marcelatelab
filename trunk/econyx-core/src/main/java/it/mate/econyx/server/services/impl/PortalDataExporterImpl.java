@@ -8,6 +8,7 @@ import it.mate.econyx.server.model.converters.ProductPageConverter;
 import it.mate.econyx.server.model.converters.TipoArticoloConverter;
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
+import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
@@ -16,6 +17,8 @@ import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
+import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Image;
@@ -30,6 +33,8 @@ import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.TipoArticolo;
 import it.mate.econyx.shared.model.UnitaDiMisura;
 import it.mate.econyx.shared.model.impl.AbstractIndirizzoTx;
+import it.mate.econyx.shared.model.impl.ArticleFolderTx;
+import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.econyx.shared.model.impl.CustomerTx;
 import it.mate.econyx.shared.model.impl.ImageTx;
@@ -77,6 +82,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   @Autowired private ImageAdapter imageAdapter;
   
+  @Autowired private ArticleAdapter articleAdapter;
+  
   private static final String INIT_FILE = "META-INF/setup-data/portaldata.xml";
   
   private void setupXStream() {
@@ -103,6 +110,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     XStreamUtils.getXStream().omitField(ModalitaSpedizioneTx.class, "id");
     XStreamUtils.getXStream().omitField(ImageTx.class, "id");
     XStreamUtils.getXStream().omitField(OrderStateConfigTx.class, "id");
+    XStreamUtils.getXStream().omitField(ArticleFolderTx.class, "id");
+    XStreamUtils.getXStream().omitField(ArticleTx.class, "id");
   }
   
   public PortalDataExportModel load () {
@@ -165,6 +174,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (Articolo articolo : dataModel.products) {
       visitProduct(dataModel, true, articolo);
     }
+    for (ArticleFolder articleFolder : dataModel.articleFolders) {
+      visitArticleFolder(dataModel, true, articleFolder);
+    }
     return dataModel;
   }
   
@@ -188,6 +200,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       model.images = imageAdapter.findAll();
       model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
       model.orderStates = orderAdapter.findAllOrderStates();
+      model.articleFolders = articleAdapter.findAll();
       setupXStream();
       xml = XStreamUtils.parseGraph(model);
     } catch (Throwable th) {
@@ -203,56 +216,56 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     dataModel.createProducts = true;
   }
   
-  private PortalUser visitPortalUser(VisitContext context, boolean createMode, PortalUser user) {
+  private PortalUser visitPortalUser(VisitContext context, boolean loadMode, PortalUser user) {
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.users.size(); it++) {
       PortalUser cachedUser = model.users.get(it);
       if (cachedUser.getEmailAddress().equals(user.getEmailAddress())) {
-        if (createMode && cachedUser.getId() == null) {
+        if (loadMode && cachedUser.getId() == null) {
           cachedUser = portalUserAdapter.create(cachedUser, true);
           model.users.set(it, cachedUser);
         }
         return cachedUser;
       }
     }
-    if (createMode && user.getId() == null) {
+    if (loadMode && user.getId() == null) {
       user = portalUserAdapter.create(user, true);
     }
     model.users.add(user);
     return user;
   }
   
-  private ModalitaSpedizione visitModalitaSpedizione(VisitContext context, boolean createMode, ModalitaSpedizione modalitaSpedizione) {
-    if (createMode) {
+  private ModalitaSpedizione visitModalitaSpedizione(VisitContext context, boolean loadMode, ModalitaSpedizione modalitaSpedizione) {
+    if (loadMode) {
       modalitaSpedizione = orderAdapter.create(modalitaSpedizione);
     }
     return modalitaSpedizione;
   }
   
-  private ModalitaPagamento visitModalitaPagamento(VisitContext context, boolean createMode, ModalitaPagamento modalitaPagamento) {
-    if (createMode) {
+  private ModalitaPagamento visitModalitaPagamento(VisitContext context, boolean loadMode, ModalitaPagamento modalitaPagamento) {
+    if (loadMode) {
       modalitaPagamento = orderAdapter.create(modalitaPagamento);
     }
     return modalitaPagamento;
   }
   
-  private OrderStateConfig visitOrderState(VisitContext context, boolean createMode, OrderStateConfig orderState) {
-    if (createMode) {
+  private OrderStateConfig visitOrderState(VisitContext context, boolean loadMode, OrderStateConfig orderState) {
+    if (loadMode) {
       orderState = orderAdapter.create(orderState);
     }
     return orderState;
   }
   
-  private Customer visitCustomer(VisitContext context, boolean createMode, Customer customer) {
-    if (createMode) {
-      customer.setPortalUser(visitPortalUser(context, createMode, customer.getPortalUser()));
+  private Customer visitCustomer(VisitContext context, boolean loadMode, Customer customer) {
+    if (loadMode) {
+      customer.setPortalUser(visitPortalUser(context, loadMode, customer.getPortalUser()));
       customer = customerAdapter.create(customer);
     }
     return customer;
   }
   
-  private Image visitImage(VisitContext context, boolean createMode, Image image) {
-    if (createMode) {
+  private Image visitImage(VisitContext context, boolean loadMode, Image image) {
+    if (loadMode) {
       if (image.getName() == null && image.getCode() != null) {
         image.setName(image.getCode());
       }
@@ -289,57 +302,88 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return imageFile;
   }
   
-  private PortalPage visitPortalPage(VisitContext context, boolean createMode, PortalPage page) {
-    if (createMode) {
+  private PortalPage visitPortalPage(VisitContext context, boolean loadMode, PortalPage page) {
+    if (loadMode) {
       page = portalPageAdapter.create(page);
     }
     if (page instanceof PortalFolderPage) {
       PortalFolderPage portalFolderPage = (PortalFolderPage)page;
       for (int it = 0; it < portalFolderPage.getChildreen().size(); it++) {
         PortalPage childPage = portalFolderPage.getChildreen().get(it);
-        if (childPage instanceof ProductPage) {
-          ProductPage productPage = (ProductPage)childPage;
-          if (createMode) {
-            productPage.setEntity(visitProduct(context, createMode, productPage.getEntity()));
-            if (productPage.getName() == null) {
-              productPage.setName(productPage.getEntity().getName());
-            }
-          } else {
-            visitProduct(context, createMode, productPage.getEntity());
-          }
-        }
-        if (createMode) {
-          portalFolderPage.getChildreen().set(it, visitPortalPage(context, createMode, childPage));
-        } else {
-          visitPortalPage(context, createMode, childPage);
+        childPage = visitPortalPage(context, loadMode, childPage);
+        if (loadMode) {
+          portalFolderPage.getChildreen().set(it, childPage);
         }
       }
-      if (createMode) {
+      if (loadMode) {
+        page = portalPageAdapter.update(page);
+      }
+    } 
+    if (page instanceof ProductPage) {
+      ProductPage productPage = (ProductPage)page;
+      Articolo product = productPage.getEntity();
+      product = visitProduct(context, loadMode, product);
+      if (loadMode) {
+        productPage.setEntity(product);
+        if (productPage.getName() == null) {
+          productPage.setName(productPage.getEntity().getName());
+        }
+        page = portalPageAdapter.update(page);
+      }
+    } 
+    if (page instanceof ArticleFolderPage) {
+      ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
+      ArticleFolder articleFolder = articleFolderPage.getEntity();
+      articleFolder = visitArticleFolder(context, loadMode, articleFolder);
+      if (loadMode) {
+        articleFolderPage.setEntity(articleFolder);
+        if (articleFolderPage.getName() == null) {
+          articleFolderPage.setName(articleFolderPage.getEntity().getName());
+        }
         page = portalPageAdapter.update(page);
       }
     }
     return page;
   }
   
-  private Articolo visitProduct(VisitContext context, boolean createMode, Articolo product) {
+  private ArticleFolder visitArticleFolder(VisitContext context, boolean loadMode, ArticleFolder articleFolder) {
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    for (int it = 0; it < model.articleFolders.size(); it++) {
+      ArticleFolder cachedArticleFolder = model.articleFolders.get(it);
+      if (articleFolder.getCode().equals(cachedArticleFolder.getCode())) {
+        if (loadMode && cachedArticleFolder.getId() == null) {
+          cachedArticleFolder = createArticleFolder(context, cachedArticleFolder);
+          model.articleFolders.set(it, cachedArticleFolder);
+        }
+        return cachedArticleFolder;
+      }
+    }
+    if (loadMode) {
+      articleFolder = createArticleFolder(context, articleFolder);
+      model.articleFolders.add(articleFolder);
+    }
+    return articleFolder;
+  }
+  
+  private Articolo visitProduct(VisitContext context, boolean loadMode, Articolo product) {
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.products.size(); it++) {
       Articolo cachedProduct = model.products.get(it);
       if (product.getCodice().equals(cachedProduct.getCodice())) {
-        if (createMode && cachedProduct.getId() == null) {
-          updateProductReferences(context, createMode, cachedProduct);
+        if (loadMode && cachedProduct.getId() == null) {
+          updateProductReferences(context, loadMode, cachedProduct);
           cachedProduct = createProduct(context, cachedProduct);
           model.products.set(it, cachedProduct);
         }
         return cachedProduct;
       }
     }
-    updateProductReferences(context, createMode, product);
-    if (!createMode) {
+    updateProductReferences(context, loadMode, product);
+    if (!loadMode) {
       product = productAdapter.resolveAllDependencies(product);
     }
     model.products.add(product);
-    if (createMode && model.createProducts) {
+    if (loadMode && model.createProducts) {
       product = createProduct(context, product);
     }
     return product;
@@ -370,147 +414,77 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return product;
   }
   
-  private void updateProductReferences(VisitContext context, boolean createMode, Articolo product) {
-    product.setTipoArticolo(visitProductType(context, createMode, product.getTipoArticolo()));
-    product.setUnitaDiMisura(visitUnitOfMeasure(context, createMode, product.getUnitaDiMisura()));
-    product.setProducer(visitProducer(context, createMode, product.getProducer()));
+  private void updateProductReferences(VisitContext context, boolean loadMode, Articolo product) {
+    product.setTipoArticolo(visitProductType(context, loadMode, product.getTipoArticolo()));
+    product.setUnitaDiMisura(visitUnitOfMeasure(context, loadMode, product.getUnitaDiMisura()));
+    product.setProducer(visitProducer(context, loadMode, product.getProducer()));
   }
   
-  private TipoArticolo visitProductType(VisitContext context, boolean createMode, TipoArticolo productType) {
+  private TipoArticolo visitProductType(VisitContext context, boolean loadMode, TipoArticolo productType) {
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.productTypes.size(); it++) {
       TipoArticolo cachedProductType = model.productTypes.get(it);
       if (productType.getCodice().equals(cachedProductType.getCodice())) {
-        if (createMode && cachedProductType.getId() == null) {
+        if (loadMode && cachedProductType.getId() == null) {
           cachedProductType = productAdapter.create(cachedProductType);
           model.productTypes.set(it, cachedProductType);
         }
         return cachedProductType;
       }
     }
-    if (createMode) {
+    if (loadMode) {
       productType = productAdapter.create(productType);
     }
     model.productTypes.add(productType);
     return productType;
   }
   
-  private UnitaDiMisura visitUnitOfMeasure(VisitContext context, boolean createMode, UnitaDiMisura unitOfMeasure) {
+  private UnitaDiMisura visitUnitOfMeasure(VisitContext context, boolean loadMode, UnitaDiMisura unitOfMeasure) {
     if (unitOfMeasure == null)
       return null;
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.unitOfMeasures.size(); it++) {
       UnitaDiMisura cachedUnitOfMeasure = model.unitOfMeasures.get(it);
       if (unitOfMeasure.getCodice().equals(cachedUnitOfMeasure.getCodice())) {
-        if (createMode && cachedUnitOfMeasure.getId() == null) {
+        if (loadMode && cachedUnitOfMeasure.getId() == null) {
           cachedUnitOfMeasure = productAdapter.create(cachedUnitOfMeasure);
           model.unitOfMeasures.set(it, cachedUnitOfMeasure);
         }
         return cachedUnitOfMeasure;
       }
     }
-    if (createMode) {
+    if (loadMode) {
       unitOfMeasure = productAdapter.create(unitOfMeasure);
     }
     model.unitOfMeasures.add(unitOfMeasure);
     return unitOfMeasure;
   }
   
-  private Produttore visitProducer(VisitContext context, boolean createMode, Produttore producer) {
+  private Produttore visitProducer(VisitContext context, boolean loadMode, Produttore producer) {
     if (producer == null)
       return null;
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.producers.size(); it++) {
       Produttore cachedProducer = model.producers.get(it);
       if (producer.getCodice().equals(cachedProducer.getCodice())) {
-        if (createMode && cachedProducer.getId() == null) {
+        if (loadMode && cachedProducer.getId() == null) {
           cachedProducer = productAdapter.create(cachedProducer);
           model.producers.set(it, cachedProducer);
         }
         return cachedProducer;
       }
     }
-    if (createMode) {
+    if (loadMode) {
       producer = productAdapter.create(producer);
     }
     model.producers.add(producer);
     return producer;
   }
   
-  /*
-  
-  public void deleteAll () {
-    deleteOrders();
-    deletePages();
-    deleteCustomers();
-    deleteUsers();
-    deleteImages();
-    deleteProducts();
+  private ArticleFolder createArticleFolder(VisitContext context, ArticleFolder articleFolder) {
+    articleFolder = articleAdapter.create(articleFolder);
+    return articleFolder;
   }
-  
-  private void deleteUsers() {
-    List<PortalUser> users = portalUserAdapter.findAll();
-    for (PortalUser user : users) {
-      portalUserAdapter.delete(user);
-    }
-  }
-  
-  private void deleteCustomers() {
-    List<Customer> customers = customerAdapter.findAll();
-    for (Customer customer : customers) {
-      customerAdapter.delete(customer);
-    }
-  }
-  
-  private void deleteImages() {
-    List<Image> images = imageAdapter.findAll();
-    for (Image image : images) {
-      imageAdapter.delete(image);
-    }
-  }
-  
-  private void deleteProducts() {
-    List<Articolo> products = productAdapter.findAll();
-    for (Articolo product : products) {
-      productAdapter.delete(product);
-    }
-    List<TipoArticolo> productTypes = productAdapter.findAllProductTypes();
-    for (TipoArticolo type : productTypes) {
-      productAdapter.delete(type);
-    }
-    List<UnitaDiMisura> unitOfMeasures = productAdapter.findAllUnitOfMeasures();
-    for (UnitaDiMisura unitOfMeasure : unitOfMeasures) {
-      productAdapter.delete(unitOfMeasure);
-    }
-    List<Produttore> producers = productAdapter.findAllProducers();
-    for (Produttore producer : producers) {
-      productAdapter.delete(producer);
-    }
-  }
-  
-  private void deletePages() {
-    List<PortalPage> pages = portalPageAdapter.findAll();
-    for (PortalPage page : pages) {
-      portalPageAdapter.delete(page);
-    }
-  }
-  
-  private void deleteOrders() {
-    List<Order> orders = orderAdapter.findAll();
-    for (Order order : orders) {
-      orderAdapter.delete(order);
-    }
-    List<ModalitaSpedizione> modalitaSpediziones = orderAdapter.findAllModalitaSpedizione();
-    for (ModalitaSpedizione mod : modalitaSpediziones) {
-      orderAdapter.delete(mod);
-    }
-    List<OrderStateConfig> orderStates = orderAdapter.findAllOrderStates();
-    for (OrderStateConfig orderState : orderStates) {
-      orderAdapter.delete(orderState);
-    }
-  }
-  
-  */
   
   private PortalDataExportModel cast(VisitContext context) {
     return (PortalDataExportModel)context;

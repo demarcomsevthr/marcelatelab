@@ -1,7 +1,7 @@
 package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Article;
-import it.mate.econyx.shared.model.ArticleGroup;
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.AbstractList;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class ArticleGroupTx implements ArticleGroup {
+public class ArticleFolderTx implements ArticleFolder {
 
   String id;
   
@@ -20,6 +20,8 @@ public class ArticleGroupTx implements ArticleGroup {
   Integer orderNm;
   
   List<ArticleTx> articles;
+  
+  String selectedArticleCode;
 
   public String getId() {
     return id;
@@ -54,10 +56,8 @@ public class ArticleGroupTx implements ArticleGroup {
   }
 
   public List<Article> getArticles() {
-    
     if (articles == null)
       return null;
-    
     return new AbstractList<Article>() {
       public int size() {
         return articles.size();
@@ -92,10 +92,7 @@ public class ArticleGroupTx implements ArticleGroup {
         return articles.remove(index);
       }
     };
-    
-    
   }
-  
 
   @CloneableProperty (targetClass=ArticleTx.class)
   public void setArticles(List<Article> articles) {
@@ -111,6 +108,14 @@ public class ArticleGroupTx implements ArticleGroup {
     } else {
       this.articles = null;
     }
+  }
+
+  public String getSelectedArticleCode() {
+    return selectedArticleCode;
+  }
+
+  public void setSelectedArticleCode(String selectedArticleCode) {
+    this.selectedArticleCode = selectedArticleCode;
   }
   
 }

@@ -1,14 +1,14 @@
 package it.mate.econyx.client.ui;
 
+import it.mate.econyx.client.util.CKConfigExt;
+import it.mate.econyx.client.util.CKConfigExt.TOOLBAR_OPTIONS;
+import it.mate.econyx.client.util.ToolbarLineExt;
 import it.mate.econyx.client.util.UrlUtils;
 import it.mate.econyx.shared.model.HtmlContent;
 
-import com.axeiya.gwtckeditor.client.CKConfig;
 import com.axeiya.gwtckeditor.client.CKConfig.PRESET_TOOLBAR;
-import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
 import com.axeiya.gwtckeditor.client.CKEditor;
 import com.axeiya.gwtckeditor.client.Toolbar;
-import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -98,27 +98,33 @@ public class HtmlContentEditor extends Composite {
   }
   
   protected CKEditor createHtmlEditor() {
-    CKConfig ckConfig = new CKConfig(PRESET_TOOLBAR.FULL);
+    CKConfigExt ckConfig = new CKConfigExt(PRESET_TOOLBAR.FULL);
     
     Toolbar toolbar = new Toolbar();
-    ToolbarLine line;
+    ToolbarLineExt line;
     TOOLBAR_OPTIONS[] options;
     
-    line = new ToolbarLine();
+    line = new ToolbarLineExt();
     options = new TOOLBAR_OPTIONS[] {TOOLBAR_OPTIONS.Cut, TOOLBAR_OPTIONS.Copy, TOOLBAR_OPTIONS.Paste, TOOLBAR_OPTIONS.PasteText, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.SpellChecker, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Undo, TOOLBAR_OPTIONS.Redo, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Find, TOOLBAR_OPTIONS.Replace, TOOLBAR_OPTIONS.SelectAll, TOOLBAR_OPTIONS.RemoveFormat, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Image, TOOLBAR_OPTIONS.Flash, TOOLBAR_OPTIONS.Table, TOOLBAR_OPTIONS.HorizontalRule, TOOLBAR_OPTIONS.Smiley, TOOLBAR_OPTIONS.SpecialChar};
-    line.addAll(options);
+    line.addAllExt(options);
     toolbar.add(line);
     
     toolbar.addSeparator();
-    line = new ToolbarLine();
+    line = new ToolbarLineExt();
     options = new TOOLBAR_OPTIONS[] {TOOLBAR_OPTIONS.Bold, TOOLBAR_OPTIONS.Italic, TOOLBAR_OPTIONS.Underline, TOOLBAR_OPTIONS.Strike, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Subscript, TOOLBAR_OPTIONS.Superscript, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.NumberedList, TOOLBAR_OPTIONS.BulletedList, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Indent, TOOLBAR_OPTIONS.Blockquote, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.JustifyLeft, TOOLBAR_OPTIONS.JustifyCenter, TOOLBAR_OPTIONS.JustifyRight, TOOLBAR_OPTIONS.JustifyBlock, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Link, TOOLBAR_OPTIONS.Unlink, TOOLBAR_OPTIONS.Anchor, TOOLBAR_OPTIONS.Source};
-    line.addAll(options);
+    line.addAllExt(options);
     toolbar.add(line);
     
     toolbar.addSeparator();
-    line = new ToolbarLine();
+    line = new ToolbarLineExt();
     options = new TOOLBAR_OPTIONS[] {TOOLBAR_OPTIONS.Styles, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Format, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.Font, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.FontSize, TOOLBAR_OPTIONS._, TOOLBAR_OPTIONS.TextColor, TOOLBAR_OPTIONS.BGColor};
-    line.addAll(options);
+    line.addAllExt(options);
+    toolbar.add(line);
+    
+    toolbar.addSeparator();
+    line = new ToolbarLineExt();
+    options = new TOOLBAR_OPTIONS[] {TOOLBAR_OPTIONS.Readmore};
+    line.addAllExt(options);
     toolbar.add(line);
     
     ckConfig.setToolbar(toolbar);

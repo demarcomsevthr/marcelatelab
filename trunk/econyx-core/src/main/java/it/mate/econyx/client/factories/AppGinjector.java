@@ -1,6 +1,7 @@
 package it.mate.econyx.client.factories;
 
 import it.mate.econyx.client.activities.mapper.AdminActivityMapper;
+import it.mate.econyx.client.view.ArticleFolderView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.client.view.ImageEditView;
@@ -27,6 +28,7 @@ import it.mate.econyx.client.view.admin.GeneralConfigView;
 import it.mate.econyx.client.view.site.PortalPageMenuViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl;
+import it.mate.econyx.shared.services.ArticleServiceAsync;
 import it.mate.econyx.shared.services.CustomerServiceAsync;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.econyx.shared.services.ImageServiceAsync;
@@ -45,6 +47,8 @@ public interface AppGinjector extends CommonGinjector {
   public PortalUserServiceAsync getPortalUserService();
   public ImageServiceAsync getImageService();
   public CustomerServiceAsync getCustomerService();
+  
+  public ArticleServiceAsync getArticleService();
 
   public OrderView getOrderView();
   public OrderEditView getOrderEditView();
@@ -81,6 +85,8 @@ public interface AppGinjector extends CommonGinjector {
   public GeneralConfigView getGeneralConfigView();
   
   public AdminActivityMapper getAdminActivityMapper();
+  
+  public ArticleFolderView getArticleFolderView();
 
   public TestView getTestView();
   

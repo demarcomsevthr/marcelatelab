@@ -5,6 +5,7 @@ import it.mate.econyx.server.model.impl.CounterDs;
 import it.mate.econyx.server.model.impl.CustomerDs;
 import it.mate.econyx.server.model.impl.IndirizzoSpedizioneDs;
 import it.mate.econyx.server.model.impl.PortalUserDs;
+import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
@@ -14,6 +15,7 @@ import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.server.util.CacheConstants;
 import it.mate.econyx.server.util.PortalSessionStateServerUtils;
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Image;
@@ -79,6 +81,8 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   @Autowired private OrderAdapter orderAdapter;
   
   @Autowired private ImageAdapter imageAdapter;
+  
+  @Autowired private ArticleAdapter articleAdapter;
   
   private Key counterId = null;
   
@@ -192,6 +196,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       deleteUsers();
       deleteImages();
       deleteProducts();
+      deleteArticles();
       CacheUtils.clearAll();
 
       // 04/01/2013
@@ -250,6 +255,13 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     List<PortalPage> pages = portalPageAdapter.findAll();
     for (PortalPage page : pages) {
       portalPageAdapter.delete(page);
+    }
+  }
+  
+  private void deleteArticles() {
+    List<ArticleFolder> folders = articleAdapter.findAll();
+    for (ArticleFolder folder : folders) {
+      articleAdapter.delete(folder);
     }
   }
   

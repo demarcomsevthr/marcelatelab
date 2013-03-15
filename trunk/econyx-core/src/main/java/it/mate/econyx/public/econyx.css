@@ -104,7 +104,14 @@ td {
 }
 
 * html .gwt-DecoratorPanel .topCenterInner,
-* html .gwt-DecoratorPanel .bottomCenterInner,
+* html .gwt-DecoratorPanel .bottomCenterInner {
   height: 2px;
 }
 
+.cke_skin_kama .cke_button .cke_button_readmore .cke_icon {
+  width: 64px;
+}
+
+.cke-readmore {
+  cursor: pointer;
+}

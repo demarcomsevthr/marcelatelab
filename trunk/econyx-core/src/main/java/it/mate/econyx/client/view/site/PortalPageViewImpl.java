@@ -2,6 +2,7 @@ package it.mate.econyx.client.view.site;
 
 import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.view.PortalPageView;
+import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -24,7 +25,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Anchor;
@@ -46,6 +46,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
   @UiField HTML htmlPanel;
   @UiField SimplePanel productListPanel;
   @UiField SimplePanel productPanel;
+  @UiField SimplePanel articlePanel;
   @UiField FlexTable inlineChildreenTable;
   
   public PortalPageViewImpl() {
@@ -115,23 +116,17 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
             String actualHtmlContent = content.getContent();
             actualHtmlContent += "<div id='"+PortalPageClientUtil.getPageContentRenderFinishedDivId()+"'></div>";
             htmlPanel.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
-            //27/12/2012
             GwtUtils.deferredExecution(100, new Delegate<Void>() {
-              @SuppressWarnings("rawtypes")
               public void execute(Void element) {
-                Object results = JQueryUtils.select("[id^='page$']");
-                if (results != null && results instanceof JsArray) {
-                  JsArray jsArray = (JsArray)results;
-                  if (jsArray.length() > 0) {
-                    final Element elem = (Element)jsArray.get(0);
-                    DOM.sinkEvents((com.google.gwt.user.client.Element)elem, Event.ONCLICK);
-                    DOM.setEventListener((com.google.gwt.user.client.Element)elem, new EventListener() {
-                      public void onBrowserEvent(Event event) {
-                        String pageCode = elem.getId().split("\\$")[1];
-                        PortalPageClientUtil.goToPageByCode(pageCode);
-                      }
-                    });
-                  }
+                JsArray<Element> elements = JQueryUtils.select("[id^='page$']");
+                if (elements != null) {
+                  final Element elem = (Element)elements.get(0);
+                  GwtUtils.addElementEventListener(elem, Event.ONCLICK, new EventListener() {
+                    public void onBrowserEvent(Event event) {
+                      String pageCode = elem.getId().split("\\$")[1];
+                      PortalPageClientUtil.goToPageByCode(pageCode);
+                    }
+                  });
                 }
               }
             });
@@ -145,6 +140,11 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       if (page instanceof ProductPage) {
         ProductPage productPage = (ProductPage)page;
         getPresenter().initProductView(productPanel, productPage);
+      }
+      
+      if (page instanceof ArticleFolderPage) {
+        ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
+        getPresenter().initArticleFolderView(articlePanel, articleFolderPage);
       }
       
       if (!childreenRendered && page instanceof PortalFolderPage) {

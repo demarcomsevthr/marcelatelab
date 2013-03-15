@@ -15,7 +15,7 @@ public class ArticleTx implements Article {
   
   Integer orderNm;
   
-  HtmlContent html;
+  HtmlContentTx html;
   
   public String getId() {
     return id;
@@ -56,7 +56,11 @@ public class ArticleTx implements Article {
 
   @CloneableProperty (targetClass=HtmlContentTx.class)
   public void setHtml(HtmlContent html) {
-    this.html = html;
+    if (html instanceof HtmlContentTx) {
+      this.html = (HtmlContentTx)html;
+    } else {
+      throw new IllegalArgumentException("cannot add item of type " + html.getClass() + ", forget CloneableProperty annotation");
+    }
   }
   
 }

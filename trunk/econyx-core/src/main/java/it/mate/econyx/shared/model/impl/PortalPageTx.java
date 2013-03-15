@@ -141,4 +141,9 @@ public abstract class PortalPageTx implements PortalPage {
     this.code = code;
   }
   
+  @Override
+  public String getLocationHash() {
+    return getCode();
+  }
+  
 }

@@ -45,7 +45,11 @@ public class PortalPageClientUtil {
   }
   
   public static void goToPage(PortalPage page) {
-    goToPage(page.getId(), true);
+    if (page.getId() == null) {
+      onPageRetrieved(page, false);
+    } else {
+      goToPage(page.getId(), true);
+    }
   }
   
   public static void goToPage(PortalPage page, boolean forceReloadPage) {
@@ -96,17 +100,7 @@ public class PortalPageClientUtil {
     
     Delegate<PortalPage> pageRetrievedDelegate = new Delegate<PortalPage>() {
       public void execute(PortalPage page) {
-        if (page == null)
-          return;
-        putInCache(page);
-        if (!forceReloadPage && AppClientFactory.IMPL.getPortalSessionState() != null) {
-          if (AppClientFactory.IMPL.getPortalSessionState().getCurrentPageCode() != null) {
-            if (AppClientFactory.IMPL.getPortalSessionState().getCurrentPageCode().equals(page.getCode())) {
-              return;
-            }
-          }
-        }
-        AppClientFactory.IMPL.getEventBus().fireEvent(new PortalPageChangingEvent(page, forceReloadPage));
+        onPageRetrieved(page, forceReloadPage);
       }
     };
     
@@ -116,6 +110,20 @@ public class PortalPageClientUtil {
     } else {
       findById(pageId, true, true, true, pageRetrievedDelegate);
     }
+  }
+  
+  private static void onPageRetrieved(PortalPage page, boolean forceReloadPage) {
+    if (page == null)
+      return;
+    putInCache(page);
+    if (!forceReloadPage && AppClientFactory.IMPL.getPortalSessionState() != null) {
+      if (AppClientFactory.IMPL.getPortalSessionState().getCurrentPageCode() != null) {
+        if (AppClientFactory.IMPL.getPortalSessionState().getCurrentPageCode().equals(page.getCode())) {
+          return;
+        }
+      }
+    }
+    AppClientFactory.IMPL.getEventBus().fireEvent(new PortalPageChangingEvent(page, forceReloadPage));
   }
   
   public static String getPageContentRenderFinishedDivId() {

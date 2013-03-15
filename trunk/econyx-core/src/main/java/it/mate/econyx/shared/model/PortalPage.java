@@ -35,5 +35,8 @@ public interface PortalPage extends PortalResource {
   public String getTemplateName();
   
   public void setTemplateName(String templateName);
+  
+  
+  public String getLocationHash();
 
 }
