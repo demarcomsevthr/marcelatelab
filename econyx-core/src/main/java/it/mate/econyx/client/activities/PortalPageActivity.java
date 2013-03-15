@@ -3,6 +3,7 @@ package it.mate.econyx.client.activities;
 import it.mate.econyx.client.events.PortalInitCompleteEvent;
 import it.mate.econyx.client.events.PortalPageExplorerRetrieveEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.client.places.ArticlePlace;
 import it.mate.econyx.client.places.PortalPagePlace;
 import it.mate.econyx.client.places.ProductPlace;
 import it.mate.econyx.client.util.PortalPageClientUtil;
@@ -12,6 +13,8 @@ import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.ProductListView;
+import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
@@ -386,6 +389,17 @@ public class PortalPageActivity extends BaseActivity implements
     ProductActivity productActivity = new ProductActivity(place, AppClientFactory.IMPL);
     productActivity.start(panel, AppClientFactory.IMPL.getEventBus());
     return productActivity;
+  }
+  
+  public void initArticleFolderView (AcceptsOneWidget panel, ArticleFolderPage page) {
+    ArticleFolder entity = page.getEntity();
+    startArticleActivity(panel, new ArticlePlace(ArticlePlace.VIEW, entity));
+  }
+  
+  private ArticleActivity startArticleActivity(AcceptsOneWidget panel, ArticlePlace place) {
+    ArticleActivity activity = new ArticleActivity(place, AppClientFactory.IMPL);
+    activity.start(panel, AppClientFactory.IMPL.getEventBus());
+    return activity;
   }
   
   public void initChildPortalPageView(final AcceptsOneWidget panel, PortalPage childPage, final PortalPage parentPage) {

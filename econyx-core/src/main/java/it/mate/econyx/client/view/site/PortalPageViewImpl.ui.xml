@@ -10,6 +10,7 @@
       <gwtcommons:Spacer height="1em"/>
       <g:SimplePanel ui:field="productListPanel"/>
       <g:SimplePanel ui:field="productPanel"/>
+      <g:SimplePanel ui:field="articlePanel"/>
       <g:FlexTable ui:field="inlineChildreenTable"/>
     </g:HTMLPanel>
   </g:VerticalPanel>

@@ -1,11 +1,14 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.WebContentPage;
+import it.mate.econyx.shared.model.impl.ArticlePageTx;
 import it.mate.econyx.shared.services.PortalPageService;
 
 import java.util.List;
@@ -23,12 +26,15 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   private static Logger logger = Logger.getLogger(PortalPageServiceImpl.class);
   
   private PortalPageAdapter adapter;
+  
+  private ArticleAdapter articleAdapter;
       
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdaptersUtil.initContext(config.getServletContext());
     this.adapter = AdaptersUtil.getPortalPageAdapter();
+    this.articleAdapter = AdaptersUtil.getArticleAdapter();
     logger.debug("initialized " + this);
   }
 
@@ -54,12 +60,18 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
 
   @Override
   public PortalPage findById(String id) {
+    if (ArticlePageTx.isVirtualId(id)) {
+      return getArticlePortalPageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    }
     return adapter.findById(id);
   }
   
   @Override
-  public PortalPage findById(String pageId, boolean resolveChildreen, boolean resolveProducts, boolean resolveHtmls) {
-    return adapter.findById(pageId, resolveChildreen, resolveProducts, resolveHtmls);
+  public PortalPage findById(String id, boolean resolveChildreen, boolean resolveProducts, boolean resolveHtmls) {
+    if (ArticlePageTx.isVirtualId(id)) {
+      return getArticlePortalPageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    }
+    return adapter.findById(id, resolveChildreen, resolveProducts, resolveHtmls);
   }
 
   @Override
@@ -102,7 +114,19 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
 
   @Override
   public PortalPage findByCode(String code) {
-    return adapter.findByCode(code);
+    PortalPage page = adapter.findByCode(code);
+    if (page == null) {
+      page = getArticlePortalPageByCode(code);
+    }
+    return page;
+  }
+  
+  private PortalPage getArticlePortalPageByCode(String code) {
+    Article article = articleAdapter.findByCode(code);
+    if (article != null) {
+      return new ArticlePageTx(article);
+    }
+    return null;
   }
 
 }

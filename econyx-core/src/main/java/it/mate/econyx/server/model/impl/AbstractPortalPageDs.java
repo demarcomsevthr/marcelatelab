@@ -155,5 +155,9 @@ public abstract class AbstractPortalPageDs implements PortalPage, HasKey, Entity
   public void setCode(String code) {
     this.code = code;
   }
+  
+  public String getLocationHash() {
+    return null;
+  }
 
 }

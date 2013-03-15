@@ -1,5 +1,6 @@
 package it.mate.econyx.server.model;
 
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Image;
@@ -19,6 +20,8 @@ public class PortalDataExportModel implements VisitContext {
   public static final int LOAD_METHOD_DEFAULT = 0;
   public static final int LOAD_METHOD_ORDERS = 1;
   public int loadMethod;
+  public boolean createProducts = false;
+  public boolean checkImageResources = false;
   public List<PortalUser> users = new ArrayList<PortalUser>();
   public List<Customer> customers = new ArrayList<Customer>();
   public List<Articolo> products = new ArrayList<Articolo>();
@@ -30,6 +33,5 @@ public class PortalDataExportModel implements VisitContext {
   public List<ModalitaSpedizione> listaModalitaSpedizione = new ArrayList<ModalitaSpedizione>();
   public List<ModalitaPagamento> listaModalitaPagamento = new ArrayList<ModalitaPagamento>();
   public List<OrderStateConfig> orderStates = new ArrayList<OrderStateConfig>();
-  public boolean createProducts = false;
-  public boolean checkImageResources = false;
+  public List<ArticleFolder> articleFolders;
 }
