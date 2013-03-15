@@ -1,0 +1,25 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:e="urn:import:it.mate.econyx.client.ui.editors">
+
+  <ui:style>
+  
+    @external econyx-StatesTableHeader;
+    .econyx-StatesTableHeader {
+	  background-color: #EBEBEB;
+	  border-top: 1px solid #C9C9C9;
+	  border-bottom: 1px solid #C9C9C9;
+	  font-size: 12px;
+      font-weight: bold;
+      height: 30px;
+      text-align: center;
+      vertical-align: middle;
+	}
+  
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:FlexTable ui:field="statesTable"/>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

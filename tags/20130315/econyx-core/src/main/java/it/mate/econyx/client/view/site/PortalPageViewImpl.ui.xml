@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+       xmlns:gwtcommons="urn:import:it.mate.gwtcommons.client.ui">
+
+  <g:VerticalPanel width="100%">
+    <g:HTMLPanel>
+      <g:FlexTable ui:field="childreenTable"/>
+      <g:HTML ui:field="htmlPanel"/>
+      <gwtcommons:Spacer height="1em"/>
+      <g:SimplePanel ui:field="productListPanel"/>
+      <g:SimplePanel ui:field="productPanel"/>
+      <g:FlexTable ui:field="inlineChildreenTable"/>
+    </g:HTMLPanel>
+  </g:VerticalPanel>
+
+</ui:UiBinder>

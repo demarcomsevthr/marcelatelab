@@ -1,0 +1,12 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+
+  <g:VerticalPanel>
+    <g:HTMLPanel>
+      <g:Label ui:field="headerLabel" text="Elenco prodotti"/>
+    </g:HTMLPanel>
+    <g:FlexTable ui:field="pTable"/>
+  </g:VerticalPanel>
+
+</ui:UiBinder>

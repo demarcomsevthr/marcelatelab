@@ -1,0 +1,80 @@
+<html>
+
+<head>
+
+<style type="text/css">
+
+  .textControlBar {
+    background: none repeat scroll 0 0 #F5F5F5;
+  }
+
+  .textControlContainer {
+    border-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+  }
+  
+  .textControlContainer:hover {
+    border-color: #C6C6C6;
+    border-style: solid;
+    border-width: 1px;
+  }
+  
+  .textControl {
+    background-image: url("text-control.png");
+    width: 21px;
+    height: 21px;
+    display: inline-block;
+  }
+  
+  .textControlBold {
+    background-position: 0 0;
+  }
+  .textControlItalic {
+    background-position: -21px 0;
+  }
+  .textControlUnderline {
+    background-position: -42px 0;
+  }
+  .textControlFontType {
+    background-position: -63px 0;
+  }
+  .textControlArrowDown {
+    background: url("text-control-arrow-down.png") no-repeat scroll center center transparent;
+    float: right;
+    height: 7px;
+    width: 5px;
+    vertical-align: middle;
+    margin: 10px 2px 0 3px;
+  }
+
+
+
+</style>
+
+</head>
+
+<body>
+
+  <div class="textControlBar">
+    <div title="Grassetto" class="textControlContainer">
+      <div class="textControl textControlBold"></div>
+    </div>
+    <div title="Corsivo" class="textControlContainer">
+      <div class="textControl textControlItalic"></div>
+    </div>
+    <div title="Sottolineato" class="textControlContainer">
+      <div class="textControl textControlUnderline"></div>
+    </div>
+    <div title="Tipo di carattere" class="textControlContainer">
+      <div>
+        <div class="textControl textControlFontType"></div>
+        <div class="textControl textControlArrowDown"></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

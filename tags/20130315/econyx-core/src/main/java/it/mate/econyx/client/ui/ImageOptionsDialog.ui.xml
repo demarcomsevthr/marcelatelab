@@ -1,0 +1,28 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+          xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+          xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" xmlns:c="urn:import:com.google.gwt.cell.client">
+
+  <ui:style>
+    .box {
+    	padding-top: 10px;
+    	padding-left: 50px;
+    	padding-bottom: 20px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:DialogBox ui:field="dlg">
+      <g:caption>Attributi per la nuova immagine</g:caption>
+      <g:HTMLPanel addStyleNames="{style.box}">
+        <g:HorizontalPanel width="360px" horizontalAlignment="left">
+          <g:Label text="Nome della nuova immagine" width="10em"/>
+          <g:TextBox ui:field="name" width="12em"/>
+        </g:HorizontalPanel>
+        <gc:Spacer height="40px"/>
+        <g:Button ui:field="okBtn">Ok</g:Button>
+        <g:Button ui:field="cancelBtn">Anulla</g:Button>
+      </g:HTMLPanel>
+    </g:DialogBox>
+  </g:HTMLPanel>
+
+</ui:UiBinder>
