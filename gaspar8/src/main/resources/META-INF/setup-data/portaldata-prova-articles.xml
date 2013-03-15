@@ -1,0 +1,94 @@
+<it.mate.econyx.server.model.PortalDataExportModel>
+
+  <createProducts>false</createProducts>
+
+  <users>
+  
+    <it.mate.econyx.shared.model.impl.PortalUserTx>
+      <screenName>Test Example</screenName>
+      <emailAddress>test@example.com</emailAddress>
+      <password>vertigine</password>
+      <passwordEncrypted>false</passwordEncrypted>
+      <active>true</active>
+    </it.mate.econyx.shared.model.impl.PortalUserTx>
+    
+  </users>
+  
+  <customers>
+  </customers>
+  
+  <productTypes>
+  </productTypes>
+  
+  <unitOfMeasures>
+  </unitOfMeasures>
+  
+  <producers>
+  </producers>
+  
+  <products>
+  </products>
+  
+  <pages>
+  </pages>
+  
+  <orderStates>
+  </orderStates> 
+  
+  <articleFolders>
+    <it.mate.econyx.shared.model.impl.ArticleFolderTx>
+      <code>HomeArticleFolder</code>
+      <name>Articoli di prima pagina</name>
+      <orderNm>100</orderNm>
+      <articles>
+        <it.mate.econyx.shared.model.impl.ArticleTx>
+          <code>FirstArticle</code>
+          <name>Articolo uno</name>
+          <orderNm>100</orderNm>
+          <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
+            <type>M</type>
+            <content>
+            <![CDATA[
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. Praesent ligula sem, viverra at
+    hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo sollicitudin vitae a lorem. Fusce laoreet molestie neque
+    ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin a lectus.
+  </p>
+  <p class="cke-readmore" id="cke-readmore">
+    Read more...</p>
+  <p>
+    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed velit lorem, tempor eget venenatis nec, fringilla vitae dolor.
+    Donec nec purus augue. Curabitur pellentesque aliquet lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+    Vivamus vel mauris arcu. Donec consectetur facilisis orci, varius blandit libero faucibus id. Quisque at purus dolor. Aliquam rutrum tincidunt pulvinar.
+    Aenean sed suscipit tortor. Vestibulum varius felis vel dui malesuada eleifend. Nulla ac mi quam, quis mollis tortor. Vestibulum ante ipsum primis in
+    faucibus orci luctus et ultrices posuere cubilia Curae; Cras porttitor quam et quam euismod fermentum. Phasellus justo nibh, mollis ut laoreet sed,
+    ullamcorper vitae ante.
+  </p>
+  <p>
+    Nunc bibendum, lectus in faucibus suscipit, purus metus porta diam, nec laoreet tellus mi in massa. Pellentesque mi diam, mollis sed accumsan et, adipiscing non
+    nisi. Maecenas sit amet dolor ac diam mollis pharetra sed non nisi. Nam elementum pulvinar dignissim. Aliquam sit amet felis dui. Morbi id dolor neque, vel
+    mattis tellus. Integer porttitor feugiat ornare. Nulla nec nisl ante, eget adipiscing quam. Donec erat neque, venenatis sed tincidunt et, ultricies at
+    ligula.
+  </p>
+  <p>
+    Aliquam vitae lorem libero. Sed purus nisl, consectetur eget placerat vel, tempor at dui. Aenean eros sapien, aliquam id accumsan et, fermentum et enim. Suspendisse
+    pretium dictum fringilla. Praesent accumsan accumsan arcu, et imperdiet sapien consectetur vel. Suspendisse imperdiet, felis vitae laoreet dignissim, ipsum
+    eros iaculis libero, eget laoreet elit diam sit amet augue. Phasellus et tortor ante. Aenean eros enim, ullamcorper sed eleifend vitae, rhoncus id justo.
+    Sed quis velit augue. Proin tempor faucibus facilisis.
+  </p>
+  <p>
+    Curabitur facilisis, purus at facilisis pellentesque, lorem nunc faucibus nibh, semper mollis leo sapien eget turpis. Nulla eget commodo diam. Pellentesque pulvinar
+    ipsum et nisl ullamcorper sodales. In hac habitasse platea dictumst. Etiam ullamcorper, nisl eu sollicitudin facilisis, nisi purus vulputate libero, ac
+    convallis metus tortor eget mi. Proin quis eros ipsum. Vivamus eleifend nulla ac neque fringilla vitae dignissim ante hendrerit. Ut malesuada, metus vitae
+    auctor vehicula, nulla augue dapibus leo, vitae suscipit sapien velit quis ipsum. Nulla vel erat enim. Etiam eu laoreet velit. Quisque sed urna quis nisi
+    malesuada mollis eu eget orci.
+  </p>
+            ]]>
+            </content>
+          </html>
+        </it.mate.econyx.shared.model.impl.ArticleTx>
+      </articles>
+    </it.mate.econyx.shared.model.impl.ArticleFolderTx>
+  </articleFolders>
+   
+</it.mate.econyx.server.model.PortalDataExportModel>
