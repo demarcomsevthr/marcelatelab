@@ -101,6 +101,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>articleService</servlet-name>
+    <servlet-class>it.mate.econyx.server.services.impl.ArticleServiceImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>articleService</servlet-name>
+    <url-pattern>*.articleService</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>resourceServlet</servlet-name>
     <servlet-class>it.mate.econyx.server.servlets.ResourceServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
