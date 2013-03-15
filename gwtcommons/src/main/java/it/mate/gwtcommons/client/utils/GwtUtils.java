@@ -21,6 +21,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -875,6 +876,11 @@ public class GwtUtils {
         reportElement.setAttribute("src", url);
       }
     });
+  }
+  
+  public static void addElementEventListener(com.google.gwt.dom.client.Element element, int eventId, EventListener listener) {
+    DOM.sinkEvents((com.google.gwt.user.client.Element)element, eventId);
+    DOM.setEventListener((com.google.gwt.user.client.Element)element, listener);
   }
   
 }

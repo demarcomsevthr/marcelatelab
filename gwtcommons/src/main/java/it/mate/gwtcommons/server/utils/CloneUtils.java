@@ -83,6 +83,9 @@ public class CloneUtils {
         
         target = internalCloneProperties(source, target, clonedBeans);
         return target;
+      } catch (InstantiationException ie) {
+        logger.error("error instantiating target class " + targetClass.getName(), ie);
+        return null;
       } catch (Exception e) {
         return null;
       }
