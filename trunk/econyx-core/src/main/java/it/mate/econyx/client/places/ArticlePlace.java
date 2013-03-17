@@ -9,7 +9,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 public class ArticlePlace extends Place implements ReversiblePlace, HasToken, HistoryPlace {
 
-  public static String VIEW = "view";
+  public static String FOLDER_VIEW = "folderView";
+
+  public static String ARTICLE_VIEW = "articleView";
 
   private String token;
   
@@ -23,7 +25,7 @@ public class ArticlePlace extends Place implements ReversiblePlace, HasToken, Hi
   }
 
   public ArticlePlace() {
-    this.token = VIEW;
+    this.token = FOLDER_VIEW;
   }
   
   public ArticlePlace(String token) {

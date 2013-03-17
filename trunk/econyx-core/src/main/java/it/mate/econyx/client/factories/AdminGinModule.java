@@ -1,6 +1,7 @@
 package it.mate.econyx.client.factories;
 
 import it.mate.econyx.client.view.ArticleFolderView;
+import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.client.view.ImageEditView;
@@ -73,6 +74,7 @@ public class AdminGinModule extends AbstractGinModule {
     bind(ImageEditView.class).to(ImageEditViewImpl.class);
     
     bind(ArticleFolderView.class).to(ArticleFolderView.NotImpl.class);
+    bind(ArticleView.class).to(ArticleView.NotImpl.class);
     
     bind(TestView.class).to(TestView.NotImpl.class);
     

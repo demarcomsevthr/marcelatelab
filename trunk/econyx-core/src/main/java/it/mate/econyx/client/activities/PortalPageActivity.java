@@ -13,8 +13,10 @@ import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.ProductListView;
+import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
+import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
@@ -391,9 +393,14 @@ public class PortalPageActivity extends BaseActivity implements
     return productActivity;
   }
   
-  public void initArticleFolderView (AcceptsOneWidget panel, ArticleFolderPage page) {
+  public void initArticleFolderPageView (AcceptsOneWidget panel, ArticleFolderPage page) {
     ArticleFolder entity = page.getEntity();
-    startArticleActivity(panel, new ArticlePlace(ArticlePlace.VIEW, entity));
+    startArticleActivity(panel, new ArticlePlace(ArticlePlace.FOLDER_VIEW, entity));
+  }
+  
+  public void initArticlePageView (AcceptsOneWidget panel, ArticlePage page) {
+    Article entity = page.getEntity();
+    startArticleActivity(panel, new ArticlePlace(ArticlePlace.ARTICLE_VIEW, entity));
   }
   
   private ArticleActivity startArticleActivity(AcceptsOneWidget panel, ArticlePlace place) {

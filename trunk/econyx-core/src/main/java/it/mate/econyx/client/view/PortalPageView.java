@@ -1,6 +1,7 @@
 package it.mate.econyx.client.view;
 
 import it.mate.econyx.shared.model.ArticleFolderPage;
+import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProductFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
@@ -25,7 +26,9 @@ public interface PortalPageView extends BaseView<PortalPageView.Presenter> {
     
     public void initChildPortalPageView(AcceptsOneWidget panel, PortalPage childPage, PortalPage parentPage);
     
-    public void initArticleFolderView (AcceptsOneWidget panel, ArticleFolderPage page);
+    public void initArticleFolderPageView (AcceptsOneWidget panel, ArticleFolderPage page);
+    
+    public void initArticlePageView (AcceptsOneWidget panel, ArticlePage page);
     
   }
   

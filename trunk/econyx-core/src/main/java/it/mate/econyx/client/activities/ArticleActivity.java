@@ -25,15 +25,22 @@ public class ArticleActivity extends BaseActivity implements
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
     registerHandlers(eventBus);
-    if (place.getToken().equals(ArticlePlace.VIEW)) {
+    if (place.getToken().equals(ArticlePlace.FOLDER_VIEW)) {
       initView(AppClientFactory.IMPL.getGinjector().getArticleFolderView(), panel);
+      retrieveModel();
+    }
+    if (place.getToken().equals(ArticlePlace.ARTICLE_VIEW)) {
+      initView(AppClientFactory.IMPL.getGinjector().getArticleView(), panel);
       retrieveModel();
     }
   }
   
   private void retrieveModel() {
     getView().setModel(AppClientFactory.IMPL.getPortalSessionState());
-    if (place.getToken().equals(ArticlePlace.VIEW)) {
+    if (place.getToken().equals(ArticlePlace.FOLDER_VIEW)) {
+      getView().setModel(place.getModel());
+    }
+    if (place.getToken().equals(ArticlePlace.ARTICLE_VIEW)) {
       getView().setModel(place.getModel());
     }
   }
