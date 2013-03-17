@@ -1,8 +1,7 @@
 package it.mate.econyx.client.view.site;
 
-import it.mate.econyx.client.view.ArticleFolderView;
+import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
-import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
@@ -18,15 +17,12 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Presenter> implements ArticleFolderView {
+public class ArticleViewImpl extends AbstractBaseView<ArticleView.Presenter> implements ArticleView {
 
-  public interface ViewUiBinder extends UiBinder<Widget, ArticleFolderViewImpl> { }
+  public interface ViewUiBinder extends UiBinder<Widget, ArticleViewImpl> { }
   
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -36,13 +32,13 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
   
   @UiField Style style;
   
-  @UiField FlexTable articlesTable;
+  @UiField HTML articleHtml;
   
-  private ArticleFolder articleFolder;
+  private Article article;
   
   private final static String HTML_CONTAINER_ID = "ecx-htmlContainer";
   
-  public ArticleFolderViewImpl() {
+  public ArticleViewImpl() {
     super();
     initUI();
   }
@@ -59,21 +55,13 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
   public void setModel(Object model, String tag) {
     if (model instanceof PortalSessionState) {
       //
-    } else if (model instanceof ArticleFolder) {
-      this.articleFolder = (ArticleFolder)model;
-      articlesTable.clear();
-      if (articleFolder.getArticles() != null) {
-        int row = 0;
-        for (Article article : articleFolder.getArticles()) {
-          HTML html = createHtml(article);
-          articlesTable.setWidget(row++, 0, html);
-        }
-      }
+    } else if (model instanceof Article) {
+      this.article = (Article)model;
+      updateHtml(articleHtml, article);
     }
   }
   
-  private HTML createHtml(final Article article) {
-    final HTML html = new HTML();
+  private HTML updateHtml(final HTML html, final Article article) {
     HtmlContent htmlContent = article.getHtml();
     String actualHtmlContent = htmlContent.getContent();
     html.getElement().setId(HTML_CONTAINER_ID);
@@ -83,28 +71,12 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
       public void execute(Void element) {
         Element readmoreElement = JQueryUtils.selectFirst("[id='cke-readmore']");
         if (readmoreElement != null) {
-          processCkeReadmore(readmoreElement);
-          GwtUtils.addElementEventListener(readmoreElement, Event.ONCLICK, new EventListener() {
-            public void onBrowserEvent(Event event) {
-              GwtUtils.setLocationHash(article.getCode());
-            }
-          });
+          readmoreElement.getStyle().setVisibility(Visibility.HIDDEN);
         }
         html.getElement().getStyle().clearHeight();
       }
     });
     return html;
-  }
-  
-  private void processCkeReadmore(Element readmoreElement) {
-    Element nextElem = readmoreElement;
-    while((nextElem = nextElem.getNextSiblingElement()) != null) {
-      nextElem.getStyle().setVisibility(Visibility.HIDDEN);
-    }
-    Element parentElem = readmoreElement.getParentElement();
-    if (!HTML_CONTAINER_ID.equals(parentElem.getId())) {
-      processCkeReadmore(parentElem);
-    }
   }
   
 }

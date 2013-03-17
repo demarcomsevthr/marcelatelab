@@ -29,7 +29,9 @@ public class PortalPageExplorerViewCustomizerDefaultImpl implements PortalPageEx
       tree = new Tree();
       panel.add(tree);
       for (PortalPage page : treeModel.childreen) {
-        tree.addItem(createTreeItem(page));
+        if (isVisibleInExplorer(page)) {
+          tree.addItem(createTreeItem(page));
+        }
       }
       tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
         public void onSelection(SelectionEvent<TreeItem> event) {
@@ -43,11 +45,17 @@ public class PortalPageExplorerViewCustomizerDefaultImpl implements PortalPageEx
       TreeItem parentItem = findItemByPage(null, treeModel.parent);
       if (parentItem != null) {
         for (PortalPage page : treeModel.childreen) {
-          parentItem.addItem(createTreeItem(page));
+          if (isVisibleInExplorer(page)) {
+            parentItem.addItem(createTreeItem(page));
+          }
         }
       }
     }
     
+  }
+  
+  private boolean isVisibleInExplorer(PortalPage page) {
+    return page.getVisibleInExplorer() != null ? page.getVisibleInExplorer() : true;
   }
 
   private TreeItem createTreeItem (PortalPage page) {

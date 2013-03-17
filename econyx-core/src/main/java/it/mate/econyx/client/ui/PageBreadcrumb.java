@@ -3,7 +3,9 @@ package it.mate.econyx.client.ui;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.PortalPagePlace;
 import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.PortalPage;
+import it.mate.econyx.shared.model.VirtualPage;
 import it.mate.gwtcommons.client.places.HistoryPlace;
 import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -55,27 +57,31 @@ public class PageBreadcrumb extends Composite {
     initWidget(vp);
     MvpUtils.addPlaceChangeHandler(AppClientFactory.IMPL.getEventBus(), new PlaceChangeEvent.Handler() {
       public void onPlaceChange(PlaceChangeEvent event) {
-        GwtUtils.log(getClass(), "onPlaceChange", event.getNewPlace().toString());
-        Place place = event.getNewPlace();
-        if (place instanceof PortalPagePlace) {
-          PortalPagePlace portalPagePlace = (PortalPagePlace)place;
-          if (portalPagePlace.getModel() instanceof PortalPage) {
-            PortalPage page = (PortalPage)portalPagePlace.getModel();
-            if (page.getName() != null)
-              updatePagePlace(portalPagePlace);
-          }
-        } else if (place instanceof HistoryPlace) {
-          HistoryPlace placeWithName = (HistoryPlace)place;
-          if (placeWithName.getHistoryName() != null) {
-            addPlaceAndUpdate(place);
-          } else {
-            updateView();
-          }
-        } else {
-          updateView();
-        }
+        placeChangeEventHandler(event);
       }
     });
+  }
+  
+  private void placeChangeEventHandler(PlaceChangeEvent event) {
+    GwtUtils.log(getClass(), "onPlaceChange", event.getNewPlace().toString());
+    Place place = event.getNewPlace();
+    if (place instanceof PortalPagePlace) {
+      PortalPagePlace portalPagePlace = (PortalPagePlace)place;
+      if (portalPagePlace.getModel() instanceof PortalPage) {
+        PortalPage page = (PortalPage)portalPagePlace.getModel();
+        if (page.getName() != null)
+          updatePagePlace(portalPagePlace);
+      }
+    } else if (place instanceof HistoryPlace) {
+      HistoryPlace placeWithName = (HistoryPlace)place;
+      if (placeWithName.getHistoryName() != null) {
+        addPlaceAndUpdate(place);
+      } else {
+        updateView();
+      }
+    } else {
+      updateView();
+    }
   }
   
   private void updatePagePlace(PortalPagePlace newPagePlace) {
@@ -84,7 +90,30 @@ public class PageBreadcrumb extends Composite {
     if (newPage.getHomePage()) {
       PageBreadcrumb.homePage = newPage;
     }
-    if (newPage.getParentId() == null) {
+    
+    // 17/03/2013
+    if (newPage instanceof VirtualPage) {
+      boolean found = false;
+      for (Iterator<Place> it = history.iterator(); it.hasNext();) {
+        Place historyPlace = it.next();
+        if (historyPlace instanceof PortalPagePlace) {
+          PortalPagePlace historyPortalPagePlace = (PortalPagePlace)historyPlace;
+          if (historyPortalPagePlace.getModel() instanceof VirtualPage) {
+            found = true;
+            it.remove();
+            while (it.hasNext()) {
+              it.next();
+              it.remove();
+            }
+            addPageAndUpdate(false, newPagePlace);
+            break;
+          }
+        }
+      }
+      if (!found) {
+        addPageAndUpdate(false, newPagePlace);
+      }
+    } else if (newPage.getParentId() == null) {
       addPageAndUpdate(true, newPagePlace);
     } else {
       boolean found = false;

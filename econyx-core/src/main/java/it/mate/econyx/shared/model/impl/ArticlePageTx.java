@@ -19,6 +19,7 @@ public class ArticlePageTx extends WebContentPageTx implements ArticlePage {
     this.setName(article.getName());
     this.setOrderNm(article.getOrderNm());
     this.setParent(this);
+    this.setVisibleInExplorer(false);
   }
   
   public static boolean isVirtualId(String id) {

@@ -3,6 +3,7 @@ package it.mate.econyx.client.view.site;
 import it.mate.econyx.client.util.PortalPageClientUtil;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.shared.model.ArticleFolderPage;
+import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -144,7 +145,12 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       
       if (page instanceof ArticleFolderPage) {
         ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
-        getPresenter().initArticleFolderView(articlePanel, articleFolderPage);
+        getPresenter().initArticleFolderPageView(articlePanel, articleFolderPage);
+      }
+      
+      if (page instanceof ArticlePage) {
+        ArticlePage articlePage = (ArticlePage)page;
+        getPresenter().initArticlePageView(articlePanel, articlePage);
       }
       
       if (!childreenRendered && page instanceof PortalFolderPage) {

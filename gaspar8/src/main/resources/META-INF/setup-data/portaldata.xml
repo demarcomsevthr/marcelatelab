@@ -753,11 +753,20 @@
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
-
+    
+    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
+      <name>News</name>
+      <code>news</code>
+      <orderNm>500</orderNm>
+      <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
+        <code>HomeArticleFolder</code>
+      </entity>
+    </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
+    
     <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
       <name>Acquisti online</name>
       <code>acquisti</code>
-      <orderNm>500</orderNm>
+      <orderNm>600</orderNm>
       <childreen>
         <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
           <name>ORTOFRUTTA</name>
@@ -1046,15 +1055,6 @@
         </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
       </childreen>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-    
-    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
-      <name>News</name>
-      <code>news</code>
-      <orderNm>600</orderNm>
-      <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
-        <code>HomeArticleFolder</code>
-      </entity>
-    </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
     
   </pages>
   
