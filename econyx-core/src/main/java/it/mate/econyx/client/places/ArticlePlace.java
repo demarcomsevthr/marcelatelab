@@ -1,5 +1,6 @@
 package it.mate.econyx.client.places;
 
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.gwtcommons.client.mvp.ReversiblePlace;
 import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.gwtcommons.client.places.HistoryPlace;
@@ -10,6 +11,10 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class ArticlePlace extends Place implements ReversiblePlace, HasToken, HistoryPlace {
 
   public static String FOLDER_VIEW = "folderView";
+
+  public static String FOLDER_LIST = "folderList";
+
+  public static String FOLDER_EDIT = "folderEdit";
 
   public static String ARTICLE_VIEW = "articleView";
 
@@ -74,6 +79,10 @@ public class ArticlePlace extends Place implements ReversiblePlace, HasToken, Hi
   private String historyName;
   
   public String getHistoryName() {
+    if (FOLDER_EDIT.equals(token) && model instanceof ArticleFolder) {
+      ArticleFolder folder = (ArticleFolder)model;
+      return folder.getName();
+    }
     return historyName;
   }
 
@@ -85,6 +94,9 @@ public class ArticlePlace extends Place implements ReversiblePlace, HasToken, Hi
   private boolean historyAppend = false;
   
   public boolean isHistoryAppend() {
+    if (FOLDER_EDIT.equals(token) && model instanceof ArticleFolder) {
+      return true;
+    }
     return historyAppend;
   }
 

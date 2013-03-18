@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
@@ -81,14 +82,17 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
     html.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
-        Element readmoreElement = JQueryUtils.selectFirst("[id='cke-readmore']");
-        if (readmoreElement != null) {
-          processCkeReadmore(readmoreElement);
-          GwtUtils.addElementEventListener(readmoreElement, Event.ONCLICK, new EventListener() {
-            public void onBrowserEvent(Event event) {
-              GwtUtils.setLocationHash(article.getCode());
-            }
-          });
+        JsArray<Element> elements = JQueryUtils.select("[id='cke-readmore']");
+        for (int it = 0; it < elements.length(); it++) {
+          Element readmoreElement = elements.get(it);
+          if (readmoreElement != null) {
+            processCkeReadmore(readmoreElement);
+            GwtUtils.addElementEventListener(readmoreElement, Event.ONCLICK, new EventListener() {
+              public void onBrowserEvent(Event event) {
+                GwtUtils.setLocationHash(article.getCode());
+              }
+            });
+          }
         }
         html.getElement().getStyle().clearHeight();
       }
@@ -99,6 +103,7 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
   private void processCkeReadmore(Element readmoreElement) {
     Element nextElem = readmoreElement;
     while((nextElem = nextElem.getNextSiblingElement()) != null) {
+      nextElem.getStyle().setHeight(0, Unit.PX);
       nextElem.getStyle().setVisibility(Visibility.HIDDEN);
     }
     Element parentElem = readmoreElement.getParentElement();
