@@ -15,7 +15,11 @@
 		
 		  >> GESTIONE ARTICOLI E BLOG <<
 
-		- NEW ArticleComment [1]
+		- NEW ArticleComment [1] [iniziato 18/03/2013]
+		
+		- ArticleView >> inserimento commenti [1]
+		
+		- finire model Article (title, author, date)
 
 		- inserimento nuovi Article e ArticleFolder [generazione codice univoco] [2]
 		

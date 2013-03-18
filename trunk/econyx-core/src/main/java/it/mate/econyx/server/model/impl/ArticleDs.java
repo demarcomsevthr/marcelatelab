@@ -1,10 +1,14 @@
 package it.mate.econyx.server.model.impl;
 
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -36,6 +40,12 @@ public class ArticleDs implements Article, HasKey {
   
   @UnownedRelationship (key="htmlKey")
   transient HtmlWebContentDs html;
+
+  @Persistent (dependentKey="false", defaultFetchGroup="false")
+  List<Key> commentsKeys;
+  
+  @UnownedRelationship (key="commentsKeys", itemClass=ArticleCommentDs.class)
+  transient List<ArticleCommentDs> comments;
 
   public Key getKey() {
     return id;
@@ -91,4 +101,32 @@ public class ArticleDs implements Article, HasKey {
     this.htmlKey = this.html != null ? this.html.getKey() : null;
   }
   
+  public List<ArticleComment> getComments() {
+    return comments != null ? new ArrayList<ArticleComment>(comments) : null;
+  }
+
+  @CloneableProperty (targetClass=ArticleCommentDs.class)
+  public void setComments(List<ArticleComment> comments) {
+    this.comments = new ArrayList<ArticleCommentDs>();
+    this.commentsKeys = new ArrayList<Key>();
+    if (comments != null) {
+      for (ArticleComment comment : comments) {
+        if (comment instanceof ArticleCommentDs) {
+          attachComment((ArticleCommentDs)comment);
+        } else {
+          throw new IllegalArgumentException("cannot add item of type " + comment.getClass() + ", forget CloneableProperty annotation?");
+        }
+      }
+    }
+  }
+
+  private void attachComment(ArticleCommentDs comment) {
+    if (comments == null)
+      comments = new ArrayList<ArticleCommentDs>();
+    this.comments.add(comment);
+    if (commentsKeys == null)
+      commentsKeys = new ArrayList<Key>();
+    this.commentsKeys.add(comment.getKey());
+  }
+
 }
