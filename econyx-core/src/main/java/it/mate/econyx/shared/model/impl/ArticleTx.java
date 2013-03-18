@@ -1,8 +1,13 @@
 package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ArticleTx implements Article {
@@ -16,6 +21,8 @@ public class ArticleTx implements Article {
   Integer orderNm;
   
   HtmlContentTx html;
+  
+  List<ArticleCommentTx> comments;
   
   public String getId() {
     return id;
@@ -60,6 +67,61 @@ public class ArticleTx implements Article {
       this.html = (HtmlContentTx)html;
     } else {
       throw new IllegalArgumentException("cannot add item of type " + html.getClass() + ", forget CloneableProperty annotation");
+    }
+  }
+
+  public List<ArticleComment> getComments() {
+    if (comments == null)
+      return null;
+    return new AbstractList<ArticleComment>() {
+      public int size() {
+        return comments.size();
+      }
+      public ArticleComment get(int index) {
+        return comments.get(index);
+      }
+      public ArticleComment set(int index, ArticleComment element) {
+        if (element instanceof ArticleCommentTx) {
+          return comments.set(index, (ArticleCommentTx)element);
+        }
+        if (element == null) {
+          throw new IllegalArgumentException("null");
+        } else {
+          throw new IllegalArgumentException(element.getClass().getName());
+        }
+      }
+      public boolean add(ArticleComment element) {
+        if (element instanceof ArticleCommentTx) {
+          return comments.add((ArticleCommentTx)element);
+        }
+        if (element == null) {
+          throw new IllegalArgumentException("null");
+        } else {
+          throw new IllegalArgumentException(element.getClass().getName());
+        }
+      }
+      public boolean remove(Object o) {
+        return comments.remove(o);
+      }
+      public ArticleComment remove(int index) {
+        return comments.remove(index);
+      }
+    };
+  }
+
+  @CloneableProperty (targetClass=ArticleCommentTx.class)
+  public void setComments(List<ArticleComment> comments) {
+    if (comments != null) {
+      this.comments = new ArrayList<ArticleCommentTx>();
+      for (ArticleComment comment : comments) {
+        if (comment instanceof ArticleCommentTx) {
+          this.comments.add((ArticleCommentTx)comment);
+        } else {
+          throw new IllegalArgumentException("cannot add item of type " + comment.getClass() + ", must use CloneableProperty annotation");
+        }
+      }
+    } else {
+      this.comments = null;
     }
   }
   
