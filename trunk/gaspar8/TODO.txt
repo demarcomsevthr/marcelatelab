@@ -10,20 +10,38 @@
 		__________________________________________________________________________________
 
 
-		PANIC ROOM - 15/01/2013
+
+		SNAPSHOT 18/03/2013
 		
-			https://appengine.google.com/
-			> An unexpected failure has occurred. Please try again.
-			>> Sia da ufficio che da casa!
-			>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
-			>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
-			>> in questa circostanza, si va in locale
-			>>> IMPORTANTE: http://code.google.com/status/appengine >> SYSTEM STATUS GLOBALE (figo)
-				
-				
+		  >> GESTIONE ARTICOLI E BLOG <<
+
+		- NEW ArticleComment [1]
+
+		- inserimento nuovi Article e ArticleFolder [generazione codice univoco] [2]
+		
+		- STYLING e contenuti pagine [2]
+			> sfondo
+			> css pagine
+			> css articoli
+			> css blog
+			
+		- NEW BlogPage, BlogThread, BlogComment [3]	
+			
+		- LOGIN DIALOG [4]
+			> login dialog (tipo sella, etc...)
+				>> btn 'ACCEDI' >> dialog field login, pwd, password dimanticata?, accedi con account google, ...
+		
+		- gestione ruoli admins [4]
+		
+
+
+		------------------------------------------------------
+
+
+
 		SNAPSHOT 16/01/2013
 		
-		  >> SOSPESI <<
+		  >> SOSPESI GESTIONE ORDINI <<
 
 		- Configurazione order states [1]
 			> SEMPLIFICARE:
@@ -51,7 +69,7 @@
 			> in producer order list view > btn 'invia mail agli utenti' (input body)
 			> in order list view > check selezione utenti > btn 'invia mail agli utenti' (input body)			
 				
-		- Modifica quantità ordine da riepilogo carrelo > non scatta il controllo prepagato [2]
+		- Modifica quantità ordine da riepilogo carrello > non scatta il controllo prepagato [2]
 		
 		- Riepilogo carrello > sfasa alla terza riga [2]
 		
@@ -59,7 +77,7 @@
 		
 		- Wait panel: profilo utente>situazione ordini, order list view>retrieve ordini [2]
 		
-		- NEW: ordini per utente [2]
+		- NEW: lista ordini per utente [2]
 				
 		- Customizzazione pagina forbidden [3]
 			> Se voglio provare ad entrare su admin con utente non autorizzato 
@@ -90,7 +108,9 @@
 			> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
 			> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
 			
-			-------------------------------------------------	
+
+		------------------------------------------------------
+
 			
 		>> IMPORTANTISSIMO: blocco invio mail a utenti di test [16/01/2013]
 			> it.mate.econyx.shared.model.impl.PortalUserTx
@@ -110,7 +130,25 @@
 		- Etichetta stato 'confermato' > 'acquisito' > FATTO [16/01/2013]
 		- Etichetta stato 'cancellato' > 'annullato' > FATTO [16/01/2013]
 		- Aggiungere stato intermedio 'in consegna' > FATTO [16/01/2013]
+
+
+			
+
+		------------------------------------------------------
+
+			
 		
+		PANIC ROOM - 15/01/2013
+		
+			https://appengine.google.com/
+			> An unexpected failure has occurred. Please try again.
+			>> Sia da ufficio che da casa!
+			>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
+			>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
+			>> in questa circostanza, si va in locale
+			>>> IMPORTANTE: http://code.google.com/status/appengine >> SYSTEM STATUS GLOBALE (figo)
+				
+				
 
 		__________________________________________________________________________________
 
