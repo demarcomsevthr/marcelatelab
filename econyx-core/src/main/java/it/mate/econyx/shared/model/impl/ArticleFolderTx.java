@@ -56,7 +56,7 @@ public class ArticleFolderTx implements ArticleFolder {
   }
   
   public List<Article> getArticles() {
-    return CollectionUtilsClient.wrapListOfInterfaces(articles, ArticleTx.class);
+    return (List<Article>)CollectionUtilsClient.wrapConcreteList(Article.class, articles, ArticleTx.class);
   }
 
   /*

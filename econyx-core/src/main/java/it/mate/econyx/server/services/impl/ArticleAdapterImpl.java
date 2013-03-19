@@ -1,15 +1,19 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.econyx.server.model.impl.ArticleCommentDs;
 import it.mate.econyx.server.model.impl.ArticleDs;
 import it.mate.econyx.server.model.impl.ArticleFolderDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.gwtcommons.server.dao.Dao;
+import it.mate.gwtcommons.server.dao.FindContext;
 import it.mate.gwtcommons.server.model.utils.OneToOneAdapterSupport;
+import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
@@ -92,10 +96,7 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     if (articles != null) {
       for (Article article : articles) {
         ArticleDs articleDs = CloneUtils.clone(article, ArticleDs.class);
-        if (htmlRelationshipSupport != null) {
-          htmlRelationshipSupport.onBeforeDelete(articleDs);
-        }
-        dao.delete(articleDs);
+        deleteArticleDs(articleDs);
       }
     }
   }
@@ -111,7 +112,36 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     return articles;
   }
   
+  private void deleteArticleDs (ArticleDs articleDs) {
+    List<ArticleComment> comments = articleDs.getComments();
+    if (comments != null) {
+      for (int it = 0; it < comments.size(); it++) {
+        ArticleCommentDs commentDs = (ArticleCommentDs)comments.get(it);
+        if (commentDs.getKey() != null) {
+          dao.delete(commentDs);
+        }
+      }
+    }
+    if (htmlRelationshipSupport != null) {
+      htmlRelationshipSupport.onBeforeDelete(articleDs);
+    }
+    dao.delete(articleDs);
+  }
+  
   private ArticleDs createOrUpdateArticleDs (ArticleDs articleDs) {
+    List<ArticleComment> comments = articleDs.getComments();
+    if (comments != null) {
+      for (int it = 0; it < comments.size(); it++) {
+        ArticleCommentDs commentDs = (ArticleCommentDs)comments.get(it);
+        if (commentDs.getKey() == null) {
+          commentDs = dao.create(commentDs);
+        } else {
+          commentDs = dao.update(commentDs);
+        }
+        comments.set(it, commentDs);
+      }
+      articleDs.setComments(comments);
+    }
     if (articleDs.getKey() == null) {
       if (htmlRelationshipSupport != null) {
         htmlRelationshipSupport.onBeforeCreate(articleDs);
@@ -129,6 +159,36 @@ public class ArticleAdapterImpl implements ArticleAdapter {
   public Article findByCode(String code) {
     ArticleDs articleDs = dao.findSingle(ArticleDs.class, "code == codeParam", String.class.getName() + " codeParam", null, code);
     return CloneUtils.clone(articleDs, ArticleTx.class);
+  }
+  
+  public Article findArticleById(String id, boolean fetchComments) {
+    Article article = internalFindArticleById(id, true);
+    return CloneUtils.clone(article, ArticleTx.class);
+  }
+  
+  private ArticleDs internalFindArticleById(String id, boolean fetchComments) {
+    if (fetchComments) {
+      CacheUtils.deleteByKeyWithCondition(id, Article.class, new CacheUtils.Condition<Article>() {
+        public boolean evaluate(Article cachedEntity) {
+          return (cachedEntity.getComments() == null || cachedEntity.getComments().size() == 0);
+        }
+      });
+    }
+    FindContext<ArticleDs> context = new FindContext<ArticleDs>(ArticleDs.class).setId(id);
+    if (fetchComments) {
+      context.includedField("commentsKeys");
+    }
+    ArticleDs ds = dao.findById(context);
+    return ds;
+  }
+  
+  public Article addCommentToArticle(String id, ArticleComment comment) {
+    ArticleDs article = internalFindArticleById(id, true);
+    List<ArticleComment> comments = article.getComments();
+    comments.add(CloneUtils.clone(comment, ArticleCommentDs.class));
+    article.setComments(comments);
+    article = createOrUpdateArticleDs(article);
+    return CloneUtils.clone(article, ArticleTx.class);
   }
 
 }

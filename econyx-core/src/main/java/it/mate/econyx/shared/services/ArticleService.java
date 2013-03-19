@@ -1,5 +1,7 @@
 package it.mate.econyx.shared.services;
 
+import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
@@ -20,5 +22,9 @@ public interface ArticleService extends RemoteService {
   public void delete(ArticleFolder entity) throws ServiceException;
 
   public ArticleFolder findById(String id) throws ServiceException;
+  
+  public Article findArticleById(String id, boolean fetchComments);
+  
+  public Article addCommentToArticle(String id, ArticleComment comment);
 
 }

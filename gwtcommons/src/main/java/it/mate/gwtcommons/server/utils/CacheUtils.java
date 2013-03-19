@@ -105,6 +105,17 @@ public class CacheUtils {
     }
   }
   
+  @SuppressWarnings("unchecked")
+  public static <E> void deleteByKeyWithCondition (Object id, Class<E> entryType, Condition<E> condition) {
+    Object cachedEntry = CacheUtils.get(id);
+    if (cachedEntry != null && entryType.isAssignableFrom(cachedEntry.getClass())) {
+      E cachedEntity = (E)cachedEntry;
+      if (condition.evaluate(cachedEntity)) {
+        CacheUtils.deleteByKey(id);
+      }
+    }
+  }
+  
   private static boolean existsInMemCacheByKey (Object key) {
     return getMemCache().contains(keyToString(key));
   }
@@ -206,6 +217,10 @@ public class CacheUtils {
   
   public static Object instPut (Object key, Object value) {
     return getInstCache().put(key, value);
+  }
+  
+  public interface Condition <E> {
+    public boolean evaluate(E cachedEntity);
   }
   
 }

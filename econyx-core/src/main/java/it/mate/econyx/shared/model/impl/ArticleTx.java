@@ -71,7 +71,7 @@ public class ArticleTx implements Article {
   }
   
   public List<ArticleComment> getComments() {
-    return CollectionUtilsClient.wrapListOfInterfaces(comments, ArticleCommentTx.class);
+    return (List<ArticleComment>)CollectionUtilsClient.wrapConcreteList(ArticleComment.class, comments, ArticleCommentTx.class);
   }
 
   /*
