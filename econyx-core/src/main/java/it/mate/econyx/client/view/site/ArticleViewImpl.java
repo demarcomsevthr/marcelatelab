@@ -1,5 +1,6 @@
 package it.mate.econyx.client.view.site;
 
+import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
@@ -11,6 +12,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -21,6 +24,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
@@ -100,8 +104,14 @@ public class ArticleViewImpl extends AbstractBaseView<ArticleView.Presenter> imp
 
   @UiHandler ("addCommentBtn")
   public void onAddCommentBtn(ClickEvent event) {
+    if (AppClientFactory.IMPL.getPortalSessionState().getLoggedUser() == null) {
+      Window.alert("Devi effettuare il login per poter inserire un commento");
+      return;
+    }
     ArticleComment comment = new ArticleCommentTx();
     comment.setContent(commentArea.getText());
+    comment.setAuthor(AppClientFactory.IMPL.getPortalSessionState().getLoggedUser());
+    comment.setPosted(new Date());
     getPresenter().addCommentToArticle(article.getId(), comment);
   }
   

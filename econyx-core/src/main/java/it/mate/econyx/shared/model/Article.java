@@ -1,5 +1,6 @@
 package it.mate.econyx.shared.model;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -12,5 +13,17 @@ public interface Article extends WebContentSimple, PortalEntity {
   public List<ArticleComment> getComments();
   
   public void setComments(List<ArticleComment> comments);
+  
+  public String getTitle();
+
+  public void setTitle(String title);
+
+  public PortalUser getAuthor();
+
+  public void setAuthor(PortalUser author);
+
+  public Date getCreated();
+
+  public void setCreated(Date created);
   
 }

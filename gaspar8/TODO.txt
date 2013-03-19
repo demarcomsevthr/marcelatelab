@@ -15,14 +15,19 @@
 		
 		  >> GESTIONE ARTICOLI E BLOG <<
 		  
-		- se funziona mettere CollectionUtilsClient in tutti i metodi getList... dei tx
+		- CollectionUtilClient | ListPropertyWrapper 
+		  se funziona mettere CollectionUtilsClient o ListPropertyWrapper in tutti i getter getList dei tx
+		
 			>> ATTENZIONE
 			HA DATO delle eccezioni del tipo:
-			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' because it is exposed as an array with 
-			a maximum dimension of 1 in this type or one of its subtypes (reached 
-			via it.mate.econyx.shared.model.Article)
-			>>> SONO SPARITE mettendo un cast nella return del metodo (molto strano!)
+			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' because it is exposed as an array with a maximum dimension of 1 in this type or one of its subtypes 
+			(reached via it.mate.econyx.shared.model.Article)
+
+			>>> PARE CHE LE DAVA PERCHE' NON ERA INIZIALIZZATA LA PROPERTY (List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();)
+			    QUINDI SEMBRA CHE NON C'ENTRAVA NIENTE CON LA CLASSE DI UTILITY
+
 			>>> SE LO RIDA ANCORA tornare alle getArticles e getComments in vecchio stile
+			
 			(vedi ArticleTx e ArticleFolderTx)
 			
 

@@ -2,7 +2,7 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
-import it.mate.gwtcommons.client.utils.CollectionUtilsClient;
+import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class ArticleFolderTx implements ArticleFolder {
   
   Integer orderNm;
   
-  List<ArticleTx> articles;
+  List<ArticleTx> articles = new ArrayList<ArticleTx>();
   
   String selectedArticleCode;
 
@@ -56,7 +56,8 @@ public class ArticleFolderTx implements ArticleFolder {
   }
   
   public List<Article> getArticles() {
-    return (List<Article>)CollectionUtilsClient.wrapConcreteList(Article.class, articles, ArticleTx.class);
+//  return (List<Article>)CollectionUtilsClient.wrapConcreteList(Article.class, articles, ArticleTx.class);
+    return new ListPropertyWrapper<Article, ArticleTx>(articles, ArticleTx.class);
   }
 
   /*

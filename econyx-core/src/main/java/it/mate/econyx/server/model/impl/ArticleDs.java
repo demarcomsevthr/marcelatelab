@@ -3,13 +3,16 @@ package it.mate.econyx.server.model.impl;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
+import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -50,6 +53,19 @@ public class ArticleDs implements Article, HasKey {
   @UnownedRelationship (key="commentsKeys", itemClass=ArticleCommentDs.class)
   transient List<ArticleCommentDs> comments;
 
+  @Persistent
+  String title;
+  
+  @Persistent (dependent="false", defaultFetchGroup="true")
+  Key authorKey;
+  
+  @UnownedRelationship (key="authorKey")
+  transient PortalUserDs author;
+  
+  @Persistent
+  Date created;
+  
+  
   public Key getKey() {
     return id;
   }
@@ -117,7 +133,7 @@ public class ArticleDs implements Article, HasKey {
         if (comment instanceof ArticleCommentDs) {
           attachComment((ArticleCommentDs)comment);
         } else {
-          throw new IllegalArgumentException("cannot add item of type " + comment.getClass() + ", forget CloneableProperty annotation?");
+          throw new CloneablePropertyMissingException(comment);
         }
       }
     }
@@ -130,6 +146,32 @@ public class ArticleDs implements Article, HasKey {
     if (commentsKeys == null)
       commentsKeys = new ArrayList<Key>();
     this.commentsKeys.add(comment.getKey());
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public PortalUser getAuthor() {
+    return author;
+  }
+
+  @CloneableProperty (targetClass=PortalUserDs.class)
+  public void setAuthor(PortalUser author) {
+    this.author = (PortalUserDs)author;
+    this.authorKey = this.author != null ? this.author.getKey() : null;
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
 
 }

@@ -17,6 +17,7 @@ import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
+import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.Articolo;
@@ -53,6 +54,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -352,14 +354,14 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       ArticleFolder cachedArticleFolder = model.articleFolders.get(it);
       if (articleFolder.getCode().equals(cachedArticleFolder.getCode())) {
         if (loadMode && cachedArticleFolder.getId() == null) {
-          cachedArticleFolder = createArticleFolder(context, cachedArticleFolder);
+          cachedArticleFolder = createArticleFolder(context, loadMode, cachedArticleFolder);
           model.articleFolders.set(it, cachedArticleFolder);
         }
         return cachedArticleFolder;
       }
     }
     if (loadMode) {
-      articleFolder = createArticleFolder(context, articleFolder);
+      articleFolder = createArticleFolder(context, loadMode, articleFolder);
       model.articleFolders.add(articleFolder);
     }
     return articleFolder;
@@ -481,7 +483,12 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return producer;
   }
   
-  private ArticleFolder createArticleFolder(VisitContext context, ArticleFolder articleFolder) {
+  private ArticleFolder createArticleFolder(VisitContext context, boolean loadMode, ArticleFolder articleFolder) {
+    for (Article article : articleFolder.getArticles()) {
+      article.setAuthor(visitPortalUser(context, loadMode, article.getAuthor()));
+      if (article.getCreated() == null)
+        article.setCreated(new Date());
+    }
     articleFolder = articleAdapter.create(articleFolder);
     return articleFolder;
   }
