@@ -3,9 +3,9 @@ package it.mate.econyx.shared.model.impl;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
+import it.mate.gwtcommons.client.utils.CollectionUtilsClient;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +69,31 @@ public class ArticleTx implements Article {
       throw new IllegalArgumentException("cannot add item of type " + html.getClass() + ", forget CloneableProperty annotation");
     }
   }
+  
+  public List<ArticleComment> getComments() {
+    return CollectionUtilsClient.wrapListOfInterfaces(comments, ArticleCommentTx.class);
+  }
 
+  /*
+  public static void main(String[] args) {
+    ArticleTx article = new ArticleTx();
+    article.setComments(new ArrayList<ArticleComment>());
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(0).setName("commento 1");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(1).setName("commento 2");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(2).setName("commento 3");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(3).setName("commento 4");
+    List<ArticleComment> comments = article.getComments();
+    for (ArticleComment comment : comments) {
+      System.out.println(comment.getName());
+    }
+  }
+  */
+
+  /*
   public List<ArticleComment> getComments() {
     if (comments == null)
       return null;
@@ -108,6 +132,7 @@ public class ArticleTx implements Article {
       }
     };
   }
+  */
 
   @CloneableProperty (targetClass=ArticleCommentTx.class)
   public void setComments(List<ArticleComment> comments) {

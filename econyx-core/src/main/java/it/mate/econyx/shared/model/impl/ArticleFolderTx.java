@@ -2,9 +2,9 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.gwtcommons.client.utils.CollectionUtilsClient;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,12 @@ public class ArticleFolderTx implements ArticleFolder {
   public void setOrderNm(Integer orderNm) {
     this.orderNm = orderNm;
   }
+  
+  public List<Article> getArticles() {
+    return CollectionUtilsClient.wrapListOfInterfaces(articles, ArticleTx.class);
+  }
 
+  /*
   public List<Article> getArticles() {
     if (articles == null)
       return null;
@@ -93,6 +98,7 @@ public class ArticleFolderTx implements ArticleFolder {
       }
     };
   }
+  */
 
   @CloneableProperty (targetClass=ArticleTx.class)
   public void setArticles(List<Article> articles) {
