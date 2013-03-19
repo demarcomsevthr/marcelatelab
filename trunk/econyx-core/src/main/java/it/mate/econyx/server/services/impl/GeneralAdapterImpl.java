@@ -192,11 +192,11 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       JdoDao.setSuppressExceptionThrowOnInternalFind(true);
       deleteOrders();
       deletePages();
+      deleteArticles();
       deleteCustomers();
       deleteUsers();
       deleteImages();
       deleteProducts();
-      deleteArticles();
       CacheUtils.clearAll();
 
       // 04/01/2013

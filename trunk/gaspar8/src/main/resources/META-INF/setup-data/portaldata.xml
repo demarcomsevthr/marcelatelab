@@ -1084,6 +1084,10 @@
           <code>201303_FirstArticle</code>
           <name>Articolo uno</name>
           <orderNm>100</orderNm>
+          <title>Titolo dell'articolo uno</title>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
           <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
             <type>M</type>
             <content>
@@ -1130,6 +1134,10 @@
           <code>201303_SecondArticle</code>
           <name>Articolo due</name>
           <orderNm>110</orderNm>
+          <title>Titolo dell'articolo due</title>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
           <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
             <type>M</type>
             <content>
@@ -1183,6 +1191,10 @@
           <code>201304_FirstArticle</code>
           <name>Articolo uno</name>
           <orderNm>100</orderNm>
+          <title>Titolo dell'articolo uno di aprile</title>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
           <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
             <type>M</type>
             <content>
@@ -1229,6 +1241,10 @@
           <code>201304_SecondArticle</code>
           <name>Articolo due</name>
           <orderNm>110</orderNm>
+          <title>Titolo dell'articolo due di aprile</title>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
           <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
             <type>M</type>
             <content>

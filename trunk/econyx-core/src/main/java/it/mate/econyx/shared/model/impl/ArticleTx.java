@@ -3,10 +3,13 @@ package it.mate.econyx.shared.model.impl;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
-import it.mate.gwtcommons.client.utils.CollectionUtilsClient;
+import it.mate.econyx.shared.model.PortalUser;
+import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
+import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -22,7 +25,13 @@ public class ArticleTx implements Article {
   
   HtmlContentTx html;
   
-  List<ArticleCommentTx> comments;
+  String title;
+  
+  PortalUserTx author;
+  
+  Date created;
+  
+  List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();
   
   public String getId() {
     return id;
@@ -66,12 +75,13 @@ public class ArticleTx implements Article {
     if (html instanceof HtmlContentTx) {
       this.html = (HtmlContentTx)html;
     } else {
-      throw new IllegalArgumentException("cannot add item of type " + html.getClass() + ", forget CloneableProperty annotation");
+      throw new CloneablePropertyMissingException(html);
     }
   }
-  
+
   public List<ArticleComment> getComments() {
-    return (List<ArticleComment>)CollectionUtilsClient.wrapConcreteList(ArticleComment.class, comments, ArticleCommentTx.class);
+//  return (List<ArticleComment>)CollectionUtilsClient.wrapConcreteList(ArticleComment.class, comments, ArticleCommentTx.class);
+    return new ListPropertyWrapper<ArticleComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
 
   /*
@@ -142,12 +152,41 @@ public class ArticleTx implements Article {
         if (comment instanceof ArticleCommentTx) {
           this.comments.add((ArticleCommentTx)comment);
         } else {
-          throw new IllegalArgumentException("cannot add item of type " + comment.getClass() + ", must use CloneableProperty annotation");
+          throw new CloneablePropertyMissingException(comment);
         }
       }
     } else {
       this.comments = null;
     }
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public PortalUser getAuthor() {
+    return author;
+  }
+
+  @CloneableProperty (targetClass=PortalUserTx.class)
+  public void setAuthor(PortalUser author) {
+    if (author instanceof PortalUserTx) {
+      this.author = (PortalUserTx)author;
+    } else {
+      throw new CloneablePropertyMissingException(author);
+    }
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
   
 }

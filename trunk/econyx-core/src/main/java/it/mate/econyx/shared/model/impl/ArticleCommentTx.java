@@ -1,6 +1,11 @@
 package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.ArticleComment;
+import it.mate.econyx.shared.model.PortalUser;
+import it.mate.gwtcommons.shared.model.CloneableProperty;
+import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
+
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public class ArticleCommentTx implements ArticleComment {
@@ -13,6 +18,10 @@ public class ArticleCommentTx implements ArticleComment {
   
   String content;
 
+  PortalUserTx author;
+  
+  Date posted;
+  
   public String getId() {
     return id;
   }
@@ -43,6 +52,27 @@ public class ArticleCommentTx implements ArticleComment {
 
   public void setContent(String content) {
     this.content = content;
+  }
+
+  public PortalUser getAuthor() {
+    return author;
+  }
+
+  @CloneableProperty (targetClass=PortalUserTx.class)
+  public void setAuthor(PortalUser author) {
+    if (author instanceof PortalUserTx) {
+      this.author = (PortalUserTx)author;
+    } else {
+      throw new CloneablePropertyMissingException(author);
+    }
+  }
+
+  public Date getPosted() {
+    return posted;
+  }
+
+  public void setPosted(Date posted) {
+    this.posted = posted;
   }
   
 }
