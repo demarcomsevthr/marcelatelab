@@ -2,6 +2,8 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.services.ArticleService;
 import it.mate.gwtcommons.shared.services.ServiceException;
@@ -57,4 +59,14 @@ public class ArticleServiceImpl extends RemoteServiceServlet implements ArticleS
     return adapter.findById(id);
   }
 
+  @Override
+  public Article findArticleById(String id, boolean fetchComments) {
+    return adapter.findArticleById(id, fetchComments);
+  }
+
+  @Override
+  public Article addCommentToArticle(String id, ArticleComment comment) {
+    return adapter.addCommentToArticle(id, comment);
+  }
+  
 }

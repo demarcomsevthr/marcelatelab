@@ -1,6 +1,7 @@
 package it.mate.econyx.server.services;
 
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 
 import java.util.List;
@@ -18,5 +19,9 @@ public interface ArticleAdapter {
   public ArticleFolder findById(String id);
   
   public Article findByCode(String code);
+  
+  public Article findArticleById(String id, boolean fetchComments);
+  
+  public Article addCommentToArticle(String id, ArticleComment comment);
   
 }

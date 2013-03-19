@@ -3,6 +3,8 @@ package it.mate.econyx.server.model.impl;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.HtmlContent;
+import it.mate.econyx.shared.model.impl.ArticleTx;
+import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
@@ -20,6 +22,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
+@CacheableEntity (txClass=ArticleTx.class)
 public class ArticleDs implements Article, HasKey {
 
   @PrimaryKey

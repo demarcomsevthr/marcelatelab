@@ -10,6 +10,12 @@
   <g:HTMLPanel>
   
     <g:HTML ui:field="articleHtml"></g:HTML>
+    
+    <g:FlexTable ui:field="commentsTable"/>
+    
+    <g:TextArea ui:field="commentArea"></g:TextArea>
+    
+    <g:Button ui:field="addCommentBtn" text="Aggiungi commento"/>
   
   </g:HTMLPanel>
   
