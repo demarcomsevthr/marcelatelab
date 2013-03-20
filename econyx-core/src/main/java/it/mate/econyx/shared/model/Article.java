@@ -4,11 +4,27 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface Article extends WebContentSimple, PortalEntity {
+public interface Article extends PortalEntity {
   
+  public String getId();
+
+  public void setId(String id);
+
+  public String getName();
+
+  public void setName(String name);
+  
+  public Integer getOrderNm();
+  
+  public void setOrderNm(Integer orderNm);
+
   public String getCode();
 
   public void setCode(String code);
+  
+  public HtmlContent getHtml();
+  
+  public void setHtml(HtmlContent html);
   
   public List<ArticleComment> getComments();
   

@@ -176,7 +176,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (Articolo articolo : dataModel.products) {
       visitProduct(dataModel, true, articolo);
     }
-    for (ArticleFolder articleFolder : dataModel.articleFolders) {
+    for (int it = 0; it < dataModel.articleFolders.size(); it++) {
+      ArticleFolder articleFolder = dataModel.articleFolders.get(it);
       visitArticleFolder(dataModel, true, articleFolder);
     }
     return dataModel;
@@ -352,7 +353,14 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     PortalDataExportModel model = (PortalDataExportModel)context;
     for (int it = 0; it < model.articleFolders.size(); it++) {
       ArticleFolder cachedArticleFolder = model.articleFolders.get(it);
-      if (articleFolder.getCode().equals(cachedArticleFolder.getCode())) {
+      boolean matched = false;
+      if (articleFolder.getCode() != null && articleFolder.getCode().equals(cachedArticleFolder.getCode())) {
+        matched = true;
+      }
+      if (articleFolder.getName() != null && articleFolder.getName().equals(cachedArticleFolder.getName())) {
+        matched = true;
+      }
+      if (matched) {
         if (loadMode && cachedArticleFolder.getId() == null) {
           cachedArticleFolder = createArticleFolder(context, loadMode, cachedArticleFolder);
           model.articleFolders.set(it, cachedArticleFolder);

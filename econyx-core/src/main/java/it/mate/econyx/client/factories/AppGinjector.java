@@ -1,6 +1,7 @@
 package it.mate.econyx.client.factories;
 
 import it.mate.econyx.client.activities.mapper.AdminActivityMapper;
+import it.mate.econyx.client.view.ArticleEditView;
 import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
@@ -90,9 +91,10 @@ public interface AppGinjector extends CommonGinjector {
   public AdminActivityMapper getAdminActivityMapper();
   
   public ArticleFolderView getArticleFolderView();
-  public ArticleView getArticleView();
   public ArticleFolderListView getArticleFolderListView();
   public ArticleFolderEditView getArticleFolderEditView();
+  public ArticleView getArticleView();
+  public ArticleEditView getArticleEditView();
 
   public TestView getTestView();
   

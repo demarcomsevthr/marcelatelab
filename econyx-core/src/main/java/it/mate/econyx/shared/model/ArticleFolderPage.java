@@ -1,5 +1,7 @@
 package it.mate.econyx.shared.model;
 
-public interface ArticleFolderPage extends PortalEntityPage<ArticleFolder>, PortalFolderPage {
+import java.io.Serializable;
+
+public interface ArticleFolderPage extends PortalEntityPage<ArticleFolder>, PortalFolderPage, Serializable {
   
 }

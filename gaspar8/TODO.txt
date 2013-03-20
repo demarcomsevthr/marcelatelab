@@ -15,17 +15,40 @@
 		
 		  >> GESTIONE ARTICOLI E BLOG <<
 		  
-		- CollectionUtilClient | ListPropertyWrapper 
-		  se funziona mettere CollectionUtilsClient o ListPropertyWrapper in tutti i getter getList dei tx
+		>> UPDATE Html Article >> NON SALVA!  
+		  
+		- ListPropertyWrapper
+		
+		  se funziona mettere ListPropertyWrapper in tutti i getter getList dei tx
 		
 			>> ATTENZIONE
 			HA DATO delle eccezioni del tipo:
 			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' because it is exposed as an array with a maximum dimension of 1 in this type or one of its subtypes 
 			(reached via it.mate.econyx.shared.model.Article)
+			
+			VEDI docs/errors/article-serialization-errors.txt
+			
+			>>>> QUANDO LO RIFA PROVARE CON CHROME
 
-			>>> PARE CHE LE DAVA PERCHE' NON ERA INIZIALIZZATA LA PROPERTY (List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();)
+			>>> PARE CHE L'ERRORE NON DIPENDA DIRETTAMENTE DA ListPropertyWrapper, sembra più una coincidenza
+			
+			>>> PARE CHE LO DIA IN MANIERA CASUALE (!)
+			
+			>>> AZIONI CHE PENSO POSSONO AVER ARGINATO IL PROBLEMA
+			
+			>>> DICHIARAZIONI DI Serializable SU TUTTE LE INTERFACCE DI MODEL
+			
+			>>> SEMPLIFICAZIONE DELLE INTERFACCE (eliminate le ereditarietà multiple)
+
+			>>> INIZIALIZZAZIONE DELLA PROPERTY (List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>())
 			    QUINDI SEMBRA CHE NON C'ENTRAVA NIENTE CON LA CLASSE DI UTILITY
+			    
+			>>> SEMBRA CHE LO DIA PIU' FREQUENTEMENTE IN DEV MODE
+			
+			>>> A VOLTE SI SBLOCCA FACENDO UNA BUILD MAVEN E RIPROVANDO IN DEV MODE (!!!)
 
+			>>> SEMBRA CHE ABBIA A CHE FARE CON L'USO DEI GENERIC NELLE INTERFACCIE O NEI TX
+			
 			>>> SE LO RIDA ANCORA tornare alle getArticles e getComments in vecchio stile
 			
 			(vedi ArticleTx e ArticleFolderTx)

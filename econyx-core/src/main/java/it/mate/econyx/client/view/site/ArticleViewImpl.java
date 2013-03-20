@@ -27,6 +27,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -75,9 +76,12 @@ public class ArticleViewImpl extends AbstractBaseView<ArticleView.Presenter> imp
       
       commentsTable.clear();
       if (article.getComments() != null) {
-        for (int row = 0; row < article.getComments().size(); row++) {
-          ArticleComment comment = article.getComments().get(row);
-          commentsTable.setWidget(row, 0, new HTML(comment.getContent()));
+        for (int it = 0; it < article.getComments().size(); it++) {
+          int row = it * 3;
+          ArticleComment comment = article.getComments().get(it);
+          commentsTable.setWidget(row, 0, new Label(comment.getAuthor().getScreenName() + " ha scritto:"));
+          commentsTable.setWidget(row + 1, 0, new HTML(comment.getContent()));
+          commentsTable.setWidget(row + 2, 0, new Label("postato il " + GwtUtils.dateToString(comment.getPosted(), "dd/MM/yyyy HH:mm")));
         }
       }
       

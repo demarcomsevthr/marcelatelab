@@ -37,7 +37,7 @@ public class ArticleFolderEditItemListView extends AbstractAdminTabPage<ArticleF
       public void goToPrevious() {  }
       public void edit(Article article) {
         GwtUtils.log(getClass(), "edit", "selected article " + article);
-//      ArticleFolderEditItemListView.this.getPresenter().edit(article);
+        ArticleFolderEditItemListView.this.getPresenter().edit(article);
       }
       /*
       public void newInstance(String classname, final Delegate<Article> delegate) {  

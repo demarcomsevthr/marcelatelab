@@ -24,4 +24,6 @@ public interface ArticleServiceAsync {
 
   void addCommentToArticle(String id, ArticleComment comment, AsyncCallback<Article> callback);
 
+  void updateArticle(Article article, AsyncCallback<Article> callback);
+
 }

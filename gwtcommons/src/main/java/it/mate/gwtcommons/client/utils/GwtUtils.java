@@ -195,7 +195,7 @@ public class GwtUtils {
   public static String dateToString (Date date) {
     if (date == null)
       return null;
-    return dateToString(date, null);
+    return dateToString(date, defaultDTFormat);
   }
   
   public static String dateToString (Date date, int len) {
@@ -203,11 +203,15 @@ public class GwtUtils {
       return dateToString(date, dt8FMT);
     if (len == 10)
       return dateToString(date, dt10FMT);
-    return dateToString(date, null);
+    return dateToString(date, defaultDTFormat);
   }
   
   public static String dateToString (Date date, DateTimeFormat fmt) {
     return fmt != null ? fmt.format(date) : defaultDTFormat.format(date);
+  }
+  
+  public static String dateToString (Date date, String fmt) {
+    return DateTimeFormat.getFormat(fmt).format(date);
   }
   
   private static String[] engDW = new String[] {"mon", "tue", "wed", "thu", "fri", "sat", "sun"};

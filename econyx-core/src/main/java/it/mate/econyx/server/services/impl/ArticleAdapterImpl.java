@@ -4,6 +4,7 @@ import it.mate.econyx.server.model.impl.ArticleCommentDs;
 import it.mate.econyx.server.model.impl.ArticleDs;
 import it.mate.econyx.server.model.impl.ArticleFolderDs;
 import it.mate.econyx.server.services.ArticleAdapter;
+import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
@@ -31,6 +32,8 @@ public class ArticleAdapterImpl implements ArticleAdapter {
 
   private static Logger logger = Logger.getLogger(ArticleAdapterImpl.class);
 
+  @Autowired private GeneralAdapter generalAdapter;
+  
   @Autowired private Dao dao;
   
   OneToOneAdapterSupport<ArticleDs, HtmlContent> htmlRelationshipSupport;
@@ -44,11 +47,13 @@ public class ArticleAdapterImpl implements ArticleAdapter {
   @Override
   public List<ArticleFolder> findAll() {
     List<ArticleFolderDs> articleFolders = dao.findAll(ArticleFolderDs.class);
-    Collections.sort(articleFolders, new Comparator<ArticleFolder>() {
-      public int compare(ArticleFolder f1, ArticleFolder f2) {
-        return f1.getOrderNm() != null ? f1.getOrderNm().compareTo(f2.getOrderNm()) : 0;
-      }
-    });
+    if (articleFolders != null) {
+      Collections.sort(articleFolders, new Comparator<ArticleFolder>() {
+        public int compare(ArticleFolder f1, ArticleFolder f2) {
+          return (f1.getOrderNm() != null && f2.getOrderNm() != null) ? f1.getOrderNm().compareTo(f2.getOrderNm()) : 0;
+        }
+      });
+    }
     return CloneUtils.clone(articleFolders, ArticleFolderTx.class, ArticleFolder.class);
   }
 
@@ -71,6 +76,9 @@ public class ArticleAdapterImpl implements ArticleAdapter {
   public ArticleFolder create(ArticleFolder entity) {
     ArticleFolderDs articleFolderDs = CloneUtils.clone(entity, ArticleFolderDs.class);
     articleFolderDs.setArticles(createArticles(articleFolderDs.getArticles()));
+    if (articleFolderDs.getCode() == null) {
+      articleFolderDs.setCode(getNextCodeCounter());
+    }
     articleFolderDs = dao.create(articleFolderDs);
     return CloneUtils.clone (articleFolderDs, ArticleFolderTx.class);
   }
@@ -81,6 +89,12 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     return CloneUtils.clone(ds, ArticleFolderTx.class);
   }
   
+  @Override
+  public Article update(Article article) {
+    article = createOrUpdateArticleDs(CloneUtils.clone(article, ArticleDs.class));
+    return CloneUtils.clone(article, ArticleTx.class);
+  }
+
   private List<Article> createArticles(List<Article> articles) {
     if (articles != null) {
       for (int it = 0; it < articles.size(); it++) {
@@ -146,6 +160,9 @@ public class ArticleAdapterImpl implements ArticleAdapter {
       if (htmlRelationshipSupport != null) {
         htmlRelationshipSupport.onBeforeCreate(articleDs);
       }
+      if (articleDs.getCode() == null) {
+        articleDs.setCode(getNextCodeCounter());
+      }
       articleDs = dao.create(articleDs);
     } else {
       if (htmlRelationshipSupport != null) {
@@ -191,4 +208,8 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     return CloneUtils.clone(article, ArticleTx.class);
   }
 
+  private String getNextCodeCounter() {
+    return ""+generalAdapter.findNextCounterValue();
+  }
+  
 }

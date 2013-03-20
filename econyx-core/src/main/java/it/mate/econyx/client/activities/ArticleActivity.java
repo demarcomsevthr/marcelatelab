@@ -2,6 +2,7 @@ package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
+import it.mate.econyx.client.view.ArticleEditView;
 import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
@@ -24,7 +25,8 @@ public class ArticleActivity extends BaseActivity implements
     ArticleFolderView.Presenter,
     ArticleFolderListView.Presenter,
     ArticleFolderEditView.Presenter,
-    ArticleView.Presenter {
+    ArticleView.Presenter,
+    ArticleEditView.Presenter {
 
   private ArticlePlace place;
   
@@ -52,6 +54,10 @@ public class ArticleActivity extends BaseActivity implements
     }
     if (place.getToken().equals(ArticlePlace.ARTICLE_VIEW)) {
       initView(AppClientFactory.IMPL.getGinjector().getArticleView(), panel);
+      retrieveModel();
+    }
+    if (place.getToken().equals(ArticlePlace.ARTICLE_EDIT)) {
+      initView(AppClientFactory.IMPL.getGinjector().getArticleEditView(), panel);
       retrieveModel();
     }
   }
@@ -93,6 +99,9 @@ public class ArticleActivity extends BaseActivity implements
       if (!rendered) {
         getView().setModel(place.getModel());
       }
+    }
+    if (place.getToken().equals(ArticlePlace.ARTICLE_EDIT)) {
+      getView().setModel(place.getModel());
     }
   }
   
@@ -154,6 +163,23 @@ public class ArticleActivity extends BaseActivity implements
       }
       public void onSuccess(Article article) {
         getView().setModel(article);
+      }
+    });
+  }
+  
+  @Override
+  public void edit(Article article) {
+    goTo(new ArticlePlace(ArticlePlace.ARTICLE_EDIT, article));
+  }
+
+  @Override
+  public void update(Article article) {
+    articleService.updateArticle(article, new AsyncCallback<Article>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Article article) {
+        goTo(new ArticlePlace(ArticlePlace.ARTICLE_EDIT, article));
       }
     });
   }

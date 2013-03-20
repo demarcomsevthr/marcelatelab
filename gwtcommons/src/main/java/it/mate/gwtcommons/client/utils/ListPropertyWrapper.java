@@ -7,10 +7,10 @@ import java.util.List;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class ListPropertyWrapper <I extends Serializable, D extends I> extends AbstractList<I> implements Serializable {
-  
+
   private List<D> items = new ArrayList<D>();
   
-  private Class<D> descendantClass;
+  private transient Class<D> descendantClass;
   
   public ListPropertyWrapper() {
 
@@ -72,5 +72,6 @@ public class ListPropertyWrapper <I extends Serializable, D extends I> extends A
     }
     return false;
   }
+  
   
 }

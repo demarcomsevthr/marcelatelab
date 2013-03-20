@@ -1054,18 +1054,18 @@
       <childreen>
         <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="false">
           <name>Marzo 2013</name>
-          <code>marzo_2013</code>
+          <code>marzo2013</code>
           <orderNm>500</orderNm>
           <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
-            <code>Marzo2013ArticleFolder</code>
+           <name>Raccolta articoli marzo 2013</name>
           </entity>
         </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
         <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="false">
           <name>Aprile 2013</name>
-          <code>aprile_2013</code>
+          <code>aprile2013</code>
           <orderNm>510</orderNm>
           <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
-            <code>Aprile2013ArticleFolder</code>
+            <name>Raccolta articoli aprile 2013</name>
           </entity>
         </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
       </childreen>
@@ -1076,12 +1076,10 @@
   
   <articleFolders>
     <it.mate.econyx.shared.model.impl.ArticleFolderTx>
-      <code>Marzo2013ArticleFolder</code>
       <name>Raccolta articoli marzo 2013</name>
       <orderNm>100</orderNm>
       <articles>
         <it.mate.econyx.shared.model.impl.ArticleTx>
-          <code>201303_FirstArticle</code>
           <name>Articolo uno</name>
           <orderNm>100</orderNm>
           <title>Titolo dell'articolo uno</title>
@@ -1131,7 +1129,6 @@
           </html>
         </it.mate.econyx.shared.model.impl.ArticleTx>
         <it.mate.econyx.shared.model.impl.ArticleTx>
-          <code>201303_SecondArticle</code>
           <name>Articolo due</name>
           <orderNm>110</orderNm>
           <title>Titolo dell'articolo due</title>
@@ -1183,12 +1180,10 @@
       </articles>
     </it.mate.econyx.shared.model.impl.ArticleFolderTx>
     <it.mate.econyx.shared.model.impl.ArticleFolderTx>
-      <code>Aprile2013ArticleFolder</code>
       <name>Raccolta articoli aprile 2013</name>
       <orderNm>200</orderNm>
       <articles>
         <it.mate.econyx.shared.model.impl.ArticleTx>
-          <code>201304_FirstArticle</code>
           <name>Articolo uno</name>
           <orderNm>100</orderNm>
           <title>Titolo dell'articolo uno di aprile</title>
@@ -1238,7 +1233,6 @@
           </html>
         </it.mate.econyx.shared.model.impl.ArticleTx>
         <it.mate.econyx.shared.model.impl.ArticleTx>
-          <code>201304_SecondArticle</code>
           <name>Articolo due</name>
           <orderNm>110</orderNm>
           <title>Titolo dell'articolo due di aprile</title>
