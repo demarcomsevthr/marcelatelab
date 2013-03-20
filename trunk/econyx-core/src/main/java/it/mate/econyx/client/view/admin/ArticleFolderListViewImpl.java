@@ -41,7 +41,7 @@ public class ArticleFolderListViewImpl extends AbstractBaseView<ArticleFolderLis
     initWidget(uiBinder.createAndBindUi(this));
     List<AdminTabPanel.Section<Presenter>> sections = new ArrayList<AdminTabPanel.Section<Presenter>>();
     sections.add(new AdminTabPanel.Section<Presenter>()
-        .setText("Generale")
+        .setText("Raccolte")
         .setView(new ArticleFolderListGeneralView()));
     adminTab.setSections(sections);
   }

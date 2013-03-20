@@ -69,4 +69,9 @@ public class ArticleServiceImpl extends RemoteServiceServlet implements ArticleS
     return adapter.addCommentToArticle(id, comment);
   }
   
+  @Override
+  public Article updateArticle(Article article) {
+    return adapter.update(article);
+  }
+  
 }

@@ -1,5 +1,6 @@
 package it.mate.econyx.client.view;
 
+import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
@@ -11,6 +12,8 @@ public interface ArticleFolderEditView extends BaseView<ArticleFolderEditView.Pr
     public void update (ArticleFolder folder);
     
     public void edit(ArticleFolder folder);
+    
+    public void edit(Article article);
     
   }
   

@@ -4,6 +4,7 @@ import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
+import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +55,8 @@ public class ArticleFolderTx implements ArticleFolder {
   public void setOrderNm(Integer orderNm) {
     this.orderNm = orderNm;
   }
-  
+
   public List<Article> getArticles() {
-//  return (List<Article>)CollectionUtilsClient.wrapConcreteList(Article.class, articles, ArticleTx.class);
     return new ListPropertyWrapper<Article, ArticleTx>(articles, ArticleTx.class);
   }
 
@@ -109,7 +109,7 @@ public class ArticleFolderTx implements ArticleFolder {
         if (article instanceof ArticleTx) {
           this.articles.add((ArticleTx)article);
         } else {
-          throw new IllegalArgumentException("cannot add item of type " + article.getClass() + ", must use CloneableProperty annotation");
+          throw new CloneablePropertyMissingException(article);
         }
       }
     } else {

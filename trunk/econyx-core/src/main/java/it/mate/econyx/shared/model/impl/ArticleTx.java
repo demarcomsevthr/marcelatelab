@@ -80,28 +80,8 @@ public class ArticleTx implements Article {
   }
 
   public List<ArticleComment> getComments() {
-//  return (List<ArticleComment>)CollectionUtilsClient.wrapConcreteList(ArticleComment.class, comments, ArticleCommentTx.class);
     return new ListPropertyWrapper<ArticleComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
-
-  /*
-  public static void main(String[] args) {
-    ArticleTx article = new ArticleTx();
-    article.setComments(new ArrayList<ArticleComment>());
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(0).setName("commento 1");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(1).setName("commento 2");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(2).setName("commento 3");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(3).setName("commento 4");
-    List<ArticleComment> comments = article.getComments();
-    for (ArticleComment comment : comments) {
-      System.out.println(comment.getName());
-    }
-  }
-  */
 
   /*
   public List<ArticleComment> getComments() {
@@ -174,7 +154,9 @@ public class ArticleTx implements Article {
 
   @CloneableProperty (targetClass=PortalUserTx.class)
   public void setAuthor(PortalUser author) {
-    if (author instanceof PortalUserTx) {
+    if (author == null) {
+      this.author = null;
+    } else if (author instanceof PortalUserTx) {
       this.author = (PortalUserTx)author;
     } else {
       throw new CloneablePropertyMissingException(author);
@@ -188,5 +170,24 @@ public class ArticleTx implements Article {
   public void setCreated(Date created) {
     this.created = created;
   }
+  
+  /*
+  public static void main(String[] args) {
+    ArticleTx article = new ArticleTx();
+    article.setComments(new ArrayList<ArticleComment>());
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(0).setName("commento 1");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(1).setName("commento 2");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(2).setName("commento 3");
+    article.getComments().add(new ArticleCommentTx());
+    article.getComments().get(3).setName("commento 4");
+    List<ArticleComment> comments = article.getComments();
+    for (ArticleComment comment : comments) {
+      System.out.println(comment.getName());
+    }
+  }
+  */
   
 }

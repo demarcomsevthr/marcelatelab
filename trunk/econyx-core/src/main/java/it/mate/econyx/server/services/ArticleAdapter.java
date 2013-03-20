@@ -24,4 +24,6 @@ public interface ArticleAdapter {
   
   public Article addCommentToArticle(String id, ArticleComment comment);
   
+  public Article update(Article article);
+  
 }

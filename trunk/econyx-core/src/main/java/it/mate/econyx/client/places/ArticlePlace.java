@@ -18,6 +18,8 @@ public class ArticlePlace extends Place implements ReversiblePlace, HasToken, Hi
 
   public static String ARTICLE_VIEW = "articleView";
 
+  public static String ARTICLE_EDIT = "articleEdit";
+
   private String token;
   
   private Object model;

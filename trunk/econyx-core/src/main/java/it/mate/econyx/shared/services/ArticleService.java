@@ -27,4 +27,6 @@ public interface ArticleService extends RemoteService {
   
   public Article addCommentToArticle(String id, ArticleComment comment);
 
+  public Article updateArticle(Article article);
+  
 }
