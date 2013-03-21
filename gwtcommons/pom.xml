@@ -12,7 +12,10 @@
     <spring.version>3.0.5.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
 
+    <!-- 21/03/2013 
     <gwt.version>2.5.0</gwt.version>
+    -->
+    <gwt.version>2.5.1</gwt.version>
     <gin.version>1.5.0</gin.version>
     <gae.version>1.7.4</gae.version>
     

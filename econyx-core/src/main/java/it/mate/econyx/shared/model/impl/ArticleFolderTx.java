@@ -8,6 +8,7 @@ import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class ArticleFolderTx implements ArticleFolder {
@@ -20,9 +21,20 @@ public class ArticleFolderTx implements ArticleFolder {
   
   Integer orderNm;
   
-  List<ArticleTx> articles = new ArrayList<ArticleTx>();
+//List<ArticleTx> articles = new ArrayList<ArticleTx>();
+  List<ArticleTx> articles = new Vector<ArticleTx>();
   
   String selectedArticleCode;
+  
+  public ArticleFolderTx() {
+    super();
+  }
+
+  @Override
+  public String toString() {
+    return "ArticleFolderTx [id=" + id + ", code=" + code + ", name=" + name + ", orderNm=" + orderNm + ", articles=" + articles
+        + ", selectedArticleCode=" + selectedArticleCode + "]";
+  }
 
   public String getId() {
     return id;

@@ -3,8 +3,17 @@ package it.mate.econyx.shared.model;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public interface Article extends PortalEntity {
+
+public interface Article extends PortalEntity, IsSerializable {
+  
+  public class Dummy4 {
+    
+//  SerializabilityUtil
+//  SerializableTypeOracleBuilder
+    
+  }
   
   public String getId();
 

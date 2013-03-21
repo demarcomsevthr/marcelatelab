@@ -8,6 +8,11 @@ public class ArticlePageTx extends WebContentPageTx implements ArticlePage {
   
   Article entity;
   
+  @Override
+  public String toString() {
+    return "ArticlePageTx [entity=" + entity + "]";
+  }
+
   public ArticlePageTx() {
     
   }

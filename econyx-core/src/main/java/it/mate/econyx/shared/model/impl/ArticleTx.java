@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class ArticleTx implements Article {
-  
+
+  private static final long serialVersionUID = 7072306998735484215L;
+
   String id;
   
   String code;
@@ -33,6 +34,14 @@ public class ArticleTx implements Article {
   
   List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();
   
+  public ArticleTx() {  }
+
+  @Override
+  public String toString() {
+    return "ArticleTx [id=" + id + ", code=" + code + ", name=" + name + ", orderNm=" + orderNm + ", html=" + html + ", title=" + title
+        + ", author=" + author + ", created=" + created + ", comments=" + comments + "]";
+  }
+
   public String getId() {
     return id;
   }
