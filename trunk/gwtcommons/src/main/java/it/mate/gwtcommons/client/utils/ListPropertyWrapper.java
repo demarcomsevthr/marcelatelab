@@ -1,13 +1,14 @@
 package it.mate.gwtcommons.client.utils;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({ "unchecked", "serial" })
-public class ListPropertyWrapper <I extends Serializable, D extends I> extends ArrayList<I> implements Serializable {
+public class ListPropertyWrapper <I extends Serializable, D extends I> extends AbstractList<I> implements Serializable {
 
-  private List<D> items = new ArrayList<D>();
+  private transient List<D> items = new ArrayList<D>();
   
   private transient Class<D> descendantClass;
   
