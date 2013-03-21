@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public interface Article extends PortalEntity, IsSerializable {
   
-  public class Dummy4 {
+  public class Dummy5 {
     
 //  SerializabilityUtil
 //  SerializableTypeOracleBuilder
