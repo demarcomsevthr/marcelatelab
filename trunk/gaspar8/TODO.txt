@@ -45,31 +45,113 @@
 			
 			>>> TENTATIVI DI CORREZIONE DEL PROBLEMA
 			
-				> DICHIARAZIONI DI Serializable SU TUTTE LE INTERFACCE DI MODEL
+				> DICHIARAZIONI DI Serializable SU TUTTE LE INTERFACCE DI MODEL > NO!
 			
-				> SEMPLIFICAZIONE DELLE INTERFACCE (eliminate ereditarietà multiple)
+				> SEMPLIFICAZIONE DELLE INTERFACCE (eliminate ereditarietà multiple) > NO!
 
 				> inizializzaizone della List<ArticleCommentTx> comments nel tx
 			    
-				> FARE UNA CLEAN BUILD MAVEN
-				
 				> SOSTITUITO List con ArrayList nell'interfaccia > ANNULLATO
 				
-				> ADD serialVersionUID in ArticleTx, ArticleCommentTx
+				> ADD serialVersionUID in ArticleTx, ArticleCommentTx > NO!
 				
-				> inserimento di toString nei tx
+				> inserimento di toString nei tx > NO!
 				
-				> ritorno a JAVA 6 (setenv.bat) (1.6.0_31) > SI
+				> ritorno a JAVA 6 (setenv.bat) (1.6.0_31) > NO!
 				
-				>> RESET CACHE Firefox 2 VOLTE !!!
+				>> RESET CACHE Firefox 2 VOLTE > NO!
 				
 				> PASSAGGIO A GWT 2.5.1
-					(gwtcommons/pom.xml, econyx-base-app/pom.xml, eclipse gwt sdk)
+					(gwtcommons/pom.xml, econyx-base-app/pom.xml, eclipse gwt sdk)    >> NO MA LO LASCIO!
+					
+				>>> ERA LA RELAZIONE HtmlContent !!!! (HtmlContent è pensato per lavorare in una List<? extends HtmllContent)	
+				
+				
+				>>>> SI RIESCE A RISPONDERE AI POST ???
+				
+				SITUAZIONE CHE GENERAVA ERRORE:
+				
+public interface Article extends Serializable {
+  
+  public HtmlContent getHtml();
+  
+  public void setHtml(HtmlContent html);
+  
+}
 
-			>>> SEMBRA CHE LO DIA PIU' FREQUENTEMENTE IN DEV MODE
-			
-			>>> SEMBRA CHE ABBIA A CHE FARE CON L'USO DEI GENERIC NELLE INTERFACCIE O NEI TX
-			
+public interface HtmlContent extends Serializable {
+
+  public String getContent();
+
+  public void setContent(String content);
+  
+  public enum Type {
+    SHORT ("S"), 
+    MEDIUM ("M"), 
+    LONG ("L");
+    private String code;
+    private Type(String code) {
+      this.code = code;
+    }
+    public String getCode() {
+      return code;
+    }
+  };
+  
+  public Type getType();
+  
+  public void setType(Type type);
+  
+}
+
+public class HtmlContentTx implements HtmlContent {
+
+  protected Type type;
+  
+  protected String content;
+  
+  public Type getType() {
+    return type;
+  }
+
+  public void setType(Type type) {
+    this.type = type;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+}
+
+@SuppressWarnings("serial")
+public class ArticleTx implements Article {
+
+  HtmlContentTx html;
+  
+  public HtmlContent getHtml() {
+    return html;
+  }
+
+  public void setHtml(HtmlContent html) {
+    if (html == null) {
+      this.html = null;
+    } else if (html instanceof HtmlContentTx) {
+      this.html = (HtmlContentTx)html;
+    } else {
+      throw new MyCastException(html);
+    }
+  }
+  
+}
+  
+				
+				
+
 			>>> ALTRE eccezioni correlate (sempre in dev mode) su ArticleService interface
 			
 			>>> SE LO RIDA ANCORA tornare alle getArticles e getComments in vecchio stile > NON SEMBRA CHE RISOLVA!

@@ -1086,10 +1086,8 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
-          <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
-            <type>M</type>
-            <content>
-            <![CDATA[
+          <content>
+          <![CDATA[
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. Praesent ligula sem, viverra at
     hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo sollicitudin vitae a lorem. Fusce laoreet molestie neque
@@ -1125,8 +1123,7 @@
     malesuada mollis eu eget orci.
   </p>
             ]]>
-            </content>
-          </html>
+          </content>
         </it.mate.econyx.shared.model.impl.ArticleTx>
         <it.mate.econyx.shared.model.impl.ArticleTx>
           <name>Articolo due</name>
@@ -1135,10 +1132,8 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
-          <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
-            <type>M</type>
-            <content>
-            <![CDATA[
+          <content>
+          <![CDATA[
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. Praesent ligula sem, viverra at
     hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo sollicitudin vitae a lorem. Fusce laoreet molestie neque
@@ -1174,8 +1169,7 @@
     malesuada mollis eu eget orci.
   </p>
             ]]>
-            </content>
-          </html>
+          </content>
         </it.mate.econyx.shared.model.impl.ArticleTx>
       </articles>
     </it.mate.econyx.shared.model.impl.ArticleFolderTx>
@@ -1190,10 +1184,8 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
-          <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
-            <type>M</type>
-            <content>
-            <![CDATA[
+          <content>
+          <![CDATA[
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. Praesent ligula sem, viverra at
     hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo sollicitudin vitae a lorem. Fusce laoreet molestie neque
@@ -1229,8 +1221,7 @@
     malesuada mollis eu eget orci.
   </p>
             ]]>
-            </content>
-          </html>
+          </content>
         </it.mate.econyx.shared.model.impl.ArticleTx>
         <it.mate.econyx.shared.model.impl.ArticleTx>
           <name>Articolo due</name>
@@ -1239,10 +1230,8 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
-          <html class="it.mate.econyx.shared.model.impl.HtmlContentTx">
-            <type>M</type>
-            <content>
-            <![CDATA[
+          <content>
+          <![CDATA[
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. Praesent ligula sem, viverra at
     hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo sollicitudin vitae a lorem. Fusce laoreet molestie neque
@@ -1278,8 +1267,7 @@
     malesuada mollis eu eget orci.
   </p>
             ]]>
-            </content>
-          </html>
+          </content>
         </it.mate.econyx.shared.model.impl.ArticleTx>
       </articles>
     </it.mate.econyx.shared.model.impl.ArticleFolderTx>

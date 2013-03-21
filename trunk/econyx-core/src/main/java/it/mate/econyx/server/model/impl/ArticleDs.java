@@ -22,6 +22,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
@@ -41,12 +42,6 @@ public class ArticleDs implements Article, HasKey {
   @Persistent
   Integer orderNm;
   
-  @Persistent (dependent="false", defaultFetchGroup="true")
-  Key htmlKey;
-  
-  @UnownedRelationship (key="htmlKey")
-  transient HtmlWebContentDs html;
-
   @Persistent (dependentKey="false", defaultFetchGroup="false")
   List<Key> commentsKeys;
   
@@ -64,6 +59,9 @@ public class ArticleDs implements Article, HasKey {
   
   @Persistent
   Date created;
+  
+  @Persistent
+  Text content;
   
   
   public Key getKey() {
@@ -102,24 +100,6 @@ public class ArticleDs implements Article, HasKey {
     this.orderNm = orderNm;
   }
 
-  public Key getHtmlId() {
-    return htmlKey;
-  }
-
-  public void setHtmlId(Key htmlId) {
-    this.htmlKey = htmlId;
-  }
-
-  public HtmlContent getHtml() {
-    return html;
-  }
-
-  @CloneableProperty (targetClass=HtmlWebContentDs.class)
-  public void setHtml(HtmlContent html) {
-    this.html = (HtmlWebContentDs)html;
-    this.htmlKey = this.html != null ? this.html.getKey() : null;
-  }
-  
   public List<ArticleComment> getComments() {
     return comments != null ? new ArrayList<ArticleComment>(comments) : null;
   }
@@ -173,5 +153,24 @@ public class ArticleDs implements Article, HasKey {
   public void setCreated(Date created) {
     this.created = created;
   }
+  
+  
+  public HtmlContent getHtml() {
+    HtmlContentDs html = new HtmlWebContentDs();
+    html.setType(HtmlContent.Type.MEDIUM);
+    html.setContent(content.getValue());
+    return html;
+  }
 
+  @CloneableProperty (targetClass=HtmlWebContentDs.class)
+  public void setHtml(HtmlContent html) {
+    if (html == null) {
+      this.content = null;
+    } else if (html instanceof HtmlWebContentDs) {
+      this.content = new Text(html.getContent());
+    } else {
+      throw new CloneablePropertyMissingException(html);
+    }
+  }
+  
 }
