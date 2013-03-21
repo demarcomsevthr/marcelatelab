@@ -8,12 +8,10 @@ import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
-import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindContext;
-import it.mate.gwtcommons.server.model.utils.OneToOneAdapterSupport;
 import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
@@ -36,12 +34,12 @@ public class ArticleAdapterImpl implements ArticleAdapter {
   
   @Autowired private Dao dao;
   
-  OneToOneAdapterSupport<ArticleDs, HtmlContent> htmlRelationshipSupport;
+//OneToOneAdapterSupport<ArticleDs, HtmlContent> htmlRelationshipSupport;
   
   @PostConstruct
   public void postConstruct() {
     logger.debug("initialized " + this);
-    htmlRelationshipSupport = new OneToOneAdapterSupport<ArticleDs, HtmlContent>(dao, "getHtml", "setHtml");
+//  htmlRelationshipSupport = new OneToOneAdapterSupport<ArticleDs, HtmlContent>(dao, "getHtml", "setHtml");
   }
 
   @Override
@@ -136,9 +134,11 @@ public class ArticleAdapterImpl implements ArticleAdapter {
         }
       }
     }
+    /*
     if (htmlRelationshipSupport != null) {
       htmlRelationshipSupport.onBeforeDelete(articleDs);
     }
+    */
     dao.delete(articleDs);
   }
   
@@ -157,17 +157,21 @@ public class ArticleAdapterImpl implements ArticleAdapter {
       articleDs.setComments(comments);
     }
     if (articleDs.getKey() == null) {
+      /*
       if (htmlRelationshipSupport != null) {
         htmlRelationshipSupport.onBeforeCreate(articleDs);
       }
+      */
       if (articleDs.getCode() == null) {
         articleDs.setCode(getNextCodeCounter());
       }
       articleDs = dao.create(articleDs);
     } else {
+      /*
       if (htmlRelationshipSupport != null) {
         htmlRelationshipSupport.onBeforeUpdate(articleDs);
       }
+      */
       articleDs = dao.update(articleDs);
     }
     return articleDs;

@@ -8,10 +8,13 @@ public interface HtmlContent extends PortalContentFragment {
   
   public static class Factory {
     public static HtmlContent createOnClient(WebContent entity, Type type) {
+      return createOnClient(entity, type, "");
+    }
+    public static HtmlContent createOnClient(WebContent entity, Type type, String content) {
       HtmlContent html = new HtmlContentTx();
       html.setType(type);
       html.setEntity(entity);
-      html.setContent("");
+      html.setContent(content);
       return html;
     }
   }

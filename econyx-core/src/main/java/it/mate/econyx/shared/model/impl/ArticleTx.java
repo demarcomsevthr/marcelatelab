@@ -24,8 +24,6 @@ public class ArticleTx implements Article {
   
   Integer orderNm;
   
-  HtmlContentTx html;
-  
   String title;
   
   PortalUserTx author;
@@ -34,14 +32,8 @@ public class ArticleTx implements Article {
   
   List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();
   
-  public ArticleTx() {  }
-
-  @Override
-  public String toString() {
-    return "ArticleTx [id=" + id + ", code=" + code + ", name=" + name + ", orderNm=" + orderNm + ", html=" + html + ", title=" + title
-        + ", author=" + author + ", created=" + created + ", comments=" + comments + "]";
-  }
-
+  String content;
+  
   public String getId() {
     return id;
   }
@@ -74,64 +66,9 @@ public class ArticleTx implements Article {
     this.orderNm = orderNm;
   }
 
-  @Override
-  public HtmlContent getHtml() {
-    return html;
-  }
-
-  @CloneableProperty (targetClass=HtmlContentTx.class)
-  public void setHtml(HtmlContent html) {
-    if (html instanceof HtmlContentTx) {
-      this.html = (HtmlContentTx)html;
-    } else {
-      throw new CloneablePropertyMissingException(html);
-    }
-  }
-
   public List<ArticleComment> getComments() {
     return new ListPropertyWrapper<ArticleComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
-
-  /*
-  public List<ArticleComment> getComments() {
-    if (comments == null)
-      return null;
-    return new AbstractList<ArticleComment>() {
-      public int size() {
-        return comments.size();
-      }
-      public ArticleComment get(int index) {
-        return comments.get(index);
-      }
-      public ArticleComment set(int index, ArticleComment element) {
-        if (element instanceof ArticleCommentTx) {
-          return comments.set(index, (ArticleCommentTx)element);
-        }
-        if (element == null) {
-          throw new IllegalArgumentException("null");
-        } else {
-          throw new IllegalArgumentException(element.getClass().getName());
-        }
-      }
-      public boolean add(ArticleComment element) {
-        if (element instanceof ArticleCommentTx) {
-          return comments.add((ArticleCommentTx)element);
-        }
-        if (element == null) {
-          throw new IllegalArgumentException("null");
-        } else {
-          throw new IllegalArgumentException(element.getClass().getName());
-        }
-      }
-      public boolean remove(Object o) {
-        return comments.remove(o);
-      }
-      public ArticleComment remove(int index) {
-        return comments.remove(index);
-      }
-    };
-  }
-  */
 
   @CloneableProperty (targetClass=ArticleCommentTx.class)
   public void setComments(List<ArticleComment> comments) {
@@ -180,23 +117,23 @@ public class ArticleTx implements Article {
     this.created = created;
   }
   
-  /*
-  public static void main(String[] args) {
-    ArticleTx article = new ArticleTx();
-    article.setComments(new ArrayList<ArticleComment>());
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(0).setName("commento 1");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(1).setName("commento 2");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(2).setName("commento 3");
-    article.getComments().add(new ArticleCommentTx());
-    article.getComments().get(3).setName("commento 4");
-    List<ArticleComment> comments = article.getComments();
-    for (ArticleComment comment : comments) {
-      System.out.println(comment.getName());
+  @Override
+  public HtmlContent getHtml() {
+    HtmlContentTx html = new HtmlContentTx();
+    html.setType(HtmlContent.Type.MEDIUM);
+    html.setContent(content);
+    return html;
+  }
+
+  @CloneableProperty (targetClass=HtmlContentTx.class)
+  public void setHtml(HtmlContent html) {
+    if (html == null) {
+      this.content = null;
+    } else if (html instanceof HtmlContentTx) {
+      this.content = html.getContent();
+    } else {
+      throw new CloneablePropertyMissingException(html);
     }
   }
-  */
-  
+
 }
