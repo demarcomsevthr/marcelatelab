@@ -10,7 +10,10 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     
+    <!-- 21/03/2013 
     <gwt.version>2.5.0</gwt.version>
+    -->
+    <gwt.version>2.5.1</gwt.version>
     <gin.version>1.5.0</gin.version>
     <gae.version>1.7.4</gae.version>
     

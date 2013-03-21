@@ -17,6 +17,11 @@ public class ArticleFolderPageTx extends WebContentPageTx implements ArticleFold
   private ArticleFolder entity;
   
   @Override
+  public String toString() {
+    return "ArticleFolderPageTx [entity=" + entity + "]";
+  }
+
+  @Override
   public ArticleFolder getEntity() {
     return entity;
   }

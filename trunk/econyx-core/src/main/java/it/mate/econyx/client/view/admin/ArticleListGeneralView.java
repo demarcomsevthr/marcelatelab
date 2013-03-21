@@ -122,8 +122,13 @@ public class ArticleListGeneralView extends AbstractAdminTabPage<ArticleListView
   public void setModel(Object model, String tag) {
     if (model instanceof List) {
       List<Article> articles = (List<Article>)model;
-      listTable.setRowDataExt(articles);
-      listTable.adaptToViewHeight(this, pagerPanel);
+      try {
+        listTable.setRowDataExt(articles);
+        listTable.adaptToViewHeight(this, pagerPanel);
+      } catch (Exception ex) {
+        // 21/03/2013 Strani errori gwt-rpc generator
+        ex.printStackTrace();
+      }
     }
   }
 

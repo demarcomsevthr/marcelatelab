@@ -3,7 +3,9 @@ package it.mate.econyx.shared.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface ArticleComment extends Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public interface ArticleComment extends IsSerializable, Serializable {
 
   public String getId();
 

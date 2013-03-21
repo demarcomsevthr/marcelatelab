@@ -7,8 +7,9 @@ import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.Date;
 
-@SuppressWarnings("serial")
 public class ArticleCommentTx implements ArticleComment {
+  
+  private static final long serialVersionUID = -8105988358558928176L;
 
   String id;
   
@@ -22,6 +23,16 @@ public class ArticleCommentTx implements ArticleComment {
   
   Date posted;
   
+  public ArticleCommentTx() {
+    super();
+  }
+
+  @Override
+  public String toString() {
+    return "ArticleCommentTx [id=" + id + ", name=" + name + ", orderNm=" + orderNm + ", content=" + content + ", author=" + author
+        + ", posted=" + posted + "]";
+  }
+
   public String getId() {
     return id;
   }
