@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
@@ -44,6 +45,7 @@ public class MessageBox extends DialogBox {
     public void onYes() { }
     public void onNo() { }
     public void onOk() { }
+    public void onLoad(DialogBox dialog) { }
   }
   
   public static class Configuration {
@@ -130,11 +132,13 @@ public class MessageBox extends DialogBox {
     } else {
       this.center();
     }
+    /*
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void value) {
         defaultButton.setFocus(true);
       }
     });
+    */
   }
   
   private void initUI(Configuration config) {
@@ -233,6 +237,18 @@ public class MessageBox extends DialogBox {
     bodyPanel.add(btPanel);
     defaultButton = buttons.get(0);
     setWidget(bodyPanel);
+    this.addAttachHandler(new AttachEvent.Handler() {
+      public void onAttachOrDetach(AttachEvent event) {
+        defaultButton.setFocus(true);
+        if (callbacks != null) {
+          GwtUtils.deferredExecution(new Delegate<Void>() {
+            public void execute(Void element) {
+              callbacks.onLoad(MessageBox.this);
+            }
+          });
+        }
+      }
+    });
   }
   
 }

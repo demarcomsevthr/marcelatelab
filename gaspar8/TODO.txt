@@ -180,8 +180,13 @@ public class ArticleTx implements Article {
 			> css pagine
 			> css articoli
 			> css blog
+				>> vedi ad esempio:
+					- https://vaadin.com/blog
+					- http://developersitalia.blogspot.it/
 			
 		- NEW BlogPage, BlogThread, BlogComment [3]	
+		
+		- Link Facebook, Twitter, ...  ???
 			
 		- LOGIN DIALOG [4]
 			> login dialog (tipo sella, etc...)
