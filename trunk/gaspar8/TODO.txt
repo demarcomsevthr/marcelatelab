@@ -167,12 +167,6 @@ public class ArticleTx implements Article {
   				com.google.gwt.user.rebind.rpc.SerializableTypeOracleBuilder [line 527] >> BREAK
 			
 
-		- NEW ArticleComment [1] [iniziato 18/03/2013]
-		
-		- ArticleView >> inserimento commenti [1]
-		
-		- finire model Article (title, author, date)
-
 		- inserimento nuovi Article e ArticleFolder [generazione codice univoco] [2]
 		
 		- STYLING e contenuti pagine [2]

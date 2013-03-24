@@ -12,6 +12,10 @@ public interface ArticleListView extends BaseView<ArticleListView.Presenter> {
     
     void delete (Article article);
     
+    /*
+    void save (Article article);
+    */
+    
   }
   
   public void setHeight(String height);
