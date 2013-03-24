@@ -56,15 +56,15 @@ public class ArticleEditGeneralView extends AbstractAdminTabPage<ArticleEditView
   
   private boolean validateArticle(Article folder) {
     if (GwtUtils.isEmpty(folder.getName())) {
-      Window.alert("Il nome della pagina è vuoto");
+      Window.alert("Il nome dell'articolo è vuoto");
       return false;
     }
     if (GwtUtils.isEmpty(folder.getCode())) {
-      Window.alert("Il codice della pagina è vuoto");
+      Window.alert("Il codice dell'articolo è vuoto");
       return false;
     }
     if (folder.getCode().contains(" ")) {
-      Window.alert("Il codice della pagina non può contenere spazi");
+      Window.alert("Il codice dell'articolo non può contenere spazi");
       return false;
     }
     return true;

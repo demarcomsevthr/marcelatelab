@@ -10,6 +10,7 @@ import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -173,15 +174,28 @@ public class ArticleActivity extends BaseActivity implements
   }
 
   @Override
-  public void update(Article article) {
-    articleService.updateArticle(article, new AsyncCallback<Article>() {
-      public void onFailure(Throwable caught) {
-        Window.alert(caught.getMessage());
-      }
-      public void onSuccess(Article article) {
-        goTo(new ArticlePlace(ArticlePlace.ARTICLE_EDIT, article));
-      }
-    });
+  public void update(final Article article) {
+    if (article.getId() == null) {
+      ArticleFolder articleFolder = ((ArticleTx)article).getArticleFolder();
+      articleFolder.getArticles().add(article);
+      articleService.update(articleFolder, new AsyncCallback<ArticleFolder>() {
+        public void onFailure(Throwable caught) {
+          Window.alert(caught.getMessage());
+        }
+        public void onSuccess(ArticleFolder articleFolder) {
+          edit(article);
+        }
+      });
+    } else {
+      articleService.updateArticle(article, new AsyncCallback<Article>() {
+        public void onFailure(Throwable caught) {
+          Window.alert(caught.getMessage());
+        }
+        public void onSuccess(Article article) {
+          goTo(new ArticlePlace(ArticlePlace.ARTICLE_EDIT, article));
+        }
+      });
+    }
   }
 
 }

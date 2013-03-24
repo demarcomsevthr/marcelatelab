@@ -58,6 +58,25 @@ public class ArticleFolderEditItemListView extends AbstractAdminTabPage<ArticleF
 //        articleActivity.delete(article);
         }
       }
+      public void save(Article updatedArticle) {
+        boolean articleFolderUpdate = false;
+        if (updatedArticle.getId() == null) {
+          articleFolder.getArticles().add(updatedArticle);
+          articleFolderUpdate = true;
+        } else {
+          for (int it = 0; it < articleFolder.getArticles().size(); it++) {
+            Article attachedArticle = (Article)articleFolder.getArticles().get(it);
+            if (attachedArticle.getId().equals(updatedArticle.getId())) {
+              articleFolder.getArticles().set(it, updatedArticle);
+              articleFolderUpdate = true;
+              break;
+            }
+          }
+        }
+        if (articleFolderUpdate) {
+          getPresenter().update(articleFolder);
+        }
+      }
     });
     
   }
@@ -65,9 +84,7 @@ public class ArticleFolderEditItemListView extends AbstractAdminTabPage<ArticleF
   public void setModel(Object model, String tag) {
     if (model instanceof ArticleFolder) {
       this.articleFolder = (ArticleFolder)model;
-      if (articleFolder.getArticles() != null) {
-        itemListView.setModel(articleFolder.getArticles(), null);
-      }
+      itemListView.setModel(articleFolder);
     }
   }
   

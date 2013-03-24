@@ -2,6 +2,7 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
@@ -33,6 +34,9 @@ public class ArticleTx implements Article {
   List<ArticleCommentTx> comments = new ArrayList<ArticleCommentTx>();
   
   String content;
+  
+  // serve solo per eseguire correttamente la ArticleActivity.update(Article) 
+  transient ArticleFolder articleFolder;
   
   public String getId() {
     return id;
@@ -136,4 +140,12 @@ public class ArticleTx implements Article {
     }
   }
 
+  public ArticleFolder getArticleFolder() {
+    return articleFolder;
+  }
+
+  public void setArticleFolder(ArticleFolder articleFolder) {
+    this.articleFolder = articleFolder;
+  }
+  
 }

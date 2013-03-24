@@ -172,5 +172,5 @@ public class ArticleDs implements Article, HasKey {
       throw new CloneablePropertyMissingException(html);
     }
   }
-  
+
 }

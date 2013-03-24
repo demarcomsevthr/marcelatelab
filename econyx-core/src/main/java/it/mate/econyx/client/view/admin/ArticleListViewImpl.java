@@ -3,6 +3,7 @@ package it.mate.econyx.client.view.admin;
 import it.mate.econyx.client.ui.AdminTabPanel;
 import it.mate.econyx.client.view.ArticleListView;
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.MessageBox;
@@ -35,6 +36,8 @@ public class ArticleListViewImpl extends AbstractBaseView<ArticleListView.Presen
   private String width;
   
   private String height;
+  
+  private ArticleFolder articleFolder;
   
   public ArticleListViewImpl() {
     this(null, null);
@@ -86,6 +89,8 @@ public class ArticleListViewImpl extends AbstractBaseView<ArticleListView.Presen
           Article article = new ArticleTx();
           article.setCode("newArticle");
           article.setTitle(title.getText());
+          article.setName(article.getTitle());
+          ((ArticleTx)article).setArticleFolder(articleFolder);
           delegate.execute(article);
         }
       }, new Delegate<DialogBox>() {
@@ -101,28 +106,15 @@ public class ArticleListViewImpl extends AbstractBaseView<ArticleListView.Presen
     adminTab = new AdminTabPanel<Presenter>(
         new AdminTabPanel.Configuration().setNewButtonEnabled(true).setWidth(width).setHeight(height).setEditButtonEnabled(true)
         .setDeleteButtonEnabled(true)) {
-      public void onSave(Object model) { }
+      public void onSave(Object model) { 
+
+      }
       public void onNewModelRequested() {
-        
         new ArticleOptionDialog(new Delegate<Article>() {
           public void execute(Article article) {
             getPresenter().edit(article);
           }
         });
-        
-        /** TO DO 
-        new ArticleOptionsDialog(new Delegate<ArticleOptionsDialog.Options>() {
-          public void execute(final ArticleOptionsDialog.Options options) {
-            GwtUtils.log(getClass(), "onNewModelRequested", options.getArticleType());
-            getPresenter().newInstance(options.getArticleType(), new Delegate<Article>() {
-              public void execute(Article page) {
-                page.setName(options.getArticleName());
-                getPresenter().edit(page);
-              }
-            });
-          }
-        });
-        **/
       }
       public void onEdit(Object model) {
         if (model instanceof Article) {
@@ -143,7 +135,10 @@ public class ArticleListViewImpl extends AbstractBaseView<ArticleListView.Presen
   }
   
   public void setModel(Object model, String tag) {
-    adminTab.setModel(model, null);
+    if (model instanceof ArticleFolder) {
+      this.articleFolder = (ArticleFolder)model;
+      adminTab.setModel(articleFolder.getArticles());
+    }
   }
   
 }
