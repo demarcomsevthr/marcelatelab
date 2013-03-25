@@ -1,6 +1,8 @@
 package it.mate.ckd.client.ui;
 
 import it.mate.ckd.client.config.ClientProperties;
+import it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle;
+import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -11,15 +13,19 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 //import com.google.gwt.user.client.ui.Button;
 
 public class SpinnerDoubleBox extends Composite implements HasValueChangeHandlers<Double> {
   
-  private Button leftBtn;
+  private Button leftBtn = null;
+  private TouchImage leftImg = null;
   private MDoubleBox valueBox;
-  private Button rightBtn;
+  private Button rightBtn = null;
+  private TouchImage rightImg = null;
   
   private double increment;
   
@@ -27,6 +33,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   
   private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerDoubleBox_disableSpinButtons(); 
 
+  private MGWTCustomClientBundle bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
+  
   public SpinnerDoubleBox() {
     initUI();
   }
@@ -37,10 +45,18 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     
     if (!disableSpinButtons) {
+      
+      leftImg = new TouchImage(bundle.minusImage());
+      GwtUtils.setStyleAttribute(leftImg, "paddingRight", "4px");
+      leftImg.addStyleName("spin-Button");
+      hp.add(leftImg);
+
+      /*
       leftBtn = new Button("-");
       GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
       leftBtn.addStyleName("spin-Button");
       hp.add(leftBtn);
+      */
     }
     
     /** SEE:
@@ -54,25 +70,49 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.add(valueBox);
     
     if (!disableSpinButtons) {
+      rightImg = new TouchImage(bundle.plusImage());
+      GwtUtils.setStyleAttribute(rightImg, "paddingLeft", "4px");
+      rightImg.addStyleName("spin-Button");
+      hp.add(rightImg);
+      /*
       rightBtn = new Button("+");
       GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
       rightBtn.addStyleName("spin-Button");
       hp.add(rightBtn);
+      */
     }
     
     initWidget(hp);
 
     if (!disableSpinButtons) {
-      leftBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          inc(increment * -1);
-        }
-      });
-      rightBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          inc(increment * +1);
-        }
-      });
+      if (leftBtn != null) {
+        leftBtn.addTapHandler(new TapHandler() {
+          public void onTap(TapEvent event) {
+            inc(increment * -1);
+          }
+        });
+      }
+      if (leftImg != null) {
+        leftImg.addTouchStartHandler(new TouchStartHandler() {
+          public void onTouchStart(TouchStartEvent event) {
+            inc(increment * -1);
+          }
+        });
+      }
+      if (rightBtn != null) {
+        rightBtn.addTapHandler(new TapHandler() {
+          public void onTap(TapEvent event) {
+            inc(increment * +1);
+          }
+        });
+      }
+      if (rightImg != null) {
+        rightImg.addTouchStartHandler(new TouchStartHandler() {
+          public void onTouchStart(TouchStartEvent event) {
+            inc(increment * +1);
+          }
+        });
+      }
       /*
       leftBtn.addTouchStartHandler(new TouchStartHandler() {
         public void onTouchStart(TouchStartEvent event) {

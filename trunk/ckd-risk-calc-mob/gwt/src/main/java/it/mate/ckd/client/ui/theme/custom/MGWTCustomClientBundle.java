@@ -22,4 +22,10 @@ public interface MGWTCustomClientBundle extends MGWTClientBundle {
   @Source("resources/check.png")
   ImageResource checkImage();
   
+  @Source("resources/ico-minus.png")
+  ImageResource minusImage();
+  
+  @Source("resources/ico-plus.png")
+  ImageResource plusImage();
+  
 }

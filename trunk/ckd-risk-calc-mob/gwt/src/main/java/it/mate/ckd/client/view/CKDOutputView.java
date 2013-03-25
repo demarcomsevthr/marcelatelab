@@ -107,10 +107,11 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   private void applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead) {
     if (overhead != null && gfr > overhead) {
       gfrBox.setText(">"+GwtUtils.formatDecimal(overhead, 0));
+      gfrStadiumBox.setText("");
     } else {
       gfrBox.setText(GwtUtils.formatDecimal(gfr, 2));
+      gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
     }
-    gfrStadiumBox.setText(CKD.getGFRStadium(gfr));
     int risk = ckd.getRiskStadium(gfr);
     String irc = "";
     String ircBckCol = "white";
@@ -120,22 +121,19 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     } else {
       riskPanel.setVisible(true);
     }
-    if (risk == CKD.VERY_LOW_RISK) {
-      irc = LocalizedMessages.IMPL.CKDOutputView_veryLowRisk_text();
-      ircBckCol = "#00FF00";
-    } else if (risk == CKD.LOW_RISK) {
+    if (risk == CKD.LOW_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_lowRisk_text();
-      ircBckCol = "#FFFF00";
+      ircBckCol = "#00FF00";
     } else if (risk == CKD.MIDDLE_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_middleRisk_text();
-      ircBckCol = "#FFCC00";
+      ircBckCol = "#FFFF00";
     } else if (risk == CKD.HIGH_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_highRisk_text();
-      ircBckCol = "#FF0000";
+      ircBckCol = "#FFCC00";
     } else if (risk == CKD.VERY_HIGH_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
-      ircBckCol = "#990000";
-      ircCol = "white";
+      ircBckCol = "#FF0000";
+//    ircCol = "white";
     }
     riskBox.setText(irc);
     riskBox.getElement().getStyle().setColor(ircCol);
