@@ -10,15 +10,13 @@ public class CKD {
   
   public final static int MG_MMOL_UNIT = 4;
   
-  public final static int VERY_LOW_RISK = 1;
+  public final static int LOW_RISK = 1;
   
-  public final static int LOW_RISK = 2;
+  public final static int MIDDLE_RISK = 2;
   
-  public final static int MIDDLE_RISK = 3;
+  public final static int HIGH_RISK = 3;
   
-  public final static int HIGH_RISK = 4;
-  
-  public final static int VERY_HIGH_RISK = 5;
+  public final static int VERY_HIGH_RISK = 4;
   
   double scr;
   
@@ -153,8 +151,10 @@ public class CKD {
       stadioVfg = "G1";
     } else if (gfr >= 60) {
       stadioVfg = "G2";
+    } else if (gfr >= 45) {
+      stadioVfg = "G3a";
     } else if (gfr >= 30) {
-      stadioVfg = "G3";
+      stadioVfg = "G3b";
     } else if (gfr >= 15) {
       stadioVfg = "G4";
     } else {
@@ -175,51 +175,31 @@ public class CKD {
     if (getAlbumin() == null || getAlbumin() == 0) {
       return -1;
     }
-    int risk = VERY_LOW_RISK;
-    if (getAlbuminMgG() < 10) {
+    int risk = LOW_RISK;
+    if (getAlbuminMgG() < 30) {
       if (gfr >= 60) {
-        risk = VERY_LOW_RISK;
-      } else if (gfr >= 45) {
         risk = LOW_RISK;
-      } else if (gfr >= 30) {
-        risk = MIDDLE_RISK;
-      } else if (gfr >= 15) {
-        risk = HIGH_RISK;
-      } else {
-        risk = VERY_HIGH_RISK;
-      }
-    } else if (getAlbuminMgG() < 30) {
-      if (gfr >= 60) {
-        risk = VERY_LOW_RISK;
       } else if (gfr >= 45) {
-        risk = LOW_RISK;
-      } else if (gfr >= 30) {
         risk = MIDDLE_RISK;
-      } else if (gfr >= 15) {
+      } else if (gfr >= 30) {
         risk = HIGH_RISK;
       } else {
         risk = VERY_HIGH_RISK;
       }
     } else if (getAlbuminMgG() < 300) {
       if (gfr >= 60) {
-        risk = LOW_RISK;
+        risk = MIDDLE_RISK;
       } else if (gfr >= 45) {
-        risk = MIDDLE_RISK;
-      } else if (gfr >= 15) {
-        risk = HIGH_RISK;
-      } else {
-        risk = VERY_HIGH_RISK;
-      }
-    } else if (getAlbuminMgG() < 2000) {
-      if (gfr >= 60) {
-        risk = MIDDLE_RISK;
-      } else if (gfr >= 15) {
         risk = HIGH_RISK;
       } else {
         risk = VERY_HIGH_RISK;
       }
     } else {
-      risk = VERY_HIGH_RISK;
+      if (gfr >= 60) {
+        risk = HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK;
+      }
     }
     return risk;
   }
