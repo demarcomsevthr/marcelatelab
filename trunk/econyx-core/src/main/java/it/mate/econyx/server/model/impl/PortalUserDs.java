@@ -49,6 +49,9 @@ public class PortalUserDs implements PortalUser, HasKey {
   @Persistent
   Boolean testUser;
 
+  @Persistent
+  Boolean adminUser;
+
 
   public Key getKey() {
     return id;
@@ -138,6 +141,18 @@ public class PortalUserDs implements PortalUser, HasKey {
 
   public void setTestUser(Boolean testUser) {
     this.testUser = testUser;
+  }
+
+  public Boolean getAdminUser() {
+    return adminUser;
+  }
+
+  public void setAdminUser(Boolean adminUser) {
+    this.adminUser = adminUser;
+  }
+  
+  public boolean isAdminUser() {
+    return adminUser != null ? adminUser : false;
   }
   
 }

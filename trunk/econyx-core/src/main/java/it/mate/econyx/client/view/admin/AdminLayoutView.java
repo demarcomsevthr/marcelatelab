@@ -92,8 +92,14 @@ public class AdminLayoutView extends Composite {
               }
             });
           } else {
-            // redirigo sulla pagina sicura
-            Window.Location.replace(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL));
+            
+            if (event.getState().getLoggedUser().isAdminUser()) {
+              // redirigo sulla pagina sicura
+              Window.Location.replace(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL));
+            } else {
+              Window.alert("ATTENZIONE: l'account " + event.getState().getLoggedUser().getEmailAddress() + " non è un amministratore di questo sito!");
+            }
+            
           }
         }
       }

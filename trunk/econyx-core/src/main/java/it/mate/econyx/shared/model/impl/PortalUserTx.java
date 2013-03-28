@@ -22,6 +22,8 @@ public class PortalUserTx implements PortalUser {
   String activationToken;
   
   Boolean testUser;
+  
+  Boolean adminUser;
 
   @Override
   public String toString() {
@@ -109,7 +111,17 @@ public class PortalUserTx implements PortalUser {
   public void setTestUser(Boolean testUser) {
     this.testUser = testUser;
   }
+
+  public Boolean getAdminUser() {
+    return adminUser;
+  }
+
+  public void setAdminUser(Boolean adminUser) {
+    this.adminUser = adminUser;
+  }
   
-  
+  public boolean isAdminUser() {
+    return adminUser != null ? adminUser : false;
+  }
   
 }

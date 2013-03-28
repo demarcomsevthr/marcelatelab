@@ -11,7 +11,10 @@
 
 
 
-		SNAPSHOT 18/03/2013
+		SNAPSHOT 28/03/2013
+		
+		  >> LOOP di AdminLayoutView >> iniziato ma da vedere meglio (introdotto PortalUserTx.adminUser)
+		
 		
 		  >> GESTIONE ARTICOLI E BLOG <<
 		  
