@@ -287,22 +287,43 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
 
     // 28/11/2012
     } else if (moduleType == PortalSessionState.MODULE_ADMIN) {
+      
       UserService userService = UserServiceFactory.getUserService();
       User googleUser = userService.getCurrentUser();
       if (googleUser != null) {
         PortalUser googlePortalUser = portalUserAdapter.findByEmail(googleUser.getEmail());
         if (googlePortalUser == null) {
+          
+          // 28/03/2013
+          // Lo accetto solo solo nel caso il db sia vuoto (inizializzaizone) 
+          
            /* non lancio nessuna eccezione, per coprire il caso in cui parto con un db vuoto
           throw new ServiceException(
     "Attenzione: sei autenticato con un account Google che non è abilitato ad accedere a questa sezione del sito."
             );
             */
+          
+          if (portalUserAdapter.findAll().size() == 0) {
+            // OK
+            
+            googlePortalUser = new PortalUserTx();
+            googlePortalUser.setEmailAddress(googleUser.getEmail());
+            googlePortalUser.setAdminUser(true);
+            portalSessionState.setLoggedUser(googlePortalUser);
+            portalSessionState.setGoogleAuthentication(true);
+            portalSessionState.setCustomer(null);
+            
+          } else {
+            throw new ServiceException("Attenzione: sei autenticato con l'account Google "+ googleUser.getEmail() +" che non è abilitato ad accedere a questa sezione del sito.");
+          }
+          
         } else {
           portalSessionState.setLoggedUser(googlePortalUser);
           portalSessionState.setGoogleAuthentication(true);
           portalSessionState.setCustomer(null);
         }
       }
+      
     }
     
     LoggingUtils.getJavaLogging(this.getClass()).info(String.format("RETRIEVED %s", portalSessionState));
