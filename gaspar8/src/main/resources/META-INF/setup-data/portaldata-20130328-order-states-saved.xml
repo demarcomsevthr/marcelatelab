@@ -10,7 +10,6 @@
       <password>vertigine</password>
       <passwordEncrypted>false</passwordEncrypted>
       <active>true</active>
-      <adminUser>true</adminUser>
     </it.mate.econyx.shared.model.impl.PortalUserTx>
     
   </users>
@@ -24,7 +23,6 @@
         <password>vertigine</password>
         <passwordEncrypted>false</passwordEncrypted>
         <active>true</active>
-        <adminUser>true</adminUser>
       </portalUser>
       <indirizzoSpedizione class="it.mate.econyx.shared.model.impl.IndirizzoSpedizioneTx">
         <nome>RODOLFO</nome>
@@ -67,7 +65,6 @@
         <password>vertigine</password>
         <passwordEncrypted>false</passwordEncrypted>
         <active>true</active>
-        <adminUser>true</adminUser>
       </portalUser>
       <indirizzoSpedizione class="it.mate.econyx.shared.model.impl.IndirizzoSpedizioneTx">
         <nome>Test</nome>
@@ -1299,14 +1296,12 @@
       <disablingOrderStateCodes>INS</disablingOrderStateCodes>
       
       <nextStateCode>CON</nextStateCode>
-      <nextStateDescription>CONSEGNA IN CORSO</nextStateDescription>
+      <nextStateDescription>ACQUISITO</nextStateDescription>
       <printButtonEnabled>false</printButtonEnabled>
       <askDeliveryInformations>false</askDeliveryInformations>
       <quantityUpdatable>false</quantityUpdatable>
       
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-
-    <!--     
     
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>CON</code>
@@ -1320,11 +1315,13 @@
       </emailContent>
       <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>CON</disablingOrderStateCodes>
+      
       <nextStateCode>ISH</nextStateCode>
       <nextStateDescription>CONSEGNA IN CORSO</nextStateDescription>
       <printButtonEnabled>true</printButtonEnabled>
       <askDeliveryInformations>true</askDeliveryInformations>
       <quantityUpdatable>true</quantityUpdatable>
+      
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
@@ -1339,27 +1336,6 @@
       </emailContent>
       <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>ISH</disablingOrderStateCodes>
-      <nextStateCode>SHI</nextStateCode>
-      <nextStateDescription>CONSEGNA EFFETTUATA</nextStateDescription>
-      <printButtonEnabled>true</printButtonEnabled>
-      <askDeliveryInformations>true</askDeliveryInformations>
-      <quantityUpdatable>true</quantityUpdatable>
-    </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-    
-     -->
-    
-    <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-      <code>CON</code>
-      <orderNm>40</orderNm>
-      <description>in consegna</description>
-      <requiredOrderStateCodes>INS</requiredOrderStateCodes>
-      <emailToCustomerSendType>N</emailToCustomerSendType>
-      <emailToAdminsSendType>N</emailToAdminsSendType>
-      <emailContent>Buongiorno ${order.customer.portalUser.screenName},
-      e' stato messo in consegna il tuo ordine n. ${order.code} di ${order.producer.nome}.
-      </emailContent>
-      <attachOrderReport>true</attachOrderReport>
-      <disablingOrderStateCodes>CON</disablingOrderStateCodes>
       
       <nextStateCode>SHI</nextStateCode>
       <nextStateDescription>CONSEGNA EFFETTUATA</nextStateDescription>

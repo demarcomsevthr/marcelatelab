@@ -40,5 +40,10 @@ public interface PortalUser extends Serializable {
 
   public Boolean getTestUser();
   
+  public Boolean getAdminUser();
+
+  public void setAdminUser(Boolean adminUser);
+  
+  public boolean isAdminUser();
   
 }
