@@ -23,10 +23,12 @@ public class MainAnimationMapper implements AnimationMapper {
           newMainPlace.getToken().equals(MainPlace.CKD_INPUT)) {
         return Animation.SLIDE_REVERSE;
       }
+      /*
       if (oldMainPlace.getToken().equals(MainPlace.CKD_OUTPUT_HELP) && 
           newMainPlace.getToken().equals(MainPlace.CKD_OUTPUT)) {
         return Animation.SLIDE_REVERSE;
       }
+      */
     }
     return Animation.SLIDE;
   }

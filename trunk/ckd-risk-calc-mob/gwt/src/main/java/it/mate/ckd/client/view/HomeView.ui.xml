@@ -38,6 +38,7 @@
        -->
       <g:HTMLPanel>
         <div id="debugDiv" class="{style.verLbl}"></div>
+        <g:Label ui:field="devInfo" addStyleNames="verLbl"/>
       </g:HTMLPanel>
       
     </g:VerticalPanel>

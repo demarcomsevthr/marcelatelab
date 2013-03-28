@@ -20,7 +20,7 @@
   <add-linker name="xsiframe" />
   
   <!-- 
-       mgwt.os values = iphone, android
+       mgwt.os values = iphone, ipad, android
    -->
   <set-property name="mgwt.os" value="iphone" />
   

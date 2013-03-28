@@ -7,8 +7,10 @@ import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
 import it.mate.ckd.client.ui.MvpPhonePanel;
 import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -30,6 +32,8 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
+import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
+import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
@@ -85,10 +89,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
-    // Start PlaceHistoryHandler with our PlaceHistoryMapper
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
-
-    if (MGWT.getOsDetection().isTablet()) {
+    
+//  if (MGWT.getOsDetection().isTablet()) {
+    if (OsDetectionPatch.isTablet()) {
 
       // StyleInjector.inject(AppBundle.INSTANCE.css().getText());
 
@@ -110,26 +114,27 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   private void createPhoneDisplay(AppClientFactory clientFactory) {
-    
     AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
-
     MainActivityMapper activityMapper = new MainActivityMapper(clientFactory);
-
     MainAnimationMapper animationMapper = new MainAnimationMapper();
-
     AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
-
     activityManager.setDisplay(display);
-
     RootPanel.get().add(display);
-  
     // 21/02/2013
 //  ZIndexPatch.apply();
-    
   }
 
   private void createTabletDisplay(AppClientFactory clientFactory) {
-
+    GwtUtils.log(">>>>>> CREATING TABLET DISPLAY");
+    SimplePanel landscapeDisplay = new SimplePanel();
+    TabletPortraitOverlay tabletPortraitOverlay = new TabletPortraitOverlay();
+    AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
+    new OrientationRegionHandler(landscapeDisplay, tabletPortraitOverlay, display);
+    MainActivityMapper activityMapper = new MainActivityMapper(clientFactory);
+    MainAnimationMapper animationMapper = new MainAnimationMapper();
+    AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
+    activityManager.setDisplay(display);
+    RootPanel.get().add(display);
   }
 
   private void initDisplay_SAVE(Panel modulePanel) {

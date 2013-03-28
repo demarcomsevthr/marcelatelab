@@ -11,21 +11,23 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
 //import com.google.gwt.user.client.ui.Button;
 
 public class SpinnerIntegerBox extends Composite implements HasValueChangeHandlers<Integer> {
   
-  private Button leftBtn = null;
-  private TouchImage leftImg = null;
   private MIntegerBox valueBox;
+  
+  private SpinControl leftSpin;
+  private SpinControl rightSpin;
+  /*
+  private Button leftBtn = null;
+  private SpinTouchable leftImg = null;
+  private SpinAnchor leftAnc = null;
   private Button rightBtn = null;
-  private TouchImage rightImg = null;
+  private SpinTouchable rightImg = null;
+  private SpinAnchor rightAnc = null;
+  */
   
   private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerIntegerBox_disableSpinButtons(); 
   
@@ -41,11 +43,25 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     
     if (!disableSpinButtons) {
+
+      leftSpin = new SpinControl(bundle.minusImage());
+      GwtUtils.setStyleAttribute(leftSpin, "paddingLeft", "4px");
+      GwtUtils.setStyleAttribute(leftSpin, "paddingRight", "6px");
+      hp.add(leftSpin);
       
+      /*
+      leftAnc = new SpinAnchor(bundle.minusImage());
+      GwtUtils.setStyleAttribute(leftAnc, "paddingLeft", "4px");
+      GwtUtils.setStyleAttribute(leftAnc, "paddingRight", "6px");
+      hp.add(leftAnc);
+      */
+
+      /*
       leftImg = new TouchImage(bundle.minusImage());
       GwtUtils.setStyleAttribute(leftImg, "paddingRight", "4px");
       leftImg.addStyleName("spin-Button");
       hp.add(leftImg);
+      */
 
       /*
       leftBtn = new Button(" - ");
@@ -62,10 +78,22 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     
     if (!disableSpinButtons) {
       
+      rightSpin = new SpinControl(bundle.plusImage());
+      GwtUtils.setStyleAttribute(rightSpin, "paddingLeft", "6px");
+      hp.add(rightSpin);
+      
+      /*
+      rightAnc = new SpinAnchor(bundle.plusImage());
+      GwtUtils.setStyleAttribute(rightAnc, "paddingLeft", "6px");
+      hp.add(rightAnc);
+      */
+
+      /*
       rightImg = new TouchImage(bundle.plusImage());
       GwtUtils.setStyleAttribute(rightImg, "paddingLeft", "4px");
       rightImg.addStyleName("spin-Button");
       hp.add(rightImg);
+      */
 
       /*
       rightBtn = new Button(" + ");
@@ -79,6 +107,27 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     initWidget(hp);
 
     if (!disableSpinButtons) {
+
+      leftSpin.addHandler(new SpinControl.SpinHandler() {
+        public void onSpin() {
+          inc(-1);
+        }
+      });
+      
+      rightSpin.addHandler(new SpinControl.SpinHandler() {
+        public void onSpin() {
+          inc(+1);
+        }
+      });
+      
+      /*
+      if (leftAnc != null) {
+        leftAnc.addClickHandler(new ClickHandler() {
+          public void onClick(ClickEvent event) {
+            inc(-1);
+          }
+        });
+      }
       if (leftBtn != null) {
         leftBtn.addTapHandler(new TapHandler() {
           public void onTap(TapEvent event) {
@@ -90,6 +139,14 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
         leftImg.addTouchStartHandler(new TouchStartHandler() {
           public void onTouchStart(TouchStartEvent event) {
             inc(-1);
+          }
+        });
+      }
+      
+      if (rightAnc != null) {
+        rightAnc.addClickHandler(new ClickHandler() {
+          public void onClick(ClickEvent event) {
+            inc(+1);
           }
         });
       }
@@ -107,6 +164,7 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
           }
         });
       }
+      */
       /*
       leftBtn.addTouchStartHandler(new TouchStartHandler() {
         public void onTouchStart(TouchStartEvent event) {
