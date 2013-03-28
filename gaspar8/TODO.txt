@@ -13,8 +13,7 @@
 
 		SNAPSHOT 28/03/2013
 		
-		  >> LOOP di AdminLayoutView >> iniziato ma da vedere meglio (introdotto PortalUserTx.adminUser)
-		
+		  >> LOOP di AdminLayoutView >> iniziato ma da vedere meglio (introdotto PortalUserTx.adminUser) >> forse SISTEMATO [28/03/2013]
 		
 		  >> GESTIONE ARTICOLI E BLOG <<
 		  
@@ -24,151 +23,22 @@
 		
 		  se funziona mettere ListPropertyWrapper in tutti i getter getList dei tx
 		
-			>> ATTENZIONE
-			HA DATO delle eccezioni del tipo:
+			>> ATTENZIONE <<
+			Eccezioni del tipo:
 			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' 
 			because it is exposed as an array with a maximum dimension of 1 in this type or one of its subtypes 
 			(reached via it.mate.econyx.shared.model.Article)
-			
 			VEDI docs/errors/article-serialization-errors.txt
-			
 			LINK INTERESSANTI
 			>> https://groups.google.com/forum/?fromgroups=#!topic/google-web-toolkit/cTNZVKefbSM
-			http://stackoverflow.com/questions/2122798/gwt-occasional-com-google-gwt-user-client-rpc-serializationexception
-			https://developers.google.com/web-toolkit/doc/latest/FAQ_Server?hl=fr#Does_the_GWT_RPC_system_support_the_use_of_java.io.Serializable
-			
-			
-			>>> LO FA ANCHE SU CHROME
-
-			>>> PARE CHE L'ERRORE NON DIPENDA DIRETTAMENTE DA ListPropertyWrapper, sembra più una coincidenza, lo ha dato anche togliendolo
-			
-			>>> PARE CHE LO DIA IN MANIERA CASUALE (!)
-			
+			>>> L'ERRORE NON DIPENDE DA ListPropertyWrapper (sembra più una coincidenza, lo ha dato anche togliendolo)
+			>>> LO DA IN MANIERA CASUALE (!)
 			>>> PER SIMULARLO BASTA INTRODURRE UNA PICCOLA MODIFICA IN Article E FARE UN REFRESH IN DEV MODE
-			
-			>>> TENTATIVI DI CORREZIONE DEL PROBLEMA
-			
-				> DICHIARAZIONI DI Serializable SU TUTTE LE INTERFACCE DI MODEL > NO!
-			
-				> SEMPLIFICAZIONE DELLE INTERFACCE (eliminate ereditarietà multiple) > NO!
+			>>> SOLUZIONE: ERA LA RELAZIONE 1-1 con HtmlContent !!!! 
+				AL CUI INTERNO E' DICHIARATA LA enum Type senza il costruttore di default e con un costruttore privato!
+				(violazione delle serialization policies)
+				In altri tx funziona ma è sempre relazionato come List<HtmlContent> > forse così ha un comportamento differente.
 
-				> inizializzaizone della List<ArticleCommentTx> comments nel tx
-			    
-				> SOSTITUITO List con ArrayList nell'interfaccia > ANNULLATO
-				
-				> ADD serialVersionUID in ArticleTx, ArticleCommentTx > NO!
-				
-				> inserimento di toString nei tx > NO!
-				
-				> ritorno a JAVA 6 (setenv.bat) (1.6.0_31) > NO!
-				
-				>> RESET CACHE Firefox 2 VOLTE > NO!
-				
-				> PASSAGGIO A GWT 2.5.1
-					(gwtcommons/pom.xml, econyx-base-app/pom.xml, eclipse gwt sdk)    >> NO MA LO LASCIO!
-					
-				>>> ERA LA RELAZIONE HtmlContent !!!! (HtmlContent è pensato per lavorare in una List<? extends HtmllContent)	
-				
-				
-				>>>> SI RIESCE A RISPONDERE AI POST ???
-				
-				SITUAZIONE CHE GENERAVA ERRORE:
-				
-public interface Article extends Serializable {
-  
-  public HtmlContent getHtml();
-  
-  public void setHtml(HtmlContent html);
-  
-}
-
-public interface HtmlContent extends Serializable {
-
-  public String getContent();
-
-  public void setContent(String content);
-  
-  public enum Type {
-    SHORT ("S"), 
-    MEDIUM ("M"), 
-    LONG ("L");
-    private String code;
-    private Type(String code) {
-      this.code = code;
-    }
-    public String getCode() {
-      return code;
-    }
-  };
-  
-  public Type getType();
-  
-  public void setType(Type type);
-  
-}
-
-public class HtmlContentTx implements HtmlContent {
-
-  protected Type type;
-  
-  protected String content;
-  
-  public Type getType() {
-    return type;
-  }
-
-  public void setType(Type type) {
-    this.type = type;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-}
-
-@SuppressWarnings("serial")
-public class ArticleTx implements Article {
-
-  HtmlContentTx html;
-  
-  public HtmlContent getHtml() {
-    return html;
-  }
-
-  public void setHtml(HtmlContent html) {
-    if (html == null) {
-      this.html = null;
-    } else if (html instanceof HtmlContentTx) {
-      this.html = (HtmlContentTx)html;
-    } else {
-      throw new MyCastException(html);
-    }
-  }
-  
-}
-  
-				
-				
-
-			>>> ALTRE eccezioni correlate (sempre in dev mode) su ArticleService interface
-			
-			>>> SE LO RIDA ANCORA tornare alle getArticles e getComments in vecchio stile > NON SEMBRA CHE RISOLVA!
-  			    (vedi ArticleTx e ArticleFolderTx)
-  			    
-  			>>> DA VEDERE:
-  				gwt.disableGeneratorResultCaching system property
-  				https://groups.google.com/forum/#!msg/google-web-toolkit/PeHaeh8mJUM/dRpXqlA1DpMJ    
-  			    
-  			>> VEDI ANCHE
-  				com.google.gwt.user.server.rpc.impl.LegacySerializationPolicy
-  				com.google.gwt.user.server.rpc.impl.SerializabilityUtil
-  				com.google.gwt.user.rebind.rpc.SerializableTypeOracleBuilder [line 527] >> BREAK
-			
 
 		- inserimento nuovi Article e ArticleFolder [generazione codice univoco] [2]
 		

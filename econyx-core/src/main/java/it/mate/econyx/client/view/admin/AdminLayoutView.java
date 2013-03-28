@@ -13,6 +13,7 @@ import it.mate.econyx.client.ui.AdminClientUtils;
 import it.mate.econyx.client.ui.PageBreadcrumb;
 import it.mate.econyx.client.util.EconyxUtils;
 import it.mate.gwtcommons.client.ui.MvpPanel;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -61,7 +62,15 @@ public class AdminLayoutView extends Composite {
             setLoggedState(true);
           } else {
             setLoggedState(false);
+            
+            /* 28/03/2013
+             * 
+             * Redirigo su admin.html in modo da entrare nel caso loggedUser != null
+             * 
             AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
+             */
+            
+            AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(EconyxUtils.getCompleteUrl(EconyxUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
               public void onSuccess(String googleLoginUrl) {
                 googleLoginAnchor.setHref(googleLoginUrl);
               }
@@ -95,9 +104,13 @@ public class AdminLayoutView extends Composite {
             
             if (event.getState().getLoggedUser().isAdminUser()) {
               // redirigo sulla pagina sicura
-              Window.Location.replace(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL));
+              GwtUtils.deferredExecution(new Delegate<Void>() {
+                public void execute(Void element) {
+                  Window.Location.replace(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL));
+                }
+              });
             } else {
-              Window.alert("ATTENZIONE: l'account " + event.getState().getLoggedUser().getEmailAddress() + " non è un amministratore di questo sito!");
+              Window.alert("ATTENZIONE: l'account " + event.getState().getLoggedUser().getEmailAddress() + " non e' un amministratore di questo sito (promemoria per gli ammnistratori di sistema: forse va impostato portalUser.adminUser)!");
             }
             
           }
