@@ -2,7 +2,6 @@ package it.mate.ckd.client.factories;
 
 import it.mate.ckd.client.activities.mapper.MainActivityMapper;
 import it.mate.ckd.client.view.CKDInputView;
-import it.mate.ckd.client.view.CKDOutputHelpView;
 import it.mate.ckd.client.view.CKDOutputView;
 import it.mate.ckd.client.view.HomeView;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
@@ -21,6 +20,8 @@ public interface AppGinjector extends CommonGinjector {
   
   public CKDOutputView getCKDOutputView();
   
+  /*
   public CKDOutputHelpView getCKDOutputHelpView();
+  */
   
 }

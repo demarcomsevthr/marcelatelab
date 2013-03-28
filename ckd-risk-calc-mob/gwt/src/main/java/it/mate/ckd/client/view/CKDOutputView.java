@@ -25,7 +25,9 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
+    /*
     void goToCkdOutputHelp();
+    */
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }

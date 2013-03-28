@@ -13,6 +13,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.widget.Button;
@@ -31,6 +33,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField (provided=true) CustomMainCss style;
   
   @UiField Button paramBtn;
+  @UiField Label devInfo;
 
   public HomeView() {
     bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
@@ -54,6 +57,10 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     
     paramBtn.setText(LocalizedMessages.IMPL.HomeView_paramBtn_text());
+    
+    String info = "Width " + Window.getClientWidth()
+    + " Height " + Window.getClientHeight();
+    devInfo.setText(info);
     
   }
   

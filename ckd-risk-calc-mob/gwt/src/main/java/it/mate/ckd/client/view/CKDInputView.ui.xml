@@ -163,7 +163,7 @@
     
     </table> 
     
-    <g:VerticalPanel horizontalAlignment="center" width="100%">
+    <g:VerticalPanel horizontalAlignment="center" width="304px">
        <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
          <ui:attribute name="text" description="text" key="estimate.text"/>
        </m:Button>
