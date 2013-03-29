@@ -171,6 +171,15 @@
 			<version>1.0.0.GA</version>
 			<classifier>sources</classifier>
 		</dependency>
+    
+    
+    <dependency>
+      <groupId>com.googlecode.gwtphonegap</groupId>
+      <artifactId>gwtphonegap</artifactId>
+      <version>2.0.0.0</version>
+    </dependency>
+
+    
 	</dependencies>
 
 	<distributionManagement>

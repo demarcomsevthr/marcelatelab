@@ -1,5 +1,6 @@
 package com.googlecode.mgwt.examples.showcase.client;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,9 +37,11 @@ public abstract class DetailViewGwtImpl implements DetailView {
 		headerMainButton.setRoundButton(true);
 
 		if (!MGWT.getOsDetection().isPhone()) {
+		  Window.alert("setting portrait only");
 			headerPanel.setLeftWidget(headerMainButton);
 			headerMainButton.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getUtilCss().portraitonly());
 		} else {
+      Window.alert("not setting portrait only");
 			headerPanel.setLeftWidget(headerBackButton);
 		}
 

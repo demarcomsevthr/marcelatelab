@@ -49,6 +49,7 @@ public class ShowCaseListActivity extends MGWTAbstractActivity {
 
     view.getFirstHeader().setText("Showcase");
 
+    /*
     view.setTopics(createTopicsList());
 
     addHandlerRegistration(view.getCellSelectedHandler().addCellSelectedHandler(
@@ -78,6 +79,7 @@ public class ShowCaseListActivity extends MGWTAbstractActivity {
 
       }
     }));
+    */
 
     panel.setWidget(view);
   }

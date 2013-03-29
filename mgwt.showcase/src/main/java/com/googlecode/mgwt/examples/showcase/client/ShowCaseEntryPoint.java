@@ -13,28 +13,24 @@
  */
 package com.googlecode.mgwt.examples.showcase.client;
 
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
-import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.googlecode.mgwt.examples.showcase.client.css.AppBundle;
+import com.googlecode.gwtphonegap.client.PhoneGap;
+import com.googlecode.gwtphonegap.client.PhoneGapAvailableEvent;
+import com.googlecode.gwtphonegap.client.PhoneGapAvailableHandler;
+import com.googlecode.gwtphonegap.client.PhoneGapTimeoutEvent;
+import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
 import com.googlecode.mgwt.examples.showcase.client.places.HomePlace;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
-import com.googlecode.mgwt.mvp.client.AnimationMapper;
 import com.googlecode.mgwt.mvp.client.history.MGWTPlaceHistoryHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
-import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
-import com.googlecode.mgwt.ui.client.layout.MasterRegionHandler;
-import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
 import com.googlecode.mgwt.ui.client.util.SuperDevModeUtil;
 
 /**
@@ -42,7 +38,9 @@ import com.googlecode.mgwt.ui.client.util.SuperDevModeUtil;
  * 
  */
 public class ShowCaseEntryPoint implements EntryPoint {
-
+  
+  private PhoneGap phoneGap;
+  
   private void start() {
 
     // MGWTColorScheme.setBaseColor("#56a60D");
@@ -77,12 +75,16 @@ public class ShowCaseEntryPoint implements EntryPoint {
     AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 
     if (MGWT.getOsDetection().isTablet()) {
+      
+      Window.alert("Is Tablet!");
 
+      /*
       // very nasty workaround because GWT does not corretly support
       // @media
       StyleInjector.inject(AppBundle.INSTANCE.css().getText());
 
       createTabletDisplay(clientFactory);
+      */
     } else {
 
       createPhoneDisplay(clientFactory);
@@ -113,6 +115,7 @@ public class ShowCaseEntryPoint implements EntryPoint {
 
   }
 
+  /*
   private void createTabletDisplay(ClientFactory clientFactory) {
     SimplePanel navContainer = new SimplePanel();
     navContainer.getElement().setId("nav");
@@ -150,6 +153,7 @@ public class ShowCaseEntryPoint implements EntryPoint {
     RootPanel.get().add(mainContainer);
 
   }
+  */
 
   @Override
   public void onModuleLoad() {
@@ -166,6 +170,7 @@ public class ShowCaseEntryPoint implements EntryPoint {
       }
     });
 
+    /*
     new Timer() {
 
       @Override
@@ -174,6 +179,26 @@ public class ShowCaseEntryPoint implements EntryPoint {
 
       }
     }.schedule(1);
+    */
+    
+    this.phoneGap = GWT.create(PhoneGap.class);
+
+    phoneGap.addHandler(new PhoneGapAvailableHandler() {
+      @Override
+      public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
+        start();
+      }
+    });
+
+    phoneGap.addHandler(new PhoneGapTimeoutHandler() {
+      @Override
+      public void onPhoneGapTimeout(PhoneGapTimeoutEvent event) {
+        Window.alert("cannot load phonegap");
+      }
+    });
+
+    phoneGap.initializePhoneGap();
+    
 
   }
 
