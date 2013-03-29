@@ -5,7 +5,6 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.MGWT;
-import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.HeaderButton;
 import com.googlecode.mgwt.ui.client.widget.HeaderPanel;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
@@ -44,7 +43,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
 
     if (!MGWT.getOsDetection().isPhone()) {
       headerPanel.setLeftWidget(headerMainButton);
-      headerMainButton.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getUtilCss().portraitonly());
+//    headerMainButton.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getUtilCss().portraitonly());
     } else {
       headerPanel.setLeftWidget(headerBackButton);
     }

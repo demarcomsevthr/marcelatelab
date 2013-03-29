@@ -5,7 +5,6 @@ import it.mate.ckd.client.activities.mapper.MainAnimationMapper;
 import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
-import it.mate.ckd.client.ui.MvpPhonePanel;
 import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
 import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
@@ -32,9 +31,9 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
+import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
 import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
-import com.googlecode.mgwt.ui.client.MGWTStyle;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
 
@@ -91,12 +90,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
     
-//  if (MGWT.getOsDetection().isTablet()) {
-    if (OsDetectionPatch.isTablet()) {
+    if (MGWT.getOsDetection().isTablet()) {
+//  if (OsDetectionPatch.isTablet()) {
 
+      Window.alert("Tablet Display To Do!");
+      
       // StyleInjector.inject(AppBundle.INSTANCE.css().getText());
 
-      createTabletDisplay(clientFactory);
+//    createTabletDisplay(clientFactory);
       
     } else {
 
@@ -137,6 +138,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     RootPanel.get().add(display);
   }
 
+  /*
   private void initDisplay_SAVE(Panel modulePanel) {
     
     ViewPort viewPort = new MGWTSettings.ViewPort();
@@ -158,6 +160,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     mvpPanel.initMvp(AppClientFactoryImpl.this, getGinjector().getMainActivityMapper());
     
   }
+  */
   
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     super.initMvp(panel, getPlaceHistoryMapper(), activityMapper);
