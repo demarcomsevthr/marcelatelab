@@ -10,12 +10,14 @@
 <!-- 	<inherits name="com.googlecode.mgwt.theme.ExampleTheme"/> -->
 
 
+  <inherits name='com.googlecode.gwtphonegap.PhoneGap' />
 	
 
 <!-- 	<set-property name="mgwt.os" value="android_tablet, android" /> -->
 <!-- 	<set-property name="mgwt.os" value="iphone" /> -->
+    <set-property name="mgwt.os" value="iphone, ipad" /> 
 	
-<!-- 	<set-property name="user.agent" value="safari" /> -->
+ 	<set-property name="user.agent" value="safari" /> 
 
 	<!-- -->
 <!-- 	<set-configuration-property name="mgwt.css" value="pretty" /> -->

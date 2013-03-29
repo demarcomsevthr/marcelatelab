@@ -18,6 +18,7 @@ package com.googlecode.mgwt.examples.showcase.client.activities;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.examples.showcase.client.BasicCell;
@@ -53,6 +54,7 @@ public class ShowCaseListViewGwtImpl implements ShowCaseListView {
 		}
 		main.add(headerPanel);
 
+		/*
 		cellList = new CellListWithHeader<Topic>(new BasicCell<Topic>() {
 
 			@Override
@@ -67,9 +69,11 @@ public class ShowCaseListViewGwtImpl implements ShowCaseListView {
 		});
 
 		cellList.getCellList().setRound(true);
+		*/
 
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setWidget(cellList);
+//  scrollPanel.setWidget(cellList);
+    scrollPanel.setWidget(new Label("Orientation test"));
 		scrollPanel.setScrollingEnabledX(false);
 		main.add(scrollPanel);
 
