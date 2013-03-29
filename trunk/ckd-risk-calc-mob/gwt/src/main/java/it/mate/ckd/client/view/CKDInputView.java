@@ -20,11 +20,9 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 
-public class CKDInputView extends BaseMgwtView <Presenter> {
+public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
   public interface Presenter extends BasePresenter {
     void goToCkdOutput(CKD ckd);
@@ -64,12 +62,14 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
+    /*
     getHeaderBackButton().setText("Home");
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToHome();
       }
     });
+    */
     
     creatininaSpinBox.setValue(1d);
     
@@ -108,7 +108,6 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
     updateCreatinineUmAnc();
   }
   private void updateCreatinineUmAnc() {
-    // "&micro;mol/l"
     creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "mmol/l");
   }
 
@@ -132,10 +131,6 @@ public class CKDInputView extends BaseMgwtView <Presenter> {
           return;
         if (!isSet(creatininaSpinBox.getValue()))
           return;
-        /*
-        if (!isSet(albuminuriaSpinBox.getValue()))
-          return;
-          */
         ckd.setAge(etaSpinBox.getValue())
           .setWeight(pesoSpinBox.getValue())
           .setScr(creatininaSpinBox.getValue())

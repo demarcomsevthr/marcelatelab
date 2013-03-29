@@ -17,17 +17,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 
-public class CKDOutputView extends BaseMgwtView <Presenter> {
+public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
-    /*
-    void goToCkdOutputHelp();
-    */
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }
@@ -73,12 +68,16 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
+    
+    /*
     getHeaderBackButton().setText(LocalizedMessages.IMPL.CKDOutputView_headerBackButton_text());
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToCkdInput();
       }
     });
+    */
+    
   }
   
   @Override
@@ -135,7 +134,6 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
     } else if (risk == CKD.VERY_HIGH_RISK) {
       irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
       ircBckCol = "#FF0000";
-//    ircCol = "white";
     }
     riskBox.setText(irc);
     riskBox.getElement().getStyle().setColor(ircCol);
@@ -144,7 +142,6 @@ public class CKDOutputView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("ckdHelpBtn")
   public void onHelpBtn(TouchStartEvent event) {
-//  getPresenter().goToCkdOutputHelp();
     String appLanguage = GwtUtils.getJSVar("appLanguage", null);
     if ("it".equals(appLanguage)) {
       PhonegapUtils.openInAppBrowser("help-it.html");
