@@ -1,8 +1,7 @@
 package it.mate.ckd.client.ui;
 
 import it.mate.ckd.client.config.ClientProperties;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -31,7 +30,8 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
   
   private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerIntegerBox_disableSpinButtons(); 
   
-  private MGWTCustomClientBundle bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
+//private MGWTCustomClientBundle bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
+  private CustomTheme.CustomBundle bundle = CustomTheme.Instance.get();
   
   public SpinnerIntegerBox() {
     initUI();

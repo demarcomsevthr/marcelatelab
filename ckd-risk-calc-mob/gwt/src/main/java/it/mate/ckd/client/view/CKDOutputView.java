@@ -3,13 +3,15 @@ package it.mate.ckd.client.view;
 import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.ui.theme.custom.CustomTheme;
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.utils.PhonegapUtils;
 import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -18,6 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
@@ -29,6 +32,10 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
+  /*
+  @UiField (provided=true) MGWTCustomClientBundle bundle;
+  */
+  @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
 
   @UiField Label cockcroftGfrBox;
@@ -54,10 +61,17 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   @UiField Panel bsaPanel;
   @UiField HTML bsaHtml;
   
+  @UiField Button ckdHelpBtn;
+  
   private CKD ckd;
   
   public CKDOutputView() {
+    /*
+    bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
     style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
+    */
+    bundle = CustomTheme.Instance.get();
+    style = bundle.css();
     initUI();
   }
 

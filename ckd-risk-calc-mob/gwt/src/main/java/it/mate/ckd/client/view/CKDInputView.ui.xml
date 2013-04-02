@@ -7,7 +7,10 @@
        ui:generateLocales="default"
        >
 
+  <!-- 
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle"/>
+   -->
+  <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
 
   <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}">
