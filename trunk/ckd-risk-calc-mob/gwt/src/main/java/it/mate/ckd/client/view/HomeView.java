@@ -2,8 +2,7 @@ package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -29,15 +28,22 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
+  /*
   @UiField (provided=true) MGWTCustomClientBundle bundle;
+  */
+  @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
   
   @UiField Button paramBtn;
   @UiField Label devInfo;
 
   public HomeView() {
+    /*
     bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
-    style = (CustomMainCss)bundle.getMainCss();
+    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
+    */
+    bundle = CustomTheme.Instance.get();
+    style = bundle.css();
     initUI();
   }
 

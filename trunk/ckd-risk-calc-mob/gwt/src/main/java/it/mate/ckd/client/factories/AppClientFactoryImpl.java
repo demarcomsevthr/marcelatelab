@@ -5,8 +5,7 @@ import it.mate.ckd.client.activities.mapper.MainAnimationMapper;
 import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
-import it.mate.ckd.client.utils.OsDetectionPatch;
+import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -84,11 +83,19 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
     
-    MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss().ensureInjected();
+//  MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss().ensureInjected();
+    CustomTheme.Instance.get().css().ensureInjected();
 
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
+
+    /*
+    if (OsDetectionPatch.isTablet()) {
+      StyleInjector.injectAtEnd(TabletTheme.Instance.get().css().getText());
+    }
+    */
+    
     
     if (MGWT.getOsDetection().isTablet()) {
 //  if (OsDetectionPatch.isTablet()) {

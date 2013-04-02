@@ -6,6 +6,10 @@
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default">
 
+  <!-- 
+  <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle"/>
+   -->
+  <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
   
   <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel}">
@@ -29,9 +33,9 @@
         <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="cockcroftGfrBox" width="7.1em" height="1.4em" addStyleNames="{style.ckdGfr}"/>
+        <g:Label ui:field="cockcroftGfrBox" addStyleNames="{style.ckdGfr}"/>
         <gc:Spacer width="0.3em"/>
-        <g:Label ui:field="cockcroftGfrStadium" width="2.0em" height="1.4em" addStyleNames="{style.ckdStadium}"/>
+        <g:Label ui:field="cockcroftGfrStadium" addStyleNames="{style.ckdStadium}"/>
         
       </g:HorizontalPanel>
       
@@ -42,7 +46,7 @@
         </g:Label>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="cockcroftRiskBox" width="9.6em" height="1.4em" addStyleNames="{style.ckdRisk}"/>
+        <g:Label ui:field="cockcroftRiskBox" addStyleNames="{style.ckdRisk}"/>
         
       </g:HorizontalPanel>
       
@@ -74,9 +78,9 @@
         <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="mdrdGfrBox" width="7.1em" height="1.4em" addStyleNames="{style.ckdGfr}"/>
+        <g:Label ui:field="mdrdGfrBox" addStyleNames="{style.ckdGfr}"/>
         <gc:Spacer width="0.3em"/>
-        <g:Label ui:field="mdrdGfrStadium" width="2.0em" height="1.4em" addStyleNames="{style.ckdStadium}"/>
+        <g:Label ui:field="mdrdGfrStadium" addStyleNames="{style.ckdStadium}"/>
         
       </g:HorizontalPanel>
       
@@ -87,7 +91,7 @@
         </g:Label>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="mdrdRiskBox" width="9.6em" height="1.4em" addStyleNames="{style.ckdRisk}"/>
+        <g:Label ui:field="mdrdRiskBox" addStyleNames="{style.ckdRisk}"/>
         
       </g:HorizontalPanel>
       
@@ -114,9 +118,9 @@
         <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="mdrdNcGfrBox" width="7.1em" height="1.4em" addStyleNames="{style.ckdGfr}"/>
+        <g:Label ui:field="mdrdNcGfrBox" addStyleNames="{style.ckdGfr}"/>
         <gc:Spacer width="0.3em"/>
-        <g:Label ui:field="mdrdNcGfrStadium" width="2.0em" height="1.4em" addStyleNames="{style.ckdStadium}"/>
+        <g:Label ui:field="mdrdNcGfrStadium" addStyleNames="{style.ckdStadium}"/>
         
       </g:HorizontalPanel>
       
@@ -127,7 +131,7 @@
         </g:Label>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="mdrdNcRiskBox" width="9.6em" height="1.4em" addStyleNames="{style.ckdRisk}"/>
+        <g:Label ui:field="mdrdNcRiskBox" addStyleNames="{style.ckdRisk}"/>
         
       </g:HorizontalPanel>
       
@@ -148,9 +152,9 @@
         <g:Label text="GFR ml/min" addStyleNames="{style.ckdLabel}"/>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="epiGfrBox" width="7.1em" height="1.4em" addStyleNames="{style.ckdGfr}"/>
+        <g:Label ui:field="epiGfrBox" addStyleNames="{style.ckdGfr}"/>
         <gc:Spacer width="0.3em"/>
-        <g:Label ui:field="epiGfrStadium" width="2.0em" height="1.4em" addStyleNames="{style.ckdStadium}"/>
+        <g:Label ui:field="epiGfrStadium" addStyleNames="{style.ckdStadium}"/>
         
       </g:HorizontalPanel>
       
@@ -161,7 +165,7 @@
         </g:Label>
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
-        <g:Label ui:field="epiRiskBox" width="9.6em" height="1.4em" addStyleNames="{style.ckdRisk}"/>
+        <g:Label ui:field="epiRiskBox" addStyleNames="{style.ckdRisk}"/>
         
       </g:HorizontalPanel>
       

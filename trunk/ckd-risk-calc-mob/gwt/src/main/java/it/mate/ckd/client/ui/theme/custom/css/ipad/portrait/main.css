@@ -1,0 +1,15 @@
+@external homePanel, outputPanel;
+
+body {
+  background-size: 20px 1004px;
+}
+
+.homePanel.outputPanel {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.mgwt-Button.ckd-HelpBtn {
+  top: 420px;
+  left: 318px;
+}

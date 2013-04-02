@@ -4,9 +4,9 @@ import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.SpinnerDoubleBox;
 import it.mate.ckd.client.ui.SpinnerIntegerBox;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle;
-import it.mate.ckd.client.ui.theme.custom.MGWTCustomTheme;
+import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.utils.IPhoneScrollPatch;
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -14,6 +14,8 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
@@ -33,7 +36,10 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
+  /*
   @UiField (provided=true) MGWTCustomClientBundle bundle;
+  */
+  @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
 
   @UiField SpinnerIntegerBox etaSpinBox;
@@ -46,11 +52,17 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   @UiField Anchor creatinineUmAnc;
   @UiField Anchor albuminUmAnc;
   
+  @UiField Button ckdOutputBtn;
+  
   private CKD ckd = new CKD();
   
   public CKDInputView() {
+    /*
     bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
     style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
+    */
+    bundle = CustomTheme.Instance.get();
+    style = bundle.css();
     initUI();
   }
 
@@ -80,6 +92,40 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         IPhoneScrollPatch.apply();
       }
     });
+    
+    if (OsDetectionPatch.isTablet()) {
+      
+      ckdOutputBtn.setVisible(false);
+      
+      ValueChangeHandler<Integer> iHandler = new ValueChangeHandler<Integer>() {
+        public void onValueChange(ValueChangeEvent<Integer> event) {
+          onCalcBtn(null);
+        }
+      };
+      
+      ValueChangeHandler<Double> dHandler = new ValueChangeHandler<Double>() {
+        public void onValueChange(ValueChangeEvent<Double> event) {
+          onCalcBtn(null);
+        }
+      };
+      
+      ValueChangeHandler<Boolean> bHandler = new ValueChangeHandler<Boolean>() {
+        public void onValueChange(ValueChangeEvent<Boolean> event) {
+          onCalcBtn(null);
+        }
+      };
+      
+      etaSpinBox.addValueChangeHandler(iHandler);
+      creatininaSpinBox.addValueChangeHandler(dHandler);
+      pesoSpinBox.addValueChangeHandler(iHandler);
+      altezzaSpinBox.addValueChangeHandler(iHandler);
+      albuminuriaSpinBox.addValueChangeHandler(iHandler);
+      fBtn.addValueChangeHandler(bHandler);
+      bBtn.addValueChangeHandler(bHandler);
+      
+      onCalcBtn(null);
+      
+    }
     
   }
   

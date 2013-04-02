@@ -115,6 +115,16 @@
   color: black !important;
 }
 
+.ckd-Gfr {
+  width: 7.1em;
+  height: 1.4em;
+}
+
+.ckd-Stadium {
+  width: 2.8em;
+  height: 1.4em;
+}
+
 .ckd-Risk {
   font-size: 14pt;
   font-weight: 600;
@@ -122,6 +132,8 @@
   padding-top: 2px;
   border: 1px solid black;
   -webkit-border-radius: 4px;
+  width: 10.34em;
+  height: 1.4em;
 }
 
 .mgwt-Button.ckd-BsaBtnSelected {
