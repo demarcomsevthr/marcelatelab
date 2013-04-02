@@ -1,6 +1,7 @@
 package it.mate.econyx.client.factories;
 
 import it.mate.econyx.client.css.CoreClientBundle;
+import it.mate.econyx.client.css.CustomClientBundle;
 import it.mate.econyx.client.events.PortalInitEvent;
 import it.mate.econyx.client.events.PortalPageChangingEvent;
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
@@ -111,6 +112,8 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     AppClientFactory.IMPL.getEventBus().fireEvent(new PortalInitEvent(portalPanel));
     
     CoreClientBundle.INSTANCE.core().ensureInjected();
+    
+    CustomClientBundle.INSTANCE.css().ensureInjected();
     
     PortalSessionState.activateStateMonitor(getEventBus());
     

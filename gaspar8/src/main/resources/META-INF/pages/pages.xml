@@ -9,78 +9,84 @@
     <beans:property name="initialPageName" value="home" />
   </factory>
 
-  <factory id="homeBase" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="true" width="100%" stylename=""/>
-    <constraints>
-      <constraint size="50px" />
-      <constraint size="200px" overflow="visible" />
-      <constraint size="50px" />
-    </constraints>
-  </factory>
-
-  <factory id="header" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="false" stylename="headerGreyBackground"/>
+  <factory id="home" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" width="1158px" stylename="tpl-Home"/>
     <widgets>
-      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-        <layout vertical="true"/>
-        <widgets>
-          <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-            <layout vertical="false" style="background: #b7df2d" />
-            <widgets>
-              <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
-                <beans:property name="html">
-                  <beans:value><![CDATA[
-
-                    <div class="ecx-headerBanner" style="width:100%;">
-                      <div style="padding-left: 100px;">
-                        <div style="background: url('images/logotr.gif') no-repeat scroll left top transparent; height: 152px;">
-                          <div style="font: 46px Arial; font-weight: 500; color: #FB350E; padding-left: 280px; padding-top: 20px;">
-                            GAS.P.A.R.8
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  ]]></beans:value>
-                  <!-- 
-                  <beans:value><![CDATA[
-                    <div style="background: url('/images/logodiss950.jpg') no-repeat scroll left top #FFFFFF; padding: 20px 0 20px 240px">
-                      <div style="font: 16px verdana; font-weight: 600; height:90px">
-                        Banner logo here
-                      </div>
-                    </div>
-                  ]]></beans:value>
-                   -->
-                </beans:property>
-              </factory>
-              <factory type="it.mate.econyx.client.portlets.PortalUserPortlet.Factory" />
-            </widgets>
-            <constraints>
-              <constraint/>
-              <constraint size="150px" />
-            </constraints>
-          </factory>
-          <factory type="it.mate.econyx.client.portlets.PortalPageMenuPortlet.Factory" stylename="headerMenu"/>
-        </widgets>
-      </factory>
+      <factory parent="homeWrapper" />
+      <factory parent="footer" />
     </widgets>
     <constraints>
-      <constraint size="100%" />
+      <constraint size="180px" overflow="visible" />
+      <constraint size="80px" />
     </constraints>
   </factory>
 
-  <factory id="innerBody3Columns" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="false" />
+  <factory id="homeWrapper" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-HomeWrapper"/>
+    <widgets>
+      <factory parent="headerWrapper" />
+      <factory parent="pageWrapper" />
+    </widgets>
+  </factory>
+  
+  <factory id="footer" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout stylename="tpl-Footer"/>
+    <widgets>
+      <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
+        <beans:property name="html">
+          <beans:value><![CDATA[
+            <div class="tpl-FooterContent">
+              footer
+            </div>
+          ]]></beans:value>
+        </beans:property>
+      </factory>
+    </widgets>
+  </factory>
+  
+  <factory id="headerWrapper" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-HeaderWrapper"/>
+    <widgets>
+      <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
+        <beans:property name="html">
+          <beans:value><![CDATA[
+            <div class="tpl-headerBanner" style="width:100%;">
+              <div style="padding-left: 100px;">
+                <div style="background: url('images/logotr.gif') no-repeat scroll left top transparent; height: 152px;">
+                  <div style="font: 46px Arial; font-weight: 500; color: #FB350E; padding-left: 280px; padding-top: 20px;">
+                    GAS.P.A.R.8
+                  </div>
+                </div>
+              </div>
+            </div>
+          ]]></beans:value>
+        </beans:property>
+      </factory>
+      
+      <factory type="it.mate.econyx.client.portlets.PortalPageMenuPortlet.Factory" stylename="headerMenu"/>
+      
+    </widgets>
+  </factory>
+  
+  <factory id="pageWrapper" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-PageWrapper"/>
+    <widgets>
+      <factory parent="innerBody2Columns" />
+    </widgets>
+  </factory>
+  
+  <factory id="innerBody2Columns" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="false" stylename="tpl-InnerBody"/>
     <widgets>
     
-      <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie" stylename="ecx-leftColumn">
+      <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie" stylename="tpl-leftColumn">
         <layout width="160px"/>
         <widgets>
           <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />
         </widgets>
       </factory>
       
-      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" stylename="tpl-CenterColumn">
         <layout vertical="true" />
         <widgets>
           <factory type="it.mate.econyx.client.portlets.PortalPageBreadcrumbPortlet.Factory"/>
@@ -92,122 +98,13 @@
         </constraints>
       </factory>
       
-      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-        <layout vertical="true" />
-        <widgets>
-          <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Cassettone della spesa">
-            <layout width="150px"/>
-            <widgets>
-              <factory type="it.mate.econyx.client.portlets.ShoppingCartPortlet.Factory" />
-            </widgets>
-          </factory>
-        </widgets>
-      </factory>
     </widgets>
     <constraints>
       <constraint size="160px" />
-      <constraint size="688px"/>
-      <constraint size="140px" />
+      <constraint/>
     </constraints>
-  </factory>
-   
-  <factory id="bodyShoppingCart" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="true" />
-    <widgets>
-      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-        <layout vertical="false" />
-        <widgets>
-          <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie">
-            <layout width="172px" />
-            <widgets>
-              <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />
-            </widgets>
-          </factory>
-          <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-            <layout vertical="true" />
-            <widgets>
-              <factory type="it.mate.econyx.client.portlets.ShoppingCartPortlet.Factory" />
-            </widgets>
-            <constraints>
-              <constraint />
-            </constraints>
-          </factory>
-        </widgets>
-        <constraints>
-          <constraint size="172px" />
-          <constraint size="816px" />
-        </constraints>
-      </factory>
-    </widgets>
-  </factory>
+  </factory>  
+    
   
-  <factory id="bodyRegistration" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="true" />
-    <widgets>
-      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-        <layout vertical="false" />
-        <widgets>
-          <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie">
-            <layout width="172px" />
-            <widgets>
-              <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />
-            </widgets>
-          </factory>
-          <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-            <layout vertical="true" />
-            <widgets>
-              <factory type="it.mate.econyx.client.portlets.PortalPageBreadcrumbPortlet.Factory" />
-              <factory type="it.mate.econyx.client.portlets.PortalUserPortlet.Factory" />
-            </widgets>
-            <constraints>
-              <constraint size="24px" />
-              <constraint />
-            </constraints>
-          </factory>
-        </widgets>
-        <constraints>
-          <constraint size="172px" />
-          <constraint size="816px" />
-        </constraints>
-      </factory>
-    </widgets>
-  </factory>
-  
-  <factory id="body" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="true"/>
-    <widgets>
-      <factory parent="innerBody3Columns" />
-    </widgets>
-  </factory>
-  
-  <factory id="footer" type="it.mate.portlets.client.ui.LabelPortlet.Factory">
-    <beans:property name="text">
-      <beans:value>Footer</beans:value>
-    </beans:property>
-  </factory>
-
-  <factory id="home" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
-    <widgets>
-      <factory parent="header" />
-      <factory parent="body" />
-      <factory parent="footer" />
-    </widgets>
-  </factory>
-
-  <factory id="shoppingCartTemplate" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
-    <widgets>
-      <factory parent="header" />
-      <factory parent="bodyShoppingCart" />
-      <factory parent="footer" />
-    </widgets>
-  </factory>
-
-  <factory id="registrationTemplate" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
-    <widgets>
-      <factory parent="header" />
-      <factory parent="bodyRegistration" />
-      <factory parent="footer" />
-    </widgets>
-  </factory>
   
 </beans:beans>
