@@ -10,7 +10,7 @@
   </factory>
 
   <factory id="homeBase" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-    <layout vertical="true" width="100%" stylename=""/>
+    <layout vertical="true" width="950px" stylename=""/>
     <constraints>
       <constraint size="50px" />
       <constraint size="200px" overflow="visible" />
@@ -25,24 +25,10 @@
         <layout vertical="true"/>
         <widgets>
           <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
-            <layout vertical="false" style="background: #b7df2d" />
+            <layout vertical="false" style="background: #A2FFA2" />
             <widgets>
               <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
                 <beans:property name="html">
-                  <beans:value><![CDATA[
-
-                    <div class="ecx-headerBanner" style="width:100%;">
-                      <div style="padding-left: 100px;">
-                        <div style="background: url('images/logotr.gif') no-repeat scroll left top transparent; height: 152px;">
-                          <div style="font: 46px Arial; font-weight: 500; color: #FB350E; padding-left: 280px; padding-top: 20px;">
-                            GAS.P.A.R.8
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  ]]></beans:value>
-                  <!-- 
                   <beans:value><![CDATA[
                     <div style="background: url('/images/logodiss950.jpg') no-repeat scroll left top #FFFFFF; padding: 20px 0 20px 240px">
                       <div style="font: 16px verdana; font-weight: 600; height:90px">
@@ -50,7 +36,6 @@
                       </div>
                     </div>
                   ]]></beans:value>
-                   -->
                 </beans:property>
               </factory>
               <factory type="it.mate.econyx.client.portlets.PortalUserPortlet.Factory" />
@@ -73,7 +58,7 @@
     <layout vertical="false" />
     <widgets>
     
-      <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie" stylename="ecx-leftColumn">
+      <factory type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Categorie">
         <layout width="160px"/>
         <widgets>
           <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />
