@@ -19,9 +19,9 @@
 		__________________________________________________________________________________
 
 
-		SNAPSHOT 02/04/2013
+		SNAPSHOT 03/04/2013
 		
-			>> STYLING
+			>> STYLING > pages.xml !
 			
 			>> TOGLIERE da econyx.properties:
 				it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache=false

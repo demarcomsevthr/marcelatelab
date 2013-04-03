@@ -6,6 +6,7 @@ import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.services.OrderServiceAsync;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -18,7 +19,7 @@ public class EconyxUtils {
   public static final String NOT_SECURE_ADMIN_PAGE_URL = "admin.html";
   
   public static void goToShoppingCartDetailView () {
-    TemplatesUtils.changeCurrentTemplate("shoppingCartTemplate", new Delegate<Void>() {
+    TemplatesUtils.changeCurrentTemplate(PropertiesHolder.getString("client.EconyxUtils.shoppingCartTemplateName", "shoppingCartTemplate"), new Delegate<Void>() {
       public void execute(Void element) {
         AppClientFactory.IMPL.getPlaceController().goTo(new ShoppingCartPlace(ShoppingCartPlace.DETAILED_VIEW));
       }

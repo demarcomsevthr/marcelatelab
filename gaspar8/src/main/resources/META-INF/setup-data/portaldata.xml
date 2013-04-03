@@ -761,15 +761,18 @@
       <name>Acquisti online</name>
       <code>acquisti</code>
       <orderNm>600</orderNm>
+      <templateName>home3Columns</templateName>
       <childreen>
         <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
           <name>ORTOFRUTTA</name>
           <code>ortofrutta</code>
+          <templateName>home3Columns</templateName>
           <orderNm>510</orderNm>
           <childreen>
             <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
               <name>ORTO DEI TERZI</name>
               <code>ortodeiterzi</code>
+              <templateName>home3Columns</templateName>
               
               <htmls>
                 <it.mate.econyx.shared.model.impl.HtmlContentTx>
@@ -787,6 +790,7 @@
                   <name>CASSETTONE MINI (5 KG)</name>
                   <code>cassetmini</code>
                   <orderNm>100</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCOR001</codice>
@@ -796,6 +800,7 @@
                   <name>CASSETTONE PICCOLO (7 KG)</name>
                   <code>cassetpiccolo</code>
                   <orderNm>200</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCOR002</codice>
@@ -805,6 +810,7 @@
                   <name>CASSETTONE MEDIO (8,5 KG)</name>
                   <code>cassetmedio</code>
                   <orderNm>300</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCOR003</codice>
@@ -814,6 +820,7 @@
                   <name>CASSETTONE GRANDE (10 KG)</name>
                   <code>cassetgrande</code>
                   <orderNm>400</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCOR004</codice>
@@ -827,17 +834,20 @@
           <name>FORMAGGI</name>
           <code>formaggi</code>
           <orderNm>530</orderNm>
+          <templateName>home3Columns</templateName>
           <childreen>
             <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
               <name>MARTI</name>
               <code>marti</code>
               <orderNm>531</orderNm>
+              <templateName>home3Columns</templateName>
               <childreen>
               
                 <it.mate.econyx.shared.model.impl.ProductPageTx>
                   <name>MOZZARELLE</name>
                   <code>mozzarelle</code>
                   <orderNm>100</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR001</codice>
@@ -847,6 +857,7 @@
                   <name>TRECCE</name>
                   <code>trecce</code>
                   <orderNm>200</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR002</codice>
@@ -856,6 +867,7 @@
                   <name>PRIMO SALE</name>
                   <code>primosale</code>
                   <orderNm>300</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR003</codice>
@@ -865,6 +877,7 @@
                   <name>SCAMORZE</name>
                   <code>scamorze</code>
                   <orderNm>400</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR004</codice>
@@ -874,6 +887,7 @@
                   <name>PROVOLA</name>
                   <code>provola</code>
                   <orderNm>500</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR005</codice>
@@ -883,6 +897,7 @@
                   <name>RICOTTA</name>
                   <code>ricotta</code>
                   <orderNm>600</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR006</codice>
@@ -892,6 +907,7 @@
                   <name>STRACCHINO</name>
                   <code>stracchino</code>
                   <orderNm>700</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR007</codice>
@@ -901,6 +917,7 @@
                   <name>YOGURT</name>
                   <code>yogurt</code>
                   <orderNm>800</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCMAR008</codice>
@@ -916,17 +933,20 @@
           <name>PESCE</name>
           <code>pesce</code>
           <orderNm>540</orderNm>
+          <templateName>home3Columns</templateName>
           <childreen>
             <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
               <name>FISHBOX</name>
               <code>fishbox</code>
               <orderNm>501</orderNm>
+              <templateName>home3Columns</templateName>
               <childreen>
               
                 <it.mate.econyx.shared.model.impl.ProductPageTx>
                   <name>FISHBOX</name>
                   <code>fishbox1</code>
                   <orderNm>10</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS01</codice>
@@ -937,6 +957,7 @@
                   <name>SPECIAL BOX</name>
                   <code>specialbox</code>
                   <orderNm>20</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS02</codice>
@@ -947,6 +968,7 @@
                   <name>FISHBOX 3</name>
                   <code>fishbox3</code>
                   <orderNm>30</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS03</codice>
@@ -957,6 +979,7 @@
                   <name>FISHBOX DELUXE</name>
                   <code>fishboxdeluxe</code>
                   <orderNm>40</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS04</codice>
@@ -967,6 +990,7 @@
                   <name>FISHBOX DA FORNO</name>
                   <code>fishboxforno</code>
                   <orderNm>50</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS05</codice>
@@ -977,6 +1001,7 @@
                   <name>FISHBOX POLPETTI</name>
                   <code>fishboxpolpetti</code>
                   <orderNm>60</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS06</codice>
@@ -987,6 +1012,7 @@
                   <name>FISHBOX TOTANI</name>
                   <code>fishboxtotani</code>
                   <orderNm>70</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS07</codice>
@@ -997,6 +1023,7 @@
                   <name>FISHBOX SEPPIE</name>
                   <code>fishboxseppie</code>
                   <orderNm>80</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS08</codice>
@@ -1007,6 +1034,7 @@
                   <name>FISHBOX PESCE RITROVATO</name>
                   <code>fishboxritrovato</code>
                   <orderNm>90</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS09</codice>
@@ -1017,6 +1045,7 @@
                   <name>BOX ALICI</name>
                   <code>fishboxalici</code>
                   <orderNm>100</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS10</codice>
@@ -1027,6 +1056,7 @@
                   <name>COZZE</name>
                   <code>cozze</code>
                   <orderNm>110</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS11</codice>
@@ -1037,6 +1067,7 @@
                   <name>VONGOLE</name>
                   <code>vongole</code>
                   <orderNm>120</orderNm>
+                  <templateName>home3Columns</templateName>
                   <htmls/>
                   <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
                     <codice>PCFIS12</codice>

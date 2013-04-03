@@ -12,6 +12,10 @@ a, a:active, a:focus {
     outline: medium none;
 }
 
+.gwt-TreeItem, .gwt-Tree > div {
+  font: 14px Verdana;
+}
+
 .mwt-PagePortlet {
   padding-top: 20px;
 }
@@ -47,11 +51,6 @@ a, a:active, a:focus {
 
 .mwt-BoxContainerBody {
   background: none repeat scroll 0 0 #FFF;
-}
-
-
-.gwt-TreeItem, .gwt-Tree > div {
-  font: 14px Verdana;
 }
 
 

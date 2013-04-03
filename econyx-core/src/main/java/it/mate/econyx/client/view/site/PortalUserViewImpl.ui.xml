@@ -36,7 +36,11 @@
           </div>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="localLoginFormState" visible="false" width="100%">
+          <!-- 03/04/2013
           <div style="width:100%;text-align:left">
+          </div>
+           -->
+          <g:VerticalPanel width="100%" spacing="0" horizontalAlignment="left">
             <g:Label text="Email:" width="5em"/><g:TextBox width="12.2em" ui:field="emailBox"/>
             <g:Label text="Password:" width="5em"/><g:PasswordTextBox width="12.2em" ui:field="passwordBox"/>
             <g:CheckBox text="Resta connesso" ui:field="keepConnectionBox"/>
@@ -44,7 +48,7 @@
               <gc:Spacer width="5px"/>
               <g:Button text="Entra" ui:field="loginBtn"/>
             </g:HorizontalPanel>
-          </div>
+          </g:VerticalPanel>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="loggedUserState" visible="false">
           Benvenuto <g:Label ui:field="screenName"/>

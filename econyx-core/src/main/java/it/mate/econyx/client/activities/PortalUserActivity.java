@@ -19,6 +19,7 @@ import it.mate.econyx.shared.services.PortalUserServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.List;
 
@@ -178,7 +179,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
 
   @Override
   public void goToRegistrationView() {
-    TemplatesUtils.changeCurrentTemplate("registrationTemplate", new Delegate<Void>() {
+    TemplatesUtils.changeCurrentTemplate(PropertiesHolder.getString("client.PortalUserActivity.registrationTemplateName", "registrationTemplate"), new Delegate<Void>() {
       public void execute(Void element) {
         goTo(new CustomerPlace(CustomerPlace.REGISTRATION));
       }
@@ -187,7 +188,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
   
   @Override
   public void goToProfileView() {
-    TemplatesUtils.changeCurrentTemplate("registrationTemplate", new Delegate<Void>() {
+    TemplatesUtils.changeCurrentTemplate(PropertiesHolder.getString("client.PortalUserActivity.profileTemplateName", "registrationTemplate"), new Delegate<Void>() {
       public void execute(Void element) {
         goTo(new CustomerPlace(CustomerPlace.PROFILE_VIEW).setHistoryName("Profilo"));
       }
