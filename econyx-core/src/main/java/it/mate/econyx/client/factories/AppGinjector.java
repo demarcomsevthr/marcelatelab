@@ -6,6 +6,8 @@ import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
 import it.mate.econyx.client.view.ArticleView;
+import it.mate.econyx.client.view.CalEventEditView;
+import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.client.view.ImageEditView;
@@ -33,6 +35,7 @@ import it.mate.econyx.client.view.site.PortalPageMenuViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
+import it.mate.econyx.shared.services.CalEventServiceAsync;
 import it.mate.econyx.shared.services.CustomerServiceAsync;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.econyx.shared.services.ImageServiceAsync;
@@ -53,6 +56,7 @@ public interface AppGinjector extends CommonGinjector {
   public CustomerServiceAsync getCustomerService();
   
   public ArticleServiceAsync getArticleService();
+  public CalEventServiceAsync getCalEventService();
 
   public OrderView getOrderView();
   public OrderEditView getOrderEditView();
@@ -96,6 +100,9 @@ public interface AppGinjector extends CommonGinjector {
   public ArticleView getArticleView();
   public ArticleEditView getArticleEditView();
 
+  public CalEventListView getCalEventListView();
+  public CalEventEditView getCalEventEditView();
+  
   public TestView getTestView();
   
 }
