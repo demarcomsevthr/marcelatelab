@@ -6,6 +6,7 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.util.PropertyConstants;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
+import it.mate.gwtcommons.client.ui.MessageBox;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
@@ -17,10 +18,13 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presenter> implements PortalUserView {
@@ -41,6 +45,8 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   @UiField CheckBox keepConnectionBox;
   @UiField Anchor googleLoginBtn;
   @UiField Anchor googleLogoutBtn;
+  @UiField Anchor localLoginBtn;
+  @UiField Button loginBtn;
   
   private boolean googleAccountAuthentication = PropertiesHolder.getBoolean(PropertyConstants.SITE_GOOGLE_ACCOUNT_AUTHENTICATION_ENABLED, false);
   
@@ -76,7 +82,7 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   public void setModel(Object model, String tag) {
     if (model != null && model instanceof PortalUser) {
       this.portalUser = (PortalUser)model;
-      setLoggetState();
+      setLoggedState();
       if (AppClientFactory.IMPL.getPortalSessionState().isGoogleAuthentication()) {
         getPresenter().getGoogleLogoutURL(new Delegate<String>() {
           public void execute(String url) {
@@ -85,11 +91,11 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
         });
       }
     } else {
-      setNotLoggetState();
+      setNotLoggedState();
     }
   }
   
-  private void setNotLoggetState() {
+  private void setNotLoggedState() {
     loggedUserState.setVisible(false);
     localLoginFormState.setVisible(false);
     if (googleAccountAuthentication) {
@@ -100,7 +106,7 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
     notLoggedUserState.setVisible(true);
   }
   
-  private void setLoggetState() {
+  private void setLoggedState() {
     loggedUserState.setVisible(true);
     notLoggedUserState.setVisible(false);
     notLoggedGoogleUserState.setVisible(false);
@@ -110,9 +116,15 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   
   @UiHandler ("localLoginBtn")
   public void onLocalLoginBtn(ClickEvent event) {
-    notLoggedUserState.setVisible(false);
-    notLoggedGoogleUserState.setVisible(false);
-    localLoginFormState.setVisible(true);
+    
+    if (PropertiesHolder.getBoolean("client.PortalUserView.useLoginDialog")) {
+      new LoginDialog();
+    } else {
+      notLoggedUserState.setVisible(false);
+      notLoggedGoogleUserState.setVisible(false);
+      localLoginFormState.setVisible(true);
+    }
+    
   }
   
   @UiHandler ("loginBtn")
@@ -148,6 +160,40 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   @UiHandler ("profileBtn")
   public void onProfileBtn(ClickEvent event) {
     getPresenter().goToProfileView();
+  }
+  
+  public class LoginDialog {
+    public LoginDialog() {
+      
+      VerticalPanel dialogPanel = new VerticalPanel();
+      dialogPanel.add(localLoginFormState);
+      
+      MessageBox.create(new MessageBox.Configuration()
+      .setCaptionText(PropertiesHolder.getString("client.PortalUserView.loginDialog.captionText", "Login"))
+      .setButtonType(MessageBox.BUTTONS_OKCANCEL)
+      .setIconType(MessageBox.ICON_INFO)
+      .setBodyWidget(dialogPanel)
+      .setBodyWidth("400px")
+      .setObjectRelativeTo(localLoginBtn)
+      .setCallbacks(new MessageBox.Callbacks() {
+        public void onOk() {
+          PortalUser portalUser = new PortalUserTx();
+          portalUser.setEmailAddress(emailBox.getValue());
+          portalUser.setPassword(passwordBox.getValue());
+          setNotLoggedState();
+          getPresenter().login(portalUser, keepConnectionBox.getValue());
+        }
+        public void onCancel() {
+          setNotLoggedState();
+        }
+        public void onLoad(DialogBox dialog) {
+          loginBtn.setVisible(false);
+          localLoginFormState.setVisible(true);
+          emailBox.setFocus(true);
+        }
+      }));
+      
+    }
   }
   
 }
