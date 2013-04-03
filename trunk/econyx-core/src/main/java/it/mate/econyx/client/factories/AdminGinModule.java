@@ -5,6 +5,8 @@ import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
 import it.mate.econyx.client.view.ArticleView;
+import it.mate.econyx.client.view.CalEventEditView;
+import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.client.view.ImageEditView;
@@ -30,6 +32,8 @@ import it.mate.econyx.client.view.TestView;
 import it.mate.econyx.client.view.admin.ArticleEditViewImpl;
 import it.mate.econyx.client.view.admin.ArticleFolderEditViewImpl;
 import it.mate.econyx.client.view.admin.ArticleFolderListViewImpl;
+import it.mate.econyx.client.view.admin.CalEventEditViewImpl;
+import it.mate.econyx.client.view.admin.CalEventListViewImpl;
 import it.mate.econyx.client.view.admin.ImageEditViewImpl;
 import it.mate.econyx.client.view.admin.ImageListViewImpl;
 import it.mate.econyx.client.view.admin.OrderEditViewImpl;
@@ -84,6 +88,9 @@ public class AdminGinModule extends AbstractGinModule {
     bind(ArticleFolderEditView.class).to(ArticleFolderEditViewImpl.class);
     bind(ArticleView.class).to(ArticleView.NotImpl.class);
     bind(ArticleEditView.class).to(ArticleEditViewImpl.class);
+
+    bind(CalEventListView.class).to(CalEventListViewImpl.class);
+    bind(CalEventEditView.class).to(CalEventEditViewImpl.class);
     
     bind(TestView.class).to(TestView.NotImpl.class);
     

@@ -3,6 +3,7 @@ package it.mate.econyx.client.view.admin;
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
+import it.mate.econyx.client.places.CalEventPlace;
 import it.mate.econyx.client.places.GeneralPlace;
 import it.mate.econyx.client.places.ImagePlace;
 import it.mate.econyx.client.places.OrderPlace;
@@ -128,48 +129,21 @@ public class AdminLayoutView extends Composite {
   protected void initUI() {
     initWidget(uiBinder.createAndBindUi(this));
 
-    /*
-    addMenu(menubar, "Generale", null, new MenuItemInfo[] {
-        new MenuItemInfo("Impostazioni", new GeneralPlace())
-      });
-      */
     addMenu(menubar, "Generale", new GeneralPlace(), null);
     
     addMenu(menubar, "Pagine", new PortalPagePlace(PortalPagePlace.LIST).setHistoryName("Pagine"), null);
     addMenu(menubar, "Immagini", new ImagePlace(ImagePlace.LIST), null);
     addMenu(menubar, "Articoli", new ArticlePlace(ArticlePlace.FOLDER_LIST).setHistoryName("Articoli"), null);
+    addMenu(menubar, "Calendario", new CalEventPlace(CalEventPlace.EVENT_LIST).setHistoryName("Calendario"), null);
     addMenu(menubar, "Ordini", new OrderPlace(OrderPlace.LIST).setHistoryName("Ordini"), null);
     addMenu(menubar, "Prodotti", new ProductPlace(ProductPlace.LIST).setHistoryName("Prodotti"), null);
     addMenu(menubar, "Produttori", new ProductPlace(ProductPlace.PRODUCER_LIST).setHistoryName("Produttori"), null);
     addMenu(menubar, "Utenti", new PortalUserPlace(PortalUserPlace.LIST).setHistoryName("Utenti"), null);
 
-    /* 30/11/2012
-    addMenu(menubar, "Ordini", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco ordini", new OrderPlace(OrderPlace.LIST).name("Ordini"))
-      });
-    addMenu(menubar, "Pagine", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco pagine", new PortalPagePlace(PortalPagePlace.LIST).name("Pagine"))
-      });
-    addMenu(menubar, "Immagini", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco immagini", new ImagePlace(ImagePlace.LIST))
-      });
-    addMenu(menubar, "Prodotti", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco prodotti", new ProductPlace(ProductPlace.LIST).name("Prodotti"))
-      });
-    addMenu(menubar, "Produttori", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco produttori", new ProductPlace(ProductPlace.PRODUCER_LIST).name("Produttori"))
-      });
-    addMenu(menubar, "Utenti", null, new MenuItemInfo[] {
-        new MenuItemInfo("Elenco utenti", new PortalUserPlace(PortalUserPlace.LIST).name("Utenti"))
-      });
-     */
-    
     breadcrumb.setClientFactory(AppClientFactory.IMPL);
 
     adminMainMvp.initMvp(AppClientFactory.IMPL, AppClientFactory.IMPL.getGinjector().getAdminActivityMapper());
 
-    // 30/11/2012
-//  ResizeUtils.setHeightRelativeToScreen(adminTabContainerPanel, AdminClientProperties.adminTabPanelRelativeHeight());
     AdminClientUtils.applyDefaultResizePolicy(adminTabContainerPanel);
     
   }
@@ -187,16 +161,6 @@ public class AdminLayoutView extends Composite {
       this.place = place;
     }
   }
-  
-  /*
-  private void addMenu (MenuBar menubar, String title, MenuItemInfo[] items) {
-    MenuBar folderMenu = new MenuBar(true);
-    menubar.addItem(title, folderMenu);
-    for (MenuItemInfo item : items) {
-      folderMenu.addItem(item.text, createPlaceMenuCommand(item.place));
-    }
-  }
-  */
   
   private void addMenu (MenuBar menubar, String title, Place rootPlace, MenuItemInfo[] items) {
     if (rootPlace != null) {

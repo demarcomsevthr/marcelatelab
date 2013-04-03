@@ -111,6 +111,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>calEventService</servlet-name>
+    <servlet-class>it.mate.econyx.server.services.impl.CalEventServiceImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>calEventService</servlet-name>
+    <url-pattern>*.calEventService</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>resourceServlet</servlet-name>
     <servlet-class>it.mate.econyx.server.servlets.ResourceServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

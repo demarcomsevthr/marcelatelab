@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:t="urn:import:it.mate.econyx.client.text" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
+
+  <g:HTMLPanel>
+    <g:VerticalPanel>
+      <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+        <g:Label text="Oggetto:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="title" width="20em" focus="true"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+        <g:Label text="Codice:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="code" width="20em"/>
+      </g:HorizontalPanel>
+    </g:VerticalPanel>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

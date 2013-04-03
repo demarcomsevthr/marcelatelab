@@ -51,6 +51,8 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   
   private String secretCode = PropertiesHolder.getString("client.GeneralConfigView.secretCode", "");
   
+  private boolean isDevServer = Window.Location.getHostName().contains("localhost");
+  
   public GeneralConfigView() {
     super();
     initUI();
@@ -68,8 +70,10 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   
   
   private void askSecretCode(final Delegate<Void> delegate) {
-    if (secretCode.equals(""))
+    if (isDevServer || secretCode.equals("")) {
       delegate.execute(null);
+      return;
+    }
     HorizontalPanel popupPanel = new HorizontalPanel();
     popupPanel.add(new Spacer("1px", "2em"));
     Label label = new Label("Secret code:");

@@ -25,6 +25,8 @@
 			
 			>> TOGLIERE da econyx.properties:
 				it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache=false
+				
+			>> CalEvent model and admin
 
 
 		
