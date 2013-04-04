@@ -3,7 +3,7 @@ package it.mate.econyx.client.activities;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.CustomerPlace;
 import it.mate.econyx.client.places.OrderPlace;
-import it.mate.econyx.client.util.EconyxUtils;
+import it.mate.econyx.client.util.NavigationUtils;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.shared.model.Customer;
@@ -120,7 +120,7 @@ public class CustomerActivity extends BaseActivity implements
 
   @Override
   public void goToShoppingCartView() {
-    EconyxUtils.goToShoppingCartDetailView();
+    NavigationUtils.goToShoppingCartDetailView();
   }
   
 }

@@ -2,7 +2,7 @@ package it.mate.econyx.client.ui;
 
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.PortalPagePlace;
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.VirtualPage;
@@ -222,7 +222,7 @@ public class PageBreadcrumb extends Composite {
       placeToken = PortalPagePlace.EDIT;
       clientFactory.getPlaceController().goTo(new PortalPagePlace(placeToken, page));
     } else {
-      PortalPageClientUtil.goToPage(page, true);
+      PagesUtils.goToPage(page, true);
     }
   }
   

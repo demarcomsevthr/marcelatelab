@@ -5,7 +5,7 @@ import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.CustomerPlace;
 import it.mate.econyx.client.places.OrderPlace;
 import it.mate.econyx.client.places.PortalUserPlace;
-import it.mate.econyx.client.util.EconyxUtils;
+import it.mate.econyx.client.util.NavigationUtils;
 import it.mate.econyx.client.util.TemplatesUtils;
 import it.mate.econyx.client.view.PortalUserEditView;
 import it.mate.econyx.client.view.PortalUserListView;
@@ -238,7 +238,7 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
   }
 
   private String getRedirectUrl() {
-    return EconyxUtils.getCompleteUrl("site.html");
+    return NavigationUtils.getCompleteUrl("site.html");
   }
   
   @Override

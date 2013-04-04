@@ -8,8 +8,8 @@ import it.mate.econyx.client.places.OrderPlace;
 import it.mate.econyx.client.places.ProductPlace;
 import it.mate.econyx.client.ui.PageBreadcrumb;
 import it.mate.econyx.client.util.ClientOrderUtils;
-import it.mate.econyx.client.util.EconyxUtils;
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.util.NavigationUtils;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.util.ProductCacheUtil;
 import it.mate.econyx.client.view.ProducerEditView;
 import it.mate.econyx.client.view.ProducerListView;
@@ -186,7 +186,7 @@ public class ProductActivity extends BaseActivity implements
   }
   
   private void checkPortalSessionState () {
-    EconyxUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
+    NavigationUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
       public void execute(Order order) {
         getView().setModel(order);
       }
@@ -297,9 +297,9 @@ public class ProductActivity extends BaseActivity implements
           AppClientFactory.IMPL.getPortalSessionState().setOpenOrder(order);
           AppClientFactory.IMPL.getEventBus().fireEvent(new UserOrderChangeEvent(order));
           if (PageBreadcrumb.getPreviousPage() != null) {
-            PortalPageClientUtil.goToPage(PageBreadcrumb.getPreviousPage().getId());
+            PagesUtils.goToPage(PageBreadcrumb.getPreviousPage().getId());
           } else {
-            PortalPageClientUtil.goToPage(AppClientFactory.IMPL.getPortalSessionState().getCurrentPageId());
+            PagesUtils.goToPage(AppClientFactory.IMPL.getPortalSessionState().getCurrentPageId());
           }
         }
       });
@@ -315,7 +315,7 @@ public class ProductActivity extends BaseActivity implements
   
   @Override
   public void goToPage(ProductPage page) {
-    PortalPageClientUtil.goToPage(page);
+    PagesUtils.goToPage(page);
   }
 
   @Override

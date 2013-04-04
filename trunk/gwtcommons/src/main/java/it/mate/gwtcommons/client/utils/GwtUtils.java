@@ -68,7 +68,13 @@ public class GwtUtils {
   
   private static int showWaitPanelRequestCounter = 0;
   
+  private static String[] engMM = new String[] {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
+  
+  private static String[] itaMM = new String[] {"gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"};
+  
+  private static String[] itaMMMM = new String[] {"gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"};
 
+  
   private static boolean devModeActive = Window.Location.getQueryString().contains("gwt.codesvr");
   
   public static String getPortletContextPath() {
@@ -157,8 +163,6 @@ public class GwtUtils {
     return Integer.valueOf(mFMT.format(date));
   }
   
-  private static String[] engMM = new String[] {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
-  private static String[] itaMM = new String[] {"gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"};
   public static String getShortMonthName (Date date) {
     String mm = m3FMT.format(date);
     for (int it = 0; it < engMM.length; it++) {
@@ -169,12 +173,15 @@ public class GwtUtils {
     return mm.substring(0, 1).toUpperCase() + mm.substring(1);
   }
   
-  private static String[] itaMMMM = new String[] {"gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"};
   public static String getMonthName (Date date) {
+    return getMonthName(date, itaMMMM);
+  }
+  
+  public static String getMonthName (Date date, String[] monthNames) {
     String mm = m3FMT.format(date);
     for (int it = 0; it < engMM.length; it++) {
       if (engMM[it].equalsIgnoreCase(mm)) {
-        mm = itaMMMM[it];
+        mm = monthNames[it];
       }
     }
     return mm.substring(0, 1).toUpperCase() + mm.substring(1);
@@ -214,6 +221,11 @@ public class GwtUtils {
     return DateTimeFormat.getFormat(fmt).format(date);
   }
   
+  public static boolean dateEquals(Date d1, Date d2, int precision) {
+    DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmssSSSS".substring(0, precision));
+    return dtf.format(d1).equals(dtf.format(d2));
+  }
+
   private static String[] engDW = new String[] {"mon", "tue", "wed", "thu", "fri", "sat", "sun"};
   private static String[] itaDW = new String[] {"lun", "mar", "mer", "gio", "ven", "sab", "dom"};
   public static String getDayOfWeek(Date date) {

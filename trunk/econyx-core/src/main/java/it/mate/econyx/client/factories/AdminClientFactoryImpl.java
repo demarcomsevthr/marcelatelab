@@ -14,6 +14,7 @@ import javax.annotation.PreDestroy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -46,8 +47,14 @@ public class AdminClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> 
     getPortalSessionState().setModuleType(PortalSessionState.MODULE_ADMIN);
   }
   
+  @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     super.initMvp(panel, getPlaceHistoryMapper(), activityMapper);
+  }
+
+  @Override
+  public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper, Place defaultPlace) {
+    super.initMvp(panel, getPlaceHistoryMapper(), activityMapper, defaultPlace);
   }
 
   @Override

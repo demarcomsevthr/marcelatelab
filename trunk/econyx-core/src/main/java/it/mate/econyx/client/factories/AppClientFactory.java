@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -46,6 +47,8 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public <G extends AppGinjector> G getConcreteGinjector(Class<G> ginClass);
   
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper);
+  
+  public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper, Place defaultPlace);
   
   public PortalSessionState getPortalSessionState();
 

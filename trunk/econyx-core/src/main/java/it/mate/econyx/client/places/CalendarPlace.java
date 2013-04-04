@@ -8,7 +8,9 @@ import it.mate.gwtcommons.client.places.HistoryPlace;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
-public class CalEventPlace extends Place implements ReversiblePlace, HasToken, HistoryPlace {
+public class CalendarPlace extends Place implements ReversiblePlace, HasToken, HistoryPlace {
+
+  public static String CAL_DATE_VIEW = "calDateView";
 
   public static String EVENT_VIEW = "eventView";
 
@@ -24,18 +26,18 @@ public class CalEventPlace extends Place implements ReversiblePlace, HasToken, H
   
   @Override
   public String toString() {
-    return "ProductPlace [token=" + token + ", model=" + model + "]";
+    return "CalendarPlace [token=" + token + ", model=" + model + "]";
   }
 
-  public CalEventPlace() {
+  public CalendarPlace() {
     this.token = EVENT_VIEW;
   }
   
-  public CalEventPlace(String token) {
+  public CalendarPlace(String token) {
     this.token = token;
   }
   
-  public CalEventPlace(String token, Object model) {
+  public CalendarPlace(String token, Object model) {
     this.token = token;
     this.model = model;
   }
@@ -60,15 +62,15 @@ public class CalEventPlace extends Place implements ReversiblePlace, HasToken, H
     this.previousPlace = previousPlace;
   }
   
-  public static class Tokenizer implements PlaceTokenizer<CalEventPlace> {
+  public static class Tokenizer implements PlaceTokenizer<CalendarPlace> {
 
     @Override
-    public String getToken(CalEventPlace place) {
+    public String getToken(CalendarPlace place) {
       return place.getToken();
     }
 
     @Override
-    public CalEventPlace getPlace(String token) {
+    public CalendarPlace getPlace(String token) {
       return null;
     }
 
@@ -84,7 +86,7 @@ public class CalEventPlace extends Place implements ReversiblePlace, HasToken, H
     return historyName;
   }
 
-  public CalEventPlace setHistoryName(String name) {
+  public CalendarPlace setHistoryName(String name) {
     this.historyName = name;
     return this;
   }
@@ -98,7 +100,7 @@ public class CalEventPlace extends Place implements ReversiblePlace, HasToken, H
     return historyAppend;
   }
 
-  public CalEventPlace setHistoryAppend() {
+  public CalendarPlace setHistoryAppend() {
     this.historyAppend = true;
     return this;
   }

@@ -6,7 +6,7 @@ import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
 import it.mate.econyx.client.places.PortalPagePlace;
 import it.mate.econyx.client.places.ProductPlace;
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.util.PortalUtils;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
@@ -186,7 +186,7 @@ public class PortalPageActivity extends BaseActivity implements
         
         AsyncCallback<PortalFolderPage> callback = new AsyncCallback<PortalFolderPage>() {
           public void onSuccess(PortalFolderPage parent) {
-            PortalPageClientUtil.putInCache(parent);
+            PagesUtils.putInCache(parent);
             PortalPageExplorerView.TreeModel model = new PortalPageExplorerView.TreeModel();
             model.parent = parent;
             model.childreen = parent.getChildreen();
@@ -197,7 +197,7 @@ public class PortalPageActivity extends BaseActivity implements
           }
         };
         
-        PortalFolderPage cachedPage = (PortalFolderPage)PortalPageClientUtil.getFromCache(parentPage.getId());
+        PortalFolderPage cachedPage = (PortalFolderPage)PagesUtils.getFromCache(parentPage.getId());
         if (cachedPage != null && cachedPage.getChildreen() != null && cachedPage.getChildreen().size() > 0) {
           GwtUtils.log(getClass(), "retrieveChildreen", "found page in cache " + cachedPage);
           callback.onSuccess(cachedPage);
@@ -224,7 +224,7 @@ public class PortalPageActivity extends BaseActivity implements
     
     // 06/11/2012 sostituito con PortalPageUtils.goToPage
     
-    PortalPageClientUtil.goToPage(page, true);
+    PagesUtils.goToPage(page, true);
     
   }
   
@@ -328,12 +328,12 @@ public class PortalPageActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(WebContentPage page) {
-        PortalPageClientUtil.putInCache(page);
+        PagesUtils.putInCache(page);
         delegate.execute(page);
       }
     };
     
-    WebContentPage cachedPage = (WebContentPage)PortalPageClientUtil.getFromCache(page.getId());
+    WebContentPage cachedPage = (WebContentPage)PagesUtils.getFromCache(page.getId());
     if (cachedPage != null && cachedPage.getHtmls() != null && cachedPage.getHtmls().size() > 0) {
       GwtUtils.log(getClass(), "fetchHtmls", "found page in cache " + cachedPage);
       callback.onSuccess(cachedPage);

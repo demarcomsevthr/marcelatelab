@@ -1,5 +1,6 @@
 package it.mate.econyx.client.util;
 
+import it.mate.econyx.client.events.CalendarDateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ShoppingCartPlace;
 import it.mate.econyx.shared.model.Order;
@@ -8,11 +9,14 @@ import it.mate.econyx.shared.services.OrderServiceAsync;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class EconyxUtils {
+public class NavigationUtils {
   
   public static final String SECURE_ADMIN_PAGE_URL = "secureAdmin.html";
   
@@ -24,6 +28,10 @@ public class EconyxUtils {
         AppClientFactory.IMPL.getPlaceController().goTo(new ShoppingCartPlace(ShoppingCartPlace.DETAILED_VIEW));
       }
     });
+  }
+  
+  public static void goToPlace(Place place) {
+    AppClientFactory.IMPL.getPlaceController().goTo(place);
   }
   
   public static void checkOpenedOrderInSession (OrderServiceAsync orderService, final Delegate<Order> openOrderPresentDelegate,
@@ -78,6 +86,10 @@ public class EconyxUtils {
       resultUrl += "?gwt.codesvr="+gwtCodesvr;
     }
     return resultUrl;
+  }
+  
+  public static void setSelectedCalendarDate(Date date) {
+    AppClientFactory.IMPL.getEventBus().fireEvent(new CalendarDateChangeEvent(date));
   }
   
 }

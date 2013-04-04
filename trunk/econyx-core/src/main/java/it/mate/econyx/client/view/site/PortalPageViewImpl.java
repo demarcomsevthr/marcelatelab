@@ -1,6 +1,11 @@
 package it.mate.econyx.client.view.site;
 
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.activities.mapper.PlaceHolderActivityMapper;
+import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.client.places.CalendarPlace;
+import it.mate.econyx.client.ui.SimplePanelDivWrapper;
+import it.mate.econyx.client.util.NavigationUtils;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.ArticlePage;
@@ -11,11 +16,13 @@ import it.mate.econyx.shared.model.ProductFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
+import it.mate.gwtcommons.client.ui.MvpPanel;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -23,6 +30,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -115,24 +123,16 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
           HtmlContent content = webContentPage.getHtmlContent(HtmlContent.Type.MEDIUM);
           if (content != null && content.getContent() != null) {
             String actualHtmlContent = content.getContent();
-            actualHtmlContent += "<div id='"+PortalPageClientUtil.getPageContentRenderFinishedDivId()+"'></div>";
+            actualHtmlContent += "<div id='"+PagesUtils.getPageContentRenderFinishedDivId()+"'></div>";
             htmlPanel.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
             GwtUtils.deferredExecution(100, new Delegate<Void>() {
               public void execute(Void element) {
-                JsArray<Element> elements = JQueryUtils.select("[id^='page$']");
-                if (elements != null) {
-                  final Element elem = (Element)elements.get(0);
-                  GwtUtils.addElementEventListener(elem, Event.ONCLICK, new EventListener() {
-                    public void onBrowserEvent(Event event) {
-                      String pageCode = elem.getId().split("\\$")[1];
-                      PortalPageClientUtil.goToPageByCode(pageCode);
-                    }
-                  });
-                }
+                processPageAnchorElements();
+                processPlaceHolderDivElements();
               }
             });
           } else {
-            String actualHtmlContent = "<div id='"+PortalPageClientUtil.getPageContentRenderFinishedDivId()+"'></div>";
+            String actualHtmlContent = "<div id='"+PagesUtils.getPageContentRenderFinishedDivId()+"'></div>";
             htmlPanel.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
           }
         }
@@ -163,6 +163,69 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
         }
       }
       
+    }
+  }
+  
+  private void processPageAnchorElements() {
+    JsArray<Element> elements = JQueryUtils.select("[id^='page$']");
+    if (elements != null) {
+      final Element elem = (Element)elements.get(0);
+      GwtUtils.addElementEventListener(elem, Event.ONCLICK, new EventListener() {
+        public void onBrowserEvent(Event event) {
+          String pageCode = elem.getId().split("\\$")[1];
+          PagesUtils.goToPageByCode(pageCode);
+        }
+      });
+    }
+  }
+  
+  private void processPlaceHolderDivElements() {
+    JsArray<Element> elements = JQueryUtils.select("div[class*='ecxPlaceHolder']");
+    if (elements != null) {
+      for (int it = 0; it < elements.length(); it++) {
+        Element elem = (Element)elements.get(it);
+        
+        if (elem.getFirstChildElement() != null) {
+          continue;
+        }
+        
+        String elemId = elem.getId();
+        
+        String placeName = null;
+        String placeToken = null;
+        String placeModel = null;
+        
+        String[] attrTokens = elemId.split(";");
+        for (int attrIt = 0; attrIt < attrTokens.length; attrIt++) {
+          String attrToken = attrTokens[attrIt];
+          String[] attrParts = attrToken.split(":");
+          if ("Place".equals(attrParts[0])) {
+            placeName = attrParts[1];
+          } else if ("PlaceToken".equals(attrParts[0])) {
+            placeToken = attrParts[1];
+          } else if ("PlaceModel".equals(attrParts[0])) {
+            placeModel = attrParts[1];
+          }
+        }
+        if (placeName != null && placeToken != null) {
+          Place place = null;
+          if (CalendarPlace.class.getName().contains(placeName)) {
+            place = new CalendarPlace(placeToken, placeModel);
+          }
+          if (place != null) {
+            
+            SimplePanelDivWrapper divWrapper = SimplePanelDivWrapper.create(elem);
+            MvpPanel mvpPanel = new MvpPanel();
+            mvpPanel.initMvp(AppClientFactory.IMPL, new PlaceHolderActivityMapper(AppClientFactory.IMPL), place);
+            divWrapper.add(mvpPanel);
+            
+          } else {
+            throw new IllegalArgumentException("Cannot instantiate PlaceHolder Div Element without a place");
+          }
+        } else {
+          throw new IllegalArgumentException("Cannot instantiate PlaceHolder Div Element without a place name and token");
+        }
+      }
     }
   }
   

@@ -6,8 +6,8 @@ import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.CustomerPlace;
 import it.mate.econyx.client.places.ShoppingCartPlace;
 import it.mate.econyx.client.util.ClientOrderUtils;
-import it.mate.econyx.client.util.EconyxUtils;
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.util.NavigationUtils;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.view.ShoppingCartView;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
@@ -101,7 +101,7 @@ public class ShoppingCartActivity extends BaseActivity implements
   }
   
   private void checkPortalSessionState (final ShoppingCartPlace newPlace) {
-    EconyxUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
+    NavigationUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
       public void execute(Order order) {
         ShoppingCartPlace actualPlace = newPlace;
         if (actualPlace == null)
@@ -142,7 +142,7 @@ public class ShoppingCartActivity extends BaseActivity implements
   }
   
   public void goToDetailedView() {
-    EconyxUtils.goToShoppingCartDetailView();
+    NavigationUtils.goToShoppingCartDetailView();
   }
   
   private void findAllModalitaSpedizione() {
@@ -201,7 +201,7 @@ public class ShoppingCartActivity extends BaseActivity implements
             AppClientFactory.IMPL.getPortalSessionState().setOpenOrder(updatedOrder);
             if (updatedOrder.getItems() == null || updatedOrder.getItems().size() == 0) {
               GwtUtils.messageBox("L'ordine &egrave; stato annullato");
-              PortalPageClientUtil.reloadCurrentPage();
+              PagesUtils.reloadCurrentPage();
             }
             getView().setModel(updatedOrder);
           }

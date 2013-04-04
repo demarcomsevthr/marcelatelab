@@ -1,7 +1,7 @@
 package it.mate.econyx.client.activities.mapper;
 
 import it.mate.econyx.client.activities.ArticleActivity;
-import it.mate.econyx.client.activities.CalEventActivity;
+import it.mate.econyx.client.activities.CalendarActivity;
 import it.mate.econyx.client.activities.GeneralActivity;
 import it.mate.econyx.client.activities.ImageActivity;
 import it.mate.econyx.client.activities.OrderActivity;
@@ -10,7 +10,7 @@ import it.mate.econyx.client.activities.PortalUserActivity;
 import it.mate.econyx.client.activities.ProductActivity;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
-import it.mate.econyx.client.places.CalEventPlace;
+import it.mate.econyx.client.places.CalendarPlace;
 import it.mate.econyx.client.places.GeneralPlace;
 import it.mate.econyx.client.places.ImagePlace;
 import it.mate.econyx.client.places.OrderPlace;
@@ -45,9 +45,9 @@ public class AdminActivityMapper extends BaseActivityMapper {
     } else if (place instanceof ArticlePlace) {
       beforePlaceChange(place);
       return new ArticleActivity((ArticlePlace)place, (AppClientFactory)clientFactory);
-    } else if (place instanceof CalEventPlace) {
+    } else if (place instanceof CalendarPlace) {
       beforePlaceChange(place);
-      return new CalEventActivity((CalEventPlace)place, (AppClientFactory)clientFactory);
+      return new CalendarActivity((CalendarPlace)place, (AppClientFactory)clientFactory);
     } else if (place instanceof PortalPagePlace) {
       beforePlaceChange(place);
       return new PortalPageActivity((PortalPagePlace)place, (AppClientFactory)clientFactory);

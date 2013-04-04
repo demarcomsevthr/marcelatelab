@@ -1,5 +1,5 @@
 
-@external gwt*, mwt*, tpl*, nav*;
+@external gwt*, mwt*, tpl*, nav*, ecx*;
 
 @external Text, ContextBoxHead, BasketLink;
 
@@ -223,5 +223,19 @@ a, a:active, a:focus {
 
 .navBar a:hover .Text {
     text-decoration: underline;
+}
+
+.ecxCalendarWidgetCell {
+  text-align: center;
+}
+
+.ecxCalendarWidget .gwt-PushButton {
+  height: 22px;
+  padding: 1px 2px;
+}
+
+.ecxCalendarWidget .ecxCalendarWidgetHeaderMonth .gwt-Button {
+  height: 27px;
+  width: 100px;
 }
 

@@ -10,6 +10,7 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -17,11 +18,18 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class MvpUtils {
   
   public static void initMvp(BaseClientFactory<? extends CommonGinjector> clientFactory, SimplePanel panel, String historyId, BaseActivityMapper activityMapper) {
+    initMvp(clientFactory, panel, historyId, activityMapper, null);
+  }
+  
+  public static void initMvp(BaseClientFactory<? extends CommonGinjector> clientFactory, SimplePanel panel, String historyId, BaseActivityMapper activityMapper, Place defaultPlace) {
+    if (defaultPlace == null) {
+      defaultPlace = activityMapper.getDefaultPlace();
+    }
     CommonGinjector ginjector = clientFactory.getGinjector();
     PlaceHistoryMapper historyMapper = clientFactory.getPlaceHistoryMapper();
     initActivityManager(ginjector, panel, activityMapper);
     MappedPlaceHistoryHandler historyHandler = new MappedPlaceHistoryHandler(historyId != null ? historyId : activityMapper.getHistoryName(), historyMapper);
-    historyHandler.register(ginjector.getPlaceController(), ginjector.getEventBus(), activityMapper.getDefaultPlace());
+    historyHandler.register(ginjector.getPlaceController(), ginjector.getEventBus(), defaultPlace);
     historyHandler.handleCurrentHistory();
   }
   
