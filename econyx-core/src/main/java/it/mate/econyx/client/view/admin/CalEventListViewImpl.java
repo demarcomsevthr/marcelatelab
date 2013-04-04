@@ -12,9 +12,11 @@ import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -23,6 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class CalEventListViewImpl extends AbstractBaseView<CalEventListView.Presenter> implements CalEventListView {
   
@@ -69,22 +72,18 @@ public class CalEventListViewImpl extends AbstractBaseView<CalEventListView.Pres
   
   public class CalEventOptionDialog {
     TextBox title = new TextBox();
+    DateBox date = new DateBox();
+    VerticalPanel table = new VerticalPanel();
     public CalEventOptionDialog(final Delegate<CalEvent> delegate) {
-      VerticalPanel table = new VerticalPanel();
-      HorizontalPanel row;
-      
-      row = new HorizontalPanel();
-      row.add(new Spacer("1px", "2em"));
-      Label label = new Label("Titolo:");
-      label.setWidth("6em");
-      row.add(label);
-      row.add(title);
-      table.add(row);
-      
+      date.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd/MM/yyyy")));
+      date.setValue(new Date());
+      addRow("Titolo:", title);
+      addRow("Data:", date);
       MessageBoxUtils.popupOkCancel("Nuovo Evento", table, "400px", new Delegate<MessageBox.Callbacks>() {
         public void execute(Callbacks callbacks) {
           CalEvent event = new CalEventTx();
           event.setTitle(title.getText());
+          event.setDate(date.getValue());
           event.setName(event.getTitle());
           delegate.execute(event);
         }
@@ -93,7 +92,16 @@ public class CalEventListViewImpl extends AbstractBaseView<CalEventListView.Pres
           title.setFocus(true);
         }
       });
-      
+    }
+    private void addRow(String text, Widget w) {
+      HorizontalPanel row;
+      row = new HorizontalPanel();
+      row.add(new Spacer("1px", "2em"));
+      Label label = new Label(text);
+      label.setWidth("6em");
+      row.add(label);
+      row.add(w);
+      table.add(row);
     }
   }
   

@@ -6,7 +6,8 @@ import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.client.view.CalendarView;
 import it.mate.econyx.shared.model.CalEvent;
-import it.mate.econyx.shared.services.CalEventServiceAsync;
+import it.mate.econyx.shared.model.Period;
+import it.mate.econyx.shared.services.CalendarServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -25,7 +26,7 @@ public class CalendarActivity extends BaseActivity implements
   
   private CalendarPlace place;
   
-  private CalEventServiceAsync calEventService = AppClientFactory.IMPL.getGinjector().getCalEventService();
+  private CalendarServiceAsync calEventService = AppClientFactory.IMPL.getGinjector().getCalendarService();
   
   public CalendarActivity(CalendarPlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -127,6 +128,11 @@ public class CalendarActivity extends BaseActivity implements
   @Override
   public void goToDate(final Date date) {
 
+  }
+
+  @Override
+  public void findByPeriod(Period period) {
+    
   }
 
 }

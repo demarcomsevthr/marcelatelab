@@ -1,11 +1,13 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.model.impl.CalEventDs;
-import it.mate.econyx.server.services.CalEventAdapter;
+import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.shared.model.CalEvent;
+import it.mate.econyx.shared.model.Period;
 import it.mate.econyx.shared.model.impl.CalEventTx;
 import it.mate.gwtcommons.server.dao.Dao;
+import it.mate.gwtcommons.server.dao.ParameterDefinition;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
@@ -20,9 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CalEventAdapterImpl implements CalEventAdapter {
+public class CalendarAdapterImpl implements CalendarAdapter {
 
-  private static Logger logger = Logger.getLogger(CalEventAdapterImpl.class);
+  private static Logger logger = Logger.getLogger(CalendarAdapterImpl.class);
 
   @Autowired private Dao dao;
   
@@ -78,6 +80,15 @@ public class CalEventAdapterImpl implements CalEventAdapter {
   @Override
   public List<CalEvent> findByDate(Date date) {
     List<CalEventDs> events = dao.findList(CalEventDs.class, "date == dateParam", Date.class.getName() + " dateParam", null, date);
+    return CloneUtils.clone(events, CalEventTx.class, CalEvent.class);
+  }
+  
+  @Override
+  public List<CalEvent> findByPeriod(Period period) {
+    List<CalEventDs> events = dao.findList(CalEventDs.class, "date >= startParam && date <= endParam", Dao.Utils.buildParameters(new ParameterDefinition[] {
+        new ParameterDefinition(Date.class, "startParam"),
+        new ParameterDefinition(Date.class, "endParam")
+    }), null,  period.getStart(), period.getEnd());
     return CloneUtils.clone(events, CalEventTx.class, CalEvent.class);
   }
   

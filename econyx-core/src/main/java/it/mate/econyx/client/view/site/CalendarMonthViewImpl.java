@@ -3,10 +3,9 @@ package it.mate.econyx.client.view.site;
 import it.mate.econyx.client.ui.CalendarWidget;
 import it.mate.econyx.client.view.CalendarView;
 import it.mate.econyx.shared.model.CalEvent;
-import it.mate.econyx.shared.model.impl.CalEventTx;
+import it.mate.econyx.shared.model.Period;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +26,6 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
   public CalendarMonthViewImpl() {
     super();
     initUI();
-    
-    List<CalEvent> tests = new ArrayList<CalEvent>();
-    tests.add(new CalEventTx(GwtUtils.stringToDate("20130415"), ""));
-    tests.add(new CalEventTx(GwtUtils.stringToDate("20130418"), ""));
-    fillCalendar(tests);
-    
   }
   
   private void initUI() {
@@ -44,11 +37,36 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
     calendar = new CalendarWidget<CalEvent>();
   }
   
-  public void setModel(Object model, String tag) {
-
+  @Override
+  protected void onLoad() {
+    super.onLoad();
+    calendar.setCellClickDelegate(new Delegate<CalEvent>() {
+      public void execute(CalEvent event) {
+        getPresenter().goToDate(event.getDate());
+      }
+    });
+    calendar.setChangedMonthDelegate(new Delegate<Period>() {
+      public void execute(Period period) {
+        /*
+        List<CalEvent> tests = new ArrayList<CalEvent>();
+        tests.add(new CalEventTx(GwtUtils.stringToDate("20130415"), ""));
+        tests.add(new CalEventTx(GwtUtils.stringToDate("20130418"), ""));
+        setModel(tests);
+        */
+        getPresenter().findByPeriod(period);
+      }
+    });
   }
 
-  private void fillCalendar(List<CalEvent> events) {
+  @SuppressWarnings("unchecked")
+  public void setModel(Object model, String tag) {
+    if (model instanceof List) {
+      List<CalEvent> events = (List<CalEvent>)model;
+      setCalendarModel(events);
+    }
+  }
+
+  private void setCalendarModel(List<CalEvent> events) {
     List<CalendarWidget.Model<CalEvent>> calModel = new ArrayList<CalendarWidget.Model<CalEvent>>();
     for (CalEvent event : events) {
       calModel.add(
@@ -58,12 +76,6 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
         .setData(event)
       );
     }
-    calendar.setCellClickCallback(new Delegate<CalEvent>() {
-      public void execute(CalEvent event) {
-        GwtUtils.log("click on date " + event.getDate());
-        getPresenter().goToDate(event.getDate());
-      }
-    });
     calendar.setModel(calModel);
   }
   

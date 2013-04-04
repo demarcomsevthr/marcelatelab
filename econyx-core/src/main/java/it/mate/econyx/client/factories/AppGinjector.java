@@ -36,7 +36,7 @@ import it.mate.econyx.client.view.site.PortalPageMenuViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
-import it.mate.econyx.shared.services.CalEventServiceAsync;
+import it.mate.econyx.shared.services.CalendarServiceAsync;
 import it.mate.econyx.shared.services.CustomerServiceAsync;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.econyx.shared.services.ImageServiceAsync;
@@ -57,7 +57,7 @@ public interface AppGinjector extends CommonGinjector {
   public CustomerServiceAsync getCustomerService();
   
   public ArticleServiceAsync getArticleService();
-  public CalEventServiceAsync getCalEventService();
+  public CalendarServiceAsync getCalendarService();
 
   public OrderView getOrderView();
   public OrderEditView getOrderEditView();

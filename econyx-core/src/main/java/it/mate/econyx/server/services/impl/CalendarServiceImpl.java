@@ -1,9 +1,10 @@
 package it.mate.econyx.server.services.impl;
 
-import it.mate.econyx.server.services.CalEventAdapter;
+import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.CalEvent;
-import it.mate.econyx.shared.services.CalEventService;
+import it.mate.econyx.shared.model.Period;
+import it.mate.econyx.shared.services.CalendarService;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.Date;
@@ -18,18 +19,18 @@ import org.springframework.stereotype.Service;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-@Service (".calEventService")
-public class CalEventServiceImpl extends RemoteServiceServlet implements CalEventService {
+@Service (".calendarService")
+public class CalendarServiceImpl extends RemoteServiceServlet implements CalendarService {
 
-  private static Logger logger = Logger.getLogger(CalEventServiceImpl.class);
+  private static Logger logger = Logger.getLogger(CalendarServiceImpl.class);
   
-  private CalEventAdapter adapter;
+  private CalendarAdapter adapter;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdaptersUtil.initContext(config.getServletContext());
-    this.adapter = AdaptersUtil.getCalEventAdapter();
+    this.adapter = AdaptersUtil.getCalendarAdapter();
     logger.debug("initialized " + this);
   }
 
@@ -61,6 +62,11 @@ public class CalEventServiceImpl extends RemoteServiceServlet implements CalEven
   @Override
   public List<CalEvent> findByDate(Date date) throws ServiceException {
     return adapter.findByDate(date);
+  }
+  
+  @Override
+  public List<CalEvent> findByPeriod(Period period) {
+    return adapter.findByPeriod(period);
   }
 
 }

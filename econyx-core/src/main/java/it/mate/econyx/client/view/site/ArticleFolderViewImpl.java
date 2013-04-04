@@ -73,16 +73,22 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
     }
   }
   
+  private static String getArticleRootElemId (Article article) {
+    return HTML_CONTAINER_ID+"-Article"+article.getCode();
+  }
+  
   private HTML createHtml(final Article article) {
     final HTML html = new HTML();
     HtmlContent htmlContent = article.getHtml();
     String actualHtmlContent = htmlContent.getContent();
-    html.getElement().setId(HTML_CONTAINER_ID);
+    html.getElement().setId(getArticleRootElemId(article));
     html.getElement().getStyle().setHeight(0, Unit.PX);
     html.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
-        JsArray<Element> elements = JQueryUtils.select("[id='cke-readmore']");
+        // per trovare il giusto read more occorre mettere nel selettore anche la root dell'articolo
+//      JsArray<Element> elements = JQueryUtils.select("[id='cke-readmore']");
+        JsArray<Element> elements = JQueryUtils.select("#"+getArticleRootElemId(article)+" #cke-readmore");
         for (int it = 0; it < elements.length(); it++) {
           Element readmoreElement = elements.get(it);
           if (readmoreElement != null) {
@@ -107,7 +113,9 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
       nextElem.getStyle().setVisibility(Visibility.HIDDEN);
     }
     Element parentElem = readmoreElement.getParentElement();
-    if (!HTML_CONTAINER_ID.equals(parentElem.getId())) {
+    if (parentElem.getId() != null && parentElem.getId().startsWith(HTML_CONTAINER_ID)) {
+      //NO-OP
+    } else {
       processCkeReadmore(parentElem);
     }
   }
