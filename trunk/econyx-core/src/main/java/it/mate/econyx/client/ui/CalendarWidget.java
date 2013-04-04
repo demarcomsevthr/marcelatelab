@@ -1,8 +1,10 @@
 package it.mate.econyx.client.ui;
 
+import it.mate.econyx.shared.model.Period;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +36,11 @@ public class CalendarWidget <M> extends Composite {
   
   private final String[] days = {"Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"}; 
   
-  private List<Model<M>> model;
+  private List<Model<M>> model = new ArrayList<Model<M>>();
   
-  private Delegate<M> cellClickCallback;
+  private Delegate<M> cellClickDelegate;
+  
+  private Delegate<Period> changedMonthDelegate;
   
   private static final int FIRST_DAY_ROW = 2;
   
@@ -48,14 +52,6 @@ public class CalendarWidget <M> extends Composite {
   
   interface CellTemplate extends SafeHtmlTemplates {
 
-    /*
-    final static String dayWithTextHtmlConst = "<div class=\"day\">{0}</div><div class=\"text\"><table cellspacing=\"0\"><tr><td><img src=\"{2}\"/></td><td><div style=\"height:0.5em\"></div><p>{1}</p></td></tr></table></div>";
-    final static String dayWithTextEnabledHtmlConst = "<a>" + dayWithTextHtmlConst + "</a>";
-    @Template(dayWithTextEnabledHtmlConst)
-    SafeHtml renderDayAndTextEnabled(String day, String text, SafeUri imgUrl);
-    final static String dayWithTextHtmlConst = "<div class=\"day\">{0}</div>";
-    */
-    
     @Template("<div class=\"day\">{0}</div>")
     SafeHtml renderDay(String day);
     
@@ -73,83 +69,66 @@ public class CalendarWidget <M> extends Composite {
     initUI();
   }
   
-  public void setModel (List<Model<M>> model) {
-    this.model = model;
-    if (model.size() > 0) {
-      initDate(model.get(0).date);
-    }
-    paintCalendarCellData();
-  }
-  
-  private void initDate (Date date) {
-    currentState = new State(date);
-    paintCalendar();
-  }
-  
-  public static class Model <M> {
-    private Date date;
-    private String text;
-    private M data;
-    public Model<M> setDate(Date date) {
-      this.date = date;
-      return this;
-    }
-    public Model<M> setText(String text) {
-      this.text = text;
-      return this;
-    }
-    public Model<M> setData(M data) {
-      this.data = data;
-      return this;
-    }
-    /*
-    private boolean forbidden;
-    public Model<M> setForbidden(boolean forbidden) {
-      this.forbidden = forbidden;
-      return this;
-    }
-    private boolean enabled = true;
-    public Model<M> setEnabled(boolean enabled) {
-      this.enabled = enabled;
-      return this;
-    }
-    */
-  }
-  
-  public void setCellClickCallback (Delegate<M> callback) {
-    this.cellClickCallback = callback;
-  }
-  
   private void initUI () {
     calendarTable = new FlexTable();
     calendarTable.setStyleName("ecxCalendarWidget", true);
     calendarTable.setCellSpacing(0);
     initWidget(calendarTable);
+    setDate(new Date());
   }
   
-  private void paintCalendar() {
-    calendarTable.clear();
-    paintCalendarHeader();
-    paintCalendarDays();
-    paintCalendarCellData();
+  public void setCellClickDelegate (Delegate<M> callback) {
+    this.cellClickDelegate = callback;
+  }
+
+  public void setChangedMonthDelegate (Delegate<Period> delegate) {
+    this.changedMonthDelegate = delegate;
+    fireChangedMonthDelegate();
+  }
+  
+  public void setModel (List<Model<M>> model) {
+    this.model = model;
+    if (model.size() > 0) {
+      paintCalendarModel();
+//    setDate(model.get(0).date);
+    }
+  }
+  
+  private void setDate (Date date) {
+    currentState = new State(date);
+    paintCalendarMonth();
   }
   
   private void decrementMonth() {
     clearCalendar();
     currentState.decrementMonth();
-    paintCalendar();
+    paintCalendarMonth();
   }
   
   private void incrementMonth() {
     clearCalendar();
     currentState.incrementMonth();
-    paintCalendar();
+    paintCalendarMonth();
   }
   
   private void setToday() {
     clearCalendar();
     currentState.setDate(new Date());
-    paintCalendar();
+    paintCalendarMonth();
+  }
+  
+  private void paintCalendarMonth() {
+    calendarTable.clear();
+    paintCalendarHeader();
+    paintCalendarDays();
+//  paintCalendarModel();
+    fireChangedMonthDelegate();
+  }
+  
+  private void fireChangedMonthDelegate() {
+    if (changedMonthDelegate != null) {
+      changedMonthDelegate.execute(new Period(currentState.getFirstDateOfMonth(), currentState.getLastDateOfMonth()));
+    }
   }
   
   private void paintCalendarHeader() {
@@ -170,23 +149,13 @@ public class CalendarWidget <M> extends Composite {
       }
     });
     
-    Button centerWidget = new Button(currentState.getCurrentMonthName()+" "+currentState.year);
+    Button centerWidget = new Button(currentState.getMonthName()+" "+currentState.year);
     centerWidget.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         setToday();
       }
     });
 
-    /*
-    cell(calendarTable, 0, 0).setWidget(leftWidget).addStyleName("ecxCalendarWidgetHeaderMonth")
-                            .setAlignment(HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-    GwtUtils.setFlexCellStyleAttribute(calendarTable, 0, 0, "borderLeft", "1px solid #C0C0C0");
-    cell(calendarTable, 0, 1).setWidget(centerWidget)
-                            .setColSpan(5)
-                            .addStyleName("ecxCalendarWidgetHeaderMonth");
-    cell(calendarTable, 0, 2).setWidget(rightWidget).addStyleName("ecxCalendarWidgetHeaderMonth")
-                             .setAlignment(HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-    */
     HorizontalPanel header = new HorizontalPanel();
     header.setSpacing(0);
     header.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -204,16 +173,14 @@ public class CalendarWidget <M> extends Composite {
   }
   
   private void paintCalendarDays() {
-    
     for (int ir = calendarTable.getRowCount() - 1; ir > 1; ir--) {
       calendarTable.removeRow(ir);
     } 
-    
     Date today = new Date();
     Date date = currentState.getFirstVisibleDate();
     while (currentState.isVisibleDate(date)) {
       CellUtil cell = cell(calendarTable, date);
-      if (!currentState.isDateInCurrentMonth(date)) {
+      if (!currentState.isDateInMonth(date)) {
         cell.addStyleName("ecxCalendarWidgetCellOutOfMonth");
       }
       cell.setWidth(DAY_CELL_SIZE)
@@ -224,21 +191,19 @@ public class CalendarWidget <M> extends Composite {
     }
   }
   
-  private void paintCalendarCellData() {
+  private void paintCalendarModel() {
     if (model == null)
       return;
     for (final Model<M> cell : model) {
       int cellDay = GwtUtils.getDay(cell.date);
-      if (currentState.isDateInCurrentMonth(cell.date)) {
+      if (currentState.isDateInMonth(cell.date)) {
         String styleName = "ecxCalendarWidgetCellWithData";
         HTMLPanel hp;
-//      String imgurl = cell.forbidden ? "images/common/forbidden.png" : "images/common/clock.png";
-//      hp = new HTMLPanel(cellTemplate.renderDayClickable(""+cellDay, cell.text, UriUtils.fromTrustedString(GWT.getModuleBaseURL() + imgurl)));
         hp = new HTMLPanel(cellTemplate.renderDayClickable(""+cellDay));
         hp.addDomHandler(new ClickHandler() {
           public void onClick(ClickEvent event) {
             event.stopPropagation();
-            cellClickCallback.execute(cell.data);
+            cellClickDelegate.execute(cell.data);
           }
         }, ClickEvent.getType());
         cell(calendarTable, cell.date, "").setWidget(hp)
@@ -246,14 +211,6 @@ public class CalendarWidget <M> extends Composite {
                 .addStyleName(styleName);
         
       }
-    }
-    if (model.size() > 0) {
-      Model<M> firstEvent = model.get(0);
-      Model<M> lastEvent =  model.get(model.size() - 1);
-      /*
-      leftWidget.setEnabled(!currentState.isDateInCurrentMonth(firstEvent.date));
-      rightWidget.setEnabled(!currentState.isDateInCurrentMonth(lastEvent.date));
-      */
     }
   }
   
@@ -358,22 +315,25 @@ public class CalendarWidget <M> extends Composite {
       this.firstDateOfMonth = GwtUtils.getDate(1, month, year);
       this.firstWeekDayOfMonth = GwtUtils.getDayNumberOfWeek(firstDateOfMonth);
       
-      this.lastDateOfMonth = getFirstDateOfCurrentMonth();
+      this.lastDateOfMonth = getFirstDateOfMonth();
       CalendarUtil.addMonthsToDate(this.lastDateOfMonth, +1);
       CalendarUtil.addDaysToDate(this.lastDateOfMonth, -1);
       
-      this.firstVisibleDate = getFirstDateOfCurrentMonth();
+      this.firstVisibleDate = getFirstDateOfMonth();
       CalendarUtil.addDaysToDate(this.firstVisibleDate, - getColumnNumber(this.firstVisibleDate));
       
-      this.lastVisibleDate = getLastDateOfCurrentMonth();
+      this.lastVisibleDate = getLastDateOfMonth();
       CalendarUtil.addDaysToDate(this.lastVisibleDate, 6 - getColumnNumber(this.lastVisibleDate));
       
     }
-    private int getFirstWeekDayOfCurrentMonth() {
+    private int getFirstWeekDayOfMonth() {
       return firstWeekDayOfMonth;
     }
-    private Date getFirstDateOfCurrentMonth() {
+    private Date getFirstDateOfMonth() {
       return CalendarUtil.copyDate(firstDateOfMonth);
+    }
+    private Date getLastDateOfMonth() {
+      return CalendarUtil.copyDate(lastDateOfMonth);
     }
     private Date getFirstVisibleDate() {
       return CalendarUtil.copyDate(firstVisibleDate);
@@ -381,19 +341,16 @@ public class CalendarWidget <M> extends Composite {
     private Date getLastVisibleDate() {
       return CalendarUtil.copyDate(lastVisibleDate);
     }
-    private Date getLastDateOfCurrentMonth() {
-      return CalendarUtil.copyDate(lastDateOfMonth);
-    }
-    private String getCurrentMonthName() {
-      return GwtUtils.getShortMonthName(getFirstDateOfCurrentMonth());
+    private String getMonthName() {
+      return GwtUtils.getShortMonthName(getFirstDateOfMonth());
     }
     private void incrementMonth() {
-      Date date = getFirstDateOfCurrentMonth();
+      Date date = getFirstDateOfMonth();
       CalendarUtil.addMonthsToDate(date, +1);
       setDate(date);
     }
     private void decrementMonth() {
-      Date date = getFirstDateOfCurrentMonth();
+      Date date = getFirstDateOfMonth();
       CalendarUtil.addMonthsToDate(date, -1);
       setDate(date);
     }
@@ -401,9 +358,9 @@ public class CalendarWidget <M> extends Composite {
       return date.compareTo(getFirstVisibleDate()) >= 0 &&
           date.compareTo(getLastVisibleDate()) <= 0;
     }
-    private boolean isDateInCurrentMonth(Date date) {
-      return date.compareTo(getFirstDateOfCurrentMonth()) >= 0 &&
-          date.compareTo(getLastDateOfCurrentMonth()) <= 0;
+    private boolean isDateInMonth(Date date) {
+      return date.compareTo(getFirstDateOfMonth()) >= 0 &&
+          date.compareTo(getLastDateOfMonth()) <= 0;
     }
   }
   
@@ -414,14 +371,32 @@ public class CalendarWidget <M> extends Composite {
   }
   
   private int getRowNumber (Date date) {
-    if (date.before(currentState.getFirstDateOfCurrentMonth())) {
+    if (date.before(currentState.getFirstDateOfMonth())) {
       return FIRST_DAY_ROW;
-    } else if (date.after(currentState.getLastDateOfCurrentMonth())) {
-      return getRowNumber(currentState.getLastDateOfCurrentMonth());
+    } else if (date.after(currentState.getLastDateOfMonth())) {
+      return getRowNumber(currentState.getLastDateOfMonth());
     } else {
       int day = GwtUtils.getDay(date);
-      int row = (day - 1 + currentState.getFirstWeekDayOfCurrentMonth() - 1) / 7 + FIRST_DAY_ROW;
+      int row = (day - 1 + currentState.getFirstWeekDayOfMonth() - 1) / 7 + FIRST_DAY_ROW;
       return row;
+    }
+  }
+  
+  public static class Model <M> {
+    private Date date;
+    private String text;
+    private M data;
+    public Model<M> setDate(Date date) {
+      this.date = date;
+      return this;
+    }
+    public Model<M> setText(String text) {
+      this.text = text;
+      return this;
+    }
+    public Model<M> setData(M data) {
+      this.data = data;
+      return this;
     }
   }
   

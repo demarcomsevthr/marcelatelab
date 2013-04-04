@@ -1,7 +1,7 @@
 package it.mate.econyx.server.util;
 
 import it.mate.econyx.server.services.ArticleAdapter;
-import it.mate.econyx.server.services.CalEventAdapter;
+import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
@@ -72,8 +72,8 @@ public class AdaptersUtil {
     return context.getBean(ArticleAdapter.class);
   }
   
-  public static CalEventAdapter getCalEventAdapter() {
-    return context.getBean(CalEventAdapter.class);
+  public static CalendarAdapter getCalendarAdapter() {
+    return context.getBean(CalendarAdapter.class);
   }
   
   public static PortalServiceAdapter getPortalServiceAdapter() {
