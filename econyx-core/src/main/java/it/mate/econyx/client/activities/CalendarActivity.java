@@ -1,14 +1,16 @@
 package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.factories.AppClientFactory;
-import it.mate.econyx.client.places.CalEventPlace;
+import it.mate.econyx.client.places.CalendarPlace;
 import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
+import it.mate.econyx.client.view.CalendarView;
 import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.services.CalEventServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
@@ -16,33 +18,34 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class CalEventActivity extends BaseActivity implements 
+public class CalendarActivity extends BaseActivity implements 
     CalEventListView.Presenter,
-    CalEventEditView.Presenter {
-
-  private CalEventPlace place;
+    CalEventEditView.Presenter,
+    CalendarView.Presenter {
+  
+  private CalendarPlace place;
   
   private CalEventServiceAsync calEventService = AppClientFactory.IMPL.getGinjector().getCalEventService();
   
-  public CalEventActivity(CalEventPlace place, AppClientFactory clientFactory) {
+  public CalendarActivity(CalendarPlace place, AppClientFactory clientFactory) {
     super(clientFactory);
     this.place = place;
+    GwtUtils.log("INITIALIZING " + this + " place = " + place);
   }
   
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    GwtUtils.log("STARTING " + this + " place = " + place);
     registerHandlers(eventBus);
-    /*
-    if (place.getToken().equals(CalEventPlace.EVENT_VIEW)) {
-      initView(AppClientFactory.IMPL.getGinjector().getCalEventView(), panel);
+    if (place.getToken().equals(CalendarPlace.CAL_DATE_VIEW)) {
+      initView(AppClientFactory.IMPL.getGinjector().getCalendarDateView(), panel);
       retrieveModel();
     }
-    */
-    if (place.getToken().equals(CalEventPlace.EVENT_LIST)) {
+    if (place.getToken().equals(CalendarPlace.EVENT_LIST)) {
       initView(AppClientFactory.IMPL.getGinjector().getCalEventListView(), panel);
       retrieveModel();
     }
-    if (place.getToken().equals(CalEventPlace.EVENT_EDIT)) {
+    if (place.getToken().equals(CalendarPlace.EVENT_EDIT)) {
       initView(AppClientFactory.IMPL.getGinjector().getCalEventEditView(), panel);
       retrieveModel();
     }
@@ -50,10 +53,13 @@ public class CalEventActivity extends BaseActivity implements
   
   private void retrieveModel() {
     getView().setModel(AppClientFactory.IMPL.getPortalSessionState());
-    if (place.getToken().equals(CalEventPlace.EVENT_VIEW)) {
+    if (place.getToken().equals(CalendarPlace.CAL_DATE_VIEW)) {
       getView().setModel(place.getModel());
     }
-    if (place.getToken().equals(CalEventPlace.EVENT_LIST)) {
+    if (place.getToken().equals(CalendarPlace.EVENT_VIEW)) {
+      getView().setModel(place.getModel());
+    }
+    if (place.getToken().equals(CalendarPlace.EVENT_LIST)) {
       calEventService.findAll(new AsyncCallback<List<CalEvent>>() {
         public void onSuccess(List<CalEvent> results) {
           getView().setModel(results);
@@ -63,7 +69,7 @@ public class CalEventActivity extends BaseActivity implements
         }
       });
     }
-    if (place.getToken().equals(CalEventPlace.EVENT_EDIT)) {
+    if (place.getToken().equals(CalendarPlace.EVENT_EDIT)) {
       getView().setModel(place.getModel());
     }
   }
@@ -80,7 +86,7 @@ public class CalEventActivity extends BaseActivity implements
   
   @Override
   public void edit(CalEvent event) {
-    goTo(new CalEventPlace(CalEventPlace.EVENT_EDIT, event));
+    goTo(new CalendarPlace(CalendarPlace.EVENT_EDIT, event));
   }
 
   @Override
@@ -113,9 +119,14 @@ public class CalEventActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Void result) {
-        goTo(new CalEventPlace(CalEventPlace.EVENT_LIST));
+        goTo(new CalendarPlace(CalendarPlace.EVENT_LIST));
       }
     });
+  }
+
+  @Override
+  public void goToDate(final Date date) {
+
   }
 
 }

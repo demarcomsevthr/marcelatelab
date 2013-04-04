@@ -656,7 +656,25 @@
       <name>Lo statuto</name>
       <code>statuto</code>
       <orderNm>300</orderNm>
-      <htmls/>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+            <![CDATA[
+            
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. 
+    Praesent ligula sem, viverra at hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo 
+    sollicitudin vitae a lorem. Fusce laoreet molestie neque ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin 
+    a lectus.
+  </p>
+  
+  <div id="Place:CalendarPlace;PlaceToken:calDateView" class="ecxPlaceHolder"></div>
+  
+            ]]>
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
       <name>I produttori</name>

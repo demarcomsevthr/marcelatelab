@@ -29,6 +29,19 @@ public class CalEventTx implements CalEvent {
   
   String content;
   
+  public CalEventTx() {
+
+  }
+
+  /**
+   * serve solo per debug
+   */
+  public CalEventTx(Date date, String title) {
+    super();
+    this.date = date;
+    this.title = title;
+  }
+
   public String getId() {
     return id;
   }

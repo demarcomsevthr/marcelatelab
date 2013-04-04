@@ -4,7 +4,7 @@ import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.OrderPlace;
 import it.mate.econyx.client.util.ClientOrderUtils;
-import it.mate.econyx.client.util.EconyxUtils;
+import it.mate.econyx.client.util.NavigationUtils;
 import it.mate.econyx.client.view.OrderEditView;
 import it.mate.econyx.client.view.OrderItemEditView;
 import it.mate.econyx.client.view.OrderListView;
@@ -125,7 +125,7 @@ public class OrderActivity extends BaseActivity implements
   }
   
   private void checkPortalSessionState () {
-    EconyxUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
+    NavigationUtils.checkOpenedOrderInSession(orderService, new Delegate<Order>() {
       public void execute(Order order) {
         goTo(new OrderPlace(OrderPlace.VIEW, order));
       }

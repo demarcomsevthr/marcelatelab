@@ -31,6 +31,7 @@ import it.mate.econyx.client.view.ProductOrderDetailView;
 import it.mate.econyx.client.view.ProductView;
 import it.mate.econyx.client.view.TestView;
 import it.mate.econyx.client.view.admin.GeneralConfigView;
+import it.mate.econyx.client.view.site.CalendarDateViewImpl;
 import it.mate.econyx.client.view.site.PortalPageMenuViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartDetailedViewImpl;
 import it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl;
@@ -102,6 +103,7 @@ public interface AppGinjector extends CommonGinjector {
 
   public CalEventListView getCalEventListView();
   public CalEventEditView getCalEventEditView();
+  public CalendarDateViewImpl getCalendarDateView();
   
   public TestView getTestView();
   

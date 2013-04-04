@@ -7,7 +7,7 @@ import it.mate.econyx.client.events.PortalPageChangingEvent;
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.places.AppPlaceHistoryMapper;
 import it.mate.econyx.client.places.PortalPagePlace;
-import it.mate.econyx.client.util.PortalPageClientUtil;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.util.PortalUtils;
 import it.mate.econyx.client.util.TemplatesUtils;
 import it.mate.econyx.shared.model.PortalPage;
@@ -31,6 +31,7 @@ import javax.annotation.PreDestroy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.Window;
@@ -80,10 +81,16 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     return ((G)AppClientFactory.IMPL.getGinjector());
   }
   
+  @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     super.initMvp(panel, getPlaceHistoryMapper(), activityMapper);
   }
   
+  @Override
+  public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper, Place defaultPlace) {
+    super.initMvp(panel, getPlaceHistoryMapper(), activityMapper, defaultPlace);
+  }
+
   @Override
   public PlaceHistoryMapper getPlaceHistoryMapper() {
     if (placeHistoryMapper == null)
@@ -327,7 +334,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
           if (!(pageTemplate.getWidgetFactory() instanceof PagePortlet.Factory) && !initPortalContext.isPortalInitialized() && initPortalContext.enquePortalPageChangeEvent()) {
             initPortalContext.setPortalInitialized(true);
             if (portalSessionState.getCurrentPageId() != null) {
-              PortalPageClientUtil.goToPage(portalSessionState.getCurrentPageId(), true);
+              PagesUtils.goToPage(portalSessionState.getCurrentPageId(), true);
             }
           }
         }
@@ -367,7 +374,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   private void initHashChangeListener() {
     HashUtils.addHashChangeHandler(new Delegate<String>() {
       public void execute(String currentHash) {
-        PortalPageClientUtil.goToPageByCode(currentHash);
+        PagesUtils.goToPageByCode(currentHash);
       }
     });
   }

@@ -17,7 +17,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class PortalPageClientUtil {
+public class PagesUtils {
   
   private static Map<String, PortalPage> pagesCache;
   
@@ -105,7 +105,7 @@ public class PortalPageClientUtil {
     };
     
     if (cachedPage != null) {
-      GwtUtils.log(PortalPageClientUtil.class, "goToPage", "found page in cache " + cachedPage);
+      GwtUtils.log(PagesUtils.class, "goToPage", "found page in cache " + cachedPage);
       pageRetrievedDelegate.execute(cachedPage);
     } else {
       findById(pageId, true, true, true, pageRetrievedDelegate);
@@ -148,22 +148,22 @@ public class PortalPageClientUtil {
   
   @SuppressWarnings("unchecked")
   private static void ensureCache() {
-    String cacheAttrName = PortalPageClientUtil.class.getName()+".pagesCache";
+    String cacheAttrName = PagesUtils.class.getName()+".pagesCache";
     pagesCache = (Map<String, PortalPage>) GwtUtils.getClientAttribute(cacheAttrName);
     if (pagesCache == null) {
       pagesCache = new HashMap<String, PortalPage>();
-      GwtUtils.setClientAttribute(cacheAttrName, PortalPageClientUtil.pagesCache);
+      GwtUtils.setClientAttribute(cacheAttrName, PagesUtils.pagesCache);
     }
   }
 
   private static void findById(String id, final boolean fetchChildreen, final boolean fetchProducts, final boolean fetchHtmls, final Delegate<PortalPage> delegate) {
-    GwtUtils.log(PortalPageClientUtil.class, "findById", "before portalPageService.findById");
+    GwtUtils.log(PagesUtils.class, "findById", "before portalPageService.findById");
     portalPageService.findById(id, fetchChildreen, fetchProducts, fetchHtmls, new AsyncCallback<PortalPage>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }
       public void onSuccess(PortalPage page) {
-        GwtUtils.log(PortalPageClientUtil.class, "findById", "after portalPageService.findById");
+        GwtUtils.log(PagesUtils.class, "findById", "after portalPageService.findById");
         delegate.execute(page);
       }
     });

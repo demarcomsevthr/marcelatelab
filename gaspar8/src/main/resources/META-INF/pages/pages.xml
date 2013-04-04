@@ -118,7 +118,20 @@
       <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
         <layout vertical="false" stylename="tpl-InnerBody"/>
         <widgets>
+          <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+            <layout vertical="true"/>
+            <widgets>
+              <factory parent="explorerWrapper" />
+              <factory parent="calendarWrapper" />
+            </widgets>
+            <constraints>
+              <constraint size="200px" overflow="visible"/>
+              <constraint/>
+            </constraints>
+          </factory>
+          <!-- 
           <factory parent="explorerWrapper" />
+           -->
           <factory parent="pageBodyWrapper" />
         </widgets>
         <constraints>
@@ -216,6 +229,13 @@
     <layout width="160px"/>
     <widgets>
       <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />
+    </widgets>
+  </factory>
+      
+  <factory id="calendarWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Calendario" stylename="tpl-leftColumn">
+    <layout width="160px"/>
+    <widgets>
+      <factory type="it.mate.econyx.client.portlets.CalendarPortlet.Factory"/>
     </widgets>
   </factory>
       

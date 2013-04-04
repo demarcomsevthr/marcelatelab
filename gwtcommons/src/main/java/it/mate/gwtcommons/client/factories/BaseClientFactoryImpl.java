@@ -43,8 +43,15 @@ public abstract class BaseClientFactoryImpl <G extends CommonGinjector> implemen
   public BaseClientFactoryImpl() {
     this.ginjector = createGinjector();
   }
-
+  
   public void initMvp(SimplePanel panel, PlaceHistoryMapper historyMapper, BaseActivityMapper activityMapper) {
+    initMvp(panel, historyMapper, activityMapper, null);
+  }
+
+  public void initMvp(SimplePanel panel, PlaceHistoryMapper historyMapper, BaseActivityMapper activityMapper, Place defaultPlace) {
+    if (defaultPlace == null) {
+      defaultPlace = activityMapper.getDefaultPlace();
+    }
     GwtUtils.log(getClass(), "initMvp", "*************************************************************");
     GwtUtils.log(getClass(), "initMvp", "activityMapper = " + activityMapper);
     GwtUtils.log(getClass(), "initMvp", "historyName = " + activityMapper.getHistoryName());
@@ -60,7 +67,7 @@ public abstract class BaseClientFactoryImpl <G extends CommonGinjector> implemen
       historyHandler = new MappedPlaceHistoryHandler(activityMapper.getHistoryName(), historyMapper);
       historyHandlerRegistration.handler = historyHandler;
     }
-    historyHandlerRegistration.registration = historyHandler.register(getPlaceController(), ginjector.getEventBus(), activityMapper.getDefaultPlace());
+    historyHandlerRegistration.registration = historyHandler.register(getPlaceController(), ginjector.getEventBus(), defaultPlace);
     historyHandlerRegistrationMap.put(activityMapper.getHistoryName(), historyHandlerRegistration);
     historyHandler.handleCurrentHistory();
   }
