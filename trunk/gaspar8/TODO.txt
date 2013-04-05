@@ -13,56 +13,36 @@
 	---------------------------------------------------------------------------------------------------------
 
 		
-		__________________________________________________________________________________
+	__________________________________________________________________________________
 
-		SNAPSHOTS
-		__________________________________________________________________________________
+	SNAPSHOTS
+	__________________________________________________________________________________
+	
 
-
-		SNAPSHOT 03/04/2013
+	SNAPSHOT 05/04/2013
 		
-			>> STYLING > pages.xml !
+		>> DOCUMENT LIBRARY
+		
+			>>> CREATO model 
 			
-			>> TOGLIERE da econyx.properties:
-				it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache=false
+
+		>> STYLING > new pages.xml
+			
+		>> TOGLIERE da econyx.properties:
+			it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache=false
 				
-			>> CalEvent model and admin
+		>> Calendar FATTO [05/04/2013]
 
+		>> ListPropertyWrapper
+			mettere in tutti i getter getList dei tx
+		
 
 		
-		SNAPSHOT 28/03/2013
+	SNAPSHOT 28/03/2013
 		
-		  >> LOOP di AdminLayoutView >> iniziato ma da vedere meglio (introdotto PortalUserTx.adminUser) >> forse SISTEMATO [28/03/2013]
-		
-		  >> GESTIONE ARTICOLI E BLOG <<
+		>> GESTIONE ARTICOLI E BLOG <<
 		  
-		>> UPDATE Html Article >> NON SALVA!  
-		  
-		- ListPropertyWrapper
-		
-		  se funziona mettere ListPropertyWrapper in tutti i getter getList dei tx
-		
-			>> ATTENZIONE <<
-			Eccezioni del tipo:
-			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' 
-			because it is exposed as an array with a maximum dimension of 1 in this type or one of its subtypes 
-			(reached via it.mate.econyx.shared.model.Article)
-			VEDI docs/errors/article-serialization-errors.txt
-			LINK INTERESSANTI
-			>> https://groups.google.com/forum/?fromgroups=#!topic/google-web-toolkit/cTNZVKefbSM
-			>>> L'ERRORE NON DIPENDE DA ListPropertyWrapper (sembra più una coincidenza, lo ha dato anche togliendolo)
-			>>> LO DA IN MANIERA CASUALE (!)
-			>>> PER SIMULARLO BASTA INTRODURRE UNA PICCOLA MODIFICA IN Article E FARE UN REFRESH IN DEV MODE
-			>>> SOLUZIONE: ERA LA RELAZIONE 1-1 con HtmlContent !!!! 
-				AL CUI INTERNO E' DICHIARATA LA enum Type senza il costruttore di default e con un costruttore privato!
-				(violazione delle serialization policies)
-				In altri tx funziona ma è sempre relazionato come List<HtmlContent> > forse così ha un comportamento differente.
-
-
-		- inserimento nuovi Article e ArticleFolder [generazione codice univoco] [2]
-		
-		- STYLING e contenuti pagine [2]
-			> sfondo
+		>> STYLING e contenuti pagine [2]
 			> css pagine
 			> css articoli
 			> css blog
@@ -70,137 +50,132 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 			
-		- NEW BlogPage, BlogThread, BlogComment [3]	
+		>> NEW BlogPage, BlogThread, BlogComment [3]	
 		
-		- Link Facebook, Twitter, ...  ???
+		>> Link Facebook, Twitter, ...  ???
 			
-		- LOGIN DIALOG [4]
-			> login dialog (tipo sella, etc...)
-				>> btn 'ACCEDI' >> dialog field login, pwd, password dimanticata?, accedi con account google, ...
-		
-		- gestione ruoli admins [4]
+		>> gestione ruoli admins [4]
 		
 
 
-		------------------------------------------------------
+	------------------------------------------------------
 
 
 
-		SNAPSHOT 16/01/2013
+	SNAPSHOT 16/01/2013
 		
-		  >> SOSPESI GESTIONE ORDINI <<
+	  >> SOSPESI GESTIONE ORDINI <<
 
-		- Configurazione order states [1]
-			> SEMPLIFICARE:
-				- in carrello
-				- inserito (stampa, mod. qta)
-				- in consegna (stampa, mod. qta, mail)
-				- consegnato (stampa, agg. prepagato)
+	- Configurazione order states [1]
+		> SEMPLIFICARE:
+			- in carrello
+			- inserito (stampa, mod. qta)
+			- in consegna (stampa, mod. qta, mail)
+			- consegnato (stampa, agg. prepagato)
 
-		- Data apertura ordine [2]
-			> gestire su producer:
-				- data apertura e chiusura dell'ordine
-				- data consegna prevista
-				- luogo di consegna previsto	
-			> btn in producer edit view > update su producer
-			> site\portal page view
-				> tramite custom client factory
-				> se portal page code in {propeties}
-					> find producer [portal page.tags = producer code ...]
-					> aggiunge html con dati aggiuntivi producer
+	- Data apertura ordine [2]
+		> gestire su producer:
+			- data apertura e chiusura dell'ordine
+			- data consegna prevista
+			- luogo di consegna previsto	
+		> btn in producer edit view > update su producer
+		> site\portal page view
+			> tramite custom client factory
+			> se portal page code in {propeties}
+				> find producer [portal page.tags = producer code ...]
+				> aggiunge html con dati aggiuntivi producer
 					
-		- Chiusura ordine [2]
-			> cambiare test 'Ordine inserito. Quando l'ordine verrà chiuso riceverai una mail di conferma.'
+	- Chiusura ordine [2]
+		> cambiare test 'Ordine inserito. Quando l'ordine verrà chiuso riceverai una mail di conferma.'
 			
-		- Invio multiplo mail agli utenti [2]
-			> in producer order list view > btn 'invia mail agli utenti' (input body)
-			> in order list view > check selezione utenti > btn 'invia mail agli utenti' (input body)			
+	- Invio multiplo mail agli utenti [2]
+		> in producer order list view > btn 'invia mail agli utenti' (input body)
+		> in order list view > check selezione utenti > btn 'invia mail agli utenti' (input body)			
 				
-		- Modifica quantità ordine da riepilogo carrello > non scatta il controllo prepagato [2]
+	- Modifica quantità ordine da riepilogo carrello > non scatta il controllo prepagato [2]
 		
-		- Riepilogo carrello > sfasa alla terza riga [2]
+	- Riepilogo carrello > sfasa alla terza riga [2]
 		
-		- Inserire informazioni di consegna anche nella stampa pdf dell'ordine [2]
+	- Inserire informazioni di consegna anche nella stampa pdf dell'ordine [2]
 		
-		- Wait panel: profilo utente>situazione ordini, order list view>retrieve ordini [2]
+	- Wait panel: profilo utente>situazione ordini, order list view>retrieve ordini [2]
 		
-		- NEW: lista ordini per utente [2]
+	- NEW: lista ordini per utente [2]
 				
-		- Customizzazione pagina forbidden [3]
-			> Se voglio provare ad entrare su admin con utente non autorizzato 
-			> va sulla pagina forbidden default e lì rimane bloccato (non si riesce a fare logout)
-		   	> WORKAROUND con firebug > elimina cookie del sito e poi fare 'logout'
+	- Customizzazione pagina forbidden [3]
+		> Se voglio provare ad entrare su admin con utente non autorizzato 
+		> va sulla pagina forbidden default e lì rimane bloccato (non si riesce a fare logout)
+	   	> WORKAROUND con firebug > elimina cookie del sito e poi fare 'logout'
 		   	
-		- Popup 'Informazioni per il ritiro' > allargare [3]
+	- Popup 'Informazioni per il ritiro' > allargare [3]
 		
-		- Mail di conferma ordine [3]
-			> Subject = Consegna ordine XXX - YYYY > mettere codice e produttore nel subject 
-			(altrimenti il client gmail accorpa mail successive di conferma con lo stesso subject)
+	- Mail di conferma ordine [3]
+		> Subject = Consegna ordine XXX - YYYY > mettere codice e produttore nel subject 
+		(altrimenti il client gmail accorpa mail successive di conferma con lo stesso subject)
 			
-		- Errore aggiornamento importo alla consegna [3]	
-			>> lista ordini (consegnato) > non si vede l'importo modificato!
-				> provato in locale, non riesco a simularlo
-				> sia it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
-				  che it.mate.econyx.client.view.admin.OrderListGeneralView
-				  utilizzano Order.Utils.computeImportoTotale(order)
-				>> DA RIVEDERE CON CALMA
+	- Errore aggiornamento importo alla consegna [3]	
+		>> lista ordini (consegnato) > non si vede l'importo modificato!
+			> provato in locale, non riesco a simularlo
+			> sia it.mate.econyx.server.services.impl.CustomAdapterGP8Impl.printOrder(PdfSession, Order)
+			  che it.mate.econyx.client.view.admin.OrderListGeneralView
+			  utilizzano Order.Utils.computeImportoTotale(order)
+			>> DA RIVEDERE CON CALMA
 				
-		- header lista ordini [3]
-			> ogni tanto errore di rendering 
-			> si riesce a fare un clean completo ad ogni retrieve?
+	- header lista ordini [3]
+		> ogni tanto errore di rendering 
+		> si riesce a fare un clean completo ad ogni retrieve?
 			
-		- timeout RPC [3]
-			> se a inizio giornata vado in lista utenti, può capitare che si pianta
-			> gestire un timeout massimo su rpc {property.rpc.timeout}
-			> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
-			> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
-			
-
-		------------------------------------------------------
-
-			
-		>> IMPORTANTISSIMO: blocco invio mail a utenti di test [16/01/2013]
-			> it.mate.econyx.shared.model.impl.PortalUserTx
-				> Boolean testUser >> se true NON INVIA MAIL!!!!
-				> it.mate.econyx.server.services.impl.OrderAdapterImpl.onOrderStateChange
-			>> DEPLOY SU GP8est > OK
-			>> RILASCIARE SU gp8net !!!!
-		>> REVISIONE GENERALE OrderStateConfig [16/01/2013]
-			  private String nextStateCode;
-			  private String nextStateDescription;
-			  private Boolean printButtonEnabled;
-			  private Boolean askDeliveryInformations;
-			  private Boolean quantityUpdatable;
-			>> DEPLOY SU gp8est >> OK
-		- Generazione ordini: input data ordine > FATTO [16/01/2013]
-		- Profile / storico ordini > CellTable > FATTO [16/01/2013]
-		- Etichetta stato 'confermato' > 'acquisito' > FATTO [16/01/2013]
-		- Etichetta stato 'cancellato' > 'annullato' > FATTO [16/01/2013]
-		- Aggiungere stato intermedio 'in consegna' > FATTO [16/01/2013]
-
-
+	- timeout RPC [3]
+		> se a inizio giornata vado in lista utenti, può capitare che si pianta
+		> gestire un timeout massimo su rpc {property.rpc.timeout}
+		> it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault
+		> se scatta il timeout sull'ultima chiamata rpc, faccio un Window.Location.reload()
 			
 
-		------------------------------------------------------
+	------------------------------------------------------
 
+			
+	>> IMPORTANTISSIMO: blocco invio mail a utenti di test [16/01/2013]
+		> it.mate.econyx.shared.model.impl.PortalUserTx
+			> Boolean testUser >> se true NON INVIA MAIL!!!!
+			> it.mate.econyx.server.services.impl.OrderAdapterImpl.onOrderStateChange
+		>> DEPLOY SU GP8est > OK
+		>> RILASCIARE SU gp8net !!!!
+	>> REVISIONE GENERALE OrderStateConfig [16/01/2013]
+		  private String nextStateCode;
+		  private String nextStateDescription;
+		  private Boolean printButtonEnabled;
+		  private Boolean askDeliveryInformations;
+		  private Boolean quantityUpdatable;
+		>> DEPLOY SU gp8est >> OK
+	- Generazione ordini: input data ordine > FATTO [16/01/2013]
+	- Profile / storico ordini > CellTable > FATTO [16/01/2013]
+	- Etichetta stato 'confermato' > 'acquisito' > FATTO [16/01/2013]
+	- Etichetta stato 'cancellato' > 'annullato' > FATTO [16/01/2013]
+	- Aggiungere stato intermedio 'in consegna' > FATTO [16/01/2013]
+
+
+			
+
+	------------------------------------------------------
 			
 		
-		PANIC ROOM - 15/01/2013
+	PANIC ROOM - 15/01/2013
 		
-			https://appengine.google.com/
-			> An unexpected failure has occurred. Please try again.
-			>> Sia da ufficio che da casa!
-			>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
-			>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
-			>> in questa circostanza, si va in locale
-			>>> IMPORTANTE: http://code.google.com/status/appengine >> SYSTEM STATUS GLOBALE (figo)
+		https://appengine.google.com/
+		> An unexpected failure has occurred. Please try again.
+		>> Sia da ufficio che da casa!
+		>> BLACKOUT DALLE 16:30 ALLE 17:00 >> 30 MINUTI DI BLACKOUT !!! continuato ad andare a singhiozzo ancora fino alle 17:30
+		>> le app funzionano ma molto più lentamente (lista utenti 25 sec medi contro i 9 soliti)
+		>> in questa circostanza, si va in locale
+		>>> IMPORTANTE: http://code.google.com/status/appengine >> SYSTEM STATUS GLOBALE (figo)
 				
 				
 
-		__________________________________________________________________________________
+	__________________________________________________________________________________
 
-		IN EVIDENZA
-		__________________________________________________________________________________
+	IN EVIDENZA
+	__________________________________________________________________________________
 
 
 		RUNNING GAE APPLICATION ON YOUR OWN SERVER		
@@ -283,7 +258,38 @@
 			
 		________________________________________________________________________________
 		
-		FATTE
+			>>> ISSUES CHIUSE <<<
+		________________________________________________________________________________
+
+
+		-- ListPropertyWrapper
+			>> FATTO [28/03/2013]
+			>> messo in ArticleFolderTx, ArticleTx
+
+		-- Eccezione 'Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>''
+			IN GWT RPC GENERATOR
+			Eccezioni del tipo:
+			Checking type argument 0 of type 'java.util.Arrays.ArrayList<E>' 
+			because it is exposed as an array with a maximum dimension of 1 in this type or one of its subtypes 
+			(reached via it.mate.econyx.shared.model.Article)
+			VEDI docs/errors/article-serialization-errors.txt
+			LINK INTERESSANTI
+			>> https://groups.google.com/forum/?fromgroups=#!topic/google-web-toolkit/cTNZVKefbSM
+			>>> L'ERRORE NON DIPENDE DA ListPropertyWrapper (sembra più una coincidenza, lo ha dato anche togliendolo)
+			>>> LO DA IN MANIERA CASUALE (!)
+			>>> PER SIMULARLO BASTA INTRODURRE UNA PICCOLA MODIFICA IN Article E FARE UN REFRESH IN DEV MODE
+			>>> SOLUZIONE: ERA LA RELAZIONE 1-1 con HtmlContent !!!! 
+				AL CUI INTERNO E' DICHIARATA LA enum Type senza il costruttore di default e con un costruttore privato!
+				(violazione delle serialization policies)
+				In altri tx funziona ma è sempre relazionato come List<HtmlContent> > forse così ha un comportamento differente.
+			>>> RISOLTO [28/03/2013]
+
+		-- LOGIN DIALOG
+			> login dialog (tipo sella, etc...)
+				>> btn 'ACCEDI' >> dialog field login, pwd, password dimanticata?, accedi con account google, ...
+
+		-- LOOP IN AdminLayoutView
+			>> SISTEMATO [28/03/2013]
 
 		-- TEST ACCOUNT GOOGLE NON ABILITATO
 			magellanic1098@gmail.com / p21103118
