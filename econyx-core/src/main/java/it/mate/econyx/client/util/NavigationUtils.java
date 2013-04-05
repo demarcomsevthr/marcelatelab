@@ -3,6 +3,7 @@ package it.mate.econyx.client.util;
 import it.mate.econyx.client.events.CalendarDateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ShoppingCartPlace;
+import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.services.OrderServiceAsync;
@@ -10,6 +11,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -88,8 +90,8 @@ public class NavigationUtils {
     return resultUrl;
   }
   
-  public static void setSelectedCalendarDate(Date date) {
-    AppClientFactory.IMPL.getEventBus().fireEvent(new CalendarDateChangeEvent(date));
+  public static void setSelectedCalendarDate(Date date, List<CalEvent> calEvents) {
+    AppClientFactory.IMPL.getEventBus().fireEvent(new CalendarDateChangeEvent(date, calEvents));
   }
   
 }

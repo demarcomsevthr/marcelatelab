@@ -12,6 +12,8 @@ public class CalendarPlace extends Place implements ReversiblePlace, HasToken, H
 
   public static String CAL_DATE_VIEW = "calDateView";
 
+  public static String CAL_MONTH_VIEW = "calMonthView";
+
   public static String EVENT_VIEW = "eventView";
 
   public static String EVENT_LIST = "eventList";

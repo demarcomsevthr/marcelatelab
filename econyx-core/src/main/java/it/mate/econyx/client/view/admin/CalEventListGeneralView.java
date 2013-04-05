@@ -8,6 +8,7 @@ import it.mate.gwtcommons.client.ui.AnchorCell;
 import it.mate.gwtcommons.client.ui.CellTableExt;
 import it.mate.gwtcommons.client.utils.ColumnUtil;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.List;
 
@@ -87,12 +88,11 @@ public class CalEventListGeneralView extends AbstractAdminTabPage<CalEventListVi
       }
     }, new TextCell(), null), "Codice");
 
-    
     listTable.addColumn(ColumnUtil.createColumn(new ColumnUtil.ValueGetter<CalEvent, String>() {
       public String getValue(CalEvent event) {
-        return event.getOrderNm() != null ? event.getOrderNm().toString() : "";
+        return GwtUtils.dateToString(event.getDate());
       }
-    }, new TextCell(), null), "Ordine");
+    }, new TextCell(), null), "Data");
     
     listTable.addFillerColumn();
     
