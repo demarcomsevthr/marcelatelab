@@ -661,16 +661,12 @@
           <type>M</type>
           <content>
             <![CDATA[
-            
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ipsum tortor. Nam tincidunt purus laoreet est aliquam lobortis. 
     Praesent ligula sem, viverra at hendrerit ac, pellentesque eu lacus. Nullam quis urna massa. Quisque non tellus nec sapien commodo 
     sollicitudin vitae a lorem. Fusce laoreet molestie neque ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin 
     a lectus.
   </p>
-  
-  <div id="Place:CalendarPlace;PlaceToken:calDateView" class="ecxPlaceHolder"></div>
-  
             ]]>
           </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
@@ -1122,6 +1118,22 @@
         </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
       </childreen>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+      <name>Evento del giorno</name>
+      <code>calendarEvent</code>
+      <orderNm>600</orderNm>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+            <![CDATA[
+              <div id="Place:CalendarPlace;PlaceToken:calDateView" class="ecxPlaceHolder"></div>
+            ]]>
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
     
   </pages>
   

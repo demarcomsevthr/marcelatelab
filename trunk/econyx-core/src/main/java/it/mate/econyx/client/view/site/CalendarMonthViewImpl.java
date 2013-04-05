@@ -23,6 +23,8 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
   
   @UiField (provided=true) CalendarWidget<CalEvent> calendar;
   
+  private List<CalEvent> events = new ArrayList<CalEvent>();
+  
   public CalendarMonthViewImpl() {
     super();
     initUI();
@@ -37,12 +39,21 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
     calendar = new CalendarWidget<CalEvent>();
   }
   
+  /*
+   * serve metterli qui perchè deve essere valorizzato il presenter
+   */
   @Override
   protected void onLoad() {
     super.onLoad();
     calendar.setCellClickDelegate(new Delegate<CalEvent>() {
       public void execute(CalEvent event) {
-        getPresenter().goToDate(event.getDate());
+        List<CalEvent> selectedEvents = new ArrayList<CalEvent>();
+        for (CalEvent calEvent : events) {
+          if (calEvent.getDate().equals(event.getDate())) {
+            selectedEvents.add(calEvent);
+          }
+        }
+        getPresenter().goToDate(event.getDate(), selectedEvents);
       }
     });
     calendar.setChangedMonthDelegate(new Delegate<Period>() {
@@ -61,7 +72,7 @@ public class CalendarMonthViewImpl extends AbstractBaseView<CalendarView.Present
   @SuppressWarnings("unchecked")
   public void setModel(Object model, String tag) {
     if (model instanceof List) {
-      List<CalEvent> events = (List<CalEvent>)model;
+      this.events = (List<CalEvent>)model;
       setCalendarModel(events);
     }
   }

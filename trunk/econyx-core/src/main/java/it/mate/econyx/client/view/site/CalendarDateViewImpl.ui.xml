@@ -4,8 +4,7 @@
 
   <g:HTMLPanel>
 
-    Siamo in calendar date view 
-    <g:Label ui:field="dateLbl"/>
+    <g:FlexTable ui:field="flexTable"/>
 
     <div id="CalendarDateViewImplHiddenDiv" style="visibility:hidden"></div>
 
