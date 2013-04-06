@@ -10,6 +10,11 @@ import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
+import it.mate.econyx.client.view.DocumentEditView;
+import it.mate.econyx.client.view.DocumentFolderEditView;
+import it.mate.econyx.client.view.DocumentFolderListView;
+import it.mate.econyx.client.view.DocumentFolderView;
+import it.mate.econyx.client.view.DocumentView;
 import it.mate.econyx.client.view.ImageEditView;
 import it.mate.econyx.client.view.ImageListView;
 import it.mate.econyx.client.view.OrderEditView;
@@ -39,6 +44,7 @@ import it.mate.econyx.client.view.site.ShoppingCartSummaryViewImpl;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
 import it.mate.econyx.shared.services.CalendarServiceAsync;
 import it.mate.econyx.shared.services.CustomerServiceAsync;
+import it.mate.econyx.shared.services.DocumentServiceAsync;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.econyx.shared.services.ImageServiceAsync;
 import it.mate.econyx.shared.services.OrderServiceAsync;
@@ -59,6 +65,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public ArticleServiceAsync getArticleService();
   public CalendarServiceAsync getCalendarService();
+  public DocumentServiceAsync getDocumentService();
 
   public OrderView getOrderView();
   public OrderEditView getOrderEditView();
@@ -101,6 +108,12 @@ public interface AppGinjector extends CommonGinjector {
   public ArticleFolderEditView getArticleFolderEditView();
   public ArticleView getArticleView();
   public ArticleEditView getArticleEditView();
+
+  public DocumentFolderView getDocumentFolderView();
+  public DocumentFolderListView getDocumentFolderListView();
+  public DocumentFolderEditView getDocumentFolderEditView();
+  public DocumentView getDocumentView();
+  public DocumentEditView getDocumentEditView();
 
   public CalEventListView getCalEventListView();
   public CalEventEditView getCalEventEditView();
