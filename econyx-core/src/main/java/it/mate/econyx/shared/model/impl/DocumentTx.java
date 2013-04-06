@@ -2,6 +2,7 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentContent;
+import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
@@ -24,6 +25,9 @@ public class DocumentTx implements Document {
   PortalUserTx author;
   
   Date created;
+  
+  // serve solo per eseguire correttamente la DocumentActivity.update(Document) 
+  transient DocumentFolder documentFolder;
   
   public String getId() {
     return id;
@@ -101,6 +105,14 @@ public class DocumentTx implements Document {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  public DocumentFolder getDocumentFolder() {
+    return documentFolder;
+  }
+
+  public void setDocumentFolder(DocumentFolder documentFolder) {
+    this.documentFolder = documentFolder;
   }
 
 }

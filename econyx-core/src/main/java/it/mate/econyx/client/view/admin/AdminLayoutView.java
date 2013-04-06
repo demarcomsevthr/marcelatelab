@@ -4,6 +4,7 @@ import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
 import it.mate.econyx.client.places.CalendarPlace;
+import it.mate.econyx.client.places.DocumentPlace;
 import it.mate.econyx.client.places.GeneralPlace;
 import it.mate.econyx.client.places.ImagePlace;
 import it.mate.econyx.client.places.OrderPlace;
@@ -31,7 +32,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AdminLayoutView extends Composite {
+public class AdminLayoutView extends Composite implements PortalSessionStateChangeEvent.Handler {
   
   public interface ViewUiBinder extends UiBinder<Widget, AdminLayoutView> { }
   
@@ -51,74 +52,8 @@ public class AdminLayoutView extends Composite {
   
   public AdminLayoutView() {
     initUI();
-    
     GwtUtils.setBorderRadius(roundedPanel, "5px");
-    
-    AppClientFactory.IMPL.getEventBus().addHandler(PortalSessionStateChangeEvent.TYPE, new PortalSessionStateChangeEvent.Handler() {
-      public void onPortalSessionStateChange(PortalSessionStateChangeEvent event) {
-        if (event.getState().getLoggedUser() == null) {
-          
-          // 28/11/2012
-          if (Window.Location.getPath().contains(NavigationUtils.SECURE_ADMIN_PAGE_URL)) {
-            setLoggedState(true);
-          } else {
-            setLoggedState(false);
-            
-            /* 28/03/2013
-             * 
-             * Redirigo su admin.html in modo da entrare nel caso loggedUser != null
-             * 
-            AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
-             */
-            
-            AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
-              public void onSuccess(String googleLoginUrl) {
-                googleLoginAnchor.setHref(googleLoginUrl);
-              }
-              public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-              }
-            });
-            AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLogoutURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
-              public void onSuccess(String googleLogoutUrl) {
-                forceGoogleLogoutAnchor.setHref(googleLogoutUrl);
-              }
-              public void onFailure(Throwable caught) {
-              }
-            });
-          }
-          
-        } else {
-          if (Window.Location.getPath().contains(NavigationUtils.SECURE_ADMIN_PAGE_URL)) {
-            // siamo nella pagina sicura
-            setLoggedState(true);
-            GwtUtils.log(getClass(), "onPortalSessionStateChange", "received " + event.getState());
-            loggedUserLabel.setText("Logged as " + event.getState().getLoggedUser().getScreenName());
-            AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLogoutURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
-              public void onSuccess(String googleLogoutUrl) {
-                googleLogoutAnchor.setHref(googleLogoutUrl);
-              }
-              public void onFailure(Throwable caught) {
-              }
-            });
-          } else {
-            
-            if (event.getState().getLoggedUser().isAdminUser()) {
-              // redirigo sulla pagina sicura
-              GwtUtils.deferredExecution(new Delegate<Void>() {
-                public void execute(Void element) {
-                  Window.Location.replace(NavigationUtils.getCompleteUrl(NavigationUtils.SECURE_ADMIN_PAGE_URL));
-                }
-              });
-            } else {
-              Window.alert("ATTENZIONE: l'account " + event.getState().getLoggedUser().getEmailAddress() + " non e' un amministratore di questo sito (promemoria per gli ammnistratori di sistema: forse va impostato portalUser.adminUser)!");
-            }
-            
-          }
-        }
-      }
-    });
-    
+    AppClientFactory.IMPL.getEventBus().addHandler(PortalSessionStateChangeEvent.TYPE, this);
   }
   
   private void setLoggedState (boolean logged) {
@@ -135,6 +70,7 @@ public class AdminLayoutView extends Composite {
     addMenu(menubar, "Immagini", new ImagePlace(ImagePlace.LIST), null);
     addMenu(menubar, "Articoli", new ArticlePlace(ArticlePlace.FOLDER_LIST).setHistoryName("Articoli"), null);
     addMenu(menubar, "Calendario", new CalendarPlace(CalendarPlace.EVENT_LIST).setHistoryName("Calendario"), null);
+    addMenu(menubar, "Documenti", new DocumentPlace(DocumentPlace.FOLDER_LIST).setHistoryName("Documenti"), null);
     addMenu(menubar, "Ordini", new OrderPlace(OrderPlace.LIST).setHistoryName("Ordini"), null);
     addMenu(menubar, "Prodotti", new ProductPlace(ProductPlace.LIST).setHistoryName("Prodotti"), null);
     addMenu(menubar, "Produttori", new ProductPlace(ProductPlace.PRODUCER_LIST).setHistoryName("Produttori"), null);
@@ -182,4 +118,67 @@ public class AdminLayoutView extends Composite {
     };
   }
 
+  public void onPortalSessionStateChange(PortalSessionStateChangeEvent event) {
+    if (event.getState().getLoggedUser() == null) {
+      
+      // 28/11/2012
+      if (Window.Location.getPath().contains(NavigationUtils.SECURE_ADMIN_PAGE_URL)) {
+        setLoggedState(true);
+      } else {
+        setLoggedState(false);
+        
+        /* 28/03/2013
+         * 
+         * Redirigo su admin.html in modo da entrare nel caso loggedUser != null
+         * 
+        AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(EconyxUtils.getCompleteUrl(EconyxUtils.SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
+         */
+        
+        AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLoginURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
+          public void onSuccess(String googleLoginUrl) {
+            googleLoginAnchor.setHref(googleLoginUrl);
+          }
+          public void onFailure(Throwable caught) {
+            Window.alert(caught.getMessage());
+          }
+        });
+        AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLogoutURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
+          public void onSuccess(String googleLogoutUrl) {
+            forceGoogleLogoutAnchor.setHref(googleLogoutUrl);
+          }
+          public void onFailure(Throwable caught) {
+          }
+        });
+      }
+      
+    } else {
+      if (Window.Location.getPath().contains(NavigationUtils.SECURE_ADMIN_PAGE_URL)) {
+        // siamo nella pagina sicura
+        setLoggedState(true);
+        GwtUtils.log(getClass(), "onPortalSessionStateChange", "received " + event.getState());
+        loggedUserLabel.setText("Logged as " + event.getState().getLoggedUser().getScreenName());
+        AppClientFactory.IMPL.getGinjector().getPortalUserService().getGoogleLogoutURL(NavigationUtils.getCompleteUrl(NavigationUtils.NOT_SECURE_ADMIN_PAGE_URL), new AsyncCallback<String>() {
+          public void onSuccess(String googleLogoutUrl) {
+            googleLogoutAnchor.setHref(googleLogoutUrl);
+          }
+          public void onFailure(Throwable caught) {
+          }
+        });
+      } else {
+        
+        if (event.getState().getLoggedUser().isAdminUser()) {
+          // redirigo sulla pagina sicura
+          GwtUtils.deferredExecution(new Delegate<Void>() {
+            public void execute(Void element) {
+              Window.Location.replace(NavigationUtils.getCompleteUrl(NavigationUtils.SECURE_ADMIN_PAGE_URL));
+            }
+          });
+        } else {
+          Window.alert("ATTENZIONE: l'account " + event.getState().getLoggedUser().getEmailAddress() + " non e' un amministratore di questo sito (promemoria per gli ammnistratori di sistema: forse va impostato portalUser.adminUser)!");
+        }
+        
+      }
+    }
+  }
+  
 }

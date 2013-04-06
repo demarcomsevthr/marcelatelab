@@ -6,6 +6,7 @@ import it.mate.econyx.shared.model.impl.DocumentFolderTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
+import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,7 @@ public class DocumentFolderDs implements DocumentFolder, HasKey {
     return documents != null ? new ArrayList<Document>(documents) : null;
   }
 
+  @CloneableProperty (targetClass=DocumentDs.class)
   public void setDocuments(List<Document> documents) {
     this.documents = new ArrayList<DocumentDs>();
     this.documentsKeys = new ArrayList<Key>();

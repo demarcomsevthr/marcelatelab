@@ -9,6 +9,11 @@ import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
+import it.mate.econyx.client.view.DocumentEditView;
+import it.mate.econyx.client.view.DocumentFolderEditView;
+import it.mate.econyx.client.view.DocumentFolderListView;
+import it.mate.econyx.client.view.DocumentFolderView;
+import it.mate.econyx.client.view.DocumentView;
 import it.mate.econyx.client.view.ImageEditView;
 import it.mate.econyx.client.view.ImageListView;
 import it.mate.econyx.client.view.OrderEditView;
@@ -34,6 +39,9 @@ import it.mate.econyx.client.view.admin.ArticleFolderEditViewImpl;
 import it.mate.econyx.client.view.admin.ArticleFolderListViewImpl;
 import it.mate.econyx.client.view.admin.CalEventEditViewImpl;
 import it.mate.econyx.client.view.admin.CalEventListViewImpl;
+import it.mate.econyx.client.view.admin.DocumentEditViewImpl;
+import it.mate.econyx.client.view.admin.DocumentFolderEditViewImpl;
+import it.mate.econyx.client.view.admin.DocumentFolderListViewImpl;
 import it.mate.econyx.client.view.admin.ImageEditViewImpl;
 import it.mate.econyx.client.view.admin.ImageListViewImpl;
 import it.mate.econyx.client.view.admin.OrderEditViewImpl;
@@ -88,6 +96,12 @@ public class AdminGinModule extends AbstractGinModule {
     bind(ArticleFolderEditView.class).to(ArticleFolderEditViewImpl.class);
     bind(ArticleView.class).to(ArticleView.NotImpl.class);
     bind(ArticleEditView.class).to(ArticleEditViewImpl.class);
+
+    bind(DocumentFolderView.class).to(DocumentFolderView.NotImpl.class);
+    bind(DocumentFolderListView.class).to(DocumentFolderListViewImpl.class);
+    bind(DocumentFolderEditView.class).to(DocumentFolderEditViewImpl.class);
+    bind(DocumentView.class).to(DocumentView.NotImpl.class);
+    bind(DocumentEditView.class).to(DocumentEditViewImpl.class);
 
     bind(CalEventListView.class).to(CalEventListViewImpl.class);
     bind(CalEventEditView.class).to(CalEventEditViewImpl.class);

@@ -19,29 +19,26 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 05/04/2013
+	SNAPSHOT 06/04/2013
 		
 		>> DOCUMENT LIBRARY
-		
-			>>> CREATO model 
-			
+			>>> model FATTO [05/04/2013]
+			>>> admin scaffholding INIZIATO [06/04/2013]
+			>>> TO DO:
+				> upload documento content
+				> cancellazione document
+			>>> DocumentFolderPage >>> DA FARE
 
-		>> STYLING > new pages.xml
-			
-		>> TOGLIERE da econyx.properties:
-			it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache=false
-				
 		>> Calendar FATTO [05/04/2013]
 
 		>> ListPropertyWrapper
 			mettere in tutti i getter getList dei tx
 		
+		>> UPGRADE GAE 1.7.6
 
 		
 	SNAPSHOT 28/03/2013
 		
-		>> GESTIONE ARTICOLI E BLOG <<
-		  
 		>> STYLING e contenuti pagine [2]
 			> css pagine
 			> css articoli
@@ -51,6 +48,8 @@
 					- http://developersitalia.blogspot.it/
 			
 		>> NEW BlogPage, BlogThread, BlogComment [3]	
+		
+		>> ProducerFolderPage [3]
 		
 		>> Link Facebook, Twitter, ...  ???
 			
@@ -261,6 +260,15 @@
 			>>> ISSUES CHIUSE <<<
 		________________________________________________________________________________
 
+
+		-- DOCUMENT LIBRARY
+			>> model e admin scaffholding FATTI IN 6 ore totali !!! [06/04/2013]
+
+		-- CALENDAR
+			>> FATTO [04/04/2013]
+
+		-- ARTICLE LIBRARY
+			>> FATTO [02/04/2013]
 
 		-- ListPropertyWrapper
 			>> FATTO [28/03/2013]
