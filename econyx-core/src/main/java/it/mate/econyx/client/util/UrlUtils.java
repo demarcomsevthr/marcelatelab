@@ -24,4 +24,8 @@ public class UrlUtils extends it.mate.gwtcommons.client.utils.UrlUtils {
     return "re/im/"+code;
   }
   
+  public static String getDocumentContentUrl(String code) {
+    return "re/doc/"+code;
+  }
+  
 }

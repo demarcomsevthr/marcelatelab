@@ -1,8 +1,11 @@
 package it.mate.econyx.server.servlets;
 
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
+import it.mate.econyx.server.model.impl.DocumentContentDs;
+import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.CustomAdapter;
+import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.ProductAdapter;
@@ -42,6 +45,8 @@ public class UploadServlet extends HttpServlet {
   
   private ImageAdapter imageAdapter;
   
+  private DocumentAdapter documentAdapter;
+  
   private CustomAdapter customAdapter;
   
   private PortalDataExporter portalDataMarshaller;
@@ -54,6 +59,7 @@ public class UploadServlet extends HttpServlet {
     imageAdapter =  context.getBean(ImageAdapter.class);
     customAdapter =  context.getBean(CustomAdapter.class);
     portalDataMarshaller = context.getBean(PortalDataExporter.class);
+    documentAdapter = context.getBean(DocumentAdapter.class);
   }
   
   @Override
@@ -108,6 +114,15 @@ public class UploadServlet extends HttpServlet {
         } else {
           throw new ServiceException(String.format("Image type %s non previsto", imageType));
         }
+      } else if ("DOCUMENT_UPLOAD".equals(op)) {
+        DocumentDs document = documentAdapter.findDocumentDsById(objId);
+        DocumentContentDs content = (DocumentContentDs)document.getContent();
+        if (content == null) {
+          content = new DocumentContentDs();
+          document.setContent(content);
+        }
+        content.setContentBlob(fileBlob);
+        documentAdapter.updateDocument(document);
       } else if ("PORTAL_DATA_UPLOAD".equals(op)) {
         if (PropertiesHolder.getBoolean("uploadServlet.deferredPortalDataUpload")) {
           Queue queue = QueueFactory.getDefaultQueue();

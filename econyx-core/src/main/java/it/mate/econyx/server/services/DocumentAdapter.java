@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services;
 
+import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
 
@@ -22,5 +23,9 @@ public interface DocumentAdapter {
   public Document findDocumentById(String id, boolean fetchContent);
   
   public Document updateDocument(Document Document);
+  
+  public DocumentDs findDocumentDsById(String id);
+  
+  public DocumentDs findDocumentDsByCode(String code);
   
 }

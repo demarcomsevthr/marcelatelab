@@ -156,9 +156,19 @@ public class DocumentAdapterImpl implements DocumentAdapter {
     return CloneUtils.clone(document, DocumentTx.class);
   }
   
+  public DocumentDs findDocumentDsByCode(String code) {
+    Document document = findDocumentByCode(code);
+    document = internalFindDocumentById(document.getId(), true);
+    return (DocumentDs)document;
+  }
+  
   public Document findDocumentById(String id, boolean fetchContent) {
     Document document = internalFindDocumentById(id, fetchContent);
     return CloneUtils.clone(document, DocumentTx.class);
+  }
+  
+  public DocumentDs findDocumentDsById(String id) {
+    return internalFindDocumentById(id, true);
   }
   
   private DocumentDs internalFindDocumentById(String id, boolean fetchContent) {

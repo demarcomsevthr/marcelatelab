@@ -35,6 +35,8 @@
 			mettere in tutti i getter getList dei tx
 		
 		>> UPGRADE GAE 1.7.6
+		
+		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
 
 		
 	SNAPSHOT 28/03/2013
