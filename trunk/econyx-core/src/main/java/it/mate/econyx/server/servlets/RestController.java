@@ -1,6 +1,9 @@
 package it.mate.econyx.server.servlets;
 
+import it.mate.econyx.server.model.impl.DocumentContentDs;
+import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.server.model.impl.ImageDs;
+import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.ExcelAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
@@ -63,6 +66,12 @@ public class RestController {
   
   @Autowired private PortalServiceAdapter portalServiceAdapter;
   
+  @Autowired private DocumentAdapter documentAdapter;
+  
+  
+  private static boolean probeActive = false;
+  
+  private static boolean probeStopRequested = false;
   
   
   @RequestMapping ("/pg/{pageCode}")
@@ -98,9 +107,16 @@ public class RestController {
     }
   }
   
-  private static boolean probeActive = false;
-  
-  private static boolean probeStopRequested = false;
+  @RequestMapping ("/doc/{docCode}")
+  public void getDocument(@PathVariable ("docCode") String docCode, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    DocumentDs document = documentAdapter.findDocumentDsByCode(docCode);
+    if (document.getContent() != null) {
+      DocumentContentDs content = (DocumentContentDs)document.getContent();
+      if (content.getContentBlob() != null && content.getContentBlob().getBytes() != null) {
+        response.getOutputStream().write(content.getContentBlob().getBytes());
+      }
+    }
+  }
   
   @RequestMapping ("/probe/{command}/{delaySeconds}")
   public void startProbe(@PathVariable ("command") String command, 

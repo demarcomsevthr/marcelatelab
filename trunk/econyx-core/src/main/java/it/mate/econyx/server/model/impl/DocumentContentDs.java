@@ -43,5 +43,13 @@ public class DocumentContentDs implements DocumentContent, HasKey {
   public void setContent(String content) {
     this.content = content != null ? BlobUtils.stringToBlob(content) : null;
   }
-
+  
+  public void setContentBlob(Blob content) {
+    this.content = content;
+  }
+  
+  public Blob getContentBlob() {
+    return content;
+  }
+  
 }

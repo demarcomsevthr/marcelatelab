@@ -168,7 +168,7 @@ public class AdminLayoutView extends Composite implements PortalSessionStateChan
         
         if (event.getState().getLoggedUser().isAdminUser()) {
           // redirigo sulla pagina sicura
-          GwtUtils.deferredExecution(new Delegate<Void>() {
+          GwtUtils.deferredExecution(800, new Delegate<Void>() {
             public void execute(Void element) {
               Window.Location.replace(NavigationUtils.getCompleteUrl(NavigationUtils.SECURE_ADMIN_PAGE_URL));
             }
