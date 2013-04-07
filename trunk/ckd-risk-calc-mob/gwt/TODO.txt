@@ -1,0 +1,16 @@
+
+	ISSUES
+	
+	
+	07/04/2013 - CENTRATURA inputPanel (e outputPanel) su tablet
+	
+	>> main.css > ckdInputPanelTable
+	>> it.mate.ckd.client.view.CKDInputViewWrapper.initUI() > deferredExecution > align center
+	
+	>> DA PROVARE:
+	
+	- .ckdInputPanelTable { width: 80% }
+	- CKDInputView deferredExec ckdInputPanetTable.getWidth > paddingLeft = (ScreenWidth - ckdInputPanelTable.width) / 2
+	
+	
+	

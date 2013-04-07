@@ -22,7 +22,8 @@
       </g:HTMLPanel>
       
       <gc:Spacer height="8em"/>
-      <m:Button round="true" ui:field="paramBtn" width="10em"/>
+      
+      <m:Button round="true" ui:field="paramBtn" addStyleNames="ckdParamBtn"/>
       
       <gc:Spacer height="7em"/>
       
@@ -36,9 +37,7 @@
       <g:Label text="" addStyleNames="{style.verLbl}">
         <ui:attribute name="text" description="text" key="app.versionCredits"/>
       </g:Label>
-      <!-- 
-      <g:Label text="1234567890123456789012345678901234567890123456789012345678901234567890" addStyleNames="{style.verLbl}"/>
-       -->
+
       <g:HTMLPanel>
         <div id="debugDiv" class="{style.verLbl}"></div>
         <g:Label ui:field="devInfo" addStyleNames="verLbl"/>

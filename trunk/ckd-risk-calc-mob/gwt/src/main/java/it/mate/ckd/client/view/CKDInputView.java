@@ -6,7 +6,6 @@ import it.mate.ckd.client.ui.SpinnerIntegerBox;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.utils.IPhoneScrollPatch;
-import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -14,8 +13,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -36,9 +33,6 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
-  /*
-  @UiField (provided=true) MGWTCustomClientBundle bundle;
-  */
   @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
 
@@ -57,10 +51,6 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   private CKD ckd = new CKD();
   
   public CKDInputView() {
-    /*
-    bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
-    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
-    */
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
     initUI();
@@ -74,15 +64,6 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    /*
-    getHeaderBackButton().setText("Home");
-    getHeaderBackButton().addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
-        getPresenter().goToHome();
-      }
-    });
-    */
-    
     creatininaSpinBox.setValue(1d);
     
     creatininaSpinBox.setIncrement(0.1);
@@ -92,7 +73,8 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         IPhoneScrollPatch.apply();
       }
     });
-    
+
+    /*
     if (OsDetectionPatch.isTablet()) {
       
       ckdOutputBtn.setVisible(false);
@@ -126,6 +108,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
       onCalcBtn(null);
       
     }
+    */
     
   }
   

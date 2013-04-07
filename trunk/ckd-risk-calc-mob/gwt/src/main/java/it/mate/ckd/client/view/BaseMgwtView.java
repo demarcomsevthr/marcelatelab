@@ -1,5 +1,6 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 
 import com.google.gwt.user.client.ui.HTML;
@@ -51,7 +52,11 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     main.add(headerPanel);
     main.add(scrollPanel);
     
-    getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Risk Calc");
+    if (OsDetectionPatch.isTablet()) {
+      getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Risk Calculator");
+    } else {
+      getTitle().setHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CKD Risk Calc");
+    }
     
   }
   

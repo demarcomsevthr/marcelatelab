@@ -4,6 +4,43 @@ body {
   background-size: 20px 768px;
 }
 
+.mgwt-ScrollPanel-container {
+  width: 100%;
+}
+
+.mgwt-ScrollPanel-container * {
+  font-size: 22px;
+}
+
+.homePanel * {
+  font-size: 22px;
+  vertical-align: middle;
+}
+
+.homePanel button {
+  font-size: 22px;
+  font-weight: bolder;
+}
+
+.ckdAppPresentation {
+  font-size: 28pt;
+  padding-top: 80px;
+}
+
+.mgwt-Button.ckdParamBtn.mgwt-Button-round {
+  font-size: 24px;
+}
+
+.verLbl {
+  font-size: 10px;
+}
+
+.ckdInputPanelTable {
+  width: 100%;
+  padding-left: 10%;
+  padding-top: 10%;
+}
+
 .homePanel.outputPanel {
   padding-top: 20px;
   padding-left: 20px;
