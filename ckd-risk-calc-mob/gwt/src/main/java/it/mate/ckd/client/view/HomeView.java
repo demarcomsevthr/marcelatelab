@@ -28,9 +28,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
-  /*
-  @UiField (provided=true) MGWTCustomClientBundle bundle;
-  */
   @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
   
@@ -38,10 +35,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Label devInfo;
 
   public HomeView() {
-    /*
-    bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
-    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
-    */
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
     initUI();
@@ -52,12 +45,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
-    /*
-    HorizontalPanel hp = new HorizontalPanel();
-    hp.add(new Spacer("0.8em"));
-    hp.add(new Image(MGWTCustomTheme.getInstance().getMGWTClientBundle().headerImage()));
-    getHeaderPanel().setLeftWidget(hp);
-    */
+
     getHeaderPanel().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));

@@ -34,6 +34,17 @@
   font-weight: bolder;
 }
 
+.mgwt-Button.ckdParamBtn.mgwt-Button-round {
+  width: 10em;
+}
+
+.ckdAppPresentation {
+  color: rgb(248, 242, 242);
+  font-size: 22pt;
+  padding-top: 20px;
+  font-weight: bold;  
+}
+
 .inputPanel button {
   border: solid 1px rgb(192,192,192);
   padding: 4px;
@@ -160,9 +171,6 @@
   font-size: 8px;
 }
 
-/*
-  background-color: rgb(121, 121, 121);
-*/
 .valoriLbl {
   font-size: 18px;
   font-weight: bolder;

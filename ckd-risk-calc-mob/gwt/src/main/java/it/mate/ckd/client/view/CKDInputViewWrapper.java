@@ -5,7 +5,11 @@ import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQueryUtils;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
@@ -34,9 +38,9 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
     layoutPanel.add(inputView.asWidget());
 
     if (isTablet) {
-      outputView = new CKDOutputView();
-      outputView.setVisible(false);
-      layoutPanel.add(outputView.asWidget());
+//    outputView = new CKDOutputView();
+//    outputView.setVisible(false);
+//    layoutPanel.add(outputView.asWidget());
     }
     
     initWidget(layoutPanel);
@@ -45,6 +49,14 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToHome();
+      }
+    });
+
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        Element tdElem = JQueryUtils.selectFirst(".mgwt-ScrollPanel-container td");
+        GwtUtils.log("mgwt-ScrollPanel-container td = " + tdElem);
+        tdElem.setAttribute("align", "center");
       }
     });
     
@@ -71,8 +83,9 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
       }
       public void goToCkdOutput(CKD ckd) {
         if (isTablet) {
-          outputView.setVisible(true);
-          outputView.setModel(ckd, null);
+//        outputView.setVisible(true);
+//        outputView.setModel(ckd, null);
+          presenter.goToCkdOutput(ckd);
         } else {
           presenter.goToCkdOutput(ckd);
         }
