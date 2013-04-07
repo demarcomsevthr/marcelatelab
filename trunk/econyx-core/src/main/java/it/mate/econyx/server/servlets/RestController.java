@@ -1,6 +1,5 @@
 package it.mate.econyx.server.servlets;
 
-import it.mate.econyx.server.model.impl.DocumentContentDs;
 import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.DocumentAdapter;
@@ -39,6 +38,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -110,12 +111,9 @@ public class RestController {
   @RequestMapping ("/doc/{docCode}")
   public void getDocument(@PathVariable ("docCode") String docCode, HttpServletRequest request, HttpServletResponse response) throws Exception {
     DocumentDs document = documentAdapter.findDocumentDsByCode(docCode);
-    if (document.getContent() != null) {
-      DocumentContentDs content = (DocumentContentDs)document.getContent();
-      if (content.getContentBlob() != null && content.getContentBlob().getBytes() != null) {
-        response.getOutputStream().write(content.getContentBlob().getBytes());
-      }
-    }
+    BlobKey blobKey = new BlobKey(document.getBlobKey());
+    response.setContentType("application/pdf");
+    BlobstoreServiceFactory.getBlobstoreService().serve(blobKey, response);
   }
   
   @RequestMapping ("/probe/{command}/{delaySeconds}")

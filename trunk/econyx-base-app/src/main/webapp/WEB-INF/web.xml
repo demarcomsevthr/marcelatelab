@@ -151,6 +151,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>blobUploadServlet</servlet-name>
+    <servlet-class>it.mate.econyx.server.servlets.BlobUploadServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>blobUploadServlet</servlet-name>
+    <url-pattern>/blobUpload</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>exportServlet</servlet-name>
     <servlet-class>it.mate.econyx.server.servlets.ExportServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

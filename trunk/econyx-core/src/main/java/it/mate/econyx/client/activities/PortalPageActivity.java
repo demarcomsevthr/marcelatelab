@@ -4,6 +4,7 @@ import it.mate.econyx.client.events.PortalInitCompleteEvent;
 import it.mate.econyx.client.events.PortalPageExplorerRetrieveEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
+import it.mate.econyx.client.places.DocumentPlace;
 import it.mate.econyx.client.places.PortalPagePlace;
 import it.mate.econyx.client.places.ProductPlace;
 import it.mate.econyx.client.util.PagesUtils;
@@ -18,6 +19,8 @@ import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.Articolo;
+import it.mate.econyx.shared.model.DocumentFolder;
+import it.mate.econyx.shared.model.DocumentFolderPage;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -405,6 +408,17 @@ public class PortalPageActivity extends BaseActivity implements
   
   private ArticleActivity startArticleActivity(AcceptsOneWidget panel, ArticlePlace place) {
     ArticleActivity activity = new ArticleActivity(place, AppClientFactory.IMPL);
+    activity.start(panel, AppClientFactory.IMPL.getEventBus());
+    return activity;
+  }
+  
+  public void initDocumentFolderPageView (AcceptsOneWidget panel, DocumentFolderPage page) {
+    DocumentFolder entity = page.getEntity();
+    startDocumentActivity(panel, new DocumentPlace(DocumentPlace.FOLDER_VIEW, entity));
+  }
+  
+  private DocumentActivity startDocumentActivity(AcceptsOneWidget panel, DocumentPlace place) {
+    DocumentActivity activity = new DocumentActivity(place, AppClientFactory.IMPL);
     activity.start(panel, AppClientFactory.IMPL.getEventBus());
     return activity;
   }

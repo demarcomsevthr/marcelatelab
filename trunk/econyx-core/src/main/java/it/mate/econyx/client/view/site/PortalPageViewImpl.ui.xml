@@ -8,10 +8,8 @@
       <g:FlexTable ui:field="childreenTable"/>
       <g:HTML ui:field="htmlPanel"/>
       <gwtcommons:Spacer height="1em"/>
-      <g:SimplePanel ui:field="productListPanel"/>
-      <g:SimplePanel ui:field="productPanel"/>
-      <g:SimplePanel ui:field="articlePanel"/>
-      <g:FlexTable ui:field="inlineChildreenTable"/>
+      <g:SimplePanel ui:field="innerPagePanel"/>
+      <g:FlexTable ui:field="innerChildreenTable"/>
     </g:HTMLPanel>
   </g:VerticalPanel>
 

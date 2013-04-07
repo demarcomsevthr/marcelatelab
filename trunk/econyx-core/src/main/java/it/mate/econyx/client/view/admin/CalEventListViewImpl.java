@@ -10,13 +10,13 @@ import it.mate.gwtcommons.client.ui.MessageBox.Callbacks;
 import it.mate.gwtcommons.client.ui.MessageBoxUtils;
 import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -75,7 +75,7 @@ public class CalEventListViewImpl extends AbstractBaseView<CalEventListView.Pres
     DateBox date = new DateBox();
     VerticalPanel table = new VerticalPanel();
     public CalEventOptionDialog(final Delegate<CalEvent> delegate) {
-      date.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd/MM/yyyy")));
+      GwtUtils.setDateBoxFormat(date, "dd/MM/yyyy");
       date.setValue(new Date());
       addRow("Titolo:", title);
       addRow("Data:", date);

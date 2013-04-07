@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DocumentEditGeneralView extends AbstractAdminTabPage<DocumentEditView.Presenter> implements DocumentEditView, IsAdminTabPage<DocumentEditView.Presenter> {
@@ -33,6 +34,7 @@ public class DocumentEditGeneralView extends AbstractAdminTabPage<DocumentEditVi
   @UiField Anchor contentAnchor;
   @UiField FormPanel uploadForm;
   @UiField Hidden objId;
+  @UiField Label authorName;
   
   private Document document;
   
@@ -58,7 +60,9 @@ public class DocumentEditGeneralView extends AbstractAdminTabPage<DocumentEditVi
         contentAnchor.setVisible(true);
         contentAnchor.setHref(UrlUtils.getDocumentContentUrl(document.getCode()));
         contentAnchor.setText(UrlUtils.getDocumentContentUrl(document.getCode()));
+        contentAnchor.setTarget(document.getTitle());
       }
+      authorName.setText(document.getAuthor().getScreenName());
     }
   }
   
@@ -95,15 +99,23 @@ public class DocumentEditGeneralView extends AbstractAdminTabPage<DocumentEditVi
       return;
     }
     objId.setValue(document.getId());
-    uploadForm.setAction(UrlUtils.getUploadServletUrl());
-    uploadForm.setMethod(FormPanel.METHOD_POST);
-    uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
-    uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-      public void onSubmitComplete(SubmitCompleteEvent event) {
-        getPresenter().edit(document);
+    
+//  uploadForm.setAction(UrlUtils.getUploadServletUrl());
+
+    getPresenter().createBlobstoreUploadUrl("/blobUpload", new Delegate<String>() {
+      public void execute(String result) {
+        uploadForm.setAction(result);
+        uploadForm.setMethod(FormPanel.METHOD_POST);
+        uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+        uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+          public void onSubmitComplete(SubmitCompleteEvent event) {
+            getPresenter().edit(document);
+          }
+        });
+        uploadForm.setVisible(true);
       }
     });
-    uploadForm.setVisible(true);
+    
   }
   
   @UiHandler ("submitBtn")

@@ -20,8 +20,8 @@ public interface Document extends PortalResource {
 
   public void setCreated(Date created);
   
-  public DocumentContent getContent();
-  
-  public void setContent(DocumentContent content);
+  public String getBlobKey();
+
+  public void setBlobKey(String blobKey);
     
 }

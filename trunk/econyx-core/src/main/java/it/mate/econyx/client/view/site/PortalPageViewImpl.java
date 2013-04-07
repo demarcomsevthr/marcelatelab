@@ -4,11 +4,11 @@ import it.mate.econyx.client.activities.mapper.PlaceHolderActivityMapper;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.CalendarPlace;
 import it.mate.econyx.client.ui.SimplePanelDivWrapper;
-import it.mate.econyx.client.util.NavigationUtils;
 import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.ArticlePage;
+import it.mate.econyx.shared.model.DocumentFolderPage;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -22,7 +22,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
-import java.util.Date;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -53,10 +52,11 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
   
   @UiField FlexTable childreenTable;
   @UiField HTML htmlPanel;
+  /*
   @UiField SimplePanel productListPanel;
-  @UiField SimplePanel productPanel;
-  @UiField SimplePanel articlePanel;
-  @UiField FlexTable inlineChildreenTable;
+  */
+  @UiField SimplePanel innerPagePanel;
+  @UiField FlexTable innerChildreenTable;
   
   public PortalPageViewImpl() {
     super();
@@ -73,6 +73,21 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       
       boolean childreenRendered = false;
 
+      if (page instanceof ArticleFolderPage) {
+        ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
+        getPresenter().initArticleFolderPageView(innerPagePanel, articleFolderPage);
+      }
+      
+      if (page instanceof ArticlePage) {
+        ArticlePage articlePage = (ArticlePage)page;
+        getPresenter().initArticlePageView(innerPagePanel, articlePage);
+      }
+      
+      if (page instanceof DocumentFolderPage) {
+        DocumentFolderPage documentFolderPage = (DocumentFolderPage)page;
+        getPresenter().initDocumentFolderPageView(innerPagePanel, documentFolderPage);
+      }
+      
       if (page instanceof ProductFolderPage) {
         ProductFolderPage productFolderPage = (ProductFolderPage)page;
         if (!productFolderPage.getHideChildreen()) {
@@ -86,7 +101,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
                 productListHeader = "";
               }
             }
-            getPresenter().initProductListView(productListPanel, productFolderPage, true, productListHeader);
+            getPresenter().initProductListView(innerPagePanel, productFolderPage, true, productListHeader);
           }
         }
       }
@@ -140,17 +155,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       
       if (page instanceof ProductPage) {
         ProductPage productPage = (ProductPage)page;
-        getPresenter().initProductView(productPanel, productPage);
-      }
-      
-      if (page instanceof ArticleFolderPage) {
-        ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
-        getPresenter().initArticleFolderPageView(articlePanel, articleFolderPage);
-      }
-      
-      if (page instanceof ArticlePage) {
-        ArticlePage articlePage = (ArticlePage)page;
-        getPresenter().initArticlePageView(articlePanel, articlePage);
+        getPresenter().initProductView(innerPagePanel, productPage);
       }
       
       if (!childreenRendered && page instanceof PortalFolderPage) {
@@ -158,7 +163,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
         if (portalFolderPage.getShowChildreenContent()) {
           if (portalFolderPage.getChildreen() != null) {
             childreenRendered = true;
-            new ChildreenTableUpdater(portalFolderPage, inlineChildreenTable);
+            new ChildreenTableUpdater(portalFolderPage, innerChildreenTable);
           }
         }
       }

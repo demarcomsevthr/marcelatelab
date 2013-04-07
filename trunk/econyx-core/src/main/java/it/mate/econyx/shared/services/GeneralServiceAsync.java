@@ -54,4 +54,6 @@ public interface GeneralServiceAsync {
 
   void cobraTest(AsyncCallback<Void> callback);
 
+  void createBlobstoreUploadUrl(String url, AsyncCallback<String> callback);
+
 }

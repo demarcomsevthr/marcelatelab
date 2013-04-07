@@ -10,6 +10,7 @@ import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
+import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.services.OrderAdapter;
@@ -22,6 +23,9 @@ import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.Document;
+import it.mate.econyx.shared.model.DocumentFolder;
+import it.mate.econyx.shared.model.DocumentFolderPage;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
@@ -38,6 +42,8 @@ import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.econyx.shared.model.impl.CustomerTx;
+import it.mate.econyx.shared.model.impl.DocumentFolderTx;
+import it.mate.econyx.shared.model.impl.DocumentTx;
 import it.mate.econyx.shared.model.impl.ImageTx;
 import it.mate.econyx.shared.model.impl.ModalitaSpedizioneTx;
 import it.mate.econyx.shared.model.impl.OrderStateConfigTx;
@@ -86,6 +92,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   @Autowired private ArticleAdapter articleAdapter;
   
+  @Autowired private DocumentAdapter documentAdapter;
+  
   private static final String INIT_FILE = "META-INF/setup-data/portaldata.xml";
   
   private void setupXStream() {
@@ -114,6 +122,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     XStreamUtils.getXStream().omitField(OrderStateConfigTx.class, "id");
     XStreamUtils.getXStream().omitField(ArticleFolderTx.class, "id");
     XStreamUtils.getXStream().omitField(ArticleTx.class, "id");
+    XStreamUtils.getXStream().omitField(DocumentFolderTx.class, "id");
+    XStreamUtils.getXStream().omitField(DocumentTx.class, "id");
   }
   
   public PortalDataExportModel load () {
@@ -180,6 +190,10 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       ArticleFolder articleFolder = dataModel.articleFolders.get(it);
       visitArticleFolder(dataModel, true, articleFolder);
     }
+    for (int it = 0; it < dataModel.documentFolders.size(); it++) {
+      DocumentFolder documentFolder = dataModel.documentFolders.get(it);
+      visitDocumentFolder(dataModel, true, documentFolder);
+    }
     return dataModel;
   }
   
@@ -204,6 +218,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
       model.orderStates = orderAdapter.findAllOrderStates();
       model.articleFolders = articleAdapter.findAll();
+      model.documentFolders = documentAdapter.findAllFolders();
       setupXStream();
       xml = XStreamUtils.parseGraph(model);
     } catch (Throwable th) {
@@ -346,6 +361,18 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         page = portalPageAdapter.update(page);
       }
     }
+    if (page instanceof DocumentFolderPage) {
+      DocumentFolderPage documentFolderPage = (DocumentFolderPage)page;
+      DocumentFolder documentFolder = documentFolderPage.getEntity();
+      documentFolder = visitDocumentFolder(context, loadMode, documentFolder);
+      if (loadMode) {
+        documentFolderPage.setEntity(documentFolder);
+        if (documentFolderPage.getName() == null) {
+          documentFolderPage.setName(documentFolderPage.getEntity().getName());
+        }
+        page = portalPageAdapter.update(page);
+      }
+    }
     return page;
   }
   
@@ -373,6 +400,32 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       model.articleFolders.add(articleFolder);
     }
     return articleFolder;
+  }
+  
+  private DocumentFolder visitDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    for (int it = 0; it < model.documentFolders.size(); it++) {
+      DocumentFolder cachedDocumentFolder = model.documentFolders.get(it);
+      boolean matched = false;
+      if (documentFolder.getCode() != null && documentFolder.getCode().equals(cachedDocumentFolder.getCode())) {
+        matched = true;
+      }
+      if (documentFolder.getName() != null && documentFolder.getName().equals(cachedDocumentFolder.getName())) {
+        matched = true;
+      }
+      if (matched) {
+        if (loadMode && cachedDocumentFolder.getId() == null) {
+          cachedDocumentFolder = createDocumentFolder(context, loadMode, cachedDocumentFolder);
+          model.documentFolders.set(it, cachedDocumentFolder);
+        }
+        return cachedDocumentFolder;
+      }
+    }
+    if (loadMode) {
+      documentFolder = createDocumentFolder(context, loadMode, documentFolder);
+      model.documentFolders.add(documentFolder);
+    }
+    return documentFolder;
   }
   
   private Articolo visitProduct(VisitContext context, boolean loadMode, Articolo product) {
@@ -499,6 +552,16 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     }
     articleFolder = articleAdapter.create(articleFolder);
     return articleFolder;
+  }
+  
+  private DocumentFolder createDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
+    for (Document document : documentFolder.getDocuments()) {
+      document.setAuthor(visitPortalUser(context, loadMode, document.getAuthor()));
+      if (document.getCreated() == null)
+        document.setCreated(new Date());
+    }
+    documentFolder = documentAdapter.createFolder(documentFolder);
+    return documentFolder;
   }
   
   private PortalDataExportModel cast(VisitContext context) {

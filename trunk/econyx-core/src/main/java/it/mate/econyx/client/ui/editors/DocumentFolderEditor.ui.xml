@@ -9,7 +9,7 @@
         <g:Label text="Nome:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="name" width="20em" focus="true"/>
       </g:HorizontalPanel>
       <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
-        <g:Label text="Codice:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="code" width="20em"/>
+        <g:Label text="Codice:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:TextBox ui:field="code" width="20em" readOnly="true"/>
       </g:HorizontalPanel>
       <g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
         <g:Label text="Ordine:" width="8em" horizontalAlignment="ALIGN_RIGHT"/><g:IntegerBox ui:field="orderNm" width="8em" />

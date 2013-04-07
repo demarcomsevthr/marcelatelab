@@ -3,6 +3,7 @@ package it.mate.econyx.server.model;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
@@ -34,4 +35,5 @@ public class PortalDataExportModel implements VisitContext {
   public List<ModalitaPagamento> listaModalitaPagamento = new ArrayList<ModalitaPagamento>();
   public List<OrderStateConfig> orderStates = new ArrayList<OrderStateConfig>();
   public List<ArticleFolder> articleFolders;
+  public List<DocumentFolder> documentFolders;
 }

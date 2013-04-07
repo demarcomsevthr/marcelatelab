@@ -7,6 +7,12 @@
     <g:VerticalPanel>
       <g:HorizontalPanel>
         <gc:Spacer width="2em"/>
+        <g:Label text="Author: "/>
+        <gc:Spacer width="0.5em"/>
+        <g:Label ui:field="authorName"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel>
+        <gc:Spacer width="2em"/>
         <g:Label text="Document link: "/>
         <gc:Spacer width="0.5em"/>
         <g:Anchor ui:field="contentAnchor" visible="false"/>
@@ -20,10 +26,7 @@
         <g:FormPanel ui:field="uploadForm" visible="false"> 
           <g:VerticalPanel>
             <g:Hidden name="op" value="DOCUMENT_UPLOAD"/>
-            <g:Hidden name="imageType" ui:field="imageType"/>
-            <g:Hidden name="imageSize" ui:field="imageSize"/>
             <g:Hidden name="objId" ui:field="objId"/>
-            <g:Hidden name="useCustomAdapter" ui:field="useCustomAdapter" value="false"/>
             <g:FileUpload ui:field="fileupdBtn" name="file" width="80em"/>
             <g:Button ui:field="submitBtn" text="Invia"/>
           </g:VerticalPanel>

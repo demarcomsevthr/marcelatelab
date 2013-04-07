@@ -1,7 +1,6 @@
 package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Document;
-import it.mate.econyx.shared.model.DocumentContent;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
@@ -20,8 +19,8 @@ public class DocumentTx implements Document {
   
   String title;
 
-  DocumentContentTx content;
-
+  String blobKey;
+  
   PortalUserTx author;
   
   Date created;
@@ -36,20 +35,13 @@ public class DocumentTx implements Document {
   public void setId(String id) {
     this.id = id;
   }
-
-  public DocumentContent getContent() {
-    return content;
+  
+  public String getBlobKey() {
+    return blobKey;
   }
 
-  @CloneableProperty (targetClass=DocumentContentTx.class)
-  public void setContent(DocumentContent content) {
-    if (content == null) {
-      this.content = null;
-    } else if (content instanceof DocumentContentTx) {
-      this.content = (DocumentContentTx)content;
-    } else {
-      throw new CloneablePropertyMissingException(content);
-    }
+  public void setBlobKey(String blobKey) {
+    this.blobKey = blobKey;
   }
 
   public String getName() {
