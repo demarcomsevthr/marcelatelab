@@ -11,7 +11,9 @@ import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.impl.DocumentTx;
 import it.mate.econyx.shared.services.DocumentServiceAsync;
+import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.List;
@@ -31,6 +33,8 @@ public class DocumentActivity extends BaseActivity implements
   private DocumentPlace place;
   
   private DocumentServiceAsync documentService = AppClientFactory.IMPL.getGinjector().getDocumentService();
+  
+  private GeneralServiceAsync generalService = AppClientFactory.IMPL.getGinjector().getGeneralService();
   
   public DocumentActivity(DocumentPlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -52,10 +56,12 @@ public class DocumentActivity extends BaseActivity implements
       initView(AppClientFactory.IMPL.getGinjector().getDocumentFolderEditView(), panel);
       retrieveModel();
     }
+    /*
     if (place.getToken().equals(DocumentPlace.DOCUMENT_VIEW)) {
       initView(AppClientFactory.IMPL.getGinjector().getDocumentView(), panel);
       retrieveModel();
     }
+    */
     if (place.getToken().equals(DocumentPlace.DOCUMENT_EDIT)) {
       initView(AppClientFactory.IMPL.getGinjector().getDocumentEditView(), panel);
       retrieveModel();
@@ -80,9 +86,11 @@ public class DocumentActivity extends BaseActivity implements
     if (place.getToken().equals(DocumentPlace.FOLDER_EDIT)) {
       getView().setModel(place.getModel());
     }
+    /*
     if (place.getToken().equals(DocumentPlace.DOCUMENT_VIEW)) {
       getView().setModel(place.getModel());
     }
+    */
     if (place.getToken().equals(DocumentPlace.DOCUMENT_EDIT)) {
       getView().setModel(place.getModel());
     }
@@ -169,6 +177,17 @@ public class DocumentActivity extends BaseActivity implements
         }
       });
     }
+  }
+  
+  public void createBlobstoreUploadUrl (String url, final Delegate<String> delegate) {
+    generalService.createBlobstoreUploadUrl(url, new AsyncCallback<String>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(String result) {
+        delegate.execute(result);
+      }
+    });
   }
 
 }

@@ -112,7 +112,7 @@ public interface AppGinjector extends CommonGinjector {
   public DocumentFolderView getDocumentFolderView();
   public DocumentFolderListView getDocumentFolderListView();
   public DocumentFolderEditView getDocumentFolderEditView();
-  public DocumentView getDocumentView();
+/*public DocumentView getDocumentView();*/
   public DocumentEditView getDocumentEditView();
 
   public CalEventListView getCalEventListView();

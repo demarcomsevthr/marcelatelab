@@ -1,6 +1,5 @@
 package it.mate.econyx.server.services.impl;
 
-import it.mate.econyx.server.model.impl.DocumentContentDs;
 import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.server.model.impl.DocumentFolderDs;
 import it.mate.econyx.server.services.DocumentAdapter;
@@ -11,7 +10,6 @@ import it.mate.econyx.shared.model.impl.DocumentFolderTx;
 import it.mate.econyx.shared.model.impl.DocumentTx;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindContext;
-import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
@@ -121,16 +119,22 @@ public class DocumentAdapterImpl implements DocumentAdapter {
   }
   
   private void deleteDocumentDs (DocumentDs documentDs) {
+    /*
     DocumentContentDs content = (DocumentContentDs)documentDs.getContent();
-    if (content != null) {
-      if (content.getKey() != null) {
+    if (content != null && content.getKey() != null) {
+      dao.delete(content);
+    } else {
+      documentDs = internalFindDocumentById(documentDs.getId(), true);
+      if (content != null && content.getKey() != null) {
         dao.delete(content);
       }
     }
+    */
     dao.delete(documentDs);
   }
   
   private DocumentDs createOrUpdateDocumentDs (DocumentDs document) {
+    /*
     DocumentContentDs content = (DocumentContentDs)document.getContent();
     if (content != null) {
       if (content.getKey() != null) {
@@ -140,6 +144,7 @@ public class DocumentAdapterImpl implements DocumentAdapter {
       }
       document.setContent(content);
     }
+    */
     if (document.getKey() == null) {
       if (document.getCode() == null) {
         document.setCode(getNextCodeCounter());
@@ -172,6 +177,7 @@ public class DocumentAdapterImpl implements DocumentAdapter {
   }
   
   private DocumentDs internalFindDocumentById(String id, boolean fetchContent) {
+    /*
     if (fetchContent) {
       CacheUtils.deleteByKeyWithCondition(id, Document.class, new CacheUtils.Condition<Document>() {
         public boolean evaluate(Document cachedEntity) {
@@ -179,10 +185,13 @@ public class DocumentAdapterImpl implements DocumentAdapter {
         }
       });
     }
+    */
     FindContext<DocumentDs> context = new FindContext<DocumentDs>(DocumentDs.class).setId(id);
+    /*
     if (fetchContent) {
       context.includedField("contentKey");
     }
+    */
     DocumentDs ds = dao.findById(context);
     return ds;
   }

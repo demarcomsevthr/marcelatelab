@@ -1,6 +1,7 @@
 package it.mate.econyx.client.ui.editors;
 
 import it.mate.econyx.shared.model.Document;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -30,6 +31,7 @@ public class DocumentEditor extends Composite implements Editor<Document> {
   
   public DocumentEditor() {
     initUI();
+    GwtUtils.setDateBoxFormat(created, "dd/MM/yyyy");
     driver.initialize(this);
   }
   

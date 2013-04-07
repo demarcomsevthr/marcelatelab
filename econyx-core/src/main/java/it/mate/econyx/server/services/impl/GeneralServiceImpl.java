@@ -40,6 +40,7 @@ import javax.servlet.http.Cookie;
 
 import org.apache.log4j.Logger;
 
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -420,6 +421,11 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   @Override
   public void cobraTest() {
     generalAdapter.cobraTest();
+  }
+  
+  
+  public String createBlobstoreUploadUrl(String url) {
+    return BlobstoreServiceFactory.getBlobstoreService().createUploadUrl(url);
   }
 
 }

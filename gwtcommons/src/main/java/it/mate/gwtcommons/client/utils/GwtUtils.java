@@ -48,7 +48,8 @@ public class GwtUtils {
   private static int mockCounter = 0;
   
   private static Map<String, Object> dictionary;
-  
+
+  /*
   private final static DateTimeFormat dt10FMT = DateTimeFormat.getFormat("dd/MM/yyyy");
   private final static DateTimeFormat dt8FMT = DateTimeFormat.getFormat("yyyyMMdd");
   private final static DateTimeFormat dt8aFMT = DateTimeFormat.getFormat("ddMMyyyy");
@@ -58,10 +59,25 @@ public class GwtUtils {
   private final static DateTimeFormat yFMT = DateTimeFormat.getFormat("yyyy");
   private final static DateTimeFormat eFMT = DateTimeFormat.getFormat("EEE");
   private final static DateTimeFormat logFMT = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm:ss,SSS");
+  */
+  
+  private final static String dt10Pattern = "dd/MM/yyyy";
+  private final static String dt8Pattern = "yyyyMMdd";
+  private final static String dt8aPattern = "ddMMyyyy";
+  private final static String dPattern = "dd";
+  private final static String mPattern = "MM";
+  private final static String m3Pattern = "MMM";
+  private final static String yPattern = "yyyy";
+  private final static String ePattern = "EEE";
+  private final static String logPattern = "dd/MM/yyyy HH:mm:ss,SSS";
+  private final static String defaultDTPattern = dt10Pattern;
+  
+  private static final Map<String, DateTimeFormat> fmtCache = new HashMap<String, DateTimeFormat>();
+  
+  private static DateTimeFormat defaultDTFormat = DateTimeFormat.getFormat(defaultDTPattern);
+
   private final static NumberFormat currencyFMT = NumberFormat.getFormat("0.00");
   
-  private static DateTimeFormat defaultDTFormat = dt10FMT;
-
   private static final String ATTR_CLIENT_WAIT_PANEL = "common.client.waitPanel";
   
   private static final String ATTR_CLIENT_DEFAULT_WAIT_PANEL = "common.client.defaultWaitPanel";
@@ -76,6 +92,7 @@ public class GwtUtils {
 
   
   private static boolean devModeActive = Window.Location.getQueryString().contains("gwt.codesvr");
+  
   
   public static String getPortletContextPath() {
     return GwtUtils.getJSVar("contextPath","");
@@ -152,19 +169,19 @@ public class GwtUtils {
   }
   
   public static Date getDate (int day, int month, int year) {
-    return dt10FMT.parse(day+"/"+month+"/"+year);
+    return formatFromCache(dt10Pattern).parse(day+"/"+month+"/"+year);
   }
   
   public static int getDay (Date date) {
-    return Integer.valueOf(dFMT.format(date));
+    return Integer.valueOf(formatFromCache(dPattern).format(date));
   }
   
   public static int getMonth (Date date) {
-    return Integer.valueOf(mFMT.format(date));
+    return Integer.valueOf(formatFromCache(mPattern).format(date));
   }
   
   public static String getShortMonthName (Date date) {
-    String mm = m3FMT.format(date);
+    String mm = formatFromCache(m3Pattern).format(date);
     for (int it = 0; it < engMM.length; it++) {
       if (engMM[it].equalsIgnoreCase(mm)) {
         mm = itaMM[it];
@@ -178,7 +195,7 @@ public class GwtUtils {
   }
   
   public static String getMonthName (Date date, String[] monthNames) {
-    String mm = m3FMT.format(date);
+    String mm = formatFromCache(m3Pattern).format(date);
     for (int it = 0; it < engMM.length; it++) {
       if (engMM[it].equalsIgnoreCase(mm)) {
         mm = monthNames[it];
@@ -188,11 +205,11 @@ public class GwtUtils {
   }
   
   public static int getYear (Date date) {
-    return Integer.valueOf(yFMT.format(date));
+    return Integer.valueOf(formatFromCache(yPattern).format(date));
   }
 
   public static String getWeekDay (Date date) {
-    return eFMT.format(date);
+    return formatFromCache(ePattern).format(date);
   }
   
   public static void setDefaultDTFormat(DateTimeFormat defaultDTFormat) {
@@ -207,9 +224,9 @@ public class GwtUtils {
   
   public static String dateToString (Date date, int len) {
     if (len == 8)
-      return dateToString(date, dt8FMT);
+      return dateToString(date, formatFromCache(dt8Pattern));
     if (len == 10)
-      return dateToString(date, dt10FMT);
+      return dateToString(date, formatFromCache(dt10Pattern));
     return dateToString(date, defaultDTFormat);
   }
   
@@ -229,7 +246,7 @@ public class GwtUtils {
   private static String[] engDW = new String[] {"mon", "tue", "wed", "thu", "fri", "sat", "sun"};
   private static String[] itaDW = new String[] {"lun", "mar", "mer", "gio", "ven", "sab", "dom"};
   public static String getDayOfWeek(Date date) {
-    String eee = GwtUtils.dateToString(date, eFMT);
+    String eee = GwtUtils.dateToString(date, formatFromCache(ePattern));
     for (int it = 0; it < engDW.length; it++) {
       if (engDW[it].equals(eee.toLowerCase())) {
         eee = itaDW[it];
@@ -239,7 +256,7 @@ public class GwtUtils {
   }
   
   public static int getDayNumberOfWeek(Date date) {
-    String eee = GwtUtils.dateToString(date, eFMT);
+    String eee = GwtUtils.dateToString(date, formatFromCache(ePattern));
     for (int it = 0; it < engDW.length; it++) {
       if (engDW[it].equals(eee.toLowerCase())) {
         return it + 1;
@@ -254,7 +271,7 @@ public class GwtUtils {
   }
   
   public static Date stringToDate (String text) {
-    return dt8FMT.parse(text);
+    return formatFromCache(dt8Pattern).parse(text);
   }
   
   public static Element getElement (String id) {
@@ -539,8 +556,8 @@ public class GwtUtils {
             String text = textBox.getValue();
             if (text.length() == 8 && isDigit(text)) {
               try {
-                Date date = dt8aFMT.parse(text);
-                textBox.setValue(dt10FMT.format(date));
+                Date date = formatFromCache(dt8Pattern).parse(text);
+                textBox.setValue(formatFromCache(dt10Pattern).format(date));
                 dateBox.hideDatePicker();
                 dateBox.showDatePicker();
               } catch (Exception ex) {
@@ -740,7 +757,7 @@ public class GwtUtils {
     }
     */
     
-    String dts = GwtUtils.dateToString(new Date(), logFMT); 
+    String dts = GwtUtils.dateToString(new Date(), formatFromCache(logPattern)); 
     if (ex != null) {
       message = message + " - " + ex.getClass().getName() + " - " + ex.getMessage();
     }
@@ -897,6 +914,17 @@ public class GwtUtils {
   public static void addElementEventListener(com.google.gwt.dom.client.Element element, int eventId, EventListener listener) {
     DOM.sinkEvents((com.google.gwt.user.client.Element)element, eventId);
     DOM.setEventListener((com.google.gwt.user.client.Element)element, listener);
+  }
+  
+  private static DateTimeFormat formatFromCache(String pattern) {
+    if (!fmtCache.containsKey(pattern)) {
+      fmtCache.put(pattern, DateTimeFormat.getFormat(pattern));
+    }
+    return fmtCache.get(pattern);
+  }
+  
+  public static void setDateBoxFormat(DateBox dateBox, String pattern) {
+    dateBox.setFormat(new DateBox.DefaultFormat(formatFromCache(pattern)));
   }
   
 }

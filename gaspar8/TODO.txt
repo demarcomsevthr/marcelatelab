@@ -19,17 +19,18 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 06/04/2013
+	SNAPSHOT 07/04/2013
 		
 		>> DOCUMENT LIBRARY
-			>>> model FATTO [05/04/2013]
-			>>> admin scaffholding INIZIATO [06/04/2013]
 			>>> TO DO:
-				> upload documento content
 				> cancellazione document
-			>>> DocumentFolderPage >>> DA FARE
-
-		>> Calendar FATTO [05/04/2013]
+				
+			>>>> Blobstore API >> [07/04/2013]
+			
+			>>>> TODO: MEMORIZZARE CONTENT TYPE
+				- BlobUploadServlet get BlobInfo
+				- RestController response.setContentType XXX
+			
 
 		>> ListPropertyWrapper
 			mettere in tutti i getter getList dei tx
@@ -38,9 +39,6 @@
 		
 		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
 
-		
-	SNAPSHOT 28/03/2013
-		
 		>> STYLING e contenuti pagine [2]
 			> css pagine
 			> css articoli
@@ -53,7 +51,7 @@
 		
 		>> ProducerFolderPage [3]
 		
-		>> Link Facebook, Twitter, ...  ???
+		>> Link Facebook, Twitter, ...  [4]
 			
 		>> gestione ruoli admins [4]
 		

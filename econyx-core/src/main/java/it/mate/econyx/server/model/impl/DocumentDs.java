@@ -1,7 +1,6 @@
 package it.mate.econyx.server.model.impl;
 
 import it.mate.econyx.shared.model.Document;
-import it.mate.econyx.shared.model.DocumentContent;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.DocumentTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
@@ -36,12 +35,9 @@ public class DocumentDs implements Document, HasKey {
   
   @Persistent
   String title;
-
-  @Persistent (dependent="false", defaultFetchGroup="false")
-  Key contentKey;
-
-  @UnownedRelationship (key="contentKey")
-  transient DocumentContentDs content;
+  
+  @Persistent
+  String blobKey;
 
   @Persistent (dependent="false", defaultFetchGroup="true")
   Key authorKey;
@@ -88,16 +84,6 @@ public class DocumentDs implements Document, HasKey {
     this.title = title;
   }
 
-  public DocumentContent getContent() {
-    return content;
-  }
-
-  @CloneableProperty (targetClass=DocumentContentDs.class)
-  public void setContent(DocumentContent content) {
-    this.content = (DocumentContentDs)content;
-    this.contentKey = this.content != null ? this.content.getKey() : null;
-  }
-
   public PortalUser getAuthor() {
     return author;
   }
@@ -122,6 +108,14 @@ public class DocumentDs implements Document, HasKey {
 
   public void setName(String name) {
     setTitle(name);
+  }
+
+  public String getBlobKey() {
+    return blobKey;
+  }
+
+  public void setBlobKey(String blobKey) {
+    this.blobKey = blobKey;
   }
   
 }

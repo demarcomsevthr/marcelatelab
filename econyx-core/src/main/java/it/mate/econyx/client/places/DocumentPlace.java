@@ -16,7 +16,7 @@ public class DocumentPlace extends Place implements ReversiblePlace, HasToken, H
 
   public static String FOLDER_EDIT = "folderEdit";
 
-  public static String DOCUMENT_VIEW = "documentView";
+//public static String DOCUMENT_VIEW = "documentView";
 
   public static String DOCUMENT_EDIT = "documentEdit";
 

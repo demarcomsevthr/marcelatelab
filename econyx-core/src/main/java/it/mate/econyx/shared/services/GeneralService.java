@@ -63,4 +63,6 @@ public interface GeneralService extends RemoteService {
   
   public void cobraTest();
   
+  public String createBlobstoreUploadUrl(String url);
+  
 }

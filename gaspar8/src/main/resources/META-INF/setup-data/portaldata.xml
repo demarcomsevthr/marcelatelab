@@ -1119,10 +1119,26 @@
       </childreen>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
     
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>Documenti</name>
+      <code>documenti</code>
+      <orderNm>700</orderNm>
+      <childreen>
+        <it.mate.econyx.shared.model.impl.DocumentFolderPageTx visibleInExplorer="false">
+          <name>Anno 2013</name>
+          <code>doc2013</code>
+          <orderNm>100</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.DocumentFolderTx">
+           <name>Raccolta documenti 2013</name>
+          </entity>
+        </it.mate.econyx.shared.model.impl.DocumentFolderPageTx>
+      </childreen>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
       <name>Evento del giorno</name>
       <code>calendarEvent</code>
-      <orderNm>600</orderNm>
+      <orderNm>900</orderNm>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>M</type>
@@ -1136,6 +1152,30 @@
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     
   </pages>
+  
+  
+  <documentFolders>
+    <it.mate.econyx.shared.model.impl.DocumentFolderTx>
+      <name>Raccolta documenti 2013</name>
+      <orderNm>100</orderNm>
+      <documents>
+        <it.mate.econyx.shared.model.impl.DocumentTx>
+          <title>Documento uno</title>
+          <orderNm>100</orderNm>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
+        </it.mate.econyx.shared.model.impl.DocumentTx>
+        <it.mate.econyx.shared.model.impl.DocumentTx>
+          <title>Documento due</title>
+          <orderNm>200</orderNm>
+          <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
+            <emailAddress>verduzio.r@gmail.com</emailAddress>
+          </author>
+        </it.mate.econyx.shared.model.impl.DocumentTx>
+      </documents>
+    </it.mate.econyx.shared.model.impl.DocumentFolderTx>
+  </documentFolders>
   
   
   <articleFolders>

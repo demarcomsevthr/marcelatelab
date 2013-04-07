@@ -7,6 +7,7 @@ import it.mate.econyx.server.model.impl.IndirizzoSpedizioneDs;
 import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
+import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.services.OrderAdapter;
@@ -18,6 +19,7 @@ import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
@@ -83,6 +85,8 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   @Autowired private ImageAdapter imageAdapter;
   
   @Autowired private ArticleAdapter articleAdapter;
+  
+  @Autowired private DocumentAdapter documentAdapter;
   
   private Key counterId = null;
   
@@ -193,6 +197,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       deleteOrders();
       deletePages();
       deleteArticles();
+      deleteDocuments();
       deleteCustomers();
       deleteUsers();
       deleteImages();
@@ -262,6 +267,13 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     List<ArticleFolder> folders = articleAdapter.findAll();
     for (ArticleFolder folder : folders) {
       articleAdapter.delete(folder);
+    }
+  }
+  
+  private void deleteDocuments() {
+    List<DocumentFolder> folders = documentAdapter.findAllFolders();
+    for (DocumentFolder folder : folders) {
+      documentAdapter.deleteFolder(folder);
     }
   }
   
