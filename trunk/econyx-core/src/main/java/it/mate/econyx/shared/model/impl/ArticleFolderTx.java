@@ -72,47 +72,6 @@ public class ArticleFolderTx implements ArticleFolder {
     return new ListPropertyWrapper<Article, ArticleTx>(articles, ArticleTx.class);
   }
 
-  /*
-  public List<Article> getArticles() {
-    if (articles == null)
-      return null;
-    return new AbstractList<Article>() {
-      public int size() {
-        return articles.size();
-      }
-      public Article get(int index) {
-        return articles.get(index);
-      }
-      public Article set(int index, Article element) {
-        if (element instanceof ArticleTx) {
-          return articles.set(index, (ArticleTx)element);
-        }
-        if (element == null) {
-          throw new IllegalArgumentException("null");
-        } else {
-          throw new IllegalArgumentException(element.getClass().getName());
-        }
-      }
-      public boolean add(Article element) {
-        if (element instanceof ArticleTx) {
-          return articles.add((ArticleTx)element);
-        }
-        if (element == null) {
-          throw new IllegalArgumentException("null");
-        } else {
-          throw new IllegalArgumentException(element.getClass().getName());
-        }
-      }
-      public boolean remove(Object o) {
-        return articles.remove(o);
-      }
-      public Article remove(int index) {
-        return articles.remove(index);
-      }
-    };
-  }
-  */
-
   @CloneableProperty (targetClass=ArticleTx.class)
   public void setArticles(List<Article> articles) {
     if (articles != null) {
