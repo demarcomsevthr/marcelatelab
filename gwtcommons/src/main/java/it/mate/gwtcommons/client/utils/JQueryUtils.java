@@ -1,5 +1,8 @@
 package it.mate.gwtcommons.client.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 
@@ -11,6 +14,15 @@ public class JQueryUtils {
       elements = null;
     }
     return elements;
+  }
+  
+  public static List<Element> selectList(String selector) {
+    List<Element> result = new ArrayList<Element>();
+    JsArray<Element> array = select(selector);
+    for (int it = 0; it < array.length(); it++) {
+      result.add(array.get(it));
+    }
+    return result;
   }
   
   @SuppressWarnings("rawtypes")
