@@ -19,7 +19,7 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 07/04/2013
+	SNAPSHOT 08/04/2013
 		
 		>> DOCUMENT LIBRARY
 			>>> TO DO:
@@ -31,15 +31,14 @@
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
 			
+		>> NEW BlogPage, Blog, BlogThread, BlogComment
+			> INIZIATO model [08/04/2013]
 
 		>> ListPropertyWrapper
 			mettere in tutti i getter getList dei tx
 		
-		>> UPGRADE GAE 1.7.6
-		
-		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
-
-		>> STYLING e contenuti pagine [2]
+		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
+			> aggiornare contenuti dal sito vero
 			> css pagine
 			> css articoli
 			> css blog
@@ -47,9 +46,11 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 			
-		>> NEW BlogPage, BlogThread, BlogComment [3]	
-		
+		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
+
 		>> ProducerFolderPage [3]
+		
+		>> UPGRADE GAE 1.7.6
 		
 		>> Link Facebook, Twitter, ...  [4]
 			
