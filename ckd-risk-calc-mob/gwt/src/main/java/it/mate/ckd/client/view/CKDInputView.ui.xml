@@ -10,9 +10,9 @@
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
 
-  <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}">
+  <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}" ui:field="wrapperPanel">
 
-    <table cellspacing="0" cellpadding="0" class="ckdInputPanelTable">
+    <table cellspacing="0" cellpadding="0" class="ckdInputPanelTable" id="ckdInputPanelTable">
     
       <tr>
         <td colspan="3">
@@ -27,7 +27,7 @@
           </g:Label>
         </td>
         <td class="secondColumn">
-          <g:Label text="" width="50px">
+          <g:Label text="">
             <ui:attribute name="text" description="text" key="age.um.text"/>
           </g:Label>
         </td>

@@ -55,7 +55,6 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
         Element tdElem = JQueryUtils.selectFirst(".mgwt-ScrollPanel-container td");
-        GwtUtils.log("mgwt-ScrollPanel-container td = " + tdElem);
         tdElem.setAttribute("align", "center");
       }
     });

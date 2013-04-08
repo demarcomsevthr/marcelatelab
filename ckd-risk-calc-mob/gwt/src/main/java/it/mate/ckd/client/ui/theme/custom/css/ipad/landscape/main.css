@@ -1,7 +1,7 @@
 @external homePanel, outputPanel;
 
 body {
-  background-size: 20px 768px;
+  background: #a8c0ce url(main/images/grad.png) top left repeat;
 }
 
 .mgwt-ScrollPanel-container {
@@ -10,6 +10,14 @@ body {
 
 .mgwt-ScrollPanel-container * {
   font-size: 22px;
+}
+
+.homePanel, .ckdHomePanel {
+  background-image: -webkit-gradient(linear , left top, left bottom, color-stop(0.20, rgba(64, 127, 221, 0.75)), color-stop(0.80, rgba(85, 184, 209, 0.72)), color-stop(0.90, rgba(5, 123, 252, 0.8))) ;
+  background-repeat: repeat;
+  background-size: 20px 600px;
+  -webkit-border-radius: 8px;
+  border: 2px inset whitesmoke;
 }
 
 .homePanel * {
@@ -24,7 +32,7 @@ body {
 
 .ckdAppPresentation {
   font-size: 28pt;
-  padding-top: 80px;
+  margin-top: 20px;
 }
 
 .mgwt-Button.ckdParamBtn.mgwt-Button-round {
@@ -35,18 +43,85 @@ body {
   font-size: 10px;
 }
 
+.inputPanel {
+  margin-top: 8%;
+}
+
 .ckdInputPanelTable {
-  width: 100%;
-  padding-left: 10%;
-  padding-top: 10%;
+  width: 80%;
+  margin-top: 8%;
+  padding-left: 8%;
+}
+
+.inputPanel .gwt-Label {
+  font-size: 22px;
+}
+
+.inputPanel .mgwt-InputBox-box {
+  font-size: 32px !important;
+}
+
+.outputPanel {
+  margin-top: 8%;
 }
 
 .homePanel.outputPanel {
   padding-top: 20px;
-  padding-left: 20px;
+}
+
+.outputPanel .gwt-Label {
+  font-size: 12pt;
+}
+
+.outputPanel .ckd-Label {
+  width: 20em;
+  padding-left: 8em;
+}
+
+.ckd-Gfr {
+  width: 10em;
+}
+
+.ckd-Risk {
+  width: 13.2em;
+}
+
+.outputPanel .ckd-LeftPaddingBox {
+  width: 0;
 }
 
 .mgwt-Button.ckd-HelpBtn {
-  top: 420px;
-  left: 318px;
+  font-size: 14px;
+  /*
+  top: 470px !important;
+  left: 300px !important;
+  */
 }
+
+.ckd-Gfr, .ckd-Stadium {
+  font-size: 14pt;
+}
+
+.ckd-Risk {
+  font-size: 16pt;
+}
+
+.valoriLbl {
+  font-size: 18px !important;
+  width: 80%;
+}
+
+.ckd-MDRD {
+  height: 1.8em !important;
+}
+
+.ckdMdrdLabel1 {
+  font-size:12pt;
+  display: inline;
+}
+
+.ckdMdrdLabel2 {
+  font-size:10pt;
+  display: inline;
+}
+

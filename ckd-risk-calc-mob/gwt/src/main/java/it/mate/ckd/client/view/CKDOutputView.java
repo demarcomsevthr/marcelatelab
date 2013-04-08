@@ -8,13 +8,16 @@ import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.utils.PhonegapUtils;
 import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -32,11 +35,10 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
-  /*
-  @UiField (provided=true) MGWTCustomClientBundle bundle;
-  */
   @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
+  
+  @UiField Panel wrapperPanel;
 
   @UiField Label cockcroftGfrBox;
   @UiField Label cockcroftGfrStadium;
@@ -66,13 +68,32 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   private CKD ckd;
   
   public CKDOutputView() {
-    /*
-    bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
-    style = (CustomMainCss)MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss();
-    */
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
     initUI();
+    
+    wrapperPanel.getElement().setId("outputWrapperPanel");
+    if (OsDetectionPatch.isTablet()) {
+      GwtUtils.onAvailable("outputWrapperPanel", new Delegate<Element>() {
+        public void execute(final Element wrapperPanelElem) {
+          int height = Window.getClientHeight() * 70 / 100;
+          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
+          int width = Window.getClientWidth() * 70 / 100;
+          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          int horMargin = ( Window.getClientWidth() - width ) / 2;
+          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          
+          Element btnElem = ckdHelpBtn.getElement();
+          int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
+          int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
+          btnElem.getStyle().setLeft(btnLeft, Unit.PX);
+          btnElem.getStyle().setTop(btnTop, Unit.PX);
+          
+        }
+      });
+    }
+    
   }
 
   private void initProvidedElements() {
@@ -82,40 +103,24 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
-    /*
-    getHeaderBackButton().setText(LocalizedMessages.IMPL.CKDOutputView_headerBackButton_text());
-    getHeaderBackButton().addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
-        getPresenter().goToCkdInput();
-      }
-    });
-    */
-    
   }
   
   @Override
   public void setModel(Object model, String tag) {
     if (model instanceof CKD) {
       this.ckd = (CKD)model;
-      
       Double bsa = ckd.getBSA();
-      
-      // 06/03/2013
       ckd.setUseBsa(bsa != null);
-      
       applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel, null);
       applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel, 60d);
       applyCKD(ckd, ckd.getMdrdNcGFR(), mdrdNcGfrBox, mdrdNcGfrStadium, mdrdNcRiskBox, mdrdNcRiskPanel, 60d);
       applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel, null);
-      
       if (bsa != null) {
         bsaPanel.setVisible(true);
         bsaHtml.setHTML("BSA = " + GwtUtils.formatDecimal(bsa, 2) + " m&#178;");
       } else {
         bsaPanel.setVisible(false);
       }
-      
     }
   }
   

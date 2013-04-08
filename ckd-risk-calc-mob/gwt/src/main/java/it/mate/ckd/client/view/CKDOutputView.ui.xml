@@ -6,19 +6,16 @@
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default">
 
-  <!-- 
-  <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle"/>
-   -->
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
   
-  <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel}">
+  <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel}" ui:field="wrapperPanel">
   
     <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
       <ui:attribute name="text" description="text" key="helpBtn.text"/>
     </m:Button>
     
-    <g:VerticalPanel>
+    <g:VerticalPanel width="100%">
     
       <!-- ==========    COCKCROFT SECTION    ========== -->
     
@@ -64,12 +61,9 @@
     
       <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
         <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
-        <!-- 
-        <g:Label text="MDRD-4P (CREATININA CALIBRATA)" addStyleNames="{style.valoriLbl}"/>
-         -->
         <g:HTMLPanel addStyleNames="{style.valoriLbl} ckd-MDRD" height="2.2em">
-          <p style="font-size:10pt">MDRD 4P</p>
-          <p style="font-size:8pt"><ui:msg key="mdrd1.subtitle.text">mdrd1 subtitle</ui:msg></p>
+          <p class="ckdMdrdLabel1">MDRD 4P</p>
+          <p class="ckdMdrdLabel2"><ui:msg key="mdrd1.subtitle.text">mdrd1 subtitle</ui:msg></p>
         </g:HTMLPanel>
       </g:HorizontalPanel>
       
@@ -104,12 +98,9 @@
     
       <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
         <gc:Spacer addStyleNames="ckd-LeftPaddingBox"/>
-        <!-- 
-        <g:Label text="MDRD-4P" addStyleNames="{style.valoriLbl}"/>
-         -->
         <g:HTMLPanel addStyleNames="{style.valoriLbl} ckd-MDRD" height="2.2em">
-          <p style="font-size:10pt">MDRD 4P</p>
-          <p style="font-size:8pt"><ui:msg key="mdrd2.subtitle.text">mdrd2 subtitle</ui:msg></p>
+          <p class="ckdMdrdLabel1">MDRD 4P</p>
+          <p class="ckdMdrdLabel2"><ui:msg key="mdrd2.subtitle.text">mdrd2 subtitle</ui:msg></p>
         </g:HTMLPanel>
       </g:HorizontalPanel>
       
