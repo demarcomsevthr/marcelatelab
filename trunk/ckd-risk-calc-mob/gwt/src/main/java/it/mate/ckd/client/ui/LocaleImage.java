@@ -44,8 +44,6 @@ public class LocaleImage extends TouchWidget {
     
     image = new Image();
 
-    GwtUtils.log("meta lang locale = " + GwtUtils.getJSVar("gDbLanguageCookieValue", "??"));
-    
   }
   
   public LocaleImage(String locale) {

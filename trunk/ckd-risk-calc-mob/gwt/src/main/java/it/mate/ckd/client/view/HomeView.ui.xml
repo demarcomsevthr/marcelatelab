@@ -6,18 +6,16 @@
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default">
        
-  <!-- 
-  <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.MGWTCustomClientBundle"/>
-   -->
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
 
-  <g:HTMLPanel>
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ckdHomePanel">
 
     <g:VerticalPanel width="100%" horizontalAlignment="center">
-      <gc:Spacer height="3.6em"/>
+    
+      <gc:Spacer height="3.6em" addStyleNames="ckdHomeSpacer"/>
       
-      <g:HTMLPanel>
+      <g:HTMLPanel addStyleNames="ckdAppPresentation">
         <div><ui:msg key="app.presentation" description="app presentation">App presentation here</ui:msg></div>
       </g:HTMLPanel>
       
@@ -25,7 +23,7 @@
       
       <m:Button round="true" ui:field="paramBtn" addStyleNames="ckdParamBtn"/>
       
-      <gc:Spacer height="7em"/>
+      <gc:Spacer height="5.4em" addStyleNames="ckdHomeSpacer"/>
       
       <g:HorizontalPanel>
          <ckd:LocaleImage resource="{bundle.flagEnImage}" locale="en"/>
@@ -34,6 +32,7 @@
       </g:HorizontalPanel>
        
       <gc:Spacer height="1em"/>
+      
       <g:Label text="" addStyleNames="{style.verLbl}">
         <ui:attribute name="text" description="text" key="app.versionCredits"/>
       </g:Label>

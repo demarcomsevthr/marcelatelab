@@ -93,10 +93,13 @@
 
 .outputPanel .ckd-Label {
   font-weight: 600;  
+  width: 9em;
+  padding-left: 2em;
 }
 
 .outputPanel .ckd-LeftPaddingBox {
-  width: 1.6em;  
+/*  width: 1.6em; */
+  width: 0em;  
 }
 
 .outputPanel .gwt-Label.ckd-Label {
@@ -186,6 +189,14 @@
 
 .ckd-MDRD {
   padding-top: 2px;
+}
+
+.ckdMdrdLabel1 {
+  font-size:10pt;
+}
+
+.ckdMdrdLabel2 {
+  font-size:8pt;
 }
 
 .gwt-HTML.ckd-Label.ckd-BsaLabel {

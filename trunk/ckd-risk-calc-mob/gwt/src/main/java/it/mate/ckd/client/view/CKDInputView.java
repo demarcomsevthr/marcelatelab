@@ -6,18 +6,23 @@ import it.mate.ckd.client.ui.SpinnerIntegerBox;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.utils.IPhoneScrollPatch;
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.widget.Button;
@@ -36,6 +41,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   @UiField (provided=true) CustomTheme.CustomBundle bundle;
   @UiField (provided=true) CustomMainCss style;
 
+  @UiField Panel wrapperPanel;
   @UiField SpinnerIntegerBox etaSpinBox;
   @UiField SpinnerDoubleBox creatininaSpinBox;
   @UiField SpinnerIntegerBox pesoSpinBox;
@@ -73,42 +79,29 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         IPhoneScrollPatch.apply();
       }
     });
-
-    /*
+    
+    wrapperPanel.getElement().setId("inputWrapperPanel");
     if (OsDetectionPatch.isTablet()) {
-      
-      ckdOutputBtn.setVisible(false);
-      
-      ValueChangeHandler<Integer> iHandler = new ValueChangeHandler<Integer>() {
-        public void onValueChange(ValueChangeEvent<Integer> event) {
-          onCalcBtn(null);
+      GwtUtils.onAvailable("inputWrapperPanel", new Delegate<Element>() {
+        public void execute(final Element wrapperPanelElem) {
+          int height = Window.getClientHeight() * 70 / 100;
+          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
+          int width = Window.getClientWidth() * 70 / 100;
+          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          int horMargin = ( Window.getClientWidth() - width ) / 2;
+          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          GwtUtils.onAvailable("ckdInputPanelTable", new Delegate<Element>() {
+            public void execute(Element inputPanelTableElem) {
+              int width = inputPanelTableElem.getClientWidth();
+              int horMargin = ( wrapperPanelElem.getClientWidth() - width ) / 2;
+              inputPanelTableElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+              inputPanelTableElem.getStyle().setMarginRight(horMargin, Unit.PX);
+            }
+          });
         }
-      };
-      
-      ValueChangeHandler<Double> dHandler = new ValueChangeHandler<Double>() {
-        public void onValueChange(ValueChangeEvent<Double> event) {
-          onCalcBtn(null);
-        }
-      };
-      
-      ValueChangeHandler<Boolean> bHandler = new ValueChangeHandler<Boolean>() {
-        public void onValueChange(ValueChangeEvent<Boolean> event) {
-          onCalcBtn(null);
-        }
-      };
-      
-      etaSpinBox.addValueChangeHandler(iHandler);
-      creatininaSpinBox.addValueChangeHandler(dHandler);
-      pesoSpinBox.addValueChangeHandler(iHandler);
-      altezzaSpinBox.addValueChangeHandler(iHandler);
-      albuminuriaSpinBox.addValueChangeHandler(iHandler);
-      fBtn.addValueChangeHandler(bHandler);
-      bBtn.addValueChangeHandler(bHandler);
-      
-      onCalcBtn(null);
-      
+      });
     }
-    */
     
   }
   
