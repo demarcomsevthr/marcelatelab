@@ -4,12 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface BlogDiscussion extends PortalResource {
+public interface BlogDiscussion extends PortalResource, CodedEntity {
 
-  public String getCode();
-
-  public void setCode(String code);
-  
   public String getTitle();
 
   public void setTitle(String title);

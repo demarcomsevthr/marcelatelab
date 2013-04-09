@@ -8,13 +8,7 @@ import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class BlogCommentTx implements BlogComment {
-  
-  String id;
-  
-  String name;
-  
-  Integer orderNm;
+public class BlogCommentTx extends AbstractPortalResourceTx implements BlogComment {
   
   String content;
 
@@ -22,30 +16,6 @@ public class BlogCommentTx implements BlogComment {
   
   Date posted;
   
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Integer getOrderNm() {
-    return orderNm;
-  }
-
-  public void setOrderNm(Integer orderNm) {
-    this.orderNm = orderNm;
-  }
-
   public String getContent() {
     return content;
   }
