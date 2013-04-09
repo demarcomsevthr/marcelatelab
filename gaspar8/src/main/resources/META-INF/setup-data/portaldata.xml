@@ -1135,6 +1135,50 @@
       </childreen>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
     
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>Blog</name>
+      <code>blog</code>
+      <orderNm>800</orderNm>
+      <childreen>
+        <it.mate.econyx.shared.model.impl.BlogPageTx visibleInExplorer="false">
+          <name>Presentazioni</name>
+          <code>blogPresentazioni</code>
+          <orderNm>100</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.BlogTx">
+           <name>Presentazioni</name>
+           <code>blogPresentazioni</code>
+          </entity>
+        </it.mate.econyx.shared.model.impl.BlogPageTx>
+        <it.mate.econyx.shared.model.impl.BlogPageTx visibleInExplorer="false">
+          <name>Albo gasparotto</name>
+          <code>blogAlbo</code>
+          <orderNm>200</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.BlogTx">
+           <name>Albo</name>
+           <code>blogAlbo</code>
+          </entity>
+        </it.mate.econyx.shared.model.impl.BlogPageTx>
+        <it.mate.econyx.shared.model.impl.BlogPageTx visibleInExplorer="false">
+          <name>Attività socio culturali</name>
+          <code>blogAttivitaSocioCulturali</code>
+          <orderNm>300</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.BlogTx">
+           <name>AttivitaSocioCulturali</name>
+           <code>blogAttivitaSocioCulturali</code>
+          </entity>
+        </it.mate.econyx.shared.model.impl.BlogPageTx>
+        <it.mate.econyx.shared.model.impl.BlogPageTx visibleInExplorer="false">
+          <name>Produttori e ordini</name>
+          <code>blogProduttoriEOrdini</code>
+          <orderNm>400</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.BlogTx">
+           <name>ProduttoriEOrdini</name>
+           <code>blogProduttoriEOrdini</code>
+          </entity>
+        </it.mate.econyx.shared.model.impl.BlogPageTx>
+      </childreen>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
       <name>Evento del giorno</name>
       <code>calendarEvent</code>
