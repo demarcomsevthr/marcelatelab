@@ -2,6 +2,7 @@ package it.mate.econyx.server.model;
 
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
+import it.mate.econyx.shared.model.Blog;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.Image;
@@ -36,4 +37,5 @@ public class PortalDataExportModel implements VisitContext {
   public List<OrderStateConfig> orderStates = new ArrayList<OrderStateConfig>();
   public List<ArticleFolder> articleFolders;
   public List<DocumentFolder> documentFolders;
+  public List<Blog> blogs;
 }

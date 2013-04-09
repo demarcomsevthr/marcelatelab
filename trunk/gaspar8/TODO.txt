@@ -22,19 +22,27 @@
 	SNAPSHOT 08/04/2013
 		
 		>> DOCUMENT LIBRARY
-			>>> TO DO:
+			> TO DO:
 				> cancellazione document
-				
-			>>>> Blobstore API >> [07/04/2013]
-			
-			>>>> TODO: MEMORIZZARE CONTENT TYPE
+			> Blobstore API >> [07/04/2013]
+	>>>		>> TODO: MEMORIZZARE CONTENT TYPE SU DS
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
+			>>> VEDI http://gasparotto.forumattivo.com/
 			> model tx [08/04/2013]
 			> INIZIATO model ds [09/04/2013]
 			> INIZIATO adapter [09/04/2013]
+			
+			> INIZIATO BlogView [09/04/2013] > PortalPageViewImpl
+			
+			>> TODO
+				BlogDs > discussionsNumber, lastDiscussion (BlogDiscussion)
+					   > si aggiornano nel ds quando si setta discussions
+				BlogDiscussionDs > commentsNumber, lastComment (BlogComment)
+								 > si aggiornano nel ds quando si setta comments
+				>> servono per fare gli ordinamenti nella view (forum like...)
 
 		>> ListPropertyWrapper
 			mettere in tutti i getter getList dei tx
@@ -44,7 +52,7 @@
 			> se funziona riportare su altri ds
 		
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
-			> aggiornare contenuti dal sito vero
+			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
 			> css pagine
 			> css articoli
 			> css blog
@@ -61,7 +69,6 @@
 		>> Link Facebook, Twitter, ...  [4]
 			
 		>> gestione ruoli admins [4]
-		
 
 
 	------------------------------------------------------

@@ -9,6 +9,7 @@ import it.mate.econyx.server.model.converters.TipoArticoloConverter;
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.ArticleAdapter;
+import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
@@ -22,6 +23,8 @@ import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.Articolo;
+import it.mate.econyx.shared.model.Blog;
+import it.mate.econyx.shared.model.BlogPage;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
@@ -41,6 +44,7 @@ import it.mate.econyx.shared.model.impl.AbstractIndirizzoTx;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
+import it.mate.econyx.shared.model.impl.BlogTx;
 import it.mate.econyx.shared.model.impl.CustomerTx;
 import it.mate.econyx.shared.model.impl.DocumentFolderTx;
 import it.mate.econyx.shared.model.impl.DocumentTx;
@@ -58,6 +62,7 @@ import it.mate.gwtcommons.server.utils.XStreamUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -94,6 +99,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   @Autowired private DocumentAdapter documentAdapter;
   
+  @Autowired private BlogAdapter blogAdapter;
+  
   private static final String INIT_FILE = "META-INF/setup-data/portaldata.xml";
   
   private void setupXStream() {
@@ -124,6 +131,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     XStreamUtils.getXStream().omitField(ArticleTx.class, "id");
     XStreamUtils.getXStream().omitField(DocumentFolderTx.class, "id");
     XStreamUtils.getXStream().omitField(DocumentTx.class, "id");
+    XStreamUtils.getXStream().omitField(BlogTx.class, "id");
   }
   
   public PortalDataExportModel load () {
@@ -193,6 +201,10 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (int it = 0; it < dataModel.documentFolders.size(); it++) {
       DocumentFolder documentFolder = dataModel.documentFolders.get(it);
       visitDocumentFolder(dataModel, true, documentFolder);
+    }
+    for (int it = 0; it < dataModel.blogs.size(); it++) {
+      Blog blog = dataModel.blogs.get(it);
+      visitBlog(dataModel, true, blog);
     }
     return dataModel;
   }
@@ -373,6 +385,18 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         page = portalPageAdapter.update(page);
       }
     }
+    if (page instanceof BlogPage) {
+      BlogPage blogPage = (BlogPage)page;
+      Blog blog = blogPage.getEntity();
+      blog = visitBlog(context, loadMode, blog);
+      if (loadMode) {
+        blogPage.setEntity(blog);
+        if (blogPage.getName() == null) {
+          blogPage.setName(blogPage.getEntity().getName());
+        }
+        page = portalPageAdapter.update(page);
+      }
+    }
     return page;
   }
   
@@ -400,6 +424,32 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       model.articleFolders.add(articleFolder);
     }
     return articleFolder;
+  }
+  
+  private Blog visitBlog(VisitContext context, boolean loadMode, Blog blog) {
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    if (model.blogs == null) {
+      model.blogs = new ArrayList<Blog>();
+    }
+    for (int it = 0; it < model.blogs.size(); it++) {
+      Blog cachedBlog = model.blogs.get(it);
+      boolean matched = false;
+      if (blog.getCode() != null && blog.getCode().equals(cachedBlog.getCode())) {
+        matched = true;
+      }
+      if (matched) {
+        if (loadMode && cachedBlog.getId() == null) {
+          cachedBlog = createBlog(context, loadMode, cachedBlog);
+          model.blogs.set(it, cachedBlog);
+        }
+        return cachedBlog;
+      }
+    }
+    if (loadMode) {
+      blog = createBlog(context, loadMode, blog);
+      model.blogs.add(blog);
+    }
+    return blog;
   }
   
   private DocumentFolder visitDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
@@ -562,6 +612,11 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     }
     documentFolder = documentAdapter.createFolder(documentFolder);
     return documentFolder;
+  }
+  
+  private Blog createBlog(VisitContext context, boolean loadMode, Blog blog) {
+    blog = blogAdapter.createBlog(blog);
+    return blog;
   }
   
   private PortalDataExportModel cast(VisitContext context) {

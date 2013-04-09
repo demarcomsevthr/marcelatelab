@@ -1,6 +1,7 @@
 package it.mate.econyx.server.util;
 
 import it.mate.econyx.server.services.ArticleAdapter;
+import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.DocumentAdapter;
@@ -79,6 +80,10 @@ public class AdaptersUtil {
   
   public static DocumentAdapter getDocumentAdapter() {
     return context.getBean(DocumentAdapter.class);
+  }
+  
+  public static BlogAdapter getBlogAdapter() {
+    return context.getBean(BlogAdapter.class);
   }
   
   public static PortalServiceAdapter getPortalServiceAdapter() {

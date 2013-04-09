@@ -134,6 +134,26 @@ public class BlogAdapterImpl implements BlogAdapter {
     dao.delete(discussionDs);
   }
   
+  private BlogDs createOrUpdateBlogDs (BlogDs blogDs) {
+    List<BlogDiscussion> discussions = blogDs.getDiscussions();
+    if (discussions != null) {
+      for (int it = 0; it < discussions.size(); it++) {
+        BlogDiscussionDs discussionDs = (BlogDiscussionDs)discussions.get(it);
+        discussionDs = createOrUpdateDiscussionDs(discussionDs);
+        discussions.set(it, discussionDs);
+      }
+    }
+    if (blogDs.getKey() == null) {
+      if (blogDs.getCode() == null) {
+        blogDs.setCode(getNextCodeCounter());
+      }
+      blogDs = dao.create(blogDs);
+    } else {
+      blogDs = dao.update(blogDs);
+    }
+    return blogDs;
+  }
+  
   private BlogDiscussionDs createOrUpdateDiscussionDs (BlogDiscussionDs discussionDs) {
     List<BlogComment> comments = discussionDs.getComments();
     if (comments != null) {
@@ -190,6 +210,31 @@ public class BlogAdapterImpl implements BlogAdapter {
     return ds;
   }
   
+  private BlogDs internalFindBlogById(String id, boolean fetchDiscussions) {
+    if (fetchDiscussions) {
+      CacheUtils.deleteByKeyWithCondition(id, Blog.class, new CacheUtils.Condition<Blog>() {
+        public boolean evaluate(Blog cachedEntity) {
+          return (cachedEntity.getDiscussions() == null || cachedEntity.getDiscussions().size() == 0);
+        }
+      });
+    }
+    FindContext<BlogDs> context = new FindContext<BlogDs>(BlogDs.class).setId(id);
+    if (fetchDiscussions) {
+      context.includedField("discussionsKeys");
+    }
+    BlogDs ds = dao.findById(context);
+    return ds;
+  }
+  
+  public Blog addDiscussionToBlog(String id, BlogDiscussion discussion) {
+    BlogDs blog = internalFindBlogById(id, true);
+    List<BlogDiscussion> discussions = blog.getDiscussions();
+    discussions.add(CloneUtils.clone(discussion, BlogDiscussionDs.class));
+    blog.setDiscussions(discussions);
+    blog = createOrUpdateBlogDs(blog);
+    return CloneUtils.clone(blog, BlogTx.class);
+  }
+  
   public BlogDiscussion addCommentToDiscussion(String id, BlogComment comment) {
     BlogDiscussionDs discussion = internalFindDiscussionById(id, true);
     List<BlogComment> comments = discussion.getComments();
@@ -198,7 +243,7 @@ public class BlogAdapterImpl implements BlogAdapter {
     discussion = createOrUpdateDiscussionDs(discussion);
     return CloneUtils.clone(discussion, BlogDiscussionTx.class);
   }
-
+  
   private String getNextCodeCounter() {
     return ""+generalAdapter.findNextCounterValue();
   }
