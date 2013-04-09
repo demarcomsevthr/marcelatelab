@@ -1,5 +1,7 @@
 package it.mate.gwtcommons.client.utils;
 
+import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
+
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -12,14 +14,36 @@ public class ListPropertyWrapper <I extends Serializable, D extends I> extends A
   
   private transient Class<D> descendantClass;
   
-  public ListPropertyWrapper() {
-
-  }
+  public ListPropertyWrapper() {  }
   
   public ListPropertyWrapper(List<D> items, Class<D> descendantClass) {
     if (items != null)
       this.items = items;
     this.descendantClass = descendantClass;
+  }
+  
+  public static <I extends Serializable, D extends I> ListPropertyWrapper<I, D> cast (List<D> itemsToWrap, Class<D> descendantClass) {
+    return new ListPropertyWrapper<I, D>(itemsToWrap, descendantClass);
+  }
+  
+  public static <I extends Serializable, D extends I> ListPropertyWrapper<I, D> clone (List<I> itemsToClone, Class<D> descendantClass) {
+    ListPropertyWrapper<I, D> wrapper = new ListPropertyWrapper<I, D>(new ArrayList<D>(), descendantClass);
+    if (itemsToClone != null) {
+      for (I itemToClone : itemsToClone) {
+        if (isInstanceOf(itemsToClone, descendantClass)) {
+          wrapper.items.add((D)itemToClone);
+        } else {
+          throw new CloneablePropertyMissingException(itemToClone);
+        }
+      }
+    } else {
+      wrapper.items = null;
+    }
+    return wrapper;
+  }
+  
+  public List<D> getItems() {
+    return items;
   }
 
   public int size() {

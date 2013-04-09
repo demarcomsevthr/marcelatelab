@@ -32,10 +32,16 @@
 				- RestController response.setContentType XXX
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
-			> INIZIATO model [08/04/2013]
+			> model tx [08/04/2013]
+			> INIZIATO model ds [09/04/2013]
+			> INIZIATO adapter [09/04/2013]
 
 		>> ListPropertyWrapper
 			mettere in tutti i getter getList dei tx
+			
+		>> ListPropertyServerWrapper
+			> provato su BlogDs... [09/04/2013]
+			> se funziona riportare su altri ds
 		
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
 			> aggiornare contenuti dal sito vero

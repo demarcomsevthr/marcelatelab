@@ -7,20 +7,13 @@ import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class BlogDiscussionTx implements BlogDiscussion {
+public class BlogDiscussionTx extends AbstractPortalResourceTx implements BlogDiscussion {
 
-  String id;
-  
   String code;
-  
-  Integer orderNm;
-  
-  String title;
   
   String content;
 
@@ -30,36 +23,12 @@ public class BlogDiscussionTx implements BlogDiscussion {
   
   List<BlogCommentTx> comments;
   
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-  
-  public String getName() {
-    return getTitle();
-  }
-
-  public void setName(String name) {
-    setTitle(name);
-  }
-
-  public Integer getOrderNm() {
-    return orderNm;
-  }
-
-  public void setOrderNm(Integer orderNm) {
-    this.orderNm = orderNm;
-  }
-
   public String getTitle() {
-    return title;
+    return name;
   }
 
   public void setTitle(String title) {
-    this.title = title;
+    this.name = title;
   }
 
   public String getCode() {
@@ -100,23 +69,12 @@ public class BlogDiscussionTx implements BlogDiscussion {
   }
 
   public List<BlogComment> getComments() {
-    return new ListPropertyWrapper<BlogComment, BlogCommentTx>(comments, BlogCommentTx.class);
+    return ListPropertyWrapper.cast(comments, BlogCommentTx.class);
   }
 
   @CloneableProperty (targetClass=BlogCommentTx.class)
   public void setComments(List<BlogComment> comments) {
-    if (comments != null) {
-      this.comments = new ArrayList<BlogCommentTx>();
-      for (BlogComment comment : comments) {
-        if (comment instanceof BlogCommentTx) {
-          this.comments.add((BlogCommentTx)comment);
-        } else {
-          throw new CloneablePropertyMissingException(comment);
-        }
-      }
-    } else {
-      this.comments = null;
-    }
+    ListPropertyWrapper.clone(comments, BlogCommentTx.class);
   }
 
 }
