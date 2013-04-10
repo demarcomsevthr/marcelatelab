@@ -37,11 +37,14 @@
 			
 			> INIZIATO BlogView [09/04/2013] > PortalPageViewImpl
 			
+			> TODO: BlogDiscussionPage
+			
 			>> TODO
-				BlogDs > discussionsNumber, lastDiscussion (BlogDiscussion)
-					   > si aggiornano nel ds quando si setta discussions
-				BlogDiscussionDs > commentsNumber, lastComment (BlogComment)
-								 > si aggiornano nel ds quando si setta comments
+				>> dati di riepilogo da mostrare nella view (stile forum):
+				BlogDs > discussionsCount, lastDiscussion (BlogDiscussion)
+					   > si aggiornano nel ds quando si modifica discussions
+				BlogDiscussionDs > commentsCount, lastComment (BlogComment)
+								 > si aggiornano nel ds quando si modifica comments
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
 		>> ListPropertyWrapper
@@ -64,7 +67,7 @@
 
 		>> ProducerFolderPage [3]
 		
-		>> UPGRADE GAE 1.7.6
+		>> UPGRADE GAE 1.7.6 >> 10/04/2013
 		
 		>> Link Facebook, Twitter, ...  [4]
 			

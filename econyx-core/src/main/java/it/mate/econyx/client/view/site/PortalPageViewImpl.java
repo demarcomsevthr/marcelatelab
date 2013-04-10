@@ -8,6 +8,7 @@ import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.ArticlePage;
+import it.mate.econyx.shared.model.BlogPage;
 import it.mate.econyx.shared.model.DocumentFolderPage;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
@@ -52,9 +53,6 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
   
   @UiField FlexTable childreenTable;
   @UiField HTML htmlPanel;
-  /*
-  @UiField SimplePanel productListPanel;
-  */
   @UiField SimplePanel innerPagePanel;
   @UiField FlexTable innerChildreenTable;
   
@@ -86,6 +84,11 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       if (page instanceof DocumentFolderPage) {
         DocumentFolderPage documentFolderPage = (DocumentFolderPage)page;
         getPresenter().initDocumentFolderPageView(innerPagePanel, documentFolderPage);
+      }
+      
+      if (page instanceof BlogPage) {
+        BlogPage blogPage = (BlogPage)page;
+        getPresenter().initBlogPageView(innerPagePanel, blogPage);
       }
       
       if (page instanceof ProductFolderPage) {

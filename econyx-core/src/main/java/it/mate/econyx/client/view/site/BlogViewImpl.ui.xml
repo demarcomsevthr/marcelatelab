@@ -6,6 +6,7 @@
   <g:HTMLPanel>
     <g:FlexTable ui:field="discussionsTable"/>
     <g:VerticalPanel>
+      <g:TextBox ui:field="titleBox"/>
       <g:TextArea ui:field="newDiscussionArea"/>
       <g:Button ui:field="addDiscussionBtn" text="Nuova discussione"/>
     </g:VerticalPanel>

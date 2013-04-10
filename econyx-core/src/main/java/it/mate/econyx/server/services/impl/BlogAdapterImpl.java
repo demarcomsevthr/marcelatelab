@@ -55,8 +55,7 @@ public class BlogAdapterImpl implements BlogAdapter {
   @Override
   public Blog updateBlog(Blog entity) {
     BlogDs blogDs = CloneUtils.clone(entity, BlogDs.class);
-    blogDs.setDiscussions(updateDiscussions(blogDs.getDiscussions()));
-    blogDs = dao.update(blogDs);
+    blogDs = createOrUpdateBlogDs(blogDs);
     return CloneUtils.clone (blogDs, BlogTx.class);
   }
 
@@ -70,11 +69,7 @@ public class BlogAdapterImpl implements BlogAdapter {
   @Override
   public Blog createBlog(Blog entity) {
     BlogDs blogDs = CloneUtils.clone(entity, BlogDs.class);
-    blogDs.setDiscussions(createDiscussions(blogDs.getDiscussions()));
-    if (blogDs.getCode() == null) {
-      blogDs.setCode(getNextCodeCounter());
-    }
-    blogDs = dao.create(blogDs);
+    blogDs = createOrUpdateBlogDs(blogDs);
     return CloneUtils.clone (blogDs, BlogTx.class);
   }
 
@@ -90,17 +85,6 @@ public class BlogAdapterImpl implements BlogAdapter {
     return CloneUtils.clone(discussion, BlogDiscussionTx.class);
   }
 
-  private List<BlogDiscussion> createDiscussions(List<BlogDiscussion> discussions) {
-    if (discussions != null) {
-      for (int it = 0; it < discussions.size(); it++) {
-        BlogDiscussionDs discussionDs = CloneUtils.clone(discussions.get(it), BlogDiscussionDs.class);
-        discussionDs = createOrUpdateDiscussionDs(discussionDs);
-        discussions.set(it, discussionDs);
-      }
-    }
-    return discussions;
-  }
-  
   private void deleteDiscussions(List<BlogDiscussion> discussions) {
     if (discussions != null) {
       for (BlogDiscussion discussion : discussions) {
@@ -110,17 +94,6 @@ public class BlogAdapterImpl implements BlogAdapter {
     }
   }
 
-  private List<BlogDiscussion> updateDiscussions(List<BlogDiscussion> discussions) {
-    if (discussions != null) {
-      for (int it = 0; it < discussions.size(); it++) {
-        BlogDiscussionDs discussionDs = CloneUtils.clone(discussions.get(it), BlogDiscussionDs.class);
-        discussionDs = createOrUpdateDiscussionDs(discussionDs);
-        discussions.set(it, discussionDs);
-      }
-    }
-    return discussions;
-  }
-  
   private void deleteDiscussionDs (BlogDiscussionDs discussionDs) {
     List<BlogComment> comments = discussionDs.getComments();
     if (comments != null) {
@@ -142,6 +115,7 @@ public class BlogAdapterImpl implements BlogAdapter {
         discussionDs = createOrUpdateDiscussionDs(discussionDs);
         discussions.set(it, discussionDs);
       }
+      blogDs.setDiscussions(discussions);
     }
     if (blogDs.getKey() == null) {
       if (blogDs.getCode() == null) {

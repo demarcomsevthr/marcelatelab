@@ -6,6 +6,7 @@ import it.mate.econyx.server.model.impl.CustomerDs;
 import it.mate.econyx.server.model.impl.IndirizzoSpedizioneDs;
 import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.ArticleAdapter;
+import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
@@ -18,6 +19,7 @@ import it.mate.econyx.server.util.CacheConstants;
 import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.Articolo;
+import it.mate.econyx.shared.model.Blog;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.Image;
@@ -66,10 +68,6 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   
   private static final long INITIAL_COUNTER = 1000; 
 
-  /*
-  private static final String PORTAL_SESSION_STATE_KEY = "PORTAL_SESSION_STATE";
-  */
-  
   @Autowired private Dao dao;
   
   @Autowired private PortalUserAdapter portalUserAdapter;
@@ -87,6 +85,8 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   @Autowired private ArticleAdapter articleAdapter;
   
   @Autowired private DocumentAdapter documentAdapter;
+  
+  @Autowired private BlogAdapter blogAdapter;
   
   private Key counterId = null;
   
@@ -198,6 +198,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       deletePages();
       deleteArticles();
       deleteDocuments();
+      deleteBlogs();
       deleteCustomers();
       deleteUsers();
       deleteImages();
@@ -274,6 +275,13 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     List<DocumentFolder> folders = documentAdapter.findAllFolders();
     for (DocumentFolder folder : folders) {
       documentAdapter.deleteFolder(folder);
+    }
+  }
+  
+  private void deleteBlogs() {
+    List<Blog> blogs = blogAdapter.findAllBlogs();
+    for (Blog blog : blogs) {
+      blogAdapter.deleteBlog(blog);
     }
   }
   

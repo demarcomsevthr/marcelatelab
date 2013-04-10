@@ -17,7 +17,11 @@
     -->
     <gwt.version>2.5.1</gwt.version>
     <gin.version>1.5.0</gin.version>
+
+    <!--     
     <gae.version>1.7.4</gae.version>
+     -->
+    <gae.version>1.7.6</gae.version>
     
     <gquery-dnd-bundle.version>1.0.6</gquery-dnd-bundle.version>
 
