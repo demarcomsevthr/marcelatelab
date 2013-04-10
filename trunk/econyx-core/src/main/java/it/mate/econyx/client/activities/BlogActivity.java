@@ -2,8 +2,10 @@ package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.BlogPlace;
+import it.mate.econyx.client.view.BlogDiscussionView;
 import it.mate.econyx.client.view.BlogView;
 import it.mate.econyx.shared.model.Blog;
+import it.mate.econyx.shared.model.BlogComment;
 import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.services.BlogServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
@@ -15,7 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class BlogActivity extends BaseActivity implements 
-    BlogView.Presenter {
+    BlogView.Presenter,
+    BlogDiscussionView.Presenter {
 
   private BlogPlace place;
   
@@ -33,11 +36,18 @@ public class BlogActivity extends BaseActivity implements
       initView(AppClientFactory.IMPL.getGinjector().getBlogView(), panel);
       retrieveModel();
     }
+    if (place.getToken().equals(BlogPlace.DISCUSSION_VIEW)) {
+      initView(AppClientFactory.IMPL.getGinjector().getBlogDiscussionView(), panel);
+      retrieveModel();
+    }
   }
   
   private void retrieveModel() {
     getView().setModel(AppClientFactory.IMPL.getPortalSessionState());
     if (place.getToken().equals(BlogPlace.BLOG_VIEW)) {
+      getView().setModel(place.getModel());
+    }
+    if (place.getToken().equals(BlogPlace.DISCUSSION_VIEW)) {
       getView().setModel(place.getModel());
     }
   }
@@ -57,6 +67,18 @@ public class BlogActivity extends BaseActivity implements
     blogService.addDiscussionToBlog(blogId, discussion, new AsyncCallback<Blog>() {
       public void onSuccess(Blog blog) {
         goTo(new BlogPlace(BlogPlace.BLOG_VIEW, blog));
+      }
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+    });
+  }
+
+  @Override
+  public void addCommentToDiscussion(String discussionId, BlogComment comment) {
+    blogService.addCommentToDiscussion(discussionId, comment, new AsyncCallback<BlogDiscussion>() {
+      public void onSuccess(BlogDiscussion discussion) {
+        goTo(new BlogPlace(BlogPlace.DISCUSSION_VIEW, discussion));
       }
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());

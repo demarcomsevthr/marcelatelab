@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface BlogDiscussion extends PortalResource, CodedEntity {
+public interface BlogDiscussion extends PortalResource, CodedEntity, PortalEntity {
 
   public String getTitle();
 

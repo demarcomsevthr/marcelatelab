@@ -21,6 +21,8 @@ import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.ArticlePage;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Blog;
+import it.mate.econyx.shared.model.BlogDiscussion;
+import it.mate.econyx.shared.model.BlogDiscussionPage;
 import it.mate.econyx.shared.model.BlogPage;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.DocumentFolderPage;
@@ -429,6 +431,11 @@ public class PortalPageActivity extends BaseActivity implements
   public void initBlogPageView (AcceptsOneWidget panel, BlogPage page) {
     Blog entity = page.getEntity();
     startBlogActivity(panel, new BlogPlace(BlogPlace.BLOG_VIEW, entity));
+  }
+  
+  public void initBlogDiscussionPageView (AcceptsOneWidget panel, BlogDiscussionPage page) {
+    BlogDiscussion entity = page.getEntity();
+    startBlogActivity(panel, new BlogPlace(BlogPlace.DISCUSSION_VIEW, entity));
   }
   
   private BlogActivity startBlogActivity(AcceptsOneWidget panel, BlogPlace place) {

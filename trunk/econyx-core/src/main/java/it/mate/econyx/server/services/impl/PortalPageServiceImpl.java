@@ -1,14 +1,17 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.ArticleAdapter;
+import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.econyx.shared.model.impl.ArticlePageTx;
+import it.mate.econyx.shared.model.impl.BlogDiscussionPageTx;
 import it.mate.econyx.shared.services.PortalPageService;
 
 import java.util.List;
@@ -29,12 +32,15 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   
   private ArticleAdapter articleAdapter;
       
+  private BlogAdapter blogAdapter;
+  
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdaptersUtil.initContext(config.getServletContext());
     this.adapter = AdaptersUtil.getPortalPageAdapter();
     this.articleAdapter = AdaptersUtil.getArticleAdapter();
+    this.blogAdapter = AdaptersUtil.getBlogAdapter();
     logger.debug("initialized " + this);
   }
 
@@ -61,7 +67,10 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   @Override
   public PortalPage findById(String id) {
     if (ArticlePageTx.isVirtualId(id)) {
-      return getArticlePortalPageByCode(ArticlePageTx.getEntityCodeFromId(id));
+      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    }
+    if (BlogDiscussionPageTx.isVirtualId(id)) {
+      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromId(id));
     }
     return adapter.findById(id);
   }
@@ -69,7 +78,10 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   @Override
   public PortalPage findById(String id, boolean resolveChildreen, boolean resolveProducts, boolean resolveHtmls) {
     if (ArticlePageTx.isVirtualId(id)) {
-      return getArticlePortalPageByCode(ArticlePageTx.getEntityCodeFromId(id));
+      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    }
+    if (BlogDiscussionPageTx.isVirtualId(id)) {
+      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromId(id));
     }
     return adapter.findById(id, resolveChildreen, resolveProducts, resolveHtmls);
   }
@@ -116,15 +128,26 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   public PortalPage findByCode(String code) {
     PortalPage page = adapter.findByCode(code);
     if (page == null) {
-      page = getArticlePortalPageByCode(code);
+      page = getArticlePageByCode(code);
+    }
+    if (page == null) {
+      page = getBlogDiscussionPageByCode(code);
     }
     return page;
   }
   
-  private PortalPage getArticlePortalPageByCode(String code) {
+  private PortalPage getArticlePageByCode(String code) {
     Article article = articleAdapter.findByCode(code);
     if (article != null) {
       return new ArticlePageTx(article);
+    }
+    return null;
+  }
+
+  private PortalPage getBlogDiscussionPageByCode(String code) {
+    BlogDiscussion discussion = blogAdapter.findDiscussionByCode(code);
+    if (discussion != null) {
+      return new BlogDiscussionPageTx(discussion);
     }
     return null;
   }

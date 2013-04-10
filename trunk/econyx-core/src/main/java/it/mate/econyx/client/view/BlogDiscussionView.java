@@ -1,21 +1,17 @@
 package it.mate.econyx.client.view;
 
 import it.mate.econyx.shared.model.BlogComment;
-import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
 
 
-public interface BlogView extends BaseView<BlogView.Presenter> {
+public interface BlogDiscussionView extends BaseView<BlogDiscussionView.Presenter> {
   
   public interface Presenter extends BasePresenter {
-    
-    public void addDiscussionToBlog(String blogId, BlogDiscussion discussion);
     public void addCommentToDiscussion(String discussionId, BlogComment comment);
-    
   }
   
-  public class NotImpl extends UnimplementedView<BlogView.Presenter> implements BlogView {
+  public class NotImpl extends UnimplementedView<BlogDiscussionView.Presenter> implements BlogDiscussionView {
 
   }
   
