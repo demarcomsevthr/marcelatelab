@@ -6,6 +6,7 @@ import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
 import it.mate.econyx.client.view.ArticleView;
+import it.mate.econyx.client.view.BlogDiscussionView;
 import it.mate.econyx.client.view.BlogView;
 import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
@@ -112,6 +113,7 @@ public interface AppGinjector extends CommonGinjector {
   public ArticleEditView getArticleEditView();
   
   public BlogView getBlogView();
+  public BlogDiscussionView getBlogDiscussionView();
 
   public DocumentFolderView getDocumentFolderView();
   public DocumentFolderListView getDocumentFolderListView();

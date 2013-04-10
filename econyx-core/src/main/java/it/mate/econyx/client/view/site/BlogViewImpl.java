@@ -13,6 +13,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -58,7 +59,7 @@ public class BlogViewImpl extends AbstractBaseView<BlogView.Presenter> implement
       discussionsTable.clear();
       if (blog.getDiscussions() != null) {
         int row = 0;
-        for (BlogDiscussion discussion : blog.getDiscussions()) {
+        for (final BlogDiscussion discussion : blog.getDiscussions()) {
           HTML title = new HTML(discussion.getTitle());
           discussionsTable.setWidget(row, 0, title);
           Anchor code = new Anchor(discussion.getCode());
@@ -68,6 +69,13 @@ public class BlogViewImpl extends AbstractBaseView<BlogView.Presenter> implement
           HTML created = new HTML(" il " + GwtUtils.dateToString(discussion.getCreated()));
           discussionsTable.setWidget(row, 3, created);
           row++;
+          
+          code.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+              GwtUtils.setLocationHash(discussion.getCode());
+            }
+          });
+          
         }
       }
     }

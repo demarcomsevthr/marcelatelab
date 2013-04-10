@@ -5,6 +5,7 @@ import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
 import it.mate.econyx.client.view.ArticleFolderView;
 import it.mate.econyx.client.view.ArticleView;
+import it.mate.econyx.client.view.BlogDiscussionView;
 import it.mate.econyx.client.view.BlogView;
 import it.mate.econyx.client.view.CalEventEditView;
 import it.mate.econyx.client.view.CalEventListView;
@@ -99,6 +100,7 @@ public class AdminGinModule extends AbstractGinModule {
     bind(ArticleEditView.class).to(ArticleEditViewImpl.class);
     
     bind(BlogView.class).to(BlogView.NotImpl.class);
+    bind(BlogDiscussionView.class).to(BlogDiscussionView.NotImpl.class);
 
     bind(DocumentFolderView.class).to(DocumentFolderView.NotImpl.class);
     bind(DocumentFolderListView.class).to(DocumentFolderListViewImpl.class);

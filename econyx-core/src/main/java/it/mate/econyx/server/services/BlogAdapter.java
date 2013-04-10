@@ -27,5 +27,7 @@ public interface BlogAdapter {
   public BlogDiscussion updateDiscussion(BlogDiscussion entity);
   
   public Blog addDiscussionToBlog(String id, BlogDiscussion discussion);
+
+  public BlogDiscussion findDiscussionByCode(String code);
   
 }

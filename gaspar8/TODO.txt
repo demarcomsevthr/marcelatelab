@@ -30,14 +30,6 @@
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
-			> model tx [08/04/2013]
-			> INIZIATO model ds [09/04/2013]
-			> INIZIATO adapter [09/04/2013]
-			
-			> INIZIATO BlogView [09/04/2013] > PortalPageViewImpl
-			
-			> TODO: BlogDiscussionPage
-			
 			> TODO:
 				>> dati di riepilogo da mostrare nella view (stile forum):
 				BlogDs > discussionsCount, lastDiscussion (BlogDiscussion)
@@ -47,7 +39,8 @@
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
 		>> ListPropertyWrapper
-			mettere in tutti i getter getList dei tx
+			> mettere in tutti i getter getList dei tx
+			>> i metodi clone e wrap funzionano solo con jdk 1.7 [10/04/2013]
 			
 		>> ListPropertyServerWrapper
 			> provato su BlogDs... [09/04/2013]
@@ -65,10 +58,15 @@
 		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
 
 		>> ProducerFolderPage [3]
+			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
+			       PortalPageServiceImpl, PortalPageViewImpl, PortalPageActivity
 		
 		>> Link Facebook, Twitter, ...  [4]
 			
 		>> gestione ruoli admins [4]
+			PortalUser
+				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
+				::isUserInRole (string)
 
 
 	------------------------------------------------------
