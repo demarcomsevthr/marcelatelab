@@ -17,14 +17,14 @@ public class ListPropertyServerWrapper <I extends Serializable, D extends I> {
   private ListPropertyServerWrapper () { }
   
   @SuppressWarnings("unchecked")
-  public static <I extends Serializable, D extends I> ListPropertyServerWrapper<I, D> clone (List<I> itemsToClone, Class<D> descendantClass) {
+  public static <I extends Serializable, D extends I> ListPropertyServerWrapper<I, D> clone (List<I> itemsToClone, Class<D> itemDescendantClass) {
     ListPropertyServerWrapper<I, D> wrapper = new ListPropertyServerWrapper<I, D>();
     if (itemsToClone != null) {
       for (I itemToClone : itemsToClone) {
-        if (descendantClass.isAssignableFrom(itemToClone.getClass())) {
+        if (itemDescendantClass.isAssignableFrom(itemToClone.getClass())) {
           wrapper.items.add((D)itemToClone);
-          if (itemsToClone instanceof HasKey) {
-            HasKey itemWithKey = (HasKey)itemsToClone;
+          if (itemToClone instanceof HasKey) {
+            HasKey itemWithKey = (HasKey)itemToClone;
             wrapper.keys.add(itemWithKey.getKey());
           } else {
             throw new IllegalArgumentException("Item must implements HasKey");

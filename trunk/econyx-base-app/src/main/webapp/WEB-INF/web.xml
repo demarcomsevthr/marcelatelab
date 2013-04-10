@@ -131,6 +131,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>blogService</servlet-name>
+    <servlet-class>it.mate.econyx.server.services.impl.BlogServiceImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>blogService</servlet-name>
+    <url-pattern>*.blogService</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>resourceServlet</servlet-name>
     <servlet-class>it.mate.econyx.server.servlets.ResourceServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

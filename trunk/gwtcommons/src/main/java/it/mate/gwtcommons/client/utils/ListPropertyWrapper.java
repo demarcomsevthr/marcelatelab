@@ -30,7 +30,7 @@ public class ListPropertyWrapper <I extends Serializable, D extends I> extends A
     ListPropertyWrapper<I, D> wrapper = new ListPropertyWrapper<I, D>(new ArrayList<D>(), descendantClass);
     if (itemsToClone != null) {
       for (I itemToClone : itemsToClone) {
-        if (isInstanceOf(itemsToClone, descendantClass)) {
+        if (isInstanceOf(itemToClone, descendantClass)) {
           wrapper.items.add((D)itemToClone);
         } else {
           throw new CloneablePropertyMissingException(itemToClone);
