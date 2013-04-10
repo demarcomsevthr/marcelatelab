@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.web.bindery.event.shared.Event;
 
 public class GwtUtils {
   
@@ -925,6 +926,32 @@ public class GwtUtils {
   
   public static void setDateBoxFormat(DateBox dateBox, String pattern) {
     dateBox.setFormat(new DateBox.DefaultFormat(formatFromCache(pattern)));
+  }
+  
+  public static void setWidgetModel(Widget widget, Object model) {
+    widget.getElement().setPropertyObject("widgetModel", model);
+  }
+  
+  public static Object getWidgetModel (Widget widget) {
+    return widget.getElement().getPropertyObject("widgetModel");
+  }
+  
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  public static <M> M getEventSourceWidgetModel (Event event, Class<M> modelClass) {
+    Widget widget = getEventSourceWidget(event);
+    if (widget != null) {
+      return (M)getWidgetModel(widget);
+    }
+    return null;
+  }
+  
+  @SuppressWarnings("rawtypes")
+  public static Widget getEventSourceWidget (Event event) {
+    Object source = event.getSource();
+    if (source instanceof Widget) {
+      return (Widget)source;
+    }
+    return null;
   }
   
 }

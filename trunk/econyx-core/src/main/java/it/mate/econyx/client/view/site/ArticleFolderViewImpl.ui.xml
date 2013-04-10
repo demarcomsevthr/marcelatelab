@@ -3,10 +3,6 @@
        xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
 
-  <ui:style type="it.mate.econyx.client.view.site.ArticleFolderViewImpl.Style">
-  
-  </ui:style>
-  
   <g:HTMLPanel>
   
     <g:FlexTable ui:field="articlesTable"/>

@@ -47,6 +47,10 @@
 			> se funziona riportare su altri ds
 		
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
+		
+			>>> INIZIATO [10/04/2013]
+			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
+		
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
 			> css pagine
 			> css articoli

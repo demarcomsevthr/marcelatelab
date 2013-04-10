@@ -3,20 +3,13 @@
        xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
 
-  <ui:style type="it.mate.econyx.client.view.site.ArticleViewImpl.Style">
-  
-  </ui:style>
-  
   <g:HTMLPanel>
-  
     <g:HTML ui:field="articleHtml"></g:HTML>
-    
     <g:FlexTable ui:field="commentsTable"/>
-    
-    <g:TextArea ui:field="commentArea"></g:TextArea>
-    
-    <g:Button ui:field="addCommentBtn" text="Aggiungi commento"/>
-  
+    <g:VerticalPanel>
+      <g:TextArea ui:field="commentArea"/>
+      <g:Button ui:field="addCommentBtn" text="Aggiungi commento"/>
+    </g:VerticalPanel>
   </g:HTMLPanel>
   
 </ui:UiBinder>

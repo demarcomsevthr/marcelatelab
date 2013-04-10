@@ -19,7 +19,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -36,12 +35,6 @@ public class ArticleViewImpl extends AbstractBaseView<ArticleView.Presenter> imp
   public interface ViewUiBinder extends UiBinder<Widget, ArticleViewImpl> { }
   
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
-  
-  interface Style extends CssResource {
-
-  }
-  
-  @UiField Style style;
   
   @UiField HTML articleHtml;
   

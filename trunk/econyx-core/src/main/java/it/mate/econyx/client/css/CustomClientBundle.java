@@ -8,7 +8,7 @@ public interface CustomClientBundle extends ClientBundle {
 
   public static final CustomClientBundle INSTANCE = GWT.create(CustomClientBundle.class);
   
-  @Source ("bundle-custom.css")
+  @Source ({"bundle.css", "bundle-custom.css"})
   public CssResource css();
 
   

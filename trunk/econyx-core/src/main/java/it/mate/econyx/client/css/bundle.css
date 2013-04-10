@@ -1,0 +1,36 @@
+
+.ecxArticleCreated {
+  background: url("main/images/commons/article-header-date.png") no-repeat scroll left -1px transparent;
+  padding-left: 20px;
+  font: 12px Arial;
+}
+
+.ecxArticleTitle {
+  font: Arial;
+  font-size: 170%;
+  line-height: 1.4em;
+}
+
+.ecxArticleFooter {
+  background: none repeat scroll 0 0 #F7F7F7;
+  border-bottom: 1px solid #DDDDDD;
+  border-top: 1px solid #DDDDDD;
+  color: #555555;
+  font: 90%/1.4em Trebuchet,Arial,Verdana,Sans-serif;
+  letter-spacing: 0;
+  margin-bottom: 0.75em;
+  margin-left: 0;
+  margin-top: 7px;
+  padding: 10px;
+  text-transform: none;
+}
+
+.ecxArticleAuthor {
+  background: url("main/images/commons/article-author.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
+
+.ecxArticleCommentsCount {
+  background: url("main/images/commons/article-comment.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
