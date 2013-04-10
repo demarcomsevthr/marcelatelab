@@ -13,7 +13,7 @@
 			
 		1) Download appengine java sdk
 			appengine-java-sdk-X.X.X
-			download link: https://code.google.com/p/googleappengine/downloads/list?can=1&q=&colspec=Filename+Summary+Uploaded+ReleaseDate+Size+DownloadCount
+			download link: https://code.google.com/p/googleappengine/downloads/list?can=1&q=java-sdk
 			[nella pagina di download ufficiale c'è solo l'ultima versione]
 			
 		2) Oggetti da modificare:

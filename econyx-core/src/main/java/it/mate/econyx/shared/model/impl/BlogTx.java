@@ -2,7 +2,7 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Blog;
 import it.mate.econyx.shared.model.BlogDiscussion;
-import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.List;
@@ -31,12 +31,12 @@ public class BlogTx extends AbstractPortalResourceTx implements Blog {
   }
 
   public List<BlogDiscussion> getDiscussions() {
-    return ListPropertyWrapper.cast(discussions, BlogDiscussionTx.class);
+    return CollectionPropertyClientUtil.cast(discussions, BlogDiscussionTx.class);
   }
 
   @CloneableProperty (targetClass=BlogDiscussionTx.class)
   public void setDiscussions(List<BlogDiscussion> discussions) {
-    this.discussions = ListPropertyWrapper.clone(discussions, BlogDiscussionTx.class).getItems();
+    this.discussions = CollectionPropertyClientUtil.clone(discussions, BlogDiscussionTx.class);
   }
 
 }

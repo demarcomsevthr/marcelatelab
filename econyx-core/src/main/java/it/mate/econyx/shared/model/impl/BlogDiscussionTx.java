@@ -3,7 +3,7 @@ package it.mate.econyx.shared.model.impl;
 import it.mate.econyx.shared.model.BlogComment;
 import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.PortalUser;
-import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
@@ -69,12 +69,12 @@ public class BlogDiscussionTx extends AbstractPortalResourceTx implements BlogDi
   }
 
   public List<BlogComment> getComments() {
-    return ListPropertyWrapper.cast(comments, BlogCommentTx.class);
+    return CollectionPropertyClientUtil.cast(comments, BlogCommentTx.class);
   }
 
   @CloneableProperty (targetClass=BlogCommentTx.class)
   public void setComments(List<BlogComment> comments) {
-    ListPropertyWrapper.clone(comments, BlogCommentTx.class);
+    this.comments = CollectionPropertyClientUtil.clone(comments, BlogCommentTx.class);
   }
 
 }
