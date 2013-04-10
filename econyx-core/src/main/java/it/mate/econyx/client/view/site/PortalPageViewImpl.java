@@ -75,6 +75,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
       if (page instanceof ArticleFolderPage) {
         ArticleFolderPage articleFolderPage = (ArticleFolderPage)page;
         getPresenter().initArticleFolderPageView(innerPagePanel, articleFolderPage);
+        childreenRendered = true;
       }
       
       if (page instanceof ArticlePage) {
