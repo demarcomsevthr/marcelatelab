@@ -5,7 +5,7 @@ import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.impl.BlogTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.ListPropertyServerWrapper;
+import it.mate.gwtcommons.server.model.CollectionPropertyServerUtil;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
@@ -90,7 +90,7 @@ public class BlogDs implements Blog, HasKey {
 
   @CloneableProperty (targetClass=BlogDiscussionDs.class)
   public void setDiscussions(List<BlogDiscussion> discussions) {
-    ListPropertyServerWrapper<BlogDiscussion, BlogDiscussionDs> wrapper = ListPropertyServerWrapper.clone(discussions, BlogDiscussionDs.class);
+    CollectionPropertyServerUtil<BlogDiscussion, BlogDiscussionDs> wrapper = CollectionPropertyServerUtil.clone(discussions, BlogDiscussionDs.class);
     this.discussions = wrapper.getItems();
     this.discussionsKeys = wrapper.getKeys();
   }

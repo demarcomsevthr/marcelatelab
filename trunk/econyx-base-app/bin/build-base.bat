@@ -30,10 +30,10 @@ set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 :NO_DEPENDENCIES
 
 cd %BASEAPPDIR%\..\econyx-base-app
-call mvn2 install
+call %~dp0\mvn2 install
 
 cd %BASEAPPDIR%
-call mvn2 %*
+call %~dp0\mvn2 %*
 
 if "%SKIP_PAUSE%"=="true" GOTO NO_PAUSE
 pause

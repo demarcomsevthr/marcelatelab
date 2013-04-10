@@ -8,26 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({ "unchecked", "serial" })
-public class ListPropertyWrapper <I extends Serializable, D extends I> extends AbstractList<I> implements Serializable {
+public class CollectionPropertyClientUtil <I extends Serializable, D extends I> extends AbstractList<I> implements Serializable {
 
   private transient List<D> items = new ArrayList<D>();
   
   private transient Class<D> descendantClass;
   
-  public ListPropertyWrapper() {  }
+  public CollectionPropertyClientUtil() {  }
   
-  public ListPropertyWrapper(List<D> items, Class<D> descendantClass) {
+  public CollectionPropertyClientUtil(List<D> items, Class<D> descendantClass) {
     if (items != null)
       this.items = items;
     this.descendantClass = descendantClass;
   }
   
-  public static <I extends Serializable, D extends I> ListPropertyWrapper<I, D> cast (List<D> itemsToWrap, Class<D> descendantClass) {
-    return new ListPropertyWrapper<I, D>(itemsToWrap, descendantClass);
+  public static <I extends Serializable, D extends I> List<I> cast (List<D> itemsToWrap, Class<D> descendantClass) {
+    return new CollectionPropertyClientUtil<I, D>(itemsToWrap, descendantClass);
   }
   
-  public static <I extends Serializable, D extends I> ListPropertyWrapper<I, D> clone (List<I> itemsToClone, Class<D> descendantClass) {
-    ListPropertyWrapper<I, D> wrapper = new ListPropertyWrapper<I, D>(new ArrayList<D>(), descendantClass);
+  public static <I extends Serializable, D extends I> List<D> clone (List<I> itemsToClone, Class<D> descendantClass) {
+    CollectionPropertyClientUtil<I, D> wrapper = new CollectionPropertyClientUtil<I, D>(new ArrayList<D>(), descendantClass);
     if (itemsToClone != null) {
       for (I itemToClone : itemsToClone) {
         if (isInstanceOf(itemToClone, descendantClass)) {
@@ -39,7 +39,7 @@ public class ListPropertyWrapper <I extends Serializable, D extends I> extends A
     } else {
       wrapper.items = null;
     }
-    return wrapper;
+    return wrapper.items;
   }
   
   public List<D> getItems() {

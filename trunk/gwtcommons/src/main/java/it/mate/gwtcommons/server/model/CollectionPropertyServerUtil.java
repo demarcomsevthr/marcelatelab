@@ -8,17 +8,17 @@ import java.util.List;
 
 import com.google.appengine.api.datastore.Key;
 
-public class ListPropertyServerWrapper <I extends Serializable, D extends I> {
+public class CollectionPropertyServerUtil <I extends Serializable, D extends I> {
 
   private List<Key> keys = new ArrayList<Key>();
   
   private List<D> items = new ArrayList<D>();
   
-  private ListPropertyServerWrapper () { }
+  private CollectionPropertyServerUtil () { }
   
   @SuppressWarnings("unchecked")
-  public static <I extends Serializable, D extends I> ListPropertyServerWrapper<I, D> clone (List<I> itemsToClone, Class<D> itemDescendantClass) {
-    ListPropertyServerWrapper<I, D> wrapper = new ListPropertyServerWrapper<I, D>();
+  public static <I extends Serializable, D extends I> CollectionPropertyServerUtil<I, D> clone (List<I> itemsToClone, Class<D> itemDescendantClass) {
+    CollectionPropertyServerUtil<I, D> wrapper = new CollectionPropertyServerUtil<I, D>();
     if (itemsToClone != null) {
       for (I itemToClone : itemsToClone) {
         if (itemDescendantClass.isAssignableFrom(itemToClone.getClass())) {

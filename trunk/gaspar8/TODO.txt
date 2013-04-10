@@ -22,12 +22,11 @@
 	SNAPSHOT 08/04/2013
 		
 		>> DOCUMENT LIBRARY
-			> TO DO:
-				> cancellazione document
-			> Blobstore API >> [07/04/2013]
-	>>>		>> TODO: MEMORIZZARE CONTENT TYPE SU DS
+			> TODO: cancellazione document
+	 		> TODO: MEMORIZZARE CONTENT TYPE SU DS
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
+			> Blobstore API >> [07/04/2013]
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
@@ -39,7 +38,7 @@
 			
 			> TODO: BlogDiscussionPage
 			
-			>> TODO
+			> TODO:
 				>> dati di riepilogo da mostrare nella view (stile forum):
 				BlogDs > discussionsCount, lastDiscussion (BlogDiscussion)
 					   > si aggiornano nel ds quando si modifica discussions
@@ -66,8 +65,6 @@
 		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
 
 		>> ProducerFolderPage [3]
-		
-		>> UPGRADE GAE 1.7.6 >> 10/04/2013
 		
 		>> Link Facebook, Twitter, ...  [4]
 			
@@ -278,6 +275,8 @@
 		________________________________________________________________________________
 
 
+		-- UPGRADE GAE 1.7.6 [10/04/2013]
+		
 		-- DOCUMENT LIBRARY
 			>> model e admin scaffholding FATTI IN 6 ore totali !!! [06/04/2013]
 

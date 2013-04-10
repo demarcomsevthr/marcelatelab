@@ -2,7 +2,7 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
-import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
@@ -55,7 +55,7 @@ public class DocumentFolderTx implements DocumentFolder {
   }
 
   public List<Document> getDocuments() {
-    return new ListPropertyWrapper<Document, DocumentTx>(documents, DocumentTx.class);
+    return new CollectionPropertyClientUtil<Document, DocumentTx>(documents, DocumentTx.class);
   }
 
   @CloneableProperty (targetClass=DocumentTx.class)

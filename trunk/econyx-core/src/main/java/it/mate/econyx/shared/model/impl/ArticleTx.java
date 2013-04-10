@@ -5,7 +5,7 @@ import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalUser;
-import it.mate.gwtcommons.client.utils.ListPropertyWrapper;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
@@ -71,7 +71,7 @@ public class ArticleTx implements Article {
   }
 
   public List<ArticleComment> getComments() {
-    return new ListPropertyWrapper<ArticleComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
+    return new CollectionPropertyClientUtil<ArticleComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
 
   @CloneableProperty (targetClass=ArticleCommentTx.class)
