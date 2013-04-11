@@ -9,6 +9,7 @@ title BUILDING APP %APPNAME% [%*]
 call %~dp0\setenv.bat
 
 SET BASEAPPDIR=%~dp0\..\..\%APPNAME%
+SET MVN2CMD=%BASEAPPDIR%\..\econyx-core\bin\mvn2.bat
 
 if "%SKIP_DEPENDENCIES%"=="true" GOTO NO_DEPENDENCIES
 
@@ -30,10 +31,10 @@ set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 :NO_DEPENDENCIES
 
 cd %BASEAPPDIR%\..\econyx-base-app
-call %~dp0\mvn2 install
+call %MVN2CMD% install
 
 cd %BASEAPPDIR%
-call %~dp0\mvn2 %*
+call %MVN2CMD% %*
 
 if "%SKIP_PAUSE%"=="true" GOTO NO_PAUSE
 pause

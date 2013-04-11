@@ -12,8 +12,9 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -66,22 +67,22 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
         for (Article article : articleFolder.getArticles()) {
           
           HTML created = new HTML(GwtUtils.dateToString(article.getCreated()));
-          created.addStyleName("ecxArticleCreated");
+          created.addStyleName("ecxPostCreated");
           articlesTable.setWidget(row, 0, created);
           row++;
           
           HTML title = new HTML(article.getTitle());
-          title.addStyleName("ecxArticleTitle");
+          title.addStyleName("ecxPostTitle");
           articlesTable.setWidget(row, 0, title);
           row++;
           
           HTML body = createHtml(article.getHtml(), article.getCode());
-          created.addStyleName("ecxArticleBody");
+          created.addStyleName("ecxPostBody");
           articlesTable.setWidget(row, 0, body);
           row++;
           
           ListPanel footer = new ListPanel();
-          footer.addStyleName("ecxArticleFooter");
+          footer.addStyleName("ecxPostFooter");
           articlesTable.setWidget(row, 0, footer);
           row++;
           
@@ -89,14 +90,22 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
           footer.add(footerLine1);
           
           HTML author = new HTML("Inserito da " + article.getAuthor().getScreenName());
-          author.addStyleName("ecxArticleAuthor");
+          author.addStyleName("ecxPostAuthor");
           footerLine1.add(author);
           
           footerLine1.add(new Spacer("1em"));
           
-          HTML commentsCount = new HTML(2 + " commenti");
-          commentsCount.addStyleName("ecxArticleCommentsCount");
+          HTML commentsCount = new HTML(article.getCommentsCount() + " commenti");
+          commentsCount.addStyleName("ecxPostCommentsCount");
           footerLine1.add(commentsCount);
+          
+          HorizontalPanel footerLine2 = new HorizontalPanel();
+          footer.add(footerLine2);
+          
+          HTML tags = new HTML("Tags: " + article.getTags());
+          tags.addStyleName("ecxPostTags");
+          footerLine2.add(tags);
+          
           
           articlesTable.setWidget(row, 0, new Spacer("1px", "4em"));
           row++;
@@ -126,8 +135,18 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
     html.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
-        // per trovare il giusto read more occorre mettere nel selettore anche la root dell'articolo
-//      JsArray<Element> elements = JQueryUtils.select("[id='cke-readmore']");
+        
+        List<Element> elements = JQueryUtils.selectList("#"+getArticleRootElemId(articleCode)+" #cke-readmore");
+        for (Element readmoreElement : elements) {
+          processCkeReadmore(readmoreElement);
+          GwtUtils.addElementEventListener(readmoreElement, Event.ONCLICK, new EventListener() {
+            public void onBrowserEvent(Event event) {
+              GwtUtils.setLocationHash(articleCode);
+            }
+          });
+        }
+
+        /*
         JsArray<Element> elements = JQueryUtils.select("#"+getArticleRootElemId(articleCode)+" #cke-readmore");
         for (int it = 0; it < elements.length(); it++) {
           Element readmoreElement = elements.get(it);
@@ -140,6 +159,8 @@ public class ArticleFolderViewImpl extends AbstractBaseView<ArticleFolderView.Pr
             });
           }
         }
+        */
+        
         html.getElement().getStyle().clearHeight();
       }
     });

@@ -1234,6 +1234,7 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
+          <tags>tag1, tag2, tag3</tags>
           <content>
           <![CDATA[
   <p>
@@ -1242,7 +1243,8 @@
     ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin a lectus.
   </p>
   <p class="cke-readmore" id="cke-readmore">
-    Read more...</p>
+    <img src="/main/ckeditor/plugins/readmore/icons/readmore.gif" />
+  </p>
   <p>
     Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed velit lorem, tempor eget venenatis nec, fringilla vitae dolor.
     Donec nec purus augue. Curabitur pellentesque aliquet lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
@@ -1288,7 +1290,8 @@
     ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin a lectus.
   </p>
   <p class="cke-readmore" id="cke-readmore">
-    Read more...</p>
+    <img src="/main/ckeditor/plugins/readmore/icons/readmore.gif" />
+  </p>
   <p>
     Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed velit lorem, tempor eget venenatis nec, fringilla vitae dolor.
     Donec nec purus augue. Curabitur pellentesque aliquet lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
@@ -1332,6 +1335,7 @@
           <author class="it.mate.econyx.shared.model.impl.PortalUserTx">
             <emailAddress>verduzio.r@gmail.com</emailAddress>
           </author>
+          <tags>tag4, tag5, tag6</tags>
           <content>
           <![CDATA[
   <p>
@@ -1340,7 +1344,8 @@
     ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin a lectus.
   </p>
   <p class="cke-readmore" id="cke-readmore">
-    Read more...</p>
+    <img src="/main/ckeditor/plugins/readmore/icons/readmore.gif" />
+  </p>
   <p>
     Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed velit lorem, tempor eget venenatis nec, fringilla vitae dolor.
     Donec nec purus augue. Curabitur pellentesque aliquet lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
@@ -1386,7 +1391,8 @@
     ut venenatis. Quisque lacus risus, auctor ut fringilla non, sollicitudin a lectus.
   </p>
   <p class="cke-readmore" id="cke-readmore">
-    Read more...</p>
+    <img src="/main/ckeditor/plugins/readmore/icons/readmore.gif" />
+  </p>
   <p>
     Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed velit lorem, tempor eget venenatis nec, fringilla vitae dolor.
     Donec nec purus augue. Curabitur pellentesque aliquet lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.

@@ -29,5 +29,13 @@ public interface Article extends PortalEntity, PortalResource {
   public Date getCreated();
 
   public void setCreated(Date created);
+
+  public Integer getCommentsCount();
+
+  public void setCommentsCount(Integer commentsCount);
+  
+  public String getTags();
+
+  public void setTags(String tags);
   
 }
