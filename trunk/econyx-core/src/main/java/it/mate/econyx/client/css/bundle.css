@@ -1,17 +1,18 @@
 
-.ecxArticleCreated {
-  background: url("main/images/commons/article-header-date.png") no-repeat scroll left -1px transparent;
+.ecxPostCreated {
+  background: url("main/images/commons/post-header-date.png") no-repeat scroll left -1px transparent;
   padding-left: 20px;
   font: 12px Arial;
 }
 
-.ecxArticleTitle {
+.ecxPostTitle {
   font: Arial;
   font-size: 170%;
   line-height: 1.4em;
+  cursor: pointer;
 }
 
-.ecxArticleFooter {
+.ecxPostFooter {
   background: none repeat scroll 0 0 #F7F7F7;
   border-bottom: 1px solid #DDDDDD;
   border-top: 1px solid #DDDDDD;
@@ -25,12 +26,18 @@
   text-transform: none;
 }
 
-.ecxArticleAuthor {
-  background: url("main/images/commons/article-author.png") no-repeat scroll 0 0 transparent;
+.ecxPostAuthor {
+  background: url("main/images/commons/post-author.png") no-repeat scroll 0 0 transparent;
   padding-left: 20px;
 }
 
-.ecxArticleCommentsCount {
-  background: url("main/images/commons/article-comment.png") no-repeat scroll 0 0 transparent;
+.ecxPostCommentsCount {
+  background: url("main/images/commons/post-comment.png") no-repeat scroll 0 0 transparent;
   padding-left: 20px;
 }
+
+.ecxPostTags {
+  background: url("main/images/commons/post-tags.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
+

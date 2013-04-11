@@ -50,6 +50,7 @@
 		
 			>>> INIZIATO [10/04/2013]
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
+			>>>> BUG: articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
 		
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
 			> css pagine

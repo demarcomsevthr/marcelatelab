@@ -35,6 +35,10 @@ public class ArticleTx implements Article {
   
   String content;
   
+  Integer commentsCount;
+  
+  String tags;
+  
   // serve solo per eseguire correttamente la ArticleActivity.update(Article) 
   transient ArticleFolder articleFolder;
   
@@ -146,6 +150,22 @@ public class ArticleTx implements Article {
 
   public void setArticleFolder(ArticleFolder articleFolder) {
     this.articleFolder = articleFolder;
+  }
+
+  public Integer getCommentsCount() {
+    return commentsCount != null ? commentsCount : 0;
+  }
+
+  public void setCommentsCount(Integer commentsCount) {
+    this.commentsCount = commentsCount;
+  }
+
+  public String getTags() {
+    return tags != null ? tags : "";
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
   }
   
 }

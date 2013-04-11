@@ -63,6 +63,12 @@ public class ArticleDs implements Article, HasKey {
   @Persistent
   Text content;
   
+  @Persistent
+  Integer commentsCount;
+  
+  @Persistent
+  String tags;
+  
   
   public Key getKey() {
     return id;
@@ -117,6 +123,7 @@ public class ArticleDs implements Article, HasKey {
         }
       }
     }
+    this.commentsCount = this.comments.size();
   }
 
   private void attachComment(ArticleCommentDs comment) {
@@ -173,4 +180,20 @@ public class ArticleDs implements Article, HasKey {
     }
   }
 
+  public Integer getCommentsCount() {
+    return commentsCount != null ? commentsCount : 0;
+  }
+
+  public void setCommentsCount(Integer commentsCount) {
+    this.commentsCount = commentsCount;
+  }
+
+  public String getTags() {
+    return tags;
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
+  
 }
