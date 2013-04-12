@@ -27,7 +27,7 @@
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
 			> Blobstore API >> [07/04/2013]
-			> TODO: caricamento documenti da setup
+			> TODO: caricamento documenti da setup [12/04/2013]
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
@@ -39,15 +39,21 @@
 								 > si aggiornano nel ds quando si modifica comments
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
+		>> FRAGMENT IDENTIFIERS
+			> hash link all'interno di una pagina
+			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
+			> IPOTESI
+				- PortalPage.html[small] >> PortalPageSummaryPortlet
+				- LocationHashChangedEvent > #pageCode.fragmentId
+				- SiteClientFactoryImpl.onPortalPageChanging(PortalPageChangingEvent) utilizza solo pageCode
+				- all'interno degli html i fragment vanno identificati con pageCode.fragId
+			
+
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
 			>>> INIZIATO [10/04/2013]
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
-			>>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
-			
-			>>> TODO: FRAGMENT IDENTIFIER
-				hash link all'interno di una pagina
-				- in gp8 si utilizzano i fragment identifier all'interno di una pagina
-		
+			>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
+
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
 			> css pagine
 			> css articoli
