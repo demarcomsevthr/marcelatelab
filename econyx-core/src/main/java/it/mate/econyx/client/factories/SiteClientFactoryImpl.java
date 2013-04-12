@@ -373,10 +373,17 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   
   private void initHashChangeListener() {
     HashUtils.addHashChangeHandler(new Delegate<String>() {
-      public void execute(String currentHash) {
-        PagesUtils.goToPageByCode(currentHash);
+      public void execute(String newHash) {
+        onHashChange(newHash);
       }
     });
+  }
+  
+  private void onHashChange(String newHash) {
+    if (newHash.contains(".")) {
+      newHash = newHash.substring(0, newHash.indexOf("."));
+    }
+    PagesUtils.goToPageByCode(newHash);
   }
   
 }
