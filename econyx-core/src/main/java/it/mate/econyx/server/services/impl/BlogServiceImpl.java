@@ -2,6 +2,8 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.server.util.PortalSessionStateServerUtils;
+import it.mate.econyx.server.util.ServletThreadUtils;
 import it.mate.econyx.shared.model.Blog;
 import it.mate.econyx.shared.model.BlogComment;
 import it.mate.econyx.shared.model.BlogDiscussion;
@@ -34,6 +36,13 @@ public class BlogServiceImpl extends RemoteServiceServlet implements BlogService
     logger.debug("initialized " + this);
   }
 
+  @Override
+  protected void onBeforeRequestDeserialized(String serializedRequest) {
+    ServletThreadUtils.set(getThreadLocalRequest(), getThreadLocalResponse());
+    PortalSessionStateServerUtils.setInThread(AdaptersUtil.getGeneralAdapter().retrievePortalSessionState(getThreadLocalRequest()));
+    super.onBeforeRequestDeserialized(serializedRequest);
+  }
+  
   @Override
   public List<Blog> findAllBlogs() throws ServiceException {
     return adapter.findAllBlogs();

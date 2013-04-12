@@ -3,13 +3,16 @@ package it.mate.econyx.shared.model.impl;
 import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.Post;
+import it.mate.econyx.shared.model.PostComment;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
-public class CalEventTx implements CalEvent {
+public class CalEventTx implements CalEvent, Post {
 
   String id;
   
@@ -130,6 +133,23 @@ public class CalEventTx implements CalEvent {
 
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  public String getBody() {
+    HtmlContent html = getHtml();
+    return html != null ? html.getContent() : "";
+  }
+
+  public List<PostComment> getPostComments() {
+    return null;
+  }
+
+  public Integer getCommentsCount() {
+    return 0;
+  }
+
+  public String getTags() {
+    return "";
   }
 
 }

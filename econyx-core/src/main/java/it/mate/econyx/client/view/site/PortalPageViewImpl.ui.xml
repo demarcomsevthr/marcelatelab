@@ -4,7 +4,7 @@
        xmlns:gwtcommons="urn:import:it.mate.gwtcommons.client.ui">
 
   <g:VerticalPanel width="100%">
-    <g:HTMLPanel>
+    <g:HTMLPanel addStyleNames="ecxPortalPageView">
       <g:FlexTable ui:field="childreenTable"/>
       <g:HTML ui:field="htmlPanel"/>
       <gwtcommons:Spacer height="1em"/>

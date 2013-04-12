@@ -2,6 +2,8 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.server.util.PortalSessionStateServerUtils;
+import it.mate.econyx.server.util.ServletThreadUtils;
 import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.model.Period;
 import it.mate.econyx.shared.services.CalendarService;
@@ -34,6 +36,13 @@ public class CalendarServiceImpl extends RemoteServiceServlet implements Calenda
     logger.debug("initialized " + this);
   }
 
+  @Override
+  protected void onBeforeRequestDeserialized(String serializedRequest) {
+    ServletThreadUtils.set(getThreadLocalRequest(), getThreadLocalResponse());
+    PortalSessionStateServerUtils.setInThread(AdaptersUtil.getGeneralAdapter().retrievePortalSessionState(getThreadLocalRequest()));
+    super.onBeforeRequestDeserialized(serializedRequest);
+  }
+  
   @Override
   public List<CalEvent> findAll() throws ServiceException {
     return adapter.findAll();

@@ -2,12 +2,13 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.PostComment;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.Date;
 
-public class ArticleCommentTx implements ArticleComment {
+public class ArticleCommentTx implements ArticleComment, PostComment {
   
   private static final long serialVersionUID = -8105988358558928176L;
 
@@ -84,6 +85,14 @@ public class ArticleCommentTx implements ArticleComment {
 
   public void setPosted(Date posted) {
     this.posted = posted;
+  }
+
+  public String getBody() {
+    return getContent();
+  }
+
+  public void setBody(String body) {
+    setContent(body);
   }
   
 }

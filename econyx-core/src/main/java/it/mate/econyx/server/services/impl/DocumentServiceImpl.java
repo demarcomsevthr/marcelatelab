@@ -2,6 +2,8 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.server.util.PortalSessionStateServerUtils;
+import it.mate.econyx.server.util.ServletThreadUtils;
 import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.services.DocumentService;
@@ -33,6 +35,13 @@ public class DocumentServiceImpl extends RemoteServiceServlet implements Documen
     logger.debug("initialized " + this);
   }
 
+  @Override
+  protected void onBeforeRequestDeserialized(String serializedRequest) {
+    ServletThreadUtils.set(getThreadLocalRequest(), getThreadLocalResponse());
+    PortalSessionStateServerUtils.setInThread(AdaptersUtil.getGeneralAdapter().retrievePortalSessionState(getThreadLocalRequest()));
+    super.onBeforeRequestDeserialized(serializedRequest);
+  }
+  
   @Override
   public List<DocumentFolder> findAllFolders() throws ServiceException {
     return adapter.findAllFolders();

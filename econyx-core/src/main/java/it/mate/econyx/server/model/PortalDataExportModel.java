@@ -24,6 +24,7 @@ public class PortalDataExportModel implements VisitContext {
   public int loadMethod;
   public boolean createProducts = false;
   public boolean checkImageResources = false;
+  public boolean checkDocumentResources = false;
   public List<PortalUser> users = new ArrayList<PortalUser>();
   public List<Customer> customers = new ArrayList<Customer>();
   public List<Articolo> products = new ArrayList<Articolo>();

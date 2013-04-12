@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.Composite;
@@ -52,10 +53,10 @@ public class CalendarWidget <M> extends Composite {
   
   interface CellTemplate extends SafeHtmlTemplates {
 
-    @Template("<div class=\"day\">{0}</div>")
+    @Template("<div class=\"ecxCalDay\">{0}</div>")
     SafeHtml renderDay(String day);
     
-    @Template("<b><div class=\"day\">{0}</div></b>")
+    @Template("<b><div class=\"ecxCalDay\">{0}</div></b>")
     SafeHtml renderDayCurrent(String day);
     
     @Template("<a><b><div class=\"day\">{0}</div></b></a>")
@@ -133,7 +134,9 @@ public class CalendarWidget <M> extends Composite {
   
   private void paintCalendarHeader() {
     
-    leftWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/left.jpg"));
+//  leftWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/left.jpg"));
+//  leftWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/cal-month-bwd.png"));
+    leftWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/cal-month-prev.png"));
     GwtUtils.setStyleAttribute(leftWidget, "textAlign", "center");
     leftWidget.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
@@ -141,7 +144,9 @@ public class CalendarWidget <M> extends Composite {
       }
     });
     
-    rightWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/right.jpg"));
+//  rightWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/right.jpg"));
+//  rightWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/cal-month-fwd.png"));
+    rightWidget = new PushButton(new Image(GWT.getModuleBaseURL()+"images/commons/cal-month-next.png"));
     GwtUtils.setStyleAttribute(rightWidget, "textAlign", "center");
     rightWidget.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
@@ -180,13 +185,24 @@ public class CalendarWidget <M> extends Composite {
     Date date = currentState.getFirstVisibleDate();
     while (currentState.isVisibleDate(date)) {
       CellUtil cell = cell(calendarTable, date);
-      if (!currentState.isDateInMonth(date)) {
+      
+      SafeHtml html = null;
+      if (currentState.isDateInMonth(date)) {
+        if (GwtUtils.dateEquals(date, today, 8)) {
+          html = cellTemplate.renderDayCurrent(""+GwtUtils.getDay(date));
+        } else {
+          html = cellTemplate.renderDay(""+GwtUtils.getDay(date));
+        }
+      } else {
+        html = SafeHtmlUtils.fromTrustedString("");
         cell.addStyleName("ecxCalendarWidgetCellOutOfMonth");
       }
+      
+      cell.addStyleName("ecxCalendarWidgetCellNum");
       cell.setWidth(DAY_CELL_SIZE)
           .setHeight(DAY_CELL_SIZE)
           .setAlignment(HasHorizontalAlignment.ALIGN_DEFAULT, HasVerticalAlignment.ALIGN_TOP)
-          .setHtml( GwtUtils.dateEquals(date, today, 8) ? cellTemplate.renderDayCurrent(""+GwtUtils.getDay(date)) : cellTemplate.renderDay(""+GwtUtils.getDay(date)));
+          .setHtml( html );
       CalendarUtil.addDaysToDate(date, +1);
     }
   }
