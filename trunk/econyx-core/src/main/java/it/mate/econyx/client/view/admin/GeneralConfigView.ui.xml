@@ -18,7 +18,7 @@
       <g:Label ui:field="buildIdLabel"/>
       
       <gc:Spacer height="2px"/>
-      <g:Button ui:field="resetAllBtn" width="12em" text="Reset all data"/>
+      <g:Button ui:field="resetAllBtn" width="12em" text="Clear all data"/>
       
       <gc:Spacer height="2px"/>
       <g:Button ui:field="resetCacheBtn" width="12em" text="Reset cache"/>

@@ -5,6 +5,8 @@ import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.Post;
+import it.mate.econyx.shared.model.PostComment;
 import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ArticleTx implements Article {
+public class ArticleTx implements Article, Post {
 
   private static final long serialVersionUID = 7072306998735484215L;
 
@@ -166,6 +168,15 @@ public class ArticleTx implements Article {
 
   public void setTags(String tags) {
     this.tags = tags;
+  }
+
+  public String getBody() {
+    HtmlContent html = getHtml();
+    return html != null ? html.getContent() : "";
+  }
+
+  public List<PostComment> getPostComments() {
+    return new CollectionPropertyClientUtil<PostComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
   
 }

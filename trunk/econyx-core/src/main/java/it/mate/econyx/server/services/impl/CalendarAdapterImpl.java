@@ -1,8 +1,10 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.model.impl.CalEventDs;
+import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.CalendarAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
+import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.model.Period;
 import it.mate.econyx.shared.model.impl.CalEventTx;
@@ -66,6 +68,9 @@ public class CalendarAdapterImpl implements CalendarAdapter {
     CalEventDs event = CloneUtils.clone(entity, CalEventDs.class);
     if (event.getCode() == null) {
       event.setCode(getNextCodeCounter());
+    }
+    if (event.getAuthor() == null) {
+      event.setAuthor(CloneUtils.clone(PortalSessionStateServerUtils.getFromThread().getLoggedUser(), PortalUserDs.class));
     }
     event = dao.create(event);
     return CloneUtils.clone (event, CalEventTx.class);

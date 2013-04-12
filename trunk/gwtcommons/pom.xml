@@ -16,6 +16,7 @@
     <gwt.version>2.5.0</gwt.version>
     -->
     <gwt.version>2.5.1</gwt.version>
+    
     <gin.version>1.5.0</gin.version>
 
     <!--     
@@ -28,7 +29,8 @@
   </properties>
 
   <repositories>
-    <!-- gwt ckeditor repository -->
+  
+    <!-- GWT CKEDITOR REPOSITORY -->
     <repository>
       <id>axeiya</id>
       <url>http://nexus.axeiya.com/nexus/content/repositories/releases</url>
@@ -66,7 +68,6 @@
       <artifactId>gin</artifactId>
       <version>${gin.version}</version>
     </dependency>
-    
     
 
     <!-- APPENGINE -->
@@ -250,7 +251,7 @@
       <resource>
         <directory>src/main/resources</directory>
         <excludes>
-          <exclude>log4j.properties</exclude>
+          <exclude>log4j*.properties</exclude>
         </excludes>
       </resource>
     </resources>
@@ -281,6 +282,7 @@
         <artifactId>maven-datanucleus-plugin</artifactId>
         <version>1.1.4</version>
         <configuration>
+          <log4jConfiguration>${basedir}/src/main/resources/log4j-enhancer.properties</log4jConfiguration>
           <mappingIncludes>**/server/model/impl/*.class</mappingIncludes>
           <enhancerName>ASM</enhancerName>
           <api>JDO</api>

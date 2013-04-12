@@ -2,6 +2,8 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
+import it.mate.econyx.server.util.PortalSessionStateServerUtils;
+import it.mate.econyx.server.util.ServletThreadUtils;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
@@ -34,6 +36,13 @@ public class ArticleServiceImpl extends RemoteServiceServlet implements ArticleS
     logger.debug("initialized " + this);
   }
 
+  @Override
+  protected void onBeforeRequestDeserialized(String serializedRequest) {
+    ServletThreadUtils.set(getThreadLocalRequest(), getThreadLocalResponse());
+    PortalSessionStateServerUtils.setInThread(AdaptersUtil.getGeneralAdapter().retrievePortalSessionState(getThreadLocalRequest()));
+    super.onBeforeRequestDeserialized(serializedRequest);
+  }
+  
   @Override
   public List<ArticleFolder> findAll() throws ServiceException {
     return adapter.findAll();

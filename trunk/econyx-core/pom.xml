@@ -10,14 +10,7 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
-
-    <!-- 31/12/2012
-    <gwt.version>2.4.0</gwt.version>
-    <gin.version>1.5.0</gin.version>
-     -->
-   
   </properties>
-  
 
   <dependencies>
 
@@ -65,23 +58,6 @@
     </dependency>
     
     
-    <!-- COBRA BROWSER TEST 
-    
-    <dependency>
-      <groupId>org.lobobrowser</groupId>
-      <artifactId>cobra</artifactId>
-      <version>0.98.4</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.lobobrowser</groupId>
-      <artifactId>cobra-js</artifactId>
-      <version>0.98.4</version>
-    </dependency>
-    
-    -->
-    
-                
   </dependencies>
 
 
@@ -102,7 +78,7 @@
       <resource>
         <directory>src/main/resources</directory>
         <excludes>
-          <exclude>log4j.properties</exclude>
+          <exclude>log4j*.properties</exclude>
         </excludes>
       </resource>
     </resources>
@@ -132,6 +108,7 @@
         <artifactId>maven-datanucleus-plugin</artifactId>
         <version>1.1.4</version>
         <configuration>
+          <log4jConfiguration>${basedir}/src/main/resources/log4j-enhancer.properties</log4jConfiguration>
           <mappingIncludes>**/server/model/impl/*.class</mappingIncludes>
           <enhancerName>ASM</enhancerName>
           <api>JDO</api>
@@ -173,18 +150,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
-      <!-- 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${gwt.version}</version>
-        <configuration>
-          <hostedWebapp>${webappDirectory}</hostedWebapp>
-          <webappDirectory>${webappDirectory}</webappDirectory>
-        </configuration>
-      </plugin>
-       -->
 
     </plugins>
 

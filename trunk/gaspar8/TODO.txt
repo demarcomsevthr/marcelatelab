@@ -27,6 +27,7 @@
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
 			> Blobstore API >> [07/04/2013]
+			> TODO: caricamento documenti da setup
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
@@ -38,19 +39,14 @@
 								 > si aggiornano nel ds quando si modifica comments
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
-		>> ListPropertyWrapper
-			> mettere in tutti i getter getList dei tx
-			>> i metodi clone e wrap funzionano solo con jdk 1.7 [10/04/2013]
-			
-		>> ListPropertyServerWrapper
-			> provato su BlogDs... [09/04/2013]
-			> se funziona riportare su altri ds
-		
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
-		
 			>>> INIZIATO [10/04/2013]
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
-			>>>> BUG: articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
+			>>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
+			
+			>>> TODO: FRAGMENT IDENTIFIER
+				hash link all'interno di una pagina
+				- in gp8 si utilizzano i fragment identifier all'interno di una pagina
 		
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
 			> css pagine
@@ -60,19 +56,27 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 			
-		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
-
 		>> ProducerFolderPage [3]
 			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
 			       PortalPageServiceImpl, PortalPageViewImpl, PortalPageActivity
 		
-		>> Link Facebook, Twitter, ...  [4]
-			
 		>> gestione ruoli admins [4]
 			PortalUser
 				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
 				::isUserInRole (string)
 
+		>> ListPropertyWrapper
+			> mettere in tutti i getter getList dei tx
+			>> i metodi clone e wrap funzionano solo con jdk 1.7 [10/04/2013]
+			
+		>> ListPropertyServerWrapper
+			> provato su BlogDs... [09/04/2013]
+			> se funziona riportare su altri ds
+		
+		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
+
+		>> Link Facebook, Twitter, ...  [4]
+			
 
 	------------------------------------------------------
 
@@ -88,6 +92,7 @@
 			- inserito (stampa, mod. qta)
 			- in consegna (stampa, mod. qta, mail)
 			- consegnato (stampa, agg. prepagato)
+			>> FATTO
 
 	- Data apertura ordine [2]
 		> gestire su producer:

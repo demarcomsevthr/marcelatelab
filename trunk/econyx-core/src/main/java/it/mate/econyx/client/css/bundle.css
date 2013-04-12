@@ -1,4 +1,11 @@
 
+/**
+
+  CSS basati su template http://btemplates.com/2013/blogger-template-abstractline/demo
+
+**/
+
+
 .ecxPostCreated {
   background: url("main/images/commons/post-header-date.png") no-repeat scroll left -1px transparent;
   padding-left: 20px;
@@ -40,4 +47,49 @@
   background: url("main/images/commons/post-tags.png") no-repeat scroll 0 0 transparent;
   padding-left: 20px;
 }
+
+.ecxCommentsHeaderCount {
+  color: #666666;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 1.4em;
+  padding-bottom: 2em;
+}
+
+.ecxCommentAuthor {
+  color: #1F7117;
+  font-weight: bold;
+  font: 12px Arial,Serif;
+}
+
+.ecxCommentPosted {
+  font: 12px Arial,Serif;
+}
+
+.ecxCommentSpacer {
+  height: 2em;
+}
+
+
+/************************************************************************
+
+    CALENDAR
+    
+ */
+
+.ecxCalendarWidgetCell .ecxCalDay {
+  background: url(/main/images/commons/cal-num-bg.png) left top repeat-x;
+}
+
+.ecxCalendarWidgetCell.ecxCalendarWidgetHeaderWeek {
+  background: #fff url(/main/images/commons/cal-days-bg.png) left bottom repeat-x;
+}
+
+.ecxCalendarWidgetCellNum {
+  padding-top: 0;
+  border: 1px solid #9A9A9A;
+}
+
+
 

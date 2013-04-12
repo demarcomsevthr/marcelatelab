@@ -62,6 +62,7 @@ import it.mate.gwtcommons.server.utils.XStreamUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -73,7 +74,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileService;
+import com.google.appengine.api.files.FileServiceFactory;
+import com.google.appengine.api.files.FileWriteChannel;
 import com.thoughtworks.xstream.XStream;
 
 @Service
@@ -102,6 +108,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   @Autowired private BlogAdapter blogAdapter;
   
   private static final String INIT_FILE = "META-INF/setup-data/portaldata.xml";
+  
+  private FileService fileService = FileServiceFactory.getFileService();
   
   private void setupXStream() {
     XStreamUtils.getXStream().setMode(XStream.NO_REFERENCES);
@@ -303,9 +311,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       if (cast(context).checkImageResources) {
         try {
           String fileName = String.format("META-INF/setup-data/images/image.%s", image.getCode());
-          File imageFile = getImageFileAllowNull(fileName + ".jpg");
+          File imageFile = getResourceFileAllowNull(fileName + ".jpg");
           if (imageFile == null) {
-            imageFile = getImageFileAllowNull(fileName + ".png");
+            imageFile = getResourceFileAllowNull(fileName + ".png");
           }
           if (imageFile != null && imageFile.exists()) {
             Blob imageBlob = BlobUtils.inputStreamToBlob(new FileInputStream(imageFile));
@@ -319,17 +327,17 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return image;
   }
   
-  private File getImageFileAllowNull(String filename) {
-    File imageFile = null;
+  private File getResourceFileAllowNull(String filename) {
+    File resourceFile = null;
     try {
-      imageFile = new ClassPathResource( filename ).getFile();
+      resourceFile = new ClassPathResource( filename ).getFile();
     } catch (Exception ex) {
       return null;
     }
-    if (imageFile == null || !imageFile.exists()) {
+    if (resourceFile == null || !resourceFile.exists()) {
       return null;
     }
-    return imageFile;
+    return resourceFile;
   }
   
   private PortalPage visitPortalPage(VisitContext context, boolean loadMode, PortalPage page) {
@@ -604,12 +612,50 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return articleFolder;
   }
   
-  private DocumentFolder createDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
-    for (Document document : documentFolder.getDocuments()) {
-      document.setAuthor(visitPortalUser(context, loadMode, document.getAuthor()));
-      if (document.getCreated() == null)
-        document.setCreated(new Date());
+  private Document visitDocument(VisitContext context, boolean loadMode, Document document) {
+    if (loadMode) {
+      if (document.getId() == null) {
+        document.setAuthor(visitPortalUser(context, loadMode, document.getAuthor()));
+        if (document.getCreated() == null) {
+          document.setCreated(new Date());
+        }
+        if (cast(context).checkDocumentResources && document.getCode() != null) {
+          try {
+            String filename = String.format("META-INF/setup-data/documents/%s.pdf", document.getCode());
+            File resourceFile = getResourceFileAllowNull(filename);
+            if (resourceFile != null && resourceFile.exists()) {
+              AppEngineFile blobFile = fileService.createNewBlobFile("application/pdf");
+              FileWriteChannel blobWriteChannel = fileService.openWriteChannel(blobFile, true);
+              FileInputStream resourceInputStream = new FileInputStream(resourceFile);
+              FileChannel resourceInputChannel = resourceInputStream.getChannel();
+              resourceInputChannel.transferTo(0, resourceInputChannel.size(), blobWriteChannel);
+              blobWriteChannel.closeFinally();
+              BlobKey blobKey = fileService.getBlobKey(blobFile);
+              document.setBlobKey(blobKey.getKeyString());
+            }
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        document = documentAdapter.updateDocument(document);
+      }
     }
+    return document;
+  }
+  
+  private DocumentFolder createDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
+    if (documentFolder.getDocuments() != null) {
+      for (int it = 0; it < documentFolder.getDocuments().size(); it++) {
+        Document document = documentFolder.getDocuments().get(it);
+        document = visitDocument(context, loadMode, document);
+        documentFolder.getDocuments().set(it, document);
+      }
+    }
+    /*
+    for (Document document : documentFolder.getDocuments()) {
+      visitDocument(context, loadMode, document);
+    }
+    */
     documentFolder = documentAdapter.createFolder(documentFolder);
     return documentFolder;
   }

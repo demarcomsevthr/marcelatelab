@@ -2,11 +2,11 @@ package it.mate.econyx.client.view.site;
 
 import it.mate.econyx.client.events.CalendarDateChangeEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.client.ui.PostViewer;
 import it.mate.econyx.client.view.CalendarView;
 import it.mate.econyx.shared.model.CalEvent;
-import it.mate.econyx.shared.model.HtmlContent;
+import it.mate.econyx.shared.model.Post;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
-import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.List;
@@ -15,7 +15,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CalendarDateViewImpl extends AbstractBaseView<CalendarView.Presenter> implements CalendarView {
@@ -64,6 +63,11 @@ public class CalendarDateViewImpl extends AbstractBaseView<CalendarView.Presente
       
       CalEvent calEvent = calEvents.get(it);
       
+      PostViewer postViewer = new PostViewer((Post)calEvent, true, false);
+      flexTable.setWidget(row, 0, postViewer);
+      row++;
+      
+      /*
       HTML title = new HTML(calEvent.getTitle());
       title.addStyleName("ecxCalEventTitle");
       flexTable.setWidget(row++, 0, title);
@@ -80,6 +84,7 @@ public class CalendarDateViewImpl extends AbstractBaseView<CalendarView.Presente
       }
       
       flexTable.setWidget(row++, 0, new Spacer("1px", "50px"));
+      */
       
     }
   }
