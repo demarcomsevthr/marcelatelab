@@ -24,7 +24,7 @@ public interface HtmlContent extends PortalContentFragment {
   public void setContent(String content);
   
   public enum Type {
-    SHORT ("S"), 
+    SMALL ("S"), 
     MEDIUM ("M"), 
     LONG ("L");
     private String code;

@@ -43,7 +43,7 @@ public class ProductEditHtmlView extends AbstractAdminTabPage<ProductEditView.Pr
       Articolo product = (Articolo)model;
       Delegate<Articolo> delegate = new Delegate<Articolo>() {
         public void execute(Articolo product) {
-          shortHtmlContentEditor.setModel(product.getHtmlContent(HtmlContent.Type.SHORT));
+          shortHtmlContentEditor.setModel(product.getHtmlContent(HtmlContent.Type.SMALL));
           mediumHtmlContentEditor.setModel(product.getHtmlContent(HtmlContent.Type.MEDIUM));
         }
       };

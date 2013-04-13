@@ -1,6 +1,7 @@
 package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.events.PortalInitCompleteEvent;
+import it.mate.econyx.client.events.PortalPageChangedEvent;
 import it.mate.econyx.client.events.PortalPageExplorerRetrieveEvent;
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
@@ -13,6 +14,7 @@ import it.mate.econyx.client.util.PortalUtils;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
+import it.mate.econyx.client.view.PortalPageSummaryView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.ProductListView;
 import it.mate.econyx.shared.model.Article;
@@ -42,11 +44,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class PortalPageActivity extends BaseActivity implements 
+public class PortalPageActivity extends BaseActivity implements
+      PortalPageChangedEvent.Handler,
       PortalPageListView.Presenter,
       PortalPageExplorerView.Presenter,
       PortalPageEditView.Presenter,
@@ -55,8 +59,14 @@ public class PortalPageActivity extends BaseActivity implements
   private final PortalPagePlace place;
   
   private PortalPageServiceAsync portalPageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
-  
+
+  /*
   private PortalPage currentPage = null;
+  */
+  
+  private EventBus eventBus;
+  
+  private HandlerRegistration portalPageChangedRegistration = null;
   
   public PortalPageActivity(PortalPagePlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -89,6 +99,10 @@ public class PortalPageActivity extends BaseActivity implements
       initView(AppClientFactory.IMPL.getGinjector().getPortalPageView(), panel);
       retrieveModel();
     }
+    if (place.getToken().equals(PortalPagePlace.VIEW_SUMMARY)) {
+      initView(AppClientFactory.IMPL.getGinjector().getPortalPageSummaryView(), panel);
+      retrieveModel();
+    }
     if (place.getToken().equals(PortalPagePlace.VIEW_BY_CODE)) {
       initView(AppClientFactory.IMPL.getGinjector().getPortalPageView(), panel);
       retrieveModel();
@@ -96,15 +110,18 @@ public class PortalPageActivity extends BaseActivity implements
     
   }
   
+  private void registerHandlers(EventBus eventBus) {
+    this.eventBus = eventBus;
+  }
+
   @Override
   public void onDispose() {
+    if (portalPageChangedRegistration != null) {
+      portalPageChangedRegistration.removeHandler();
+    }
     super.onDispose();
   }
   
-  private void registerHandlers(EventBus eventBus) {
-    
-  }
-
   private void retrieveModel() {
     if (place.getToken().equals(PortalPagePlace.LIST)) {
       retrieveChildreen(null);
@@ -132,6 +149,11 @@ public class PortalPageActivity extends BaseActivity implements
       } else {
         retrieveChildreen(null, true);
       }
+    } else if (place.getToken().equals(PortalPagePlace.VIEW_SUMMARY)) {
+      if (portalPageChangedRegistration == null) {
+        portalPageChangedRegistration = eventBus.addHandler(PortalPageChangedEvent.TYPE, this);
+      }
+      getView().setModel(place.getModel());
     } else if (place.getToken().equals(PortalPagePlace.VIEW_BY_CODE)) {
       String code = (String)place.getModel();
       findByCode(code, new Delegate<PortalPage>() {
@@ -144,6 +166,13 @@ public class PortalPageActivity extends BaseActivity implements
     }
   }
   
+  @Override
+  public void onPortalPageChanged(PortalPageChangedEvent event) {
+    if (getView() instanceof PortalPageSummaryView) {
+      getView().setModel(event.getPage());
+    }
+  }
+
   public void retrieveChildreen (PortalPage parent) {
     retrieveChildreen(parent, false);
   }

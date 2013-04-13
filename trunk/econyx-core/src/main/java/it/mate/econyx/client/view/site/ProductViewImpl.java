@@ -107,8 +107,8 @@ public class ProductViewImpl extends AbstractBaseView<ProductView.Presenter> imp
           mediumImagePanel.add(image);
           mediumImagePanel.add(new Spacer("1px", "10px"));
         }
-        if (productTx.hasHtmlOfType(HtmlContent.Type.SHORT)) {
-          HTML html = new HTML(SafeHtmlUtils.fromTrustedString(productTx.getHtmlOfType(HtmlContent.Type.SHORT).getContent()));
+        if (productTx.hasHtmlOfType(HtmlContent.Type.SMALL)) {
+          HTML html = new HTML(SafeHtmlUtils.fromTrustedString(productTx.getHtmlOfType(HtmlContent.Type.SMALL).getContent()));
           shortHtmlPanel.add(html);
           shortHtmlPanel.add(new Spacer("1px", "10px"));
         }

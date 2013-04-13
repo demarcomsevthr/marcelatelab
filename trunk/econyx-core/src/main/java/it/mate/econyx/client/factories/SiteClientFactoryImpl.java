@@ -3,6 +3,7 @@ package it.mate.econyx.client.factories;
 import it.mate.econyx.client.css.CoreClientBundle;
 import it.mate.econyx.client.css.CustomClientBundle;
 import it.mate.econyx.client.events.PortalInitEvent;
+import it.mate.econyx.client.events.PortalPageChangedEvent;
 import it.mate.econyx.client.events.PortalPageChangingEvent;
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.places.AppPlaceHistoryMapper;
@@ -142,8 +143,8 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
         startingPageCode = startingPageCode.substring(1);
       }
     }
-    if (startingPageCode == null) {
-      startingPageCode = "";
+    if (startingPageCode == null || "".equals(startingPageCode)) {
+      startingPageCode = PropertiesHolder.getString("client.homePageCode", "home");
     }
     getGinjector().getPortalPageService().findByCode(startingPageCode, new AsyncCallback<PortalPage>() {
       public void onFailure(Throwable caught) {
@@ -261,6 +262,7 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     if (page.getName() != null)
       Window.setTitle(originalTitle + " - " + page.getName());
     getPlaceController().goTo(new PortalPagePlace(PortalPagePlace.VIEW, page));
+    getEventBus().fireEvent(new PortalPageChangedEvent(page));
   }
 
   private class StartingPortalContext {

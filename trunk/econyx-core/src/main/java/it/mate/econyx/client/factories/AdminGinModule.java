@@ -25,6 +25,7 @@ import it.mate.econyx.client.view.OrderView;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
+import it.mate.econyx.client.view.PortalPageSummaryView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.PortalUserEditView;
 import it.mate.econyx.client.view.PortalUserListView;
@@ -82,6 +83,7 @@ public class AdminGinModule extends AbstractGinModule {
     bind(PortalPageListView.class).to(PortalPageListViewImpl.class);
     bind(PortalPageView.class).to(PortalPageView.NotImpl.class);
     bind(PortalPageExplorerView.class).to(PortalPageExplorerView.NotImpl.class);
+    bind(PortalPageSummaryView.class).to(PortalPageSummaryView.NotImpl.class);
     
     bind(PortalUserView.class).to(PortalUserView.NotImpl.class);
     bind(PortalUserListView.class).to(PortalUserListViewImpl.class);

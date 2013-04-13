@@ -25,6 +25,7 @@ import it.mate.econyx.client.view.OrderView;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
+import it.mate.econyx.client.view.PortalPageSummaryView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.PortalUserEditView;
 import it.mate.econyx.client.view.PortalUserListView;
@@ -91,6 +92,7 @@ public interface AppGinjector extends CommonGinjector {
   public PortalPageListView getPortalPageListView();
   public PortalPageView getPortalPageView();
   public PortalPageExplorerView getPortalPageExplorerView();
+  public PortalPageSummaryView getPortalPageSummaryView();
   
   public PortalUserView getPortalUserView();
   public PortalUserListView getPortalUserListView();

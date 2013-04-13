@@ -434,7 +434,7 @@ public class InitAdapterImpl implements InitAdapter {
     if (page instanceof WebContentPage) {
       try {
         HtmlContent content = new HtmlContentTx();
-        content.setType(HtmlContent.Type.SHORT);
+        content.setType(HtmlContent.Type.SMALL);
         content.setContent("<p>testo generato automaticamente a scopo di test</p>");
         page = portalPageAdapter.updateHtmlContent(page.getId(), content);
         logger.debug("updated html for page "+page);
@@ -565,7 +565,7 @@ public class InitAdapterImpl implements InitAdapter {
       AbstractArticoloDs product = CloneUtils.clone(products.get(it), AbstractArticoloDs.class);
       try {
         HtmlContent content = new HtmlContentTx();
-        content.setType(HtmlContent.Type.SHORT);
+        content.setType(HtmlContent.Type.SMALL);
         content.setContent("<p>prova testo</p>");
         productAdapter.updateHtmlContent(product.getId(), content);
         logger.debug("updated "+product);
