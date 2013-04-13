@@ -982,95 +982,123 @@
       <orderNm>400</orderNm>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>S</type>
+          <content>
+            <![CDATA[
+<p>
+  <a href="#produttori.arvalia">Arvalia</a></p>
+<p>
+  <a href="#produttori.osti">Tomasoni</a></p>
+<p>
+  <a href="#produttori.silano">Silano</a></p>
+<p>
+  <a href="#produttori.coltellese">Coltellese</a></p>
+<p>
+  <a href="#produttori.dea">Dea Nocciola</a></p>
+<p>
+  <a href="#produttori.valente">Valente</a></p>
+<p>
+  <a href="#produttori.osti">Osti</a></p>
+<p>
+  <a href="#produttori.cascina">Riserva della Cascina</a></p>
+            ]]>
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>M</type>
-          <content>&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;strong&gt;ARVALIA&lt;/strong&gt; (ortofrutta)&lt;br /&gt;
-	Piccola Azienda agricola situata nella campagna viterbese e impegnata nella produzione di ortaggi che coltiva con metodi biologici. Presso l&amp;#39;Azienda viene realizzata la vendita dei prodotti propri che possono essere anche consegnati a domicilio sia a Viterbo e dintorni, sia a Roma.&lt;br /&gt;
-	La gamma dei prodotti biologici offerti &amp;egrave; ampia e comprende sia quelli coltivati in azienda che da altri produttori, nonch&amp;eacute; quelli distribuiti dal commercio equo e solidale.&lt;br /&gt;
-	Da segnalare la nuova apertura del &lt;em&gt;Bio Ristoro&lt;/em&gt; dove poter assaggiare piatti con prodotti biologici laziali. Dall&amp;#39;agriturismo sono facilmente raggiungibili l&amp;#39;oasi del benessere delle Terme dei Papi, il centro storico di Viterbo, la necropoli etrusca di Castel d&amp;#39;Asso e le pozze d&amp;#39;acqua sulfurea del Bullicame.&lt;br /&gt;
-	Referente Patrizia Merlino&lt;br /&gt;
-	tel: 0761 344051&lt;br /&gt;
-	e-mail: &lt;a href="mailto:puntovendita@arvalia.it" title="scrivi email"&gt;puntovendita@arvalia.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="tomasoni"&gt;&lt;/a&gt; &lt;img alt="logo" class="imgleft" height="150" src="http://www.gaspar8.net/img/logotomasoni.jpg" title="logo dell'azienda Tomasoni" width="200" /&gt;&lt;strong&gt;TOMASONI F.lli snc&lt;/strong&gt; (formaggi e latticini)&lt;br /&gt;
-	Siamo uno dei pi&amp;ugrave; piccoli caseifici associati al Consorzio per la tutela del formaggio Grana Padano.&lt;br /&gt;
-	La nostra &amp;egrave; un&amp;rsquo;azienda artigianale a conduzione familiare che continua nella tradizione&amp;nbsp; producendo formaggi fin dal lontano 1815.&lt;br /&gt;
-	Il passaggio dal convenzionale al biologico &amp;egrave; avvenuto nel 2001. Quella che sembrava una scommessa fin troppo azzardata, ci ha invece portato a convertirci totalmente al biologico e a promuoverne i principi che abbracciano tutto il benessere dell&amp;rsquo;uomo e dell&amp;rsquo;ambiente che lo circonda.&lt;br /&gt;
-	Un progetto che da &amp;ldquo;colturale&amp;rdquo; diventa &amp;ldquo;culturale&amp;rdquo; fino a dimostrare che un nuovo &amp;ldquo;stile di vita&amp;rdquo; &amp;egrave; possibile. Uno stile rispettoso dell&amp;rsquo;ambiente, della conservazione delle biodiversit&amp;agrave;, delle diversit&amp;agrave; locali, delle risorse naturali, oltre che interessato alla qualit&amp;agrave; della vita.&lt;br /&gt;
-	Il caseificio Tomasoni, trasforma solo latte da agricoltura biologica proveniente da stalle della pianura lombarda.&lt;br /&gt;
-	Attualmente vengono prodotti: grana padano, ricotta, robiola nostrana, fontal, mozzarella, caciotta, crescenza, latte fresco in bottiglia.&lt;br /&gt;
-	Il latte lavorato come i prodotti ottenuti sono certificati da ICEA.&lt;br /&gt;
-	Negli anni, la ditta Tomasoni ha sviluppato sempre di pi&amp;ugrave; i rapporti con i Gruppi di Acquisto Solidale che sono diventati, in Italia, i principali &amp;ldquo;clienti-amici&amp;rdquo; dell&amp;rsquo;azienda.&lt;br /&gt;
-	Caseificio Tomasoni F.lli snc&lt;br /&gt;
-	Via Roma, 30 - 25023 Gottolengo (BS)&lt;br /&gt;
-	tel: 030 951007 fax: 030 9518147&lt;br /&gt;
-	e-mail: &lt;a href="mailto:info@biocaseificiotomasoni.it" title="scrivi email"&gt;info@biocaseificiotomasoni.it&lt;/a&gt;&lt;br /&gt;
-	web: &lt;a class="esterno" href="http://www.biocaseificiotomasoni.it/" title="vai al sito"&gt;www.biocaseificiotomasoni.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="silano"&gt;&lt;/a&gt;&lt;strong&gt;SILANO&lt;/strong&gt; (formaggi e latticini)&lt;br /&gt;
-	L&amp;#39;Azienda agricola &amp;quot;Silano&amp;quot; nasce oltre 20 anni fa, raccogliendo l&amp;#39;esperienza e la tradizione tramandate da generazioni, con passione e seriet&amp;agrave;. La sede dell&amp;#39;azienda &amp;egrave; situata nel cuore dell&amp;rsquo;Irpinia, a Villanova del Battista (AV). Ci occupiamo principalmente della produzione del latte e della trasformazione in formaggi e latticini. La genuinit&amp;agrave; e la bont&amp;agrave; dei nostri prodotti motiva e spinge la voglia di diffonderli e valorizzarli con tutte le nostre forze e le nostre energie.&lt;br /&gt;
-	Referente Gianluca Silano&lt;br /&gt;
-	tel/fax: 0825 826334&lt;br /&gt;
-	e-mail: &lt;a href="mailto:aziendasilano@tiscali.it" title="scrivi email"&gt;aziendasilano@tiscali.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="coltellese"&gt;&lt;/a&gt; &lt;img alt="foto" class="imgleft" height="150" src="http://www.gaspar8.net/img/coltellese.jpg" title="foto dell'azienda Coltellese" width="200" /&gt;&lt;strong&gt;ALTA MONTAGNA BIO &lt;/strong&gt; (carne e salumi)&lt;br /&gt;
-	L&amp;rsquo;Azienda Agricola Biologica Alta Montagna Bio (gi&amp;agrave; Coltellese) &amp;egrave; a conduzione interamente&amp;nbsp;famigliare, con annessa macelleria aziendale. La nostra azienda sorge a 1000 mt s.l.m. ai piedi delle catene montuose&amp;nbsp;tra il&amp;nbsp;Parco&amp;nbsp;dei Monti della Laga e quello dei Sibillini.&lt;br /&gt;
-	La nostra mandria si nutre esclusivamente del pascolo montano nei periodi tra maggio e dicembre e di prodotti quali fieno, paglia e granelle, coltivati direttamente&amp;nbsp;in azienda, nei restanti mesi.&lt;br /&gt;
-	Nella rimessa troviamo anche i suini, allevati pi&amp;ugrave; o meno allo stesso modo.&amp;nbsp;Il nostro sistema di&amp;nbsp;produzione, che rispecchia i vecchi metodi contadini, &amp;egrave; approvato e sostenuto&amp;nbsp;dall&amp;#39;associazione di controllo del biologico ICEA.&lt;br /&gt;
-	Azienda Agricola Alta Montagna Bio&lt;br /&gt;
-	Fr. Mole, 02011 Accumoli (RI)&lt;br /&gt;
-	Referente&amp;nbsp; Giudo Pica&lt;br /&gt;
-	tel: 0746 808565 cell: 347 8294588&lt;br /&gt;
-	e-mail: &lt;a href="mailto:picaguido@hotmail.it" title="scrivi email"&gt;picaguido@hotmail.it&lt;/a&gt;&lt;br /&gt;
-	web: &lt;a class="esterno" href="http://www.altamontagnabio.it/"&gt;http://www.altamontagnabio.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="dea"&gt;&lt;/a&gt;&lt;strong&gt;DEA NOCCIOLA s.r.l.&lt;/strong&gt; (creme spalmabili)&lt;br /&gt;
-	Dea Nocciola nasce tra le colline etrusche della Sabina, antica zona a vocazione rurale dell&amp;#39;Alto Lazio. Qui, in una stazione di posta romana (risalente al 300 d.C.) ai piedi del castello di Borghetto, in un ambiente incontaminato e testimone di secoli di storia, l&amp;rsquo;Azienda seleziona con passione l&amp;#39;eccellenza dei prodotti del territorio: nocciole della variet&amp;agrave; Tonda Gentile Romana, marroncini della Tuscia, olio extra vergine di oliva della Sabina; materie con cui produce creme di gianduia e composte di castagne.&lt;/span&gt;&lt;/p&gt;
-&lt;br /&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;DEA NOCCIOLA non fa uso di addensanti, emulsionati, coloranti, aromi ed essenze, non utilizza materie grasse raffinate ma soltanto materie provenienti da agricoltura biologica certificata; tutto quello che non &amp;egrave; prodotto dal territorio proviene dal mercato Equo e Solidale.&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;Referente Manuela De Angelis&lt;br /&gt;
-	Via Taschini, 11 - Localit&amp;agrave; Borghetto di Civita Castellana (VT)&lt;br /&gt;
-	tel. 0761 090926 fax: 0761/090929 cell. 323 2268273&lt;br /&gt;
-	e-mail: &lt;a href="mailto:manuela@deanocciola.com"&gt;manuela@deanocciola.com&lt;/a&gt;&lt;br /&gt;
-	web: &lt;a class="esterno" href="http://www.deanocciola.com/"&gt;www.deanocciola.com&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="valente"&gt;&lt;/a&gt;&lt;strong&gt;VALENTE&lt;/strong&gt; (olio di oliva extravergine)&lt;br /&gt;
-	L&amp;#39;azienda di Antonio Valente, agricoltore diretto, &amp;egrave; localizzata nel comune di Torremaggiore (FG), nel sub Appennino Daunio ai margini nord occidentali del Tavoliere delle Puglie, zona dove da secoli si produce olio di altissima qualit&amp;agrave; con caratteristiche di profumo e fragranza che nulla ha da invidiare dai pregiati oli toscani. Nel territorio insistono cooperative che esportano questo olio in tutto il mondo. L&amp;rsquo;Azienda intende crearsi una clientela diretta di consumatori che apprezzano il buon mangiare con prodotti genuini e di qualit&amp;agrave;.&lt;br /&gt;
-	La sua produzione si aggira intorno a solo 8.000 lt di olio l&amp;#39;anno.&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="osti"&gt;&lt;/a&gt;&lt;strong&gt;OSTI&lt;/strong&gt; (mele)&lt;br /&gt;
-	L&amp;#39;Azienda &amp;egrave; inserita nel contesto delle Dolomiti di Brenta ad un altitudine di circa 600 m. E&amp;#39; un&amp;#39;azienda frutticola biologica sita in vicinanza di un torrente e di un bosco.&lt;br /&gt;
-	Referente Marco Osti&lt;br /&gt;
-	Via Fontanele, 22 - Spormaggiore (TN)&lt;br /&gt;
-	tel: 0461/653337 cell: 328/3626483&lt;br /&gt;
-	e-mail: &lt;a href="mailto:sorgebio@hotmail.it" title="scrivi email"&gt;sorgebio@hotmail.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;
-	&lt;span style="font-size:14px;"&gt;&lt;a name="cascina"&gt;&lt;/a&gt;&lt;strong&gt;RISERVA DELLA CASCINA&lt;/strong&gt; (vino, olio, miele)&lt;br /&gt;
-	Partendo da Roma e percorrendo l&amp;#39;Appia Antica, a soli 16 Km dal Campidoglio troviamo l&amp;#39;azienda &amp;quot;Riserva della Cascina&amp;quot; dove la famiglia Brannetti, da sempre dedita all&amp;#39;agricoltura, ha deciso di indirizzarsi esclusivamente alla vitivinicoltura dal 1946, con l&amp;#39;obiettivo costante di migliorare la qualit&amp;agrave; del prodotto, reimpiantando i migliori tralci dei vitigni regionali ed avvalendosi delle migliori tecniche di vinificazione. Biologici &amp;quot;dentro&amp;quot;, rispettosi della terra e della salute dell&amp;#39;uomo, i Brannetti non hanno mai utilizzato diserbanti o prodotti chimici tossici nella coltivazione delle loro viti.&lt;br /&gt;
-	Non &amp;egrave; quindi una sorpresa sapere che gi&amp;agrave; dal 1994, veri pionieri in ambito vitivinicolo, Giuseppe e Daniela hanno ottenuto, con il controllo dell&amp;#39;ente &amp;quot;Suolo e Salute&amp;quot;, la certificazione biologica. La loro azienda agricola &amp;quot;Riserva della Cascina&amp;quot;, dal magnifico colpo d&amp;#39;occhio anche per quel che riguarda l&amp;#39;aspetto paesaggistico, prende il nome dalle antiche mappe catastali del terreno che si affaccia sull&amp;#39;Appia Antica e si estende all&amp;#39;interno del parco omonimo per circa 18 ettari, di cui 15 di vigneto coltivato in allevamento a filari.&lt;br /&gt;
-	Referente Daniela Vecchi&lt;br /&gt;
-	Via F.lli Wright, 12 - 00043 Ciampino (RM)&lt;br /&gt;
-	tel: 06 7917221 &amp;ndash; fax: 06 7917221&lt;br /&gt;
-	e-mail: &lt;a href="mailto:riservadellacascina@inwind.it" title="scrivi email"&gt;riservadellacascina@inwind.it&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-	&amp;nbsp;&lt;/p&gt;
-</content>
+          <content>
+            <![CDATA[
+            
+<p>
+  <span style="font-size:14px;"><strong><a name="produttori.arvalia"></a>ARVALIA</strong> (ortofrutta)<br />
+  Piccola Azienda agricola situata nella campagna viterbese e impegnata nella produzione di ortaggi che coltiva con metodi biologici. Presso l&#39;Azienda viene realizzata la vendita dei prodotti propri che possono essere anche consegnati a domicilio sia a Viterbo e dintorni, sia a Roma.<br />
+  La gamma dei prodotti biologici offerti &egrave; ampia e comprende sia quelli coltivati in azienda che da altri produttori, nonch&eacute; quelli distribuiti dal commercio equo e solidale.<br />
+  Da segnalare la nuova apertura del <em>Bio Ristoro</em> dove poter assaggiare piatti con prodotti biologici laziali. Dall&#39;agriturismo sono facilmente raggiungibili l&#39;oasi del benessere delle Terme dei Papi, il centro storico di Viterbo, la necropoli etrusca di Castel d&#39;Asso e le pozze d&#39;acqua sulfurea del Bullicame.<br />
+  Referente Patrizia Merlino<br />
+  tel: 0761 344051<br />
+  e-mail: <a href="mailto:puntovendita@arvalia.it" title="scrivi email">puntovendita@arvalia.it</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.tomasoni"></a> <img alt="logo" class="imgleft" height="150" src="http://www.gaspar8.net/img/logotomasoni.jpg" title="logo dell'azienda Tomasoni" width="200" /><strong>TOMASONI F.lli snc</strong> (formaggi e latticini)<br />
+  Siamo uno dei pi&ugrave; piccoli caseifici associati al Consorzio per la tutela del formaggio Grana Padano.<br />
+  La nostra &egrave; un&rsquo;azienda artigianale a conduzione familiare che continua nella tradizione&nbsp; producendo formaggi fin dal lontano 1815.<br />
+  Il passaggio dal convenzionale al biologico &egrave; avvenuto nel 2001. Quella che sembrava una scommessa fin troppo azzardata, ci ha invece portato a convertirci totalmente al biologico e a promuoverne i principi che abbracciano tutto il benessere dell&rsquo;uomo e dell&rsquo;ambiente che lo circonda.<br />
+  Un progetto che da &ldquo;colturale&rdquo; diventa &ldquo;culturale&rdquo; fino a dimostrare che un nuovo &ldquo;stile di vita&rdquo; &egrave; possibile. Uno stile rispettoso dell&rsquo;ambiente, della conservazione delle biodiversit&agrave;, delle diversit&agrave; locali, delle risorse naturali, oltre che interessato alla qualit&agrave; della vita.<br />
+  Il caseificio Tomasoni, trasforma solo latte da agricoltura biologica proveniente da stalle della pianura lombarda.<br />
+  Attualmente vengono prodotti: grana padano, ricotta, robiola nostrana, fontal, mozzarella, caciotta, crescenza, latte fresco in bottiglia.<br />
+  Il latte lavorato come i prodotti ottenuti sono certificati da ICEA.<br />
+  Negli anni, la ditta Tomasoni ha sviluppato sempre di pi&ugrave; i rapporti con i Gruppi di Acquisto Solidale che sono diventati, in Italia, i principali &ldquo;clienti-amici&rdquo; dell&rsquo;azienda.<br />
+  Caseificio Tomasoni F.lli snc<br />
+  Via Roma, 30 - 25023 Gottolengo (BS)<br />
+  tel: 030 951007 fax: 030 9518147<br />
+  e-mail: <a href="mailto:info@biocaseificiotomasoni.it" title="scrivi email">info@biocaseificiotomasoni.it</a><br />
+  web: <a class="esterno" href="http://www.biocaseificiotomasoni.it/" title="vai al sito">www.biocaseificiotomasoni.it</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.silano"></a><strong>SILANO</strong> (formaggi e latticini)<br />
+  L&#39;Azienda agricola &quot;Silano&quot; nasce oltre 20 anni fa, raccogliendo l&#39;esperienza e la tradizione tramandate da generazioni, con passione e seriet&agrave;. La sede dell&#39;azienda &egrave; situata nel cuore dell&rsquo;Irpinia, a Villanova del Battista (AV). Ci occupiamo principalmente della produzione del latte e della trasformazione in formaggi e latticini. La genuinit&agrave; e la bont&agrave; dei nostri prodotti motiva e spinge la voglia di diffonderli e valorizzarli con tutte le nostre forze e le nostre energie.<br />
+  Referente Gianluca Silano<br />
+  tel/fax: 0825 826334<br />
+  e-mail: <a href="mailto:aziendasilano@tiscali.it" title="scrivi email">aziendasilano@tiscali.it</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.coltellese"></a> <img alt="foto" class="imgleft" height="150" src="http://www.gaspar8.net/img/coltellese.jpg" title="foto dell'azienda Coltellese" width="200" /><strong>ALTA MONTAGNA BIO </strong> (carne e salumi)<br />
+  L&rsquo;Azienda Agricola Biologica Alta Montagna Bio (gi&agrave; Coltellese) &egrave; a conduzione interamente&nbsp;famigliare, con annessa macelleria aziendale. La nostra azienda sorge a 1000 mt s.l.m. ai piedi delle catene montuose&nbsp;tra il&nbsp;Parco&nbsp;dei Monti della Laga e quello dei Sibillini.<br />
+  La nostra mandria si nutre esclusivamente del pascolo montano nei periodi tra maggio e dicembre e di prodotti quali fieno, paglia e granelle, coltivati direttamente&nbsp;in azienda, nei restanti mesi.<br />
+  Nella rimessa troviamo anche i suini, allevati pi&ugrave; o meno allo stesso modo.&nbsp;Il nostro sistema di&nbsp;produzione, che rispecchia i vecchi metodi contadini, &egrave; approvato e sostenuto&nbsp;dall&#39;associazione di controllo del biologico ICEA.<br />
+  Azienda Agricola Alta Montagna Bio<br />
+  Fr. Mole, 02011 Accumoli (RI)<br />
+  Referente&nbsp; Giudo Pica<br />
+  tel: 0746 808565 cell: 347 8294588<br />
+  e-mail: <a href="mailto:picaguido@hotmail.it" title="scrivi email">picaguido@hotmail.it</a><br />
+  web: <a class="esterno" href="http://www.altamontagnabio.it/">http://www.altamontagnabio.it</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.dea"></a><strong>DEA NOCCIOLA s.r.l.</strong> (creme spalmabili)<br />
+  Dea Nocciola nasce tra le colline etrusche della Sabina, antica zona a vocazione rurale dell&#39;Alto Lazio. Qui, in una stazione di posta romana (risalente al 300 d.C.) ai piedi del castello di Borghetto, in un ambiente incontaminato e testimone di secoli di storia, l&rsquo;Azienda seleziona con passione l&#39;eccellenza dei prodotti del territorio: nocciole della variet&agrave; Tonda Gentile Romana, marroncini della Tuscia, olio extra vergine di oliva della Sabina; materie con cui produce creme di gianduia e composte di castagne.</span></p>
+<br />
+<p>
+  <span style="font-size:14px;">DEA NOCCIOLA non fa uso di addensanti, emulsionati, coloranti, aromi ed essenze, non utilizza materie grasse raffinate ma soltanto materie provenienti da agricoltura biologica certificata; tutto quello che non &egrave; prodotto dal territorio proviene dal mercato Equo e Solidale.</span></p>
+<p>
+  <span style="font-size:14px;">Referente Manuela De Angelis<br />
+  Via Taschini, 11 - Localit&agrave; Borghetto di Civita Castellana (VT)<br />
+  tel. 0761 090926 fax: 0761/090929 cell. 323 2268273<br />
+  e-mail: <a href="mailto:manuela@deanocciola.com">manuela@deanocciola.com</a><br />
+  web: <a class="esterno" href="http://www.deanocciola.com/">www.deanocciola.com</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.valente"></a><strong>VALENTE</strong> (olio di oliva extravergine)<br />
+  L&#39;azienda di Antonio Valente, agricoltore diretto, &egrave; localizzata nel comune di Torremaggiore (FG), nel sub Appennino Daunio ai margini nord occidentali del Tavoliere delle Puglie, zona dove da secoli si produce olio di altissima qualit&agrave; con caratteristiche di profumo e fragranza che nulla ha da invidiare dai pregiati oli toscani. Nel territorio insistono cooperative che esportano questo olio in tutto il mondo. L&rsquo;Azienda intende crearsi una clientela diretta di consumatori che apprezzano il buon mangiare con prodotti genuini e di qualit&agrave;.<br />
+  La sua produzione si aggira intorno a solo 8.000 lt di olio l&#39;anno.</span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.osti"></a><strong>OSTI</strong> (mele)<br />
+  L&#39;Azienda &egrave; inserita nel contesto delle Dolomiti di Brenta ad un altitudine di circa 600 m. E&#39; un&#39;azienda frutticola biologica sita in vicinanza di un torrente e di un bosco.<br />
+  Referente Marco Osti<br />
+  Via Fontanele, 22 - Spormaggiore (TN)<br />
+  tel: 0461/653337 cell: 328/3626483<br />
+  e-mail: <a href="mailto:sorgebio@hotmail.it" title="scrivi email">sorgebio@hotmail.it</a></span></p>
+<p>
+  &nbsp;</p>
+<p>
+  <span style="font-size:14px;"><a name="produttori.cascina"></a><strong>RISERVA DELLA CASCINA</strong> (vino, olio, miele)<br />
+  Partendo da Roma e percorrendo l&#39;Appia Antica, a soli 16 Km dal Campidoglio troviamo l&#39;azienda &quot;Riserva della Cascina&quot; dove la famiglia Brannetti, da sempre dedita all&#39;agricoltura, ha deciso di indirizzarsi esclusivamente alla vitivinicoltura dal 1946, con l&#39;obiettivo costante di migliorare la qualit&agrave; del prodotto, reimpiantando i migliori tralci dei vitigni regionali ed avvalendosi delle migliori tecniche di vinificazione. Biologici &quot;dentro&quot;, rispettosi della terra e della salute dell&#39;uomo, i Brannetti non hanno mai utilizzato diserbanti o prodotti chimici tossici nella coltivazione delle loro viti.<br />
+  Non &egrave; quindi una sorpresa sapere che gi&agrave; dal 1994, veri pionieri in ambito vitivinicolo, Giuseppe e Daniela hanno ottenuto, con il controllo dell&#39;ente &quot;Suolo e Salute&quot;, la certificazione biologica. La loro azienda agricola &quot;Riserva della Cascina&quot;, dal magnifico colpo d&#39;occhio anche per quel che riguarda l&#39;aspetto paesaggistico, prende il nome dalle antiche mappe catastali del terreno che si affaccia sull&#39;Appia Antica e si estende all&#39;interno del parco omonimo per circa 18 ettari, di cui 15 di vigneto coltivato in allevamento a filari.<br />
+  Referente Daniela Vecchi<br />
+  Via F.lli Wright, 12 - 00043 Ciampino (RM)<br />
+  tel: 06 7917221 &ndash; fax: 06 7917221<br />
+  e-mail: <a href="mailto:riservadellacascina@inwind.it" title="scrivi email">riservadellacascina@inwind.it</a></span></p>
+<p>
+  &nbsp;</p>
+            
+            ]]>
+         </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>

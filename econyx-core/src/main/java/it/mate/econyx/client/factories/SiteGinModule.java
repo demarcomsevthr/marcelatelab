@@ -24,6 +24,7 @@ import it.mate.econyx.client.view.OrderView;
 import it.mate.econyx.client.view.PortalPageEditView;
 import it.mate.econyx.client.view.PortalPageExplorerView;
 import it.mate.econyx.client.view.PortalPageListView;
+import it.mate.econyx.client.view.PortalPageSummaryView;
 import it.mate.econyx.client.view.PortalPageView;
 import it.mate.econyx.client.view.PortalUserEditView;
 import it.mate.econyx.client.view.PortalUserListView;
@@ -45,6 +46,7 @@ import it.mate.econyx.client.view.site.DocumentFolderViewImpl;
 import it.mate.econyx.client.view.site.OrderListViewImpl;
 import it.mate.econyx.client.view.site.OrderViewImpl;
 import it.mate.econyx.client.view.site.PortalPageExplorerViewImpl;
+import it.mate.econyx.client.view.site.PortalPageSummaryViewImpl;
 import it.mate.econyx.client.view.site.PortalPageViewImpl;
 import it.mate.econyx.client.view.site.PortalUserViewImpl;
 import it.mate.econyx.client.view.site.ProductEditViewImpl;
@@ -77,6 +79,7 @@ public class SiteGinModule extends AbstractGinModule {
     bind(PortalPageListView.class).to(PortalPageListView.NotImpl.class);
     bind(PortalPageView.class).to(PortalPageViewImpl.class);
     bind(PortalPageExplorerView.class).to(PortalPageExplorerViewImpl.class);
+    bind(PortalPageSummaryView.class).to(PortalPageSummaryViewImpl.class);
     
     bind(PortalUserView.class).to(PortalUserViewImpl.class);
     bind(PortalUserListView.class).to(PortalUserListView.NotImpl.class);

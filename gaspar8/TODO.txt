@@ -19,8 +19,8 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 08/04/2013
-		
+	SNAPSHOT 13/04/2013
+
 		>> DOCUMENT LIBRARY
 			> TODO: cancellazione document
 	 		> TODO: MEMORIZZARE CONTENT TYPE SU DS
@@ -40,13 +40,12 @@
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
 		>> FRAGMENT IDENTIFIERS
-			> hash link all'interno di una pagina
+			> hash link all'interno di una pagina [OK - 13/04/2013] > provato in produttori
 			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
 			> IPOTESI
-				- PortalPage.html[small] >> PortalPageSummaryPortlet
-				- LocationHashChangedEvent > #pageCode.fragmentId
-				- all'interno degli html i fragment vanno identificati con pageCode.fragId
-				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]
+				- PortalPage.html[small] >> PortalPageSummaryPortlet   [OK - 13/04/2013]
+				- all'interno degli html i fragment vanno identificati con pageCode.fragId    [OK - 13/04/2013]
+				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
 			
 
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]

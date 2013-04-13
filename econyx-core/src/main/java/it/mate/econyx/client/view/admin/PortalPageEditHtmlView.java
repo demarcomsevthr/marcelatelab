@@ -88,7 +88,7 @@ public class PortalPageEditHtmlView extends AbstractAdminTabPage<PortalPageEditV
       Delegate<WebContentPage> delegate = new Delegate<WebContentPage>() {
         public void execute(WebContentPage page) {
           if (page != null) {
-            shortHtmlContentEditor.setModel(page.getHtmlContent(HtmlContent.Type.SHORT));
+            shortHtmlContentEditor.setModel(page.getHtmlContent(HtmlContent.Type.SMALL));
             mediumHtmlContentEditor.setModel(page.getHtmlContent(HtmlContent.Type.MEDIUM));
           }
         }

@@ -269,7 +269,7 @@ public class PortalPageViewImpl extends AbstractBaseView<PortalPageView.Presente
           getPresenter().fetchHtmls(childContentPage, new Delegate<WebContentPage>() {
             public void execute(WebContentPage childContentPage) {
               if (childContentPage != null) {
-                HtmlContent content = childContentPage.getHtmlContent(HtmlContent.Type.SHORT);
+                HtmlContent content = childContentPage.getHtmlContent(HtmlContent.Type.SMALL);
                 if (content != null && content.getContent() != null && !content.getContent().equals("")) {
                   HorizontalPanel childHorizontalPanel = new HorizontalPanel();
                   HTML childHtml = new HTML(SafeHtmlUtils.fromTrustedString(content.getContent()));

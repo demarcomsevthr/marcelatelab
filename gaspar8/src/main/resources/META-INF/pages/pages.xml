@@ -123,15 +123,14 @@
             <widgets>
               <factory parent="explorerWrapper" />
               <factory parent="calendarWrapper" />
+              <factory parent="pageSummaryWrapper" />
             </widgets>
             <constraints>
               <constraint size="200px" overflow="visible"/>
               <constraint/>
+              <constraint/>
             </constraints>
           </factory>
-          <!-- 
-          <factory parent="explorerWrapper" />
-           -->
           <factory parent="pageBodyWrapper" />
         </widgets>
         <constraints>
@@ -236,6 +235,13 @@
     <layout width="160px"/>
     <widgets>
       <factory type="it.mate.econyx.client.portlets.CalendarPortlet.Factory"/>
+    </widgets>
+  </factory>
+      
+  <factory id="pageSummaryWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Sommario" stylename="tpl-leftColumn">
+    <layout width="160px"/>
+    <widgets>
+      <factory type="it.mate.econyx.client.portlets.PortalPageSummaryPortlet.Factory"/>
     </widgets>
   </factory>
       

@@ -17,6 +17,8 @@ public class PortalPagePlace extends Place implements ReversiblePlace, HasToken,
 
   public static String VIEW = "view";
 
+  public static String VIEW_SUMMARY = "viewSummary";
+
   public static String LIST_MENU = "listMenu";
 
   public static String VIEW_BY_CODE = "viewByCode";

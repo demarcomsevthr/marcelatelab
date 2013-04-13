@@ -143,7 +143,7 @@ public class HtmlContentEditor extends Composite {
   
   public void setModel(HtmlContent htmlContent) {
     if (htmlEditorLabel.getText().length() == 0) {
-      if (htmlContent.getType() == HtmlContent.Type.SHORT) {
+      if (htmlContent.getType() == HtmlContent.Type.SMALL) {
         setLabelText("Descrizione breve");
       } else if (htmlContent.getType() == HtmlContent.Type.MEDIUM) {
         setLabelText("Descrizione");
