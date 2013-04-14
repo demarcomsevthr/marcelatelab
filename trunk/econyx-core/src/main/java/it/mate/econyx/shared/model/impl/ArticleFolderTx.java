@@ -26,6 +26,9 @@ public class ArticleFolderTx implements ArticleFolder {
   
   String selectedArticleCode;
   
+  // serve solo sul client
+  transient String containerPageId;
+  
   public ArticleFolderTx() {
     super();
   }
@@ -94,6 +97,14 @@ public class ArticleFolderTx implements ArticleFolder {
 
   public void setSelectedArticleCode(String selectedArticleCode) {
     this.selectedArticleCode = selectedArticleCode;
+  }
+
+  public String getContainerPageId() {
+    return containerPageId;
+  }
+
+  public void setContainerPageId(String containerPageId) {
+    this.containerPageId = containerPageId;
   }
   
 }

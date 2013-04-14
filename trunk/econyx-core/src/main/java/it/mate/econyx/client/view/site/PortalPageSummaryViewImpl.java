@@ -5,6 +5,8 @@ import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.portlets.client.ui.BoxContainerPortlet;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -38,9 +40,13 @@ public class PortalPageSummaryViewImpl extends AbstractBaseView<PortalPageSummar
       if (page instanceof WebContentPage) {
         WebContentPage webContentPage = (WebContentPage)page;
         HtmlContent content = webContentPage.getHtmlContent(HtmlContent.Type.SMALL);
-        if (content != null && content.getContent() != null) {
+        Widget boxContainerPortlet = GwtUtils.getParentWidgetByClassAndStyle(this, BoxContainerPortlet.class.getName(), "mwt-BoxContainer");
+        if (content != null && content.getContent() != null && content.getContent().trim().length() > 0) {
+          boxContainerPortlet.setVisible(true);
           String actualHtmlContent = content.getContent();
           htmlPanel.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
+        } else {
+          boxContainerPortlet.setVisible(false);
         }
       }
       

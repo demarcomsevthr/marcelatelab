@@ -7,7 +7,6 @@
       <g:HTMLPanel>
       </g:HTMLPanel>
     </g:VerticalPanel>
-    <gc:Spacer height="2em"/>
   </g:VerticalPanel>
   
 

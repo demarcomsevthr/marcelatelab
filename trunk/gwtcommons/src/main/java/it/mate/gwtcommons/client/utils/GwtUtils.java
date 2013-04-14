@@ -954,4 +954,22 @@ public class GwtUtils {
     return null;
   }
   
+  public static Widget getParentWidgetByClassAndStyle(Widget widget, String classname, String stylename) {
+    Widget parent = widget.getParent();
+    if (parent == null)
+      return null;
+    boolean found = true;
+    if (classname != null) {
+      found = found && (classname.equals(parent.getClass().getName()));
+    }
+    if (stylename != null) {
+      String parentStylenames = parent.getElement().getClassName();
+      found = found && (parentStylenames != null && parentStylenames.contains(stylename));
+    }
+    if (found) {
+      return parent;
+    }
+    return getParentWidgetByClassAndStyle(parent, classname, stylename);
+  }
+  
 }

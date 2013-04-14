@@ -137,6 +137,16 @@ public class PagesUtils {
     }
   }
   
+  public static void removePageFromCache(String id) {
+    ensureCache();
+    if (AppClientFactory.isSiteModule) {
+      PortalPage page = pagesCache.get(id);
+      if (page != null) {
+        pagesCache.remove(id);
+      }
+    }
+  }
+  
   public static PortalPage getFromCache(String id) {
     ensureCache();
     if (AppClientFactory.isSiteModule) {
