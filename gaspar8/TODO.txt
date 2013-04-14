@@ -27,7 +27,7 @@
 				- BlobUploadServlet get BlobInfo
 				- RestController response.setContentType XXX
 			> Blobstore API >> [07/04/2013]
-			> TODO: caricamento documenti da setup [12/04/2013]
+			> caricamento documenti da setup [12/04/2013]
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
@@ -48,16 +48,25 @@
 				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
 			
 
+		>> BUG Articoli     >>  OK [14/04/2013]
+			- se aggiungo un commento e torno nella ArticleFolderPage non vedo la situazione aggiornata
+			- con F5 si ricarica la pagina
+			
+			>> IPOTESI: forse c'entra con la cahce di PagesUtils ?
+
+
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
-			>>> INIZIATO [10/04/2013]
+
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
+			
 			>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
 
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
+			
 			> css pagine
 			> css articoli
 			> css blog
-				>> vedi ad esempio:
+				>> esempi:
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 			

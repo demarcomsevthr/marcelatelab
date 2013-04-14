@@ -34,6 +34,7 @@ import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProductFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.WebContentPage;
+import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.PortalPageTx;
 import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
@@ -432,6 +433,10 @@ public class PortalPageActivity extends BaseActivity implements
   
   public void initArticleFolderPageView (AcceptsOneWidget panel, ArticleFolderPage page) {
     ArticleFolder entity = page.getEntity();
+    if (entity instanceof ArticleFolderTx) {
+      ArticleFolderTx articleFolder = (ArticleFolderTx)entity;
+      articleFolder.setContainerPageId(page.getId());
+    }
     startArticleActivity(panel, new ArticlePlace(ArticlePlace.FOLDER_VIEW, entity));
   }
   

@@ -2,6 +2,7 @@ package it.mate.econyx.client.activities;
 
 import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.places.ArticlePlace;
+import it.mate.econyx.client.util.PagesUtils;
 import it.mate.econyx.client.view.ArticleEditView;
 import it.mate.econyx.client.view.ArticleFolderEditView;
 import it.mate.econyx.client.view.ArticleFolderListView;
@@ -10,6 +11,7 @@ import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
@@ -32,6 +34,8 @@ public class ArticleActivity extends BaseActivity implements
   private ArticlePlace place;
   
   private ArticleServiceAsync articleService = AppClientFactory.IMPL.getGinjector().getArticleService();
+  
+  private static final String CURRENT_ARTICLE_FOLDER_PAGE_ID = "articleActivity.currentArticleFolderPageId";
   
   public ArticleActivity(ArticlePlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -66,6 +70,10 @@ public class ArticleActivity extends BaseActivity implements
   private void retrieveModel() {
     getView().setModel(AppClientFactory.IMPL.getPortalSessionState());
     if (place.getToken().equals(ArticlePlace.FOLDER_VIEW)) {
+      if (place.getModel() instanceof ArticleFolderTx) {
+        ArticleFolderTx articleFolder = (ArticleFolderTx)place.getModel();
+        GwtUtils.setClientAttribute(CURRENT_ARTICLE_FOLDER_PAGE_ID, articleFolder.getContainerPageId());
+      }
       getView().setModel(place.getModel());
     }
     if (place.getToken().equals(ArticlePlace.FOLDER_LIST)) {
@@ -163,6 +171,10 @@ public class ArticleActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Article article) {
+        String articleFolderPageId = (String)GwtUtils.getClientAttribute(CURRENT_ARTICLE_FOLDER_PAGE_ID);
+        if (articleFolderPageId != null) {
+          PagesUtils.removePageFromCache(articleFolderPageId);
+        }
         getView().setModel(article);
       }
     });

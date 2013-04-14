@@ -145,5 +145,5 @@ public abstract class PortalPageTx implements PortalPage {
   public String getLocationHash() {
     return getCode();
   }
-  
+
 }

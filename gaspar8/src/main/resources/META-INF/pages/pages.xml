@@ -122,8 +122,8 @@
             <layout vertical="true"/>
             <widgets>
               <factory parent="explorerWrapper" />
-              <factory parent="calendarWrapper" />
               <factory parent="pageSummaryWrapper" />
+              <factory parent="calendarWrapper" />
             </widgets>
             <constraints>
               <constraint size="200px" overflow="visible"/>
