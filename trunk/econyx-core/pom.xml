@@ -108,7 +108,7 @@
         <artifactId>maven-datanucleus-plugin</artifactId>
         <version>1.1.4</version>
         <configuration>
-          <log4jConfiguration>${basedir}/src/main/resources/log4j-enhancer.properties</log4jConfiguration>
+          <log4jConfiguration>${basedir}/src/main/enhancer/log4j-enhancer.properties</log4jConfiguration>
           <mappingIncludes>**/server/model/impl/*.class</mappingIncludes>
           <enhancerName>ASM</enhancerName>
           <api>JDO</api>
