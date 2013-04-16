@@ -51,11 +51,12 @@
 		>> BUG Articoli     >>  OK [14/04/2013]
 			- se aggiungo un commento e torno nella ArticleFolderPage non vedo la situazione aggiornata
 			- con F5 si ricarica la pagina
-			
 			>> IPOTESI: forse c'entra con la cahce di PagesUtils ?
 
 
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
+
+			> SPOSTATO TUTTO IN it.mate.econyx.client.css.AppClientBundle > app-bundel.css, app-bundle-custom.css
 
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
 			
@@ -69,6 +70,9 @@
 				>> esempi:
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
+					
+		>> MINI TEST ORDINI
+			> prima di ripresntare fare un test sugli ordini / stati / prepagato
 			
 		>> ProducerFolderPage [3]
 			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
