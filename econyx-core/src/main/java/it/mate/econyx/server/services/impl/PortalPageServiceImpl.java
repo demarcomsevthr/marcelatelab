@@ -1,18 +1,25 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.econyx.server.model.impl.ProduttoreDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.BlogAdapter;
 import it.mate.econyx.server.services.PortalPageAdapter;
+import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Article;
+import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
+import it.mate.econyx.shared.model.ProducerFolderPage;
+import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.econyx.shared.model.impl.ArticlePageTx;
 import it.mate.econyx.shared.model.impl.BlogDiscussionPageTx;
 import it.mate.econyx.shared.services.PortalPageService;
+import it.mate.gwtcommons.server.utils.CacheUtils;
+import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.List;
 
@@ -34,6 +41,8 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
       
   private BlogAdapter blogAdapter;
   
+  private ProductAdapter productAdapter;
+  
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
@@ -41,6 +50,7 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
     this.adapter = AdaptersUtil.getPortalPageAdapter();
     this.articleAdapter = AdaptersUtil.getArticleAdapter();
     this.blogAdapter = AdaptersUtil.getBlogAdapter();
+    this.productAdapter = AdaptersUtil.getProductAdapter();
     logger.debug("initialized " + this);
   }
 
@@ -150,6 +160,23 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
       return new BlogDiscussionPageTx(discussion);
     }
     return null;
+  }
+  
+  private PortalPage postProcessProducerFolderPage (PortalPage page) {
+    if (page instanceof ProducerFolderPage) {
+      ProducerFolderPage producerFolderPage = (ProducerFolderPage)page;
+      Produttore producer = producerFolderPage.getEntity();
+      if (producer.getProducts() == null || producer.getProducts().size() == 0) {
+        List<Articolo> products = productAdapter.findProductsByProducerId(producer.getId());
+        if (products != null) {
+          producer.setProducts(products);
+          ProduttoreDs producerDs = CloneUtils.clone(producer, ProduttoreDs.class);
+          CacheUtils.put(producerDs);
+          producerFolderPage.setEntity(producer);
+        }
+      }
+    }
+    return page;
   }
 
 }
