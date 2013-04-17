@@ -42,6 +42,11 @@
 				> riseguire in debug (nella if producer.getProducts() == null ci deve entrare una volta sola!)
 
 			>> DA LOG GWT vedo che va in loop chiamando la PortalPageService.findById
+			
+			>> IN TEST
+				-- it.mate.gwtcommons.server.utils.EntityRelationshipsResolver
+					>> introdotto resolvedEntities map di controllo per evitare i loop
+				[17/04/2013]
 
 		---------------------------------------------------------------------------------
 
