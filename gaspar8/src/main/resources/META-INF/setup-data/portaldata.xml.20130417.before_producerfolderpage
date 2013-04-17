@@ -380,7 +380,7 @@
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
-          <content>TRE KG TRE SPECIE! Cassetta da 3 kg di pesce fresco in box (solo Polpi â€“ Totani - Merluzzi)</content>
+          <content>TRE KG TRE SPECIE! Cassetta da 3 kg di pesce fresco in box (solo Polpi – Totani - Merluzzi)</content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
       <prezzo>45.00</prezzo>
@@ -1115,19 +1115,6 @@
           <templateName>home3Columns</templateName>
           <orderNm>510</orderNm>
           <childreen>
-          
-            <it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
-              <name>ORTO DEI TERZI</name>
-              <code>ortodeiterzi</code>
-              <templateName>home3Columns</templateName>
-              <orderNm>511</orderNm>
-              <entity class="it.mate.econyx.shared.model.impl.ProduttoreTx">
-                <codice>PRD001</codice>
-                <nome>ORTO DEI TERZI</nome>
-              </entity>
-            </it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
-          
-            <!-- 
             <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
               <name>ORTO DEI TERZI</name>
               <code>ortodeiterzi</code>
@@ -1187,9 +1174,6 @@
                 </it.mate.econyx.shared.model.impl.ProductPageTx>
               </childreen>
             </it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-            
-            -->
-            
           </childreen>
         </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
         <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
@@ -1515,7 +1499,7 @@
           </entity>
         </it.mate.econyx.shared.model.impl.BlogPageTx>
         <it.mate.econyx.shared.model.impl.BlogPageTx visibleInExplorer="false">
-          <name>AttivitÃ  socio culturali</name>
+          <name>Attività socio culturali</name>
           <code>blogAttivitaSocioCulturali</code>
           <orderNm>300</orderNm>
           <entity class="it.mate.econyx.shared.model.impl.BlogTx">

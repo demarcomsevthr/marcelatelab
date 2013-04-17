@@ -17,6 +17,7 @@ import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.econyx.shared.model.impl.ArticlePageTx;
 import it.mate.econyx.shared.model.impl.BlogDiscussionPageTx;
+import it.mate.econyx.shared.model.impl.ProducerFolderPageTx.ProducerProductPageTx;
 import it.mate.econyx.shared.services.PortalPageService;
 import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
@@ -56,7 +57,13 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
 
   @Override
   public List<PortalPage> findAll() {
-    return adapter.findAll();
+    List<PortalPage> results = adapter.findAll();
+    if (results != null) {
+      for (PortalPage page : results) {
+        postProcessProducerFolderPage(page);
+      }
+    }
+    return results;
   }
 
   @Override
@@ -76,29 +83,43 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
 
   @Override
   public PortalPage findById(String id) {
-    if (ArticlePageTx.isVirtualId(id)) {
-      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    if (ArticlePageTx.isVirtualPageId(id)) {
+      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromPageId(id));
     }
-    if (BlogDiscussionPageTx.isVirtualId(id)) {
-      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromId(id));
+    if (BlogDiscussionPageTx.isVirtualPageId(id)) {
+      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromPageId(id));
     }
-    return adapter.findById(id);
+    if (ProducerProductPageTx.isVirtualPageId(id)) {
+      return getProducerProductPageByCode(ProducerProductPageTx.getEntityCodeFromPageId(id));
+    }
+    PortalPage result = adapter.findById(id);
+    postProcessProducerFolderPage(result);
+    return result;
   }
   
   @Override
   public PortalPage findById(String id, boolean resolveChildreen, boolean resolveProducts, boolean resolveHtmls) {
-    if (ArticlePageTx.isVirtualId(id)) {
-      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromId(id));
+    if (ArticlePageTx.isVirtualPageId(id)) {
+      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromPageId(id));
     }
-    if (BlogDiscussionPageTx.isVirtualId(id)) {
-      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromId(id));
+    if (BlogDiscussionPageTx.isVirtualPageId(id)) {
+      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromPageId(id));
     }
-    return adapter.findById(id, resolveChildreen, resolveProducts, resolveHtmls);
+    if (ProducerProductPageTx.isVirtualPageId(id)) {
+      return getProducerProductPageByCode(ProducerProductPageTx.getEntityCodeFromPageId(id));
+    }
+    PortalPage result = adapter.findById(id, resolveChildreen, resolveProducts, resolveHtmls);
+    if (resolveChildreen) {
+      postProcessProducerFolderPage(result);
+    }
+    return result;
   }
 
   @Override
   public PortalFolderPage fetchChildreen(PortalFolderPage page) {
-    return adapter.fetchChildreen(page);
+    PortalFolderPage result = adapter.fetchChildreen(page);
+    postProcessProducerFolderPage(result);
+    return result;
   }
 
   public WebContentPage fetchHtmls (WebContentPage contentPage) {
@@ -137,11 +158,17 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   @Override
   public PortalPage findByCode(String code) {
     PortalPage page = adapter.findByCode(code);
+    if (page != null) {
+      postProcessProducerFolderPage(page);
+    }
     if (page == null) {
       page = getArticlePageByCode(code);
     }
     if (page == null) {
       page = getBlogDiscussionPageByCode(code);
+    }
+    if (page == null) {
+      page = getProducerProductPageByCode(code);
     }
     return page;
   }
@@ -161,18 +188,28 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
     }
     return null;
   }
+
+  private PortalPage getProducerProductPageByCode(String code) {
+    Articolo product = productAdapter.findProductByCode(code);
+    if (product != null) {
+      return new ProducerProductPageTx(product);
+    }
+    return null;
+  }
   
   private PortalPage postProcessProducerFolderPage (PortalPage page) {
-    if (page instanceof ProducerFolderPage) {
+    if (page != null && page instanceof ProducerFolderPage) {
       ProducerFolderPage producerFolderPage = (ProducerFolderPage)page;
       Produttore producer = producerFolderPage.getEntity();
-      if (producer.getProducts() == null || producer.getProducts().size() == 0) {
-        List<Articolo> products = productAdapter.findProductsByProducerId(producer.getId());
-        if (products != null) {
-          producer.setProducts(products);
-          ProduttoreDs producerDs = CloneUtils.clone(producer, ProduttoreDs.class);
-          CacheUtils.put(producerDs);
-          producerFolderPage.setEntity(producer);
+      if (producer != null) {
+        if (producer.getProducts() == null || producer.getProducts().size() == 0) {
+          List<Articolo> products = productAdapter.findProductsByProducerId(producer.getId());
+          if (products != null) {
+            producer.setProducts(products);
+            ProduttoreDs producerDs = CloneUtils.clone(producer, ProduttoreDs.class);
+            CacheUtils.put(producerDs);
+            producerFolderPage.setEntity(producer);
+          }
         }
       }
     }

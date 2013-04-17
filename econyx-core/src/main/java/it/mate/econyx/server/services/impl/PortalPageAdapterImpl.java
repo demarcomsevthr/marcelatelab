@@ -9,6 +9,7 @@ import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProductFolderPage;
+import it.mate.econyx.shared.model.VirtualPage;
 import it.mate.econyx.shared.model.WebContentPage;
 import it.mate.econyx.shared.model.impl.PortalPageTx;
 import it.mate.econyx.shared.model.impl.WebContentPageTx;
@@ -16,8 +17,8 @@ import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindCallback;
 import it.mate.gwtcommons.server.dao.FindContext;
 import it.mate.gwtcommons.server.model.utils.OneToManyAdapterSupport;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.server.utils.CacheUtils;
+import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.server.utils.KeyUtils;
 
 import java.util.ArrayList;
@@ -78,8 +79,14 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
     return CloneUtils.clone(dss, PortalPageTx.class, PortalPage.class);
   }
   
-  public PortalPage create(PortalPage entity) {
-    AbstractPortalPageDs pageDs = CloneUtils.clone (entity, AbstractPortalPageDs.class);
+  public PortalPage create(PortalPage page) {
+
+    // 17/04/2013
+    if (page instanceof VirtualPage) {
+      return page;
+    }
+    
+    AbstractPortalPageDs pageDs = CloneUtils.clone (page, AbstractPortalPageDs.class);
     pageDs.setKey(KeyFactory.createKey(pageDs.getClass().getSimpleName(), KeyUtils.getRandomUUID()));
     
     if (pageDs instanceof AbstractWebContentPageDs) {
@@ -120,6 +127,12 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
   }
   
   public PortalPage update(PortalPage page) {
+    
+    // 17/04/2013
+    if (page instanceof VirtualPage) {
+      return page;
+    }
+    
     AbstractPortalPageDs pageDs = CloneUtils.clone (page, AbstractPortalPageDs.class);
     
     /** BUGFIX PortalPageAdapterImpl@20120828 **/
@@ -144,8 +157,14 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
     return CloneUtils.clone (pageDs,PortalPageTx.class);
   }
 
-  public void delete(PortalPage entity) {
-    AbstractPortalPageDs pageToDeleteDs = CloneUtils.clone (entity, AbstractPortalPageDs.class);
+  public void delete(PortalPage page) {
+    
+    // 17/04/2013
+    if (page instanceof VirtualPage) {
+      return;
+    }
+    
+    AbstractPortalPageDs pageToDeleteDs = CloneUtils.clone (page, AbstractPortalPageDs.class);
     if (pageToDeleteDs.getParentId() != null) {
       AbstractPortalPageDs parentPageDs = internalFindById(pageToDeleteDs.getParentId(), true, false);
       if (parentPageDs instanceof AbstractPortalFolderPageDs) {
