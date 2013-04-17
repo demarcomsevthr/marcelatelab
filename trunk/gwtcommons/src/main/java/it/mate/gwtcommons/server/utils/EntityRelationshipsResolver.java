@@ -4,6 +4,7 @@ import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.EntityRelationshipsResolverHandler;
 import it.mate.gwtcommons.server.dao.FindContext;
 import it.mate.gwtcommons.server.dao.PersistenceException;
+import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.HasUnownedRelationships;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 
@@ -12,7 +13,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -30,8 +33,14 @@ public class EntityRelationshipsResolver {
     this.dao = dao;
     this.context = context;
   }
-
+  
   public Object resolveUnownedRelationships (Object entity) {
+    return resolveUnownedRelationships(entity, new HashMap<Key, Object>());
+  }
+  
+  // 17/04/2013
+  // Introdotto resolvedEntities per evitare i loop ricorsivi
+  private Object resolveUnownedRelationships (Object entity, Map<Key, Object> resolvedEntities) {
     if (entity == null)
       return null;
     
@@ -45,33 +54,28 @@ public class EntityRelationshipsResolver {
     if (entity instanceof List) {
       List results = (List)entity;
       for (Object item : results) {
-        resolveUnownedRelationships(item);
+        if (resolvedEntities.containsKey(getKey(item))) {
+          logger.debug("prevent resolving loop");
+        } else {
+          resolvedEntities.put(getKey(item), item);
+          resolveUnownedRelationships(item, resolvedEntities);
+        }
       }
     } else if (entity instanceof HasUnownedRelationships) {
       HasUnownedRelationships hasDipendencies = (HasUnownedRelationships)entity;
       hasDipendencies.resolveUnownedRelationships();
     } else {
-      resolveUnownedRelationshipsWithAnnotation(entity);
+      if (resolvedEntities.containsKey(getKey(entity))) {
+        logger.debug("prevent resolving loop");
+      } else {
+        resolvedEntities.put(getKey(entity), entity);
+        resolveUnownedRelationshipsWithAnnotation(entity, resolvedEntities);
+      }
     }
     return entity;
   }
   
-  
-  private Field[] getAllHierarchyDeclaredFieldsInSamePackage(Class<?> entityClass) {
-    Package entityPackage = entityClass.getPackage();
-    List<Field> allFields = new ArrayList<Field>();
-    Class<?> currentClass = entityClass;
-    while (currentClass != null) {
-      if (currentClass.getPackage().equals(entityPackage)) {
-        allFields.addAll(Arrays.asList(currentClass.getDeclaredFields()));
-      }
-      currentClass = currentClass.getSuperclass();
-    }
-    return allFields.toArray(new Field[0]);
-  }
-  
-  
-  private void resolveUnownedRelationshipsWithAnnotation (Object entity) {
+  private void resolveUnownedRelationshipsWithAnnotation (Object entity, Map<Key, Object> resolvedEntities) {
     if (entity == null)
       return;
     // 28/02/2012: dopo l'introduzione delle gerarchie di classi ds, si rende necessario esaminare tutti i fields dichiarati nella gerarchia
@@ -108,16 +112,21 @@ public class EntityRelationshipsResolver {
               } else {
                 Key relatedKey = (Key)keyField.get(entity);
                 if (relatedKey != null) {
-                  Object relatedEntity = dao.findById((Class<Serializable>)relationshipField.getType(), relatedKey);
                   
-                  if (relatedEntity == null) {
-                    logger.error("ERROR", new PersistenceException(String.format("ALERT: cannot resolve unowned related entity in %s, relationship type is %s, id is %s ", entity.getClass().getName(), relationshipField.getType(), relatedKey)));
+                  Object relatedEntity = null;
+                  if (resolvedEntities.containsKey(relatedKey)) {
+                    relatedEntity = resolvedEntities.get(relatedKey);
+                    relationshipField.set(entity, relatedEntity);
+                  } else {
+                    relatedEntity = dao.findById((Class<Serializable>)relationshipField.getType(), relatedKey);
+                    if (relatedEntity == null) {
+                      logger.error("ERROR", new PersistenceException(String.format("ALERT: cannot resolve unowned related entity in %s, relationship type is %s, id is %s ", entity.getClass().getName(), relationshipField.getType(), relatedKey)));
+                    } else {
+                      resolvedEntities.put(relatedKey, relatedEntity);
+                    }
+                    relationshipField.set(entity, relatedEntity);
+                    resolveUnownedRelationships(relatedEntity, resolvedEntities);
                   }
-                  
-                  relationshipField.set(entity, relatedEntity);
-
-                  // 30/04/2012
-                  resolveUnownedRelationships(relatedEntity);
                   
                 } else {
                   relationshipField.set(entity, null);
@@ -138,7 +147,12 @@ public class EntityRelationshipsResolver {
           Collection collection = (Collection)collectionField.get(entity);
           if (collection != null) {
             for (Object item : collection) {
-              resolveUnownedRelationshipsWithAnnotation(item);
+              if (resolvedEntities.containsKey(getKey(item))) {
+                logger.debug("prevent resolving loop");
+              } else {
+                resolvedEntities.put(getKey(item), item);
+                resolveUnownedRelationshipsWithAnnotation(item, resolvedEntities);
+              }
             }
           }
         } catch (Exception ex) {
@@ -148,5 +162,25 @@ public class EntityRelationshipsResolver {
     }
   }
   
+  private Field[] getAllHierarchyDeclaredFieldsInSamePackage(Class<?> entityClass) {
+    Package entityPackage = entityClass.getPackage();
+    List<Field> allFields = new ArrayList<Field>();
+    Class<?> currentClass = entityClass;
+    while (currentClass != null) {
+      if (currentClass.getPackage().equals(entityPackage)) {
+        allFields.addAll(Arrays.asList(currentClass.getDeclaredFields()));
+      }
+      currentClass = currentClass.getSuperclass();
+    }
+    return allFields.toArray(new Field[0]);
+  }
   
+  private Key getKey (Object entity) {
+    if (entity instanceof HasKey) {
+      HasKey hasKey = (HasKey)entity;
+      return hasKey.getKey();
+    }
+    return null;
+  }
+
 }
