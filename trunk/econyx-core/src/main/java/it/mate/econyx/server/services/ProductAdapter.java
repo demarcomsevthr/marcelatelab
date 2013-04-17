@@ -54,4 +54,6 @@ public interface ProductAdapter {
   
   public Produttore findProducerById (String id);
   
+  public List<Articolo> findProductsByProducerId(Serializable producerId);
+  
 }

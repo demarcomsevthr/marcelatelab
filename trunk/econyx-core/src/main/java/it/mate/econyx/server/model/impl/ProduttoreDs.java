@@ -1,9 +1,14 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.ProduttoreTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
+import it.mate.gwtcommons.server.model.CollectionPropertyServerUtil;
 import it.mate.gwtcommons.server.model.HasKey;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -27,6 +32,8 @@ public class ProduttoreDs implements Produttore, HasKey {
   
   @Persistent
   String nome;
+  
+  transient List<ArticoloDs> products;
   
   public Key getKey() {
     return id;
@@ -54,6 +61,15 @@ public class ProduttoreDs implements Produttore, HasKey {
 
   public void setNome(String name) {
     this.nome = name;
+  }
+
+  public List<Articolo> getProducts() {
+    return products != null ? new ArrayList<Articolo>(products) : null;
+  }
+
+  public void setProducts(List<Articolo> products) {
+    CollectionPropertyServerUtil<Articolo, ArticoloDs> wrapper = CollectionPropertyServerUtil.clone(products, ArticoloDs.class);
+    this.products = wrapper.getItems();
   }
   
 }

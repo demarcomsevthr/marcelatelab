@@ -1,6 +1,7 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
+import it.mate.econyx.server.model.impl.ArticoloDs;
 import it.mate.econyx.server.model.impl.HtmlWebContentDs;
 import it.mate.econyx.server.model.impl.ImageWebContentDs;
 import it.mate.econyx.server.model.impl.ProduttoreDs;
@@ -35,6 +36,9 @@ import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 
 @Service
@@ -295,6 +299,25 @@ public class ProductAdapterImpl implements ProductAdapter {
         dao.delete(CloneUtils.clone(image, ImageWebContentDs.class));
       }
     }
+  }
+  
+  public List<Articolo> findProductsByProducerId(Serializable producerId) {
+    if (producerId == null)
+      return null;
+    Key producerKey = null;
+    if (producerId instanceof Key) {
+      producerKey = (Key)producerId;
+    } else if (producerId instanceof String) {
+      producerKey = KeyFactory.stringToKey((String)producerId);
+    } else {
+      throw new IllegalArgumentException("producerId type mismatch " + producerId);
+    }
+    FindContext<ArticoloDs> context = new FindContext<ArticoloDs>(ArticoloDs.class)
+        .setFilter("produttoreId == produttoreIdParam")
+        .setParameters(Key.class.getName() + " produttoreIdParam")
+        .setParamValues(new Object[] {producerKey});
+    List<ArticoloDs> results = dao.findList(context);
+    return CloneUtils.clone(results, ArticoloTx.class, Articolo.class);
   }
 
 }

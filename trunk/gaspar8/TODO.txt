@@ -77,6 +77,25 @@
 		>> ProducerFolderPage [3]
 			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
 			       PortalPageServiceImpl, PortalPageViewImpl, PortalPageActivity
+			       
+			>> 17/04/2013 - non è così semplice!
+			> ProducerFolderPage > ok
+			> Produttore deve avere un getProducts() che non ha
+			> la relazione produttore - list aprodotti non andrebbe salvata su ds (c'è già la relazione product - producer)
+			> quindi: in PortalPageServiceImpl per ogni find su ProducerFolderPage andrebbe riempita la lista dei prodotti con una find a parte (utilizzando ProductAdapter ?)
+			> questa find verrebe fatta tutte le volte che si apre una producer folder page
+			> la relazione andrebbe fatta finire in cache, senza essere salvata su db (cosa mai fatta prima!)
+			> quindi: andrebbe gestito tutto in PortalPageServiceImpl (improprio):
+				in ogni find:
+				  - è una ProducerFolderPage ?
+				     - getEntity > Producer.getProducts == null ?
+				       - si:
+				         - find su ds products where producerId = X
+				         - producer.products = results
+				         - reset cache producer
+				         - set cache producer (with products set) 
+			>>> INIZIATO vedi it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			
 		
 		>> gestione ruoli admins [4]
 			PortalUser
