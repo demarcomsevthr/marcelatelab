@@ -27,11 +27,11 @@ public class ArticlePageTx extends WebContentPageTx implements ArticlePage {
     this.setVisibleInExplorer(false);
   }
   
-  public static boolean isVirtualId(String id) {
+  public static boolean isVirtualPageId(String id) {
     return (id.startsWith(ArticlePageTx.class.getName()+"@"));
   }
   
-  public static String getEntityCodeFromId(String id) {
+  public static String getEntityCodeFromPageId(String id) {
     return id.substring((ArticlePageTx.class.getName()+"@").length());
   }
 

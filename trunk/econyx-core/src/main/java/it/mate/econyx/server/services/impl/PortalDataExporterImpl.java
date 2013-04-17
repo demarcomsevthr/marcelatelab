@@ -36,6 +36,7 @@ import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.ProducerFolderPage;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.TipoArticolo;
@@ -125,7 +126,6 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     XStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "visibleInMenu");
     XStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "homePage");
     XStreamUtils.getXStream().omitField(ArticoloTx.class, "id");
-//  XStreamUtils.getXStream().omitField(ArticoloTx.class, "htmls");
     XStreamUtils.getXStream().omitField(ArticoloTx.class, "htmlsInitialized");
     XStreamUtils.getXStream().omitField(CustomerTx.class, "id");
     XStreamUtils.getXStream().omitField(AbstractIndirizzoTx.class, "id");
@@ -343,6 +343,12 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   private PortalPage visitPortalPage(VisitContext context, boolean loadMode, PortalPage page) {
     if (loadMode) {
       page = portalPageAdapter.create(page);
+    }
+    if (page instanceof ProducerFolderPage) {
+      ProducerFolderPage producerFolderPage = (ProducerFolderPage)page;
+      Produttore producer = producerFolderPage.getEntity();
+      producer = visitProducer(context, loadMode, producer);
+      producerFolderPage.setEntity(producer);
     }
     if (page instanceof PortalFolderPage) {
       PortalFolderPage portalFolderPage = (PortalFolderPage)page;
@@ -651,11 +657,6 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         documentFolder.getDocuments().set(it, document);
       }
     }
-    /*
-    for (Document document : documentFolder.getDocuments()) {
-      visitDocument(context, loadMode, document);
-    }
-    */
     documentFolder = documentAdapter.createFolder(documentFolder);
     return documentFolder;
   }

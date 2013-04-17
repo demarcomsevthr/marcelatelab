@@ -27,11 +27,11 @@ public class BlogDiscussionPageTx extends WebContentPageTx implements BlogDiscus
     this.setVisibleInExplorer(false);
   }
   
-  public static boolean isVirtualId(String id) {
+  public static boolean isVirtualPageId(String id) {
     return (id.startsWith(BlogDiscussionPageTx.class.getName()+"@"));
   }
   
-  public static String getEntityCodeFromId(String id) {
+  public static String getEntityCodeFromPageId(String id) {
     return id.substring((BlogDiscussionPageTx.class.getName()+"@").length());
   }
 

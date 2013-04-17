@@ -19,7 +19,32 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 13/04/2013
+	SNAPSHOT 17/04/2013
+	
+		>> BUG ProducerFolderPage
+			- start gae
+			- load producer folder page
+			- close browser
+			- reopen producer folder page
+			>> gae loop:
+
+14:33:45,038 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] MEMCACHE  MISSED entity with key PortalFolderPageDs.6a4c6b2483934fa9a3de32d2a3ae3101
+14:33:45,039 DEBUG [it.mate.gwtcommons.server.dao.JdoDao:internalFind] DAO >>>> fetching datastore Entity PortalFolderPageDs Id PortalFolderPageDs.6a4c6b2483934fa9a3de32d2a3ae3101.0
+14:33:45,065 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
+14:33:45,073 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key TipoArticoloDs.6848849133323681792
+14:33:45,075 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key UnitaDiMisuraDs.6380474772077150208
+14:33:45,081 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
+14:33:45,090 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key TipoArticoloDs.6848849133323681792
+14:33:45,093 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key UnitaDiMisuraDs.6380474772077150208
+14:33:45,097 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
+
+			>> IPOTESI: bug in PortalPageServiceImpl.postProcessProducerFolderPage
+				> riseguire in debug (nella if producer.getProducts() == null ci deve entrare una volta sola!)
+
+			>> DA LOG GWT vedo che va in loop chiamando la PortalPageService.findById
+
+		---------------------------------------------------------------------------------
+
 
 		>> DOCUMENT LIBRARY
 			> TODO: cancellazione document
@@ -28,6 +53,7 @@
 				- RestController response.setContentType XXX
 			> Blobstore API >> [07/04/2013]
 			> caricamento documenti da setup [12/04/2013]
+			> per il momento fisso mime type = pdf
 			
 		>> NEW BlogPage, Blog, BlogThread, BlogComment
 			>>> VEDI http://gasparotto.forumattivo.com/
@@ -48,22 +74,18 @@
 				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
 			
 
-		>> BUG Articoli     >>  OK [14/04/2013]
+		>> BUG Articoli     
 			- se aggiungo un commento e torno nella ArticleFolderPage non vedo la situazione aggiornata
 			- con F5 si ricarica la pagina
 			>> IPOTESI: forse c'entra con la cahce di PagesUtils ?
+			>> OK [14/04/2013]
 
 
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
-
 			> SPOSTATO TUTTO IN it.mate.econyx.client.css.AppClientBundle > app-bundel.css, app-bundle-custom.css
-
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
-			
 			>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
-
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
-			
 			> css pagine
 			> css articoli
 			> css blog
@@ -96,7 +118,6 @@
 				         - set cache producer (with products set) 
 			>>> INIZIATO vedi it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
 			
-		
 		>> gestione ruoli admins [4]
 			PortalUser
 				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...

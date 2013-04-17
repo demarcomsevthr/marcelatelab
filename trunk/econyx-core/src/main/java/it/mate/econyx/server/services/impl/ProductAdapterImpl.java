@@ -319,5 +319,15 @@ public class ProductAdapterImpl implements ProductAdapter {
     List<ArticoloDs> results = dao.findList(context);
     return CloneUtils.clone(results, ArticoloTx.class, Articolo.class);
   }
+  
+  public Produttore findProducerByCode(String code) {
+    ProduttoreDs producer = dao.findSingle(ProduttoreDs.class, "codice == codeParam", String.class.getName() + " codeParam", null, code);
+    return CloneUtils.clone(producer, ProduttoreTx.class);
+  }
+
+  public Articolo findProductByCode(String code) {
+    ArticoloDs producer = dao.findSingle(ArticoloDs.class, "codice == codeParam", String.class.getName() + " codeParam", null, code);
+    return CloneUtils.clone(producer, ArticoloTx.class);
+  }
 
 }
