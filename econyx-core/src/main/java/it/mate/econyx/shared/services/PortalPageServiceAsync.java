@@ -39,4 +39,6 @@ public interface PortalPageServiceAsync {
 
   void findByCode(String code, AsyncCallback<PortalPage> callback);
 
+  void removePageFromCache(String pageId, AsyncCallback<Void> callback);
+
 }

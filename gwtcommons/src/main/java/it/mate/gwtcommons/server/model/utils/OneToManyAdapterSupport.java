@@ -122,7 +122,7 @@ public class OneToManyAdapterSupport <OWNER extends Serializable, ITEM extends S
         }
       });
       
-      OWNER attachedEntity = dao.findById(context);
+      OWNER attachedEntity = dao.findWithContext(context);
       if (JdoDao.isSuppressExceptionThrowOnInternalFind() && attachedEntity == null) {
         return null;
       }

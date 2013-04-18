@@ -28,8 +28,11 @@ public class EntityRelationshipsResolver {
   
   private Dao dao;
   
+  private FindContext context;
+  
   public EntityRelationshipsResolver(Dao dao, FindContext context) {
     this.dao = dao;
+    this.context = context;
   }
   
   public Object resolveUnownedRelationships (Object entity) {
@@ -74,6 +77,13 @@ public class EntityRelationshipsResolver {
   private void resolveUnownedRelationshipsWithAnnotation (Object entity, Map<Key, Object> resolvedEntities) {
     if (entity == null)
       return;
+    
+    /*
+    if (entity.getClass().getSimpleName().endsWith("PortalFolderPageDs")) {
+      logger.debug(">>>>>>>>>>>>>>>>> DEBUGGING");
+    }
+    */
+    
     Field[] fields = getAllHierarchyDeclaredFieldsInSamePackage(entity.getClass());
     for (Field field : fields) {
       UnownedRelationship unownedRelationshipAnnotation = field.getAnnotation(UnownedRelationship.class);
@@ -85,7 +95,7 @@ public class EntityRelationshipsResolver {
             if (keyName.equals(keyField.getName())) {
               keyField.setAccessible(true);
               relationshipField.setAccessible(true);
-
+              
               //25.02.2011
               if (Collection.class.isAssignableFrom(relationshipField.getType())) {
                 Class itemClass = unownedRelationshipAnnotation.itemClass();
@@ -94,7 +104,12 @@ public class EntityRelationshipsResolver {
                   if (keys != null) {
                     List relatedEntities = new ArrayList();
                     for (Key relatedKey : keys) {
-                      Object relatedEntity = dao.findById((Class<Serializable>)itemClass, relatedKey);
+                      
+                      // 18/04/2013
+                      // In sintesi questo permette di risolvere le entity correlate in maniera ricorsiva
+//                    Object relatedEntity = dao.findById((Class<Serializable>)itemClass, relatedKey);
+                      Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+                      
                       relatedEntities.add(relatedEntity);
                     }
                     relationshipField.set(entity, relatedEntities);

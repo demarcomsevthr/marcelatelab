@@ -590,7 +590,7 @@ public class OrderAdapterImpl implements OrderAdapter {
     if (fetchItems) {
       context.includedField("itemKeys");
     }
-    OrderDs order = dao.findById(context);
+    OrderDs order = dao.findWithContext(context);
     if (fetchItems)
       order.setItemsInitialized(true);
     

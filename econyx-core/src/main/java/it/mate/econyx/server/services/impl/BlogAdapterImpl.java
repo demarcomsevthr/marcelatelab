@@ -180,7 +180,7 @@ public class BlogAdapterImpl implements BlogAdapter {
     if (fetchComments) {
       context.includedField("commentsKeys");
     }
-    BlogDiscussionDs ds = dao.findById(context);
+    BlogDiscussionDs ds = dao.findWithContext(context);
     return ds;
   }
   
@@ -196,7 +196,7 @@ public class BlogAdapterImpl implements BlogAdapter {
     if (fetchDiscussions) {
       context.includedField("discussionsKeys");
     }
-    BlogDs ds = dao.findById(context);
+    BlogDs ds = dao.findWithContext(context);
     return ds;
   }
   

@@ -1,5 +1,6 @@
 package it.mate.gwtcommons.server.dao;
 
+import it.mate.gwtcommons.server.services.NotImplementedException;
 import it.mate.gwtcommons.server.utils.EntityRelationshipsResolver;
 import it.mate.gwtcommons.server.utils.KeyUtils;
 import it.mate.gwtcommons.server.utils.ReflectionUtils;
@@ -92,7 +93,7 @@ public class JdoDao implements Dao {
     return (List<E>)internalFind(context.setResultAsList(true));
   }
   
-  public <E extends Serializable> E findById(FindContext<E> context) {
+  public <E extends Serializable> E findWithContext(FindContext<E> context) {
     return (E)internalFind(context);
   }
 
@@ -138,12 +139,8 @@ public class JdoDao implements Dao {
     
     Object results = null;
     PersistenceManager pm = PMF.get().getPersistenceManager();
-    // 14/11/2012: tolta transazione
-//  Transaction tx = pm.currentTransaction();
     Query query = null;
     try {
-      
-//    tx.begin();
       
       if (context.getId() != null) {
         try {
@@ -199,7 +196,7 @@ public class JdoDao implements Dao {
       
       if (results instanceof QueryResult) {
         QueryResult queryResult = (QueryResult)results;
-        // 20/11/2012
+
         @SuppressWarnings("rawtypes")
         List detachedResults = null;
         if (context.keysOnly()) {
@@ -207,13 +204,15 @@ public class JdoDao implements Dao {
         } else {
           detachedResults = new ArrayList<E>();
         }
-//      List<E> detachedResults = new ArrayList<E>();
         if (!queryResult.isEmpty()) {
           for (Object result : queryResult) {
             detachedResults.add(result);
             applyDefaultFetchGroupPatches(result, context);
             if (context.getCallback() != null && !context.keysOnly()) {
-              context.getCallback().processResultsInTransaction((E)result);
+              // 18/04/2013
+              if (result != null && context.getOriginalEntityClass().isAssignableFrom(result.getClass())) {
+                context.getCallback().processResultsInTransaction((E)result);
+              }
             }
           }
         }
@@ -237,13 +236,15 @@ public class JdoDao implements Dao {
       } else if (results instanceof List) {
         
         @SuppressWarnings("rawtypes")
-//      List<E> resultsList = (List)results;
         List resultsList = (List)results;
         resultsList.size();
         for (Object result : resultsList) {
           applyDefaultFetchGroupPatches(result, context);
           if (context.getCallback() != null && !context.keysOnly()) {
-            context.getCallback().processResultsInTransaction((E)result);
+            // 18/04/2013
+            if (result != null && context.getOriginalEntityClass().isAssignableFrom(result.getClass())) {
+              context.getCallback().processResultsInTransaction((E)result);
+            }
           }
         }
 
@@ -258,18 +259,18 @@ public class JdoDao implements Dao {
         // quindi provo a commentarlo fisso
         //applyPatchDefaultFetchGroup(results, context);
         
-        if (context.getCallback() != null)
-          context.getCallback().processResultsInTransaction((E)results);
+        if (context.getCallback() != null) {
+          // 18/04/2013
+          if (results != null && context.getOriginalEntityClass().isAssignableFrom(results.getClass())) {
+            context.getCallback().processResultsInTransaction((E)results);
+          }
+        }
         
       }
       
     } finally {
       if (query != null)
         query.closeAll();
-      /*
-      if (tx.isActive())
-        tx.rollback();
-        */
       pm.close();
     }
 
@@ -281,7 +282,6 @@ public class JdoDao implements Dao {
   }
   
   @SuppressWarnings("rawtypes")
-  // 16/11/2012
   private <E extends Serializable> void applyDefaultFetchGroupPatches(Object result, FindContext<E> context) {
     if (result == null)
       return;
@@ -492,7 +492,14 @@ public class JdoDao implements Dao {
     return resolver.resolveUnownedRelationships(result);
   }
 
+  private class SubClassesResults {
+    Object results = null;
+    boolean hasSubclasses = false;
+  }
+  
   private <E extends Serializable> E findById_OLD_VERSION(Class<E> entityClass, Serializable id, FindCallback<E> callback) {
+    throw new NotImplementedException();
+    /*
     E result = null;
     PersistenceManager pm = PMF.get().getPersistenceManager();
     Transaction tx = pm.currentTransaction();
@@ -509,14 +516,12 @@ public class JdoDao implements Dao {
       pm.close();
     }
     return (E)resolveUnownedRelationships(result, null);
-  }
-  
-  private class SubClassesResults {
-    Object results = null;
-    boolean hasSubclasses = false;
+    */
   }
   
   private <E extends Serializable> List<E> findAll_OLD_VERSION(Class<E> entityClass, FindCallback<E> callback) {
+    throw new NotImplementedException();
+    /*
     logger.debug("finding all entities of type " + entityClass);
     List<E> results = null;
     PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -545,6 +550,7 @@ public class JdoDao implements Dao {
       pm.close();
     }
     return (List<E>)resolveUnownedRelationships(results, null);
+    */
   }
   
   public static void setSuppressExceptionThrowOnInternalFind(boolean suppressExceptionThrowOnInternalFind) {

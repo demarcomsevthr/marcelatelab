@@ -199,7 +199,7 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     if (fetchComments) {
       context.includedField("commentsKeys");
     }
-    ArticleDs ds = dao.findById(context);
+    ArticleDs ds = dao.findWithContext(context);
     return ds;
   }
   

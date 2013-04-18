@@ -188,7 +188,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         productDs.resolveImages();
       }
     });
-    AbstractArticoloDs articoloDs = dao.findById(context);
+    AbstractArticoloDs articoloDs = dao.findWithContext(context);
     return articoloDs;
   }
   

@@ -37,6 +37,10 @@ public abstract class AbstractWebContentPageDs extends AbstractPortalPageDs impl
    * 
    */
   
+  public boolean hasSavedHtmls() {
+    return (htmlKeys != null && htmlKeys.size() > 0);
+  }
+  
   @Override
   public List<HtmlContent> getHtmls() {
     return htmls != null ? new ArrayList<HtmlContent>(htmls) : null;

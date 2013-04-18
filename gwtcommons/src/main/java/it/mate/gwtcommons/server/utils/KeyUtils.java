@@ -39,7 +39,29 @@ public class KeyUtils {
     throw new IllegalArgumentException(""+key);
   }
   
-  public static String formatToString(Object key) {
+  public static String formatToString(Object keyObj) {
+    if (keyObj == null) {
+      return "null";
+    }
+    String result = null;
+    if (keyObj instanceof String) {
+      keyObj = castToKey(keyObj);
+    }
+    if (keyObj instanceof Key) {
+      Key key = (Key)keyObj;
+      result = "{";
+      result += (key.getNamespace() != null && !"".equals(key.getNamespace())) ? (" ns:" + key.getNamespace()) : "";
+//    result += key.getAppId() != null ? (" app:" + key.getAppId()) : "";
+      result += key.getKind() != null ? ("k:" + key.getKind()) : "";
+      result += key.getName() != null ? (",nm:" + key.getName()) : "";
+      result += key.getId() != 0 ? (",id:" + key.getId()) : "";
+      result += "}";
+    }
+    return result;
+  }
+  
+  
+  public static String formatToString2(Object key) {
     if (key == null) {
       return "null!";
     }

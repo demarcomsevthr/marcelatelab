@@ -20,25 +20,36 @@
 	
 
 	SNAPSHOT 18/04/2013
-
-		>> DA TENERE SOTTO CONTROLLO
 	
+		>> CALENDARIO
+			- errore nel settagio di author su nuovo evento
+
+		>> IN EVIDENZA - OTTIMIZZAZIONI CACHE
+			- PortalPageAdapterImpl.internalFindById
+				// cachedContentPage.hasSavedHtmls()
+    			// merge tra istanza cache e persistent su childreen e htmls
+    		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
+    			// Map<Key, Object> resolvedEntities
+    			// Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+    		- DynamicInvocationUtils.invokeMethod
+    			// commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
+    		- JdoDao.checkSubClassesResults
+    			// ottimizzazione per utilizzare la subclass ricavata dalla key
+    		- PortalPageServiceImpl.removePageFromCache
+    			// serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
+    		[18/04/2013]
+    		
 		>> BUG ProducerFolderPage
-			>> gae loop:
-			>> IN TEST
+			>> gae loop: IN TEST:
 				-- it.mate.gwtcommons.server.utils.EntityRelationshipsResolver
-					>> introdotto resolvedEntities map di controllo per evitare i loop
+					>> introdotto resolvedEntities per evitare i loop ricorsivi
 				[17/04/2013]
 				
-		>> IMPORTANTI OTTIMIZZAZIONE INIZIATE E DA COMPLETARE SU CACHE/JDODAO
+		>> IMPORTANTE OTTIMIZZAZIONE IN JdoDao
 			> it.mate.gwtcommons.server.dao.JdoDao.checkSubClassesResults
 				>>> se sono in una find per id nella key ho il nome della sub clas specifica che mi serve, tento prima quella
 			[18/04/2013]
-				
-		>> IN GENERE NEL LOG DI GAE SI VEDONO MOLTE
-			MEMCACHE  MISSED entity with key
-		   sulle stesse key
-		>> SEGUIRE IN DEBUG E CAPIRE SE CI SONO LOOP INUTILI
+			
 		
 
 		---------------------------------------------------------------------------------
@@ -66,20 +77,16 @@
 		>> FRAGMENT IDENTIFIERS
 			> hash link all'interno di una pagina [OK - 13/04/2013] > provato in produttori
 			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
-			> IPOTESI
+			> implementazione:
 				- PortalPage.html[small] >> PortalPageSummaryPortlet   [OK - 13/04/2013]
 				- all'interno degli html i fragment vanno identificati con pageCode.fragId    [OK - 13/04/2013]
 				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
 			
 
-		>> BUG Articoli     
-			- se aggiungo un commento e torno nella ArticleFolderPage non vedo la situazione aggiornata
-			- con F5 si ricarica la pagina
-			>> IPOTESI: forse c'entra con la cahce di PagesUtils ?
-			>> OK [14/04/2013]
-
-
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
+		
+			>> VEDI STILE Calendario e BoxContainer >>> http://www.giuliettochiesa.it/  !!!
+		
 			> SPOSTATO TUTTO IN it.mate.econyx.client.css.AppClientBundle > app-bundel.css, app-bundle-custom.css
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
 			>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
@@ -91,30 +98,15 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 					
-		>> MINI TEST ORDINI
+		>> RIFARE TEST ORDINI
 			> prima di ripresntare fare un test sugli ordini / stati / prepagato
 			
 		>> ProducerFolderPage [3]
 			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
 			       PortalPageServiceImpl, PortalPageViewImpl, PortalPageActivity
-			       
-			>> 17/04/2013 - non è così semplice!
+			>> 17/04/2013
 			> ProducerFolderPage > ok
-			> Produttore deve avere un getProducts() che non ha
-			> la relazione produttore - list aprodotti non andrebbe salvata su ds (c'è già la relazione product - producer)
-			> quindi: in PortalPageServiceImpl per ogni find su ProducerFolderPage andrebbe riempita la lista dei prodotti con una find a parte (utilizzando ProductAdapter ?)
-			> questa find verrebe fatta tutte le volte che si apre una producer folder page
-			> la relazione andrebbe fatta finire in cache, senza essere salvata su db (cosa mai fatta prima!)
-			> quindi: andrebbe gestito tutto in PortalPageServiceImpl (improprio):
-				in ogni find:
-				  - è una ProducerFolderPage ?
-				     - getEntity > Producer.getProducts == null ?
-				       - si:
-				         - find su ds products where producerId = X
-				         - producer.products = results
-				         - reset cache producer
-				         - set cache producer (with products set) 
-			>>> INIZIATO vedi it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
 			
 		>> gestione ruoli admins [4]
 			PortalUser

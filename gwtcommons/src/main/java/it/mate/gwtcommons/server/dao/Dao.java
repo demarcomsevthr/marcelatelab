@@ -9,7 +9,7 @@ public interface Dao {
 
   public <E extends Serializable> List<E> findAll(final Class<E> entityClass, FindCallback<E> callback);
 
-  public <E extends Serializable> E findById(FindContext<E> context);
+  public <E extends Serializable> E findWithContext(FindContext<E> context);
   
   public <E extends Serializable> E findById(final Class<E> entityClass, final Serializable id);
 
