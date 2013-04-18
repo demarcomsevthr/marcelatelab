@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FindContext <E extends Serializable> {
+  
   private Class<E> entityClass;
   private boolean resultAsList = false;
   private Serializable id;
@@ -17,16 +18,38 @@ public class FindContext <E extends Serializable> {
   private List<String> excludedFields = new ArrayList<String>();
   private boolean relationshipsResolutionDisabled = false;
   private String whereClause;
-  
   private boolean keysOnly = false;
+  private Class<E> originalEntityClass;
   
   public FindContext(Class<E> entityClass) {
     super();
     this.entityClass = entityClass;
+    this.originalEntityClass = entityClass;
+  }
+
+  // 18/04/2013
+  public FindContext(FindContext<E> that) {
+    this.entityClass = that.entityClass;
+    this.resultAsList = that.resultAsList;
+    this.id = that.id;
+    this.filter = that.filter;
+    this.parameters = that.parameters;
+    this.paramValues = that.paramValues;
+    this.callback = that.callback;
+    this.cacheDisabled = that.cacheDisabled;
+    this.includedFields = that.includedFields;
+    this.excludedFields = that.excludedFields;
+    this.relationshipsResolutionDisabled = that.relationshipsResolutionDisabled;
+    this.whereClause = that.whereClause;
+    this.keysOnly = that.keysOnly;
+    this.originalEntityClass = that.originalEntityClass;
   }
   
   public FindContext<E> setEntityClass(Class<E> entityClass) {
     this.entityClass = entityClass;
+    if (this.originalEntityClass == null) {
+      this.originalEntityClass = entityClass;
+    }
     return this;
   }
   public Class<E> getEntityClass() {
@@ -115,5 +138,8 @@ public class FindContext <E extends Serializable> {
   public FindContext<E> whereClause(String whereClause) {
     this.whereClause = whereClause;
     return this;
+  }
+  public Class<E> getOriginalEntityClass() {
+    return originalEntityClass;
   }
 }

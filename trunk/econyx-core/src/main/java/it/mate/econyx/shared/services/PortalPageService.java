@@ -41,5 +41,7 @@ public interface PortalPageService extends RemoteService {
   public PortalPage newInstance(String classname) throws ServiceException;
   
   public PortalPage findByCode(String code) throws ServiceException;
+
+  public void removePageFromCache(String pageId);
   
 }

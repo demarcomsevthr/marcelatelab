@@ -1,5 +1,6 @@
 package it.mate.econyx.client.view.admin;
 
+import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.ui.AdminTabPanel;
 import it.mate.econyx.client.view.CalEventListView;
 import it.mate.econyx.shared.model.CalEvent;
@@ -85,6 +86,8 @@ public class CalEventListViewImpl extends AbstractBaseView<CalEventListView.Pres
           event.setTitle(title.getText());
           event.setDate(date.getValue());
           event.setName(event.getTitle());
+          event.setCreated(new Date());
+          event.setAuthor(AppClientFactory.IMPL.getPortalSessionState().getLoggedUser());
           delegate.execute(event);
         }
       }, new Delegate<DialogBox>() {

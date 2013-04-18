@@ -181,7 +181,7 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
 
 
   public ContoUtente findContoUtenteByPortalUser(String portalUserId) {
-    PortalUser portalUser = dao.findById(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
+    PortalUser portalUser = dao.findWithContext(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
     Customer customer = customerAdapter.findByPortalUser(portalUser);
     if (customer != null) {
       ContoUtente contoUtente = findContoUtenteByCustomer(customer, true, false);
@@ -191,7 +191,7 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
   }
   
   public Double getSaldoByPortalUser(String portalUserId) {
-    PortalUser portalUser = dao.findById(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
+    PortalUser portalUser = dao.findWithContext(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
     Customer customer = customerAdapter.findByPortalUser(portalUser);
     if (customer != null) {
       ContoUtente contoUtente = findContoUtenteByCustomer(customer, false);

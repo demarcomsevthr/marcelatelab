@@ -14,6 +14,7 @@ import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
+import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -34,6 +35,8 @@ public class ArticleActivity extends BaseActivity implements
   private ArticlePlace place;
   
   private ArticleServiceAsync articleService = AppClientFactory.IMPL.getGinjector().getArticleService();
+  
+  private PortalPageServiceAsync pageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
   
   private static final String CURRENT_ARTICLE_FOLDER_PAGE_ID = "articleActivity.currentArticleFolderPageId";
   
@@ -174,6 +177,10 @@ public class ArticleActivity extends BaseActivity implements
         String articleFolderPageId = (String)GwtUtils.getClientAttribute(CURRENT_ARTICLE_FOLDER_PAGE_ID);
         if (articleFolderPageId != null) {
           PagesUtils.removePageFromCache(articleFolderPageId);
+          pageService.removePageFromCache(articleFolderPageId, new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) { }
+            public void onSuccess(Void result) { }
+          });
         }
         getView().setModel(article);
       }

@@ -192,7 +192,7 @@ public class DocumentAdapterImpl implements DocumentAdapter {
       context.includedField("contentKey");
     }
     */
-    DocumentDs ds = dao.findById(context);
+    DocumentDs ds = dao.findWithContext(context);
     return ds;
   }
   

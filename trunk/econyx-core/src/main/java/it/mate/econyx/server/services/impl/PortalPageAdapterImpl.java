@@ -22,6 +22,7 @@ import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.server.utils.KeyUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -214,27 +215,36 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
     if (pageId == null)
       return null;
     
+    AbstractPortalPageDs cachedPage = null;
+    
     if (pageId != null) {
-      Object cachedPage = CacheUtils.get(pageId);
-      if (cachedPage != null) {
+      Object cacheEntry = CacheUtils.get(pageId);
+      if (cacheEntry != null && cacheEntry instanceof AbstractPortalPageDs) {
+        cachedPage = (AbstractPortalPageDs)cacheEntry;
         if (resolveChildreen && cachedPage instanceof AbstractPortalFolderPageDs) {
-          AbstractPortalFolderPageDs portalFolderPageDs = (AbstractPortalFolderPageDs)cachedPage;
-          if (portalFolderPageDs.getChildreen() == null || portalFolderPageDs.getChildreen().size() == 0) {
+          AbstractPortalFolderPageDs cachedFolderPage = (AbstractPortalFolderPageDs)cachedPage;
+          if (isEmptyOrNull(cachedFolderPage.getChildreen())) {
             CacheUtils.deleteByKey(pageId);
           }
         }
         if (resolveHtmls && cachedPage instanceof AbstractWebContentPageDs) {
-          AbstractWebContentPageDs webContentPageDs = (AbstractWebContentPageDs)cachedPage;
-          if (webContentPageDs.getHtmls() == null || webContentPageDs.getHtmls().size() == 0) {
+          AbstractWebContentPageDs cachedContentPage = (AbstractWebContentPageDs)cachedPage;
+          
+          /* 18/04/2013
+           * voglio esser sicuro che il reset della cache lo faccia solo se necessario
+           * (ci sono html keys su ds, ma non ha gli htmls in cache)
+          if (isEmptyOrNull(cachedContentPage.getHtmls())) {
+          */
+          if (cachedContentPage.hasSavedHtmls() && isEmptyOrNull(cachedContentPage.getHtmls())) {
             CacheUtils.deleteByKey(pageId);
           }
+          
         }
       }
     }
     
     FindContext<P> context = new FindContext<P>(resultClass);
     context.setId(pageId);
-//  context.setNotUseCache(resolveChildreen || resolveHtmls);
     context.setCallback(new FindCallback<P>() {
       public void processResultsInTransaction(P pageDs) {
         if (pageDs instanceof AbstractPortalFolderPageDs && resolveChildreen) {
@@ -246,9 +256,38 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
       }
     });
     
-    P pageDs = dao.findById(context);
+    P fetchedPage = dao.findWithContext(context);
 
-    return pageDs;
+    // 18/04/2013
+    // merge tra istanza cache e persistent su childreen e htmls
+    if (cachedPage != null && fetchedPage != null) {
+      boolean needRewriteCache = false;
+      if (cachedPage instanceof AbstractPortalFolderPageDs && fetchedPage instanceof AbstractPortalFolderPageDs) {
+        AbstractPortalFolderPageDs cachedFolderPage = (AbstractPortalFolderPageDs)cachedPage;
+        AbstractPortalFolderPageDs fetchedFolderPage = (AbstractPortalFolderPageDs)fetchedPage;
+        if (!isEmptyOrNull(cachedFolderPage.getChildreen()) && isEmptyOrNull(fetchedFolderPage.getChildreen())) {
+          fetchedFolderPage.setChildreen(cachedFolderPage.getChildreen());
+          needRewriteCache = true;
+        }
+      }
+      if (cachedPage instanceof AbstractWebContentPageDs && fetchedPage instanceof AbstractWebContentPageDs) {
+        AbstractWebContentPageDs cachedContentPage = (AbstractWebContentPageDs)cachedPage;
+        AbstractWebContentPageDs fetchedContentPage = (AbstractWebContentPageDs)fetchedPage;
+        if (!isEmptyOrNull(cachedContentPage.getHtmls()) && isEmptyOrNull(fetchedContentPage.getHtmls())) {
+          fetchedContentPage.setHtmls(cachedContentPage.getHtmls());
+          needRewriteCache = true;
+        }
+      }
+      if (needRewriteCache) {
+        CacheUtils.put(fetchedPage);
+      }
+    }
+    
+    return fetchedPage;
+  }
+  
+  private boolean isEmptyOrNull (Collection coll) {
+    return (coll == null || coll.size() == 0);
   }
   
   public PortalFolderPage fetchChildreen (PortalFolderPage parent) {
