@@ -1,6 +1,7 @@
 package it.mate.gwtcommons.server.dao;
 
 import it.mate.gwtcommons.server.utils.EntityRelationshipsResolver;
+import it.mate.gwtcommons.server.utils.KeyUtils;
 import it.mate.gwtcommons.server.utils.ReflectionUtils;
 
 import java.io.Serializable;
@@ -324,33 +325,70 @@ public class JdoDao implements Dao {
     List<Class<? extends Serializable>> subClasses = findSubClasses(context.getEntityClass());
     if (subClasses.size() > 0) {
       subClassesResults.hasSubclasses = true;
+      
       Object actualResults = null;
-      for (Class<? extends Serializable> subClass : subClasses) {
-        Object currentSubclassResults = null;
-        try {
-          currentSubclassResults = internalFind(context.setEntityClass((Class<E>)subClass));
-        } catch (DataNotFoundException ex) {  }
-        if (currentSubclassResults == null) {
-          // nothing
-        } else if (currentSubclassResults instanceof Collection) {
-          if (actualResults == null) {
-            actualResults = currentSubclassResults;
-          } else if (actualResults instanceof Collection) {
-            Collection prevCollection = (Collection)actualResults;
-            try {
-              prevCollection.addAll((Collection)currentSubclassResults);
-            } catch (Exception ex) {
-              new JDOException(String.format("Error merging subclass resultsets (%s)", context.getEntityClass()), ex);
+
+      // 18/04/2013
+      // OTTIMIZZAZIONE:
+      // se sto facendo una find per id, nella key ho il nome della subclass specifica che mi serve
+      // quindi evito di fare il loop di find su tutte le sub classes
+      try {
+        if (context.getId() != null) {
+          String keyKindName = KeyUtils.castToKey(context.getId()).getKind();
+          if (keyKindName != null) {
+            for (Class<? extends Serializable> subClass : subClasses) {
+              String subClassTypeName = subClass.getName().substring(subClass.getName().lastIndexOf('.') + 1);
+              if (subClassTypeName.equals(keyKindName)) {
+                Object currentSubclassResults = null;
+                try {
+                  currentSubclassResults = internalFind(context.setEntityClass((Class<E>)subClass));
+                } catch (DataNotFoundException ex) {  }
+                if (currentSubclassResults == null) {
+                  // nothing
+                } else if (currentSubclassResults instanceof Collection) {
+                  new JDOException(String.format("Incompatible subclass resultsets (%s)", context.getEntityClass()));
+                } else {
+                  actualResults = currentSubclassResults;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      } catch (Exception ex) {
+        logger.error("error", ex);
+      }
+
+      if (actualResults == null) {
+        for (Class<? extends Serializable> subClass : subClasses) {
+          Object currentSubclassResults = null;
+          try {
+            currentSubclassResults = internalFind(context.setEntityClass((Class<E>)subClass));
+          } catch (DataNotFoundException ex) {  }
+          if (currentSubclassResults == null) {
+            // nothing
+          } else if (currentSubclassResults instanceof Collection) {
+            if (actualResults == null) {
+              actualResults = currentSubclassResults;
+            } else if (actualResults instanceof Collection) {
+              Collection prevCollection = (Collection)actualResults;
+              try {
+                prevCollection.addAll((Collection)currentSubclassResults);
+              } catch (Exception ex) {
+                new JDOException(String.format("Error merging subclass resultsets (%s)", context.getEntityClass()), ex);
+              }
+            } else {
+              new JDOException(String.format("Incompatible subclass resultsets (%s)", context.getEntityClass()));
             }
           } else {
-            new JDOException(String.format("Incompatible subclass resultsets (%s)", context.getEntityClass()));
+            actualResults = currentSubclassResults;
+            break;
           }
-        } else {
-          actualResults = currentSubclassResults;
-          break;
         }
       }
+      
       subClassesResults.results = actualResults;
+      
     }
     return subClassesResults;
   }

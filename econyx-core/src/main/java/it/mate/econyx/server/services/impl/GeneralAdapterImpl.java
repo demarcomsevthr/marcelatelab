@@ -42,6 +42,7 @@ import it.mate.gwtcommons.server.dao.JdoDaoWithCache;
 import it.mate.gwtcommons.server.dao.UpdateCallback;
 import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
+import it.mate.gwtcommons.server.utils.KeyUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.ArrayList;
@@ -419,7 +420,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
           || CacheConstants.REFRESH_CACHE_DEEPER_CHECK.equals(key)) {
         valueAsString = new Date(Long.parseLong(valueAsString)).toString();
       }
-      results.add(new CacheDumpEntry(CacheUtils.formatKeyToString(key), valueAsString));
+      results.add(new CacheDumpEntry(KeyUtils.formatToString(key), valueAsString));
     }
     Collections.sort(results, new Comparator<CacheDumpEntry>() {
       public int compare(CacheDumpEntry e1, CacheDumpEntry e2) {

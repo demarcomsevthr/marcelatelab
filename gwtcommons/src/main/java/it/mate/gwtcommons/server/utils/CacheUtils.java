@@ -6,6 +6,7 @@ import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
@@ -42,17 +42,26 @@ public class CacheUtils {
   
   private static Map<Object, Object> instanceCache;
   
+  private static List<Key> missedInstKeys = new ArrayList<Key>();
+  private static List<Key> missedMemcKeys = new ArrayList<Key>();
+  
   @SuppressWarnings("unchecked")
   public static Object get (Object key) {
     Object result = null;
     if (key != null) {
-      result = getInstCache().get(keyToString(key));
+      result = getInstCache().get(KeyUtils.castToString(key));
       if (result == null) {
-        logger.debug(String.format("INSTCACHE MISSED entity with key %s", formatKeyToString(key)));
-        result = getMemCache().get(keyToString(key));
-      }
-      if (result == null) {
-        logger.debug(String.format("MEMCACHE  MISSED entity with key %s", formatKeyToString(key)));
+        if (!missedInstKeys.contains(key)) {
+          logger.debug(String.format("INSTCACHE MISSED entity with key %s", KeyUtils.formatToString(key)));
+          missedInstKeys.add(KeyUtils.castToKey(key));
+        }
+        result = getMemCache().get(KeyUtils.castToString(key));
+        if (result == null) {
+          if (!missedMemcKeys.contains(key)) {
+            logger.debug(String.format("MEMCACHE  MISSED entity with key %s", KeyUtils.formatToString(key)));
+            missedMemcKeys.add(KeyUtils.castToKey(key));
+          }
+        }
       }
       if (result != null && result instanceof CacheEntry) {
         CacheEntry cacheEntry = (CacheEntry)result;
@@ -77,10 +86,10 @@ public class CacheUtils {
         }
         CacheEntry cacheEntry = new CacheEntry(entityClone, txClass, entity.getClass());
         if (cacheableEntityAnnotation.instanceCache()) {
-          getInstCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
+          getInstCache().put(KeyUtils.castToString(hasKeyEntity.getKey()), cacheEntry);
         }
         // in mem cache sempre
-        getMemCache().put(keyToString(hasKeyEntity.getKey()), cacheEntry);
+        getMemCache().put(KeyUtils.castToString(hasKeyEntity.getKey()), cacheEntry);
       }
     }
   }
@@ -98,10 +107,10 @@ public class CacheUtils {
   
   public static void deleteByKey (Object key) {
     if (existsInInstCacheByKey(key)) {
-      getInstCache().remove(keyToString(key));
+      getInstCache().remove(KeyUtils.castToString(key));
     }
     if (existsInMemCacheByKey(key)) {
-      getMemCache().delete(keyToString(key));
+      getMemCache().delete(KeyUtils.castToString(key));
     }
   }
   
@@ -117,11 +126,11 @@ public class CacheUtils {
   }
   
   private static boolean existsInMemCacheByKey (Object key) {
-    return getMemCache().contains(keyToString(key));
+    return getMemCache().contains(KeyUtils.castToString(key));
   }
   
   private static boolean existsInInstCacheByKey (Object key) {
-    return getInstCache().containsKey(keyToString(key));
+    return getInstCache().containsKey(KeyUtils.castToString(key));
   }
   
   public static void clearAll() {
@@ -175,36 +184,6 @@ public class CacheUtils {
       // se voglio annullare la cache globalmente restituisco sempre una map vuota
       return new HashMap<Object, Object>();
     }
-  }
-  
-  private static String keyToString(Object key) {
-    if (key instanceof Key) {
-      key = KeyFactory.keyToString((Key)key);
-    }
-    return key.toString();
-  }
-  
-  public static String formatKeyToString(Object key) {
-    Key dsKey = null;
-    if (key instanceof Key) {
-      dsKey = (Key)key;
-    } else {
-      try {
-        dsKey = KeyFactory.stringToKey((String)key);
-      } catch (Exception ex) {  }
-    }
-    String textKey = null;
-    if (dsKey != null) {
-      textKey = dsKey.getKind()+".";
-      if (dsKey.getName() == null) {
-        textKey += dsKey.getId();
-      } else {
-        textKey += dsKey.getName();
-      }
-    } else {
-      textKey = key.toString();
-    }
-    return textKey;
   }
   
   public static Set<Object> instKeySet () {
