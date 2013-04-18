@@ -206,8 +206,7 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
           List<Articolo> products = productAdapter.findProductsByProducerId(producer.getId());
           if (products != null) {
             producer.setProducts(products);
-            ProduttoreDs producerDs = CloneUtils.clone(producer, ProduttoreDs.class);
-            CacheUtils.put(producerDs);
+            CacheUtils.put(CloneUtils.clone(producer, ProduttoreDs.class));
             producerFolderPage.setEntity(producer);
           }
         }

@@ -19,34 +19,27 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 17/04/2013
+	SNAPSHOT 18/04/2013
+
+		>> DA TENERE SOTTO CONTROLLO
 	
 		>> BUG ProducerFolderPage
-			- start gae
-			- load producer folder page
-			- close browser
-			- reopen producer folder page
 			>> gae loop:
-
-14:33:45,038 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] MEMCACHE  MISSED entity with key PortalFolderPageDs.6a4c6b2483934fa9a3de32d2a3ae3101
-14:33:45,039 DEBUG [it.mate.gwtcommons.server.dao.JdoDao:internalFind] DAO >>>> fetching datastore Entity PortalFolderPageDs Id PortalFolderPageDs.6a4c6b2483934fa9a3de32d2a3ae3101.0
-14:33:45,065 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
-14:33:45,073 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key TipoArticoloDs.6848849133323681792
-14:33:45,075 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key UnitaDiMisuraDs.6380474772077150208
-14:33:45,081 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
-14:33:45,090 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key TipoArticoloDs.6848849133323681792
-14:33:45,093 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key UnitaDiMisuraDs.6380474772077150208
-14:33:45,097 DEBUG [it.mate.gwtcommons.server.utils.CacheUtils:get] INSTCACHE MISSED entity with key ProduttoreDs.5695927628716834816
-
-			>> IPOTESI: bug in PortalPageServiceImpl.postProcessProducerFolderPage
-				> riseguire in debug (nella if producer.getProducts() == null ci deve entrare una volta sola!)
-
-			>> DA LOG GWT vedo che va in loop chiamando la PortalPageService.findById
-			
 			>> IN TEST
 				-- it.mate.gwtcommons.server.utils.EntityRelationshipsResolver
 					>> introdotto resolvedEntities map di controllo per evitare i loop
 				[17/04/2013]
+				
+		>> IMPORTANTI OTTIMIZZAZIONE INIZIATE E DA COMPLETARE SU CACHE/JDODAO
+			> it.mate.gwtcommons.server.dao.JdoDao.checkSubClassesResults
+				>>> se sono in una find per id nella key ho il nome della sub clas specifica che mi serve, tento prima quella
+			[18/04/2013]
+				
+		>> IN GENERE NEL LOG DI GAE SI VEDONO MOLTE
+			MEMCACHE  MISSED entity with key
+		   sulle stesse key
+		>> SEGUIRE IN DEBUG E CAPIRE SE CI SONO LOOP INUTILI
+		
 
 		---------------------------------------------------------------------------------
 

@@ -21,17 +21,15 @@ import org.apache.log4j.Logger;
 
 import com.google.appengine.api.datastore.Key;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class EntityRelationshipsResolver {
 
   private static Logger logger = Logger.getLogger(EntityRelationshipsResolver.class);
   
   private Dao dao;
   
-  private FindContext context;
-  
   public EntityRelationshipsResolver(Dao dao, FindContext context) {
     this.dao = dao;
-    this.context = context;
   }
   
   public Object resolveUnownedRelationships (Object entity) {
@@ -40,13 +38,11 @@ public class EntityRelationshipsResolver {
   
   // 17/04/2013
   // Introdotto resolvedEntities per evitare i loop ricorsivi
+  // si è manifestato con l'introduzione di Produttore.getProducts (e Articolo.getProducer) 
   private Object resolveUnownedRelationships (Object entity, Map<Key, Object> resolvedEntities) {
     if (entity == null)
       return null;
     
-    // 01/03/2011
-    // Introdotto per ovviare al fatto che su relazioni con liste di key sembra non funzionare
-    // il default-fetch-group = false !!!!!
     if (entity instanceof EntityRelationshipsResolverHandler) {
       ((EntityRelationshipsResolverHandler) entity).onBeforeResolveRelationships();
     }
@@ -55,7 +51,7 @@ public class EntityRelationshipsResolver {
       List results = (List)entity;
       for (Object item : results) {
         if (resolvedEntities.containsKey(getKey(item))) {
-          logger.debug("prevent resolving loop");
+          logRecursiveLoop(getKey(item));
         } else {
           resolvedEntities.put(getKey(item), item);
           resolveUnownedRelationships(item, resolvedEntities);
@@ -66,7 +62,7 @@ public class EntityRelationshipsResolver {
       hasDipendencies.resolveUnownedRelationships();
     } else {
       if (resolvedEntities.containsKey(getKey(entity))) {
-        logger.debug("prevent resolving loop");
+        logRecursiveLoop(getKey(entity));
       } else {
         resolvedEntities.put(getKey(entity), entity);
         resolveUnownedRelationshipsWithAnnotation(entity, resolvedEntities);
@@ -78,10 +74,6 @@ public class EntityRelationshipsResolver {
   private void resolveUnownedRelationshipsWithAnnotation (Object entity, Map<Key, Object> resolvedEntities) {
     if (entity == null)
       return;
-    // 28/02/2012: dopo l'introduzione delle gerarchie di classi ds, si rende necessario esaminare tutti i fields dichiarati nella gerarchia
-    //    ATTENZIONE: la getFields NON FUNZIONA!!!!
-//  Field[] fields = entity.getClass().getDeclaredFields();
-//  Field[] fields = entity.getClass().getFields();
     Field[] fields = getAllHierarchyDeclaredFieldsInSamePackage(entity.getClass());
     for (Field field : fields) {
       UnownedRelationship unownedRelationshipAnnotation = field.getAnnotation(UnownedRelationship.class);
@@ -115,6 +107,7 @@ public class EntityRelationshipsResolver {
                   
                   Object relatedEntity = null;
                   if (resolvedEntities.containsKey(relatedKey)) {
+                    logRecursiveLoop(relatedKey);
                     relatedEntity = resolvedEntities.get(relatedKey);
                     relationshipField.set(entity, relatedEntity);
                   } else {
@@ -148,7 +141,7 @@ public class EntityRelationshipsResolver {
           if (collection != null) {
             for (Object item : collection) {
               if (resolvedEntities.containsKey(getKey(item))) {
-                logger.debug("prevent resolving loop");
+                logRecursiveLoop(getKey(item));
               } else {
                 resolvedEntities.put(getKey(item), item);
                 resolveUnownedRelationshipsWithAnnotation(item, resolvedEntities);
@@ -183,4 +176,8 @@ public class EntityRelationshipsResolver {
     return null;
   }
 
+  private void logRecursiveLoop (Key key) {
+    logger.debug("break recursive loop " + KeyUtils.formatToString(key));
+  }
+  
 }
