@@ -20,6 +20,22 @@
 	
 
 	SNAPSHOT 19/04/2013
+
+		---------------------------------------------------------------------------------
+
+		VERIFICA ONLINE 19/04/2013
+		
+		> ProducerProductPage
+			- non mantiene il template corretto (sparisce il carrello)
+				>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
+				
+		> Calendario
+			- inserito evento
+			- si vede nel month
+			- al click però non carica l'evento!
+			>> dopo aver fatto un clean della memcache, ho inserito un nuovo evento e ha funzionato !!!!
+			>> quello che non si vede ha autorKey a null !!!
+
 			
 		---------------------------------------------------------------------------------
 
