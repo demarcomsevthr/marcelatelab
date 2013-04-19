@@ -2,13 +2,14 @@ package it.mate.econyx.shared.model.impl;
 
 import it.mate.econyx.shared.model.BlogComment;
 import it.mate.econyx.shared.model.PortalUser;
+import it.mate.econyx.shared.model.PostComment;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class BlogCommentTx extends AbstractPortalResourceTx implements BlogComment {
+public class BlogCommentTx extends AbstractPortalResourceTx implements BlogComment, PostComment {
   
   String content;
 
@@ -43,6 +44,16 @@ public class BlogCommentTx extends AbstractPortalResourceTx implements BlogComme
 
   public void setPosted(Date posted) {
     this.posted = posted;
+  }
+
+  @Override
+  public String getBody() {
+    return getContent();
+  }
+
+  @Override
+  public void setBody(String body) {
+    setContent(body);
   }
   
 }

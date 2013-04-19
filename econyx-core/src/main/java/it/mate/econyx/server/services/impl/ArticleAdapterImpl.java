@@ -34,12 +34,9 @@ public class ArticleAdapterImpl implements ArticleAdapter {
   
   @Autowired private Dao dao;
   
-//OneToOneAdapterSupport<ArticleDs, HtmlContent> htmlRelationshipSupport;
-  
   @PostConstruct
   public void postConstruct() {
     logger.debug("initialized " + this);
-//  htmlRelationshipSupport = new OneToOneAdapterSupport<ArticleDs, HtmlContent>(dao, "getHtml", "setHtml");
   }
 
   @Override
@@ -134,11 +131,6 @@ public class ArticleAdapterImpl implements ArticleAdapter {
         }
       }
     }
-    /*
-    if (htmlRelationshipSupport != null) {
-      htmlRelationshipSupport.onBeforeDelete(articleDs);
-    }
-    */
     dao.delete(articleDs);
   }
   
@@ -157,21 +149,11 @@ public class ArticleAdapterImpl implements ArticleAdapter {
       articleDs.setComments(comments);
     }
     if (articleDs.getKey() == null) {
-      /*
-      if (htmlRelationshipSupport != null) {
-        htmlRelationshipSupport.onBeforeCreate(articleDs);
-      }
-      */
       if (articleDs.getCode() == null) {
         articleDs.setCode(getNextCodeCounter());
       }
       articleDs = dao.create(articleDs);
     } else {
-      /*
-      if (htmlRelationshipSupport != null) {
-        htmlRelationshipSupport.onBeforeUpdate(articleDs);
-      }
-      */
       articleDs = dao.update(articleDs);
     }
     return articleDs;

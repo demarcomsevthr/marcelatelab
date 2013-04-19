@@ -8,7 +8,6 @@ import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class ArticleFolderTx implements ArticleFolder {
@@ -21,12 +20,12 @@ public class ArticleFolderTx implements ArticleFolder {
   
   Integer orderNm;
   
-//List<ArticleTx> articles = new ArrayList<ArticleTx>();
-  List<ArticleTx> articles = new Vector<ArticleTx>();
+  List<ArticleTx> articles = new ArrayList<ArticleTx>();
+//List<ArticleTx> articles = new Vector<ArticleTx>();
   
   String selectedArticleCode;
   
-  // serve solo sul client
+  // serve solo lato client
   transient String containerPageId;
   
   public ArticleFolderTx() {

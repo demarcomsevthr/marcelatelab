@@ -5,8 +5,8 @@ import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.BlogDiscussionTx;
 import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.CollectionPropertyServerUtil;
+import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
@@ -62,6 +62,11 @@ public class BlogDiscussionDs implements BlogDiscussion, HasKey {
   @Persistent
   Text content;
   
+  @Persistent
+  Integer commentsCount;
+  
+  @Persistent
+  String tags;
   
   public Key getKey() {
     return id;
@@ -108,6 +113,7 @@ public class BlogDiscussionDs implements BlogDiscussion, HasKey {
     CollectionPropertyServerUtil<BlogComment, BlogCommentDs> wrapper = CollectionPropertyServerUtil.clone(comments, BlogCommentDs.class);
     this.comments = wrapper.getItems();
     this.commentsKeys = wrapper.getKeys();
+    this.commentsCount = this.comments.size();
   }
 
   public String getTitle() {
@@ -144,4 +150,20 @@ public class BlogDiscussionDs implements BlogDiscussion, HasKey {
     this.content = content != null ? new Text(content) : null;
   }
 
+  public Integer getCommentsCount() {
+    return commentsCount != null ? commentsCount : 0;
+  }
+
+  public void setCommentsCount(Integer commentsCount) {
+    this.commentsCount = commentsCount;
+  }
+
+  public String getTags() {
+    return tags;
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
+  
 }

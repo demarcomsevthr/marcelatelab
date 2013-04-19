@@ -4,12 +4,8 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
 
   <g:HTMLPanel>
-    <g:HTML ui:field="discussionContent"/>
-    <g:FlexTable ui:field="commentsTable"/>
-    <g:VerticalPanel>
-      <g:TextArea ui:field="newCommentArea"/>
-      <g:Button ui:field="addCommentBtn" text="Invia commento"/>
-    </g:VerticalPanel>
+    <g:HTML ui:field="bodyHtml"></g:HTML>
+    <g:SimplePanel ui:field="postPanel"/>
   </g:HTMLPanel>
   
 </ui:UiBinder>
