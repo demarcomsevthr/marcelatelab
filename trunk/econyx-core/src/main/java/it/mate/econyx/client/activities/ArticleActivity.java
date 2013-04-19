@@ -38,7 +38,7 @@ public class ArticleActivity extends BaseActivity implements
   
   private PortalPageServiceAsync pageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
   
-  private static final String CURRENT_ARTICLE_FOLDER_PAGE_ID = "articleActivity.currentArticleFolderPageId";
+  private static final String CURRENT_FOLDER_PAGE_ID = "articleActivity.currentArticleFolderPageId";
   
   public ArticleActivity(ArticlePlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -75,7 +75,7 @@ public class ArticleActivity extends BaseActivity implements
     if (place.getToken().equals(ArticlePlace.FOLDER_VIEW)) {
       if (place.getModel() instanceof ArticleFolderTx) {
         ArticleFolderTx articleFolder = (ArticleFolderTx)place.getModel();
-        GwtUtils.setClientAttribute(CURRENT_ARTICLE_FOLDER_PAGE_ID, articleFolder.getContainerPageId());
+        GwtUtils.setClientAttribute(CURRENT_FOLDER_PAGE_ID, articleFolder.getContainerPageId());
       }
       getView().setModel(place.getModel());
     }
@@ -174,7 +174,7 @@ public class ArticleActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Article article) {
-        String articleFolderPageId = (String)GwtUtils.getClientAttribute(CURRENT_ARTICLE_FOLDER_PAGE_ID);
+        String articleFolderPageId = (String)GwtUtils.getClientAttribute(CURRENT_FOLDER_PAGE_ID);
         if (articleFolderPageId != null) {
           PagesUtils.removePageFromCache(articleFolderPageId);
           pageService.removePageFromCache(articleFolderPageId, new AsyncCallback<Void>() {

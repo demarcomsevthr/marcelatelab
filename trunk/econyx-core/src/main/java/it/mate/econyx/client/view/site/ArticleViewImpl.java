@@ -55,6 +55,9 @@ public class ArticleViewImpl extends AbstractBaseView<ArticleView.Presenter> imp
         public void addComment(String id, PostComment comment) {
           getPresenter().addCommentToArticle(article.getId(), (ArticleComment)comment);
         }
+        public void onPostSelected(Post post) {
+          
+        }
       }));
     }
   }

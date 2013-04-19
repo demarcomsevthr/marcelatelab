@@ -26,4 +26,12 @@ public interface BlogDiscussion extends PortalResource, CodedEntity, PortalEntit
 
   public void setComments(List<BlogComment> comments);
   
+  public Integer getCommentsCount();
+
+  public void setCommentsCount(Integer commentsCount);
+  
+  public String getTags();
+
+  public void setTags(String tags);
+  
 }

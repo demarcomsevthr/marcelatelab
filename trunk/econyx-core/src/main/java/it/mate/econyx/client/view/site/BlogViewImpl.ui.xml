@@ -6,9 +6,10 @@
   <g:HTMLPanel>
     <g:FlexTable ui:field="discussionsTable"/>
     <g:VerticalPanel>
-      <g:TextBox ui:field="titleBox"/>
-      <g:TextArea ui:field="newDiscussionArea"/>
-      <g:Button ui:field="addDiscussionBtn" text="Nuova discussione"/>
+      <g:Label text="Inserisci una nuova discussione" addStyleNames="ecxAddCommentLabel"/>
+      <g:TextBox ui:field="titleBox" width="30em"/>
+      <g:TextArea ui:field="newDiscussionArea" width="30em"/>
+      <g:Button ui:field="addDiscussionBtn" text="Invia discussione"/>
     </g:VerticalPanel>
   </g:HTMLPanel>
   

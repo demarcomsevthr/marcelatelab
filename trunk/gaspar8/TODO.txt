@@ -19,12 +19,12 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 18/04/2013
-	
-		>> CALENDARIO
-			- errore nel settagio di author su nuovo evento
+	SNAPSHOT 19/04/2013
+			
+		---------------------------------------------------------------------------------
 
 		>> IN EVIDENZA - OTTIMIZZAZIONI CACHE
+		
 			- PortalPageAdapterImpl.internalFindById
 				// cachedContentPage.hasSavedHtmls()
     			// merge tra istanza cache e persistent su childreen e htmls
@@ -47,13 +47,10 @@
 				
 		>> IMPORTANTE OTTIMIZZAZIONE IN JdoDao
 			> it.mate.gwtcommons.server.dao.JdoDao.checkSubClassesResults
-				>>> se sono in una find per id nella key ho il nome della sub clas specifica che mi serve, tento prima quella
+				>>> se sono in una find per id nella key ho il nome della sub class specifica che mi serve, tento prima quella
 			[18/04/2013]
 			
-		
-
 		---------------------------------------------------------------------------------
-
 
 		>> DOCUMENT LIBRARY
 			> TODO: cancellazione document
@@ -64,7 +61,9 @@
 			> caricamento documenti da setup [12/04/2013]
 			> per il momento fisso mime type = pdf
 			
-		>> NEW BlogPage, Blog, BlogThread, BlogComment
+		>> BlogPage, Blog, BlogDiscussion, BlogComment
+			>> STILI
+			>> NON FUNZIONA BENE IL REFRESH DI COMMENTS COUNT
 			>>> VEDI http://gasparotto.forumattivo.com/
 			> TODO:
 				>> dati di riepilogo da mostrare nella view (stile forum):
@@ -74,20 +73,9 @@
 								 > si aggiornano nel ds quando si modifica comments
 				>> servono per fare gli ordinamenti nella view (forum like...)
 
-		>> FRAGMENT IDENTIFIERS
-			> hash link all'interno di una pagina [OK - 13/04/2013] > provato in produttori
-			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
-			> implementazione:
-				- PortalPage.html[small] >> PortalPageSummaryPortlet   [OK - 13/04/2013]
-				- all'interno degli html i fragment vanno identificati con pageCode.fragId    [OK - 13/04/2013]
-				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
-			
-
 		>> STYLING E CONTENUTI PAGINE DAL SITO [2]
-		
-			>> VEDI STILE Calendario e BoxContainer >>> http://www.giuliettochiesa.it/  !!!
-		
-			> SPOSTATO TUTTO IN it.mate.econyx.client.css.AppClientBundle > app-bundel.css, app-bundle-custom.css
+			>>> VEDI STILE Calendario e BoxContainer >>> http://www.giuliettochiesa.it/  !!!
+			>>> SPOSTATO TUTTO IN it.mate.econyx.client.css.AppClientBundle > app-bundel.css, app-bundle-custom.css
 			>>> TEMPLATE 1: http://btemplates.com/2013/blogger-template-abstractline/demo/
 			>>> BUG articoli: aggiungi commento, occorre fare F5 per ricaricare il conteggio dei commenti in ArticleFolderView
 			> AGGIORNAMENTO CONTENUTI SITO PER PRESENTAZIONE
@@ -102,10 +90,7 @@
 			> prima di ripresntare fare un test sugli ordini / stati / prepagato
 			
 		>> ProducerFolderPage [3]
-			> vedi ArticlePage e BlogDiscussionPage (VirtualPage), 
-			       PortalPageServiceImpl, PortalPageViewImpl, PortalPageActivity
-			>> 17/04/2013
-			> ProducerFolderPage > ok
+			> ProducerFolderPage >> 17/04/2013
 			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
 			
 		>> gestione ruoli admins [4]
@@ -330,6 +315,15 @@
 			>>> ISSUES CHIUSE <<<
 		________________________________________________________________________________
 
+
+		>> FRAGMENT IDENTIFIERS
+			> hash link all'interno di una pagina [OK - 13/04/2013] > provato in produttori
+			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
+			> implementazione:
+				- PortalPage.html[small] >> PortalPageSummaryPortlet   [OK - 13/04/2013]
+				- all'interno degli html i fragment vanno identificati con pageCode.fragId    [OK - 13/04/2013]
+				- SiteClientFactoryImpl utilizza solo pageCode > FATTO [SiteClientFactoryImpl.onHashChange]    [OK - 13/04/2013]
+			[13/04/2013]
 
 		-- UPGRADE GAE 1.7.6 [10/04/2013]
 		

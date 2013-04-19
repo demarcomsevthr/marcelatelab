@@ -43,6 +43,7 @@ public class PostViewer extends Composite {
   public interface Presenter {
     public void addComment(String id, PostComment comment);
     public PostComment newPostCommentInstance();
+    public void onPostSelected(Post post);
   }
   
   @UiField FlexTable postTable;
@@ -101,7 +102,7 @@ public class PostViewer extends Composite {
     HorizontalPanel footerLine1 = new HorizontalPanel();
     footer.add(footerLine1);
     
-    HTML author = new HTML("Inserito da " + post.getAuthor().getScreenName());
+    HTML author = new HTML("Inserito da " + post.getAuthor() != null ? post.getAuthor().getScreenName() : "<author null!>");
     author.addStyleName("ecxPostAuthor");
     footerLine1.add(author);
     
@@ -125,7 +126,11 @@ public class PostViewer extends Composite {
     title.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         Post post = GwtUtils.getEventSourceWidgetModel(event, Post.class);
-        GwtUtils.setLocationHash(post.getCode());
+        if (presenter != null) {
+          presenter.onPostSelected(post);
+        } else {
+          GwtUtils.setLocationHash(post.getCode());
+        }
       }
     });
     
@@ -184,6 +189,8 @@ public class PostViewer extends Composite {
   
   private HTML createHtml(String htmlContent, final String postCode) {
     final HTML html = new HTML();
+    if (htmlContent == null)
+      return html;
     String actualHtmlContent = htmlContent;
     html.getElement().setId(getPostRootElemId(postCode));
     html.getElement().getStyle().setHeight(0, Unit.PX);
