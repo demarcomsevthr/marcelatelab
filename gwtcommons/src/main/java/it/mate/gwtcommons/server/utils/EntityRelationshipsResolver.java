@@ -106,11 +106,19 @@ public class EntityRelationshipsResolver {
                     for (Key relatedKey : keys) {
                       
                       // 18/04/2013
-                      // In sintesi questo permette di risolvere le entity correlate in maniera ricorsiva
+                      // Indirettamente questo permette di risolvere le entity correlate in maniera ricorsiva
 //                    Object relatedEntity = dao.findById((Class<Serializable>)itemClass, relatedKey);
-                      Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+//                    Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+                      // 20/04/2013
+                      Object relatedEntity = null;
+                      if (context != null && context.useContextInRelationshipsResolver()) {
+                        relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+                      } else {
+                        relatedEntity = dao.findById((Class<Serializable>)itemClass, relatedKey);
+                      }
                       
                       relatedEntities.add(relatedEntity);
+                      
                     }
                     relationshipField.set(entity, relatedEntities);
                   }

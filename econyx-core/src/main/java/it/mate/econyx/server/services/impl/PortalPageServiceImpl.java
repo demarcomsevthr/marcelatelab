@@ -85,14 +85,9 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
 
   @Override
   public PortalPage findById(String id) {
-    if (ArticlePageTx.isVirtualPageId(id)) {
-      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromPageId(id));
-    }
-    if (BlogDiscussionPageTx.isVirtualPageId(id)) {
-      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromPageId(id));
-    }
-    if (ProducerProductPageTx.isVirtualPageId(id)) {
-      return getProducerProductPageByCode(ProducerProductPageTx.getEntityCodeFromPageId(id));
+    PortalPage virtualPage = findVirtualPageById(id);
+    if (virtualPage != null) {
+      return virtualPage;
     }
     PortalPage result = adapter.findById(id);
     postProcessProducerFolderPage(result);
@@ -101,14 +96,9 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   
   @Override
   public PortalPage findById(String id, boolean resolveChildreen, boolean resolveProducts, boolean resolveHtmls) {
-    if (ArticlePageTx.isVirtualPageId(id)) {
-      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromPageId(id));
-    }
-    if (BlogDiscussionPageTx.isVirtualPageId(id)) {
-      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromPageId(id));
-    }
-    if (ProducerProductPageTx.isVirtualPageId(id)) {
-      return getProducerProductPageByCode(ProducerProductPageTx.getEntityCodeFromPageId(id));
+    PortalPage virtualPage = findVirtualPageById(id);
+    if (virtualPage != null) {
+      return virtualPage;
     }
     PortalPage result = adapter.findById(id, resolveChildreen, resolveProducts, resolveHtmls);
     if (resolveChildreen) {
@@ -116,7 +106,7 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
     }
     return result;
   }
-
+  
   @Override
   public PortalFolderPage fetchChildreen(PortalFolderPage page) {
     PortalFolderPage result = adapter.fetchChildreen(page);
@@ -180,9 +170,25 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
   
   @Override
   public void removePageFromCache(String pageId) {
-    CacheUtils.deleteByKey(KeyUtils.castToKey(pageId));
+    PortalPage virtualPage = findVirtualPageById(pageId);
+    if (virtualPage == null) {
+      CacheUtils.deleteByKey(KeyUtils.castToKey(pageId));
+    }
   }
   
+  private PortalPage findVirtualPageById (String id) {
+    if (ArticlePageTx.isVirtualPageId(id)) {
+      return getArticlePageByCode(ArticlePageTx.getEntityCodeFromPageId(id));
+    }
+    if (BlogDiscussionPageTx.isVirtualPageId(id)) {
+      return getBlogDiscussionPageByCode(BlogDiscussionPageTx.getEntityCodeFromPageId(id));
+    }
+    if (ProducerProductPageTx.isVirtualPageId(id)) {
+      return getProducerProductPageByCode(ProducerProductPageTx.getEntityCodeFromPageId(id));
+    }
+    return null;
+  }
+
   private PortalPage getArticlePageByCode(String code) {
     Article article = articleAdapter.findByCode(code);
     if (article != null) {

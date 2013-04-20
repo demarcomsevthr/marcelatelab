@@ -256,6 +256,10 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
       }
     });
     
+    // 20/04/2013
+//  context.setUseContextInRelationshipsResolver(true);
+    context.setUseContextInRelationshipsResolver(false);
+    
     P fetchedPage = dao.findWithContext(context);
 
     // 18/04/2013
@@ -281,6 +285,10 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
       if (needRewriteCache) {
         CacheUtils.put(fetchedPage);
       }
+    }
+    
+    if (fetchedPage != null) {
+      logger.debug(String.format("found page %s %s %s", fetchedPage.getCode(), KeyUtils.formatToString(pageId), fetchedPage.getClass()));
     }
     
     return fetchedPage;

@@ -115,7 +115,7 @@ public class GeneralActivity extends BaseActivity {
         Window.alert("Errore: "+caught.getMessage());
       }
       public void onSuccess(Void result) {
-        Window.alert("Import dei dati accodato");
+        Window.alert("Import dei dati accodato - RICORDA DI FARE UN REFRESH DELLA PAGINA LA TERMINE DEL CARICAMENTO!");
       }
     });
   }
