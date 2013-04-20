@@ -11,10 +11,8 @@ import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
-import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
-import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -35,10 +33,12 @@ public class ArticleActivity extends BaseActivity implements
   private ArticlePlace place;
   
   private ArticleServiceAsync articleService = AppClientFactory.IMPL.getGinjector().getArticleService();
-  
+
+  /*
   private PortalPageServiceAsync pageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
   
   private static final String CURRENT_FOLDER_PAGE_ID = "articleActivity.currentArticleFolderPageId";
+  */
   
   public ArticleActivity(ArticlePlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -73,10 +73,12 @@ public class ArticleActivity extends BaseActivity implements
   private void retrieveModel() {
     getView().setModel(AppClientFactory.IMPL.getPortalSessionState());
     if (place.getToken().equals(ArticlePlace.FOLDER_VIEW)) {
+      /*
       if (place.getModel() instanceof ArticleFolderTx) {
         ArticleFolderTx articleFolder = (ArticleFolderTx)place.getModel();
         GwtUtils.setClientAttribute(CURRENT_FOLDER_PAGE_ID, articleFolder.getContainerPageId());
       }
+      */
       getView().setModel(place.getModel());
     }
     if (place.getToken().equals(ArticlePlace.FOLDER_LIST)) {
@@ -174,6 +176,7 @@ public class ArticleActivity extends BaseActivity implements
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Article article) {
+        /*
         String articleFolderPageId = (String)GwtUtils.getClientAttribute(CURRENT_FOLDER_PAGE_ID);
         if (articleFolderPageId != null) {
           PagesUtils.removePageFromCache(articleFolderPageId);
@@ -183,6 +186,9 @@ public class ArticleActivity extends BaseActivity implements
           });
         }
         getView().setModel(article);
+        */
+        PagesUtils.clearAllCurrentPageCaches();
+        PagesUtils.reloadCurrentPage();
       }
     });
   }

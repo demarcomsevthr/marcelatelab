@@ -24,7 +24,7 @@ public class PagesUtils {
   private static PortalPageServiceAsync portalPageService = AppClientFactory.IMPL.getGinjector().getPortalPageService();
   
   private static String pageContentRenderFinishedDivId;
-  
+
   public static void goToPageByCode(String pageCode) {
     ensureCache();
     boolean found = false;
@@ -60,11 +60,29 @@ public class PagesUtils {
     goToPage(pageId, true);
   }
   
+  public static void clearAllCurrentPageCaches() {
+    removeCurrentPageFromCache();
+    portalPageService.removePageFromCache(getCurrentPageId(), new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+      }
+      public void onSuccess(Void result) {
+      }
+    });
+  }
+  
   public static void reloadCurrentPage() {
     String currentPageId = AppClientFactory.IMPL.getPortalSessionState().getCurrentPageId();
     if (currentPageId != null) {
       goToPage(currentPageId, true);
     }
+  }
+  
+  public static String getCurrentPageId() {
+    return AppClientFactory.IMPL.getPortalSessionState().getCurrentPageId();
+  }
+  
+  public static PortalPage getCurrentPage() {
+    return getFromCache(getCurrentPageId());
   }
   
   public static void goToPage(String pageId, final boolean forceReloadPage) {
@@ -135,6 +153,10 @@ public class PagesUtils {
     if (AppClientFactory.isSiteModule) {
       pagesCache.put(page.getId(), page);
     }
+  }
+  
+  public static void removeCurrentPageFromCache() {
+    removePageFromCache(getCurrentPageId());
   }
   
   public static void removePageFromCache(String id) {

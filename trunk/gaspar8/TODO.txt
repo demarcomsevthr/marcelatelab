@@ -19,40 +19,41 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 19/04/2013
+	SNAPSHOT 20/04/2013
 
-		---------------------------------------------------------------------------------
-
-		VERIFICA ONLINE 19/04/2013
+		>> ANCORA SU OTTIMIZZAZIONI CACHE
 		
-		> ProducerProductPage
-			- non mantiene il template corretto (sparisce il carrello)
-				>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
-				
-		> Calendario
-			- inserito evento
-			- si vede nel month
-			- al click però non carica l'evento!
-			>> dopo aver fatto un clean della memcache, ho inserito un nuovo evento e ha funzionato !!!!
-			>> quello che non si vede ha autorKey a null !!!
-
+			>> ho parametrizzato l'ottimizzazione (*) (vedi sotto)
+			> it.mate.gwtcommons.server.dao.FindContext.useContextInRelationshipsResolver
+			> it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById(Class<P>, String, boolean, boolean)
+			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
 			
-		---------------------------------------------------------------------------------
+			>> utilizzare la log PortalPageAdapterImpl.internalFindById per capire se riesce a restingere l'utilizzo di questo comportamento
+			
+			>> ATTENZIONE: provando a settare true/false pare che il comportamento non cambi più!!!
+			
+			>> CASI DA PROVARE: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
 
+
+		>> VERIFICA ONLINE 19/04/2013
+			> ProducerProductPage
+				- non mantiene il template corretto (sparisce il carrello)
+					>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
+				
 		>> IN EVIDENZA - OTTIMIZZAZIONI CACHE
-		
-			- PortalPageAdapterImpl.internalFindById
-				// cachedContentPage.hasSavedHtmls()
-    			// merge tra istanza cache e persistent su childreen e htmls
+			>>> PARAMETRIZZARE (*) ???
     		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
-    			// Map<Key, Object> resolvedEntities
-    			// Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+    			> Map<Key, Object> resolvedEntities
+    			>>> (*) Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+			- PortalPageAdapterImpl.internalFindById
+				> cachedContentPage.hasSavedHtmls()
+    			> merge tra istanza cache e persistent su childreen e htmls
     		- DynamicInvocationUtils.invokeMethod
-    			// commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
+    			> commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
     		- JdoDao.checkSubClassesResults
-    			// ottimizzazione per utilizzare la subclass ricavata dalla key
+    			> ottimizzazione per utilizzare la subclass ricavata dalla key
     		- PortalPageServiceImpl.removePageFromCache
-    			// serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
+    			> serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
     		[18/04/2013]
     		
 		>> BUG ProducerFolderPage

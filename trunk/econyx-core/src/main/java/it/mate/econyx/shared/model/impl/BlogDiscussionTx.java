@@ -29,6 +29,7 @@ public class BlogDiscussionTx extends AbstractPortalResourceTx implements BlogDi
   
   String tags;
   
+  
   public String getTitle() {
     return name;
   }

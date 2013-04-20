@@ -14,8 +14,6 @@ public class BlogTx extends AbstractPortalResourceTx implements Blog {
   
   List<BlogDiscussionTx> discussions;
 
-  // serve solo lato client
-  transient String pageId;
   
   public String getTitle() {
     return name;
@@ -40,14 +38,6 @@ public class BlogTx extends AbstractPortalResourceTx implements Blog {
   @CloneableProperty (targetClass=BlogDiscussionTx.class)
   public void setDiscussions(List<BlogDiscussion> discussions) {
     this.discussions = CollectionPropertyClientUtil.clone(discussions, BlogDiscussionTx.class);
-  }
-
-  public String getPageId() {
-    return pageId;
-  }
-
-  public void setPageId(String pageId) {
-    this.pageId = pageId;
   }
 
 }

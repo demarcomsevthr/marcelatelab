@@ -20,6 +20,7 @@ public class FindContext <E extends Serializable> {
   private String whereClause;
   private boolean keysOnly = false;
   private Class<E> originalEntityClass;
+  private boolean useContextInRelationshipsResolver = false;
   
   public FindContext(Class<E> entityClass) {
     super();
@@ -43,6 +44,7 @@ public class FindContext <E extends Serializable> {
     this.whereClause = that.whereClause;
     this.keysOnly = that.keysOnly;
     this.originalEntityClass = that.originalEntityClass;
+    this.useContextInRelationshipsResolver = that.useContextInRelationshipsResolver;
   }
   
   public FindContext<E> setEntityClass(Class<E> entityClass) {
@@ -141,5 +143,12 @@ public class FindContext <E extends Serializable> {
   }
   public Class<E> getOriginalEntityClass() {
     return originalEntityClass;
+  }
+  public boolean useContextInRelationshipsResolver() {
+    return useContextInRelationshipsResolver;
+  }
+  public FindContext<E> setUseContextInRelationshipsResolver(boolean useContextInRelationshipsResolver) {
+    this.useContextInRelationshipsResolver = useContextInRelationshipsResolver;
+    return this;
   }
 }

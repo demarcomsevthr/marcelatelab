@@ -21,12 +21,8 @@ public class ArticleFolderTx implements ArticleFolder {
   Integer orderNm;
   
   List<ArticleTx> articles = new ArrayList<ArticleTx>();
-//List<ArticleTx> articles = new Vector<ArticleTx>();
   
   String selectedArticleCode;
-  
-  // serve solo lato client
-  transient String containerPageId;
   
   public ArticleFolderTx() {
     super();
@@ -98,12 +94,4 @@ public class ArticleFolderTx implements ArticleFolder {
     this.selectedArticleCode = selectedArticleCode;
   }
 
-  public String getContainerPageId() {
-    return containerPageId;
-  }
-
-  public void setContainerPageId(String containerPageId) {
-    this.containerPageId = containerPageId;
-  }
-  
 }
