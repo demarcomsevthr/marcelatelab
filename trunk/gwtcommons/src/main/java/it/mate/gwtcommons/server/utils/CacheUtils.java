@@ -8,6 +8,7 @@ import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +45,8 @@ public class CacheUtils {
   
   private static List<Key> missedInstKeys = new ArrayList<Key>();
   private static List<Key> missedMemcKeys = new ArrayList<Key>();
+  
+  private static final String MASTER_INDEX_KEY = "masterIndex";
   
   @SuppressWarnings("unchecked")
   public static Object get (Object key) {
@@ -84,14 +87,44 @@ public class CacheUtils {
         if (txClass != null) {
           entityClone = CloneUtils.clone(entity, txClass);
         }
-        CacheEntry cacheEntry = new CacheEntry(entityClone, txClass, entity.getClass());
+        CacheEntry cacheEntry = new CacheEntry(entityClone, txClass, entity.getClass(), KeyUtils.castToString(hasKeyEntity.getKey()));
         if (cacheableEntityAnnotation.instanceCache()) {
           getInstCache().put(KeyUtils.castToString(hasKeyEntity.getKey()), cacheEntry);
         }
         // in mem cache sempre
         getMemCache().put(KeyUtils.castToString(hasKeyEntity.getKey()), cacheEntry);
+        updateMasterIndex(hasKeyEntity.getKey());
       }
     }
+  }
+  
+  private static void updateMasterIndex(Key key) {
+    List<String> masterIndex = (List<String>)getMemCache().get(MASTER_INDEX_KEY);
+    if (masterIndex == null) {
+      masterIndex = new ArrayList<String>();
+    }
+    masterIndex.add(KeyUtils.castToString(key));
+    for (Iterator<String> it = masterIndex.iterator(); it.hasNext();) {
+      String index = it.next();
+      if (!getMemCache().contains(index)) {
+        it.remove();
+      }
+    }
+    getMemCache().put(MASTER_INDEX_KEY, masterIndex);
+  }
+  
+  public static List<CacheEntry> getAllMemCacheEntries() {
+    List<CacheEntry> results = new ArrayList<CacheEntry>();
+    List<String> masterIndex = (List<String>)getMemCache().get(MASTER_INDEX_KEY);
+    if (masterIndex != null) {
+      for (String index : masterIndex) {
+        Object entry = getMemCache().get(index);
+        if (entry != null && entry instanceof CacheEntry) {
+          results.add((CacheEntry)entry);
+        }
+      }
+    }
+    return results;
   }
   
   public static void delete (Object entity) {
@@ -159,14 +192,22 @@ public class CacheUtils {
     public Object entity; 
     public Class txClass;
     public Class dsClass;
-    public CacheEntry(Object entity, Class txClass, Class dsClass) {
+    public String key;
+    public CacheEntry(Object entity, Class txClass, Class dsClass, String key) {
       super();
       this.entity = entity;
       this.txClass = txClass;
       this.dsClass = dsClass;
+      this.key = key;
     }
     public String toString() {
       return "CacheEntry [txClass=" + txClass + ", dsClass=" + dsClass + ", entity=" + entity + "]";
+    }
+    public Object getEntity() {
+      return entity;
+    }
+    public String getKey() {
+      return key;
     }
   }
 

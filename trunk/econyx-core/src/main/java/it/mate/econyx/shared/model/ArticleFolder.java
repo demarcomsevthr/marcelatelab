@@ -16,4 +16,18 @@ public interface ArticleFolder extends PortalEntity, PortalResource {
 
   public void setSelectedArticleCode(String selectedArticleCode);
   
+  public class Utils {
+    public static boolean folderContains (ArticleFolder folder, Article thatArticle) {
+      if (folder.getArticles() == null) {
+        return false;
+      }
+      for (Article article : folder.getArticles()) {
+        if (article.getCode().equals(thatArticle.getCode())) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+  
 }

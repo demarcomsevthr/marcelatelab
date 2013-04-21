@@ -8,11 +8,13 @@ import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindContext;
 import it.mate.gwtcommons.server.utils.CacheUtils;
+import it.mate.gwtcommons.server.utils.CacheUtils.CacheEntry;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
@@ -191,6 +193,24 @@ public class ArticleAdapterImpl implements ArticleAdapter {
     comments.add(CloneUtils.clone(comment, ArticleCommentDs.class));
     article.setComments(comments);
     article = createOrUpdateArticleDs(article);
+    
+    List<CacheEntry> entries = CacheUtils.getAllMemCacheEntries();
+    logger.debug("cahce entries " + entries.size());
+    for (CacheEntry entry : entries) {
+      Object entity = entry.getEntity();
+      if (entity instanceof ArticleFolder) {
+        ArticleFolder folder = (ArticleFolder)entity;
+        if (ArticleFolder.Utils.folderContains(folder, article)) {
+          CacheUtils.deleteByKey(entry.getKey());
+        }
+      } else if (entity instanceof ArticleFolderPage) {
+        ArticleFolderPage folderPage = (ArticleFolderPage)entity;
+        if (folderPage.getEntity() != null && ArticleFolder.Utils.folderContains(folderPage.getEntity(), article)) {
+          CacheUtils.deleteByKey(entry.getKey());
+        }
+      }
+    }
+    
     return CloneUtils.clone(article, ArticleTx.class);
   }
 
