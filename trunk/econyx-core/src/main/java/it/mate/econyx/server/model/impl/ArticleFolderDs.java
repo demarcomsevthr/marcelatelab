@@ -85,7 +85,11 @@ public class ArticleFolderDs implements ArticleFolder, HasKey {
   }
 
   public List<Article> getArticles() {
-    return articles != null ? new ArrayList<Article>(articles) : null;
+    if (articles == null) {
+      return null;
+    } else {
+      return new ArrayList<Article>(articles);
+    }
   }
 
   @CloneableProperty (targetClass=ArticleDs.class)

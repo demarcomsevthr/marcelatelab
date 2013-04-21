@@ -23,7 +23,6 @@ public class ArticlePageTx extends WebContentPageTx implements ArticlePage {
     this.setCode(article.getCode());
     this.setName(article.getName());
     this.setOrderNm(article.getOrderNm());
-    this.setParent(this);
     this.setVisibleInExplorer(false);
   }
   
