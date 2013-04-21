@@ -11,6 +11,7 @@ import it.mate.econyx.client.view.ArticleView;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
 import it.mate.econyx.shared.model.ArticleFolder;
+import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.services.ArticleServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
@@ -187,6 +188,7 @@ public class ArticleActivity extends BaseActivity implements
         }
         getView().setModel(article);
         */
+        PortalPage debugPage = PagesUtils.getCurrentPage();
         PagesUtils.clearAllCurrentPageCaches();
         PagesUtils.reloadCurrentPage();
       }

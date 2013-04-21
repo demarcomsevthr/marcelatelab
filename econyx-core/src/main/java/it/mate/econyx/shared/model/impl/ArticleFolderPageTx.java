@@ -46,6 +46,7 @@ public class ArticleFolderPageTx extends WebContentPageTx implements ArticleFold
     if (entity != null && entity.getArticles() != null) {
       for (Article article : entity.getArticles()) {
         ArticlePageTx articlePage = new ArticlePageTx(article);
+        articlePage.setParent(this);
         childreen.add(articlePage);
       }
     }

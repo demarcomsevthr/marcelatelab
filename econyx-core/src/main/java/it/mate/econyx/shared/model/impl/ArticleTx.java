@@ -41,6 +41,10 @@ public class ArticleTx implements Article, Post {
   
   String tags;
   
+  /*
+  ArticleFolderTx folder;
+  */
+
   // serve solo per eseguire correttamente la ArticleActivity.update(Article) 
   transient ArticleFolder articleFolder;
   
@@ -178,5 +182,22 @@ public class ArticleTx implements Article, Post {
   public List<PostComment> getPostComments() {
     return new CollectionPropertyClientUtil<PostComment, ArticleCommentTx>(comments, ArticleCommentTx.class);
   }
+
+  /*
+  public ArticleFolder getFolder() {
+    return folder;
+  }
+
+  @CloneableProperty (targetClass=ArticleFolderTx.class)
+  public void setFolder(ArticleFolder folder) {
+    if (folder == null) {
+      this.folder = null;
+    } else if (folder instanceof ArticleFolderTx) {
+      this.folder = (ArticleFolderTx)folder;
+    } else {
+      throw new CloneablePropertyMissingException(folder);
+    }
+  }
+  */
   
 }

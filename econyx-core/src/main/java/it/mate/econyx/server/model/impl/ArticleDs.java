@@ -2,6 +2,7 @@ package it.mate.econyx.server.model.impl;
 
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleComment;
+import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.ArticleTx;
@@ -68,6 +69,14 @@ public class ArticleDs implements Article, HasKey {
   
   @Persistent
   String tags;
+  
+  /*
+  @Persistent (dependent="false", defaultFetchGroup="true")
+  Key folderKey;
+  
+  @UnownedRelationship (key="folderKey")
+  transient ArticleFolderDs folder;
+  */
   
   
   public Key getKey() {
@@ -195,5 +204,17 @@ public class ArticleDs implements Article, HasKey {
   public void setTags(String tags) {
     this.tags = tags;
   }
+
+  /*
+  public ArticleFolder getFolder() {
+    return folder;
+  }
+
+  @CloneableProperty (targetClass=ArticleFolderDs.class)
+  public void setFolder(ArticleFolder folder) {
+    this.folder = (ArticleFolderDs)folder;
+    this.folderKey = this.folder != null ? this.folder.getKey() : null;
+  }
+  */
   
 }

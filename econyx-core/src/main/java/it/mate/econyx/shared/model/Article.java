@@ -38,4 +38,10 @@ public interface Article extends PortalEntity, PortalResource {
 
   public void setTags(String tags);
   
+  /*
+  public ArticleFolder getFolder();
+
+  public void setFolder(ArticleFolder folder);
+  */
+  
 }
