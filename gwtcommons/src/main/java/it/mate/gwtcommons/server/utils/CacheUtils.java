@@ -38,7 +38,9 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 
 public class CacheUtils {
-  
+
+  // 22/04/2013
+  // NB: ho limitato i logging tramite log4j configuration
   private static Logger logger = Logger.getLogger(CacheUtils.class);
   
   private static Map<Object, Object> instanceCache;
