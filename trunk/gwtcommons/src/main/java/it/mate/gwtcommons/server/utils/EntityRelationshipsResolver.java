@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Key;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EntityRelationshipsResolver {
 
+  // 22/04/2013
+  // NB: ho limitato i logging tramite log4j configuration
   private static Logger logger = Logger.getLogger(EntityRelationshipsResolver.class);
   
   private Dao dao;
