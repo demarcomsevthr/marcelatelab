@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 @SuppressWarnings("serial")
 public class DefaultCustomClientFactory implements AbstractCustomClientFactory {
 
-  protected static Panel portalPanel;
+  protected transient static Panel portalPanel;
   
   @Override
   public void initEventBus(EventBus eventBus) {

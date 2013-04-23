@@ -202,17 +202,23 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (Articolo articolo : dataModel.products) {
       visitProduct(dataModel, true, articolo);
     }
-    for (int it = 0; it < dataModel.articleFolders.size(); it++) {
-      ArticleFolder articleFolder = dataModel.articleFolders.get(it);
-      visitArticleFolder(dataModel, true, articleFolder);
+    if (dataModel.articleFolders != null) {
+      for (int it = 0; it < dataModel.articleFolders.size(); it++) {
+        ArticleFolder articleFolder = dataModel.articleFolders.get(it);
+        visitArticleFolder(dataModel, true, articleFolder);
+      }
     }
-    for (int it = 0; it < dataModel.documentFolders.size(); it++) {
-      DocumentFolder documentFolder = dataModel.documentFolders.get(it);
-      visitDocumentFolder(dataModel, true, documentFolder);
+    if (dataModel.documentFolders != null) {
+      for (int it = 0; it < dataModel.documentFolders.size(); it++) {
+        DocumentFolder documentFolder = dataModel.documentFolders.get(it);
+        visitDocumentFolder(dataModel, true, documentFolder);
+      }
     }
-    for (int it = 0; it < dataModel.blogs.size(); it++) {
-      Blog blog = dataModel.blogs.get(it);
-      visitBlog(dataModel, true, blog);
+    if (dataModel.blogs != null) {
+      for (int it = 0; it < dataModel.blogs.size(); it++) {
+        Blog blog = dataModel.blogs.get(it);
+        visitBlog(dataModel, true, blog);
+      }
     }
     return dataModel;
   }
