@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class ArticleTx implements Article, Post {
-
-  private static final long serialVersionUID = 7072306998735484215L;
 
   String id;
   
@@ -121,6 +120,11 @@ public class ArticleTx implements Article, Post {
     } else {
       throw new CloneablePropertyMissingException(author);
     }
+  }
+  
+  @Override
+  public Date getPostDate() {
+    return getCreated();
   }
 
   public Date getCreated() {

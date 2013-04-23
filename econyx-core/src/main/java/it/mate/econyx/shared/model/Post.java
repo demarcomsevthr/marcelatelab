@@ -18,7 +18,7 @@ public interface Post extends Serializable {
 
   public PortalUser getAuthor();
 
-  public Date getCreated();
+  public Date getPostDate();
 
   public Integer getCommentsCount();
 
