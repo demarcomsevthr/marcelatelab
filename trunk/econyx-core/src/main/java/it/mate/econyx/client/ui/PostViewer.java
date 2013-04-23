@@ -79,7 +79,7 @@ public class PostViewer extends Composite {
     
     int postRow = 0;
     
-    HTML created = new HTML(GwtUtils.dateToString(post.getCreated()));
+    HTML created = new HTML(GwtUtils.dateToString(post.getPostDate()));
     created.addStyleName("ecxPostCreated");
     postTable.setWidget(postRow, 0, created);
     postRow++;

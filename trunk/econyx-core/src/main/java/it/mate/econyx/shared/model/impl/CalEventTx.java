@@ -127,6 +127,11 @@ public class CalEventTx implements CalEvent, Post {
     }
   }
 
+  @Override
+  public Date getPostDate() {
+    return getDate();
+  }
+
   public Date getDate() {
     return date;
   }

@@ -59,6 +59,11 @@ public class BlogDiscussionTx extends AbstractPortalResourceTx implements BlogDi
     }
   }
 
+  @Override
+  public Date getPostDate() {
+    return getCreated();
+  }
+
   public Date getCreated() {
     return created;
   }

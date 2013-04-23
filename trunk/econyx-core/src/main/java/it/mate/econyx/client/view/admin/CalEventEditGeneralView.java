@@ -51,12 +51,13 @@ public class CalEventEditGeneralView extends AbstractAdminTabPage<CalEventEditVi
     event.setName(editedInstance.getName());
     event.setCode(editedInstance.getCode());
     event.setOrderNm(editedInstance.getOrderNm());
+    event.setDate(editedInstance.getDate());
     delegate.execute(event);
   }
   
   private boolean validateCalEvent(CalEvent event) {
     if (GwtUtils.isEmpty(event.getTitle())) {
-      Window.alert("L'oggetto dell'evento è vuoto");
+      Window.alert("Il titolo dell'evento è vuoto");
       return false;
     }
     return true;

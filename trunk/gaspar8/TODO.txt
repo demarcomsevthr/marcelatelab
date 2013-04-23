@@ -23,12 +23,12 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 22/04/2013
+	SNAPSHOT 23/04/2013
 	
-		>> VERIFICA APPSPOT 22/04/2013
+		>> VERIFICA APPSPOT 23/04/2013
 			- il refresh di comments count sembra ancora non funzionare (articles) >> IPOTESI: si può sfruttare PageBreadcrumb per fare la clean del folder ?
-			- Evento del giorno:
-				- l'altezza del body evento è limitata (taglia il contenuto del body)
+			- body calendar event troncato > ho riprovato, non l'ha rifatto, è stato un caso, forse dipendente dal copia/incolla del contenuto
+			  [OK 23/04/2013]
 				
 		>> LOGGING
 			- ho eliminato tutti i log4j.properties inutili (gwtcommons, econyx-core) adesso si usano solo gaspar8/resources/log4j.properties e copycart/resources/log4j.propertis)
