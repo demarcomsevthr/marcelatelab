@@ -8,7 +8,7 @@
   <application>gaspar8est</application>
   -->
   
-  <version>2b</version>
+  <version>3a</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
