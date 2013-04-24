@@ -23,12 +23,19 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 23/04/2013
+	SNAPSHOT 24/04/2013
+
+		>> VERIFICA APPSPOT 24/04/2013 (gaspar8net)
+			- post body troncato
+				- lo fa sia sulle blog discussion
+				- lo fa anche sugli eventi (vedi meeting del tamburello)
+				>> sembra comunque un problema di css
+			- click su giorno calendario > carica il template calendar event > ricarica il mese corrente nel calendario mensile
+			  (basta settare in client attributes il mese corrente, nella portlet del calendario si recupera e si visualizza quello)
+
 	
 		>> VERIFICA APPSPOT 23/04/2013
 			- il refresh di comments count sembra ancora non funzionare (articles) >> IPOTESI: si può sfruttare PageBreadcrumb per fare la clean del folder ?
-			- body calendar event troncato > ho riprovato, non l'ha rifatto, è stato un caso, forse dipendente dal copia/incolla del contenuto
-			  [OK 23/04/2013]
 				
 		>> LOGGING
 			- ho eliminato tutti i log4j.properties inutili (gwtcommons, econyx-core) adesso si usano solo gaspar8/resources/log4j.properties e copycart/resources/log4j.propertis)
