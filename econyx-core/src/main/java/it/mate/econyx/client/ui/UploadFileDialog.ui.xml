@@ -14,7 +14,7 @@
     <g:caption>Carica file</g:caption>
     <g:HTMLPanel addStyleNames="{style.box}">
       <g:HorizontalPanel width="400px" ui:field="anchorPanel">
-        <gc:CommonAnchor ui:field="caricaFileBtn" text="Carica file"/>
+        <gc:CommonAnchor ui:field="caricaFileBtn" text="Inserisci file da disco"/>
       </g:HorizontalPanel>
       <g:Label ui:field="filenameLabel"/>
       <gc:Spacer height="20px"/>
@@ -28,7 +28,7 @@
           <g:FileUpload ui:field="fileupdBtn" name="file"></g:FileUpload>
         </g:VerticalPanel>
       </g:FormPanel>
-      <g:Button ui:field="okBtn">Carica file</g:Button>
+      <g:Button ui:field="okBtn">Salva</g:Button>
       <g:Button ui:field="cancelBtn">Annulla</g:Button>
     </g:HTMLPanel>
   </g:DialogBox>

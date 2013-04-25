@@ -13,6 +13,7 @@ import it.mate.econyx.client.view.site.custom.PortalPageExplorerViewCustomizerIm
 import it.mate.econyx.client.view.site.custom.PortalPageMenuViewCustomizerImpl;
 import it.mate.econyx.client.view.site.custom.ProductEditViewCustomizerImpl;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.CssResource;
@@ -59,7 +60,10 @@ public class CustomClientFactory extends DefaultCustomClientFactory {
     eventBus.addHandler(PortalPageExplorerRetrieveEvent.TYPE, new PortalPageExplorerRetrieveEvent.Handler() {
       public void onPortalPageExplorerRetrieve(PortalPageExplorerRetrieveEvent event) {
         if (AppClientFactory.isSiteModule) {
-          GwtUtils.setStyleAttribute(RootPanel.get(), "background", "url('/images/wallp/alter_04alt_turq.jpg') no-repeat scroll 0 0 / cover transparent");
+          String bgrImage = PropertiesHolder.getString("customClientFactory.bodyBgrImage");
+          if (bgrImage != null && bgrImage.trim().length() > 0) {
+            GwtUtils.setStyleAttribute(RootPanel.get(), "background", "url('"+bgrImage+"') no-repeat scroll 0 0 / cover transparent");
+          }
         }
       }
     });

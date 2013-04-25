@@ -14,6 +14,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -40,6 +41,7 @@ public class UploadFileDialog extends Composite {
   @UiField Hidden useCustomAdapter;
   @UiField HorizontalPanel anchorPanel;
   @UiField Label filenameLabel;
+  @UiField Button okBtn;
   
   private Delegate<String> okCallback;
   
@@ -49,6 +51,7 @@ public class UploadFileDialog extends Composite {
   
   public UploadFileDialog(String imageType, String objId, String imageSize, boolean useCustomAdapter, Delegate<String> okCallback) {
     initUI();
+    okBtn.setEnabled(false);
     formPanel.setAction(UrlUtils.getUploadServletUrl());
     formPanel.setMethod(FormPanel.METHOD_POST);
     formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
@@ -115,6 +118,7 @@ public class UploadFileDialog extends Composite {
       public void onChange(ChangeEvent event) {
         String filename = purgePath(purgePath(fileupdBtn.getFilename(), "\\"), "/");
         filenameLabel.setText(filename);
+        okBtn.setEnabled(true);
       }
     });
     
