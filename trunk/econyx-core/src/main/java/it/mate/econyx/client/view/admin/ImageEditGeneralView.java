@@ -46,7 +46,7 @@ public class ImageEditGeneralView extends AbstractAdminTabPage<ImageEditView.Pre
   
   public ImageEditGeneralView() {
     initUI();
-    imageUploadBtn.setHTML(buttonTemplate.render(UriUtils.fromSafeConstant(MODIFY_TEXT_URL), "Carica file"));
+    imageUploadBtn.setHTML(buttonTemplate.render(UriUtils.fromSafeConstant(MODIFY_TEXT_URL), "Inserisci il file dell'immagine"));
   }
 
   protected void initUI() {

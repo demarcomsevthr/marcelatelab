@@ -6,6 +6,7 @@ import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.impl.ImageTx;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.utils.CloneUtils;
+import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.List;
 
@@ -34,30 +35,44 @@ public class ImageAdapterImpl implements ImageAdapter {
   }
   
   public Image findById (String id) {
-    Image ds = dao.findById(ImageDs.class, id);
-    return CloneUtils.clone(ds, ImageTx.class);
+    Image image = dao.findById(ImageDs.class, id);
+    return CloneUtils.clone(image, ImageTx.class);
   }
 
   public ImageDs findByCode (String code) {
-//  Image ds = dao.findById(ImageDs.class, id);
-    ImageDs ds = dao.findSingle(ImageDs.class, "code == codeParam", String.class.getName() + " codeParam", null, code );
-    return ds;
+    ImageDs image = dao.findSingle(ImageDs.class, "code == codeParam", String.class.getName() + " codeParam", null, code );
+    return image;
   }
 
-  public Image update (Image entity) {
-    return CloneUtils.clone (updateDs(CloneUtils.clone(entity, ImageDs.class)), ImageTx.class);
+  public Image update (Image image) {
+    validateImage(image);
+    return CloneUtils.clone (updateDs(CloneUtils.clone(image, ImageDs.class)), ImageTx.class);
   }
   
-  public void delete (Image entity) {
-    dao.delete(CloneUtils.clone(entity, ImageDs.class));
+  public void delete (Image image) {
+    dao.delete(CloneUtils.clone(image, ImageDs.class));
   }
 
-  public Image create (Image entity) {
-    return CloneUtils.clone(dao.create( CloneUtils.clone(entity, ImageDs.class)  ), ImageTx.class);
+  public Image create (Image image) {
+    validateImage(image);
+    return CloneUtils.clone(dao.create( CloneUtils.clone(image, ImageDs.class)  ), ImageTx.class);
+  }
+  
+  private void validateImage(Image image) {
+    if (image.getCode() == null || image.getCode().trim().length() == 0) {
+      throw new ServiceException("Inserire il codice dell'immagine");
+    }
+    if (image.getCode().contains(" ")) {
+      throw new ServiceException("Il codice non può contenere spazi");
+    }
+    Image found = findByCode(image.getCode());
+    if (found != null) {
+      throw new ServiceException("Esiste già un'altra immagine con lo stesso codice");
+    }
   }
 
-  public ImageDs updateDs(ImageDs entity) {
-    return dao.update(entity);
+  public ImageDs updateDs(ImageDs image) {
+    return dao.update(image);
   }
   
 }

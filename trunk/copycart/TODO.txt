@@ -20,6 +20,19 @@
 		---------------------------------------------------
 
 
+		SNAPSHOT 25/04/2013
+
+			> aggiornamento portaldata con pagine federica >> portalData.copycartsnc.20130424.federica.xml
+			> inserire nuove pagine federica (vedi mail)
+			> semplificare inserimento immagini > fatto
+			> alleggerimento caricamento home page
+				>> home page in template (vedi gp8/welcome template)
+				>> background image come gp8 > ok
+				>> un pò di border radius...
+				>> menu?
+
+
+
 		SNAPSHOT 04/02/2013
 
 			> GWT OPTIMIZATION:
