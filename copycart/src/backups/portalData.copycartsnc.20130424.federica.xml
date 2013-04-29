@@ -2431,45 +2431,107 @@
       <name>ARTICOLI PER GASTRONOMIA</name>
       <code>artGastronomia</code>
       <orderNm>920</orderNm>
-      <templateName>home</templateName>
+      <templateName>home2ColumnsTemplate</templateName>
       <childreen>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>BLOCNOTES</name>
           <code>blocnotes</code>
           <orderNm>100</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>BUSTE PORTAPOSATE</name>
           <code>portaposate</code>
           <orderNm>110</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>SOTTOBICCHIERI</name>
           <code>sottobicchieri</code>
           <orderNm>120</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>BICCHIERI DI CARTA</name>
           <code>bicchiericarta</code>
           <orderNm>130</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>TOVAGLIETTE</name>
           <code>tovagliette</code>
           <orderNm>140</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
         <it.mate.econyx.shared.model.impl.WebContentPageTx>
           <name>RENDIRESTO</name>
           <code>rendiresto</code>
           <orderNm>150</orderNm>
-          <templateName>home</templateName>
+          <templateName>home2ColumnsTemplate</templateName>
         </it.mate.econyx.shared.model.impl.WebContentPageTx>
       </childreen>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>CATALOGHI RIVISTE</name>
+      <code>cataloghiRiviste</code>
+      <orderNm>930</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>ESPOSITORI</name>
+      <code>espositori</code>
+      <orderNm>940</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
+      <childreen>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>DA INTERNO</name>
+          <code>espositoriDaInterno</code>
+          <orderNm>100</orderNm>
+          <templateName>home2ColumnsTemplate</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>DA BANCO</name>
+          <code>espositoriDaBanco</code>
+          <orderNm>110</orderNm>
+          <templateName>home2ColumnsTemplate</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>DA TERRA</name>
+          <code>espositoriDaTerra</code>
+          <orderNm>120</orderNm>
+          <templateName>home2ColumnsTemplate</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>TOTEM</name>
+          <code>espositoriTotem</code>
+          <orderNm>130</orderNm>
+          <templateName>home2ColumnsTemplate</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+      </childreen>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>BLOCNOTES - BLOCCHI RICEVUTE</name>
+      <code>blocchiRicevute</code>
+      <orderNm>950</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>INSEGNE - PANNELLI</name>
+      <code>insegnePannelli</code>
+      <orderNm>960</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>CALENDARI</name>
+      <code>calendari</code>
+      <orderNm>970</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>FOTOQUADRI</name>
+      <code>fotoquadri</code>
+      <orderNm>980</orderNm>
+      <templateName>home2ColumnsTemplate</templateName>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
   </pages>
   <images>
