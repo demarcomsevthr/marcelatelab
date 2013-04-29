@@ -52,6 +52,12 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   
   private PortalUser portalUser;
   
+  private final boolean REGISTRATION_BTN_VISIBLE = PropertiesHolder.getBoolean("client.PortalUserView.registrationBtn.visible", true);
+  
+  private final boolean USE_LOGIN_DLG = PropertiesHolder.getBoolean("client.PortalUserView.useLoginDialog");
+  
+  private final String LOGIN_DLG_CAPTION_TEXT = PropertiesHolder.getString("client.PortalUserView.loginDialog.captionText", "Login");
+  
   public PortalUserViewImpl() {
     super();
     initUI();
@@ -59,7 +65,7 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   
   private void initUI() {
     initWidget(uiBinder.createAndBindUi(this));
-    registrationBtn.setVisible(PropertiesHolder.getBoolean("client.PortalUserView.registrationBtn.visible", true));
+    registrationBtn.setVisible(REGISTRATION_BTN_VISIBLE);
   }
   
   @Override
@@ -117,7 +123,7 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
   @UiHandler ("localLoginBtn")
   public void onLocalLoginBtn(ClickEvent event) {
     
-    if (PropertiesHolder.getBoolean("client.PortalUserView.useLoginDialog")) {
+    if (USE_LOGIN_DLG) {
       new LoginDialog();
     } else {
       notLoggedUserState.setVisible(false);
@@ -169,7 +175,7 @@ public class PortalUserViewImpl extends AbstractBaseView<PortalUserView.Presente
       dialogPanel.add(localLoginFormState);
       
       MessageBox.create(new MessageBox.Configuration()
-      .setCaptionText(PropertiesHolder.getString("client.PortalUserView.loginDialog.captionText", "Login"))
+      .setCaptionText(LOGIN_DLG_CAPTION_TEXT)
       .setButtonType(MessageBox.BUTTONS_OKCANCEL)
       .setIconType(MessageBox.ICON_INFO)
       .setBodyWidget(dialogPanel)

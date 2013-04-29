@@ -38,6 +38,8 @@ public class PortalServiceAdapterImpl implements PortalServiceAdapter {
   
   private static Map<Object, Object> instanceCache;
   
+  private final static boolean USE_INSTANCE_CACHE = PropertiesHolder.getBoolean("it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache", true);
+  
   @Override
   public PageTemplate getPage(String historyToken) {
     PageTemplate result = new PageTemplate();
@@ -77,7 +79,7 @@ public class PortalServiceAdapterImpl implements PortalServiceAdapter {
   }
   
   private synchronized static Map<Object, Object> getInstCache() {
-    if (PropertiesHolder.getBoolean("it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache", true)) {
+    if (USE_INSTANCE_CACHE) {
       if (instanceCache == null) {
         instanceCache = new HashMap<Object, Object>();
       }

@@ -7,6 +7,7 @@
       <passwordEncrypted>true</passwordEncrypted>
       <active>true</active>
       <activationToken>d423ebd62ce1463fb04a57c70fe9c8c3</activationToken>
+      <adminUser>true</adminUser>
     </it.mate.econyx.shared.model.impl.PortalUserTx>
     <it.mate.econyx.shared.model.impl.PortalUserTx>
       <screenName>Marcello Test</screenName>
@@ -22,6 +23,7 @@
       <password>2ETIPWZa1R4+LJRW3nahQw==</password>
       <passwordEncrypted>true</passwordEncrypted>
       <active>true</active>
+      <adminUser>true</adminUser>
     </it.mate.econyx.shared.model.impl.PortalUserTx>
     <it.mate.econyx.shared.model.impl.PortalUserTx>
       <screenName>Rodolfo Verduzio</screenName>
@@ -45,6 +47,7 @@
       <passwordEncrypted>true</passwordEncrypted>
       <active>true</active>
       <activationToken>462c2afc4dd14d4c840f95f95f29ff26</activationToken>
+      <adminUser>true</adminUser>
     </it.mate.econyx.shared.model.impl.PortalUserTx>
     <it.mate.econyx.shared.model.impl.PortalUserTx>
       <screenName>Gianfranco Admin</screenName>
@@ -53,6 +56,7 @@
       <passwordEncrypted>true</passwordEncrypted>
       <active>true</active>
       <activationToken>5a32f95e4897469cb617613a75d8cf72</activationToken>
+      <adminUser>true</adminUser>
     </it.mate.econyx.shared.model.impl.PortalUserTx>
   </users>
   <customers>
@@ -2423,6 +2427,50 @@
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name>ARTICOLI PER GASTRONOMIA</name>
+      <code>artGastronomia</code>
+      <orderNm>920</orderNm>
+      <templateName>home</templateName>
+      <childreen>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>BLOCNOTES</name>
+          <code>blocnotes</code>
+          <orderNm>100</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>BUSTE PORTAPOSATE</name>
+          <code>portaposate</code>
+          <orderNm>110</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>SOTTOBICCHIERI</name>
+          <code>sottobicchieri</code>
+          <orderNm>120</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>BICCHIERI DI CARTA</name>
+          <code>bicchiericarta</code>
+          <orderNm>130</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>TOVAGLIETTE</name>
+          <code>tovagliette</code>
+          <orderNm>140</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+        <it.mate.econyx.shared.model.impl.WebContentPageTx>
+          <name>RENDIRESTO</name>
+          <code>rendiresto</code>
+          <orderNm>150</orderNm>
+          <templateName>home</templateName>
+        </it.mate.econyx.shared.model.impl.WebContentPageTx>
+      </childreen>
+    </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
   </pages>
   <images>
     <it.mate.econyx.shared.model.impl.ImageTx>

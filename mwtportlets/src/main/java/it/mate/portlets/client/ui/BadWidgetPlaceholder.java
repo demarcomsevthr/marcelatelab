@@ -15,6 +15,7 @@ public class BadWidgetPlaceholder extends VerticalPanel {
     }
     if (ex != null) {
       add(new Label("Exception = " + ex.getClass().getName()+ " - " + ex.getMessage()));
+      ex.printStackTrace();
     }
   }
   

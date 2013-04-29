@@ -12,7 +12,7 @@
 	}
   </ui:style>
 
-  <g:HTMLPanel width="100%">
+  <g:HTMLPanel width="100%" addStyleNames="ecxPortalUserView">
     <g:HorizontalPanel>
       <gc:Spacer width="5px"/>
       <g:VerticalPanel>
