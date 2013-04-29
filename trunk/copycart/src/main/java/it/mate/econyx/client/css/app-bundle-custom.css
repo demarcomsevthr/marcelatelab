@@ -37,13 +37,15 @@ a, a:active, a:focus {
 }
 
 .mwt-PagePortlet > div > table {
+  /*
     border-color: #B3B3B3;
     border-style: solid;
     border-width: 2px;
+   */
 }
 
 .mwt-TableLayoutPanel {
-    background: none repeat scroll 0 0 white;
+    background: none repeat scroll 0 0 transparent;
     border-style: none;
     border-width: 0;
 }
@@ -58,6 +60,9 @@ a, a:active, a:focus {
   margin: 0;
   padding: 3px 0 0 10px;
   height: 20px;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;  
 }
 
 .mwt-BoxContainerTitle a {
@@ -74,6 +79,39 @@ a, a:active, a:focus {
 
 .mwt-BoxContainerBody {
   background: none repeat scroll 0 0 #F1F1F1;
+}
+
+
+/************************************************************************************
+
+	TPL CSS
+   
+****/
+
+.tpl-HomeWrapper {
+  width: 100%;
+  -moz-box-shadow: 0px 0px 6px #666;
+  -webkit-box-shadow: 0px 0px 6px #666;
+  padding: 8px;
+  border: 1px solid #fff;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;  
+  /* margin: 30px auto 10px; */
+  background: #E4E4E4;
+}
+
+.tpl-PageWrapper {
+  width: 100%;
+  -moz-box-shadow: 0px 0px 6px #666;
+  -webkit-box-shadow: 0px 0px 6px #666;
+  padding: 8px;
+  border: 1px solid #ababab;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;  
+  margin: 2px auto 10px;
+  background: #fff; /* Old browsers */
 }
 
 
@@ -188,7 +226,7 @@ a, a:active, a:focus {
 
 .navBar a {
     color: #333333;
-    font-size: 11px;
+    font-size: 14px;
     font-style: normal;
     font-weight: normal;
     text-decoration: none;
@@ -445,5 +483,18 @@ ul.menu_explorer_sx ul li ul li.submenu3 a:hover {
 ul.menu_explorer_sx ul li ul li.submenu3 a.active {
     background-color: #ECDE99 !important;
     padding: 5px 10px 5px 20px;
+}
+
+
+
+/* #############################################################################################################
+
+    ECX STYLES
+
+*/
+
+
+.ecxPortalUserView .gwt-Anchor {
+  font-size: 12px;
 }
 

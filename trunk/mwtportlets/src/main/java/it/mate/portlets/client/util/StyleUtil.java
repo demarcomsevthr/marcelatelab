@@ -10,6 +10,9 @@ public class StyleUtil {
     String[] properties = style.split(";");
     for (String property : properties) {
       String[] tokens = property.split(":");
+      if (tokens.length != 2) {
+        throw new IllegalArgumentException("cannot parse layout.style property");
+      }
       GwtUtils.setStyleAttribute(w, tokens[0], tokens[1]);
     }
   }
