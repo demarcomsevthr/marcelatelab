@@ -933,45 +933,51 @@
       <name>Home</name>
       <code>home</code>
       <orderNm>100</orderNm>
+      <templateName>welcome</templateName>
+      <!-- 
       <templateName>home</templateName>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>M</type>
-          <content>&lt;div class="inside" id="panel-pane-row_2_2"&gt;
-	&lt;div&gt;
-		&lt;div class="content"&gt;
-			&lt;p style="text-align: center;"&gt;
-				&lt;img alt="disegno bv_0_0.jpg" height="196" src="/images/disegno_bv_0_0.jpg" title="disegno bv_0_0.jpg" width="300" /&gt;&lt;/p&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-	&lt;div&gt;
-		&lt;div class="content"&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;COPYCART SNC &lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;di De Marco Gianfranco e Occhini Federica&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;&amp;nbsp;&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;Via Martiri della Libert&amp;agrave;, 109&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;18038 - SANREMO&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;TEL. 0184 532605&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;FAX 0184.532605&lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;E-MAIL : &lt;/em&gt;&lt;a href="mailto:copy.cart@alice.it"&gt;&lt;em&gt;copy.cart@alice.it&lt;/em&gt;&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-			&lt;p&gt;
-				&amp;nbsp;&lt;/p&gt;
-			&lt;h1 style="text-align: center;"&gt;
-				&lt;strong&gt;&lt;span style="font-size:18px;"&gt;&lt;span style="color: rgb(0, 0, 0);"&gt;&lt;em&gt;Benvenuto...... &lt;/em&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h1&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/div&gt;
-</content>
+          <content>
+<![CDATA[ 
+<div class="inside" id="panel-pane-row_2_2">
+  <div>
+    <div class="content">
+      <p style="text-align: center;">
+        <img alt="disegno bv_0_0.jpg" height="196" src="/images/disegno_bv_0_0.jpg" title="disegno bv_0_0.jpg" width="300" /></p>
+    </div>
+  </div>
+  <div>
+    <div class="content">
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>COPYCART SNC </em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>di De Marco Gianfranco e Occhini Federica</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>&nbsp;</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>Via Martiri della Libert&agrave;, 109</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>18038 - SANREMO</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>TEL. 0184 532605</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>FAX 0184.532605</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>E-MAIL : </em><a href="mailto:copy.cart@alice.it"><em>copy.cart@alice.it</em></a></span></span></strong></h1>
+      <p>
+        &nbsp;</p>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>Benvenuto...... </em></span></span></strong></h1>
+    </div>
+  </div>
+</div>
+]]>         
+         </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
+       -->
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
       <name>Chi siamo</name>

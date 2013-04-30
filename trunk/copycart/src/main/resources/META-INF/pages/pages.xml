@@ -24,6 +24,13 @@
     </widgets>
   </factory>
 
+  <factory id="welcome" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
+    <widgets>
+      <factory parent="homeWrapperWelcome" />
+      <factory parent="filler" />
+    </widgets>
+  </factory>
+
   <factory id="home2ColumnsTemplate" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
     <widgets>
       <factory parent="homeWrapper2Columns" />
@@ -50,6 +57,15 @@
     <widgets>
       <factory parent="headerWrapper" />
       <factory parent="pageWrapper3Columns" />
+      <factory parent="footer" />
+    </widgets>
+  </factory>
+  
+  <factory id="homeWrapperWelcome" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-HomeWrapper"/>
+    <widgets>
+      <factory parent="headerWrapper" />
+      <factory parent="pageWrapperWelcome" />
       <factory parent="footer" />
     </widgets>
   </factory>
@@ -117,6 +133,62 @@
         <widgets>
           <factory parent="leftColumnWrapper" />
           <factory parent="centerColumnWrapper" />
+          <factory parent="rightColumnWrapper" />
+        </widgets>
+        <constraints>
+          <constraint size="172px" />
+          <constraint size="676px" />
+          <constraint size="140px" />
+        </constraints>
+      </factory>  
+    </widgets>
+  </factory>
+
+  <factory id="pageWrapperWelcome" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-PageWrapper"/>
+    <widgets>
+      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+        <layout vertical="false" stylename="tpl-InnerBody"/>
+        <widgets>
+          <factory parent="leftColumnWrapper" />
+          <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
+            <beans:property name="html">
+              <beans:value><![CDATA[
+<div class="inside" id="panel-pane-row_2_2">
+  <div>
+    <div class="content">
+      <p style="text-align: center;">
+        <img alt="disegno bv_0_0.jpg" height="196" src="/images/disegno_bv_0_0.jpg" title="disegno bv_0_0.jpg" width="300" /></p>
+    </div>
+  </div>
+  <div>
+    <div class="content">
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>COPYCART SNC </em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>di De Marco Gianfranco e Occhini Federica</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>&nbsp;</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>Via Martiri della Libert&agrave;, 109</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>18038 - SANREMO</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>TEL. 0184 532605</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>FAX 0184.532605</em></span></span></strong></h1>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>E-MAIL : </em><a href="mailto:copy.cart@alice.it"><em>copy.cart@alice.it</em></a></span></span></strong></h1>
+      <p>
+        &nbsp;</p>
+      <h1 style="text-align: center;">
+        <strong><span style="font-size:18px;"><span style="color: rgb(0, 0, 0);"><em>Benvenuto...... </em></span></span></strong></h1>
+    </div>
+  </div>
+</div>
+              ]]></beans:value>
+            </beans:property>
+          </factory>
           <factory parent="rightColumnWrapper" />
         </widgets>
         <constraints>
