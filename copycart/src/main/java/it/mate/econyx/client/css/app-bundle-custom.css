@@ -103,8 +103,8 @@ a, a:active, a:focus {
 
 .tpl-PageWrapper {
   width: 100%;
-  -moz-box-shadow: 0px 0px 6px #666;
-  -webkit-box-shadow: 0px 0px 6px #666;
+  -moz-box-shadow: 0px 0px 1px #666;
+  -webkit-box-shadow: 0px 0px 1px #666;
   padding: 8px;
   border: 1px solid #ababab;
   -webkit-border-radius: 10px;
