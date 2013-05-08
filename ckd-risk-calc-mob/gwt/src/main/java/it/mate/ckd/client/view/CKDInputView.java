@@ -9,6 +9,7 @@ import it.mate.ckd.client.utils.IPhoneScrollPatch;
 import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.ui.MessageBoxUtils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -103,6 +104,12 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
       });
     }
     
+    etaSpinBox.setMinValue(0);
+    creatininaSpinBox.setMinValue(0d);
+    pesoSpinBox.setMinValue(0);
+    altezzaSpinBox.setMinValue(0);
+    albuminuriaSpinBox.setMinValue(0);
+    
   }
   
   @Override
@@ -149,14 +156,38 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
       public void execute(Void element) {
         if (!isSet(etaSpinBox.getValue()))
           return;
+        if (etaSpinBox.getValue() < 0 || etaSpinBox.getValue() > 120) {
+          MessageBoxUtils.popupOk("Wrong value for age");
+          return;
+        }
         if (!isSet(pesoSpinBox.getValue()))
           return;
+        if (pesoSpinBox.getValue() <= 0) {
+          MessageBoxUtils.popupOk("Wrong value for weight");
+          return;
+        }
         if (!isSet(creatininaSpinBox.getValue()))
           return;
+        if (creatininaSpinBox.getValue() < 0) {
+          MessageBoxUtils.popupOk("Wrong value for creatinine");
+          return;
+        }
+        if (isSet(altezzaSpinBox.getValue())) {
+          if (altezzaSpinBox.getValue() <= 0 || altezzaSpinBox.getValue() > 240) {
+            MessageBoxUtils.popupOk("Wrong value for heigth");
+            return;
+          }
+        }
+        if (isSet(albuminuriaSpinBox.getValue())) {
+          if (albuminuriaSpinBox.getValue() < 0) {
+            MessageBoxUtils.popupOk("Wrong value for albuminuria");
+            return;
+          }
+        }
         ckd.setAge(etaSpinBox.getValue())
           .setWeight(pesoSpinBox.getValue())
           .setScr(creatininaSpinBox.getValue())
-          .setAlbumin(albuminuriaSpinBox.getValue())
+          .setAlbumin(albuminuriaSpinBox.getValueAllowNull())
           .setFemale(fBtn.getValue())
           .setBlack(bBtn.getValue())
           .setHeight(altezzaSpinBox.getValue());
