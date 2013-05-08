@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
-//import com.google.gwt.user.client.ui.Button;
 
 public class SpinnerDoubleBox extends Composite implements HasValueChangeHandlers<Double> {
   
@@ -23,22 +22,15 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   private SpinControl leftSpin;
   private SpinControl rightSpin;
   
-  /*
-  private Button leftBtn = null;
-  private TouchImage leftImg = null;
-  private SpinAnchor leftAnc = null;
-  private Button rightBtn = null;
-  private TouchImage rightImg = null;
-  private SpinAnchor rightAnc = null;
-  */
-  
   private double increment;
   
   private boolean needFireEvents = false;
   
   private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerDoubleBox_disableSpinButtons(); 
+  
+  private Double minValue;
+  private Double maxValue;
 
-//private MGWTCustomClientBundle bundle = MGWTCustomTheme.getInstance().getMGWTClientBundle();
   private CustomTheme.CustomBundle bundle = CustomTheme.Instance.get();
   
   public SpinnerDoubleBox() {
@@ -51,38 +43,11 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     
     if (!disableSpinButtons) {
-
       leftSpin = new SpinControl(bundle.minusImage());
       GwtUtils.setStyleAttribute(leftSpin, "paddingLeft", "4px");
       GwtUtils.setStyleAttribute(leftSpin, "paddingRight", "6px");
       hp.add(leftSpin);
-      
-      /*
-      leftAnc = new SpinAnchor(bundle.minusImage());
-      GwtUtils.setStyleAttribute(leftAnc, "paddingLeft", "4px");
-      GwtUtils.setStyleAttribute(leftAnc, "paddingRight", "6px");
-      hp.add(leftAnc);
-      */
-
-      /*
-      leftImg = new TouchImage(bundle.minusImage());
-      GwtUtils.setStyleAttribute(leftImg, "paddingRight", "4px");
-      leftImg.addStyleName("spin-Button");
-      hp.add(leftImg);
-      */
-
-      /*
-      leftBtn = new Button("-");
-      GwtUtils.setStyleAttribute(leftBtn, "fontSize", "14px");
-      leftBtn.addStyleName("spin-Button");
-      hp.add(leftBtn);
-      */
     }
-    
-    /** SEE:
-    NumberFormat.getDecimalFormat();
-    LocaleInfo.getCurrentLocale().getNumberConstants();
-    */
     
     valueBox = new MDoubleBox();
     valueBox.getElement().setPropertyString("type", "number");
@@ -90,30 +55,9 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     hp.add(valueBox);
     
     if (!disableSpinButtons) {
-      
       rightSpin = new SpinControl(bundle.plusImage());
       GwtUtils.setStyleAttribute(rightSpin, "paddingLeft", "6px");
       hp.add(rightSpin);
-      
-      /*
-      rightAnc = new SpinAnchor(bundle.plusImage());
-      GwtUtils.setStyleAttribute(rightAnc, "paddingLeft", "6px");
-      hp.add(rightAnc);
-      */
-
-      /*
-      rightImg = new TouchImage(bundle.plusImage());
-      GwtUtils.setStyleAttribute(rightImg, "paddingLeft", "4px");
-      rightImg.addStyleName("spin-Button");
-      hp.add(rightImg);
-      */
-      
-      /*
-      rightBtn = new Button("+");
-      GwtUtils.setStyleAttribute(rightBtn, "fontSize", "14px");
-      rightBtn.addStyleName("spin-Button");
-      hp.add(rightBtn);
-      */
     }
     
     initWidget(hp);
@@ -131,75 +75,6 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
           inc(increment * +1);
         }
       });
-      /*
-      if (leftAnc != null) {
-        leftAnc.addClickHandler(new ClickHandler() {
-          public void onClick(ClickEvent event) {
-            inc(increment * -1);
-          }
-        });
-      }
-      if (leftBtn != null) {
-        leftBtn.addTapHandler(new TapHandler() {
-          public void onTap(TapEvent event) {
-            inc(increment * -1);
-          }
-        });
-      }
-      if (leftImg != null) {
-        leftImg.addTouchStartHandler(new TouchStartHandler() {
-          public void onTouchStart(TouchStartEvent event) {
-            inc(increment * -1);
-          }
-        });
-      }
-      
-      if (rightAnc != null) {
-        rightAnc.addClickHandler(new ClickHandler() {
-          public void onClick(ClickEvent event) {
-            inc(increment * +1);
-          }
-        });
-      }
-      if (rightBtn != null) {
-        rightBtn.addTapHandler(new TapHandler() {
-          public void onTap(TapEvent event) {
-            inc(increment * +1);
-          }
-        });
-      }
-      if (rightImg != null) {
-        rightImg.addTouchStartHandler(new TouchStartHandler() {
-          public void onTouchStart(TouchStartEvent event) {
-            inc(increment * +1);
-          }
-        });
-      }
-      */
-      /*
-      leftBtn.addTouchStartHandler(new TouchStartHandler() {
-        public void onTouchStart(TouchStartEvent event) {
-          inc(increment * -1);
-        }
-      });
-      rightBtn.addTouchStartHandler(new TouchStartHandler() {
-        public void onTouchStart(TouchStartEvent event) {
-          inc(increment);
-        }
-      });
-      */
-      /*
-      leftBtn.addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          inc(increment * -1);
-        }
-      });
-      rightBtn.addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          inc(increment);
-        }
-      });
-      */
     }
 
   }
@@ -215,7 +90,16 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       return;
     double value = valueBox.getValue();
     value += increment;
-    valueBox.setValue(value, needFireEvents);
+    boolean accept = true;
+    if (minValue != null) {
+      accept = accept && value >= minValue;
+    }
+    if (maxValue != null) {
+      accept = accept && value <= maxValue;
+    }
+    if (accept) {
+      valueBox.setValue(value, needFireEvents);
+    }
   }
   
   public void setIncrement(double increment) {
@@ -237,6 +121,14 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       getElement().appendChild(image.getElement());
       addStyleName("ckd-spinAnchor");
     }
+  }
+  
+  public void setMinValue(Double minValue) {
+    this.minValue = minValue;
+  }
+  
+  public void setMaxValue(Double maxValue) {
+    this.maxValue = maxValue;
   }
   
 }

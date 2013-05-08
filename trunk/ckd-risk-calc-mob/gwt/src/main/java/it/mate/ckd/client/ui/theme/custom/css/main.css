@@ -5,7 +5,7 @@
 
 @external outputPanel;
 
-@external gwt*;
+@external gwt*, dialog*;
 
 @external mgwt*;
 
@@ -247,4 +247,40 @@
 
 .gwt-HTML.ckd-HelpPanel * {
   font-size: 12px;
+}
+
+.gwt-DialogBox {
+  background-color: #ccc;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  /* font-family: Verdana; */
+  font-size: 11pt;
+}
+
+.gwt-DialogBox .dialogTop {
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+.gwt-DialogBox .dialogTopCenterInner {
+  background-color: lightyellow;
+  -webkit-border-radius: 4px;
+  padding: 3px 3px 3px 9px;
+}
+
+.gwt-DialogBox .dialogMiddleCenter {
+  padding-top: 8px;
+  padding-right: 14px;
+}
+
+.gwt-DialogBox .dialogContent .gwt-HTML {
+  padding: 5px;
+  font-weight: 600;
+}
+
+.gwt-DialogBox .dialogContent .gwt-Button {
+  font-size: 14pt;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 10px;
 }

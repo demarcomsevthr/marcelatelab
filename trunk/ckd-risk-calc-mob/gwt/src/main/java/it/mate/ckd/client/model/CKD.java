@@ -172,7 +172,7 @@ public class CKD {
   }
   
   public int getRiskStadium(double gfr) {
-    if (getAlbumin() == null || getAlbumin() == 0) {
+    if (getAlbumin() == null) {
       return -1;
     }
     int risk = LOW_RISK;
