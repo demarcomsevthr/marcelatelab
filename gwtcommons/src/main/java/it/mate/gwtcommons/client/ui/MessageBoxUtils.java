@@ -3,6 +3,7 @@ package it.mate.gwtcommons.client.ui;
 import it.mate.gwtcommons.client.utils.Delegate;
 
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MessageBoxUtils {
@@ -29,6 +30,29 @@ public class MessageBoxUtils {
       }
     })
   );
+  }
+  
+  public static void popupOk (String bodyContent) {
+    popupOk(bodyContent, null);
+  }
+  
+  public static void popupOk (String bodyContent, String width) {
+    popupOk("Alert", bodyContent, width);
+  }
+  
+  public static void popupOk (String title, String bodyContent, String width) {
+    HTML body = new HTML(bodyContent);
+    popupOk(title, body, width);
+  }
+  
+  public static void popupOk (String title, Widget bodyWidget, String width) {
+    MessageBox.create(new MessageBox.Configuration()
+      .setCaptionText(title)
+      .setButtonType(MessageBox.BUTTONS_OK)
+      .setIconType(MessageBox.ICON_ALERT)
+      .setBodyWidget(bodyWidget)
+      .setBodyWidth(width)
+    );
   }
 
 }
