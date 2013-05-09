@@ -20,9 +20,10 @@
   <add-linker name="xsiframe" />
   
   <!-- 
-       mgwt.os values = iphone, ipad, android
+       mgwt.os values = iphone, android
+       ipad non va bene per il layout
    -->
-  <set-property name="mgwt.os" value="iphone" />
+  <set-property name="mgwt.os" value=iphone />
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 
