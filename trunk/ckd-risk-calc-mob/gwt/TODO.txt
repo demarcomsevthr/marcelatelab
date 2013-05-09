@@ -9,5 +9,14 @@
 		- RISOLTO [08/04/2013 - v.0.22]
 		
 	15/04/2013 - CONTROLLO RANGE VALORI
-		- ok
+		- OK
+		
+	09/05/2013 - ANDROID TEST
+		- problemi di lentezza: sembra solo quando si carica l'app la prima volta
+		- disabilitare navigazione con tasto 'indietro' oppure controllarla meglio (usa history)
+		- help page: aumentare carattere
+		- field numerici > la keyboard non si attiva in numerico
+		- test su tablet
+		
+		
 	
