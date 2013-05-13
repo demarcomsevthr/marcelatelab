@@ -193,7 +193,12 @@ public class PostViewer extends Composite {
       return html;
     String actualHtmlContent = htmlContent;
     html.getElement().setId(getPostRootElemId(postCode));
-    html.getElement().getStyle().setHeight(0, Unit.PX);
+    
+    //TODO
+    //13/05/2013
+    //ho dovuto togliere il set di height a zero perche da il problema del post che rimane truncato
+    
+//  html.getElement().getStyle().setHeight(0, Unit.PX);
     html.setHTML(SafeHtmlUtils.fromTrustedString(actualHtmlContent));
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
@@ -210,11 +215,11 @@ public class PostViewer extends Composite {
           } else {
             readmoreElement.getStyle().setHeight(0, Unit.PX);
             readmoreElement.getStyle().setDisplay(Display.NONE);
-            html.getElement().getStyle().clearHeight();
+//          html.getElement().getStyle().clearHeight();
           }
           
         }
-        html.getElement().getStyle().clearHeight();
+//      html.getElement().getStyle().clearHeight();
       }
     });
     return html;

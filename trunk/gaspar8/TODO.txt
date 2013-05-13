@@ -30,6 +30,9 @@
 				- lo fa sia sulle blog discussion
 				- lo fa anche sugli eventi (vedi meeting del tamburello)
 				>> sembra comunque un problema di css
+				
+				>> [13/05/2013] COMMENTATO height = 0 in it.mate.econyx.client.ui.PostViewer.createHtml()
+				
 			- click su giorno calendario > carica il template calendar event > ricarica il mese corrente nel calendario mensile
 			  (basta settare in client attributes il mese corrente, nella portlet del calendario si recupera e si visualizza quello)
 
