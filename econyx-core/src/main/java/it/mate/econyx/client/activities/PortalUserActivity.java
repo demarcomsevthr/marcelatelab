@@ -253,5 +253,29 @@ public class PortalUserActivity extends BaseActivity implements PortalUserView.P
       }
     });
   }
+
+  @Override
+  public void createCustomer(Customer customer, final Delegate<Customer> delegate) {
+    customerService.create(customer, new AsyncCallback<Customer>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Customer results) {
+        delegate.execute(results);
+      }
+    });
+  }
+
+  @Override
+  public void activateUser(String id) {
+    portalUserService.activateUserById(id, new AsyncCallback<PortalUser>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(PortalUser result) {
+        Window.alert("Utente attivato");
+      }
+    });
+  }
   
 }
