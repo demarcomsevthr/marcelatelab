@@ -79,6 +79,14 @@ public class PortalUserAdapterImpl implements PortalUserAdapter {
     return CloneUtils.clone(ds, PortalUserTx.class);
   }
   
+  public PortalUser activateUserById (String id) {
+    PortalUserDs ds = dao.findById(PortalUserDs.class, id);
+    ds.setActive(true);
+    ds.setActivationToken(null);
+    ds = dao.update(ds);
+    return CloneUtils.clone(ds, PortalUserTx.class);
+  }
+  
   private PortalUserDs doUpdateUserNotActive (PortalUserDs ds) {
     ds.setActive(false);
     ds.setActivationToken(KeyUtils.getRandomUUID());

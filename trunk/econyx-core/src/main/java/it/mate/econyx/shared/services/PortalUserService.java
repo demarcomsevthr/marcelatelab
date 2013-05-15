@@ -33,4 +33,6 @@ public interface PortalUserService extends RemoteService {
   
   public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) throws ServiceException;
   
+  public PortalUser activateUserById (String id);
+  
 }

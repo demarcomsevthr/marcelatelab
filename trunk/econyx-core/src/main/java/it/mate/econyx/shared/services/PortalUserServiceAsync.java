@@ -31,4 +31,6 @@ public interface PortalUserServiceAsync {
   void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword,
       AsyncCallback<PortalUser> callback);
 
+  void activateUserById(String id, AsyncCallback<PortalUser> callback);
+
 }

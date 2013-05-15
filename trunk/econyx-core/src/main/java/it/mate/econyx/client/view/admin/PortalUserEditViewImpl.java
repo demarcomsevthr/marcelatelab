@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -56,6 +57,15 @@ public class PortalUserEditViewImpl extends AbstractBaseView<PortalUserEditView.
         adminTab.addButton(new Button("Cambio password utente", new ClickHandler() {
           public void onClick(ClickEvent event) {
             onCambioPasswordBtn(event);
+          }
+        }));
+        adminTab.addButton(new Button("Attiva utente adesso", new ClickHandler() {
+          public void onClick(ClickEvent event) {
+            if (portalUser.getId() != null) {
+              getPresenter().activateUser(portalUser.getId());
+            } else {
+              Window.alert("Utente non salvato");
+            }
           }
         }));
       }
@@ -99,7 +109,7 @@ public class PortalUserEditViewImpl extends AbstractBaseView<PortalUserEditView.
     popupPanel.add(GwtUtils.createPopupPanelItem("Nuova password:", nuovaPasswordBox, "2em", "10em"));
     final PasswordTextBox confermaPasswordBox = new PasswordTextBox();
     popupPanel.add(GwtUtils.createPopupPanelItem("Conferma password:", confermaPasswordBox, "2em", "10em"));
-    MessageBoxUtils.popupOkCancel("Inserire gli estremi del movimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
+    MessageBoxUtils.popupOkCancel("Inserire la nuova password", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
       public void execute(MessageBox.Callbacks callbacks) {
         getPresenter().updatePassword(portalUser, passwordAttualeBox.getValue(), nuovaPasswordBox.getValue(), confermaPasswordBox.getValue());
       }

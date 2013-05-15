@@ -28,4 +28,6 @@ public interface PortalUserAdapter {
   
   public PortalUser updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword);
   
+  public PortalUser activateUserById (String id);
+  
 }
