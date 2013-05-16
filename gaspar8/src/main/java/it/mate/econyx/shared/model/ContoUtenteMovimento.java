@@ -37,4 +37,8 @@ public interface ContoUtenteMovimento extends Serializable {
   
   public void setRegisteringPortalUser(PortalUser portalUser);
 
+  public ContoUtente getConto();
+
+  public void setConto(ContoUtente conto);
+  
 }

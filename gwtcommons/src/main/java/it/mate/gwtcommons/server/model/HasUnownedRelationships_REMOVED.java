@@ -1,6 +1,6 @@
 package it.mate.gwtcommons.server.model;
 
-public interface HasUnownedRelationships {
+public interface HasUnownedRelationships_REMOVED {
 
   void resolveUnownedRelationships();
   

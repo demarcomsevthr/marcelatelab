@@ -1,5 +1,6 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.econyx.shared.model.ContoUtente;
 import it.mate.econyx.shared.model.ContoUtenteMovimento;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.PortalUser;
@@ -47,6 +48,16 @@ public class ContoUtenteMovimentoDs implements ContoUtenteMovimento, HasKey {
   Key registeringPortalUserId;
   @UnownedRelationship (key="registeringPortalUserId")
   transient PortalUserDs registeringPortalUser;
+  
+
+  // 16/05/2013
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
+  Key contoId;
+  @UnownedRelationship (key="contoId")
+  transient ContoUtenteDs conto;
+  
+  @Persistent
+  String customerEmail;
   
   
   @Override
@@ -123,6 +134,18 @@ public class ContoUtenteMovimentoDs implements ContoUtenteMovimento, HasKey {
   public void setRegisteringPortalUser(PortalUser portalUser) {
     this.registeringPortalUser = (PortalUserDs)portalUser;
     this.registeringPortalUserId = this.registeringPortalUser != null ? this.registeringPortalUser.getKey() : null;
+  }
+
+  public ContoUtente getConto() {
+    return conto;
+  }
+
+  @CloneableProperty (targetClass=ContoUtenteDs.class)
+  public void setConto(ContoUtente conto) {
+    this.conto = (ContoUtenteDs)conto;
+    this.contoId = this.conto != null ? this.conto.getKey() : null;
+    this.customerEmail = (this.conto != null && this.conto.getCustomer() != null && this.conto.getCustomer().getPortalUser() != null) ?
+        this.conto.getCustomer().getPortalUser().getEmailAddress() : null;
   }
   
 }

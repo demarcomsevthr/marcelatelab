@@ -37,10 +37,16 @@ public class ContoUtenteDs implements ContoUtente, HasKey {
   @Persistent
   Double saldo;
   
+  /* 16/05/2013 - eliminata la relazione in questo verso
   @Persistent (dependentKey="false", defaultFetchGroup="false")
   List<Key> movimentiKeys;
   @UnownedRelationship (key="movimentiKeys", itemClass=ContoUtenteMovimentoDs.class)
+  */
   transient List<ContoUtenteMovimentoDs> movimenti;
+  
+  @Persistent
+  String customerEmail;
+  
   
   @Override
   public String toString() {
@@ -71,6 +77,7 @@ public class ContoUtenteDs implements ContoUtente, HasKey {
     } else {
       this.customer = (CustomerDs)customer;
       this.customerId = this.customer.getKey();
+      this.customerEmail = this.customer.getPortalUser() != null ? this.customer.getPortalUser().getEmailAddress() : null;
     }
   }
 
@@ -88,13 +95,18 @@ public class ContoUtenteDs implements ContoUtente, HasKey {
 
   @CloneableProperty (targetClass=ContoUtenteMovimentoDs.class)
   public void setMovimenti(List<ContoUtenteMovimento> movimenti) {
-    this.movimentiKeys = new ArrayList<Key>();
+//  this.movimentiKeys = new ArrayList<Key>();
     this.movimenti = new ArrayList<ContoUtenteMovimentoDs>();
     if (movimenti != null) {
       for (ContoUtenteMovimento movimento : movimenti) {
         if (movimento instanceof ContoUtenteMovimentoDs) {
           this.movimenti.add((ContoUtenteMovimentoDs)movimento);
-          this.movimentiKeys.add(((ContoUtenteMovimentoDs)movimento).getKey());
+          
+          // 16/05/2013
+//        this.movimentiKeys.add(((ContoUtenteMovimentoDs)movimento).getKey());
+          
+          movimento.setConto(this);
+          
         } else {
           throw new IllegalArgumentException("cannot add item of type " + movimento.getClass() + ", do you forget CloneableProperty annotation?");
         }
