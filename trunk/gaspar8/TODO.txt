@@ -23,7 +23,7 @@
 	__________________________________________________________________________________
 	
 
-	SNAPSHOT 15/05/2013 - VERIFICA SU APPSPOT
+	SNAPSHOT 15/05/2013
 
 		>> REFRESH CACHE UTENTI
 			- per 12 utenti ci sta 2 minuti
@@ -39,14 +39,26 @@
 			- ContoUtenteDs > List<ContoUtenteMovimentoDs> >> potrebbe dare problemi alla lunga con molti movimenti sull'utente ?
 			- forse va eliminata e gestito il link manualmente nell'adapter
 
+		>> RUOLI ADMINS
+			PortalUser
+				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
+				::isUserInRole (string)
 
-
-	SNAPSHOT 24/04/2013
-
-		>> VERIFICA APPSPOT 23/04/2013
-			- il refresh di comments count sembra ancora non funzionare (articles) >> IPOTESI: si può sfruttare PageBreadcrumb per fare la clean del folder ?
+		>> PRODUCER PAGE TEMPLATE
+			> nella ProducerProductPage sparisce il carrello
+				- non mantiene il template corretto (sparisce il carrello)
+					>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
+			> nella ProducerPage lasciare il calendario
 				
-		>> ISSUE AGGIORNAMENTO commentsCount (provato su Article) >> ANCORA DA SISTEMARE (PageBreadcrumb...]
+		>> PRODUCER FOLDER PAGE
+			> ProducerFolderPage >> 17/04/2013
+			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			
+		>> ADMIN EDITORS
+			> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
+
+		>> ARTICLE COMMENTS COUNT
+		    > ISSUE AGGIORNAMENTO commentsCount (provato su Article) >> ANCORA DA SISTEMARE (PageBreadcrumb...]
 			> CacheUtils.getAllMemCacheEntries()
 			> ArticleAdapterImpl.addCommentToArticle()
 				-- ottengo la lista di tutte le entry in cache
@@ -56,12 +68,6 @@
 			>> SE FUNZIONA RIPORTARE SUI BLOG
 			[21/04/2013]
 
-		>> PRODUCER PAGE TEMPLATE
-			> nella ProducerProductPage sparisce il carrello
-				- non mantiene il template corretto (sparisce il carrello)
-					>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
-			> nella ProducerPage lasciare il calendario
-				
 		>> OTTIMIZZAZIONI CACHE
     		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
     			> Map<Key, Object> resolvedEntities
@@ -81,7 +87,6 @@
 				> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
 			>> CASI DI TEST: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
     		[21/04/2013]
-    		
 
 		>> DOCUMENT LIBRARY
 			> TODO: cancellazione document
@@ -90,7 +95,7 @@
 				- RestController response.setContentType XXX
 			> per il momento fisso mime type = pdf
 			
-		>> BlogPage, Blog, BlogDiscussion, BlogComment
+		>> BLOG
 			>> STILI
 				>>> VEDI http://gasparotto.forumattivo.com/
 			> TODO:
@@ -109,15 +114,6 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 					
-		>> ProducerFolderPage [3]
-			> ProducerFolderPage >> 17/04/2013
-			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
-			
-		>> gestione ruoli admins [4]
-			PortalUser
-				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
-				::isUserInRole (string)
-
 		>> it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil
 			> mettere in tutti i getter getList dei tx
 			>> i metodi clone e wrap funzionano solo con jdk 1.7 [10/04/2013]
@@ -126,18 +122,13 @@
 			> provato su BlogDs... [09/04/2013]
 			> se funziona riportare su altri ds
 		
-		>> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
-
 		>> Link Facebook, Twitter, ...  [4]
 			
 
 	------------------------------------------------------
 
 
-
-	SNAPSHOT 16/01/2013
-		
-	>> SOSPESI GESTIONE ORDINI <<
+	SNAPSHOT 16/01/2013  [[ SOSPESI GESTIONE ORDINI ]]
 
 	- Data apertura ordine [2]
 		> gestire su producer:
