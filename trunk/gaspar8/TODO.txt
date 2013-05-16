@@ -23,6 +23,23 @@
 	__________________________________________________________________________________
 	
 
+
+	SNAPSHOT 16/05/2013
+	
+		>> ENTITY RELATIONSHIPS RESOLVER [IMPORTANTE]
+			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationships(Object, Map<Key, Object>)
+			> nel caso di entity List faceva un doppio controllo sulle resolvedEntities (quindi non risolveva le relazioni correttamente)
+			> commentato il primo check [16/05/2013]
+			> da provare: view acquisti in admin, aggiunta di un commento ad article, aggiornamento comments count
+				>> prima prova fatta su localhost [16/05/2013]
+				>> seconda prova fatta su gp8test [16/05/2013]
+		>> SEMPLIFICAZIONE CONTO UTENTE DS
+			> ContoUtenteDs >> eliminata relazione movimentiKeys
+			> ContoUtenteMovimentoDs >> aggiunta relazione contoId
+			> CustomAdapterGP8Impl.findContoUtenteByCustomer >> aggiunta find List<ContoUtenteMovimento> e settaggio in contoUtente
+			>> PROVARE SU GP8 TEST
+
+
 	SNAPSHOT 15/05/2013
 
 		>> REFRESH CACHE UTENTI

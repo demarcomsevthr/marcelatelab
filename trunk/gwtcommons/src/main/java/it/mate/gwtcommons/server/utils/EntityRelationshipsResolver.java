@@ -5,7 +5,6 @@ import it.mate.gwtcommons.server.dao.EntityRelationshipsResolverHandler;
 import it.mate.gwtcommons.server.dao.FindContext;
 import it.mate.gwtcommons.server.dao.PersistenceException;
 import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.HasUnownedRelationships;
 import it.mate.gwtcommons.server.model.UnownedRelationship;
 
 import java.io.Serializable;
@@ -55,16 +54,28 @@ public class EntityRelationshipsResolver {
     if (entity instanceof List) {
       List results = (List)entity;
       for (Object item : results) {
+        
+        /* ***********
+         * 16/05/2013 >> in questo caso il controllo sulle resolvedEntities lo fa due volte 
+         * (lo ripete nella chiamata innestata, quindi non risolve quando invece dovrebbe)
+         * 
         if (resolvedEntities.containsKey(getKey(item))) {
           logRecursiveLoop(getKey(item));
         } else {
           resolvedEntities.put(getKey(item), item);
           resolveUnownedRelationships(item, resolvedEntities);
         }
+        */
+        resolveUnownedRelationships(item, resolvedEntities);
+        
       }
+      
+    /* 16/05/2013  
     } else if (entity instanceof HasUnownedRelationships) {
       HasUnownedRelationships hasDipendencies = (HasUnownedRelationships)entity;
       hasDipendencies.resolveUnownedRelationships();
+      */
+      
     } else {
       if (resolvedEntities.containsKey(getKey(entity))) {
         logRecursiveLoop(getKey(entity));

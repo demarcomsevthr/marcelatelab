@@ -184,7 +184,7 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
     PortalUser portalUser = dao.findWithContext(new FindContext<PortalUserDs>(PortalUserDs.class).setId(portalUserId));
     Customer customer = customerAdapter.findByPortalUser(portalUser);
     if (customer != null) {
-      ContoUtente contoUtente = findContoUtenteByCustomer(customer, true, false);
+      ContoUtente contoUtente = findContoUtenteByCustomer(customer, true, true);
       return CloneUtils.clone(contoUtente, ContoUtenteTx.class);
     }
     return null;
@@ -202,25 +202,44 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
   }
   
   private ContoUtente findContoUtenteByCustomer(Customer customer, boolean createIfNotFound) {
-    return findContoUtenteByCustomer(customer, createIfNotFound, true);
+    return findContoUtenteByCustomer(customer, createIfNotFound, false);
   }
   
-  private ContoUtente findContoUtenteByCustomer(Customer customer, boolean createIfNotFound, boolean excludeOrderId) {
-    FindContext<ContoUtenteDs> findContext = new FindContext<ContoUtenteDs>(ContoUtenteDs.class)
+  private ContoUtente findContoUtenteByCustomer(Customer customer, boolean createIfNotFound, boolean includeOrderId) {
+    FindContext<ContoUtenteDs> findContoContext = new FindContext<ContoUtenteDs>(ContoUtenteDs.class)
         .setFilter("customerId == customerIdParam")
         .setParameters(Key.class.getName() + " customerIdParam")
         .setParamValues(new Object[] {KeyUtils.serializableToKey(customer.getId())})
         .includedField("movimentiKeys");
-    if (excludeOrderId) {
-      findContext.excludedField("orderId");
+    if (includeOrderId) {
+      findContoContext.includedField("orderId");
+    } else {
+      findContoContext.excludedField("orderId");
     }
-    ContoUtente contoUtente = dao.findSingle(findContext);
+    ContoUtente contoUtente = dao.findSingle(findContoContext);
     if (contoUtente == null && createIfNotFound) {
       contoUtente = new ContoUtenteDs();
       contoUtente.setCustomer(CloneUtils.clone(customer, CustomerDs.class));
       contoUtente.setSaldo(0d);
       contoUtente = dao.create(contoUtente);
     }
+
+    // 16/05/2013
+    if (contoUtente.getId() != null) {
+      FindContext<ContoUtenteMovimentoDs> findMovimentiContext = new FindContext<ContoUtenteMovimentoDs>(ContoUtenteMovimentoDs.class)
+          .setFilter("contoId == contoIdParam")
+          .setParameters(Key.class.getName() + " contoIdParam")
+          .setParamValues(new Object[] {KeyUtils.serializableToKey(contoUtente.getId())});
+      if (includeOrderId) {
+        findMovimentiContext.includedField("orderId");
+      } else {
+        findMovimentiContext.excludedField("orderId");
+      }
+      List<? extends ContoUtenteMovimento> movimenti = dao.findList(findMovimentiContext);
+      contoUtente.setMovimenti((List<ContoUtenteMovimento>)movimenti);
+    }
+    
+    
     return contoUtente;
   }
   

@@ -91,4 +91,12 @@ public class ContoUtenteMovimentoTx implements ContoUtenteMovimento {
     this.registeringPortalUser = (PortalUserTx)portalUser;
   }
 
+  public ContoUtente getConto() {
+    return conto;
+  }
+
+  public void setConto(ContoUtente conto) {
+    this.conto = conto;
+  }
+
 }
