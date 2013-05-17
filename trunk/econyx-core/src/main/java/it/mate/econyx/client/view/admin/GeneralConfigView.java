@@ -1,7 +1,6 @@
 package it.mate.econyx.client.view.admin;
 
 import it.mate.econyx.client.activities.GeneralActivity;
-import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.MessageBox;
@@ -17,22 +16,18 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -105,7 +100,8 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       }
     });
   }
-  
+
+  /*
   @UiHandler ("exportPortalDataBtn")
   public void onExportPortalDataBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -114,6 +110,7 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       }
     });
   }
+  */
   
   @UiHandler ("resetCacheBtn")
   public void onResetCacheBtn (ClickEvent event) {
@@ -198,6 +195,15 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
   
+  @UiHandler ("refreshUsersCacheBtn")
+  public void refreshUsersCacheBtn(ClickEvent event) {
+    askSecretCode(new Delegate<Void>() {
+      public void execute(Void element) {
+        getPresenter().refreshUsersCache();
+      }
+    });
+  }
+  
   class GenerateInformations {
     int number;
     Date date;
@@ -213,15 +219,17 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     final IntegerBox numberBox = new IntegerBox();
     popupPanel.add(GwtUtils.createPopupPanelItem("Numero:", numberBox, "2em", "8em"));
     final DateBox dateBox = new DateBox();
+    GwtUtils.setDateBoxFormat(dateBox, "dd/MM/yyyy");
     dateBox.setValue(new Date());
     popupPanel.add(GwtUtils.createPopupPanelItem("Data:", dateBox, "2em", "8em"));
-    MessageBoxUtils.popupOkCancel("Inserire gli estremi del movimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
+    MessageBoxUtils.popupOkCancel("Inserire gli estremi per l'inserimento", popupPanel, "400px", new Delegate<MessageBox.Callbacks> () {
       public void execute(MessageBox.Callbacks callbacks) {
         delegate.execute(new GenerateInformations(numberBox.getValue(), dateBox.getValue()));
       }
     });
   }
   
+  /*
   @UiHandler ("gdataSpreadsheetTestBtn")
   public void gdataSpreadsheetTestBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -230,7 +238,9 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       }
     });
   }
+  */
   
+  /*
   @UiHandler ("exceptionTestBtn")
   public void exceptionTestBtn (ClickEvent event) {
     AppClientFactory.IMPL.getGinjector().getGeneralService().testServiceException(new AsyncCallback<Void>() {
@@ -242,6 +252,7 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       }
     });
   }
+  */
   
   @UiHandler ("instCacheViewBtn")
   public void instCacheViewBtn (ClickEvent event) {
@@ -265,6 +276,7 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
   
+  /*
   @UiHandler ("cobraTestBtn")
   public void cobraTestBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -273,13 +285,13 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       }
     });
   }
+  */
   
-  
+
+  /*
   private boolean waiting = false;
-  
   @UiHandler ("customTest1Btn")
   public void customTest1Btn (ClickEvent event) {
-    
     if (waiting) {
       GwtUtils.hideWaitPanel();
       waiting = false;
@@ -292,13 +304,10 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
       Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
       defaultWaitPanel.setWidget(waitingImg);
       GwtUtils.setDefaultWaitPanel(defaultWaitPanel);
-      
       GwtUtils.showWaitPanel();
       waiting = true;
     }
-    
   }
-  
-  
+  */
   
 }

@@ -23,6 +23,11 @@
 	__________________________________________________________________________________
 	
 
+	RILEVAZIONE TEMPI MEDI - 17/05/2013
+		>> init static data > 1:40 min
+		>> generate order > 16'' per order
+		>> update order state > 6' per order 
+
 
 	SNAPSHOT 16/05/2013
 	
@@ -40,7 +45,20 @@
 			>> PROVARE SU GP8 TEST
 
 
-	SNAPSHOT 15/05/2013
+	SNAPSHOT 17/05/2013
+	
+		>> IMPORT/EXPORT ORDINI
+			- si utilizza sempre PortalDataExportModel e PortalDataExporterImpl (con load method differenti)
+			- deve lavorare su:
+				PortalUserTx (users)
+				CustomerTx (customers)
+				TipoArticoloTx (productTypes)
+				UnitaDiMisuraTx (unitOfMeasures)
+				ProduttoreTx (producers)
+				ArticoloTx (products)
+				OrderStateConfigTx (orderStates)
+			- >> deve essere possibile fare il merge su portaldata.xml	
+				
 
 		>> REFRESH CACHE UTENTI
 			- per 12 utenti ci sta 2 minuti
@@ -70,6 +88,10 @@
 		>> PRODUCER FOLDER PAGE
 			> ProducerFolderPage >> 17/04/2013
 			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			
+		>> INFORMAZIONI PER IL RITIRO
+			> deve essere una prop (multi riga) di producer
+			> va messa nella mail di conf ordine	
 			
 		>> ADMIN EDITORS
 			> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]

@@ -56,4 +56,6 @@ public interface GeneralServiceAsync {
 
   void createBlobstoreUploadUrl(String url, AsyncCallback<String> callback);
 
+  void refreshUsersCache(AsyncCallback<Void> callback);
+
 }

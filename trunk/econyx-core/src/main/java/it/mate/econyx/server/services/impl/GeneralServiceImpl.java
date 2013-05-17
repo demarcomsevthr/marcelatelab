@@ -357,6 +357,11 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number, date)));
   }
   
+  @Override
+  public void refreshUsersCache() {
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.REFRESH_USERS_CACHE, 0, null)));
+  }
+
   public String gdataSpreadsheetTest() {
     
     String consumerKey = PropertiesHolder.getString("generalService.gdata.consumerKey");

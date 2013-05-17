@@ -1,6 +1,7 @@
 package it.mate.econyx.client.view;
 
 import it.mate.econyx.client.view.CustomerProfileView.Presenter;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
 
@@ -18,6 +19,8 @@ public interface CustomerProfileView extends BaseView<Presenter> {
     void goToShoppingCartView();
     
     void createOrderListView(AcceptsOneWidget panel);
+    
+    public void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword);    
     
   }
   

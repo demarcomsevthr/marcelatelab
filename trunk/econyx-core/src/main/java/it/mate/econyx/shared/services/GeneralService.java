@@ -51,6 +51,8 @@ public interface GeneralService extends RemoteService {
   
   public void generateRandomOrders(int number, Date date);
   
+  public void refreshUsersCache();
+  
   
   
   public String gdataSpreadsheetTest();
