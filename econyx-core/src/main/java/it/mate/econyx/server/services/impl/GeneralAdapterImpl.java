@@ -411,6 +411,12 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     
   }
   
+  @Override
+  public void refreshUsersCache() {
+    portalUserAdapter.findAll();
+    customerAdapter.findAll();
+  }
+
   public List<CacheDumpEntry> instanceCacheDump () {
     List<CacheDumpEntry> results = new ArrayList<CacheDumpEntry>(); 
     Set<Object> keys = CacheUtils.instKeySet();

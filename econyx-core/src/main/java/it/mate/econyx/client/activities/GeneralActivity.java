@@ -187,7 +187,7 @@ public class GeneralActivity extends BaseActivity {
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Void result) {
-        Window.alert("Operazione eseguita");
+        Window.alert("Operazione accodata");
       }
     });
   }
@@ -198,7 +198,18 @@ public class GeneralActivity extends BaseActivity {
         Window.alert(caught.getMessage());
       }
       public void onSuccess(Void result) {
-        Window.alert("Operazione eseguita");
+        Window.alert("Operazione accodata");
+      }
+    });
+  }
+  
+  public void refreshUsersCache() {
+    generalService.refreshUsersCache(new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Void result) {
+        Window.alert("Operazione accodata");
       }
     });
   }

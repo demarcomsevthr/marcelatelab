@@ -28,6 +28,8 @@ public interface GeneralAdapter {
   
   public List<CacheDumpEntry> instanceCacheDump ();
   
+  public void refreshUsersCache();
+  
   
   public void cobraTest();
   

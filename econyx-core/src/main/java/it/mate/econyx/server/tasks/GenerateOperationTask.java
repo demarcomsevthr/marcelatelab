@@ -14,6 +14,8 @@ public class GenerateOperationTask implements DeferredTask {
   
   public static final int GENERATE_RANDOM_ORDERS = 2;
   
+  public static final int REFRESH_USERS_CACHE = 3;
+  
   private int command;
 
   private int number;
@@ -33,6 +35,8 @@ public class GenerateOperationTask implements DeferredTask {
       adapter.generateRandomCustomers(number, date);
     } else if (command == GENERATE_RANDOM_ORDERS) {
       adapter.generateRandomOrders(number, date);
+    } else if (command == REFRESH_USERS_CACHE) {
+      adapter.refreshUsersCache();
     }
   }
 

@@ -7,7 +7,9 @@ import it.mate.econyx.client.util.NavigationUtils;
 import it.mate.econyx.client.view.CustomerEditView;
 import it.mate.econyx.client.view.CustomerProfileView;
 import it.mate.econyx.shared.model.Customer;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.services.CustomerServiceAsync;
+import it.mate.econyx.shared.services.PortalUserServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 
 import com.google.gwt.event.shared.EventBus;
@@ -22,6 +24,8 @@ public class CustomerActivity extends BaseActivity implements
   private CustomerPlace place;
   
   private CustomerServiceAsync customerService = AppClientFactory.IMPL.getGinjector().getCustomerService();
+  
+  private PortalUserServiceAsync portalUserService = AppClientFactory.IMPL.getGinjector().getPortalUserService();
   
   public CustomerActivity(CustomerPlace place, AppClientFactory clientFactory) {
     super(clientFactory);
@@ -121,6 +125,18 @@ public class CustomerActivity extends BaseActivity implements
   @Override
   public void goToShoppingCartView() {
     NavigationUtils.goToShoppingCartDetailView();
+  }
+
+  @Override
+  public void updatePassword(PortalUser portalUser, String passwordAttuale, String nuovaPassword, String confermaPassword) {
+    portalUserService.updatePassword(portalUser, passwordAttuale, nuovaPassword, confermaPassword, new AsyncCallback<PortalUser>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(PortalUser result) {
+        Window.alert("Password modificata");
+      }
+    });
   }
   
 }
