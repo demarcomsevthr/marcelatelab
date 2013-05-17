@@ -61,6 +61,9 @@
       <gc:Spacer height="2px"/>
       <g:Button ui:field="refreshUsersCacheBtn" width="12em" text="Refresh Users Cache"/>
       
+      <gc:Spacer height="2px"/>
+      <g:Button ui:field="exportOrderDataXmlBtn" width="12em" text="Export order data XML"/>
+      
     </g:VerticalPanel>
     
     <g:FormPanel ui:field="exportForm" visible="false"/>

@@ -8,6 +8,7 @@ import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
+import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.PortalUser;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PortalDataExportModel implements VisitContext {
-  public static final int LOAD_METHOD_DEFAULT = 0;
+  public static final int LOAD_METHOD_ALL = 0;
   public static final int LOAD_METHOD_ORDERS = 1;
   public int loadMethod;
   public boolean createProducts = false;
@@ -39,4 +40,5 @@ public class PortalDataExportModel implements VisitContext {
   public List<ArticleFolder> articleFolders;
   public List<DocumentFolder> documentFolders;
   public List<Blog> blogs;
+  public List<Order> orders;
 }

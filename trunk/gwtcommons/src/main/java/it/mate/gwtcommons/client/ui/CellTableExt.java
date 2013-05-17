@@ -146,15 +146,25 @@ public class CellTableExt<M> extends CellTable<M> {
   }
     
   public void setRowDataExt (List<M> data, Object firstSortedColumnKey) {
+
+    if (dataProvider != null) {
+      dataProvider.setList(new ArrayList<M>());
+      dataProvider.refresh();
+    }
     
     if (data == null) {
       dataProvider = new ListDataProvider<M>(new ArrayList<M>());
       dataProvider.addDataDisplay(this);
       return;
     }
-    
-    dataProvider = new ListDataProvider<M>(data);
-    dataProvider.addDataDisplay(this);
+
+    if (dataProvider == null) {
+      dataProvider = new ListDataProvider<M>(data);
+      dataProvider.addDataDisplay(this);
+    } else {
+      dataProvider.setList(data);
+      dataProvider.refresh();
+    }
 
     sortHandler = new ListHandler<M>(dataProvider.getList());
 

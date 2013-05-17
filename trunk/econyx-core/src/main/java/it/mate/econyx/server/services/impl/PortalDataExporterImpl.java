@@ -32,6 +32,8 @@ import it.mate.econyx.shared.model.DocumentFolderPage;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
+import it.mate.econyx.shared.model.Order;
+import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -43,6 +45,7 @@ import it.mate.econyx.shared.model.TipoArticolo;
 import it.mate.econyx.shared.model.UnitaDiMisura;
 import it.mate.econyx.shared.model.impl.AbstractIndirizzoTx;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
+import it.mate.econyx.shared.model.impl.ArticlePageTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.econyx.shared.model.impl.BlogTx;
@@ -51,7 +54,10 @@ import it.mate.econyx.shared.model.impl.DocumentFolderTx;
 import it.mate.econyx.shared.model.impl.DocumentTx;
 import it.mate.econyx.shared.model.impl.ImageTx;
 import it.mate.econyx.shared.model.impl.ModalitaSpedizioneTx;
+import it.mate.econyx.shared.model.impl.OrderItemTx;
 import it.mate.econyx.shared.model.impl.OrderStateConfigTx;
+import it.mate.econyx.shared.model.impl.OrderStateTx;
+import it.mate.econyx.shared.model.impl.OrderTx;
 import it.mate.econyx.shared.model.impl.PortalPageTx;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.model.impl.ProduttoreTx;
@@ -63,17 +69,21 @@ import it.mate.gwtcommons.server.utils.XStreamUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Blob;
@@ -82,6 +92,10 @@ import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 
 @Service
 public class PortalDataExporterImpl implements PortalDataExporter {
@@ -113,6 +127,32 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   private FileService fileService = FileServiceFactory.getFileService();
   
   private void setupXStream() {
+    
+    final List<String> CDATA_FIELDS = Arrays.asList(new String[] {"name", "content"}); 
+    
+    // 17/05/2013
+    XStreamUtils.setDriver(new XppDriver() {
+      @Override
+      public HierarchicalStreamWriter createWriter(Writer out) {
+        return new PrettyPrintWriter(out) {
+          boolean cdata = false;
+          public void startNode(String name, Class clazz) {
+            super.startNode(name, clazz);
+            cdata = CDATA_FIELDS.contains(name);
+          }
+          protected void writeText(QuickWriter writer, String text) {
+            if (cdata) {
+              writer.write("<![CDATA[");
+              super.writeText(writer, HtmlUtils.htmlEscape(text));
+              writer.write("]]>");
+            } else {
+              super.writeText(writer, text);
+            }
+          }
+        };
+      }
+    });
+    
     XStreamUtils.getXStream().setMode(XStream.NO_REFERENCES);
     XStreamUtils.registerConverter(new TipoArticoloConverter());
     XStreamUtils.registerConverter(new HtmlContentConverter());
@@ -140,6 +180,15 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     XStreamUtils.getXStream().omitField(DocumentFolderTx.class, "id");
     XStreamUtils.getXStream().omitField(DocumentTx.class, "id");
     XStreamUtils.getXStream().omitField(BlogTx.class, "id");
+    
+    XStreamUtils.getXStream().omitField(ArticlePageTx.class, "id");
+    
+    XStreamUtils.getXStream().omitField(OrderTx.class, "id");
+    XStreamUtils.getXStream().omitField(OrderItemTx.class, "id");
+    XStreamUtils.getXStream().omitField(OrderStateTx.class, "id");
+    XStreamUtils.getXStream().omitField(OrderItemTx.class, "order");
+    XStreamUtils.getXStream().omitField(OrderStateTx.class, "order");
+    
   }
   
   public PortalDataExportModel load () {
@@ -223,30 +272,53 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return dataModel;
   }
   
-  public String unload() {
+  public String unload(int loadMethod) {
     String xml = null;
     try {
       PortalDataExportModel model = new PortalDataExportModel();
+      
       model.users = portalUserAdapter.findAll();
       model.customers = customerAdapter.findAll();
-      model.pages = portalPageAdapter.findAllRoot();
       model.products = productAdapter.findAll();
-      for (PortalPage page : model.pages) {
-        portalPageAdapter.resolveAllDependencies(page);
-        visitPortalPage(model, false, page);
+      
+      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
+        model.pages = portalPageAdapter.findAllRoot();
+        for (PortalPage page : model.pages) {
+          portalPageAdapter.resolveAllDependencies(page);
+          visitPortalPage(model, false, page);
+        }
       }
+      
       Collections.sort(model.products, new Comparator<Articolo>() {
         public int compare(Articolo o1, Articolo o2) {
           return o1.getCodice().compareTo(o2.getCodice());
         }
       });
-      model.images = imageAdapter.findAll();
+
+      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
+        model.images = imageAdapter.findAll();
+      }
+      
       model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
       model.orderStates = orderAdapter.findAllOrderStates();
-      model.articleFolders = articleAdapter.findAll();
-      model.documentFolders = documentAdapter.findAllFolders();
+      
+      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ORDERS) {
+        model.orders = orderAdapter.findAll();
+        for (Order order : model.orders) {
+          visitOrder(model, false, order);
+        }
+      }
+      
+      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
+        model.articleFolders = articleAdapter.findAll();
+        model.documentFolders = documentAdapter.findAllFolders();
+      }
+      
       setupXStream();
+      // 17/05/2013
+//    xml = XStreamUtils.parseGraph(model, "UTF-8");
       xml = XStreamUtils.parseGraph(model);
+      
     } catch (Throwable th) {
       logger.log(Level.SEVERE, "error", th);
     }
@@ -346,6 +418,34 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return resourceFile;
   }
   
+  private Order visitOrder(VisitContext context, boolean loadMode, Order order) {
+    if (loadMode) {
+      order = orderAdapter.create(order);
+    }
+    boolean needUpdate = false;
+    if (order.getProducer() != null) {
+      order.setProducer(visitProducer(context, loadMode, order.getProducer()));
+      needUpdate = true;
+    }
+    if (order.getCustomer() != null) {
+      order.setCustomer(visitCustomer(context, loadMode, order.getCustomer()));
+      needUpdate = true;
+    }
+    if (order.getItems() != null) {
+      List<OrderItem> orderItems = order.getItems();
+      for (int it = 0; it < orderItems.size(); it++) {
+        OrderItem orderItem = orderItems.get(it);
+        orderItem.setProduct(visitProduct(context, loadMode, orderItem.getProduct()));
+        orderItems.set(it, orderItem);
+      }
+      needUpdate = true;
+    }
+    if (loadMode && needUpdate) {
+      order = orderAdapter.update(order);
+    }
+    return order;
+  }
+  
   private PortalPage visitPortalPage(VisitContext context, boolean loadMode, PortalPage page) {
     if (loadMode) {
       page = portalPageAdapter.create(page);
@@ -422,6 +522,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   private ArticleFolder visitArticleFolder(VisitContext context, boolean loadMode, ArticleFolder articleFolder) {
     PortalDataExportModel model = (PortalDataExportModel)context;
+    if (model.articleFolders == null) {
+      model.articleFolders = new ArrayList<ArticleFolder>();
+    }
     for (int it = 0; it < model.articleFolders.size(); it++) {
       ArticleFolder cachedArticleFolder = model.articleFolders.get(it);
       boolean matched = false;
@@ -474,6 +577,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   private DocumentFolder visitDocumentFolder(VisitContext context, boolean loadMode, DocumentFolder documentFolder) {
     PortalDataExportModel model = (PortalDataExportModel)context;
+    if (model.documentFolders == null) {
+      model.documentFolders = new ArrayList<DocumentFolder>();
+    }
     for (int it = 0; it < model.documentFolders.size(); it++) {
       DocumentFolder cachedDocumentFolder = model.documentFolders.get(it);
       boolean matched = false;
