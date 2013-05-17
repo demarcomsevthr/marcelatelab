@@ -364,6 +364,9 @@ public class PortalPageAdapterImpl implements PortalPageAdapter {
   }
 
   private void resolvePageDependencies(PortalPage page, boolean resolveChildreen, boolean resolveHtmls) {
+    if (page instanceof VirtualPage) {
+      return;
+    }
     PortalPage resolvedPage = findById(page.getId(), resolveChildreen, true, resolveHtmls);
     if (resolveHtmls && resolvedPage instanceof WebContentPage) {
       WebContentPage webContentPage = (WebContentPage)resolvedPage;

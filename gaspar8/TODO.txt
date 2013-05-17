@@ -47,6 +47,12 @@
 
 	SNAPSHOT 17/05/2013
 	
+		>> EXPORT ERRORS
+			> null pointer (articlefolder) > risolto
+			> xml not well formed (Attività socio culturali) >> XStreamUtils.setDriver() in PortalDataExporterImpl
+			>> DA TESTARE MEGLIO			
+		
+	
 		>> IMPORT/EXPORT ORDINI
 			- si utilizza sempre PortalDataExportModel e PortalDataExporterImpl (con load method differenti)
 			- deve lavorare su:
@@ -57,23 +63,12 @@
 				ProduttoreTx (producers)
 				ArticoloTx (products)
 				OrderStateConfigTx (orderStates)
+				
+				++++
+				OrderTx (orders)
+				
 			- >> deve essere possibile fare il merge su portaldata.xml	
 				
-
-		>> REFRESH CACHE UTENTI
-			- per 12 utenti ci sta 2 minuti
-			- TODO: funzione di servizio per ricaricare la cache degli utenti in background
-
-		>> INSERIMENTO UTENTE
-			- OK 15/05/2013
-			
-		>> CAMBIO PWD DA PROFILO UTENTE
-
-		>> CONTO UTENTE
-			- ContoUtenteMovimentoDs > aggiungere codice utente (per facilitare le query da datastore viewer)
-			- ContoUtenteDs > List<ContoUtenteMovimentoDs> >> potrebbe dare problemi alla lunga con molti movimenti sull'utente ?
-			- forse va eliminata e gestito il link manualmente nell'adapter
-
 		>> RUOLI ADMINS
 			PortalUser
 				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...

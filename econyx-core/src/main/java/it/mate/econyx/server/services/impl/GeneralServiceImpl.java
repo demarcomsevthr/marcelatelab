@@ -1,6 +1,7 @@
 package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.client.factories.DefaultCustomClientFactory;
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.InitAdapter;
@@ -159,7 +160,7 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
 
   @Override
   public void exportPortalData() {
-    portalDataMarshaller.unload();
+    portalDataMarshaller.unload(PortalDataExportModel.LOAD_METHOD_ALL);
   }
 
   @Override

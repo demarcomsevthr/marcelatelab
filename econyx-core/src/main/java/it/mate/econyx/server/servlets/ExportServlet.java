@@ -1,5 +1,6 @@
 package it.mate.econyx.server.servlets;
 
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.server.services.PortalDataExporter;
 
 import java.io.IOException;
@@ -31,7 +32,8 @@ public class ExportServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
-      String xml = portalDataMarshaller.unload();
+      int exportMode = getIntParameter(request, "exportMode", PortalDataExportModel.LOAD_METHOD_ALL);
+      String xml = portalDataMarshaller.unload(exportMode);
       response.setContentType("text/xml");
       response.getWriter().print(xml);
     } catch (Exception ex) {
@@ -40,5 +42,12 @@ public class ExportServlet extends HttpServlet {
     }
   }
   
+  private int getIntParameter(HttpServletRequest request, String name, int defValue) {
+    String value = request.getParameter(name);
+    if (value != null) {
+      return Integer.parseInt(value);
+    }
+    return defValue;
+  }
   
 }

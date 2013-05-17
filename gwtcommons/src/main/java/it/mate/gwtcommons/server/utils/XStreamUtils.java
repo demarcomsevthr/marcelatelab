@@ -1,10 +1,14 @@
 package it.mate.gwtcommons.server.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
 public class XStreamUtils {
   
@@ -12,11 +16,22 @@ public class XStreamUtils {
   
   private static XStreamUtils INSTANCE = null;
   
+  private static HierarchicalStreamDriver driver;
+  
+  public static void setDriver(HierarchicalStreamDriver driver) {
+    XStreamUtils.driver = driver;
+  }
+  
   private static XStreamUtils getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new XStreamUtils();
-      INSTANCE.xstream = new XStreamAppengine(new PureJavaReflectionProvider());
-//    INSTANCE.xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
+      
+      if (driver != null) {
+        INSTANCE.xstream = new XStreamAppengine(new PureJavaReflectionProvider(), driver);
+      } else {
+        INSTANCE.xstream = new XStreamAppengine(new PureJavaReflectionProvider());
+      }
+      
     }
     return INSTANCE;
   }
@@ -26,8 +41,24 @@ public class XStreamUtils {
   }
   
   public static String parseGraph(Object graph) {
-    String result = getInstance().xstream.toXML(graph);
-    return result;
+    return parseGraph(graph, null);
+  }
+  
+  public static String parseGraph(Object graph, String encoding) {
+    String xml = null;
+    if (encoding != null) {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try {
+        Writer writer = new OutputStreamWriter(baos, encoding);
+        getInstance().xstream.toXML(graph, writer);
+        xml = baos.toString(encoding);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else {
+      xml = getInstance().xstream.toXML(graph);
+    }
+    return xml;
   }
   
   public static Object buildGraph(File xmlFile) {

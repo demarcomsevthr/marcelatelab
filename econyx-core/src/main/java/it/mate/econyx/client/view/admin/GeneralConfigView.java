@@ -1,6 +1,7 @@
 package it.mate.econyx.client.view.admin;
 
 import it.mate.econyx.client.activities.GeneralActivity;
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.ui.MessageBox;
@@ -64,34 +65,6 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   }
   
   
-  private void askSecretCode(final Delegate<Void> delegate) {
-    if (isDevServer || secretCode.equals("")) {
-      delegate.execute(null);
-      return;
-    }
-    HorizontalPanel popupPanel = new HorizontalPanel();
-    popupPanel.add(new Spacer("1px", "2em"));
-    Label label = new Label("Secret code:");
-    label.setWidth("6em");
-    popupPanel.add(label);
-    final PasswordTextBox secretBox = new PasswordTextBox();
-    popupPanel.add(secretBox);
-    MessageBoxUtils.popupOkCancel("Secret code", popupPanel, "400px", new Delegate<MessageBox.Callbacks>() {
-      public void execute(Callbacks callbacks) {
-        if (secretCode.equals(secretBox.getValue())) {
-          delegate.execute(null);
-        } else {
-          Window.alert("Secret code errato!");
-        }
-      }
-    });
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        secretBox.setFocus(true);
-      }
-    });
-  }
-  
   @UiHandler ("importPortalDataBtn")
   public void onImportPortalDataBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -125,14 +98,16 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   public void onExportPortalDataXmlBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
-        long ctm = System.currentTimeMillis();
-        exportForm.clear();
-        exportForm.setAction("/portalData.export?v="+ctm);
-        exportForm.setMethod(FormPanel.METHOD_POST);
-        HorizontalPanel inner = new HorizontalPanel();
-        inner.add( new Hidden("oper", "portalData" ));
-        exportForm.setWidget(inner);
-        exportForm.submit();
+        setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ALL);
+      }
+    });
+  }
+  
+  @UiHandler ("exportOrderDataXmlBtn")
+  public void exportOrderDataXmlBtn (ClickEvent event) {
+    askSecretCode(new Delegate<Void>() {
+      public void execute(Void element) {
+        setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ORDERS);
       }
     });
   }
@@ -200,6 +175,34 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
         getPresenter().refreshUsersCache();
+      }
+    });
+  }
+  
+  private void askSecretCode(final Delegate<Void> delegate) {
+    if (isDevServer || secretCode.equals("")) {
+      delegate.execute(null);
+      return;
+    }
+    HorizontalPanel popupPanel = new HorizontalPanel();
+    popupPanel.add(new Spacer("1px", "2em"));
+    Label label = new Label("Secret code:");
+    label.setWidth("6em");
+    popupPanel.add(label);
+    final PasswordTextBox secretBox = new PasswordTextBox();
+    popupPanel.add(secretBox);
+    MessageBoxUtils.popupOkCancel("Secret code", popupPanel, "400px", new Delegate<MessageBox.Callbacks>() {
+      public void execute(Callbacks callbacks) {
+        if (secretCode.equals(secretBox.getValue())) {
+          delegate.execute(null);
+        } else {
+          Window.alert("Secret code errato!");
+        }
+      }
+    });
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        secretBox.setFocus(true);
       }
     });
   }
@@ -274,6 +277,18 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
         });
       }
     });
+  }
+  
+  private void setExportFormAndSubmit(int exportMode) {
+    long ctm = System.currentTimeMillis();
+    exportForm.clear();
+    exportForm.setAction("/portalData.export?v="+ctm);
+    exportForm.setMethod(FormPanel.METHOD_POST);
+    HorizontalPanel inner = new HorizontalPanel();
+    inner.add( new Hidden("oper", "portalData" ));
+    inner.add( new Hidden("exportMode", ""+exportMode ));
+    exportForm.setWidget(inner);
+    exportForm.submit();
   }
   
   /*
