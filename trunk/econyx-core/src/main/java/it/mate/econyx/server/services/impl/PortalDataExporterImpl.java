@@ -126,12 +126,13 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   private FileService fileService = FileServiceFactory.getFileService();
   
+  private XStreamUtils xStreamUtils;
+  
   private void setupXStream() {
     
     final List<String> CDATA_FIELDS = Arrays.asList(new String[] {"name", "content"}); 
-    
-    // 17/05/2013
-    XStreamUtils.setDriver(new XppDriver() {
+
+    xStreamUtils = new XStreamUtils(new XppDriver() {
       @Override
       public HierarchicalStreamWriter createWriter(Writer out) {
         return new PrettyPrintWriter(out) {
@@ -153,41 +154,41 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       }
     });
     
-    XStreamUtils.getXStream().setMode(XStream.NO_REFERENCES);
-    XStreamUtils.registerConverter(new TipoArticoloConverter());
-    XStreamUtils.registerConverter(new HtmlContentConverter());
-    XStreamUtils.registerConverter(new ImageContentConverter());
-    XStreamUtils.registerConverter(new ProductPageConverter());
-    XStreamUtils.getXStream().omitField(PortalPageTx.class, "id");
-    XStreamUtils.getXStream().omitField(PortalPageTx.class, "parent");
-    XStreamUtils.getXStream().omitField(PortalPageTx.class, "parentId");
-    XStreamUtils.getXStream().omitField(WebContentPageTx.class, "htmlsInitialized");
-    XStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "visibleInExplorer");
-    XStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "visibleInMenu");
-    XStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "homePage");
-    XStreamUtils.getXStream().omitField(ArticoloTx.class, "id");
-    XStreamUtils.getXStream().omitField(ArticoloTx.class, "htmlsInitialized");
-    XStreamUtils.getXStream().omitField(CustomerTx.class, "id");
-    XStreamUtils.getXStream().omitField(AbstractIndirizzoTx.class, "id");
-    XStreamUtils.getXStream().omitField(PortalUserTx.class, "id");
-    XStreamUtils.getXStream().omitField(UnitaDiMisuraTx.class, "id");
-    XStreamUtils.getXStream().omitField(ProduttoreTx.class, "id");
-    XStreamUtils.getXStream().omitField(ModalitaSpedizioneTx.class, "id");
-    XStreamUtils.getXStream().omitField(ImageTx.class, "id");
-    XStreamUtils.getXStream().omitField(OrderStateConfigTx.class, "id");
-    XStreamUtils.getXStream().omitField(ArticleFolderTx.class, "id");
-    XStreamUtils.getXStream().omitField(ArticleTx.class, "id");
-    XStreamUtils.getXStream().omitField(DocumentFolderTx.class, "id");
-    XStreamUtils.getXStream().omitField(DocumentTx.class, "id");
-    XStreamUtils.getXStream().omitField(BlogTx.class, "id");
+    xStreamUtils.getXStream().setMode(XStream.NO_REFERENCES);
+    xStreamUtils.registerConverter(new TipoArticoloConverter());
+    xStreamUtils.registerConverter(new HtmlContentConverter());
+    xStreamUtils.registerConverter(new ImageContentConverter());
+    xStreamUtils.registerConverter(new ProductPageConverter(xStreamUtils.getXStream().getMapper(), xStreamUtils.getXStream().getReflectionProvider()));
+    xStreamUtils.getXStream().omitField(PortalPageTx.class, "id");
+    xStreamUtils.getXStream().omitField(PortalPageTx.class, "parent");
+    xStreamUtils.getXStream().omitField(PortalPageTx.class, "parentId");
+    xStreamUtils.getXStream().omitField(WebContentPageTx.class, "htmlsInitialized");
+    xStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "visibleInExplorer");
+    xStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "visibleInMenu");
+    xStreamUtils.getXStream().useAttributeFor(PortalPageTx.class, "homePage");
+    xStreamUtils.getXStream().omitField(ArticoloTx.class, "id");
+    xStreamUtils.getXStream().omitField(ArticoloTx.class, "htmlsInitialized");
+    xStreamUtils.getXStream().omitField(CustomerTx.class, "id");
+    xStreamUtils.getXStream().omitField(AbstractIndirizzoTx.class, "id");
+    xStreamUtils.getXStream().omitField(PortalUserTx.class, "id");
+    xStreamUtils.getXStream().omitField(UnitaDiMisuraTx.class, "id");
+    xStreamUtils.getXStream().omitField(ProduttoreTx.class, "id");
+    xStreamUtils.getXStream().omitField(ModalitaSpedizioneTx.class, "id");
+    xStreamUtils.getXStream().omitField(ImageTx.class, "id");
+    xStreamUtils.getXStream().omitField(OrderStateConfigTx.class, "id");
+    xStreamUtils.getXStream().omitField(ArticleFolderTx.class, "id");
+    xStreamUtils.getXStream().omitField(ArticleTx.class, "id");
+    xStreamUtils.getXStream().omitField(DocumentFolderTx.class, "id");
+    xStreamUtils.getXStream().omitField(DocumentTx.class, "id");
+    xStreamUtils.getXStream().omitField(BlogTx.class, "id");
     
-    XStreamUtils.getXStream().omitField(ArticlePageTx.class, "id");
+    xStreamUtils.getXStream().omitField(ArticlePageTx.class, "id");
     
-    XStreamUtils.getXStream().omitField(OrderTx.class, "id");
-    XStreamUtils.getXStream().omitField(OrderItemTx.class, "id");
-    XStreamUtils.getXStream().omitField(OrderStateTx.class, "id");
-    XStreamUtils.getXStream().omitField(OrderItemTx.class, "order");
-    XStreamUtils.getXStream().omitField(OrderStateTx.class, "order");
+    xStreamUtils.getXStream().omitField(OrderTx.class, "id");
+    xStreamUtils.getXStream().omitField(OrderItemTx.class, "id");
+    xStreamUtils.getXStream().omitField(OrderStateTx.class, "id");
+    xStreamUtils.getXStream().omitField(OrderItemTx.class, "order");
+    xStreamUtils.getXStream().omitField(OrderStateTx.class, "order");
     
   }
   
@@ -204,7 +205,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   public PortalDataExportModel load (String portalDataXml) {
     try {
       setupXStream();
-      PortalDataExportModel dataModel = (PortalDataExportModel)XStreamUtils.buildGraph(portalDataXml);
+      PortalDataExportModel dataModel = (PortalDataExportModel)xStreamUtils.buildGraph(portalDataXml);
       ensureProductsDataModel(dataModel);
       load(dataModel);
     } catch (Exception ex) {
@@ -216,7 +217,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   private PortalDataExportModel load (File portalDataXml) {
     try {
       setupXStream();
-      PortalDataExportModel dataModel = (PortalDataExportModel)XStreamUtils.buildGraph(portalDataXml);
+      PortalDataExportModel dataModel = (PortalDataExportModel)xStreamUtils.buildGraph(portalDataXml);
       ensureProductsDataModel(dataModel);
       load(dataModel);
     } catch (Exception ex) {
@@ -277,52 +278,67 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     try {
       PortalDataExportModel model = new PortalDataExportModel();
       
-      model.users = portalUserAdapter.findAll();
-      model.customers = customerAdapter.findAll();
-      model.products = productAdapter.findAll();
-      
       if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
-        model.pages = portalPageAdapter.findAllRoot();
-        for (PortalPage page : model.pages) {
-          portalPageAdapter.resolveAllDependencies(page);
-          visitPortalPage(model, false, page);
-        }
-      }
-      
-      Collections.sort(model.products, new Comparator<Articolo>() {
-        public int compare(Articolo o1, Articolo o2) {
-          return o1.getCodice().compareTo(o2.getCodice());
-        }
-      });
-
-      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
-        model.images = imageAdapter.findAll();
-      }
-      
-      model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
-      model.orderStates = orderAdapter.findAllOrderStates();
-      
-      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ORDERS) {
-        model.orders = orderAdapter.findAll();
-        for (Order order : model.orders) {
-          visitOrder(model, false, order);
-        }
-      }
-      
-      if (loadMethod == PortalDataExportModel.LOAD_METHOD_ALL) {
-        model.articleFolders = articleAdapter.findAll();
-        model.documentFolders = documentAdapter.findAllFolders();
+        unloadAll(model);
+      } else if (loadMethod == PortalDataExportModel.LOAD_METHOD_ORDERS) {
+        unloadOrders(model);
       }
       
       setupXStream();
       // 17/05/2013
-//    xml = XStreamUtils.parseGraph(model, "UTF-8");
-      xml = XStreamUtils.parseGraph(model);
+//    xml = xStreamUtils.parseGraph(model, "UTF-8");
+      xml = xStreamUtils.parseGraph(model);
       
     } catch (Throwable th) {
       logger.log(Level.SEVERE, "error", th);
     }
     return xml;
+  }
+  
+  private void unloadAll(PortalDataExportModel model) {
+    model.users = portalUserAdapter.findAll();
+    model.customers = customerAdapter.findAll();
+    model.products = productAdapter.findAll();
+    
+    model.pages = portalPageAdapter.findAllRoot();
+    for (PortalPage page : model.pages) {
+      portalPageAdapter.resolveAllDependencies(page);
+      visitPortalPage(model, false, page);
+    }
+    
+    Collections.sort(model.products, new Comparator<Articolo>() {
+      public int compare(Articolo o1, Articolo o2) {
+        return o1.getCodice().compareTo(o2.getCodice());
+      }
+    });
+
+    model.images = imageAdapter.findAll();
+    
+    model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
+    model.orderStates = orderAdapter.findAllOrderStates();
+    
+    model.articleFolders = articleAdapter.findAll();
+    model.documentFolders = documentAdapter.findAllFolders();
+  }
+  
+  private void unloadOrders(PortalDataExportModel model) {
+    model.users = portalUserAdapter.findAll();
+    model.customers = customerAdapter.findAll();
+    model.products = productAdapter.findAll();
+    
+    Collections.sort(model.products, new Comparator<Articolo>() {
+      public int compare(Articolo o1, Articolo o2) {
+        return o1.getCodice().compareTo(o2.getCodice());
+      }
+    });
+
+    model.listaModalitaSpedizione = orderAdapter.findAllModalitaSpedizione();
+    model.orderStates = orderAdapter.findAllOrderStates();
+    
+    model.orders = orderAdapter.findAll();
+    for (Order order : model.orders) {
+      visitOrder(model, false, order);
+    }
   }
   
   private void ensureProductsDataModel(PortalDataExportModel dataModel) {

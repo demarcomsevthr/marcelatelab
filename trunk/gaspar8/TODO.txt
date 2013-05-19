@@ -29,6 +29,12 @@
 		>> update order state > 6' per order 
 
 
+	SNAPSHOT 19/05/2013
+		> XStreamUtils >> da static a instance
+		> PortalDataExporterImpl > unloadAll|unloadOrders
+		>> TODO >> ContoUtenteTx
+
+
 	SNAPSHOT 16/05/2013
 	
 		>> ENTITY RELATIONSHIPS RESOLVER [IMPORTANTE]
@@ -64,8 +70,11 @@
 				ArticoloTx (products)
 				OrderStateConfigTx (orderStates)
 				
-				++++
+				+++
 				OrderTx (orders)
+				
+				+++
+				ContoUtenteTx (extraData)
 				
 			- >> deve essere possibile fare il merge su portaldata.xml	
 				

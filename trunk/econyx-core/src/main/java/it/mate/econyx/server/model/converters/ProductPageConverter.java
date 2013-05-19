@@ -3,22 +3,23 @@ package it.mate.econyx.server.model.converters;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.econyx.shared.model.impl.ProductPageTx;
 import it.mate.gwtcommons.server.utils.CloneUtils;
-import it.mate.gwtcommons.server.utils.XStreamUtils;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 public class ProductPageConverter implements Converter {
   
   ReflectionConverter defaultConverter;
 
-  public ProductPageConverter() {
+  public ProductPageConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
     super();
-    this.defaultConverter = new ReflectionConverter(XStreamUtils.getXStream().getMapper(), XStreamUtils.getXStream().getReflectionProvider());
+    this.defaultConverter = new ReflectionConverter(mapper, reflectionProvider);
   }
 
   @Override
