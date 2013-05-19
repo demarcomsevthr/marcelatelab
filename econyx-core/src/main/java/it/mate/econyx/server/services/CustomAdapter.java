@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services;
 
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.server.model.impl.AbstractOrderItemDetailDs;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Order;
@@ -35,5 +36,7 @@ public interface CustomAdapter {
   public void validateProductToOrder(Order order) throws ServiceException;
   
   public byte[] exportPortalUsersToExcel();
+  
+  public void unloadExtraData(PortalDataExportModel model);
   
 }
