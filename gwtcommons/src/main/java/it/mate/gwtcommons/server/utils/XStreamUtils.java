@@ -14,65 +14,51 @@ public class XStreamUtils {
   
   private XStreamAppengine xstream;
   
-  private static XStreamUtils INSTANCE = null;
-  
-  private static HierarchicalStreamDriver driver;
-  
-  public static void setDriver(HierarchicalStreamDriver driver) {
-    XStreamUtils.driver = driver;
+  public XStreamUtils() {
+    xstream = new XStreamAppengine(new PureJavaReflectionProvider());
+  }
+
+  public XStreamUtils(HierarchicalStreamDriver driver) {
+    xstream = new XStreamAppengine(new PureJavaReflectionProvider(), driver);
+  }
+
+  public XStream getXStream() {
+    return xstream;
   }
   
-  private static XStreamUtils getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new XStreamUtils();
-      
-      if (driver != null) {
-        INSTANCE.xstream = new XStreamAppengine(new PureJavaReflectionProvider(), driver);
-      } else {
-        INSTANCE.xstream = new XStreamAppengine(new PureJavaReflectionProvider());
-      }
-      
-    }
-    return INSTANCE;
-  }
-  
-  public static XStream getXStream() {
-    return getInstance().xstream;
-  }
-  
-  public static String parseGraph(Object graph) {
+  public String parseGraph(Object graph) {
     return parseGraph(graph, null);
   }
   
-  public static String parseGraph(Object graph, String encoding) {
+  public String parseGraph(Object graph, String encoding) {
     String xml = null;
     if (encoding != null) {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try {
         Writer writer = new OutputStreamWriter(baos, encoding);
-        getInstance().xstream.toXML(graph, writer);
+        xstream.toXML(graph, writer);
         xml = baos.toString(encoding);
       } catch (Exception e) {
         e.printStackTrace();
       }
     } else {
-      xml = getInstance().xstream.toXML(graph);
+      xml = xstream.toXML(graph);
     }
     return xml;
   }
   
-  public static Object buildGraph(File xmlFile) {
-    Object graph = getInstance().xstream.fromXML(xmlFile);
+  public Object buildGraph(File xmlFile) {
+    Object graph = xstream.fromXML(xmlFile);
     return graph;
   }
   
-  public static Object buildGraph(String xml) {
-    Object graph = getInstance().xstream.fromXML(xml);
+  public Object buildGraph(String xml) {
+    Object graph = xstream.fromXML(xml);
     return graph;
   }
   
-  public static void registerConverter(Converter converter) {
-    getInstance().xstream.registerConverter(converter);
+  public void registerConverter(Converter converter) {
+    xstream.registerConverter(converter);
   }
 
 }
