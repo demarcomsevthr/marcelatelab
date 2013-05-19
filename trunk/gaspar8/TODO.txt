@@ -32,6 +32,7 @@
 	SNAPSHOT 19/05/2013
 		> XStreamUtils >> da static a instance
 		> PortalDataExporterImpl > unloadAll|unloadOrders
+		>> TODO >> reduceOrderState !!!
 		>> TODO >> ContoUtenteTx
 
 

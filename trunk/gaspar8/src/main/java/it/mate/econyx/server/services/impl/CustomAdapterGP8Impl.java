@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.server.model.impl.AbstractOrderItemDetailDs;
 import it.mate.econyx.server.model.impl.ContoUtenteDs;
 import it.mate.econyx.server.model.impl.ContoUtenteMovimentoDs;
@@ -419,6 +420,16 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
       logger.error("error", ex);
     }
     return null;
+  }
+
+  @Override
+  public void unloadExtraData(PortalDataExportModel model) {
+    List<ContoUtenteTx> conti = new ArrayList<ContoUtenteTx>();
+    for (Customer customer : model.customers) {
+      ContoUtente conto = findContoUtenteByCustomer(customer, false, true);
+      conti.add(CloneUtils.clone(conto, ContoUtenteTx.class));
+    }
+    model.extraData = conti;
   }
 
 }

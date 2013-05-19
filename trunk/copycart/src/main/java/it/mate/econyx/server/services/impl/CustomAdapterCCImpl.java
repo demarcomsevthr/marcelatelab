@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.econyx.server.model.PortalDataExportModel;
 import it.mate.econyx.server.model.impl.AbstractOrderItemDetailDs;
 import it.mate.econyx.server.model.impl.OrderItemStampDetailDs;
 import it.mate.econyx.server.services.CustomAdapter;
@@ -308,6 +309,10 @@ public class CustomAdapterCCImpl implements CustomAdapter {
   
   public byte[] exportPortalUsersToExcel() {
     return null;
+  }
+
+  public void unloadExtraData(PortalDataExportModel model) {
+    
   }
 
 }

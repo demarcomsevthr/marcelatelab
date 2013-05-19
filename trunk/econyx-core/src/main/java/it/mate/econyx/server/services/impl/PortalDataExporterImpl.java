@@ -34,6 +34,7 @@ import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
+import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
@@ -247,7 +248,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       visitModalitaPagamento(dataModel, true, modalitaPagamento);
     }
     for (OrderStateConfig orderState : dataModel.orderStates) {
-      visitOrderState(dataModel, true, orderState);
+      visitOrderStateConfig(dataModel, true, orderState);
     }
     for (Articolo articolo : dataModel.products) {
       visitProduct(dataModel, true, articolo);
@@ -339,6 +340,58 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (Order order : model.orders) {
       visitOrder(model, false, order);
     }
+    
+    for (Customer customer : model.customers) {
+      customer.setPortalUser(reducePortalUser(customer.getPortalUser()));
+    }
+    
+    for (Order order : model.orders) {
+      List<OrderItem> orderItems = order.getItems();
+      for (int it = 0; it < orderItems.size(); it++) {
+        OrderItem orderItem = orderItems.get(it);
+        orderItem.setProduct(reduceProduct(orderItem.getProduct()));
+        orderItems.set(it, orderItem);
+      }
+      order.getCustomer().setPortalUser(reducePortalUser(order.getCustomer().getPortalUser()));
+      List<OrderState> orderStates = order.getStates();
+      for (int it = 0; it < orderStates.size(); it++) {
+        OrderState orderState = orderStates.get(it);
+        orderState.setConfig(reduceOrderStateConfig(orderState.getConfig()));
+        orderState.setPortalUser(reducePortalUser(orderState.getPortalUser()));
+        orderStates.set(it, orderState);
+      }
+    }
+    
+  }
+  
+  private PortalUser reducePortalUser(PortalUser portalUser) {
+    if (portalUser == null)
+      return null;
+    portalUser = CloneUtils.clone(portalUser, PortalUserTx.class);
+    portalUser.setScreenName(null);
+    portalUser.setPassword(null);
+    portalUser.setAdminUser(null);
+    portalUser.setTestUser(null);
+    return portalUser;
+  }
+  
+  private Articolo reduceProduct(Articolo product) {
+    product = CloneUtils.clone(product, ArticoloTx.class);
+    product.setConfezione(null);
+    product.setHtmls(null);
+    product.setImages(null);
+    product.setOrderNm(null);
+    product.setPrezzo(null);
+    product.setProducer(null);
+    product.setTipoArticolo(null);
+    product.setUnitaDiMisura(null);
+    return product;
+  }
+  
+  private OrderStateConfig reduceOrderStateConfig(OrderStateConfig orderStateConfig) {
+    OrderStateConfig reducedOrderStateConfig = new OrderStateConfigTx();
+    reducedOrderStateConfig.setCode(orderStateConfig.getCode());
+    return reducedOrderStateConfig;
   }
   
   private void ensureProductsDataModel(PortalDataExportModel dataModel) {
@@ -346,25 +399,6 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       dataModel.products = productAdapter.findAll();
     }
     dataModel.createProducts = true;
-  }
-  
-  private PortalUser visitPortalUser(VisitContext context, boolean loadMode, PortalUser user) {
-    PortalDataExportModel model = (PortalDataExportModel)context;
-    for (int it = 0; it < model.users.size(); it++) {
-      PortalUser cachedUser = model.users.get(it);
-      if (cachedUser.getEmailAddress().equals(user.getEmailAddress())) {
-        if (loadMode && cachedUser.getId() == null) {
-          cachedUser = portalUserAdapter.create(cachedUser, true);
-          model.users.set(it, cachedUser);
-        }
-        return cachedUser;
-      }
-    }
-    if (loadMode && user.getId() == null) {
-      user = portalUserAdapter.create(user, true);
-    }
-    model.users.add(user);
-    return user;
   }
   
   private ModalitaSpedizione visitModalitaSpedizione(VisitContext context, boolean loadMode, ModalitaSpedizione modalitaSpedizione) {
@@ -381,19 +415,64 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return modalitaPagamento;
   }
   
-  private OrderStateConfig visitOrderState(VisitContext context, boolean loadMode, OrderStateConfig orderState) {
-    if (loadMode) {
+  private OrderStateConfig visitOrderStateConfig(VisitContext context, boolean loadMode, OrderStateConfig orderState) {
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    for (int it = 0; it < model.orderStates.size(); it++) {
+      OrderStateConfig cachedOrderState = model.orderStates.get(it);
+      if (cachedOrderState.getCode().equals(orderState.getCode())) {
+        if (loadMode && cachedOrderState.getId() == null) {
+          cachedOrderState = orderAdapter.create(cachedOrderState);
+          model.orderStates.set(it, cachedOrderState);
+        }
+        return cachedOrderState;
+      }
+    }
+    if (loadMode && orderState.getId() == null) {
       orderState = orderAdapter.create(orderState);
+      model.orderStates.add(orderState);
     }
     return orderState;
   }
   
   private Customer visitCustomer(VisitContext context, boolean loadMode, Customer customer) {
-    if (loadMode) {
-      customer.setPortalUser(visitPortalUser(context, loadMode, customer.getPortalUser()));
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    customer.setPortalUser(visitPortalUser(context, loadMode, customer.getPortalUser()));
+    for (int it = 0; it < model.customers.size(); it++) {
+      Customer cachedCustomer = model.customers.get(it);
+      if (cachedCustomer.getPortalUser().getEmailAddress().equals(customer.getPortalUser().getEmailAddress())) {
+        if (loadMode && cachedCustomer.getId() == null) {
+          cachedCustomer = customerAdapter.create(cachedCustomer);
+          model.customers.set(it, cachedCustomer);
+        }
+        return cachedCustomer;
+      }
+    }
+    if (loadMode && customer.getId() == null) {
       customer = customerAdapter.create(customer);
     }
+    model.customers.add(customer);
     return customer;
+  }
+  
+  private PortalUser visitPortalUser(VisitContext context, boolean loadMode, PortalUser user) {
+    if (user == null)
+      return null;
+    PortalDataExportModel model = (PortalDataExportModel)context;
+    for (int it = 0; it < model.users.size(); it++) {
+      PortalUser cachedUser = model.users.get(it);
+      if (cachedUser.getEmailAddress().equals(user.getEmailAddress())) {
+        if (loadMode && cachedUser.getId() == null) {
+          cachedUser = portalUserAdapter.create(cachedUser, true);
+          model.users.set(it, cachedUser);
+        }
+        return cachedUser;
+      }
+    }
+    if (loadMode && user.getId() == null) {
+      user = portalUserAdapter.create(user, true);
+    }
+    model.users.add(user);
+    return user;
   }
   
   private Image visitImage(VisitContext context, boolean loadMode, Image image) {
@@ -453,6 +532,16 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         OrderItem orderItem = orderItems.get(it);
         orderItem.setProduct(visitProduct(context, loadMode, orderItem.getProduct()));
         orderItems.set(it, orderItem);
+      }
+      needUpdate = true;
+    }
+    if (order.getStates() != null) {
+      List<OrderState> orderStates = order.getStates();
+      for (int it = 0; it < orderStates.size(); it++) {
+        OrderState orderState = orderStates.get(it);
+        orderState.setConfig(visitOrderStateConfig(context, loadMode, orderState.getConfig()));
+        orderState.setPortalUser(visitPortalUser(context, loadMode, orderState.getPortalUser()));
+        orderStates.set(it, orderState);
       }
       needUpdate = true;
     }
