@@ -10,6 +10,7 @@ import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.BlogAdapter;
+import it.mate.econyx.server.services.CustomAdapter;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.DocumentAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
@@ -123,6 +124,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   @Autowired private BlogAdapter blogAdapter;
   
+  @Autowired private CustomAdapter customAdapter;
+  
   private static final String INIT_FILE = "META-INF/setup-data/portaldata.xml";
   
   private FileService fileService = FileServiceFactory.getFileService();
@@ -131,7 +134,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   
   private void setupXStream() {
     
-    final List<String> CDATA_FIELDS = Arrays.asList(new String[] {"name", "content"}); 
+    final List<String> CDATA_FIELDS = Arrays.asList(new String[] {"name", "content", "customData"}); 
 
     xStreamUtils = new XStreamUtils(new XppDriver() {
       @Override
@@ -285,8 +288,9 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         unloadOrders(model);
       }
       
-      setupXStream();
       // 17/05/2013
+      setupXStream();
+      
 //    xml = xStreamUtils.parseGraph(model, "UTF-8");
       xml = xStreamUtils.parseGraph(model);
       
@@ -341,6 +345,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
       visitOrder(model, false, order);
     }
     
+    customAdapter.unloadExtraData(model);
+    
     for (Customer customer : model.customers) {
       customer.setPortalUser(reducePortalUser(customer.getPortalUser()));
     }
@@ -367,25 +373,15 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   private PortalUser reducePortalUser(PortalUser portalUser) {
     if (portalUser == null)
       return null;
-    portalUser = CloneUtils.clone(portalUser, PortalUserTx.class);
-    portalUser.setScreenName(null);
-    portalUser.setPassword(null);
-    portalUser.setAdminUser(null);
-    portalUser.setTestUser(null);
-    return portalUser;
+    PortalUser reducedPortalUser = new PortalUserTx();
+    reducedPortalUser.setEmailAddress(portalUser.getEmailAddress());
+    return reducedPortalUser;
   }
   
   private Articolo reduceProduct(Articolo product) {
-    product = CloneUtils.clone(product, ArticoloTx.class);
-    product.setConfezione(null);
-    product.setHtmls(null);
-    product.setImages(null);
-    product.setOrderNm(null);
-    product.setPrezzo(null);
-    product.setProducer(null);
-    product.setTipoArticolo(null);
-    product.setUnitaDiMisura(null);
-    return product;
+    Articolo reducedProduct = new ArticoloTx();
+    reducedProduct.setCodice(product.getCodice());
+    return reducedProduct;
   }
   
   private OrderStateConfig reduceOrderStateConfig(OrderStateConfig orderStateConfig) {
