@@ -21,6 +21,7 @@ import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.Produttore;
+import it.mate.econyx.shared.model.impl.ContoUtenteMovimentoTx;
 import it.mate.econyx.shared.model.impl.ContoUtenteTx;
 import it.mate.econyx.shared.util.FontTypes;
 import it.mate.gwtcommons.server.dao.Dao;
@@ -424,12 +425,17 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
 
   @Override
   public void unloadExtraData(PortalDataExportModel model) {
-    List<ContoUtenteTx> conti = new ArrayList<ContoUtenteTx>();
+    List<ContoUtenteMovimento> data = new ArrayList<ContoUtenteMovimento>();
     for (Customer customer : model.customers) {
       ContoUtente conto = findContoUtenteByCustomer(customer, false, true);
-      conti.add(CloneUtils.clone(conto, ContoUtenteTx.class));
+      for (int it = 0; it < conto.getMovimenti().size(); it++) {
+        ContoUtenteMovimento movimento = CloneUtils.clone(conto.getMovimenti().get(it), ContoUtenteMovimentoTx.class);
+        movimento.setConto(null);
+        movimento.setOrder(null);
+        data.add(movimento);
+      }
     }
-    model.extraData = conti;
+    model.customData = data;
   }
 
 }

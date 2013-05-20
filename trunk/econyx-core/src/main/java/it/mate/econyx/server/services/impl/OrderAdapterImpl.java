@@ -110,18 +110,7 @@ public class OrderAdapterImpl implements OrderAdapter {
   }
 
   private OrderDs findOpenOrderByCustomerDs(Customer customer) {
-    
-    /* 16/11/2012
-    FindCallback<OrderDs> callback = new FindCallback<OrderDs>() {
-      public void processResultsInTransaction(OrderDs order) {
-        resolveOrderItems((Order) order);
-        order.setItemsInitialized(true);
-      }
-    };
-    */
     OrderDs orderDs;
-    
-//  .setCallback(callback)
     FindContext<OrderDs> context = new FindContext<OrderDs>(OrderDs.class)
         .setFilter(String.format("customerId == customerIdParam && currentStateCode == '%s'", OrderStateConfig.OPENED))
         .setParameters(Key.class.getName() + " customerIdParam")
@@ -153,13 +142,8 @@ public class OrderAdapterImpl implements OrderAdapter {
   
   public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details) {
 
-    // 14/11/2012
-    // introdotto con la gestione UserOrderClientUtils
-    // se arriva un order != null significa che l'ordine sta nella cache del client
-    // e quindi non lo aggiorno sul datastore
     boolean updateDatastore = true;
     
-    // 19/11/2012
     if (openOrderId != null) {
       order = castTx((Order)CacheUtils.get(openOrderId));
     }
@@ -173,7 +157,7 @@ public class OrderAdapterImpl implements OrderAdapter {
     }
     if (order == null) {
       order = new OrderTx();
-      String orderCode = "O" + generalAdapter.findNextCounterValue();
+      String orderCode = "" + generalAdapter.findNextCounterValue();
       order.setCode(orderCode);
       order.setCreated(new Date());
       order.setDescription("ORDER");
