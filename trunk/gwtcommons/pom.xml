@@ -13,7 +13,7 @@
     <log4j.version>1.2.14</log4j.version>
     <gwt.version>2.5.1</gwt.version>
     <gin.version>1.5.0</gin.version>
-    <gae.version>1.7.6</gae.version>
+    <gae.version>1.7.7.1</gae.version>
     <gquery-dnd-bundle.version>1.0.6</gquery-dnd-bundle.version>
   </properties>
 
@@ -46,6 +46,12 @@
     <repository>
       <id>plugins</id>
       <url>http://gwtquery-plugins.googlecode.com/svn/mavenrepo</url>
+    </repository>
+    
+    <!-- 20/05/2013 - IMPORTANTE: serve per escludere il repo melograno!!! -->
+    <repository>
+      <id>repo1</id>
+      <url>http://repo1.maven.org/maven2</url>
     </repository>
     
   </repositories>

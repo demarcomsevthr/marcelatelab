@@ -16,5 +16,8 @@ SET M2_HOME=D:\OPT\apache-maven-2.2.1
 ::set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-1.7.4
 
 :: 10/04/2013
-set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-1.7.6
+::set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-1.7.6
+
+:: 20/05/2013
+set GAE_HOME=D:\OPT\gwt\appengine\appengine-java-sdk-1.7.7.1
 

@@ -23,6 +23,8 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.ContoUtenteMovimentoTx;
 import it.mate.econyx.shared.model.impl.ContoUtenteTx;
+import it.mate.econyx.shared.model.impl.CustomerTx;
+import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.util.FontTypes;
 import it.mate.gwtcommons.server.dao.Dao;
 import it.mate.gwtcommons.server.dao.FindContext;
@@ -425,15 +427,25 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
 
   @Override
   public void unloadExtraData(PortalDataExportModel model) {
-    List<ContoUtenteMovimento> data = new ArrayList<ContoUtenteMovimento>();
+    List<ContoUtente> data = new ArrayList<ContoUtente>();
     for (Customer customer : model.customers) {
-      ContoUtente conto = findContoUtenteByCustomer(customer, false, true);
+      ContoUtenteTx conto = CloneUtils.clone(findContoUtenteByCustomer(customer, false, true), ContoUtenteTx.class);
+      conto.setId(null);
+      Customer reducedCustomer = new CustomerTx();
+      PortalUser reducedPortalUser = new PortalUserTx();
+      reducedPortalUser.setEmailAddress(conto.getCustomer().getPortalUser().getEmailAddress());
+      reducedCustomer.setPortalUser(reducedPortalUser);
+      conto.setCustomer(reducedCustomer);
+      List<ContoUtenteMovimentoTx> movimenti = new ArrayList<ContoUtenteMovimentoTx>();
       for (int it = 0; it < conto.getMovimenti().size(); it++) {
-        ContoUtenteMovimento movimento = CloneUtils.clone(conto.getMovimenti().get(it), ContoUtenteMovimentoTx.class);
+        ContoUtenteMovimentoTx movimento = CloneUtils.clone(conto.getMovimenti().get(it), ContoUtenteMovimentoTx.class);
+        movimento.setId(null);
         movimento.setConto(null);
         movimento.setOrder(null);
-        data.add(movimento);
+        movimenti.add(movimento);
       }
+      conto.setMovimentiTx(movimenti);
+      data.add(conto);
     }
     model.customData = data;
   }
