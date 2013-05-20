@@ -29,13 +29,6 @@
 		>> update order state > 6' per order 
 
 
-	SNAPSHOT 19/05/2013
-		> XStreamUtils >> da static a instance
-		> PortalDataExporterImpl > unloadAll|unloadOrders
-		>> TODO >> reduceOrderState !!!
-		>> TODO >> ContoUtenteTx
-
-
 	SNAPSHOT 16/05/2013
 	
 		>> ENTITY RELATIONSHIPS RESOLVER [IMPORTANTE]
@@ -52,13 +45,9 @@
 			>> PROVARE SU GP8 TEST
 
 
-	SNAPSHOT 17/05/2013
+	SNAPSHOT 20/05/2013
 	
-		>> EXPORT ERRORS
-			> null pointer (articlefolder) > risolto
-			> xml not well formed (Attività socio culturali) >> XStreamUtils.setDriver() in PortalDataExporterImpl
-			>> DA TESTARE MEGLIO			
-		
+		>> TODO: IMPORT ORDINI
 	
 		>> IMPORT/EXPORT ORDINI
 			- si utilizza sempre PortalDataExportModel e PortalDataExporterImpl (con load method differenti)
@@ -70,13 +59,8 @@
 				ProduttoreTx (producers)
 				ArticoloTx (products)
 				OrderStateConfigTx (orderStates)
-				
-				+++
 				OrderTx (orders)
-				
-				+++
 				ContoUtenteTx (extraData)
-				
 			- >> deve essere possibile fare il merge su portaldata.xml	
 				
 		>> RUOLI ADMINS
