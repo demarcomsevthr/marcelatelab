@@ -24,6 +24,7 @@ import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.ContoUtenteMovimentoTx;
 import it.mate.econyx.shared.model.impl.ContoUtenteTx;
 import it.mate.econyx.shared.model.impl.CustomerTx;
+import it.mate.econyx.shared.model.impl.OrderTx;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
 import it.mate.econyx.shared.util.FontTypes;
 import it.mate.gwtcommons.server.dao.Dao;
@@ -229,22 +230,27 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
     }
 
     // 16/05/2013
-    if (contoUtente.getId() != null) {
-      FindContext<ContoUtenteMovimentoDs> findMovimentiContext = new FindContext<ContoUtenteMovimentoDs>(ContoUtenteMovimentoDs.class)
-          .setFilter("contoId == contoIdParam")
-          .setParameters(Key.class.getName() + " contoIdParam")
-          .setParamValues(new Object[] {KeyUtils.serializableToKey(contoUtente.getId())});
-      if (includeOrderId) {
-        findMovimentiContext.includedField("orderId");
-      } else {
-        findMovimentiContext.excludedField("orderId");
-      }
-      List<? extends ContoUtenteMovimento> movimenti = dao.findList(findMovimentiContext);
+    if (contoUtente != null && contoUtente.getId() != null) {
+      List<? extends ContoUtenteMovimento> movimenti = findMovimentiByConto(contoUtente, includeOrderId);
       contoUtente.setMovimenti((List<ContoUtenteMovimento>)movimenti);
     }
     
     
     return contoUtente;
+  }
+  
+  private List<ContoUtenteMovimentoDs> findMovimentiByConto(ContoUtente contoUtente, boolean includeOrderId) {
+    FindContext<ContoUtenteMovimentoDs> findMovimentiContext = new FindContext<ContoUtenteMovimentoDs>(ContoUtenteMovimentoDs.class)
+        .setFilter("contoId == contoIdParam")
+        .setParameters(Key.class.getName() + " contoIdParam")
+        .setParamValues(new Object[] {KeyUtils.serializableToKey(contoUtente.getId())});
+    if (includeOrderId) {
+      findMovimentiContext.includedField("orderId");
+    } else {
+      findMovimentiContext.excludedField("orderId");
+    }
+    List<ContoUtenteMovimentoDs> movimenti = dao.findList(findMovimentiContext);
+    return movimenti;
   }
   
   public ContoUtente updateContoUtente(ContoUtente contoUtente) {
@@ -441,13 +447,72 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
         ContoUtenteMovimentoTx movimento = CloneUtils.clone(conto.getMovimenti().get(it), ContoUtenteMovimentoTx.class);
         movimento.setId(null);
         movimento.setConto(null);
-        movimento.setOrder(null);
+        Order reducedOrder = null;
+        if (movimento.getOrder() != null) {
+          reducedOrder = new OrderTx();
+          reducedOrder.setCode(movimento.getOrder().getCode());
+        }
+        movimento.setOrder(reducedOrder);
         movimenti.add(movimento);
       }
       conto.setMovimentiTx(movimenti);
       data.add(conto);
     }
-    model.customData = data;
+    model.extraData = data;
+  }
+  
+  @Override
+  public void deleteExtraData() {
+    List<ContoUtenteDs> conti = dao.findAll(ContoUtenteDs.class);
+    if (conti != null) {
+      for (ContoUtenteDs contoUtente : conti) {
+        List<? extends ContoUtenteMovimento> movimenti = findMovimentiByConto(contoUtente, false);
+        for (ContoUtenteMovimento contoUtenteMovimento : movimenti) {
+          dao.delete(contoUtenteMovimento);
+        }
+        dao.delete(contoUtente);
+      }
+    }
+  }
+  
+  @Override
+  public void loadExtraData(PortalDataExportModel model) {
+    List<ContoUtente> conti = (List<ContoUtente>)model.extraData;
+    for (ContoUtente contoUtente : conti) {
+      ContoUtenteDs contoUtenteDs = CloneUtils.clone(contoUtente, ContoUtenteDs.class);
+      contoUtenteDs.setCustomer(CloneUtils.clone(findCustomerFromExportModel(model, contoUtenteDs.getCustomer()), CustomerDs.class));
+      contoUtenteDs = dao.create(contoUtenteDs);
+      List<ContoUtenteMovimento> savedMovimenti = new ArrayList<ContoUtenteMovimento>();
+      List<ContoUtenteMovimento> movimenti = contoUtenteDs.getMovimenti();
+      for (ContoUtenteMovimento contoUtenteMovimentoDs : movimenti) {
+        contoUtenteMovimentoDs.setConto(contoUtenteDs);
+        if (contoUtenteMovimentoDs.getOrder() != null) {
+          contoUtenteMovimentoDs.setOrder(CloneUtils.clone(findOrderFromExportModel(model, contoUtenteMovimentoDs.getOrder()), OrderDs.class));
+        }
+        contoUtenteMovimentoDs = dao.create(contoUtenteMovimentoDs);
+        savedMovimenti.add(contoUtenteMovimentoDs);
+      }
+      contoUtenteDs.setMovimenti(savedMovimenti);
+      dao.update(contoUtenteDs);
+    }
+  }
+  
+  private Customer findCustomerFromExportModel(PortalDataExportModel model, Customer customerToFind) {
+    for (Customer customerInModel : model.customers) {
+      if (customerInModel.getPortalUser().getScreenName().equals(customerToFind.getPortalUser().getScreenName())) {
+        return customerInModel;
+      }
+    }
+    return null;
+  }
+  
+  private Order findOrderFromExportModel(PortalDataExportModel model, Order orderToFind) {
+    for (Order orderInModel : model.orders) {
+      if (orderInModel.getCode().equals(orderToFind.getCode())) {
+        return orderInModel;
+      }
+    }
+    return null;
   }
 
 }

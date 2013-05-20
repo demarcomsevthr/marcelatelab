@@ -39,4 +39,8 @@ public interface CustomAdapter {
   
   public void unloadExtraData(PortalDataExportModel model);
   
+  public void deleteExtraData();
+  
+  public void loadExtraData(PortalDataExportModel model);
+  
 }

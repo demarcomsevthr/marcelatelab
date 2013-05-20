@@ -41,5 +41,5 @@ public class PortalDataExportModel implements VisitContext {
   public List<DocumentFolder> documentFolders;
   public List<Blog> blogs;
   public List<Order> orders;
-  public Object customData;
+  public Object extraData;
 }

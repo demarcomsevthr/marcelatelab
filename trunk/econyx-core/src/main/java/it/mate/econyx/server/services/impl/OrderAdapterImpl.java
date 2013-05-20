@@ -85,6 +85,18 @@ public class OrderAdapterImpl implements OrderAdapter {
   
   @Autowired CustomAdapter customAdapter;
 
+  private boolean disableOrderStateChangeCustomAdapter = false;
+  
+  private boolean disableOrderStateChangeDeferredTask = false;
+  
+  public void setDisableOrderStateChangeCustomAdapter(boolean disableOrderStateChangeCustomAdapter) {
+    this.disableOrderStateChangeCustomAdapter = disableOrderStateChangeCustomAdapter;
+  }
+  
+  public void setDisableOrderStateChangeDeferredTask(boolean disableOrderStateChangeDeferredTask) {
+    this.disableOrderStateChangeDeferredTask = disableOrderStateChangeDeferredTask;
+  }
+  
   @PostConstruct
   public void postConstruct() {
     logger.debug("initialized " + this);
@@ -292,6 +304,14 @@ public class OrderAdapterImpl implements OrderAdapter {
     return castTx(order);
   }
   
+  public Order createWithoutInitialState(Order entity) {
+    Order order = castDs(entity);
+    order.setItems(createItems(order.getItems()));
+    updateStates(order, null);
+    order = dao.create(order);
+    return castTx(order);
+  }
+  
   public Order update(Order entity) {
     Order order = castDs(entity);
     order.setItems(updateItems(order.getItems()));
@@ -368,14 +388,14 @@ public class OrderAdapterImpl implements OrderAdapter {
       
       for (OrderState newState : states) {
         
-        boolean stateChangedAsChecked = newState.getChecked();
+        boolean newStateChecked = newState.getChecked();
         if (oldStates != null && oldStates.size() > 0) {
           for (OrderStateDs oldState : oldStates) {
             if (oldState.getCode().equals(newState.getCode())) {
-              stateChangedAsChecked = false;
+              newStateChecked = false;
               if (oldState.getChecked().booleanValue() != newState.getChecked().booleanValue()) {
                 if (newState.getChecked()) {
-                  stateChangedAsChecked = true;
+                  newStateChecked = true;
                 }
                 newState.setDate(new Date());
                 PortalSessionState portalSessionState = PortalSessionStateServerUtils.getFromThread();
@@ -389,13 +409,13 @@ public class OrderAdapterImpl implements OrderAdapter {
             }
           }
         }
-        if (stateChangedAsChecked) {
+        if (newStateChecked) {
           if (OrderStateConfig.YES.equals(newState.getConfig().getEmailToCustomerSendType())) {
-            Queue queue = QueueFactory.getDefaultQueue();
-            OrderStateChangeDeferredTask task = new OrderStateChangeDeferredTask(order.getId(), newState.getCode());
-            // 15/01/2013
-            // setto 10 secondi di delay per permettere al ds di aggiornarsi
-            queue.add(TaskOptions.Builder.withPayload(task).countdownMillis(10000));
+            if (!disableOrderStateChangeDeferredTask) {
+              Queue queue = QueueFactory.getDefaultQueue();
+              OrderStateChangeDeferredTask task = new OrderStateChangeDeferredTask(order.getId(), newState.getCode());
+              queue.add(TaskOptions.Builder.withPayload(task).countdownMillis(10000));
+            }
           }
         }
       }
@@ -420,7 +440,9 @@ public class OrderAdapterImpl implements OrderAdapter {
     order.setStates(states);
     OrderState currentState = order.getCurrentState();
     if (previousState == null || !currentState.getCode().equals(previousState.getCode())) {
-      customAdapter.orderStateChanged(order);
+      if (!disableOrderStateChangeCustomAdapter) {
+        customAdapter.orderStateChanged(order);
+      }
     }
   }
   

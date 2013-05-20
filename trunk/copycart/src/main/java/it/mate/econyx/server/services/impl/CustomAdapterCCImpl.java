@@ -315,4 +315,12 @@ public class CustomAdapterCCImpl implements CustomAdapter {
     
   }
 
+  public void deleteExtraData() {
+    
+  }
+
+  public void loadExtraData(PortalDataExportModel model) {
+    
+  }
+
 }
