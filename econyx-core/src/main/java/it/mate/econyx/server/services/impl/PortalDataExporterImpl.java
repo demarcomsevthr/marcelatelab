@@ -239,10 +239,13 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return model;
   }
   
+  
+  // TODO: da finire (caricamento ContoUtente)
   private PortalDataExportModel loadOrders (PortalDataExportModel model) {
     
     // CANCELLAZIONI
     generalAdapter.deleteOrdersData();
+    customAdapter.deleteExtraData();
     
     // FACCIO IL MERGE DI UTENTI, CUSTOMER, PRODUCTS
     List<PortalUser> usersToImport = model.users;
@@ -254,7 +257,20 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     List<Customer> customersToImport = model.customers;
     model.customers = customerAdapter.findAll();
     for (Customer customer : customersToImport) {
-      visitCustomer(model, true, customer);
+      try {
+        customerAdapter.setDisableCreateCustomerCustomAdapter(true);
+        visitCustomer(model, true, customer);
+      } catch (RuntimeException re) {
+        throw re;
+      } finally {
+        customerAdapter.setDisableCreateCustomerCustomAdapter(false);
+      }
+    }
+    
+    List<Produttore> producersToImport = model.producers;
+    model.producers = productAdapter.findAllProducers();
+    for (Produttore producer : producersToImport) {
+      visitProducer(model, true, producer);
     }
     
     List<Articolo> productsToImport = model.products;
@@ -278,6 +294,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     for (Order order : model.orders) {
       visitOrder(model, true, order);
     }
+    
+    customAdapter.loadExtraData(model);
     
     return model;
   }
@@ -565,9 +583,6 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   }
   
   private Order visitOrder(VisitContext context, boolean loadMode, Order order) {
-    if (loadMode) {
-      order = orderAdapter.create(order);
-    }
     boolean needUpdate = false;
     if (order.getProducer() != null) {
       order.setProducer(visitProducer(context, loadMode, order.getProducer()));
@@ -592,12 +607,33 @@ public class PortalDataExporterImpl implements PortalDataExporter {
         OrderState orderState = orderStates.get(it);
         orderState.setConfig(visitOrderStateConfig(context, loadMode, orderState.getConfig()));
         orderState.setPortalUser(visitPortalUser(context, loadMode, orderState.getPortalUser()));
+        
+        if (loadMode) {
+          if (orderState.getOrder() == null) {
+            orderState.setOrder(order);
+          }
+        }
+        
         orderStates.set(it, orderState);
       }
       needUpdate = true;
     }
-    if (loadMode && needUpdate) {
-      order = orderAdapter.update(order);
+    if (loadMode || needUpdate) {
+      if (order.getId() == null) {
+        try {
+          // serve per disabilitare gli aggiornamenti automatici su contoutente
+          orderAdapter.setDisableOrderStateChangeCustomAdapter(true);
+          orderAdapter.setDisableOrderStateChangeDeferredTask(true);
+          order = orderAdapter.createWithoutInitialState(order);
+        } catch (RuntimeException re) {
+          throw re;
+        } finally {
+          orderAdapter.setDisableOrderStateChangeCustomAdapter(false);
+          orderAdapter.setDisableOrderStateChangeDeferredTask(false);
+        }
+      } else {
+        order = orderAdapter.update(order);
+      }
     }
     return order;
   }

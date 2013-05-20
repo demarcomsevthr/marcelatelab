@@ -21,5 +21,7 @@ public interface CustomerAdapter {
   public Customer register(Customer entity);
   
   public Customer findByPortalUser(PortalUser portalUser);
+  
+  public void setDisableCreateCustomerCustomAdapter(boolean disableCreateCustomerCustomAdapter);
 
 }

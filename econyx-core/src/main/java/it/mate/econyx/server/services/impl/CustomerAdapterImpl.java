@@ -36,6 +36,12 @@ public class CustomerAdapterImpl implements CustomerAdapter {
   
   @Autowired CustomAdapter customAdapter;
 
+  private boolean disableCreateCustomerCustomAdapter = false;
+  
+  public void setDisableCreateCustomerCustomAdapter(boolean disableCreateCustomerCustomAdapter) {
+    this.disableCreateCustomerCustomAdapter = disableCreateCustomerCustomAdapter;
+  }
+
   @PostConstruct
   public void postConstruct() {
     logger.debug("initialized " + this);
@@ -82,10 +88,12 @@ public class CustomerAdapterImpl implements CustomerAdapter {
     customerDs.setIndirizzoSpedizione(dao.create(CloneUtils.clone(customerDs.getIndirizzoSpedizione(), IndirizzoSpedizioneDs.class)));
     customerDs.setIndirizzoFatturazione(dao.create(CloneUtils.clone(customerDs.getIndirizzoFatturazione(), IndirizzoFatturazioneDs.class)));
     customerDs = dao.create(customerDs);
-    customAdapter.onCreateCustomer(customerDs, date);
+    if (!disableCreateCustomerCustomAdapter) {
+      customAdapter.onCreateCustomer(customerDs, date);
+    }
     return CloneUtils.clone(customerDs, CustomerTx.class);
   }
-
+  
   @Override
   public Customer register(Customer entity) {
     Customer cliente = create(entity);

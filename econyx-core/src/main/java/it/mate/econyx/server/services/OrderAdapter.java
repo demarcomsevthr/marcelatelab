@@ -75,4 +75,10 @@ public interface OrderAdapter {
   public abstract OrderStateConfig findOrderStateConfig(String code);
   
   
+  public Order createWithoutInitialState(Order entity);
+  
+  public void setDisableOrderStateChangeCustomAdapter(boolean disableOrderStateChangeCustomAdapter);
+
+  public void setDisableOrderStateChangeDeferredTask(boolean disableOrderStateChangeDeferredTask);
+  
 }
