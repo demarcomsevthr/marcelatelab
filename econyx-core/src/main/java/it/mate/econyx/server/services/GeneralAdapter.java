@@ -20,7 +20,7 @@ public interface GeneralAdapter {
   
   public PortalSessionState retrievePortalSessionState(HttpServletRequest request);
   
-  public void deleteAll ();
+  public void deleteAllData ();
   
   public void generateRandomCustomers(int numero, Date date);
   
@@ -30,6 +30,7 @@ public interface GeneralAdapter {
   
   public void refreshUsersCache();
   
+  public void deleteOrdersData ();
   
   public void cobraTest();
   

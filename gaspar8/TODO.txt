@@ -48,6 +48,18 @@
 	SNAPSHOT 20/05/2013
 	
 		>> TODO: IMPORT ORDINI
+			>> it.mate.econyx.server.services.impl.PortalDataExporterImpl.loadOrders(PortalDataExportModel)
+			>> line 278
+			>> NPE 
+        at it.mate.econyx.shared.model.Order$Utils.getCurrentState(Order.java:65)
+        at it.mate.econyx.shared.model.Order$Utils.getCurrentState(Order.java:55)
+        at it.mate.econyx.server.model.impl.OrderDs.setStates(OrderDs.java:219)
+        at it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStates(OrderAdapterImpl.java:420)
+        at it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStatesWithOrderStateConfig(OrderAdapterImpl.java:326)
+        at it.mate.econyx.server.services.impl.OrderAdapterImpl.updateStatesWithInitialState(OrderAdapterImpl.java:316)
+        at it.mate.econyx.server.services.impl.OrderAdapterImpl.create(OrderAdapterImpl.java:290)
+        at it.mate.econyx.server.services.impl.PortalDataExporterImpl.visitOrder(PortalDataExporterImpl.java:569)
+		
 	
 		>> IMPORT/EXPORT ORDINI
 			- si utilizza sempre PortalDataExportModel e PortalDataExporterImpl (con load method differenti)
