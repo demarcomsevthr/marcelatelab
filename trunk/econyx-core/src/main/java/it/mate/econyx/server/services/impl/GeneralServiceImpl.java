@@ -336,7 +336,7 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
   @Override
   public void deleteAll() {
     // portalDataMarshaller.deleteAll();
-    generalAdapter.deleteAll();
+    generalAdapter.deleteAllData();
   }
 
   @Override

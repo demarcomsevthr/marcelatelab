@@ -190,7 +190,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     return PortalSessionStateServerUtils.getFromSession(request);
   }
   
-  public void deleteAll () {
+  public void deleteAllData () {
     try {
       // serve fare due clear delle cache, prima e dopo
       CacheUtils.clearAll();
@@ -210,9 +210,20 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       // workaround: una sola passata lascia dati sporchi >> DA APPROFONDIRE!
       List<PortalPage> pages = portalPageAdapter.findAll();
       if (pages != null && pages.size() > 0) {
-        deleteAll();
+        deleteAllData();
       }
       
+    } finally {
+      JdoDao.setSuppressExceptionThrowOnInternalFind(false);
+    }
+  }
+
+  // utilizzata dall'exporter
+  public void deleteOrdersData () {
+    try {
+      CacheUtils.clearAll();
+      JdoDao.setSuppressExceptionThrowOnInternalFind(true);
+      deleteOrders();
     } finally {
       JdoDao.setSuppressExceptionThrowOnInternalFind(false);
     }

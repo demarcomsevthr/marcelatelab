@@ -230,51 +230,106 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return null;
   }
   
-  private PortalDataExportModel load (PortalDataExportModel dataModel) {
-    generalAdapter.deleteAll();
-    for (PortalUser user : dataModel.users) {
-      visitPortalUser(dataModel, true, user);
+  private PortalDataExportModel load (PortalDataExportModel model) {
+    if (model.loadMethod == PortalDataExportModel.LOAD_METHOD_ORDERS) {
+      model = loadOrders(model);
+    } else {
+      model = loadAll(model);
     }
-    for (Customer customer : dataModel.customers) {
-      visitCustomer(dataModel, true, customer);
+    return model;
+  }
+  
+  private PortalDataExportModel loadOrders (PortalDataExportModel model) {
+    
+    // CANCELLAZIONI
+    generalAdapter.deleteOrdersData();
+    
+    // FACCIO IL MERGE DI UTENTI, CUSTOMER, PRODUCTS
+    List<PortalUser> usersToImport = model.users;
+    model.users = portalUserAdapter.findAll();
+    for (PortalUser portalUser : usersToImport) {
+      visitPortalUser(model, true, portalUser);
     }
-    for (Image image : dataModel.images) {
-      visitImage(dataModel, true, image);
+    
+    List<Customer> customersToImport = model.customers;
+    model.customers = customerAdapter.findAll();
+    for (Customer customer : customersToImport) {
+      visitCustomer(model, true, customer);
     }
-    for (PortalPage page : dataModel.pages) {
-      visitPortalPage(dataModel, true, page);
+    
+    List<Articolo> productsToImport = model.products;
+    model.products = productAdapter.findAll();
+    for (Articolo articolo : productsToImport) {
+      visitProduct(model, true, articolo);
     }
-    for (ModalitaSpedizione modalitaSpedizione : dataModel.listaModalitaSpedizione) {
-      visitModalitaSpedizione(dataModel, true, modalitaSpedizione);
+    
+    for (ModalitaSpedizione modalitaSpedizione : model.listaModalitaSpedizione) {
+      visitModalitaSpedizione(model, true, modalitaSpedizione);
     }
-    for (ModalitaPagamento modalitaPagamento : dataModel.listaModalitaPagamento) {
-      visitModalitaPagamento(dataModel, true, modalitaPagamento);
+    
+    for (ModalitaPagamento modalitaPagamento : model.listaModalitaPagamento) {
+      visitModalitaPagamento(model, true, modalitaPagamento);
     }
-    for (OrderStateConfig orderState : dataModel.orderStates) {
-      visitOrderStateConfig(dataModel, true, orderState);
+    
+    for (OrderStateConfig orderState : model.orderStates) {
+      visitOrderStateConfig(model, true, orderState);
     }
-    for (Articolo articolo : dataModel.products) {
-      visitProduct(dataModel, true, articolo);
+    
+    for (Order order : model.orders) {
+      visitOrder(model, true, order);
     }
-    if (dataModel.articleFolders != null) {
-      for (int it = 0; it < dataModel.articleFolders.size(); it++) {
-        ArticleFolder articleFolder = dataModel.articleFolders.get(it);
-        visitArticleFolder(dataModel, true, articleFolder);
+    
+    return model;
+  }
+  
+  private PortalDataExportModel loadAll (PortalDataExportModel model) {
+    
+    // CANCELLAZIONI
+    generalAdapter.deleteAllData();
+    
+    for (PortalUser user : model.users) {
+      visitPortalUser(model, true, user);
+    }
+    for (Customer customer : model.customers) {
+      visitCustomer(model, true, customer);
+    }
+    for (Image image : model.images) {
+      visitImage(model, true, image);
+    }
+    for (PortalPage page : model.pages) {
+      visitPortalPage(model, true, page);
+    }
+    for (ModalitaSpedizione modalitaSpedizione : model.listaModalitaSpedizione) {
+      visitModalitaSpedizione(model, true, modalitaSpedizione);
+    }
+    for (ModalitaPagamento modalitaPagamento : model.listaModalitaPagamento) {
+      visitModalitaPagamento(model, true, modalitaPagamento);
+    }
+    for (OrderStateConfig orderState : model.orderStates) {
+      visitOrderStateConfig(model, true, orderState);
+    }
+    for (Articolo articolo : model.products) {
+      visitProduct(model, true, articolo);
+    }
+    if (model.articleFolders != null) {
+      for (int it = 0; it < model.articleFolders.size(); it++) {
+        ArticleFolder articleFolder = model.articleFolders.get(it);
+        visitArticleFolder(model, true, articleFolder);
       }
     }
-    if (dataModel.documentFolders != null) {
-      for (int it = 0; it < dataModel.documentFolders.size(); it++) {
-        DocumentFolder documentFolder = dataModel.documentFolders.get(it);
-        visitDocumentFolder(dataModel, true, documentFolder);
+    if (model.documentFolders != null) {
+      for (int it = 0; it < model.documentFolders.size(); it++) {
+        DocumentFolder documentFolder = model.documentFolders.get(it);
+        visitDocumentFolder(model, true, documentFolder);
       }
     }
-    if (dataModel.blogs != null) {
-      for (int it = 0; it < dataModel.blogs.size(); it++) {
-        Blog blog = dataModel.blogs.get(it);
-        visitBlog(dataModel, true, blog);
+    if (model.blogs != null) {
+      for (int it = 0; it < model.blogs.size(); it++) {
+        Blog blog = model.blogs.get(it);
+        visitBlog(model, true, blog);
       }
     }
-    return dataModel;
+    return model;
   }
   
   public String unload(int loadMethod) {
