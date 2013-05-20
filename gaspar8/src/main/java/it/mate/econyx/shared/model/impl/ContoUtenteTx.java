@@ -110,6 +110,9 @@ public class ContoUtenteTx implements ContoUtente {
     
   }
   
+  public void setMovimentiTx(List<ContoUtenteMovimentoTx> movimenti) {
+    this.movimenti = movimenti;
+  }
   
   
 }

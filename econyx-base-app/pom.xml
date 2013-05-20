@@ -18,8 +18,9 @@
 
     <!--     
     <gae.version>1.7.4</gae.version>
-     -->
     <gae.version>1.7.6</gae.version>
+     -->
+    <gae.version>1.7.7.1</gae.version>
     
   </properties>
   
