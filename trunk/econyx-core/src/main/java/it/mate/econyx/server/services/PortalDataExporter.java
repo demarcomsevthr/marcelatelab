@@ -6,6 +6,8 @@ public interface PortalDataExporter {
 
   public String unload(int loadMethod);
   
+  public void unloadDeferred(String jobId, int loadMethod);
+  
   public PortalDataExportModel load ();
   
   public PortalDataExportModel load (String portalDataXml);

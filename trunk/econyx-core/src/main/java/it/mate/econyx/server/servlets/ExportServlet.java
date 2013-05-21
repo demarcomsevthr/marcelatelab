@@ -1,6 +1,8 @@
 package it.mate.econyx.server.servlets;
 
 import it.mate.econyx.server.model.PortalDataExportModel;
+import it.mate.econyx.server.model.impl.ExportJobDs;
+import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.PortalDataExporter;
 
 import java.io.IOException;
@@ -22,18 +24,29 @@ public class ExportServlet extends HttpServlet {
   
   private PortalDataExporter portalDataMarshaller;
   
+  private GeneralAdapter generalAdapter;
+  
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
     portalDataMarshaller = context.getBean(PortalDataExporter.class);
+    generalAdapter = context.getBean(GeneralAdapter.class);
   }
   
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
       int exportMode = getIntParameter(request, "exportMode", PortalDataExportModel.LOAD_METHOD_ALL);
-      String xml = portalDataMarshaller.unload(exportMode);
+      String exportJobId = getStringParameter(request, "exportJobId", null);
+      String xml = null;
+      if (exportJobId != null) {
+        logger.debug("finding export job " + exportJobId);
+        ExportJobDs exportJob = generalAdapter.findExportJobById(exportJobId);
+        xml = exportJob.getResult().getValue();
+      } else {
+        xml = portalDataMarshaller.unload(exportMode);
+      }
       response.setContentType("text/xml");
       response.getWriter().print(xml);
     } catch (Exception ex) {
@@ -46,6 +59,14 @@ public class ExportServlet extends HttpServlet {
     String value = request.getParameter(name);
     if (value != null) {
       return Integer.parseInt(value);
+    }
+    return defValue;
+  }
+  
+  private String getStringParameter(HttpServletRequest request, String name, String defValue) {
+    String value = request.getParameter(name);
+    if (value != null) {
+      return value;
     }
     return defValue;
   }

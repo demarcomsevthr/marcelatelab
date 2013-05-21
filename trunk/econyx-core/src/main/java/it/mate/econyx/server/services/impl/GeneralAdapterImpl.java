@@ -3,6 +3,7 @@ package it.mate.econyx.server.services.impl;
 import it.mate.econyx.server.model.Counter;
 import it.mate.econyx.server.model.impl.CounterDs;
 import it.mate.econyx.server.model.impl.CustomerDs;
+import it.mate.econyx.server.model.impl.ExportJobDs;
 import it.mate.econyx.server.model.impl.IndirizzoSpedizioneDs;
 import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.ArticleAdapter;
@@ -178,6 +179,19 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       JdoDaoWithCache daoWithCache = (JdoDaoWithCache)dao;
       daoWithCache.clearCache();
     }
+  }
+  
+  public ExportJobDs createExportJob () {
+    ExportJobDs exportJob = new ExportJobDs();
+    return dao.create(exportJob);
+  }
+  
+  public ExportJobDs findExportJobById (String id) {
+    return dao.findById(ExportJobDs.class, id);
+  }
+  
+  public ExportJobDs updateExportJob (ExportJobDs exportJob) {
+    return dao.update(exportJob);
   }
   
   @Override

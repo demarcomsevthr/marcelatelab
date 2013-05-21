@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -49,6 +50,8 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   
   private boolean isDevServer = Window.Location.getHostName().contains("localhost");
   
+  private Timer exportJobTimer = null;
+  
   public GeneralConfigView() {
     super();
     initUI();
@@ -64,6 +67,14 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     
   }
   
+  @Override
+  protected void onUnload() {
+    if (exportJobTimer != null) {
+      exportJobTimer.cancel();
+    }
+    super.onUnload();
+  }
+  
   
   @UiHandler ("importPortalDataBtn")
   public void onImportPortalDataBtn (ClickEvent event) {
@@ -74,17 +85,6 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
 
-  /*
-  @UiHandler ("exportPortalDataBtn")
-  public void onExportPortalDataBtn (ClickEvent event) {
-    askSecretCode(new Delegate<Void>() {
-      public void execute(Void element) {
-        getPresenter().exportPortalData();
-      }
-    });
-  }
-  */
-  
   @UiHandler ("resetCacheBtn")
   public void onResetCacheBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -98,7 +98,11 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   public void onExportPortalDataXmlBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
-        setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ALL);
+
+        // 21/05/2013
+        startExportJob(PortalDataExportModel.LOAD_METHOD_ALL);
+//      setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ALL, null);
+        
       }
     });
   }
@@ -107,7 +111,11 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   public void exportOrderDataXmlBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
       public void execute(Void element) {
-        setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ORDERS);
+        
+        // 21/05/2013
+        startExportJob(PortalDataExportModel.LOAD_METHOD_ORDERS);
+//      setExportFormAndSubmit(PortalDataExportModel.LOAD_METHOD_ORDERS, null);
+        
       }
     });
   }
@@ -232,31 +240,6 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
   
-  /*
-  @UiHandler ("gdataSpreadsheetTestBtn")
-  public void gdataSpreadsheetTestBtn (ClickEvent event) {
-    askSecretCode(new Delegate<Void>() {
-      public void execute(Void element) {
-
-      }
-    });
-  }
-  */
-  
-  /*
-  @UiHandler ("exceptionTestBtn")
-  public void exceptionTestBtn (ClickEvent event) {
-    AppClientFactory.IMPL.getGinjector().getGeneralService().testServiceException(new AsyncCallback<Void>() {
-      public void onSuccess(Void result) {
-        Window.alert("Siamo nella onSuccess");
-      }
-      public void onFailure(Throwable caught) {
-        Window.alert("Siamo nella onFailure con " + caught.getMessage());
-      }
-    });
-  }
-  */
-  
   @UiHandler ("instCacheViewBtn")
   public void instCacheViewBtn (ClickEvent event) {
     askSecretCode(new Delegate<Void>() {
@@ -279,7 +262,30 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     });
   }
   
-  private void setExportFormAndSubmit(int exportMode) {
+  private void startExportJob(final int exportMethod) {
+    GwtUtils.log("starting export job");
+    GwtUtils.showWaitPanel(true);
+    getPresenter().exportPortalDataDeferred(exportMethod, new Delegate<String>() {
+      public void execute(final String jobId) {
+        exportJobTimer = GwtUtils.createTimer(5000, new Delegate<Void>() {
+          public void execute(Void element) {
+            getPresenter().isExportJobComplete(jobId, new Delegate<Boolean>() {
+              public void execute(Boolean exportJobComplete) {
+                GwtUtils.log("export job completion = " + exportJobComplete + " " + jobId);
+                if (exportJobComplete) {
+                  exportJobTimer.cancel();
+                  GwtUtils.hideWaitPanel(true);
+                  setExportFormAndSubmit(exportMethod, jobId);
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  private void setExportFormAndSubmit(int exportMode, String exportJobId) {
     long ctm = System.currentTimeMillis();
     exportForm.clear();
     exportForm.setAction("/portalData.export?v="+ctm);
@@ -287,42 +293,11 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
     HorizontalPanel inner = new HorizontalPanel();
     inner.add( new Hidden("oper", "portalData" ));
     inner.add( new Hidden("exportMode", ""+exportMode ));
+    if (exportJobId != null) {
+      inner.add( new Hidden("exportJobId", exportJobId ));
+    }
     exportForm.setWidget(inner);
     exportForm.submit();
   }
-  
-  /*
-  @UiHandler ("cobraTestBtn")
-  public void cobraTestBtn (ClickEvent event) {
-    askSecretCode(new Delegate<Void>() {
-      public void execute(Void element) {
-        getPresenter().cobraTest();
-      }
-    });
-  }
-  */
-  
-
-  /*
-  private boolean waiting = false;
-  @UiHandler ("customTest1Btn")
-  public void customTest1Btn (ClickEvent event) {
-    if (waiting) {
-      GwtUtils.hideWaitPanel();
-      waiting = false;
-    } else {
-      PopupPanel defaultWaitPanel = new PopupPanel();
-      GwtUtils.setStyleAttribute(defaultWaitPanel, "border", "none");
-      GwtUtils.setStyleAttribute(defaultWaitPanel, "background", "transparent");
-      defaultWaitPanel.setGlassEnabled(false);
-      defaultWaitPanel.setAnimationEnabled(true);
-      Image waitingImg = new Image(UriUtils.fromTrustedString("/images/commons/transp-loading.gif"));
-      defaultWaitPanel.setWidget(waitingImg);
-      GwtUtils.setDefaultWaitPanel(defaultWaitPanel);
-      GwtUtils.showWaitPanel();
-      waiting = true;
-    }
-  }
-  */
   
 }

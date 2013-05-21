@@ -58,4 +58,8 @@ public interface GeneralServiceAsync {
 
   void refreshUsersCache(AsyncCallback<Void> callback);
 
+  void exportPortalDataDeferred(int exportMethod, AsyncCallback<String> callback);
+
+  void isExportJobComplete(String jobId, AsyncCallback<Boolean> callback);
+
 }
