@@ -45,19 +45,10 @@
 			>> PROVARE SU GP8 TEST
 
 
-	SNAPSHOT 20/05/2013
+	SNAPSHOT 21/05/2013
 	
 		>> IMPORT/EXPORT ORDINI
-			- si utilizza sempre PortalDataExportModel e PortalDataExporterImpl (con load method differenti)
-
 	        >>> set contatore (> setMaxContatore(prg) setta il contatore se maggiore del corrente)
-	        
-	        >>> DOPO LA IMPORT NON SI VEDONO I MOVIMENTI IN ADMIN VIEW UTENTI
-	        
-	        		>> ContoUtenteDs duplicati !!!
-	        		
-	        		>> FORSE MANCA SOLO IL RESET DELLA CACHE AD OPERAZIONI ULTIMATE
-	        
 
 				
 		>> RUOLI ADMINS

@@ -66,6 +66,7 @@ import it.mate.econyx.shared.model.impl.ProduttoreTx;
 import it.mate.econyx.shared.model.impl.UnitaDiMisuraTx;
 import it.mate.econyx.shared.model.impl.WebContentPageTx;
 import it.mate.gwtcommons.server.utils.BlobUtils;
+import it.mate.gwtcommons.server.utils.CacheUtils;
 import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.server.utils.XStreamUtils;
 
@@ -240,7 +241,6 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   }
   
   
-  // TODO: da finire (caricamento ContoUtente)
   private PortalDataExportModel loadOrders (PortalDataExportModel model) {
     
     // CANCELLAZIONI
@@ -296,6 +296,8 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     }
     
     customAdapter.loadExtraData(model);
+    
+    CacheUtils.clearAll();
     
     return model;
   }
@@ -400,6 +402,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   }
   
   private void unloadOrders(PortalDataExportModel model) {
+    model.loadMethod = PortalDataExportModel.LOAD_METHOD_ORDERS;
     model.users = portalUserAdapter.findAll();
     model.customers = customerAdapter.findAll();
     model.products = productAdapter.findAll();
@@ -583,6 +586,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
   }
   
   private Order visitOrder(VisitContext context, boolean loadMode, Order order) {
+    PortalDataExportModel model = (PortalDataExportModel)context;
     boolean needUpdate = false;
     if (order.getProducer() != null) {
       order.setProducer(visitProducer(context, loadMode, order.getProducer()));
@@ -625,6 +629,12 @@ public class PortalDataExporterImpl implements PortalDataExporter {
           orderAdapter.setDisableOrderStateChangeCustomAdapter(true);
           orderAdapter.setDisableOrderStateChangeDeferredTask(true);
           order = orderAdapter.createWithoutInitialState(order);
+          // aggiorno id in model per il successivo load dei conti utente
+          for (Order orderInModel : model.orders) {
+            if (orderInModel.getCode().equals(order.getCode())) {
+              orderInModel.setId(order.getId());
+            }
+          }
         } catch (RuntimeException re) {
           throw re;
         } finally {
