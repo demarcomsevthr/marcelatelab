@@ -95,17 +95,24 @@ public class CacheUtils {
         }
         // in mem cache sempre
         getMemCache().put(KeyUtils.castToString(hasKeyEntity.getKey()), cacheEntry);
-        updateMasterIndex(hasKeyEntity.getKey());
+        updateKeyInMasterIndex(hasKeyEntity.getKey());
       }
     }
   }
   
-  private static void updateMasterIndex(Key key) {
+  private static void updateKeyInMasterIndex(Key key) {
     List<String> masterIndex = (List<String>)getMemCache().get(MASTER_INDEX_KEY);
     if (masterIndex == null) {
       masterIndex = new ArrayList<String>();
     }
     masterIndex.add(KeyUtils.castToString(key));
+    getMemCache().put(MASTER_INDEX_KEY, masterIndex);
+  }
+  
+  public static void purgeMasterIndex() {
+    List<String> masterIndex = (List<String>)getMemCache().get(MASTER_INDEX_KEY);
+    if (masterIndex == null)
+      return;
     for (Iterator<String> it = masterIndex.iterator(); it.hasNext();) {
       String index = it.next();
       if (!getMemCache().contains(index)) {
