@@ -7,6 +7,7 @@ import it.mate.econyx.server.model.converters.ImageContentConverter;
 import it.mate.econyx.server.model.converters.ProductPageConverter;
 import it.mate.econyx.server.model.converters.TipoArticoloConverter;
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
+import it.mate.econyx.server.model.impl.ExportJobDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.ArticleAdapter;
 import it.mate.econyx.server.services.BlogAdapter;
@@ -90,6 +91,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
@@ -352,6 +354,15 @@ public class PortalDataExporterImpl implements PortalDataExporter {
     return model;
   }
   
+  @Override
+  public void unloadDeferred(String jobId, int loadMethod) {
+    ExportJobDs exportJob = generalAdapter.findExportJobById(jobId);
+    String xml = unload(loadMethod);
+    exportJob.setResult(new Text(xml));
+    exportJob.setCompleted(new Date());
+    generalAdapter.updateExportJob(exportJob);
+  }
+
   public String unload(int loadMethod) {
     String xml = null;
     try {

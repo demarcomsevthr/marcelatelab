@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services;
 
+import it.mate.econyx.server.model.impl.ExportJobDs;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 
@@ -33,5 +34,11 @@ public interface GeneralAdapter {
   public void deleteOrdersData ();
   
   public void cobraTest();
+  
+  public ExportJobDs createExportJob ();
+  
+  public ExportJobDs findExportJobById (String id);
+  
+  public ExportJobDs updateExportJob (ExportJobDs exportJob);
   
 }

@@ -67,4 +67,8 @@ public interface GeneralService extends RemoteService {
   
   public String createBlobstoreUploadUrl(String url);
   
+  public String exportPortalDataDeferred(int exportMethod);
+  
+  public boolean isExportJobComplete(String jobId);
+  
 }

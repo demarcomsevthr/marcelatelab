@@ -2,6 +2,7 @@ package it.mate.econyx.server.services.impl;
 
 import it.mate.econyx.client.factories.DefaultCustomClientFactory;
 import it.mate.econyx.server.model.PortalDataExportModel;
+import it.mate.econyx.server.model.impl.ExportJobDs;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.InitAdapter;
@@ -10,6 +11,7 @@ import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.tasks.GenerateOperationTask;
+import it.mate.econyx.server.tasks.PortalDataExportDeferredTask;
 import it.mate.econyx.server.tasks.PortalDataInitializeDeferredTask;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Customer;
@@ -156,6 +158,20 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
     // queue.add(TaskOptions.Builder.withUrl("/exec.cron").param("op",
     // "importPortalData").header("X-AppEngine-Cron", "true"));
     queue.add(TaskOptions.Builder.withPayload(new PortalDataInitializeDeferredTask()));
+  }
+  
+  @Override
+  public String exportPortalDataDeferred(int exportMethod) {
+    ExportJobDs exportJob = generalAdapter.createExportJob();
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(TaskOptions.Builder.withPayload(new PortalDataExportDeferredTask(exportJob.getId(), exportMethod)));
+    return exportJob.getId();
+  }
+
+  @Override
+  public boolean isExportJobComplete(String jobId) {
+    ExportJobDs exportJob = generalAdapter.findExportJobById(jobId);
+    return (exportJob.getResult() != null);
   }
 
   @Override

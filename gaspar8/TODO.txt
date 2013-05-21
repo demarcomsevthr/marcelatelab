@@ -27,30 +27,36 @@
 		>> init static data > 1:40 min
 		>> generate order > 16'' per order
 		>> update order state > 6' per order 
-
-
-	SNAPSHOT 16/05/2013
-	
-		>> ENTITY RELATIONSHIPS RESOLVER [IMPORTANTE]
-			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationships(Object, Map<Key, Object>)
-			> nel caso di entity List faceva un doppio controllo sulle resolvedEntities (quindi non risolveva le relazioni correttamente)
-			> commentato il primo check [16/05/2013]
-			> da provare: view acquisti in admin, aggiunta di un commento ad article, aggiornamento comments count
-				>> prima prova fatta su localhost [16/05/2013]
-				>> seconda prova fatta su gp8test [16/05/2013]
-		>> SEMPLIFICAZIONE CONTO UTENTE DS
-			> ContoUtenteDs >> eliminata relazione movimentiKeys
-			> ContoUtenteMovimentoDs >> aggiunta relazione contoId
-			> CustomAdapterGP8Impl.findContoUtenteByCustomer >> aggiunta find List<ContoUtenteMovimento> e settaggio in contoUtente
-			>> PROVARE SU GP8 TEST
+		
+	----------------------------------------------------------------------------------	
 
 
 	SNAPSHOT 21/05/2013
 	
-		>> IMPORT/EXPORT ORDINI
-	        >>> set contatore (> setMaxContatore(prg) setta il contatore se maggiore del corrente)
-
-				
+		>> GWTCOMMONS SPLIT (con calma! serve più di un giorno per farlo)
+			[analisi del 21/05/2013]
+			> gwtcommons-1.6.2 >> backup svn
+			> gwtcommons (packages client, rpc, shared) >> gwtcommons-2.5 
+					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
+					it.mate.gwtcommons.shared.model.PageConfig
+					it.mate.gwtcommons.shared.services.ServiceException
+					it.mate.gwtcommons.shared.utils.PropertiesHolder
+			> gwtcommons (packages server, shared) >> gaecommons-1.7.7
+				>> rename pkg it.mate.commons.server...
+					>>> per questo ci vorrà molto tempo (vanno aggiornate tutte le import in econyx...)
+				>> DUE STEP: 1) si crea la lib senza rename e si prova; 2) si fa la rename del pkg
+				>> classi shared da metterci:
+					it.mate.gwtcommons.shared.model.CloneableBean
+					it.mate.gwtcommons.shared.model.CloneableProperty
+			> il pkg shared va diviso tra gwt/gaecommons, facendo attenzione a mettere in gwtcommons tutto quello
+				che viene utilizzato nel client (anche in econyx) e va compilato gwt
+			> NOTA: le seguenti classi shared sono utilizzate sia da client che da server:
+					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
+					it.mate.gwtcommons.shared.utils.PropertiesHolder
+				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza	
+			> ALLA FINE: aggiornare la dipendenza in CKD		
+					 
+	
 		>> RUOLI ADMINS
 			PortalUser
 				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
@@ -62,17 +68,26 @@
 					>> IPOTESI: quando costruisco le virtual page settare il template della ProducerFolderPage
 			> nella ProducerPage lasciare il calendario
 				
-		>> PRODUCER FOLDER PAGE
-			> ProducerFolderPage >> 17/04/2013
-			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
-			
 		>> INFORMAZIONI PER IL RITIRO
 			> deve essere una prop (multi riga) di producer
-			> va messa nella mail di conf ordine	
+			> va messa nella mail di conf ordine
+			> va visualizzato in ProducerFolderPage
 			
 		>> ADMIN EDITORS
 			> DISABILITARE I CAMPI code IN TUTTI GLI EDITOR [importante!]
 
+		>> IMPORT/EXPORT ORDINI WITH DEFERRED JOB
+			>>> [21/05/2013] VERIFICA SU GP8NET E IMPORT IN LOCALHOST >> PERFETTO!
+	        >>> TODO: set max contatore (setta il contatore se maggiore del corrente)
+				
+		>> COLLECTION PROPERTY CLIENT/SERVER UTIL
+			>> it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil
+				> TODO: riportare in tutti i getter getList dei tx
+				> NOTA: i metodi cast e clone funzionano solo con jdk 1.7 [10/04/2013]
+			>> it.mate.gwtcommons.server.model.CollectionPropertyServerUtil
+				> provato su BlogDs... [09/04/2013]
+				> TODO: sugli altri ds
+		
 		>> ARTICLE COMMENTS COUNT
 		    > ISSUE AGGIORNAMENTO commentsCount (provato su Article) >> ANCORA DA SISTEMARE (PageBreadcrumb...]
 			> CacheUtils.getAllMemCacheEntries()
@@ -83,26 +98,6 @@
 			>> POTREBBE ESSERE PIU' LENTO > CONTROLLARE
 			>> SE FUNZIONA RIPORTARE SUI BLOG
 			[21/04/2013]
-
-		>> OTTIMIZZAZIONI CACHE
-    		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
-    			> Map<Key, Object> resolvedEntities
-    			>>> (*) Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
-			- PortalPageAdapterImpl.internalFindById
-				> cachedContentPage.hasSavedHtmls()
-    			> merge tra istanza cache e persistent su childreen e htmls
-    		- DynamicInvocationUtils.invokeMethod
-    			> commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
-    		- JdoDao.checkSubClassesResults
-    			> ottimizzazione per utilizzare la subclass ricavata dalla key
-    		- PortalPageServiceImpl.removePageFromCache
-    			> serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
-			>> ho parametrizzato l'ottimizzazione (*)
-				> it.mate.gwtcommons.server.dao.FindContext.useContextInRelationshipsResolver
-				> it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById(Class<P>, String, boolean, boolean)
-				> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
-			>> CASI DI TEST: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
-    		[21/04/2013]
 
 		>> DOCUMENT LIBRARY
 			> TODO: cancellazione document
@@ -130,21 +125,58 @@
 					- https://vaadin.com/blog
 					- http://developersitalia.blogspot.it/
 					
-		>> it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil
-			> mettere in tutti i getter getList dei tx
-			>> i metodi clone e wrap funzionano solo con jdk 1.7 [10/04/2013]
-			
-		>> it.mate.gwtcommons.server.model.CollectionPropertyServerUtil
-			> provato su BlogDs... [09/04/2013]
-			> se funziona riportare su altri ds
-		
 		>> Link Facebook, Twitter, ...  [4]
 			
 
 	------------------------------------------------------
 
 
-	SNAPSHOT 16/01/2013  [[ SOSPESI GESTIONE ORDINI ]]
+	SNAPSHOT 16/05/2013 [ULTIME COSE FATTE]
+	
+		>> ENTITY RELATIONSHIPS RESOLVER BUG [RISOLTO]
+			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationships(Object, Map<Key, Object>)
+			> nel caso di entity List faceva un doppio controllo sulle resolvedEntities (quindi non risolveva le relazioni correttamente)
+			> commentato il primo check [16/05/2013]
+			> da provare: view acquisti in admin, aggiunta di un commento ad article, aggiornamento comments count
+				>> prima prova fatta su localhost [16/05/2013]
+				>> seconda prova fatta su gp8test [16/05/2013]
+				
+		>> SEMPLIFICAZIONE CONTO UTENTE DS [CHIUSO]
+			> ContoUtenteDs >> eliminata relazione movimentiKeys
+			> ContoUtenteMovimentoDs >> aggiunta relazione contoId
+			> CustomAdapterGP8Impl.findContoUtenteByCustomer >> aggiunta find List<ContoUtenteMovimento> e settaggio in contoUtente
+			>> PROVATO SU GP8NET [17/05/2013]
+
+		>> PRODUCER FOLDER PAGE [FATTO]
+			> ProducerFolderPage >> 17/04/2013
+			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			
+		>> OTTIMIZZAZIONI CACHE [FATTO]
+    		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
+    			> Map<Key, Object> resolvedEntities
+    			>>> (*) Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+			- PortalPageAdapterImpl.internalFindById
+				> cachedContentPage.hasSavedHtmls()
+    			> merge tra istanza cache e persistent su childreen e htmls
+    		- DynamicInvocationUtils.invokeMethod
+    			> commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
+    		- JdoDao.checkSubClassesResults
+    			> ottimizzazione per utilizzare la subclass ricavata dalla key
+    		- PortalPageServiceImpl.removePageFromCache
+    			> serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
+			>> ho parametrizzato l'ottimizzazione (*)
+				> it.mate.gwtcommons.server.dao.FindContext.useContextInRelationshipsResolver
+				> it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById(Class<P>, String, boolean, boolean)
+				> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
+			>> CASI DI TEST: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
+    		[21/04/2013]
+
+
+
+	------------------------------------------------------
+
+
+	SNAPSHOT 16/01/2013  [SOSPESI GESTIONE ORDINI]
 
 	- Data apertura ordine [2]
 		> gestire su producer:

@@ -27,9 +27,6 @@ public class GeneralActivity extends BaseActivity {
     super(clientFactory);
     this.place = place;
     registerHandlers(clientFactory.getEventBus());
-    
-//  RPCUtils.setSynchronizedInterceptor((ServiceDefTarget)generalService);
-    
   }
 
   private void registerHandlers(EventBus eventBus) {
@@ -247,5 +244,26 @@ public class GeneralActivity extends BaseActivity {
     });
   }
   
+  public void exportPortalDataDeferred (int exportMethod, final Delegate<String> delegate) {
+    generalService.exportPortalDataDeferred(exportMethod, new AsyncCallback<String>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(String jobId) {
+        delegate.execute(jobId);
+      }
+    });
+  }
+  
+  public void isExportJobComplete(String jobId, final Delegate<Boolean> delegate) {
+    generalService.isExportJobComplete(jobId, new AsyncCallback<Boolean>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Boolean result) {
+        delegate.execute(result);
+      }
+    });
+  }
   
 }
