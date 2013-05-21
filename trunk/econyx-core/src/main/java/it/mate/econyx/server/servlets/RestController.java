@@ -19,6 +19,7 @@ import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.econyx.shared.model.ProductPage;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.gwtcommons.server.utils.CacheUtils;
+import it.mate.gwtcommons.server.utils.LoggingUtils;
 import it.mate.gwtcommons.server.utils.PdfSession;
 import it.mate.gwtcommons.server.utils.StringUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
@@ -163,6 +164,7 @@ public class RestController {
       } else {
         Long currentTime = System.currentTimeMillis();
         if (currentTime > refreshTime) {
+          LoggingUtils.getJavaLogging(getClass()).info(String.format("REFRESH CACHE STARTED"));
           refreshTime = System.currentTimeMillis() + 1000 * PropertiesHolder.getInt("server.refreshCache.nextDelay", 1800);
           CacheUtils.instPut(CacheConstants.REFRESH_CACHE_CHECK, refreshTime);
           logger.debug("REFRESH CACHE CHECK >>>> RELOADING ALL DATA IN CACHE.......");
@@ -170,6 +172,8 @@ public class RestController {
           imageAdapter.findAll();
           portalServiceAdapter.getPage("root");
           portalServiceAdapter.getPage("home");
+          CacheUtils.purgeMasterIndex();
+          LoggingUtils.getJavaLogging(getClass()).info(String.format("REFRESH CACHE COMPLETED"));
         }
       }
     }

@@ -55,7 +55,11 @@
 					it.mate.gwtcommons.shared.utils.PropertiesHolder
 				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza	
 			> ALLA FINE: aggiornare la dipendenza in CKD		
-					 
+
+
+		>> MEMCACHE MASTER INDEX
+			>> purge master index spostata in RestController::refreshCache (lo faceva ad ogni put, rallentandola notevolmente)
+			[21/05/2013]					 
 	
 		>> RUOLI ADMINS
 			PortalUser
