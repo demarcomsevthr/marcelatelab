@@ -484,13 +484,16 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
       contoUtenteDs = dao.create(contoUtenteDs);
       List<ContoUtenteMovimento> savedMovimenti = new ArrayList<ContoUtenteMovimento>();
       List<ContoUtenteMovimento> movimenti = contoUtenteDs.getMovimenti();
-      for (ContoUtenteMovimento contoUtenteMovimentoDs : movimenti) {
-        contoUtenteMovimentoDs.setConto(contoUtenteDs);
-        if (contoUtenteMovimentoDs.getOrder() != null) {
-          contoUtenteMovimentoDs.setOrder(CloneUtils.clone(findOrderFromExportModel(model, contoUtenteMovimentoDs.getOrder()), OrderDs.class));
+      for (ContoUtenteMovimento contoUtenteMovimento : movimenti) {
+        contoUtenteMovimento.setConto(contoUtenteDs);
+        if (contoUtenteMovimento.getOrder() != null) {
+          contoUtenteMovimento.setOrder(CloneUtils.clone(findOrderFromExportModel(model, contoUtenteMovimento.getOrder()), OrderDs.class));
         }
-        contoUtenteMovimentoDs = dao.create(contoUtenteMovimentoDs);
-        savedMovimenti.add(contoUtenteMovimentoDs);
+        if (contoUtenteMovimento.getRegisteringPortalUser() != null) {
+          contoUtenteMovimento.setRegisteringPortalUser( CloneUtils.clone(findPortalUserFromExportModel(model, contoUtenteMovimento.getRegisteringPortalUser()), PortalUserDs.class ));
+        }
+        contoUtenteMovimento = dao.create(contoUtenteMovimento);
+        savedMovimenti.add(contoUtenteMovimento);
       }
       contoUtenteDs.setMovimenti(savedMovimenti);
       dao.update(contoUtenteDs);
@@ -499,7 +502,7 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
   
   private Customer findCustomerFromExportModel(PortalDataExportModel model, Customer customerToFind) {
     for (Customer customerInModel : model.customers) {
-      if (customerInModel.getPortalUser().getScreenName().equals(customerToFind.getPortalUser().getScreenName())) {
+      if (customerInModel.getPortalUser().getEmailAddress().equals(customerToFind.getPortalUser().getEmailAddress())) {
         return customerInModel;
       }
     }
@@ -515,4 +518,13 @@ public class CustomAdapterGP8Impl implements CustomAdapter {
     return null;
   }
 
+  private PortalUser findPortalUserFromExportModel(PortalDataExportModel model, PortalUser userToFind) {
+    for (PortalUser userInModel : model.users) {
+      if (userInModel.getEmailAddress().equals(userToFind.getEmailAddress())) {
+        return userInModel;
+      }
+    }
+    return null;
+  }
+  
 }
