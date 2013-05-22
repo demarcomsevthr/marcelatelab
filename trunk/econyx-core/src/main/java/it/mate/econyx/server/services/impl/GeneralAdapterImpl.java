@@ -370,7 +370,8 @@ public class GeneralAdapterImpl implements GeneralAdapter {
   }
   
   
-  public void generateRandomOrders(int number, Date date) {
+  public void generateRandomOrders(int number, Date date, String loggedUserId) {
+    PortalUser loggedUser = portalUserAdapter.findById(loggedUserId);
     List<Customer> customers = customerAdapter.findAll();
     List<Articolo> products = productAdapter.findAll();
     int it = 0;
@@ -394,10 +395,10 @@ public class GeneralAdapterImpl implements GeneralAdapter {
           try {
             while (numeroArticoliDaOrdinare > 0) {
               Articolo articoloDaOrdinare = articoliProduttore.get((int)(Math.random() * articoliProduttore.size()));
-              openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null);
+              openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null, loggedUser);
               numeroArticoliDaOrdinare --;
             }
-            orderAdapter.closeOrder(openOrder.getId(), null, null, date);
+            orderAdapter.closeOrder(openOrder.getId(), null, null, date, loggedUser);
           } catch (ServiceException ex) {
             logger.error("error: " + ex.getMessage());
           }
@@ -411,7 +412,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
       if (openOrder == null) {
         Articolo articoloDaOrdinare = products.get((int) (Math.random() * products.size()));
         try {
-          openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null);
+          openOrder = orderAdapter.orderProduct(null, openOrderId, articoloDaOrdinare, customer, 1d, null, loggedUser);
         } catch (ServiceException ex) {
           logger.error("error: " + ex.getMessage());
           it ++;
@@ -429,7 +430,7 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     for (Customer customer2 : customers) {
       Order openOrder = orderAdapter.findOpenOrderByCustomer(customer2);
       if (openOrder != null) {
-        orderAdapter.closeOrder(openOrder.getId(), null, null, date);
+        orderAdapter.closeOrder(openOrder.getId(), null, null, date, loggedUser);
       }
     }
     

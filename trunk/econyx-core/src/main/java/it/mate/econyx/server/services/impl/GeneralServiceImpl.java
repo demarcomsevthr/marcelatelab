@@ -371,9 +371,17 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
 
   @Override
   public void generateRandomOrders(int number, Date date) {
-    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number, date)));
+    QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.GENERATE_RANDOM_ORDERS, number, date).setLoggedUserId(getLoggedUserId())));
   }
   
+  private String getLoggedUserId() {
+    PortalSessionState portalSessionState = generalAdapter.retrievePortalSessionState(getThreadLocalRequest());
+    if (portalSessionState != null && portalSessionState.getLoggedUser() != null) {
+      return portalSessionState.getLoggedUser().getId();
+    }
+    return null;
+  }
+
   @Override
   public void refreshUsersCache() {
     QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new GenerateOperationTask(GenerateOperationTask.REFRESH_USERS_CACHE, 0, null)));

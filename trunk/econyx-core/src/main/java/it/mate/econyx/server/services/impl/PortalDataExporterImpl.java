@@ -639,7 +639,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
           // serve per disabilitare gli aggiornamenti automatici su contoutente
           orderAdapter.setDisableOrderStateChangeCustomAdapter(true);
           orderAdapter.setDisableOrderStateChangeDeferredTask(true);
-          order = orderAdapter.createWithoutInitialState(order);
+          order = orderAdapter.createWithoutInitialState(order, null);
           // aggiorno id in model per il successivo load dei conti utente
           for (Order orderInModel : model.orders) {
             if (orderInModel.getCode().equals(order.getCode())) {
@@ -653,7 +653,7 @@ public class PortalDataExporterImpl implements PortalDataExporter {
           orderAdapter.setDisableOrderStateChangeDeferredTask(false);
         }
       } else {
-        order = orderAdapter.update(order);
+        order = orderAdapter.update(order, null);
       }
     }
     return order;

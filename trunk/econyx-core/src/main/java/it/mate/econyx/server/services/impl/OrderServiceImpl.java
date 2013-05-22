@@ -15,6 +15,8 @@ import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.OrderStateConfig;
+import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.OrderTx;
 import it.mate.econyx.shared.services.OrderService;
@@ -65,9 +67,17 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   public List<Order> findAll() {
     return adapter.findAll();
   }
+  
+  private PortalUser getLoggedUser() {
+    PortalSessionState portalSessionState = generalAdapter.retrievePortalSessionState(getThreadLocalRequest());
+    if (portalSessionState != null) {
+      return portalSessionState.getLoggedUser();
+    }
+    return null;
+  }
 
   public Order create(Order entity) {
-    return adapter.create(entity);
+    return adapter.create(entity, getLoggedUser());
   }
 
   public void delete(Order entity) {
@@ -75,7 +85,7 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   }
 
   public Order update(Order entity) {
-    return adapter.update(entity);
+    return adapter.update(entity, getLoggedUser());
   }
   
   @Override
@@ -98,12 +108,12 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
 
   @Override
   public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details) {
-    return adapter.orderProduct(order, openOrderId, product, customer, quantity, details);
+    return adapter.orderProduct(order, openOrderId, product, customer, quantity, details, getLoggedUser());
   }
 
   @Override
   public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento) {
-    adapter.closeOrder(id, modalitaSpedizione, modalitaPagamento);
+    adapter.closeOrder(id, modalitaSpedizione, modalitaPagamento, getLoggedUser());
   }
   
   @Override

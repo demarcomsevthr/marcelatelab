@@ -21,6 +21,8 @@ public class GenerateOperationTask implements DeferredTask {
   private int number;
   
   private Date date;
+  
+  private String loggedUserId;
 
   public GenerateOperationTask(int command, int number, Date date) {
     this.command = command;
@@ -34,10 +36,15 @@ public class GenerateOperationTask implements DeferredTask {
     if (command == GENERATE_RANDOM_CUSTOMERS) {
       adapter.generateRandomCustomers(number, date);
     } else if (command == GENERATE_RANDOM_ORDERS) {
-      adapter.generateRandomOrders(number, date);
+      adapter.generateRandomOrders(number, date, loggedUserId);
     } else if (command == REFRESH_USERS_CACHE) {
       adapter.refreshUsersCache();
     }
+  }
+  
+  public GenerateOperationTask setLoggedUserId(String loggedUserId) {
+    this.loggedUserId = loggedUserId;
+    return this;
   }
 
 }

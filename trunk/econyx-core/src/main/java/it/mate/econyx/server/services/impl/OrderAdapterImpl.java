@@ -28,6 +28,7 @@ import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.ModalitaPagamentoTx;
 import it.mate.econyx.shared.model.impl.ModalitaSpedizioneTx;
 import it.mate.econyx.shared.model.impl.OrderItemTx;
@@ -152,7 +153,7 @@ public class OrderAdapterImpl implements OrderAdapter {
     return CloneUtils.clone(results, OrderTx.class, Order.class);
   }
   
-  public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details) {
+  public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details, PortalUser loggedUser) {
 
     boolean updateDatastore = true;
     
@@ -174,7 +175,7 @@ public class OrderAdapterImpl implements OrderAdapter {
       order.setCreated(new Date());
       order.setDescription("ORDER");
       order.setCustomer(customer);
-      order = create(order);
+      order = create(order, loggedUser);
     }
     boolean found = false;
     for (OrderItem item : order.getItems()) {
@@ -211,7 +212,7 @@ public class OrderAdapterImpl implements OrderAdapter {
     
     updateImportoTotale(order, null, false);
     if (updateDatastore) {
-      order = update(order);
+      order = update(order, loggedUser);
     } else {
       CacheUtils.put(castDs(order));
     }
@@ -267,14 +268,14 @@ public class OrderAdapterImpl implements OrderAdapter {
     return castTx(itemDs);
   }
   
-  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento) {
-    closeOrder(id, modalitaSpedizione, modalitaPagamento, null);
+  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, PortalUser loggedUser) {
+    closeOrder(id, modalitaSpedizione, modalitaPagamento, null, loggedUser);
   }
   
-  public void closeOrder (String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento, final Date dataGenerazioneOrdine) {
+  public void closeOrder (String id, final ModalitaSpedizione modalitaSpedizione, final ModalitaPagamento modalitaPagamento, final Date dataGenerazioneOrdine, PortalUser loggedUser) {
     // non faccio la fetch degli items
     final OrderDs detachedEntity = internalFindById(id, false);
-    updateStatesWithInsertedState(detachedEntity);
+    updateStatesWithInsertedState(detachedEntity, loggedUser);
     if (dataGenerazioneOrdine != null) {
       List<OrderState> detachedStates = detachedEntity.getStates();
       for (OrderState detachedState : detachedStates) {
@@ -296,26 +297,26 @@ public class OrderAdapterImpl implements OrderAdapter {
     });
   }
   
-  public Order create(Order entity) {
+  public Order create(Order entity, PortalUser loggedUser) {
     Order order = castDs(entity);
     order.setItems(createItems(order.getItems()));
-    updateStatesWithInitialState(order);
+    updateStatesWithInitialState(order, loggedUser);
     order = dao.create(order);
     return castTx(order);
   }
   
-  public Order createWithoutInitialState(Order entity) {
+  public Order createWithoutInitialState(Order entity, PortalUser loggedUser) {
     Order order = castDs(entity);
     order.setItems(createItems(order.getItems()));
-    updateStates(order, null);
+    updateStates(order, null, loggedUser);
     order = dao.create(order);
     return castTx(order);
   }
   
-  public Order update(Order entity) {
+  public Order update(Order entity, PortalUser loggedUser) {
     Order order = castDs(entity);
     order.setItems(updateItems(order.getItems()));
-    updateStates(order, null);
+    updateStates(order, null, loggedUser);
     updateImportoTotale(order, null, false);
     order = dao.update(order);
     return castTx(order);
@@ -328,25 +329,25 @@ public class OrderAdapterImpl implements OrderAdapter {
     dao.delete(order);
   }
   
-  private void updateStatesWithInsertedState(Order order) {
-    updateStatesWithOrderStateConfig(order, getInsertedOrderStateConfig());
+  private void updateStatesWithInsertedState(Order order, PortalUser loggedUser) {
+    updateStatesWithOrderStateConfig(order, getInsertedOrderStateConfig(), loggedUser);
   }
   
-  private void updateStatesWithInitialState(Order order) {
-    updateStatesWithOrderStateConfig(order, getInitialOrderStateConfig());
+  private void updateStatesWithInitialState(Order order, PortalUser loggedUser) {
+    updateStatesWithOrderStateConfig(order, getInitialOrderStateConfig(), loggedUser);
   }
   
-  private void updateStatesWithOrderStateConfig(Order order, OrderStateConfig orderStateConfig) {
+  private void updateStatesWithOrderStateConfig(Order order, OrderStateConfig orderStateConfig, PortalUser loggedUser) {
     OrderState state = new OrderStateDs();
     state.setCode(orderStateConfig.getCode());
     state.setConfig(castDs(orderStateConfig));
     state.setDate(new Date());
     state.setChecked(true);
     state.setPortalUser(castDs(order).getCustomer().getPortalUser());
-    updateStates(order, state);
+    updateStates(order, state, loggedUser);
   }
   
-  private void updateStates(Order order, OrderState stateToUpdate) {
+  private void updateStates(Order order, OrderState stateToUpdate, PortalUser loggedUser) {
     OrderState previousState = null;
     List<OrderState> states = order.getStates();
     if (states == null) {
