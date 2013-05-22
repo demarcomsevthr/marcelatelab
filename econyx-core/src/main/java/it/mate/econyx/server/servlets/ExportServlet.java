@@ -48,6 +48,7 @@ public class ExportServlet extends HttpServlet {
         xml = portalDataMarshaller.unload(exportMode);
       }
       response.setContentType("text/xml");
+      response.setHeader("Content-Disposition", "attachment; filename=\"portalData.export.xml\"");
       response.getWriter().print(xml);
     } catch (Exception ex) {
       logger.error("error", ex);

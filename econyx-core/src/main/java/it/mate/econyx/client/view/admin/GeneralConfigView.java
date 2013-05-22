@@ -58,7 +58,7 @@ public class GeneralConfigView extends AbstractBaseView<GeneralActivity> {
   }
 
   private void initUI() {
-    exportForm = new FormPanel("exportTab");
+    exportForm = new FormPanel("exportFrame");
     initWidget(uiBinder.createAndBindUi(this));
     buildIdLabel.setText("Build id: " + PropertiesHolder.getString("shared.buildId", "not set"));
   }
