@@ -10,6 +10,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface OrderListView extends BaseView<Presenter> {
 
@@ -23,10 +24,14 @@ public interface OrderListView extends BaseView<Presenter> {
     
     public void findAllOrderStates (Delegate<List<OrderStateConfig>> delegate);
     
+    public void getSaldoByPortalUserId (String portalUserId, Delegate<Double> delegate);
+    
   }
   
   public void setOrderStateFilterChangeDelegate(Delegate<String> orderStateFilterChangeDelegate);  
   
   public void addButton (Button button);
+  
+  public void addWidget (Widget widget);
   
 }

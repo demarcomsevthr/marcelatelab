@@ -33,4 +33,8 @@ public interface OrderState extends Serializable {
   
   public void setOrder(Order order);
   
+  public Boolean getDisableEmailToCustomerSubmission();
+
+  public void setDisableEmailToCustomerSubmission(Boolean disableEmailToCustomerSubmission);
+  
 }

@@ -26,6 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,6 +44,8 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
   Button stampaBtn;
   
   Button excelBtn;
+  
+  CheckBox disableSendEmailBox;
   
   private Produttore produttore;
   
@@ -71,6 +74,28 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     });
     
     super.onAttach();
+  }
+  
+  protected void initProvided() {
+    orderListView = new OrderListViewImpl("640px", "400px");
+    orderListView.setPresenter(new OrderListView.Presenter() {
+      public BaseView getView() {
+        return null;
+      }
+      public void goToPrevious() {
+      }
+      public void fetchItems(Order order, Delegate<Order> delegate) {
+      }
+      public void edit(Order order) {
+        getPresenter().editOrder(order);
+      }
+      public void findAllOrderStates(Delegate<List<OrderStateConfig>> delegate) {
+        getPresenter().findAllOrderStates(delegate);
+      }
+      public void getSaldoByPortalUserId(String portalUserId, Delegate<Double> delegate) {
+        getPresenter().getSaldoByPortalUserId(portalUserId, delegate);
+      }
+    });
   }
   
   protected void initUI() {
@@ -116,28 +141,9 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
       }
     });
     
+    disableSendEmailBox = new CheckBox("disabilita invio mail");
+    orderListView.addWidget(disableSendEmailBox);
 
-  }
-  
-  protected void initProvided() {
-    orderListView = new OrderListViewImpl("640px", "400px");
-    
-    orderListView.setPresenter(new OrderListView.Presenter() {
-      public BaseView getView() {
-        return null;
-      }
-      public void goToPrevious() {
-      }
-      public void fetchItems(Order order, Delegate<Order> delegate) {
-      }
-      public void edit(Order order) {
-        getPresenter().editOrder(order);
-      }
-      public void findAllOrderStates(Delegate<List<OrderStateConfig>> delegate) {
-        getPresenter().findAllOrderStates(delegate);
-      }
-    });
-    
   }
   
   public void setModel(Object model, String tag) {
@@ -200,6 +206,12 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
           for (OrderState state : order.getStates()) {
             if (state.getCode().equals(fNewStateCode) && !state.getChecked()) {
               state.setChecked(true);
+
+              // 22/05/2013
+              if (disableSendEmailBox.getValue()) {
+                state.setDisableEmailToCustomerSubmission(true);
+              }
+              
               updateOrder = true;
             }
             statesToUpdate.add(state);

@@ -33,4 +33,6 @@ public interface PortalUserServiceAsync {
 
   void activateUserById(String id, AsyncCallback<PortalUser> callback);
 
+  void getSaldoByPortalUserId(String portalUserId, AsyncCallback<Double> callback);
+
 }

@@ -40,6 +40,8 @@ public class OrderListGeneralView extends AbstractAdminTabPage<OrderListView.Pre
   @UiField (provided=true) CellTableExt<Order> ordersTable;
   @UiField Panel pagerPanel;
   
+  private List<Order> orders;
+
   public OrderListGeneralView() {
     initUI();
   }
@@ -140,6 +142,18 @@ public class OrderListGeneralView extends AbstractAdminTabPage<OrderListView.Pre
       }
     }, new TextCell(), null), "Stato");
     
+    ordersTable.addColumn(ColumnUtil.createColumn(new ColumnUtil.ValueGetter<Order, String>() {
+      public String getValue(Order order) {
+        return GwtUtils.dateToString(order.getCurrentState().getDate()); 
+      }
+    }, new TextCell(), null), "Data Agg.");
+    
+    ordersTable.addColumn(ColumnUtil.createColumn(new ColumnUtil.ValueGetter<Order, String>() {
+      public String getValue(Order order) {
+        return GwtUtils.formatCurrency(order.getCustomer().getPortalUser().getBillingAccount()); 
+      }
+    }, new TextCell(), null), "Saldo Utente Attuale");
+    
     ordersTable.addFillerColumn();
     
     ordersTable.addCellPreviewHandler(new CellPreviewEvent.Handler<Order>() {
@@ -153,45 +167,27 @@ public class OrderListGeneralView extends AbstractAdminTabPage<OrderListView.Pre
     ordersTable.sinkEvents(Event.ONDBLCLICK);
     
   }
-
+  
   public void setModel(Object model, String tag) {
     if (model instanceof List) {
-      final List<Order> orders = (List<Order>)model;
-      
+      orders = (List<Order>)model;
       Collections.sort(orders, new Comparator<Order>() {
         public int compare(Order o1, Order o2) {
           return o2.getCode().compareTo(o1.getCode());
         }
       });
-      
       ordersTable.setRowDataExt(orders, "codice");
-      
-      /*
-      ordersTable.adaptToViewHeight(this.getOffsetHeight() - 16, new Delegate<SimplePager>() {
-        public void execute(SimplePager pager) {
-          pagerPanel.clear();
-          pagerPanel.add(pager);
-        }
-      });
-      */
-      
       ordersTable.adaptToViewHeight(this, pagerPanel);
-
-//    ordersTable.setRowCount(orders.size());
       
-      /* 27/11/2012
-      AsyncDataProvider<Order> dataProvider = new AsyncDataProvider<Order>() {
-        protected void onRangeChanged(final HasData<Order> display) {
-          Range range = display.getVisibleRange();
-          int start = range.getStart();
-          int end = start + range.getLength();
-          end = Math.min(end, orders.size());
-          List<Order> rangeOrders = new ArrayList<Order>(orders.subList(start, end));
-          fetchNextOrderItems(new ArrayList<Order>(), rangeOrders.iterator(), display);
-        }
-      };
-      dataProvider.addDataDisplay(ordersTable);
-      */
+      for (final Order order : orders) {
+        getPresenter().getSaldoByPortalUserId(order.getCustomer().getPortalUser().getId(), new Delegate<Double>() {
+          public void execute(Double value) {
+            order.getCustomer().getPortalUser().setBillingAccount(value);
+            ordersTable.refreshDataProvider();
+          }
+        });
+      }
+      
     }
     
   }
@@ -227,6 +223,11 @@ public class OrderListGeneralView extends AbstractAdminTabPage<OrderListView.Pre
   
   @Override
   public void addButton(Button button) {
+    
+  }
+  
+  @Override
+  public void addWidget(Widget widget) {
     
   }
   

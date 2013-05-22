@@ -125,4 +125,8 @@ public class PortalUserServiceImpl extends RemoteServiceServlet implements Porta
     return adapter.activateUserById(id);
   }
   
+  public Double getSaldoByPortalUserId(String portalUserId) {
+    return adapter.getSaldoByPortalUserId(portalUserId);
+  }
+  
 }

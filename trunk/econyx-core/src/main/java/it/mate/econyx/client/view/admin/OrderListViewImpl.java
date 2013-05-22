@@ -31,6 +31,7 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
   
   @UiField Panel filterPanel;
   @UiField ListBox orderStateFilterBox;
+  @UiField Panel additionalWidgetsPanel;
   
 
   private String width;
@@ -142,6 +143,10 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
   
   public void addButton (Button button) {
     adminTab.addButton(button);
+  }
+  
+  public void addWidget(Widget widget) {
+    additionalWidgetsPanel.add(widget);
   }
   
 }

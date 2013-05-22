@@ -24,6 +24,8 @@ public class OrderStateTx implements OrderState {
   OrderTx order;
   
   PortalUserTx portalUser;
+  
+  Boolean disableEmailToCustomerSubmission;
 
   public String getId() {
     return id;
@@ -82,6 +84,14 @@ public class OrderStateTx implements OrderState {
   @CloneableProperty (targetClass=PortalUserTx.class)
   public void setPortalUser(PortalUser portalUser) {
     this.portalUser = (PortalUserTx)portalUser;
+  }
+
+  public Boolean getDisableEmailToCustomerSubmission() {
+    return disableEmailToCustomerSubmission != null ? disableEmailToCustomerSubmission : false;
+  }
+
+  public void setDisableEmailToCustomerSubmission(Boolean disableEmailToCustomerSubmission) {
+    this.disableEmailToCustomerSubmission = disableEmailToCustomerSubmission;
   }
   
 }

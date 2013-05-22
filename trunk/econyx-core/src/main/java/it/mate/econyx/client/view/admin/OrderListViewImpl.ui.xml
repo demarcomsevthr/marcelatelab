@@ -9,6 +9,8 @@
       <g:HorizontalPanel >
         <g:Label text="Stato corrente:"/>
         <g:ListBox ui:field="orderStateFilterBox"/>
+        <gc:Spacer width="2em"/>
+        <g:HorizontalPanel ui:field="additionalWidgetsPanel"></g:HorizontalPanel>
       </g:HorizontalPanel>
       <gc:Spacer height="10px"/>
     </g:VerticalPanel>

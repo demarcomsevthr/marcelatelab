@@ -29,6 +29,8 @@ public interface ProducerEditView extends BaseView<ProducerEditView.Presenter> {
     
     public void findOrderStateConfig (String code, Delegate<OrderStateConfig> delegate);
     
+    public void getSaldoByPortalUserId (String portalUserId, Delegate<Double> delegate);
+    
   }
   
   public class NotImpl extends UnimplementedView<ProducerEditView.Presenter> implements ProducerEditView {
