@@ -10,6 +10,7 @@ import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderItemDetail;
 import it.mate.econyx.shared.model.OrderStateConfig;
+import it.mate.econyx.shared.model.PortalUser;
 
 import java.util.Date;
 import java.util.List;
@@ -18,11 +19,11 @@ public interface OrderAdapter {
   
   public List<Order> findAll();
 
-  public Order update(Order entity);
+  public Order update(Order entity, PortalUser loggedUser);
 
   public void delete(Order entity);
 
-  public Order create(Order entity);
+  public Order create(Order entity, PortalUser loggedUser);
 
   public Order fetchItems(Order order);
   
@@ -34,11 +35,11 @@ public interface OrderAdapter {
   
   public List<Order> findOrdersByCustomer(Customer customer);
   
-  public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details);
+  public Order orderProduct(Order order, String openOrderId, Articolo product, Customer customer, Double quantity, List<OrderItemDetail> details, PortalUser loggedUser);
   
-  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento);
+  public void closeOrder(String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, PortalUser loggedUser);
   
-  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, Date dataGenerazioneOrdine);
+  public void closeOrder (String id, ModalitaSpedizione modalitaSpedizione, ModalitaPagamento modalitaPagamento, Date dataGenerazioneOrdine, PortalUser loggedUser);
   
   public OrderItem updateOrderItem (OrderItem item);
   
@@ -75,7 +76,7 @@ public interface OrderAdapter {
   public abstract OrderStateConfig findOrderStateConfig(String code);
   
   
-  public Order createWithoutInitialState(Order entity);
+  public Order createWithoutInitialState(Order entity, PortalUser loggedUser);
   
   public void setDisableOrderStateChangeCustomAdapter(boolean disableOrderStateChangeCustomAdapter);
 

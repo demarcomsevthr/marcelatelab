@@ -658,12 +658,12 @@ public class InitAdapterImpl implements InitAdapter {
   }
   
   private void createOrder(Order order) {
-    order = orderAdapter.create(order);
+    order = orderAdapter.create(order, null);
     logger.debug("created " + order);
   }
   
   private void updateOrder(Order order) {
-    order = orderAdapter.update(order);
+    order = orderAdapter.update(order, null);
     logger.debug("updated " + order);
   }
   

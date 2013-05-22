@@ -41,8 +41,8 @@
 	
 		>> ORDER STATES VIEW BUG:
 			-- ho notato errori nel reference al registeringPortalUser (fare test specifico)
-			
 			>>> TODO: nella update order state passare il portal user dalla view
+			> [IS006] [IN TEST] [22/05/2013]
 			
 		>> MOVIMENTO - ORDER BUG
 			-- su alcuni ordini confermati oggi (22/5) non ha settato il ref all'ordine
@@ -81,7 +81,7 @@
 
 		>> MEMCACHE MASTER INDEX
 			>> purge master index spostata in RestController::refreshCache (lo faceva ad ogni put, rallentandola notevolmente)
-			[21/05/2013]					 
+			[21/05/2013] [IS003]					 
 	
 		>> RUOLI ADMINS
 			PortalUser
@@ -105,6 +105,7 @@
 		>> IMPORT/EXPORT ORDINI WITH DEFERRED JOB
 			>>> [21/05/2013] VERIFICA SU GP8NET E IMPORT IN LOCALHOST >> PERFETTO!
 	        >>> TODO: set max contatore (setta il contatore se maggiore del corrente)
+	        > [IS001] [IS002]
 				
 		>> COLLECTION PROPERTY CLIENT/SERVER UTIL
 			>> it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil
@@ -510,3 +511,24 @@
 				> affinamenti in orderview
 				> visualizzazioen link movimento > ordine
 				> affinamenti in pdf order
+
+				
+		
+	__________________________________________________________________________________
+
+	ISSUES
+	__________________________________________________________________________________
+	
+
+	21/05/2013	IS001	Import / export ordini
+	
+	21/05/2013	IS002	ExportJob
+	
+	21/05/2013	IS003	Purge master index
+	
+	22/05/2013	IS004	Export iframe
+	
+	22/05/2013	IS005	Disabilita email send, colonna saldo utente attuale
+	
+	22/05/2013	IS006	Order states bugs
+	

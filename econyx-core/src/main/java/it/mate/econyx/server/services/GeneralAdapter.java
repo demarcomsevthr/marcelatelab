@@ -2,6 +2,7 @@ package it.mate.econyx.server.services;
 
 import it.mate.econyx.server.model.impl.ExportJobDs;
 import it.mate.econyx.shared.model.PortalSessionState;
+import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.CacheDumpEntry;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public interface GeneralAdapter {
   
   public void generateRandomCustomers(int numero, Date date);
   
-  public void generateRandomOrders(int number, Date date);
+  public void generateRandomOrders(int number, Date date, String loggedUserId);
   
   public List<CacheDumpEntry> instanceCacheDump ();
   
