@@ -4,10 +4,19 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui">
        
   <ui:style>
+
+	@external exportFrame;
   
     .outputPanel * {
 	  font-size: 9px;
     }
+    
+    .exportFrame {
+	  width: 1px;
+	  height: 1px;
+	  border: 0px;
+	}
+	
   
   </ui:style>     
 
@@ -66,12 +75,13 @@
       
     </g:VerticalPanel>
     
-    <g:FormPanel ui:field="exportForm" visible="false"/>
-    
     <g:VerticalPanel>
       <gc:Spacer height="2em"/>
       <g:HTMLPanel ui:field="outputPanel" addStyleNames="{style.outputPanel}"></g:HTMLPanel>
     </g:VerticalPanel>
+    
+    <g:FormPanel ui:field="exportForm" visible="false"/>
+    <iframe id="exportFrame" class="exportFrame" name="exportFrame"></iframe>
     
   </g:HTMLPanel>
 
