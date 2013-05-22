@@ -28,8 +28,30 @@
 		>> generate order > 16'' per order
 		>> update order state > 6' per order 
 		
+		
+	RILEVAZIONE TEMPI MEDI - 22/05/2013
+		>> dopo aver tolto l'update master index in cacheutils ad ogni put:
+		>> update order state > 1' per order !!!
+		
+		
 	----------------------------------------------------------------------------------	
 
+
+	SNAPSHOT 22/05/2013
+	
+		>> ORDER STATES VIEW BUG:
+			-- ho notato errori nel reference al registeringPortalUser (fare test specifico)
+			
+			>>> TODO: nella update order state passare il portal user dalla view
+			
+		>> MOVIMENTO - ORDER BUG
+			-- su alcuni ordini confermati oggi (22/5) non ha settato il ref all'ordine
+				(vedi ordini demarco.m73)
+				
+		>> ORDER LIST VIEW
+			-- nella order list view (da menu) sugli ordini confermati non c'è il PAGER !!!		
+			
+	
 
 	SNAPSHOT 21/05/2013
 	

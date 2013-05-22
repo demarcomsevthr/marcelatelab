@@ -207,5 +207,17 @@ public class OrderActivity extends BaseActivity implements
       }
     });
   }
+
+  @Override
+  public void getSaldoByPortalUserId(String portalUserId, final Delegate<Double> delegate) {
+    AppClientFactory.IMPL.getGinjector().getPortalUserService().getSaldoByPortalUserId(portalUserId, new AsyncCallback<Double>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(Double result) {
+        delegate.execute(result);
+      }
+    });
+  }
   
 }

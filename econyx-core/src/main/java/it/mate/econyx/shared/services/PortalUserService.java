@@ -35,4 +35,6 @@ public interface PortalUserService extends RemoteService {
   
   public PortalUser activateUserById (String id);
   
+  public Double getSaldoByPortalUserId(String portalUserId);
+  
 }

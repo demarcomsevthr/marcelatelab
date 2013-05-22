@@ -46,6 +46,10 @@ public class PortalUserAdapterImpl implements PortalUserAdapter {
     }
     return CloneUtils.clone(users, PortalUserTx.class, PortalUser.class);
   }
+
+  public Double getSaldoByPortalUserId(String portalUserId) {
+    return customAdapter.getSaldoByPortalUser(portalUserId);
+  }
   
   @Override
   public PortalUser create(PortalUser user) {

@@ -411,7 +411,7 @@ public class OrderAdapterImpl implements OrderAdapter {
         }
         if (newStateChecked) {
           if (OrderStateConfig.YES.equals(newState.getConfig().getEmailToCustomerSendType())) {
-            if (!disableOrderStateChangeDeferredTask) {
+            if (!disableOrderStateChangeDeferredTask && !newState.getDisableEmailToCustomerSubmission()) {
               Queue queue = QueueFactory.getDefaultQueue();
               OrderStateChangeDeferredTask task = new OrderStateChangeDeferredTask(order.getId(), newState.getCode());
               queue.add(TaskOptions.Builder.withPayload(task).countdownMillis(10000));

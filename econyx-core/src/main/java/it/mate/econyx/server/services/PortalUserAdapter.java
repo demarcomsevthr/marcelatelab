@@ -30,4 +30,6 @@ public interface PortalUserAdapter {
   
   public PortalUser activateUserById (String id);
   
+  public Double getSaldoByPortalUserId(String portalUserId);
+  
 }

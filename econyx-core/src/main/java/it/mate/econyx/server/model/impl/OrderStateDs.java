@@ -57,6 +57,8 @@ public class OrderStateDs implements OrderState, HasKey {
   @UnownedRelationship (key="portalUserId")
   transient PortalUserDs portalUser;
   
+  // serve solo per comunicare all'adapter di non inviare l'email
+  transient Boolean disableEmailToCustomerSubmission;
 
   public Key getKey() {
     return id;
@@ -126,6 +128,14 @@ public class OrderStateDs implements OrderState, HasKey {
   public void setPortalUser(PortalUser portalUser) {
     this.portalUser = (PortalUserDs)portalUser;
     this.portalUserId = this.portalUser != null ? this.portalUser.getKey() : null;
+  }
+  
+  public Boolean getDisableEmailToCustomerSubmission() {
+    return disableEmailToCustomerSubmission != null ? disableEmailToCustomerSubmission : false;
+  }
+
+  public void setDisableEmailToCustomerSubmission(Boolean disableEmailToCustomerSubmission) {
+    this.disableEmailToCustomerSubmission = disableEmailToCustomerSubmission;
   }
   
 }

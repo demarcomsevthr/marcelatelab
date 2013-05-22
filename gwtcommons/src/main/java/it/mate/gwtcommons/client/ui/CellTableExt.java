@@ -182,6 +182,10 @@ public class CellTableExt<M> extends CellTable<M> {
     
   }
   
+  public void refreshDataProvider() {
+    dataProvider.refresh();
+  }
+  
   public SimplePager createPager () {
     SimplePager pager = new SimplePager(TextLocation.CENTER, 
         (SimplePager.Resources)GWT.create(SimplePager.Resources.class), 

@@ -154,4 +154,9 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
     
   }
   
+  @Override
+  public void addWidget(Widget widget) {
+    
+  }
+  
 }
