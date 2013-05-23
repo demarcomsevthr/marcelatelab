@@ -1,5 +1,6 @@
 package it.mate.econyx.server.servlets;
 
+import it.mate.commons.server.utils.BlobUtils;
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.CustomAdapter;
@@ -9,7 +10,6 @@ import it.mate.econyx.server.services.PortalDataExporter;
 import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.server.tasks.PortalDataUploadDeferredTask;
 import it.mate.econyx.shared.model.ImageContent;
-import it.mate.gwtcommons.server.utils.BlobUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 

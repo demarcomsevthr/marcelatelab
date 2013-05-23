@@ -1,12 +1,12 @@
 package it.mate.econyx.server.servlets;
 
+import it.mate.commons.server.utils.SpringUtils;
 import it.mate.econyx.server.model.impl.AbstractArticoloDs;
 import it.mate.econyx.server.model.impl.ImageDs;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.services.ProductAdapter;
 import it.mate.econyx.server.services.ResourcesService;
 import it.mate.econyx.shared.model.ImageContent;
-import it.mate.gwtcommons.server.utils.SpringUtils;
 
 import java.io.IOException;
 

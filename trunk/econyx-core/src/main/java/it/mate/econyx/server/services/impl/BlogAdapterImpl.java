@@ -1,5 +1,9 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.FindContext;
+import it.mate.commons.server.utils.CacheUtils;
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.server.model.impl.BlogCommentDs;
 import it.mate.econyx.server.model.impl.BlogDiscussionDs;
 import it.mate.econyx.server.model.impl.BlogDs;
@@ -10,10 +14,6 @@ import it.mate.econyx.shared.model.BlogComment;
 import it.mate.econyx.shared.model.BlogDiscussion;
 import it.mate.econyx.shared.model.impl.BlogDiscussionTx;
 import it.mate.econyx.shared.model.impl.BlogTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.dao.FindContext;
-import it.mate.gwtcommons.server.utils.CacheUtils;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
 import java.util.Comparator;

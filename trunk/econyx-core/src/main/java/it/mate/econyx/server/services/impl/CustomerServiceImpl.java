@@ -1,11 +1,11 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.utils.HttpUtils;
 import it.mate.econyx.server.services.CustomerAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.services.CustomerService;
-import it.mate.gwtcommons.server.utils.HttpUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 

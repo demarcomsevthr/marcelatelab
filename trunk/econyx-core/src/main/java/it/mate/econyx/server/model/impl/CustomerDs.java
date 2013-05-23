@@ -1,12 +1,12 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.Indirizzo;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.CustomerTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import javax.jdo.annotations.IdGeneratorStrategy;

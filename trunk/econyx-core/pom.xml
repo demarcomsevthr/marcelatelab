@@ -17,7 +17,13 @@
     <dependency>
       <groupId>it.mate</groupId>
       <artifactId>gwtcommons</artifactId>
-      <version>1.6.2</version>
+      <version>2.5.1</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>it.mate</groupId>
+      <artifactId>gaecommons</artifactId>
+      <version>1.7.7</version>
     </dependency>
     
     <dependency>

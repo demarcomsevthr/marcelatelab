@@ -1,8 +1,8 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.utils.BlobUtils;
 import it.mate.econyx.shared.model.DocumentContent;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.utils.BlobUtils;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;

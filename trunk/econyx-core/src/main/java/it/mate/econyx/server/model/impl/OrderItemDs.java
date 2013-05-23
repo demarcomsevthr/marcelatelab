@@ -1,11 +1,11 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderItemDetail;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

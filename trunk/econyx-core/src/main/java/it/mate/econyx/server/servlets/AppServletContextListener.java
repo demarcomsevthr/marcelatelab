@@ -1,8 +1,8 @@
 package it.mate.econyx.server.servlets;
 
+import it.mate.commons.server.utils.CacheUtils;
+import it.mate.commons.server.utils.KeyUtils;
 import it.mate.econyx.server.util.CacheConstants;
-import it.mate.gwtcommons.server.utils.CacheUtils;
-import it.mate.gwtcommons.server.utils.KeyUtils;
 
 import java.util.Date;
 

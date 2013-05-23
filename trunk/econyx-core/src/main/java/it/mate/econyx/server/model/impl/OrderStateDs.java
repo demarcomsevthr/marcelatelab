@@ -1,13 +1,13 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.Order;
 import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.OrderStateConfig;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.OrderStateTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.Date;

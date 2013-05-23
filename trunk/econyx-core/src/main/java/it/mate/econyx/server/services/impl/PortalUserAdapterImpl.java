@@ -1,14 +1,14 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.CodecUtils;
+import it.mate.commons.server.utils.KeyUtils;
 import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.CustomAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.PortalUserTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.utils.CloneUtils;
-import it.mate.gwtcommons.server.utils.CodecUtils;
-import it.mate.gwtcommons.server.utils.KeyUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.List;

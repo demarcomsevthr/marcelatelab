@@ -1,5 +1,6 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.server.model.impl.OrderDs;
 import it.mate.econyx.server.model.impl.ProduttoreDs;
 import it.mate.econyx.server.services.GeneralAdapter;
@@ -20,7 +21,6 @@ import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.OrderTx;
 import it.mate.econyx.shared.services.OrderService;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.ArrayList;

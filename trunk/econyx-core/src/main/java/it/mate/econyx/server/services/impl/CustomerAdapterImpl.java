@@ -1,5 +1,7 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.server.model.impl.CustomerDs;
 import it.mate.econyx.server.model.impl.IndirizzoFatturazioneDs;
 import it.mate.econyx.server.model.impl.IndirizzoSpedizioneDs;
@@ -10,8 +12,6 @@ import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.model.impl.CustomerTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Date;
 import java.util.List;

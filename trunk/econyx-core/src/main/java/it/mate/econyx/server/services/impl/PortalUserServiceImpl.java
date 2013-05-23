@@ -1,13 +1,13 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.utils.HttpUtils;
+import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.econyx.server.services.MailAdapter;
 import it.mate.econyx.server.services.PortalUserAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.PortalUser;
 import it.mate.econyx.shared.services.GeneralService;
 import it.mate.econyx.shared.services.PortalUserService;
-import it.mate.gwtcommons.server.utils.HttpUtils;
-import it.mate.gwtcommons.server.utils.LoggingUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.List;

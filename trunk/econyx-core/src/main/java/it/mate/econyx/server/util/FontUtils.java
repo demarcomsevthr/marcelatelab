@@ -1,7 +1,7 @@
 package it.mate.econyx.server.util;
 
+import it.mate.commons.server.utils.SpringUtils;
 import it.mate.econyx.shared.util.FontTypes;
-import it.mate.gwtcommons.server.utils.SpringUtils;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,10 +1,10 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.dao.EntityRelationshipsResolverHandler;
+import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.utils.CollectionUtils;
 import it.mate.econyx.shared.model.PortalFolderPage;
 import it.mate.econyx.shared.model.PortalPage;
-import it.mate.gwtcommons.server.dao.EntityRelationshipsResolverHandler;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
-import it.mate.gwtcommons.server.utils.CollectionUtils;
 import it.mate.gwtcommons.shared.model.CloneableBean;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 

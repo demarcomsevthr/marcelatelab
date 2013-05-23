@@ -34,6 +34,10 @@
 		>> update order state > 1' per order !!!
 		
 		
+	RILEVAZIONE TEMPI MEDI - 22/05/2013
+		>> insert 10 ordini 45'' >> 4,5'' per order
+
+		
 	----------------------------------------------------------------------------------	
 
 
@@ -56,27 +60,47 @@
 	SNAPSHOT 21/05/2013
 	
 		>> GWTCOMMONS SPLIT (con calma! serve più di un giorno per farlo)
+			[IS007]
 			[analisi del 21/05/2013]
-			> gwtcommons-1.6.2 >> backup svn
+			[iniziato il 23/05/2013]
+			
+			> gwtcommons-1.6.2 >> backup svn	> OK [23/05/2013]
+			
 			> gwtcommons (packages client, rpc, shared) >> gwtcommons-2.5 
 					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
 					it.mate.gwtcommons.shared.model.PageConfig
+					it.mate.gwtcommons.shared.model.CloneableBean
+					it.mate.gwtcommons.shared.model.CloneableProperty
 					it.mate.gwtcommons.shared.services.ServiceException
 					it.mate.gwtcommons.shared.utils.PropertiesHolder
+					
 			> gwtcommons (packages server, shared) >> gaecommons-1.7.7
 				>> rename pkg it.mate.commons.server...
 					>>> per questo ci vorrà molto tempo (vanno aggiornate tutte le import in econyx...)
 				>> DUE STEP: 1) si crea la lib senza rename e si prova; 2) si fa la rename del pkg
-				>> classi shared da metterci:
-					it.mate.gwtcommons.shared.model.CloneableBean
-					it.mate.gwtcommons.shared.model.CloneableProperty
-			> il pkg shared va diviso tra gwt/gaecommons, facendo attenzione a mettere in gwtcommons tutto quello
-				che viene utilizzato nel client (anche in econyx) e va compilato gwt
+				
 			> NOTA: le seguenti classi shared sono utilizzate sia da client che da server:
 					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
 					it.mate.gwtcommons.shared.utils.PropertiesHolder
-				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza	
-			> ALLA FINE: aggiornare la dipendenza in CKD		
+					it.mate.gwtcommons.shared.model.CloneableBean
+					it.mate.gwtcommons.shared.model.CloneableProperty
+				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza
+				
+			> INIZIATO [23/05/2013]	
+				
+			>>> FILE MODIFICATI:
+				tutti i **/server/**.java ci copycart, econyx-core
+				econyx-base-app: src/main/webapp/WEB-INF/econyx-web-context.xml
+												re-servlet.xml
+												web.xml
+												(bean di **.gwtcommons.server.**)
+				econyx-base-app: pom.xml
+				econyx-core: bin/build-core.bat
+				econyx-core: pom.xml
+				mwtportlets: pom.xml
+			
+				
+			> ALLA FINE: aggiornare la dipendenza in CKD
 
 
 		>> MEMCACHE MASTER INDEX
@@ -531,4 +555,7 @@
 	22/05/2013	IS005	Disabilita email send, colonna saldo utente attuale
 	
 	22/05/2013	IS006	Order states bugs
+	
+	23/05/2013	IS007	gwtcommons split
+	
 	

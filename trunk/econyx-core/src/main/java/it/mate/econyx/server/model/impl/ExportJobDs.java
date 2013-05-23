@@ -1,6 +1,6 @@
 package it.mate.econyx.server.model.impl;
 
-import it.mate.gwtcommons.server.model.HasKey;
+import it.mate.commons.server.model.HasKey;
 
 import java.io.Serializable;
 import java.util.Date;

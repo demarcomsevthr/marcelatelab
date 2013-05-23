@@ -1,9 +1,9 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.Article;
 import it.mate.econyx.shared.model.ArticleFolder;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

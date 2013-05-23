@@ -1,8 +1,8 @@
 package it.mate.test;
 
+import it.mate.commons.server.utils.PdfSession;
 import it.mate.econyx.server.util.FontUtils;
 import it.mate.econyx.shared.util.FontTypes;
-import it.mate.gwtcommons.server.utils.PdfSession;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

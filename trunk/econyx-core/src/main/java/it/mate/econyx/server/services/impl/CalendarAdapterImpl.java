@@ -1,5 +1,8 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.ParameterDefinition;
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.server.model.impl.CalEventDs;
 import it.mate.econyx.server.model.impl.PortalUserDs;
 import it.mate.econyx.server.services.CalendarAdapter;
@@ -8,9 +11,6 @@ import it.mate.econyx.server.util.PortalSessionStateServerUtils;
 import it.mate.econyx.shared.model.CalEvent;
 import it.mate.econyx.shared.model.Period;
 import it.mate.econyx.shared.model.impl.CalEventTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.dao.ParameterDefinition;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
