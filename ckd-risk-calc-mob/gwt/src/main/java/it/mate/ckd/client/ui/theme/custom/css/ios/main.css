@@ -1,7 +1,0 @@
-@url bgr bgrImage;
-
-body {
-  background-image: -webkit-gradient(linear , left top, left bottom, color-stop(0.20, rgba(64, 127, 221, 0.75)), color-stop(0.80, rgba(85, 184, 209, 0.72)), color-stop(0.90, rgba(5, 123, 252, 0.8))) ;
-  background-repeat: repeat;
-  background-size: 20px 500px;
-}
