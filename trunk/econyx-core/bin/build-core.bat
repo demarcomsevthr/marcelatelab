@@ -10,14 +10,14 @@ SET MVN2CMD=%~dp0\mvn2.bat
 
 if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 
-cd %BASEDIR%\..\mwtportlets
-call %MVN2CMD% %DEP_CLEAN% compile package install
-
 cd %BASEDIR%\..\gwtcommons
 call %MVN2CMD% %DEP_CLEAN% compile package install
 
 cd %BASEDIR%\..\gaecommons
 call %MVN2CMD% %DEP_CLEAN% compile datanucleus:enhance package install
+
+cd %BASEDIR%\..\mwtportlets
+call %MVN2CMD% %DEP_CLEAN% compile package install
 
 :NO_DEPENDENCIES
 
