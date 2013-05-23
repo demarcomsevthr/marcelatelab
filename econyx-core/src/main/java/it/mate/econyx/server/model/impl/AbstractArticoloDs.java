@@ -1,5 +1,9 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.services.NotImplementedException;
+import it.mate.commons.server.utils.CollectionUtils;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.HtmlContent.Type;
@@ -7,10 +11,6 @@ import it.mate.econyx.shared.model.ImageContent;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.TipoArticolo;
 import it.mate.econyx.shared.model.UnitaDiMisura;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
-import it.mate.gwtcommons.server.services.NotImplementedException;
-import it.mate.gwtcommons.server.utils.CollectionUtils;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

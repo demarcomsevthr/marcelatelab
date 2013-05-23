@@ -1,5 +1,10 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.FindContext;
+import it.mate.commons.server.utils.CacheUtils;
+import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.CacheUtils.CacheEntry;
 import it.mate.econyx.server.model.impl.ArticleCommentDs;
 import it.mate.econyx.server.model.impl.ArticleDs;
 import it.mate.econyx.server.model.impl.ArticleFolderDs;
@@ -11,11 +16,6 @@ import it.mate.econyx.shared.model.ArticleFolder;
 import it.mate.econyx.shared.model.ArticleFolderPage;
 import it.mate.econyx.shared.model.impl.ArticleFolderTx;
 import it.mate.econyx.shared.model.impl.ArticleTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.dao.FindContext;
-import it.mate.gwtcommons.server.utils.CacheUtils;
-import it.mate.gwtcommons.server.utils.CacheUtils.CacheEntry;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
 import java.util.Comparator;

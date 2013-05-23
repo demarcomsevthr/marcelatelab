@@ -1,7 +1,7 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
 import it.mate.econyx.shared.model.impl.WebContentPageTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
 import it.mate.gwtcommons.shared.model.CloneableBean;
 
 import javax.jdo.annotations.PersistenceCapable;

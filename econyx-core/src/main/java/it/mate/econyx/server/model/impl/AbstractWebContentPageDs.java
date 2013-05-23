@@ -1,11 +1,11 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.dao.EntityRelationshipsResolverHandler;
+import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.utils.CollectionUtils;
 import it.mate.econyx.shared.model.HtmlContent;
 import it.mate.econyx.shared.model.HtmlContent.Type;
 import it.mate.econyx.shared.model.WebContentPage;
-import it.mate.gwtcommons.server.dao.EntityRelationshipsResolverHandler;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
-import it.mate.gwtcommons.server.utils.CollectionUtils;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

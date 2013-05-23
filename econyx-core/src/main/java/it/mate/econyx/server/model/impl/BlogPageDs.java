@@ -1,10 +1,10 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.Blog;
 import it.mate.econyx.shared.model.BlogPage;
 import it.mate.econyx.shared.model.impl.BlogPageTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableBean;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;

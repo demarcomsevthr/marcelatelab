@@ -1,11 +1,11 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.CollectionPropertyServerUtil;
+import it.mate.commons.server.model.HasKey;
 import it.mate.econyx.shared.model.Articolo;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.ProduttoreTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.CollectionPropertyServerUtil;
-import it.mate.gwtcommons.server.model.HasKey;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

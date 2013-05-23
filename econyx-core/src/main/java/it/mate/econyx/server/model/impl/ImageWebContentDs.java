@@ -1,12 +1,12 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.utils.BlobUtils;
 import it.mate.econyx.shared.model.ImageContent;
 import it.mate.econyx.shared.model.WebContent;
 import it.mate.econyx.shared.model.impl.ImageContentTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
-import it.mate.gwtcommons.server.utils.BlobUtils;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;

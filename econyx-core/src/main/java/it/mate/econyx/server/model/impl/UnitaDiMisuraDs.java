@@ -1,9 +1,9 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
 import it.mate.econyx.shared.model.UnitaDiMisura;
 import it.mate.econyx.shared.model.impl.UnitaDiMisuraTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;

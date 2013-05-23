@@ -1,6 +1,6 @@
 package it.mate.econyx.server.model.impl;
 
-import it.mate.gwtcommons.server.utils.BlobUtils;
+import it.mate.commons.server.utils.BlobUtils;
 import it.mate.gwtcommons.shared.model.CloneableBean;
 
 import javax.jdo.annotations.PersistenceCapable;

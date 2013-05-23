@@ -1,7 +1,7 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.HasKey;
 import it.mate.econyx.shared.model.HtmlContent;
-import it.mate.gwtcommons.server.model.HasKey;
 
 import javax.jdo.annotations.PersistenceCapable;
 

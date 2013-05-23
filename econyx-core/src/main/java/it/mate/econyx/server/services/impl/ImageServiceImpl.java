@@ -1,10 +1,10 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.util.AdaptersUtil;
 import it.mate.econyx.shared.model.Image;
 import it.mate.econyx.shared.services.ImageService;
-import it.mate.gwtcommons.server.dao.Dao;
 
 import java.util.List;
 

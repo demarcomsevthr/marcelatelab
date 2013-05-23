@@ -1,5 +1,10 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
+import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.CollectionUtils;
 import it.mate.econyx.shared.model.Customer;
 import it.mate.econyx.shared.model.ModalitaPagamento;
 import it.mate.econyx.shared.model.ModalitaSpedizione;
@@ -8,11 +13,6 @@ import it.mate.econyx.shared.model.OrderItem;
 import it.mate.econyx.shared.model.OrderState;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.OrderTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
-import it.mate.gwtcommons.server.utils.CloneUtils;
-import it.mate.gwtcommons.server.utils.CollectionUtils;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;

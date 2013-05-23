@@ -1,5 +1,8 @@
 package it.mate.econyx.server.services.impl;
 
+import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.FindContext;
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.server.model.impl.DocumentDs;
 import it.mate.econyx.server.model.impl.DocumentFolderDs;
 import it.mate.econyx.server.services.DocumentAdapter;
@@ -8,9 +11,6 @@ import it.mate.econyx.shared.model.Document;
 import it.mate.econyx.shared.model.DocumentFolder;
 import it.mate.econyx.shared.model.impl.DocumentFolderTx;
 import it.mate.econyx.shared.model.impl.DocumentTx;
-import it.mate.gwtcommons.server.dao.Dao;
-import it.mate.gwtcommons.server.dao.FindContext;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import java.util.Collections;
 import java.util.Comparator;

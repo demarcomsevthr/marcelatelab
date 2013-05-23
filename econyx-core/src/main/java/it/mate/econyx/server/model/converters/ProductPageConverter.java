@@ -1,8 +1,8 @@
 package it.mate.econyx.server.model.converters;
 
+import it.mate.commons.server.utils.CloneUtils;
 import it.mate.econyx.shared.model.impl.ArticoloTx;
 import it.mate.econyx.shared.model.impl.ProductPageTx;
-import it.mate.gwtcommons.server.utils.CloneUtils;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

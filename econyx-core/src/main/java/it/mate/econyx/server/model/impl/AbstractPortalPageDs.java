@@ -1,10 +1,10 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.dao.EntityRelationshipsResolverHandler;
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.HasKey;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.impl.PortalPageTx;
-import it.mate.gwtcommons.server.dao.EntityRelationshipsResolverHandler;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.HasKey;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;

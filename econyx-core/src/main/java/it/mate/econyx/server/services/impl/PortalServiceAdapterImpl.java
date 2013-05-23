@@ -1,6 +1,6 @@
 package it.mate.econyx.server.services.impl;
 
-import it.mate.gwtcommons.server.utils.SpringUtils;
+import it.mate.commons.server.utils.SpringUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 import it.mate.portlets.client.WidgetFactory;
 import it.mate.portlets.server.services.PortalServiceAdapter;

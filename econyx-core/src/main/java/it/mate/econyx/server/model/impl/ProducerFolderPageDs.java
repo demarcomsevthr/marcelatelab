@@ -1,11 +1,11 @@
 package it.mate.econyx.server.model.impl;
 
+import it.mate.commons.server.model.CacheableEntity;
+import it.mate.commons.server.model.UnownedRelationship;
 import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.ProducerFolderPage;
 import it.mate.econyx.shared.model.Produttore;
 import it.mate.econyx.shared.model.impl.ProducerFolderPageTx;
-import it.mate.gwtcommons.server.model.CacheableEntity;
-import it.mate.gwtcommons.server.model.UnownedRelationship;
 import it.mate.gwtcommons.shared.model.CloneableBean;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.model.CloneablePropertyMissingException;
