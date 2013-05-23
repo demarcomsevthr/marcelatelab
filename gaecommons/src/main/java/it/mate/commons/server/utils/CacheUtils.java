@@ -225,7 +225,7 @@ public class CacheUtils {
   }
   
   private synchronized static Map<Object, Object> getInstCache() {
-    if (PropertiesHolder.getBoolean("it.mate.gwtcommons.server.utils.CacheUtils.useInstanceCache", true)) {
+    if (PropertiesHolder.getBoolean("it.mate.commons.server.utils.CacheUtils.useInstanceCache", true)) {
       if (instanceCache == null) {
         instanceCache = new HashMap<Object, Object>();
       }
