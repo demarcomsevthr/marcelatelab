@@ -58,7 +58,7 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
     List<AdminTabPanel.Section<Presenter>> sections = new ArrayList<AdminTabPanel.Section<Presenter>>();
     sections.add(new AdminTabPanel.Section<Presenter>()
         .setText("Generale")
-        .setView(new OrderListGeneralView()));
+        .setView(new OrderListGeneralView().setOrderListView(this)));
     adminTab.setSections(sections);
   }
   
@@ -89,12 +89,6 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
         completeDelegate.execute(null);
       }
     });
-    /* 30/11/2012
-    listBox.addItem("nel carrello", OrderStateConfig.OPENED);
-    listBox.addItem("inserito", OrderStateConfig.INSERTED);
-    listBox.addItem("confermato", OrderStateConfig.CONFIRMED);
-    listBox.addItem("consegnato", OrderStateConfig.SHIPPED);
-    */
   }
   
   private void fireOrderStateFilterChangeDelegate() {
@@ -138,14 +132,14 @@ public class OrderListViewImpl extends AbstractBaseView<OrderListView.Presenter>
   }
   
   public void setModel(Object model, String tag) {
-    adminTab.setModel(model, null);
+    adminTab.setModel(model, tag);
   }
   
   public void addButton (Button button) {
     adminTab.addButton(button);
   }
   
-  public void addWidget(Widget widget) {
+  public void addTopWidget(Widget widget) {
     additionalWidgetsPanel.add(widget);
   }
   

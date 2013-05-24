@@ -55,4 +55,8 @@ public interface OrderServiceAsync {
 
   void findOrderStateConfig(String code, AsyncCallback<OrderStateConfig> callback);
 
+  void findOrdersIdByState(String currentStateCode, AsyncCallback<List<String>> callback);
+
+  void findOrdersByIds(List<String> ids, AsyncCallback<List<Order>> callback);
+
 }

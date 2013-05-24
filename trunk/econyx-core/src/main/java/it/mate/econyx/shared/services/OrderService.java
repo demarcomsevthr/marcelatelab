@@ -51,6 +51,8 @@ public interface OrderService extends RemoteService {
 
   public List<Order> findOrdersByState(String currentStateCode);
   
+  public List<String> findOrdersIdByState(String currentStateCode);
+  
   public List<OrderStateConfig> findAllOrderStates();
 
   
@@ -58,6 +60,8 @@ public interface OrderService extends RemoteService {
   
   public Order updateImportoTotale(Order order, Double importoTotale);
 
-  public abstract OrderStateConfig findOrderStateConfig(String code);
+  public OrderStateConfig findOrderStateConfig(String code);
+  
+  public List<Order> findOrdersByIds(List<String> ids);
   
 }

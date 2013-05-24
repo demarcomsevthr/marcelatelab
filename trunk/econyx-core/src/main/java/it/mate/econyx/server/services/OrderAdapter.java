@@ -82,4 +82,9 @@ public interface OrderAdapter {
 
   public void setDisableOrderStateChangeDeferredTask(boolean disableOrderStateChangeDeferredTask);
   
+
+  public List<String> findOrdersIdByState(String currentStateCode);
+  
+  public List<Order> findOrdersByIds(List<String> ids);
+  
 }

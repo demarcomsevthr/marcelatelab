@@ -409,4 +409,16 @@ public class ProductActivity extends BaseActivity implements
     });
   }
   
+  @Override
+  public void findOrdersByIds(List<String> ids, final Delegate<List<Order>> delegate) {
+    orderService.findOrdersByIds(ids, new AsyncCallback<List<Order>>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(List<Order> results) {
+        delegate.execute(results);
+      }
+    });
+  }
+  
 }

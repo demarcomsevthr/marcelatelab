@@ -8,6 +8,7 @@ import it.mate.commons.server.services.AdapterException;
 import it.mate.commons.server.utils.BooleanUtils;
 import it.mate.commons.server.utils.CacheUtils;
 import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.KeyUtils;
 import it.mate.econyx.server.model.impl.AbstractOrderItemDetailDs;
 import it.mate.econyx.server.model.impl.ModalitaPagamentoDs;
 import it.mate.econyx.server.model.impl.ModalitaSpedizioneDs;
@@ -722,6 +723,31 @@ public class OrderAdapterImpl implements OrderAdapter {
       ;
     List<OrderDs> orders = dao.findList(context);
     return orders;
+  }
+  
+  @Override
+  public List<String> findOrdersIdByState(String currentStateCode) {
+    FindContext<OrderDs> context = new FindContext<OrderDs>(OrderDs.class)
+        .setFilter(String.format("currentStateCode == '%s'", currentStateCode))
+        .setKeysOnly(true);
+      ;
+    List<Key> keys = dao.findKeys(context);
+    if (keys == null)
+      return null;
+    List<String> ids = new ArrayList<String>(keys.size());
+    for (Key key : keys) {
+      ids.add(KeyUtils.castToString(key));
+    }
+    return ids;
+  }
+
+  @Override
+  public List<Order> findOrdersByIds(List<String> ids) {
+    List<Order> results = new ArrayList<Order>();
+    for (String id : ids) {
+      results.add(findById(id));
+    }
+    return results;
   }
   
 }

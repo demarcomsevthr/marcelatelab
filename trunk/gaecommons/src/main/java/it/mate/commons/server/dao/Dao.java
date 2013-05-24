@@ -3,6 +3,8 @@ package it.mate.commons.server.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import com.google.appengine.api.datastore.Key;
+
 public interface Dao {
   
   public <E extends Serializable> List<E> findAll(final Class<E> entityClass);
@@ -36,6 +38,8 @@ public interface Dao {
   public <E extends Serializable> E findSingle(FindContext<E> context);
   
   public <E extends Serializable> List<E> findList(FindContext<E> context);
+  
+  public <E extends Serializable> List<Key> findKeys(FindContext<E> context);
   
   public <E extends Serializable> List<E> findList(Class<E> entityClass, String filter, String parameters, FindCallback<E> callback, Object... values);  
   
