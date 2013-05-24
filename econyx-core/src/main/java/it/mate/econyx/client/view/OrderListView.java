@@ -18,6 +18,8 @@ public interface OrderListView extends BaseView<Presenter> {
     
     public static final String ORDER_LIST_BY_CUSTOMER = "listOrderByCustomer";
     
+    public static final String ORDER_IDS_LIST = "listOrderIds";
+    
     public void fetchItems(Order order, Delegate<Order> delegate);
     
     public void edit (Order order);
@@ -26,12 +28,14 @@ public interface OrderListView extends BaseView<Presenter> {
     
     public void getSaldoByPortalUserId (String portalUserId, Delegate<Double> delegate);
     
+    public void findOrdersByIds(List<String> ids, Delegate<List<Order>> delegate);
+    
   }
   
   public void setOrderStateFilterChangeDelegate(Delegate<String> orderStateFilterChangeDelegate);  
   
   public void addButton (Button button);
   
-  public void addWidget (Widget widget);
+  public void addTopWidget (Widget widget);
   
 }

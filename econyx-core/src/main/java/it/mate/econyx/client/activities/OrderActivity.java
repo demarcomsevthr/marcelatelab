@@ -18,6 +18,7 @@ import it.mate.econyx.shared.services.OrderServiceAsync;
 import it.mate.gwtcommons.client.mvp.BaseActivity;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 
 import java.util.List;
 
@@ -67,21 +68,38 @@ public class OrderActivity extends BaseActivity implements
     if (place.getToken().equals(OrderPlace.LIST)) {
       if (AppClientFactory.isAdminModule) {
 
-        // 27/11/2012
+        // 24/05/2013
         OrderListView orderListView = (OrderListView)getView();
         orderListView.setOrderStateFilterChangeDelegate(new Delegate<String>() {
           public void execute(String currentStateCode) {
             GwtUtils.showWait();
-            orderService.findOrdersByState(currentStateCode, new AsyncCallback<List<Order>>() {
-              public void onFailure(Throwable caught) {
-                GwtUtils.hideWait();
-                Window.alert(caught.getMessage());
-              }
-              public void onSuccess(List<Order> orders) {
-                GwtUtils.hideWait();
-                getView().setModel(orders);
-              }
-            });
+            
+            
+            // TODO
+            if (PropertiesHolder.getString("client.OrderListView.asynchLoad.orderStates", "").contains(currentStateCode)) {
+              orderService.findOrdersIdByState(currentStateCode, new AsyncCallback<List<String>>() {
+                public void onFailure(Throwable caught) {
+                  GwtUtils.hideWait();
+                  Window.alert(caught.getMessage());
+                }
+                public void onSuccess(List<String> orderIds) {
+                  GwtUtils.hideWait();
+                  getView().setModel(orderIds, ORDER_IDS_LIST);
+                }
+              });
+            } else {
+              orderService.findOrdersByState(currentStateCode, new AsyncCallback<List<Order>>() {
+                public void onFailure(Throwable caught) {
+                  GwtUtils.hideWait();
+                  Window.alert(caught.getMessage());
+                }
+                public void onSuccess(List<Order> orders) {
+                  GwtUtils.hideWait();
+                  getView().setModel(orders);
+                }
+              });
+            }
+            
           }
         });
 
@@ -216,6 +234,18 @@ public class OrderActivity extends BaseActivity implements
       }
       public void onSuccess(Double result) {
         delegate.execute(result);
+      }
+    });
+  }
+  
+  @Override
+  public void findOrdersByIds(List<String> ids, final Delegate<List<Order>> delegate) {
+    orderService.findOrdersByIds(ids, new AsyncCallback<List<Order>>() {
+      public void onFailure(Throwable caught) {
+        Window.alert(caught.getMessage());
+      }
+      public void onSuccess(List<Order> results) {
+        delegate.execute(results);
       }
     });
   }

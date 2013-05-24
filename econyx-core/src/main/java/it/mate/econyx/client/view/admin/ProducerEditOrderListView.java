@@ -95,6 +95,9 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
       public void getSaldoByPortalUserId(String portalUserId, Delegate<Double> delegate) {
         getPresenter().getSaldoByPortalUserId(portalUserId, delegate);
       }
+      public void findOrdersByIds(List<String> ids, Delegate<List<Order>> delegate) {
+        getPresenter().findOrdersByIds(ids, delegate);
+      }
     });
   }
   
@@ -142,7 +145,7 @@ public class ProducerEditOrderListView extends AbstractAdminTabPage<ProducerEdit
     });
     
     disableSendEmailBox = new CheckBox("disabilita invio mail");
-    orderListView.addWidget(disableSendEmailBox);
+    orderListView.addTopWidget(disableSendEmailBox);
 
   }
   

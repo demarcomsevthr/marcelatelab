@@ -190,7 +190,7 @@ public abstract class AdminTabPanel <P extends BasePresenter> extends Composite 
   public void setModel(Object model, String tag) {
     this.model = model;
     for (Section<P> section : sections) {
-      section.view.setModel(model, null);
+      section.view.setModel(model, tag);
     }
   }
   

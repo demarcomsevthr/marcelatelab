@@ -152,6 +152,11 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
     return CloneUtils.clone(orders, OrderTx.class, Order.class);
   }
   
+  @Override
+  public List<String> findOrdersIdByState(String currentStateCode) {
+    return adapter.findOrdersIdByState(currentStateCode);
+  }
+  
   public List<OrderStateConfig> findAllOrderStates() {
     return adapter.findAllOrderStates();
   }
@@ -159,9 +164,14 @@ public class OrderServiceImpl extends RemoteServiceServlet implements OrderServi
   public Order updateImportoTotale(Order order, Double importoTotale) {
     return adapter.updateImportoTotale(order, importoTotale, true);
   }
-  
+
   public OrderStateConfig findOrderStateConfig(String code) {
     return adapter.findOrderStateConfig(code);
+  }
+  
+  @Override
+  public List<Order> findOrdersByIds(List<String> ids) {
+    return adapter.findOrdersByIds(ids);
   }
 
 }

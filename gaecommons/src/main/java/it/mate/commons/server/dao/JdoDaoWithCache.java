@@ -27,6 +27,7 @@ public class JdoDaoWithCache extends JdoDao {
     if (useCache) {
       
       if (context.getId() != null) {
+        
         Object cachedResult = CacheUtils.get(context.getId());
         if (cachedResult != null) {
           return cachedResult;

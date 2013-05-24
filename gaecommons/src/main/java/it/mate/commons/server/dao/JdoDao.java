@@ -93,6 +93,10 @@ public class JdoDao implements Dao {
     return (List<E>)internalFind(context.setResultAsList(true));
   }
   
+  public <E extends Serializable> List<Key> findKeys(FindContext<E> context) {
+    return (List<Key>)internalFind(context.setResultAsList(true).setCacheDisabled(true));
+  }
+  
   public <E extends Serializable> E findWithContext(FindContext<E> context) {
     return (E)internalFind(context);
   }

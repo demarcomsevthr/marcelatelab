@@ -23,94 +23,61 @@
 	__________________________________________________________________________________
 	
 
-	RILEVAZIONE TEMPI MEDI - 17/05/2013
-		>> init static data > 1:40 min
-		>> generate order > 16'' per order
-		>> update order state > 6' per order 
+	RILEVAZIONE TEMPI - 24/05/2013
+		>> lista ordini consegnati (27) >> 12" >> 2" per order
+		>> generate 10 orders 40" >> 4" per order
+		>> import orders 27 3' >> 6,5" per order
+	
+	RILEVAZIONE TEMPI - 22/05/2013
+		>> generate 10 orders 45" >> 4,5" per order
+		>> update order state > 1" per order !!!
+		   (dopo aver tolto l'update master index in cacheutils ad ogni put)
 		
+	RILEVAZIONE TEMPI - 17/05/2013
+		>> init static data > 1'40"
+		>> generate order > 16" per order
+		>> update order state > 6" per order 
 		
-	RILEVAZIONE TEMPI MEDI - 22/05/2013
-		>> dopo aver tolto l'update master index in cacheutils ad ogni put:
-		>> update order state > 1' per order !!!
-		
-		
-	RILEVAZIONE TEMPI MEDI - 22/05/2013
-		>> insert 10 ordini 45'' >> 4,5'' per order
-
 		
 	----------------------------------------------------------------------------------	
 
 
-	SNAPSHOT 22/05/2013
+	SNAPSHOT 24/05/2013
 	
 		>> ORDER STATES VIEW BUG:
 			-- ho notato errori nel reference al registeringPortalUser (fare test specifico)
 			>>> TODO: nella update order state passare il portal user dalla view
 			> [IS006] [IN TEST] [22/05/2013]
 			
-		>> MOVIMENTO - ORDER BUG
-			-- su alcuni ordini confermati oggi (22/5) non ha settato il ref all'ordine
-				(vedi ordini demarco.m73)
-				
 		>> ORDER LIST VIEW
-			-- nella order list view (da menu) sugli ordini confermati non c'è il PAGER !!!		
-			
-	
-
-	SNAPSHOT 21/05/2013
-	
-		>> GWTCOMMONS SPLIT (con calma! serve più di un giorno per farlo)
-			[IS007]
-			[analisi del 21/05/2013]
-			[iniziato il 23/05/2013]
-			
-			> gwtcommons-1.6.2 >> backup svn	> OK [23/05/2013]
-			
-			> gwtcommons (packages client, rpc, shared) >> gwtcommons-2.5 
-					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
-					it.mate.gwtcommons.shared.model.PageConfig
-					it.mate.gwtcommons.shared.model.CloneableBean
-					it.mate.gwtcommons.shared.model.CloneableProperty
-					it.mate.gwtcommons.shared.services.ServiceException
-					it.mate.gwtcommons.shared.utils.PropertiesHolder
-					
-			> gwtcommons (packages server, shared) >> gaecommons-1.7.7
-				>> rename pkg it.mate.commons.server...
-					>>> per questo ci vorrà molto tempo (vanno aggiornate tutte le import in econyx...)
-				>> DUE STEP: 1) si crea la lib senza rename e si prova; 2) si fa la rename del pkg
-				
-			> NOTA: le seguenti classi shared sono utilizzate sia da client che da server:
-					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
-					it.mate.gwtcommons.shared.utils.PropertiesHolder
-					it.mate.gwtcommons.shared.model.CloneableBean
-					it.mate.gwtcommons.shared.model.CloneableProperty
-				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza
-				
-			> INIZIATO [23/05/2013]	
-				
-			>>> FILE MODIFICATI:
-				tutti i **/server/**.java ci copycart, econyx-core
-				econyx-base-app: src/main/webapp/WEB-INF/econyx-web-context.xml
-												re-servlet.xml
-												web.xml
-												(bean di **.gwtcommons.server.**)
-				econyx-base-app: pom.xml
-				econyx-core: bin/build-core.bat
-				econyx-core: pom.xml
-				mwtportlets: pom.xml
-			
-				
-			> ALLA FINE: aggiornare la dipendenza in CKD
-
-
-		>> MEMCACHE MASTER INDEX
-			>> purge master index spostata in RestController::refreshCache (lo faceva ad ogni put, rallentandola notevolmente)
-			[21/05/2013] [IS003]					 
+			-- nella order list view (da menu) sugli ordini confermati non c'è il PAGER !!!
+			   (su FF)
 	
 		>> RUOLI ADMINS
 			PortalUser
 				::role (string) > es: general_admin, pagine_admin, articoli_admin, ...
 				::isUserInRole (string)
+				
+		>> ORDER LIST VIEW - ASYNCH LOAD
+			> [IS008] [24/05/2013]
+			>> vedi esempio gwt https://developers.google.com/web-toolkit/doc/latest/DevGuideUiCellWidgets#data-provider
+			>> provare prima AsynchDataProvider
+				- prima chiamata rpc restituisce list di Key<Order> da mantenere nella view > list di id, order
+				- onRangeChange: list.subList(start,end) > per ogni item con order == null > rpc find orders per chiavi
+				>>> NON VA BENE !!!!
+				>> di base il sort viene perso
+				>> occorrerebbe gestirlo a mano > non conviene
+				>> punti modificati:
+					OrderListGeneralView.setModel
+					OrderActivity.retrieveModel
+				
+				>>> ALTRA IPOTESI
+					- EmptyOrderTx (eredita da OrderTx e mostra valori vuoti)
+					- si mantiene orderService.findOrdersIdByState (in OrderActivity)
+					- si mantiene OrderListGeneralView.setModel(Object, String) > Presenter.ORDER_IDS_LIST
+					- in questo caso si mantiene una List<EmptyOrderTx>
+					- fa loop di chiamate rpc per sostituire gli EmptyOrder con OrderTx buoni
+					- ad ogni loop chiama CellTableExt.dataProvider.refresh()
 
 		>> PRODUCER PAGE TEMPLATE
 			> nella ProducerProductPage sparisce il carrello
@@ -178,50 +145,6 @@
 					
 		>> Link Facebook, Twitter, ...  [4]
 			
-
-	------------------------------------------------------
-
-
-	SNAPSHOT 16/05/2013 [ULTIME COSE FATTE]
-	
-		>> ENTITY RELATIONSHIPS RESOLVER BUG [RISOLTO]
-			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationships(Object, Map<Key, Object>)
-			> nel caso di entity List faceva un doppio controllo sulle resolvedEntities (quindi non risolveva le relazioni correttamente)
-			> commentato il primo check [16/05/2013]
-			> da provare: view acquisti in admin, aggiunta di un commento ad article, aggiornamento comments count
-				>> prima prova fatta su localhost [16/05/2013]
-				>> seconda prova fatta su gp8test [16/05/2013]
-				
-		>> SEMPLIFICAZIONE CONTO UTENTE DS [CHIUSO]
-			> ContoUtenteDs >> eliminata relazione movimentiKeys
-			> ContoUtenteMovimentoDs >> aggiunta relazione contoId
-			> CustomAdapterGP8Impl.findContoUtenteByCustomer >> aggiunta find List<ContoUtenteMovimento> e settaggio in contoUtente
-			>> PROVATO SU GP8NET [17/05/2013]
-
-		>> PRODUCER FOLDER PAGE [FATTO]
-			> ProducerFolderPage >> 17/04/2013
-			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
-			
-		>> OTTIMIZZAZIONI CACHE [FATTO]
-    		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
-    			> Map<Key, Object> resolvedEntities
-    			>>> (*) Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
-			- PortalPageAdapterImpl.internalFindById
-				> cachedContentPage.hasSavedHtmls()
-    			> merge tra istanza cache e persistent su childreen e htmls
-    		- DynamicInvocationUtils.invokeMethod
-    			> commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
-    		- JdoDao.checkSubClassesResults
-    			> ottimizzazione per utilizzare la subclass ricavata dalla key
-    		- PortalPageServiceImpl.removePageFromCache
-    			> serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
-			>> ho parametrizzato l'ottimizzazione (*)
-				> it.mate.gwtcommons.server.dao.FindContext.useContextInRelationshipsResolver
-				> it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById(Class<P>, String, boolean, boolean)
-				> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
-			>> CASI DI TEST: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
-    		[21/04/2013]
-
 
 
 	------------------------------------------------------
@@ -316,12 +239,6 @@
 
 		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		PRESENTAZIONE
-
-		>> INVIATA 29/11/2012 10:38 (https://mail.google.com/mail/u/0/?hl=it&shva=1#sent/13b4b8833315e210)
-		
-		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 		CONSULTAZIONE LOG (https://appengine.google.com/logs?&app_id=s~gaspar8net&version_id=2b.363509964354483203#)
 			si possono filtrare i log con: regexp = PortalSessionState | PortalUserTx
 			e si trovano tutti gli accessi e i login
@@ -329,7 +246,7 @@
 		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		
-		DA FARE
+		COSA DA ANALIZZARE
 		
 		-- RETTIFICHE AGLI ORDINI
 		    >> POSSIBILITA' DI INSERIRE DATI ALLA CONSEGNA:
@@ -342,7 +259,7 @@
 
 
 		-- DATE ORDINI 
-			> forse va gestita una DATA DI APERTURE e DATA CHIUSURA ORDINE, ovvero un range entro il quale è possibile fare nuovi ordini
+			> va gestita una DATA DI APERTURA e DATA CHIUSURA ORDINE, ovvero un range entro il quale è possibile fare nuovi ordini
 			>> attributo su producer: data inizio e fine inserimento nuovi ordini >> check in orderProduct >> ritorna un messaggio di alert
 			>> [PRIO 9] extended attribute sulla pagina 
 							> portalPageServ.findExtendedAnnotations(page.extAttr) return HTML 
@@ -388,12 +305,82 @@
 			> STORNO [PRIO 2]
 				> deve inserire un movimento con segno opposto
 			
-		________________________________________________________________________________
+	________________________________________________________________________________
 		
-			>>> ISSUES CHIUSE <<<
-		________________________________________________________________________________
+		>>> CLOSED ISSUES <<<
+	________________________________________________________________________________
 
 
+		>> GWTCOMMONS SPLIT [IS007] [23/05/2013]
+			> gwtcommons-1.6.2 >> backup svn	> OK [23/05/2013]
+			> gwtcommons (packages client, rpc, shared) >> gwtcommons-2.5 
+					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
+					it.mate.gwtcommons.shared.model.PageConfig
+					it.mate.gwtcommons.shared.model.CloneableBean
+					it.mate.gwtcommons.shared.model.CloneableProperty
+					it.mate.gwtcommons.shared.services.ServiceException
+					it.mate.gwtcommons.shared.utils.PropertiesHolder
+			> gwtcommons (packages server, shared) >> gaecommons-1.7.7
+				>> rename pkg it.mate.commons.server...
+					>>> per questo ci vorrà molto tempo (vanno aggiornate tutte le import in econyx...)
+				>> DUE STEP: 1) si crea la lib senza rename e si prova; 2) si fa la rename del pkg
+			> NOTA: le seguenti classi shared sono utilizzate sia da client che da server:
+					it.mate.gwtcommons.shared.model.CloneablePropertyMissingException
+					it.mate.gwtcommons.shared.utils.PropertiesHolder
+					it.mate.gwtcommons.shared.model.CloneableBean
+					it.mate.gwtcommons.shared.model.CloneableProperty
+				>> PER QUESTO MOTIVO gaecommons deve avere gwtcommons come dipendenza
+			> FILE MODIFICATI:
+				tutti i **/server/**.java ci copycart, econyx-core
+				econyx-base-app: src/main/webapp/WEB-INF/econyx-web-context.xml, re-servlet.xml web.xml (bean di **.gwtcommons.server.**)
+				econyx-base-app: pom.xml
+				econyx-core: bin/build-core.bat
+				econyx-core: pom.xml
+				mwtportlets: pom.xml
+			> ALLA FINE: aggiornata la dipendenza in CKD > OK
+
+		>> MEMCACHE MASTER INDEX UPDATE
+			>> purge master index spostata in RestController::refreshCache (lo faceva ad ogni put, rallentandola notevolmente)
+			[21/05/2013] [IS003]					 
+	
+		>> SEMPLIFICAZIONE DS CONTO UTENTE
+			> ContoUtenteDs >> eliminata relazione movimentiKeys
+			> ContoUtenteMovimentoDs >> aggiunta relazione contoId
+			> CustomAdapterGP8Impl.findContoUtenteByCustomer >> aggiunta find List<ContoUtenteMovimento> e settaggio in contoUtente
+			>> PROVATO SU GP8NET [17/05/2013]
+
+		>> ENTITY RELATIONSHIPS RESOLVER BUG
+			> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationships(Object, Map<Key, Object>)
+			> nel caso di entity List faceva un doppio controllo sulle resolvedEntities (quindi non risolveva le relazioni correttamente)
+			> commentato il primo check [16/05/2013]
+			> da provare: view acquisti in admin, aggiunta di un commento ad article, aggiornamento comments count
+				>> prima prova fatta su localhost [16/05/2013]
+				>> seconda prova fatta su gp8test [16/05/2013]
+				
+		>> OTTIMIZZAZIONI CACHE [FATTO]
+    		- EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation
+    			> Map<Key, Object> resolvedEntities
+    			>>> (*) Object relatedEntity = dao.findWithContext(new FindContext<Serializable>(this.context).setEntityClass(itemClass).setId(relatedKey));
+			- PortalPageAdapterImpl.internalFindById
+				> cachedContentPage.hasSavedHtmls()
+    			> merge tra istanza cache e persistent su childreen e htmls
+    		- DynamicInvocationUtils.invokeMethod
+    			> commentata throw new IllegalArgumentException(String.format("method %s not found in object of type %s", methodName, type))
+    		- JdoDao.checkSubClassesResults
+    			> ottimizzazione per utilizzare la subclass ricavata dalla key
+    		- PortalPageServiceImpl.removePageFromCache
+    			> serve per forzare il refresh della cahce in caso come ArticleFolderPage (commentsCount sui childreen)
+			>> ho parametrizzato l'ottimizzazione (*)
+				> it.mate.gwtcommons.server.dao.FindContext.useContextInRelationshipsResolver
+				> it.mate.econyx.server.services.impl.PortalPageAdapterImpl.internalFindById(Class<P>, String, boolean, boolean)
+				> it.mate.gwtcommons.server.utils.EntityRelationshipsResolver.resolveUnownedRelationshipsWithAnnotation(Object, Map<Key, Object>)
+			>> CASI DI TEST: view di acquisti in admin, aggiunta di un comment all'articolo (refresch del comments count in articleFolder)
+    		[21/04/2013]
+
+		>> PRODUCER FOLDER PAGE
+			> ProducerFolderPage >> 17/04/2013
+			> it.mate.econyx.server.services.impl.PortalPageServiceImpl.postProcessProducerFolderPage(PortalPage)
+			
 		>> FRAGMENT IDENTIFIERS
 			> hash link all'interno di una pagina [OK - 13/04/2013] > provato in produttori
 			> in gp8 si utilizzano i fragment identifier all'interno di una pagina
@@ -479,64 +466,6 @@
 			
 
 			
-    ______________________________________________________________________________________
-
-		>>> CHANGES LOG <<<
-    ______________________________________________________________________________________
-
-
-    22/11/2012
-    
-   				- it.mate.econyx.shared.model.Order
-   					sostituito order.producers in order.producer (l'ordine è MONO PRODUTTORE)
-   				- it.mate.econyx.server.services.impl.OrderAdapterImpl 
-   					orderProduct: impedita apertura ordine con produttori diversi
-   					updateStates: chiamata a customAdapter.orderStateChanged
-   				- it.mate.econyx.server.services.impl.OrderServiceImpl
-   					spostato PortalSessionStateServerUtils.setInThread in onBeforeRequestDeserialized
-   					
-   				- it.mate.econyx.client.factories.CustomClientFactory
-   					gestione di ContoUtente	
-   					
-   				> gestione account google su site module:
-   				- it.mate.econyx.client.activities.PortalUserActivity
-   				- it.mate.econyx.client.factories.SiteClientFactoryImpl
-   				- it.mate.econyx.client.view.PortalUserView
-   				- it.mate.econyx.server.services.impl.GeneralServiceImpl
-   				- it.mate.econyx.server.services.impl.PortalUserServiceImpl
-   				- 
-   				
-   	23/11/2012			
-   				- it.mate.econyx.client.activities.ProductActivity >> gest tabellare produttori
-   				- it.mate.econyx.client.view.ProducerListView
-   				- it.mate.econyx.client.view.ProducerEditView
-   	
-   	
-   	24/11/2012
-   				- it.mate.econyx.client.view.admin.ProducerEditOrderListView >> conferma ordini in blocco
-   				- it.mate.econyx.server.services.impl.CustomerAdapterImpl >> cacnellazione conto utente
-   				- it.mate.econyx.server.services.impl.CustomAdapterImpl >> cancellazione conto utente
-   				
-   	28/11/2012
-   				> revisione admin login:
-   				- /econyx-base-app/src/main/webapp/secureAdmin.html (nuovo, copia identica di admin.html)
-   				- /econyx-base-app/src/main/webapp/WEB-INF/web.xml (spostato admin constraint su secureAdmin.html)
-   				- it.mate.econyx.client.view.admin.AdminLayoutView
-   				- it.mate.econyx.server.services.impl.GeneralServiceImpl.retrievePortalSessionState
-   				- it.mate.econyx.client.factories.AdminClientFactoryImpl.onPortalSessionStateChange
-   				
-    29/11/2012
-    			> disabilitata verifica google account in site module
-    			- it.mate.econyx.shared.util.PropertyConstants.SITE_GOOGLE_ACCOUNT_AUTHENTICATION_ENABLED
-    			- it.mate.econyx.client.view.site.PortalUserViewImpl
-    			- it.mate.econyx.server.services.impl.GeneralServiceImpl
-
-	12/01/2013
-				> affinamenti in orderview
-				> visualizzazioen link movimento > ordine
-				> affinamenti in pdf order
-
-				
 		
 	__________________________________________________________________________________
 
@@ -557,5 +486,7 @@
 	22/05/2013	IS006	Order states bugs
 	
 	23/05/2013	IS007	gwtcommons split
+	
+	24/05/2013	IS008	order list async load
 	
 	
