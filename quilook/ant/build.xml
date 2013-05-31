@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+  <property name="theme.id" value="standardTheme" />
+  <property name="src.themes.dir" location="src/themes" />
+
+  <property name="ant.execution.task">before-package</property>
+
+  <target name="execution-wrapper">
+    <antcall target="${ant.execution.task}" />
+  </target>
+
+  <target name="prepare-zipped-theme">
+    <delete dir="${target.themes.dir}" failonerror="false" />
+    <mkdir dir="${target.themes.dir}" />
+    <zip destfile="${target.themes.dir}/${theme.id}.zip">
+      <fileset dir="${src.themes.dir}/${theme.id}" includes="**/*" />
+    </zip>
+    <echo message="Prepared theme ${target.themes.dir}/${theme.id}.zip" />
+  </target>
+	
+  <target name="clean-web-inf-dir">
+  	<echo message="cleaning web inf dir..."/>
+    <delete>
+      <fileset dir="${webapp.dir}/WEB-INF" includes="**/*">
+      	<exclude name="appengine-generated/**"/>
+      	<exclude name="classes/**"/>
+      	<exclude name="*.properties"/>
+      </fileset>
+   	</delete>
+    <delete dir="${webapp.dir}/META-INF"/>
+  </target>
+
+  <target name="before-package">
+    <antcall target="prepare-zipped-theme" />
+    <antcall target="clean-web-inf-dir" />
+  </target>
+
+  <target name="after-build">
+    <delete dir="${webapp.dir}/main/ckeditor/_samples"/>
+    <delete dir="${webapp.dir}/main/ckeditor/_source"/>
+  </target>
+		
+</project>
