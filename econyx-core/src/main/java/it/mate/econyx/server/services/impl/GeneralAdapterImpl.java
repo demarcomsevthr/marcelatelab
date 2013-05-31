@@ -330,28 +330,28 @@ public class GeneralAdapterImpl implements GeneralAdapter {
     }
   }
 
-  String[] cognomi = {"Rossi", "Russo",     "Ferrari",  "Esposito", "Bianchi", "Romano",    "Colombo", "Ricci",  "Marino", "Greco",  "De Santis", "Farina", "Gatti", "Cattaneo",  "Amato",   "Basile", "Sartori", "Milano",  "Riva",   "Ferretti"};
-  String[] nomi = {"Antonio",  "Salvatore", "Federico", "Vittorio", "Mario",   "Giancarlo", "Lara",    "Pamela", "Paolo",  "Maria",  "Anna",      "Davide", "Luigi", "Maddalena", "Giuseppe", "Lucia", "Eleonora", "Giorgio", "Marco", "Simona"};
+  String[] cognomi = {"Rossi", "Russo",     "Ferrari",  "Esposito", "Bianchi", "Romano",    "Colombo", "Ricci",  "Marino", "Greco", "Sanna", "Farina", "Gatti", "Cattaneo",  "Amato",   "Basile", "Sartori", "Milano",  "Riva",   "Ferretti"};
+  String[] nomi = {"Antonio",  "Salvatore", "Federico", "Vittorio", "Mario",   "Giancarlo", "Lara",    "Pamela", "Paolo",  "Maria", "Anna",  "Davide", "Luigi", "Maddalena", "Giuseppe", "Lucia", "Eleonora", "Giorgio", "Marco", "Simona"};
   
   public void generateRandomCustomers(int number, Date date) {
     
     List<PortalUser> utentiEsistenti = portalUserAdapter.findAll();
-    List<String> nominativi = new ArrayList<String>();
+    List<String> nominativiEsistenti = new ArrayList<String>();
     for (PortalUser portalUser : utentiEsistenti) {
-      nominativi.add(portalUser.getScreenName());
+      nominativiEsistenti.add(portalUser.getScreenName());
     }
     
     int it = 0;
     while (it < number) {
-      it++;
       int rand = (int)(Math.random() * cognomi.length);
       String cognome = cognomi[rand];
       String nome = nomi[rand];
       String nominativo = cognome+" "+nome;
-      if (nominativi.contains(nominativo)) {
+      if (nominativiEsistenti.contains(nominativo)) {
         continue;
       }
-      nominativi.add(nominativo);
+      it++;
+      nominativiEsistenti.add(nominativo);
       CustomerDs customer = new CustomerDs();
       IndirizzoSpedizioneDs indirizzoSpedizione = new IndirizzoSpedizioneDs();
       indirizzoSpedizione.setCognome(cognome);
