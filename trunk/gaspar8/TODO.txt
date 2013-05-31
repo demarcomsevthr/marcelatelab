@@ -23,6 +23,14 @@
 	__________________________________________________________________________________
 	
 
+	RILEVAZIONE TEMPI - 31/05/2013
+		>> generate 10 order 45" > 4" per order
+		>> update 6 order 8" > 1,5" per order
+		>> visualizzazione 27 utenti 6" > 0,25" per user
+		>> visualizzazione 27 utenti varia a momenti a 19" > 0,75" per user
+		>> export 57 ordini 1'10" 
+		>> import 57 ordini 5'30" > 5,8" per order
+		
 	RILEVAZIONE TEMPI - 24/05/2013
 		>> lista ordini consegnati (27) >> 12" >> 2" per order
 		>> generate 10 orders 40" >> 4" per order
@@ -42,7 +50,9 @@
 	----------------------------------------------------------------------------------	
 
 
-	SNAPSHOT 24/05/2013
+	SNAPSHOT 31/05/2013
+	
+		>> PASSAGGIO A SPRING 3.2.3 (gaecommons) [IS009]
 	
 		>> ORDER STATES VIEW BUG:
 			-- ho notato errori nel reference al registeringPortalUser (fare test specifico)
@@ -465,7 +475,20 @@
 			     (it.mate.econyx.server.services.impl.OrderAdapterImpl.orderProduct) 
 			
 
-			
+		
+	__________________________________________________________________________________
+
+	BUILD HISTORY
+	__________________________________________________________________________________
+	
+		#shared.buildId=16/01/2013 17:50
+		#shared.buildId=28/03/2013 11:05
+		#shared.buildId=24/04/2013 09:20
+		#shared.buildId=13/05/2013 12:30
+		#shared.buildId=16/05/2013 12:05
+		#shared.buildId=17/05/2013 09:55
+		#shared.buildId=17/05/2013 10:45
+		#shared.buildId=17/05/2013 15:35
 		
 	__________________________________________________________________________________
 
@@ -488,5 +511,7 @@
 	23/05/2013	IS007	gwtcommons split
 	
 	24/05/2013	IS008	order list async load
+	
+	31/05/2013	IS009	spring 3.2.3
 	
 	

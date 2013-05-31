@@ -10,7 +10,10 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
+    <!-- 31/05/2013
     <spring.version>3.0.5.RELEASE</spring.version>
+     -->
+    <spring.version>3.2.3.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
     <gae.version>1.7.7.1</gae.version>
   </properties>
