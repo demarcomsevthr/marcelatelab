@@ -20,14 +20,17 @@ if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 set SAVE_SKIP_PAUSE=%SKIP_PAUSE%
 set SKIP_PAUSE=true
 
-cd %BASEDIR%\..\gwtcommons
+cd %BASEAPPDIR%\..\gwtcommons
 call %MVN2CMD% %DEP_CLEAN% compile package install
 
-cd %BASEDIR%\..\gaecommons
+cd %BASEAPPDIR%\..\gaecommons
 call %MVN2CMD% %DEP_CLEAN% compile datanucleus:enhance package install
 
-cd %BASEDIR%\..\mwtportlets
+cd %BASEAPPDIR%\..\mwtportlets
 call %MVN2CMD% %DEP_CLEAN% compile package install
+
+cd %BASEAPPDIR%\..\econyx-core
+call %MVN2CMD% %DEP_CLEAN% compile datanucleus:enhance package install
 
 set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 

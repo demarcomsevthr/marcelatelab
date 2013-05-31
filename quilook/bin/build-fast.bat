@@ -3,4 +3,7 @@
 set APPNAME=quilook
 
 set SKIP_DEPENDENCIES_CLEAN=true
-call %~dp0\build-base.bat compile datanucleus:enhance gwt:compile antrun:run war:exploded
+
+::call %~dp0\build-base.bat compile datanucleus:enhance gwt:compile antrun:run war:exploded
+call %~dp0\build-base.bat compile datanucleus:enhance antrun:run war:exploded
+

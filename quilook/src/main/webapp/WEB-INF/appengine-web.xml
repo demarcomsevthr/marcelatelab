@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 
-  <application>gaspar8net</application>
+  <application>quilook</application>
   
-  <!--
-  <application>gaspar8net</application>
-  <application>gaspar8est</application>
-  -->
-  
-  <version>3a</version>
+  <version>V001</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
@@ -20,10 +15,7 @@
 
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
-    
-    <!-- Disable cookies to avoid runtime permissions error -->
     <property name="com.google.gdata.DisableCookieHandler" value="true"/>
-    
   </system-properties>
 
   <threadsafe>true</threadsafe>
