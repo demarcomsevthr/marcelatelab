@@ -17,9 +17,7 @@
   
   <context:component-scan base-package="it.mate.quilook.server"/>
   
-  <context:component-scan base-package="it.mate.econyx.server"/>
-  
-  <bean class="it.mate.commons.server.dao.JdoDaoWithCache"/>
+  <import resource="classpath*:econyx-core-context.xml"/>
   
   <bean class="it.mate.quilook.server.services.impl.MailAdapterImpl">
     <property name="mailSender">
