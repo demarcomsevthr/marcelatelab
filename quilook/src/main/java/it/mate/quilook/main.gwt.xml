@@ -12,6 +12,8 @@
   <inherits name="it.mate.gwtcommons.Commons" />
   <inherits name='it.mate.portlets.Portlets' />
   
+  <inherits name="it.mate.econyx.Core" />
+  
   <inherits name='com.axeiya.gwtckeditor.Gwtckeditor'/>
   
   <!-- IN TEST DAL 02/12/2012 -->
