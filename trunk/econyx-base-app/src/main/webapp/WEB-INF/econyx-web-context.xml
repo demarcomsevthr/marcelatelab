@@ -15,18 +15,8 @@
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
   </bean>
   
-  <context:component-scan base-package="it.mate.econyx.server"/>
-  
-  <bean class="it.mate.commons.server.dao.JdoDaoWithCache"/>
-  
-  <!-- 
-  <bean class="it.mate.commons.server.dao.JdoDao"/>
-   -->
+  <import resource="classpath*:econyx-core-context.xml"/>
 
-  <bean class="it.mate.econyx.server.services.impl.ResourcesServiceImpl">
-    <property name="themesLocation" value="classpath:themes"/>
-  </bean>
-  
   <bean class="it.mate.econyx.server.services.impl.MailAdapterImpl">
     <property name="mailSender">
       <bean class="it.mate.econyx.server.util.JavaMailSenderGaeImpl">
@@ -49,5 +39,17 @@
       </bean>
     </property>
   </bean>
+  
+  <!-- 02/06/2013
+  
+  <context:component-scan base-package="it.mate.econyx.server"/>
+  
+  <bean class="it.mate.commons.server.dao.JdoDaoWithCache"/>
+  
+  <bean class="it.mate.econyx.server.services.impl.ResourcesServiceImpl">
+    <property name="themesLocation" value="classpath:themes"/>
+  </bean>
+  
+   -->
   
 </beans>

@@ -1,6 +1,9 @@
 package it.mate.quilook.server.services.impl;
 
-import it.mate.quilook.server.services.MailAdapter;
+import it.mate.econyx.server.services.MailAdapter;
+import it.mate.econyx.shared.model.PortalUser;
+
+import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,6 +24,19 @@ public class MailAdapterImpl implements MailAdapter {
   public void setMailTemplate(SimpleMailMessage mailTemplate) {
     this.mailTemplate = mailTemplate;
   }
+
+  @Override
+  public void sendActivationMail(PortalUser user, String activationUrl) throws MessagingException {
+    
+  }
+
+  @Override
+  public void sendOrderStateMail(PortalUser user, String mailText, String attachName, byte[] attachBuffer) throws MessagingException {
+    
+  }
+  
+  
+  
 
 
 }
