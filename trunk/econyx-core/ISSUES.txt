@@ -1,12 +1,24 @@
 
-	INDICE:
-	  ToDo
-	  Issues
-
     ______________________________________________________________________________________
 
-		>>> LINKS <<<
+		>>> RISORSE ESTERNE <<<
     ______________________________________________________________________________________
+
+		
+	ECONYX DEVELOPMENT
+	
+	https://docs.google.com/document/d/15J-GNcUWwQWPTcMH5Dqn7McM7l6407AhJYgDL1otqCk/edit
+		
+	---------------------------------------------------------------------------------------------------------
+
+	RISORSE IMPORTANTI
+	
+		http://www.colorzilla.com/gradient-editor/
+
+		http://www.cartoonize.net/ > CARTOONIZER + SNAGIT
+		
+		
+	---------------------------------------------------------------------------------------------------------
 
 	
 	gdoc: https://docs.google.com/document/d/16KOyoCNWg_amHQY-AYzKEU0lM-IXBiF-IunqvV8L_fo/edit
