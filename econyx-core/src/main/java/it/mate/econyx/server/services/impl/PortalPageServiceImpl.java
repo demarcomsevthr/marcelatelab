@@ -22,7 +22,6 @@ import it.mate.econyx.shared.model.impl.ArticlePageTx;
 import it.mate.econyx.shared.model.impl.BlogDiscussionPageTx;
 import it.mate.econyx.shared.model.impl.ProducerFolderPageTx.ProducerProductPageTx;
 import it.mate.econyx.shared.services.PortalPageService;
-import it.mate.gwtcommons.shared.services.ServiceException;
 
 import java.util.List;
 
@@ -163,7 +162,8 @@ public class PortalPageServiceImpl extends RemoteServiceServlet implements Porta
       page = getProducerProductPageByCode(code);
     }
     if (page == null) {
-      logger.error("error", new ServiceException("Page not found " + code));
+//    logger.error("error", new ServiceException("Page not found " + code));
+      logger.error("error - Page not found " + code);
     }
     return page;
   }

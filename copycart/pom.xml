@@ -26,6 +26,12 @@
       <resource>
         <directory>../econyx-base-app/src/main/resources</directory>
       </resource>
+      
+      <!-- 03/06/2013 -->
+      <resource>
+        <directory>../econyx-base-app/src/main/java</directory>
+      </resource>
+      
     </resources>
     
   </build>

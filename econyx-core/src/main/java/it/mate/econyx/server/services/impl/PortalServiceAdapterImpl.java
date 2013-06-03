@@ -40,6 +40,8 @@ public class PortalServiceAdapterImpl implements PortalServiceAdapter {
   
   private final static boolean USE_INSTANCE_CACHE = PropertiesHolder.getBoolean("it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.useInstanceCache", true);
   
+  private final static String CONFIG_PATH = PropertiesHolder.getString("it.mate.econyx.server.services.impl.PortalServiceAdapterImpl.pageTemplatesConfigPath", "META-INF/pages/pages.xml");
+  
   @Override
   public PageTemplate getPage(String historyToken) {
     PageTemplate result = new PageTemplate();
@@ -68,7 +70,7 @@ public class PortalServiceAdapterImpl implements PortalServiceAdapter {
       if (cachedWidgetFactory != null) {
         return cachedWidgetFactory;
       }
-      String content = FileUtils.readFileToString(new ClassPathResource("META-INF/pages/pages.xml").getFile());
+      String content = FileUtils.readFileToString(new ClassPathResource(CONFIG_PATH).getFile());
       WidgetFactory widgetFactory = SpringUtils.getStringApplicationContext(content).getBean(historyToken, WidgetFactory.class);
       getInstCache().put(historyToken, widgetFactory);
       return widgetFactory;
