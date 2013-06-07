@@ -1,7 +1,7 @@
 package it.mate.econyx.client.factories;
 
-import it.mate.econyx.client.css.CoreClientBundle;
 import it.mate.econyx.client.css.AppClientBundle;
+import it.mate.econyx.client.css.CoreClientBundle;
 import it.mate.econyx.client.events.PortalInitEvent;
 import it.mate.econyx.client.events.PortalPageChangedEvent;
 import it.mate.econyx.client.events.PortalPageChangingEvent;
@@ -56,16 +56,9 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   
   private final PortalInitCompleteDelegate portalInitCompleteDelegate = new PortalInitCompleteDelegate();
   
-  
-  
-  
-  // 12/10/2012
-  // PROVATO A GESTIRE LA CACHE MA NON FUNZIONA SE SI RIUTILIZZA UN TEMPLATE IN CACHE
-  // NON REINIZIALIZZA CORRETTAMENTE LE PORTLET
   private static final boolean PAGE_TEMPLATE_CACHE_ENABLED = true; 
   
   private static Map<String, PageTemplate> pageTamplateCache = new HashMap<String, PageTemplate>();
-  
   
   private String originalTitle;
   
@@ -159,34 +152,11 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
               completePortalInitialization(null, startingPage);
             }
             public void onSuccess(PortalSessionState portalSessionState) {
-              // 28/11/2012
               completePortalInitialization(portalSessionState, startingPage);
-              /*
-              if (portalSessionState == null) {
-                portalSessionState = new PortalSessionState(PortalSessionState.MODULE_SITE);
-              }
-              portalSessionState.setCurrentPage(startingPage);
-              if (startingPage != null) {
-                portalSessionState.setTemplateName(startingPage.getTemplateName());
-              }
-              setPortalSessionState(portalSessionState);
-              portalInitCompleteDelegate.onPortalInitComplete(new StartingPortalContext(portalSessionState.getTemplateName(), true));
-              getEventBus().fireEvent(new PortalSessionStateChangeEvent(portalSessionState));
-              */
             }
           });
         } else {
           completePortalInitialization(null, startingPage);
-          /*
-          PortalSessionState portalSessionState = new PortalSessionState(PortalSessionState.MODULE_SITE);
-          portalSessionState.setCurrentPage(startingPage);
-          if (startingPage != null) {
-            portalSessionState.setTemplateName(startingPage.getTemplateName());
-          }
-          setPortalSessionState(portalSessionState);
-          portalInitCompleteDelegate.onPortalInitComplete(new StartingPortalContext(portalSessionState.getTemplateName(), true));
-          getEventBus().fireEvent(new PortalSessionStateChangeEvent(portalSessionState));
-          */
         }
       }
     });
@@ -231,7 +201,6 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     
     final PortalPage changingPage = event.getPage();
     
-    // patch 14/09/2012 (ottimizza il processo di cambio template)
     if (AppClientFactory.IMPL.getPortalSessionState().getTemplateName() == null) {
       AppClientFactory.IMPL.getPortalSessionState().setTemplateName(changingPage.getTemplateName());
     }
@@ -269,9 +238,11 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     String initialTemplateName;
     boolean enquePortalPageChangeEvent = false;
     boolean portalInitialized = false;
+    /*
     public StartingPortalContext() {
       this(null, false);
     }
+    */
     public StartingPortalContext(String initialTemplateName, boolean enquePortalPageChangeEvent) {
       this.initialTemplateName = initialTemplateName;
       this.enquePortalPageChangeEvent = enquePortalPageChangeEvent;
