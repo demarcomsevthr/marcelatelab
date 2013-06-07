@@ -21,7 +21,7 @@
   
   <set-configuration-property name="it.mate.gwtcommons.rpc.interceptor.class" 
     value="it.mate.gwtcommons.rpc.client.RpcServiceInterceptorDefault" />
-  
+
   <generate-with class="it.mate.gwtcommons.rpc.generator.RemoteInterfaceProxyGenerator">
     <any>
       <when-type-assignable class="it.mate.econyx.shared.services.ImageService" />
@@ -31,18 +31,12 @@
   </generate-with>
   
   
-  <!-- IN TEST -->  
-  <inherits name='com.google.gwt.query.Query'/>
-  
-  <inherits name='gwtquery.plugins.droppable.Droppable'/>
+  <inherits name='com.gwtplatform.mvp.Mvp' />
 
-  <!-- rimuove un warning durante la compilazione del modulo -->
-  <replace-with class="gwtquery.plugins.draggable.client.impl.DraggableHandlerImplIE8">
-    <when-type-is class="gwtquery.plugins.draggable.client.impl.DraggableHandlerImpl" />
-    <any>
-      <when-property-is name="user.agent" value="ie9" />
-    </any>
-  </replace-with>
+  <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
+  <set-configuration-property name="gin.ginjector"
+       value="it.mate.quilook.client.factories.SiteGinjector" />  
+       
   
   <entry-point class='it.mate.quilook.client.MainEP' />
 

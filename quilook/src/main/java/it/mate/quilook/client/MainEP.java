@@ -1,12 +1,12 @@
 package it.mate.quilook.client;
 
-import it.mate.econyx.client.factories.AppClientFactory;
 import it.mate.econyx.client.view.admin.AdminLayoutView;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.econyx.shared.services.PropertiesConstants;
 import it.mate.gwtcommons.client.factories.AbstractCustomClientFactory;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
+import it.mate.quilook.client.factories.AppClientFactory;
 
 import java.util.Map;
 
@@ -20,7 +20,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class MainEP implements EntryPoint {
 
   public void onModuleLoad() {
-    final GeneralServiceAsync generalService = AppClientFactory.IMPL.getGinjector().getGeneralService();
+    
+    final GeneralServiceAsync generalService = AppClientFactory.IMPL.getGwtpGinjector().getGeneralService();
     generalService.getPropertiesFromServer(new AsyncCallback<Map<String,String>>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
@@ -30,7 +31,7 @@ public class MainEP implements EntryPoint {
         generalService.getCustomClientFactory(new AsyncCallback<AbstractCustomClientFactory>() {
           public void onSuccess(AbstractCustomClientFactory customClientFactory) {
             
-            customClientFactory.initEventBus(AppClientFactory.IMPL.getEventBus());
+//          customClientFactory.initEventBus(AppClientFactory.IMPL.getGwtpGinjector().getEventBus());
             
             CssResource customCss = customClientFactory.getCustomCss();
             if (customCss != null) {
@@ -40,7 +41,7 @@ public class MainEP implements EntryPoint {
             GwtUtils.logEnvironment(getClass(), "onModuleLoad");
             GwtUtils.log(getClass(), "onModuleLoad", "developmentMode = " + PropertiesHolder.getBoolean(PropertiesConstants.SYSTEM_ENVIRONMENT_DEVELOPMENT_MODE));
             AppClientFactory.IMPL.setCustomClientFactory(customClientFactory);
-            GwtUtils.log(getClass(), "getCustomClientFactory", "customClientFactory = " + AppClientFactory.Customizer.cast() + " - " + AppClientFactory.Customizer.cast().getCustomName());
+//          GwtUtils.log(getClass(), "getCustomClientFactory", "customClientFactory = " + AppClientFactory.Customizer.cast() + " - " + AppClientFactory.Customizer.cast().getCustomName());
             if (AppClientFactory.isAdminModule) {
               startupModuleAdmin();
             } else if (AppClientFactory.isSiteModule) { 
@@ -68,6 +69,7 @@ public class MainEP implements EntryPoint {
     if (portalPanel == null) {
       portalPanel = RootPanel.get();
     }
+    GwtUtils.log("here");
     AppClientFactory.IMPL.initModule(portalPanel);
   }
   

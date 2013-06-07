@@ -11,6 +11,7 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <gwt.version>2.5.1</gwt.version>
+    <gwtp.version>0.8.4</gwtp.version>
     <gin.version>1.5.0</gin.version>
     <gae.version>1.7.7.1</gae.version>
     <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
@@ -23,7 +24,17 @@
       <artifactId>econyx-core</artifactId>
       <version>0.1</version>
     </dependency>
-
+    
+    
+    <!-- GWTP - MVP component -->
+    <dependency>
+      <groupId>com.gwtplatform</groupId>
+      <artifactId>gwtp-mvp-client</artifactId>
+      <version>${gwtp.version}</version>
+      <!-- <scope>provided</scope>  -->
+    </dependency>
+    
+   
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
