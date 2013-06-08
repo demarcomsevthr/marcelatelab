@@ -25,25 +25,16 @@
 		> GWTP PORTLET
 			- è possibile fare l'equivalente della mvp portlet ?
 			- https://code.google.com/p/gwt-platform/
-			
 			- riesco a startare gwtp sul rootpanel (e da doc anche su un div separato)
 			- non trovo come startarlo dentro un panel!
-			
 			> forse è il caso del Nested Presenters ?
-			
 			>> da vedere PresenterWidget
-			
 			>> e PuzzleBazar > https://code.google.com/p/puzzlebazar/source/browse/
-			
-			
 			>>> VALUTAZIONE - 03/06/2013
 				> sembra che il presenter vede la view, ma la view NON VEDE il presenter
 				>> quindi dal presenter: getView().addHandler(....)
 				>> e non si può fare nella view: getPresenter().doAction(...)
 				> interessante l'utilizzo di gin/guice (AsynchProvider)
-				
-
-
 
 
 	__________________________________________________________________________________
