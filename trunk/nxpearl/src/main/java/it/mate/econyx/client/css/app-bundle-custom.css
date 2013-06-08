@@ -1,0 +1,418 @@
+
+@external gwt*, mwt*, tpl*, nav*, ecx*;
+
+@external Text, ContextBoxHead, BasketLink;
+
+
+/************************************************************************************
+
+	HTML AND GWT CSS
+   
+****/
+
+body {
+  background: #a8c0ce url(images/grad.png) top left repeat;
+}
+
+a, a:active, a:focus {
+    cursor: pointer;
+    outline: medium none;
+}
+
+.gwt-TreeItem, .gwt-Tree > div {
+  font: 14px Verdana;
+}
+
+
+/************************************************************************************
+
+	MWT CSS
+   
+****/
+
+.mwt-PagePortlet {
+  padding-top: 20px;
+}
+
+.mwt-BoxContainer {
+  padding: 2px 10px 20px 0;
+}
+
+.mwt-BoxContainerTitle {
+  margin: 0;
+  padding: 8px 0px 0px 10px;
+  height: 28px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;  
+}
+
+/* 
+.mwt-BoxContainerTitle {
+  background: #cbcbcb;
+}
+*/
+
+.mwt-BoxContainerTitle {
+  background: #f30f09;
+  background: -moz-linear-gradient(top,  #f30f09 0%, #970907 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f30f09), color-stop(100%,#970907));
+  background: -webkit-linear-gradient(top,  #f30f09 0%,#970907 100%);
+  background: -o-linear-gradient(top,  #f30f09 0%,#970907 100%);
+  background: -ms-linear-gradient(top,  #f30f09 0%,#970907 100%);
+  background: linear-gradient(to bottom,  #f30f09 0%,#970907 100%);
+}
+
+@if user.agent ie9 {
+  .mwt-BoxContainerTitle {
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YzMGYwOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5NzA5MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+) !important;
+  }
+}
+
+
+.mwt-BoxContainerTitle a {
+  text-decoration: none;
+}
+
+.mwt-BoxContainerTitle span {
+  color: #FFFFFF;
+  font-family: Arial,Verdana,Helvetica;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.mwt-BoxContainerBody {
+  background: none repeat scroll 0 0 #FFF;
+}
+
+
+/************************************************************************************
+
+	TPL CSS
+   
+****/
+
+.tpl-HomeWrapper {
+  
+  width: 100%;
+  -moz-box-shadow: 0px 0px 6px #666;
+  -webkit-box-shadow: 0px 0px 6px #666;
+  padding: 8px;
+  border: 1px solid #fff;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;  
+  margin: 30px auto 10px;
+  
+  background: #f8ffe8; /* Old browsers */
+  background: -moz-linear-gradient(left,  #f8ffe8 0%, #e3f5ab 33%, #b7df2d 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#f8ffe8), color-stop(33%,#e3f5ab), color-stop(100%,#b7df2d)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left,  #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left,  #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left,  #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* IE10+ */
+  background: linear-gradient(to right,  #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* W3C */
+
+}
+
+@if user.agent ie9 {
+  .tpl-HomeWrapper {
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4ZmZlOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjMzJSIgc3RvcC1jb2xvcj0iI2UzZjVhYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiN2RmMmQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+) !important;
+  }
+}
+
+.tpl-headerBanner {
+  		
+}
+
+.tpl-PageWrapper {
+  width: 100%;
+  -moz-box-shadow: 0px 0px 6px #666;
+  -webkit-box-shadow: 0px 0px 6px #666;
+  padding: 8px;
+  border: 1px solid #ababab;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;  
+  margin: 2px auto 10px;
+  
+  background: #fff; /* Old browsers */
+
+}
+
+/************************************************************************************
+
+   NAV CSS
+   
+****/
+
+.navPropertiesContainer {
+  
+}
+
+.navSizeContainer {
+  
+}
+
+.navBar {
+    background: url("/images/bgr_top_bar.gif") no-repeat scroll right top transparent;
+    font-size: 1px;
+    height: auto;
+    margin: 2px 0 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    text-align: right;
+    vertical-align: top;
+    white-space: nowrap;
+    padding-right: 20px;
+}
+
+.navBar {
+    background: transparent;
+}
+
+.navBar .navPropertyContainer {
+  /*
+    background: url("/images/bgr_top_properties.gif") no-repeat scroll left top transparent;
+    */
+    color: #333333;
+    font-size: 1px;
+    height: 27px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0 0 0 10px;
+    text-align: right;
+}
+
+.navElement {
+  display: inline-block;
+  background: url("/images/bgr_top_element0.gif") no-repeat scroll left top transparent;
+  padding: 0 0 0 10px;
+  line-height: 27px;
+  height: 27px;
+  vertical-align: top;
+}
+
+.navBar table.navSizeContainer {
+    border-collapse: collapse;
+    border-width: 0;
+    margin: 0 0 0 auto;
+}
+
+.navBar table.navSizeContainer tr td {
+    overflow: hidden;
+    padding: 0;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.navBar {
+    color: #333333;
+}
+
+.navBar div, .navBar span, .navBar table, .navBar td, .navBar p, .navBar ul li, .navBar ol li, .navBar blockquote, .navBar input {
+    font-family: Arial,Verdana,Helvetica;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 140%;
+}
+
+.navBar input {
+    color: #000000;
+    line-height: normal !important;
+}
+
+.navBar .ContextBoxHead span, .navBar h1, .navBar h2, .navBar h3, .navBar h4, .navBar h5, .navBar h6 {
+    color: #333333;
+    font-family: Arial,Verdana,Helvetica;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: bold;
+    margin: 0;
+}
+
+.navBar p, .navBar td {
+    margin: 0;
+    padding: 0 4px;
+}
+
+.navBar .navElement {
+    background: url("/images/bgr_top_element1.gif") no-repeat scroll left top transparent;
+    font-size: 11px;
+    height: 27px;
+    line-height: 27px;
+    margin: 0;
+    padding: 0 0 0 10px;
+}
+
+.navBar p.BasketLink, .navBar .navElement a {
+    background: url("/images/bgr_top_element2.gif") no-repeat scroll right top transparent;
+    display: block;
+    height: 27px;
+    line-height: 27px;
+    padding: 0 10px 0 0;
+    vertical-align: middle;
+}
+
+.navBar a {
+    color: #333333;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.navBar a:hover {
+    color: #A3A3A3;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+.navBar a:hover .Text {
+    text-decoration: underline;
+}
+
+
+
+/************************************************************************************
+
+	ECX CSS
+   
+****/
+
+.ecxPortalPageView .gwt-HTML {
+  font-size: 14px;
+}
+
+
+
+/*************************************************************************************************
+
+	Posts CSS
+  
+	basati su template http://btemplates.com/2013/blogger-template-abstractline/demo
+  
+**/
+
+.ecxPostCreated {
+  background: url("main/images/commons/post-header-date.png") no-repeat scroll left -1px transparent;
+  padding-left: 20px;
+  font: 12px Arial;
+}
+
+.ecxPortalPageView .gwt-HTML.ecxPostTitle {
+  font: Arial;
+  font-size: 170%;
+  line-height: 1.4em;
+  cursor: pointer;
+}
+
+.ecxPostFooter {
+  background: none repeat scroll 0 0 #F7F7F7;
+  border-bottom: 1px solid #DDDDDD;
+  border-top: 1px solid #DDDDDD;
+  color: #555555;
+  font: 90%/1.4em Trebuchet,Arial,Verdana,Sans-serif;
+  letter-spacing: 0;
+  margin-bottom: 0.75em;
+  margin-left: 0;
+  margin-top: 7px;
+  padding: 10px;
+  text-transform: none;
+}
+
+.ecxPortalPageView .ecxPostFooter .gwt-HTML {
+  font: 12px Trebuchet,Arial,Verdana,Sans-serif;
+}
+
+.ecxPostAuthor {
+  background: url("main/images/commons/post-author.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
+
+.ecxPostCommentsCount {
+  background: url("main/images/commons/post-comment.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
+
+.ecxPostTags {
+  background: url("main/images/commons/post-tags.png") no-repeat scroll 0 0 transparent;
+  padding-left: 20px;
+}
+
+.ecxCommentsHeaderCount {
+  color: #666666;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 1.4em;
+  padding-bottom: 2em;
+}
+
+.ecxCommentAuthor {
+  color: #1F7117;
+  font-weight: bold;
+  font: 12px Arial,Serif;
+}
+
+.ecxCommentPosted {
+  font: 12px Arial,Serif;
+}
+
+.ecxCommentSpacer {
+  height: 2em;
+}
+
+
+/************************************************************************
+
+    CALENDAR CSS
+    
+ */
+
+.ecxCalendarWidgetCell {
+  text-align: center;
+}
+
+.ecxCalendarWidget .gwt-PushButton {
+  height: 22px;
+  padding: 1px 2px;
+}
+
+.ecxCalendarWidget .ecxCalendarWidgetHeaderMonth .gwt-Button {
+  height: 27px;
+  width: 100px;
+}
+
+.ecxCalendarWidgetCell .ecxCalDay {
+  /*
+  background: url(/main/images/commons/cal-num-bg.png) left top repeat-x;
+   */
+  background-color: #EFEFEF;
+}
+
+.ecxCalendarWidgetCell.ecxCalendarWidgetHeaderWeek {
+  /*
+  background: #fff url(/main/images/commons/cal-days-bg.png) left bottom repeat-x;
+   */
+  background-color: #D9E2E1
+}
+
+.ecxCalendarWidgetCellNum {
+  /*
+  border: 1px solid #9A9A9A;
+   */
+  padding-top: 0;
+  background-color: #EFEFEF;
+  border-right: 1px solid #A2ADBC;
+  border-bottom: 1px solid #A2ADBC;
+}
+
+.ecxCalendarWidgetCell.ecxCalendarWidgetCellWithData {
+  background-color: #CCE0FF;
+  border-bottom: 1px solid #A2ADBC;
+  border-right: 1px solid #A2ADBC;	
+}
