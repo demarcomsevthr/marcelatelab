@@ -13,10 +13,7 @@ public class CommonGinModule extends AbstractGinModule {
   protected void configure() {
     
     bind(EventBus.class).to(LoggedSimpleEventBus.class).in(Singleton.class);
-//  bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
 
-    // 10/03/2012
-//  bind(PlaceController.class).to(InjectedPlaceController.class);
     bind(PlaceController.class).to(InjectedPlaceController.class).in(Singleton.class);
     
     bind(com.google.web.bindery.event.shared.EventBus.class).to(com.google.web.bindery.event.shared.SimpleEventBus.class).in(Singleton.class);
