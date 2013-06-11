@@ -36,9 +36,6 @@
 				>> e non si può fare nella view: getPresenter().doAction(...)
 				> interessante l'utilizzo di gin/guice (AsynchProvider)
 
-		> APP GIN MODULE [11/06/2013]
-			- DA CAPIRE PERCHE' IN AppGinModule è necessario dichiarare i metodi get Product/Image/Customer/OrderService 
-
 
 
 	__________________________________________________________________________________
