@@ -1,8 +1,8 @@
-package it.mate.quilook.client.view;
+package it.mate.quilook.client.gwtp.view;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.quilook.client.factories.AppClientFactory;
-import it.mate.quilook.client.presenter.MainPagePresenter;
+import it.mate.quilook.client.gwtp.factories.AppClientFactory;
+import it.mate.quilook.client.gwtp.presenter.MainPagePresenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

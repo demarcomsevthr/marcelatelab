@@ -1,4 +1,4 @@
-package it.mate.quilook.client.factories;
+package it.mate.quilook.client.gwtp.factories;
 
 import it.mate.econyx.client.events.PortalSessionStateChangeEvent;
 import it.mate.econyx.client.places.AppPlaceHistoryMapper;
@@ -30,11 +30,17 @@ public class AdminClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> 
   private HandlerRegistration portalSessionStateChangeRegistration;
   
   @Override
+  public SiteGinjector getGwtpGinjector() {
+    return null;
+  }
+
+  @Override
   protected AppGinjector createGinjector() {
     return GWT.create(AdminGinjector.class);
   }
   
   @Override
+  @SuppressWarnings("unchecked")
   public <G extends AppGinjector> G getConcreteGinjector(Class<G> ginClass) {
     return (G)AppClientFactory.IMPL.getGinjector();
   }
