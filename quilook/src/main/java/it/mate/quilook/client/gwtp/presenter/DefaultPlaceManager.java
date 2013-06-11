@@ -1,4 +1,4 @@
-package it.mate.quilook.client.presenter;
+package it.mate.quilook.client.gwtp.presenter;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;

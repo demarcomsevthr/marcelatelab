@@ -30,12 +30,13 @@
     </any>
   </generate-with>
   
-  
-  <inherits name='com.gwtplatform.mvp.Mvp' />
 
+  <!--   
+  <inherits name='com.gwtplatform.mvp.Mvp' />
   <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
   <set-configuration-property name="gin.ginjector"
-       value="it.mate.quilook.client.factories.SiteGinjector" />  
+       value="it.mate.quilook.client.factories.gwtp.SiteGinjector" />
+        -->  
        
   
   <entry-point class='it.mate.quilook.client.MainEP' />

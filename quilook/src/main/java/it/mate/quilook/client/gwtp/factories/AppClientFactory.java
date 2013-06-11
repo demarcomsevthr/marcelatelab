@@ -1,4 +1,4 @@
-package it.mate.quilook.client.factories;
+package it.mate.quilook.client.gwtp.factories;
 
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
@@ -53,5 +53,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public PortalSessionState getPortalSessionState();
 
   public void setPortalSessionState(PortalSessionState portalSessionState);
+  
+  public SiteGinjector getGwtpGinjector();
   
 }

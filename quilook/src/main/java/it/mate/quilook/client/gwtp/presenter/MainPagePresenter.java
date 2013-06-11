@@ -1,8 +1,8 @@
-package it.mate.quilook.client.presenter;
+package it.mate.quilook.client.gwtp.presenter;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.quilook.client.presenter.MainPagePresenter.MyProxy;
-import it.mate.quilook.client.presenter.MainPagePresenter.MyView;
+import it.mate.quilook.client.gwtp.presenter.MainPagePresenter.MyProxy;
+import it.mate.quilook.client.gwtp.presenter.MainPagePresenter.MyView;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;

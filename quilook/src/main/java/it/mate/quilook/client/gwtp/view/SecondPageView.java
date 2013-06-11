@@ -1,6 +1,6 @@
-package it.mate.quilook.client.view;
+package it.mate.quilook.client.gwtp.view;
 
-import it.mate.quilook.client.presenter.SecondPagePresenter;
+import it.mate.quilook.client.gwtp.presenter.SecondPagePresenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

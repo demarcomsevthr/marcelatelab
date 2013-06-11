@@ -1,4 +1,4 @@
-package it.mate.quilook.client.portlets;
+package it.mate.quilook.client.gwtp.portlets;
 
 import it.mate.portlets.client.WidgetFactory;
 import it.mate.portlets.client.ui.PortletFactory;
