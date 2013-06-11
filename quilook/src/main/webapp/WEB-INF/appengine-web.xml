@@ -3,7 +3,7 @@
 
   <application>quilook</application>
   
-  <version>V001</version>
+  <version>v1</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>

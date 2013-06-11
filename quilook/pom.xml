@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>it.mate</groupId>
   <artifactId>quilook</artifactId>
   <version>0.1</version>
   <packaging>war</packaging>
   <name>quilook</name>
-  
+
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -17,13 +17,34 @@
     <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
   </properties>
   
-  <dependencies>
+  <repositories>
+    
+    <!-- 20/05/2013 - IMPORTANTE: serve per escludere il repo melograno!!! -->
+    <repository>
+      <id>repo1</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    
+  </repositories>
   
+
+  <dependencies>
+
     <dependency>
       <groupId>it.mate</groupId>
       <artifactId>econyx-core</artifactId>
       <version>0.1</version>
     </dependency>
+
+
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-endpoints</artifactId>
+      <version>${gae.version}</version>
+      <!-- 
+      <scope>runtime</scope>
+       -->
+    </dependency>    
     
     
     <!-- GWTP - MVP component -->
@@ -33,20 +54,20 @@
       <version>${gwtp.version}</version>
       <!-- <scope>provided</scope>  -->
     </dependency>
-    
-   
+
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.5.11</version>
       <scope>runtime</scope>
     </dependency>
-  
+
   </dependencies>
-  
-  
+
+
   <build>
-  
+
     <plugins>
 
       <plugin>
@@ -205,5 +226,5 @@
     </pluginManagement>
 
   </build>
-  
+
 </project>
