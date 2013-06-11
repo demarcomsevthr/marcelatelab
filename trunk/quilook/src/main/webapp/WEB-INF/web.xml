@@ -183,7 +183,26 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </auth-constraint>
   </security-constraint>
    -->
+   
+   
+   
   
+  <!-- 
+      ENDPOINTS API
+   -->
+   
+  <servlet>
+    <servlet-name>systemServiceServlet</servlet-name>
+    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    <init-param>
+      <param-name>services</param-name>
+      <param-value>it.mate.quilook.server.endpoints.QuEndpoint</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>systemServiceServlet</servlet-name>
+    <url-pattern>/_ah/spi/*</url-pattern>
+  </servlet-mapping>   
 
 
 </web-app>
