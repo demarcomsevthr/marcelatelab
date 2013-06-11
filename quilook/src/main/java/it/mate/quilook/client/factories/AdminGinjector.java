@@ -1,5 +1,6 @@
 package it.mate.quilook.client.factories;
 
+import it.mate.econyx.client.factories.AppGinjector;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 
 import com.google.gwt.inject.client.GinModules;

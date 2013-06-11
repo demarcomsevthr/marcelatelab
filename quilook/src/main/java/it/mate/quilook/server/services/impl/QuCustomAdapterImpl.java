@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.google.appengine.api.datastore.Blob;
 
 @Service
-public class QuilookCustomAdapterImpl implements CustomAdapter {
+public class QuCustomAdapterImpl implements CustomAdapter {
 
   @Override
   public String uploadImage(String imageType, String imageSize, String objId, Blob imageBlob, HttpSession session) {
