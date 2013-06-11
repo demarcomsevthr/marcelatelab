@@ -35,7 +35,7 @@ public interface GeneralService extends RemoteService {
 
   public void clearCache();
   
-  public Map<String, String> getPropertiesFromServer();
+  public Map<String, String> initPortalSession();
   
   public void storePortalSessionState(PortalSessionState state);
   

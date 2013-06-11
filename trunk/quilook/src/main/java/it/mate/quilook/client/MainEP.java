@@ -19,8 +19,8 @@ public class MainEP implements EntryPoint {
 
   public void onModuleLoad() {
     
-    final GeneralServiceAsync generalService = AppClientFactory.IMPL.getGinjector().getGeneralService();
-    generalService.getPropertiesFromServer(new AsyncCallback<Map<String,String>>() {
+    GeneralServiceAsync generalService = AppClientFactory.IMPL.getGinjector().getGeneralService();
+    generalService.initPortalSession(new AsyncCallback<Map<String,String>>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }
