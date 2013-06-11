@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> 
-    implements AppClientFactory, PortalSessionStateChangeEvent.Handler, PortalPageChangingEvent.Handler {
+    implements AppClientFactory, SiteClientFactory, PortalSessionStateChangeEvent.Handler, PortalPageChangingEvent.Handler {
   
   private static PlaceHistoryMapper placeHistoryMapper;
   
@@ -65,15 +65,21 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
   
   
   @Override
-  protected SiteGinjector createGinjector() {
+  protected AppGinjector createGinjector() {
     return GWT.create(SiteGinjector.class);
   }
   
+  // 11/06/2013
   @Override
   @SuppressWarnings("unchecked")
+  public <G extends CoreGinjector> G castGinjector(Class<G> ginClass) {
+    return ((G)AppClientFactory.IMPL.getGinjector());
+  }
+  /*
   public <G extends AppGinjector> G getConcreteGinjector(Class<G> ginClass) {
     return ((G)AppClientFactory.IMPL.getGinjector());
   }
+  */
   
   @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
@@ -238,11 +244,6 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     String initialTemplateName;
     boolean enquePortalPageChangeEvent = false;
     boolean portalInitialized = false;
-    /*
-    public StartingPortalContext() {
-      this(null, false);
-    }
-    */
     public StartingPortalContext(String initialTemplateName, boolean enquePortalPageChangeEvent) {
       this.initialTemplateName = initialTemplateName;
       this.enquePortalPageChangeEvent = enquePortalPageChangeEvent;
@@ -261,10 +262,12 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
     }
   }
 
+  @Override
   public PortalSessionState getPortalSessionState() {
     return portalSessionState;
   }
 
+  @Override
   public void setPortalSessionState(PortalSessionState portalSessionState) {
     this.portalSessionState = portalSessionState;
   }
@@ -317,7 +320,8 @@ public class SiteClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector>
       if (pageTemplate != null) {
         firstTemplateFoundDelegate.execute(pageTemplate);
       } else {
-        PortalServiceAsync portalService = AppClientFactory.IMPL.getConcreteGinjector(SiteGinjector.class).getPortalService();
+//      PortalServiceAsync portalService = AppClientFactory.IMPL.getConcreteGinjector(SiteGinjector.class).getPortalService();
+        PortalServiceAsync portalService = AppClientFactory.IMPL.castGinjector(CoreGinjector.class).getPortalService();
         portalService.getPage(templateName, new AsyncCallback<PageTemplate>() {
           public void onSuccess(PageTemplate pageTemplate) {
             pageTemplateCachePut(pageTemplate);

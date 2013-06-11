@@ -54,9 +54,12 @@ import it.mate.econyx.shared.services.OrderServiceAsync;
 import it.mate.econyx.shared.services.PortalPageServiceAsync;
 import it.mate.econyx.shared.services.PortalUserServiceAsync;
 import it.mate.econyx.shared.services.ProductServiceAsync;
-import it.mate.gwtcommons.client.factories.CommonGinjector;
 
+// 11/06/2013
+public interface AppGinjector extends CoreGinjector {
+/*  
 public interface AppGinjector extends CommonGinjector {
+*/
   
   public GeneralServiceAsync getGeneralService();
   public PortalPageServiceAsync getPortalPageService();

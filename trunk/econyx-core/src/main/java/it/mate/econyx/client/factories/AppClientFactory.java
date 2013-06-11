@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -12,19 +13,28 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
 
   public static AppClientFactory IMPL = Initializer.create();
-  
+
+  // 11/06/2013
+  public static boolean isAdminModule = (IMPL instanceof AdminClientFactory);
+  public static boolean isSiteModule = (IMPL instanceof SiteClientFactory);
+
+  /*
   public static boolean isAdminModule = (IMPL instanceof AdminClientFactoryImpl);
-  
   public static boolean isSiteModule = (IMPL instanceof SiteClientFactoryImpl);
+  */
   
   class Initializer {
     private static AppClientFactory create() {
       String startupModule = GwtUtils.getJSVar("startupModule", null);
       AppClientFactory clientFactory = null;
       if ("admin".equals(startupModule)) {
-        clientFactory = new AdminClientFactoryImpl();
+        // 11/06/2013
+        clientFactory = GWT.create(AdminClientFactory.class);
+//      clientFactory = new AdminClientFactoryImpl();
       } else if ("site".equals(startupModule)) {
-        clientFactory = new SiteClientFactoryImpl();
+        // 11/06/2013
+        clientFactory = GWT.create(SiteClientFactory.class);
+//      clientFactory = new SiteClientFactoryImpl();
       } else {
         Window.alert("Internal error: startupModule property not set!");
       }
@@ -44,7 +54,11 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
     
   }
   
+  // 11/06/2013
+  public <G extends CoreGinjector> G castGinjector(Class<G> ginClass);
+  /*
   public <G extends AppGinjector> G getConcreteGinjector(Class<G> ginClass);
+  */
   
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper);
   

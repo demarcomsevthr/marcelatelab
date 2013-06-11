@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class AdminClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements 
-        AppClientFactory, PortalSessionStateChangeEvent.Handler {
+        AppClientFactory, AdminClientFactory, PortalSessionStateChangeEvent.Handler {
 
   private static PlaceHistoryMapper placeHistoryMapper;
   
@@ -35,10 +35,16 @@ public class AdminClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> 
     return GWT.create(AdminGinjector.class);
   }
   
+  // 11/06/2013
   @Override
+  public <G extends CoreGinjector> G castGinjector(Class<G> ginClass) {
+    return (G)AppClientFactory.IMPL.getGinjector();
+  }
+  /*
   public <G extends AppGinjector> G getConcreteGinjector(Class<G> ginClass) {
     return (G)AppClientFactory.IMPL.getGinjector();
   }
+  */
   
   @Override
   public void initModule(Panel portalPanel) {
@@ -99,6 +105,7 @@ public class AdminClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> 
     return placeHistoryMapper;
   }
   
+  @Override
   public AdminActivityMapper getAdminActivityMapper() {
     return new AdminActivityMapper(this);
   }
