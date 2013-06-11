@@ -81,6 +81,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>quService</servlet-name>
+    <servlet-class>it.mate.quilook.server.services.impl.QuServiceImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>quService</servlet-name>
+    <url-pattern>*.quService</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>cronServlet</servlet-name>
     <servlet-class>it.mate.econyx.server.servlets.CronServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

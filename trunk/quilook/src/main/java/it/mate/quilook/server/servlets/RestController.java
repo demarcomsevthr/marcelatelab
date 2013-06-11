@@ -3,7 +3,6 @@ package it.mate.quilook.server.servlets;
 import it.mate.commons.server.utils.CacheUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.econyx.server.model.impl.ImageDs;
-import it.mate.econyx.server.services.GeneralAdapter;
 import it.mate.econyx.server.services.ImageAdapter;
 import it.mate.econyx.server.services.PortalPageAdapter;
 import it.mate.econyx.server.util.CacheConstants;
@@ -12,6 +11,7 @@ import it.mate.econyx.shared.model.PortalPage;
 import it.mate.econyx.shared.model.PortalSessionState;
 import it.mate.gwtcommons.shared.utils.PropertiesHolder;
 import it.mate.portlets.server.services.PortalServiceAdapter;
+import it.mate.quilook.server.services.QuAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,18 +22,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller ("quilookRestController")
+@Controller ("quRestController")
 public class RestController {
   
   private final static Logger logger = Logger.getLogger(RestController.class);
 
-//@Autowired private GeneralAdapter generalAdapter;
-  
   @Autowired private PortalPageAdapter portalPageAdapter;
   
   @Autowired private ImageAdapter imageAdapter;
   
   @Autowired private PortalServiceAdapter portalServiceAdapter;
+  
+  @Autowired private QuAdapter quAdapter;
   
   
   
@@ -44,7 +44,6 @@ public class RestController {
     PortalPage page = portalPageAdapter.findByCode(pageCode);
     PortalSessionState state = new PortalSessionState(PortalSessionState.MODULE_SITE, page);
     state.setTemplateName(page.getTemplateName());
-//  generalAdapter.storePortalSessionState(request, state);
     request.setAttribute("pageName", page.getName());
     request.getRequestDispatcher("/site-nobanner.jsp").forward(request, response);
   }
@@ -121,5 +120,12 @@ public class RestController {
       }
     }
   }
+  
+  
+  @RequestMapping ("/quTest")
+  public void quTest(HttpServletResponse response) throws Exception {
+    response.getOutputStream().print(quAdapter.getQuMessage());
+  }
+  
   
 }

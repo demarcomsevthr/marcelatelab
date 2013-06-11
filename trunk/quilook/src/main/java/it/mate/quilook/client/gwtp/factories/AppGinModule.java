@@ -2,7 +2,6 @@ package it.mate.quilook.client.gwtp.factories;
 
 import it.mate.econyx.shared.services.GeneralService;
 import it.mate.econyx.shared.services.GeneralServiceAsync;
-import it.mate.econyx.shared.services.ImageService;
 import it.mate.econyx.shared.services.ImageServiceAsync;
 import it.mate.econyx.shared.services.PortalPageService;
 import it.mate.econyx.shared.services.PortalPageServiceAsync;
@@ -51,14 +50,6 @@ public class AppGinModule extends AbstractGinModule {
       portalUserService = GWT.create(PortalUserService.class);
     }
     return portalUserService;
-  }
-  
-  @Provides
-  public ImageServiceAsync getImageService() {
-    if (imageService == null) {
-      imageService = GWT.create(ImageService.class);
-    }
-    return imageService;
   }
   
 }

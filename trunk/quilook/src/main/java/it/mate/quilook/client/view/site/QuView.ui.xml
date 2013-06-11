@@ -1,0 +1,19 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  <g:HTMLPanel>
+
+    Siamo in QuView!
+    
+    <g:VerticalPanel>
+    
+      <g:Button ui:field="rpcTestBtn" text="RPC Test"></g:Button>
+  
+      <g:Button ui:field="restTestBtn" text="Rst Test"></g:Button>
+    
+    </g:VerticalPanel>
+  
+  </g:HTMLPanel>
+  
+
+</ui:UiBinder>
