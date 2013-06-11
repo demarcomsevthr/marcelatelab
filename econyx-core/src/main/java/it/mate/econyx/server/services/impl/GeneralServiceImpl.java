@@ -114,7 +114,7 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
 
   @Override
   @SuppressWarnings("unchecked")
-  public Map<String, String> getPropertiesFromServer() {
+  public Map<String, String> initPortalSession() {
     Map<String, String> results = new HashMap<String, String>();
 
     PropertiesHolderConfigurer.reloadFromClassPathResource("econyx.properties");

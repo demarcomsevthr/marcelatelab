@@ -30,7 +30,7 @@ public interface GeneralServiceAsync {
 
   void clearCache(AsyncCallback<Void> callback);
 
-  void getPropertiesFromServer(AsyncCallback<Map<String, String>> callback);
+  void initPortalSession(AsyncCallback<Map<String, String>> callback);
 
   void storePortalSessionState(PortalSessionState state, AsyncCallback<Void> callback);
 

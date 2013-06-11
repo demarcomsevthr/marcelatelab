@@ -22,7 +22,7 @@ public class MainGwtpEP implements EntryPoint {
   public void onModuleLoad() {
     
     final GeneralServiceAsync generalService = AppClientFactory.IMPL.getGwtpGinjector().getGeneralService();
-    generalService.getPropertiesFromServer(new AsyncCallback<Map<String,String>>() {
+    generalService.initPortalSession(new AsyncCallback<Map<String,String>>() {
       public void onFailure(Throwable caught) {
         Window.alert(caught.getMessage());
       }
