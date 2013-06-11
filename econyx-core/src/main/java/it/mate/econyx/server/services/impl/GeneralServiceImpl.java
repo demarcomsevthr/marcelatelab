@@ -95,8 +95,9 @@ public class GeneralServiceImpl extends RemoteServiceServlet implements GeneralS
 
   public AbstractCustomClientFactory getCustomClientFactory() {
     try {
-      List<Class<? extends AbstractCustomClientFactory>> customClientFactoryClasses = SpringUtils.scanPackageClasses("it.mate.econyx.client.factories",
-          AbstractCustomClientFactory.class);
+      List<Class<? extends AbstractCustomClientFactory>> customClientFactoryClasses = 
+          SpringUtils.scanPackageClasses(PropertiesHolder.getString(getClass().getName()+".customClientFactoryPackage", "it.mate.econyx.client.factories") ,
+                      AbstractCustomClientFactory.class);
       if (customClientFactoryClasses != null && customClientFactoryClasses.size() > 0) {
         for (Class<? extends AbstractCustomClientFactory> customClientFactoryClass : customClientFactoryClasses) {
           if (customClientFactoryClasses.size() > 1 && customClientFactoryClass != DefaultCustomClientFactory.class) {
