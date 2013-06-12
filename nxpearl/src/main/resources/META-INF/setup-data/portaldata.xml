@@ -62,21 +62,6 @@
       </indirizzoSpedizione>
     </it.mate.econyx.shared.model.impl.CustomerTx>
     
-    <it.mate.econyx.shared.model.impl.CustomerTx>
-      <portalUser class="it.mate.econyx.shared.model.impl.PortalUserTx">
-        <screenName>Test Gaspar8net</screenName>
-        <emailAddress>test.gaspar8net@gmail.com</emailAddress>
-        <password>vertigine</password>
-        <passwordEncrypted>false</passwordEncrypted>
-        <active>true</active>
-        <adminUser>true</adminUser>
-      </portalUser>
-      <indirizzoSpedizione class="it.mate.econyx.shared.model.impl.IndirizzoSpedizioneTx">
-        <nome>Test</nome>
-        <cognome>Gaspar8net</cognome>
-      </indirizzoSpedizione>
-    </it.mate.econyx.shared.model.impl.CustomerTx>
-    
   </customers>
   
   <productTypes>
@@ -102,15 +87,15 @@
   <producers>
     <it.mate.econyx.shared.model.impl.ProduttoreTx>
       <codice>PRD001</codice>
-      <nome>ORTO DEI TERZI</nome>
+      <nome>PRODUTTORE UNO</nome>
     </it.mate.econyx.shared.model.impl.ProduttoreTx>
     <it.mate.econyx.shared.model.impl.ProduttoreTx>
       <codice>PRD002</codice>
-      <nome>MARTI</nome>
+      <nome>PRODUTTORE DUE</nome>
     </it.mate.econyx.shared.model.impl.ProduttoreTx>
     <it.mate.econyx.shared.model.impl.ProduttoreTx>
       <codice>PRD003</codice>
-      <nome>FISHBOX</nome>
+      <nome>PRODUTTORE TRE</nome>
     </it.mate.econyx.shared.model.impl.ProduttoreTx>
   </producers>
   
@@ -118,7 +103,7 @@
   
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCOR001</codice>
-      <nome>CASSETTONE MINI (5 KG)</nome>
+      <nome>PRODOTTO UNO</nome>
       <prezzo>10.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -135,7 +120,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCOR002</codice>
-      <nome>CASSETTONE PICCOLO (7 KG)</nome>
+      <nome>PRODOTTO DUE</nome>
       <prezzo>14.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -152,7 +137,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCOR003</codice>
-      <nome>CASSETTONE MEDIO (8,5 KG)</nome>
+      <nome>PRODOTTO TRE</nome>
       <prezzo>16.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -169,7 +154,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCOR004</codice>
-      <nome>CASSETTONE GRANDE (10 KG)</nome>
+      <nome>PRODOTTO QUATTRO</nome>
       <prezzo>18.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -186,7 +171,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR001</codice>
-      <nome>MOZZARELLE</nome>
+      <nome>PRODOTTO CINQUE</nome>
       <prezzo>13.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -204,7 +189,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR002</codice>
-      <nome>TRECCE</nome>
+      <nome>PRODOTTO SEI</nome>
       <prezzo>13.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -222,7 +207,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR003</codice>
-      <nome>PRIMO SALE</nome>
+      <nome>PRODOTTO SETTE</nome>
       <prezzo>10.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -240,7 +225,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR004</codice>
-      <nome>SCAMORZE</nome>
+      <nome>PRODOTTO OTTO</nome>
       <prezzo>10.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -258,7 +243,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR005</codice>
-      <nome>PROVOLA STAGIONATA</nome>
+      <nome>PRODOTTO NOVE</nome>
       <prezzo>15.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -276,7 +261,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR006</codice>
-      <nome>RICOTTA</nome>
+      <nome>PRODOTTO DIECI</nome>
       <prezzo>8.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -294,7 +279,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR007</codice>
-      <nome>STRACCHINO</nome>
+      <nome>PRODOTTO UNDICI</nome>
       <prezzo>14.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -312,7 +297,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCMAR008</codice>
-      <nome>YOGURT</nome>
+      <nome>PRODOTTO TREDICI</nome>
       <prezzo>6.00</prezzo>
       <tipoArticolo class="it.mate.econyx.shared.model.impl.TipoArticoloTx">
         <codice>PTC01</codice>
@@ -330,7 +315,7 @@
     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS01</codice>
-      <nome>FISHBOX</nome>
+      <nome>PRODOTTO QUATTORDICI</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -353,7 +338,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS02</codice>
-      <nome>SPECIAL BOX</nome>
+      <nome>PRODOTTO QUINDICI</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -376,7 +361,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS03</codice>
-      <nome>FISHBOX 3</nome>
+      <nome>PRODOTTO SEDICI</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -399,7 +384,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS04</codice>
-      <nome>FISHBOX DELUXE</nome>
+      <nome>PRODOTTO DICIASSETTE</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -422,7 +407,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS05</codice>
-      <nome>FISHBOX DA FORNO</nome>
+      <nome>PRODOTTO DICIOTTO</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -445,7 +430,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS06</codice>
-      <nome>FISHBOX POLPETTI</nome>
+      <nome>PRODOTTO DICIANNOVE</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -468,7 +453,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS07</codice>
-      <nome>FISHBOX TOTANI</nome>
+      <nome>PRODOTTO VENTI</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -491,7 +476,7 @@
                                     
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS08</codice>
-      <nome>FISHBOX SEPPIE</nome>
+      <nome>PRODOTTO VENTUNO</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -514,7 +499,7 @@
                                                                         
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS09</codice>
-      <nome>FISHBOX PESCE RITROVATO</nome>
+      <nome>PRODOTTO VENTIDUE</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -537,7 +522,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS10</codice>
-      <nome>BOX ALICI</nome>
+      <nome>PRODOTTO VENTITRE</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -560,7 +545,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS11</codice>
-      <nome>COZZE</nome>
+      <nome>PRODOTTO VENTIQUATTRO</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -583,7 +568,7 @@
 
     <it.mate.econyx.shared.model.impl.ArticoloTx>
       <codice>PCFIS12</codice>
-      <nome>VONGOLE</nome>
+      <nome>PRODOTTO VENTICINQUE</nome>
       <htmls>
         <it.mate.econyx.shared.model.impl.HtmlContentTx>
           <type>S</type>
@@ -622,24 +607,7 @@
           <type>M</type>
           <content>
           <![CDATA[
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	Siamo semplici cittadini e consumatori che, forse un po&rsquo; stanchi di subire passivamente le scelte fatte da altri, abbiamo deciso di provare ad essere protagonisti: cittadini partecipi, consumatori critici e solidali.<br style="margin: 0px; padding: 0px;" />
-	Siamo un gruppo di persone che ha deciso di incontrarsi per riflettere sui propri consumi e per acquistare prodotti di uso comune, utilizzando come criterio guida il concetto di giustizia e solidariet&agrave;.<br style="margin: 0px; padding: 0px;" />
-	Riteniamo che conciliare concetti come &ldquo;salute&rdquo; e &ldquo;sapori&rdquo;, &ldquo;equit&agrave;&rdquo; e &ldquo;risparmio&rdquo;,&nbsp; siano non soltanto astrattamente condivisibili ma realmente praticabili attraverso piccoli gesti quotidiani come&hellip;fare la spesa.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	Per questo nel<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">2005</strong>, all&rsquo;interno del Comitato di quartiere di Torre Spaccata un piccolo gruppo di soci ha iniziato un percorso, aggregando attorno a questo progetto amici, familiari, conoscenti e semplici curiosi e siamo partiti con l&rsquo;esperienza del Gruppo di Acquisto Solidale.<br style="margin: 0px; padding: 0px;" />
-	Si &egrave; trattato, da una parte, di cominciare a stabilire di quali prodotti e servizi abbiamo bisogno e, attraverso quella che viene definita &ldquo;filiera corta&rdquo;, inaugurare rapporti con i produttori disponibili; dall&rsquo;altra cercare di fare opera di informazione e sensibilizzazione sui temi che ci stanno a cuore, con l&rsquo;obiettivo di allargare la partecipazione e la consapevolezza degli abitanti del territorio.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	Dall&rsquo;ottobre del<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">2007</strong><span class="Apple-converted-space">&nbsp;</span>ci siamo costituiti formalmente in associazione dandoci uno<span class="Apple-converted-space">&nbsp;</span><a href="http://www.gaspar8.net/docu/statuto.html" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: initial initial; background-repeat: initial initial;" title="leggi lo statuto">statuto</a><span class="Apple-converted-space">&nbsp;</span>che fissasse in maniera chiara i nostri obiettivi e i nostri desideri e un nome (per noi molto simpatico) che racchiude la nostra &lsquo;filosofia&rsquo; di vita:<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">GAS.P.A.R.8</strong><span class="Apple-converted-space">&nbsp;</span>che significa<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">Gruppo di Acquisto Solidale a Partecipazione Attiva e Responsabile dell&rsquo;8&deg; Municipio di Roma</strong>.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	&nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	Ad oggi siamo circa 50 soci che coinvolgono una trentina nuclei familiari per un totale di oltre cento persone.<br style="margin: 0px; padding: 0px;" />
-	La&nbsp; strada intrapresa &egrave; solo all&rsquo;inizio e la meta &egrave; ancora lontana, ma siamo fiduciosi che sia un cammino che vale la pena di percorrere.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	&nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-	&nbsp;</p>
+<P>Chi siamo</p>
            ]]>
 </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
@@ -654,39 +622,14 @@
           <type>M</type>
           <content>
           <![CDATA[
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Il nostro<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">obiettivo</strong><span class="Apple-converted-space">&nbsp;</span>&egrave; ambizioso perch&eacute;, partendo dal &lsquo;semplice&rsquo; fare la spesa, vorremmo cambiare il mondo! Intanto ci accontentiamo di realizzare alcuni obiettivi:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Pagare il giusto prezzo dei prodotti</strong>, cio&egrave; trovare il giusto equilibrio tra la remunerazione chi lavora e le giuste aspirazioni di noi consumatori che difendiamo il nostro potere di acquisto.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Riscoprire sapori e relazioni</strong>, richiamandoci ad una vita in cui le relazioni umane e la condivisione con gli amici ed i vicini tornano ad avere importanza primaria; il ritorno ai sapori di una volta; il piacere di mangiare cose buone, che fanno bene, in armonia con gli altri esseri umani e con la natura.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Sviluppare e creare solidariet&agrave; e consapevolezza</strong>, che si estendono, a partire dai membri del gruppo stesso, ai piccoli produttori che forniscono i prodotti biologici, fino a comprendere, nel rispetto dell&#39;ambiente, i popoli del Sud del mondo, e tutti coloro che, a causa dello spreco e della ingiusta ripartizione delle ricchezze, subiscono le conseguenze inique di questo modello di sviluppo. Interessandoci alle problematiche dell&#39;ambiente, del suo sfruttamento e delle condizioni di lavoro, acquisiamo una maggiore consapevolezza del mondo che ci circonda e delle sue contraddizioni.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Sviluppare e mettere in pratica il consumo critico</strong><span class="Apple-converted-space">&nbsp;</span>inteso come atteggiamento che ci aiuti a non subire i messaggi pubblicitari ma a valutare e scegliere i prodotti in base a criteri pi&ugrave; giusti ed equi e non imposti dal mercato.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Informarsi e formarsi</strong>, attraverso le riunioni e gli incontri del gruppo che possono/devono diventare un vero e proprio momento di scambio e formazione reciproca.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    <strong style="margin: 0px; padding: 0px;">Ridurre il prezzo di acquisto</strong><span class="Apple-converted-space">&nbsp;</span>dei prodotti etici e biologici; trattandosi di prodotti di nicchia, con uno scarso mercato ed una scarsa capacit&agrave; distributiva da parte dei produttori, i prezzi sono alti e disincentivanti per le molte famiglie a basso reddito.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Praticamente il<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">funzionamento</strong><span class="Apple-converted-space">&nbsp;</span>del nostro G.A.S. &egrave; molto semplice.<br style="margin: 0px; padding: 0px;" />
-  Con cadenza periodica viene inviata ai soci un listino di prodotti che intendiamo acquistare in maniera collettiva; gli ordini raccolti vengono trasmessi ai produttori.<br style="margin: 0px; padding: 0px;" />
-  Quando arriva la merce del produttore, a turno alcuni soci si impegnano a distribuirla alle famiglie, che pagano il corrispettivo.<br style="margin: 0px; padding: 0px;" />
-  All&rsquo;interno del G.A.S. non esiste una rigida divisione dei ruoli, ma tutti di impegnano nei<span class="Apple-converted-space">&nbsp;</span><a href="http://www.gaspar8.net/iniziative.html" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: initial initial; background-repeat: initial initial;" title="vai ai gruppi di lavoro">vari compiti</a><span class="Apple-converted-space">&nbsp;</span>che servono al buon funzionamento dello stesso: oltre alla raccolta degli ordini e ai turni per la distribuzione dei prodotti, alcuni soci si occupano dei rapporti con i produttori e con le istituzioni, della comunicazione tramite il volantino all&rsquo;aggiornamento del sito web in un clima di reciproca fiducia e convivialit&agrave;.<br style="margin: 0px; padding: 0px;" />
-  Abbiamo inoltre momenti di studio e di confronto per approfondire tematiche particolari, per verificare l&rsquo;andamento delle attivit&agrave; o solamente per il piacere di incontrarci e stare insieme davanti ad una tavola imbandita.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Per conoscerci meglio e aderire alla nostra associazione,<span class="Apple-converted-space">&nbsp;</span><a href="http://www.gaspar8.net/contatti.html" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: initial initial; background-repeat: initial initial;" title="vai ai contatti">contattaci</a><span class="Apple-converted-space">&nbsp;</span>senza paura; il nostro<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">gruppo di accoglienza</strong><span class="Apple-converted-space">&nbsp;</span>sar&agrave; lieto di darti il benvenuto.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
+<P>Cosa facciamo</p>
            ]]>
 </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
-      <name>Lo statuto</name>
+      <name>Termini di servizio</name>
       <code>statuto</code>
       <orderNm>300</orderNm>
       <htmls>
@@ -694,739 +637,51 @@
           <type>M</type>
           <content>
             <![CDATA[
-            
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 1 - Denominazione sociale</strong><br style="margin: 0px; padding: 0px;" />
-  &Egrave; costituita in Roma nel rispetto della Costituzione della Repubblica Italiana, della Legge 383/2000 e della Legge Regionale 22/1999, l&#39;Associazione di promozione sociale denominata<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">GAS.P.A.R.8</strong><span class="Apple-converted-space">&nbsp;</span>(<strong style="margin: 0px; padding: 0px;">G</strong>ruppo di<strong style="margin: 0px; padding: 0px;">A</strong>cquisto<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">S</strong>olidale a<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">P</strong>artecipazione<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">A</strong>ttiva e<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">R</strong>esponsabile<span class="Apple-converted-space">&nbsp;</span><strong style="margin: 0px; padding: 0px;">8&deg;</strong><span class="Apple-converted-space">&nbsp;</span>Municipio di Roma) - di seguito indicata come Associazione - con sede legale in Roma. Il domicilio &egrave; quello del Presidente<span class="Apple-converted-space">&nbsp;</span><em style="margin: 0px; padding: 0px;">pro-tempore</em><span class="Apple-converted-space">&nbsp;</span>rilevato dal libro dei soci.<br style="margin: 0px; padding: 0px;" />
-  La sede potr&agrave; essere trasferita con semplice delibera del Consiglio Direttivo.<br style="margin: 0px; padding: 0px;" />
-  L&rsquo;Associazione ha facolt&agrave; di istituire e sopprimere sedi operative e sezioni distaccate. L&rsquo;Associazione ha durata illimitata.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 2 - Finalit&agrave;</strong><br style="margin: 0px; padding: 0px;" />
-  L&rsquo;Associazione &egrave; apartitica e aconfessionale, non ha fini di lucro e ha l&rsquo;esclusivo perseguimento di finalit&agrave; di promozione e utilit&agrave; sociale, culturale ed economica.<br style="margin: 0px; padding: 0px;" />
-  In particolare l&rsquo;Associazione si propone di:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    sostenere, promuovere e diffondere i valori della pace, della nonviolenza, della solidariet&agrave; e della tutela dell&rsquo;ambiente per la costruzione di una civilt&agrave; armoniosa tra tutti gli esseri viventi;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    sostenere, promuovere e diffondere i principi di una economia etico-sostenibile;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    sviluppare la consapevolezza, difendere la salute e il potere d&rsquo;acquisto dei soci attraverso gli strumenti dell&rsquo;acquisto collettivo di beni e servizi, prodotti con un&rsquo;attenzione particolare al rapporto diretto fra consumatori e piccoli produttori e artigiani locali (<em style="margin: 0px; padding: 0px;">filiera corta</em>) e alla dignit&agrave; dei lavoratori;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    promuovere iniziative di informazione, di formazione, di assistenza e di aggregazione in stretto rapporto di collaborazione con tutte le componenti sociali, culturali, religiose ed economiche che operano nel territorio, in armonia con le finalit&agrave; dell&rsquo;Associazione.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Per il raggiungimento di tali finalit&agrave; l&rsquo;Associazione potr&agrave;, inoltre:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    consorziarsi e riunirsi in coordinamento con altre associazioni ed enti che operino nel medesimo ambito;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    coordinare, realizzare e promuovere progetti di ricerca e studio.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 3 - Risorse economiche</strong><br style="margin: 0px; padding: 0px;" />
-  Per il conseguimento delle sue finalit&agrave;, l&rsquo;Associazione si avvale di fondi propri, ricavati dalle quote sociali, da contributi di enti pubblici o privati, dagli Enti Locali, dall&rsquo;Unione Europea e da organismi internazionali, da eventuali rendite, donazioni, lasciti o da contributi raccolti in occasione di particolari servizi erogati o manifestazioni organizzate, da proventi realizzati dalla cessione di beni e servizi, agli associati e a terzi, anche attraverso lo svolgimento di attivit&agrave; economiche di natura commerciale, artigianale e agricola, svolte in maniera ausiliaria e sussidiaria e comunque finalizzate al conseguimento delle finalit&agrave; dell&rsquo;art. 2&nbsp; e di ogni altro tipo di entrata ammessa dalla legge 383/2000 e sue eventuali e successive modifiche ed integrazioni.<br style="margin: 0px; padding: 0px;" />
-  Non possono essere distribuiti, anche in modo indiretto, utili ed avanzi di gestione, nonch&eacute; fondi, riserve o capitale, durante la vita dell&rsquo;associazione.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 4 - Bilancio</strong><br style="margin: 0px; padding: 0px;" />
-  L&rsquo;esercizio finanziario chiude al 31 dicembre di ogni anno.<br style="margin: 0px; padding: 0px;" />
-  Entro 90 giorni dalla fine di ogni esercizio verranno predisposti dal Tesoriere il bilancio consuntivo e quello preventivo del successivo esercizio.<br style="margin: 0px; padding: 0px;" />
-  Gli eventuali utili o gli avanzi di gestione devono essere impiegati per la realizzazione delle attivit&agrave; istituzionali e di quelle ad esse strettamente connesse.<br style="margin: 0px; padding: 0px;" />
-  L&rsquo;Associazione deve redigere e aggiornare un rendiconto economico e finanziario e registrare ogni tipo di entrata ed uscita.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 5 - Soci</strong><br style="margin: 0px; padding: 0px;" />
-  Possono diventare soci tutti coloro che condividono i principi dell&rsquo;Associazione, accettano il presente statuto e il regolamento e si impegnano in prima persona nella vita della stessa.<br style="margin: 0px; padding: 0px;" />
-  I soci si dividono in:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    soci fondatori: coloro che hanno costituito l&rsquo;Associazione; la qualifica di socio ha carattere di perpetuit&agrave;, non &egrave; soggetta ad iscrizione ma solo la quota sociale annuale;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    soci ordinari: persone fisiche (maggiorenni) e persone giuridiche, rappresentate da un loro delegato; versano la quota di iscrizione e la quota sociale annuale.</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    soci onorari: persone nominate dall&rsquo;Assemblea per meriti particolari acquisiti a favore dell&rsquo;Associazione stessa.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Non &egrave; prevista la figura del socio temporaneo.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 6 - Diritti e doveri dei soci</strong><br style="margin: 0px; padding: 0px;" />
-  L&rsquo;ammissione a socio &egrave; subordinata alla presentazione di apposita domanda scritta da parte degli interessati. Sulle domande di ammissione si pronuncia il Consiglio Direttivo, le eventuali reiezioni debbono essere motivate.<br style="margin: 0px; padding: 0px;" />
-  Tutti i soci devono:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    Rispettare le norme del presente Statuto, del Regolamento ed i deliberati degli organi associativi;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    Versare le quote associative fissate dall&rsquo;assemblea, nei termini dalla stessa indicati;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    Prestare la loro opera all&rsquo;interno dell&rsquo;Associazione in maniera volontaria e gratuita.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Tutti i soci hanno il diritto di frequentare i locali sociali e&nbsp; di accesso ai documenti dell&rsquo;Associazione.<br style="margin: 0px; padding: 0px;" />
-  Tutti i soci hanno diritto di voto nelle assemblee e di ricoprire cariche all&rsquo;interno dell&rsquo;Associazione.<br style="margin: 0px; padding: 0px;" />
-  La qualifica di socio si perde per morte, dimissioni, per morosit&agrave; e indegnit&agrave;.<span class="Apple-converted-space">&nbsp;</span><br style="margin: 0px; padding: 0px;" />
-  Il socio receduto o escluso non ha diritto alla restituzione delle quote associative versate.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 7 - Organi sociali</strong><br style="margin: 0px; padding: 0px;" />
-  Gli organi dell&#39;Associazione sono:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    l&#39;Assemblea dei soci;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    il Consiglio Direttivo;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    il Presidente;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    il Tesoriere;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    Il Collegio dei Probiviri.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Tutte le cariche, nel rispetto del principio della pari opportunit&agrave;, sono ricoperte da soci e non danno diritto ad alcun tipo di compenso.<br style="margin: 0px; padding: 0px;" />
-  Tutte le cariche hanno durata triennale e sono ammessi due mandati consecutivi.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 8 - Assemblea dei soci</strong><br style="margin: 0px; padding: 0px;" />
-  L&rsquo;Assemblea dei soci &egrave; l&rsquo;organo sovrano dell&rsquo;Associazione; essa &egrave; costituita da tutti i soci .<br style="margin: 0px; padding: 0px;" />
-  I soci sono convocati in Assemblea, dal Presidente, almeno una volta l&rsquo;anno per l&rsquo;approvazione del bilancio, con comunicazione disposta almeno dieci giorni prima della data fissata per l&rsquo;Assemblea mediante pi&ugrave; idonea prassi divulgativa, contenente la data, il luogo e l&rsquo;ordine del giorno.<br style="margin: 0px; padding: 0px;" />
-  Le Assemblee possono essere convocate anche su domanda firmata da almeno il 10% dei soci con un minimo di dieci o dalla maggioranza del Consiglio Direttivo.<br style="margin: 0px; padding: 0px;" />
-  Hanno diritto di intervenire nell&rsquo;Assemblea tutti i soci in regola con il pagamento della quota sociale annuale.<br style="margin: 0px; padding: 0px;" />
-  L&rsquo;Assemblea &egrave; presieduta dal Presidente dell&rsquo;Associazione, in mancanza dal Vicepresidente, in mancanza di entrambi, dal socio pi&ugrave; anziano tra i presenti.<br style="margin: 0px; padding: 0px;" />
-  Spetta al Presidente constatare la regolarit&agrave; della costituzione ed in generale il diritto di intervento in Assemblea.<br style="margin: 0px; padding: 0px;" />
-  Il Presidente dell&rsquo;Assemblea nomina un segretario e, se il caso lo richiede, due scrutatori.<br style="margin: 0px; padding: 0px;" />
-  Dell&rsquo;Assemblea verr&agrave; redatto, su apposito libro, il relativo verbale che verr&agrave; sottoscritto dal Presidente e dal segretario ed eventualmente dagli scrutatori.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">Articolo 9 - Compiti dell&rsquo;Assemblea</strong><br style="margin: 0px; padding: 0px;" />
-  Compiti dell&rsquo;Assemblea sono:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sugli indirizzi e direttive generali dell&rsquo;Associazione;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sul bilancio consuntivo e preventivo;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sulle modifiche dello statuto e del regolamento;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sulle quote associative proposte da consiglio Direttivo e determina il termine ultimo per il loro versamento</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    elegge il Presidente;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    elegge i componenti il Consiglio Direttivo e ne determina il numero;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    elegge i Probiviri;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    nomina i soci onorari;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    ratifica le esclusioni dei soci;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera su tutti gli argomenti sottoposti al suo esame dal Consiglio Direttivo.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 10 - Consiglio Direttivo</strong><br style="margin: 0px; padding: 0px;" />
-  Il Consiglio Direttivo &egrave; eletto dall&#39;Assemblea ed &egrave; composto da un minimo di 5 ad un massimo di 10 soci.<br style="margin: 0px; padding: 0px;" />
-  Si riunisce di norma almeno una volta al mese, su convocazione del Presidente o quando ne faccia richiesta almeno un terzo dei componenti.<br style="margin: 0px; padding: 0px;" />
-  Le riunioni del Consiglio Direttivo sono convocate dal Presidente con comunicazione disposta almeno due giorni prima della data fissata per la riunione mediante pi&ugrave; idonea prassi divulgativa, contenente la data, il luogo e l&rsquo;ordine del giorno<br style="margin: 0px; padding: 0px;" />
-  Compiti del Consiglio Direttivo:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    redige il programma annuale;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    predispone i bilanci;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    elabora le variazioni dello statuto e del regolamento;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    fissa le quote associative annuali;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    affida la regolare tenuta del libro dei soci;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sull&rsquo;ammissione delle persone giuridiche e propone la nomina dei soci onorari;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    nomina, su proposta del Presidente, tra i componenti del Consiglio stesso, il Vicepresidente;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    nomina, tra i componenti del Consiglio stesso, il Tesoriere ed il segretario;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    delibera sulla ammissione e la decadenza dei soci.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Il Consiglio Direttivo &egrave; presieduto dal Presidente, in sua assenza dal Vicepresidente, in assenza di entrambi dal pi&ugrave; anziano di et&agrave; dei presenti.<br style="margin: 0px; padding: 0px;" />
-  Delle riunioni del Consiglio Direttivo verr&agrave; redatto, su apposito libro, il relativo verbale, che verr&agrave; sottoscritto dal Presidente e dal Segretario.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 11 - Presidente</strong><br style="margin: 0px; padding: 0px;" />
-  Il Presidente rappresenta legalmente l&rsquo;Associazione nei confronti di terzi ed in giudizio, cura l&rsquo;esecuzione dei deliberati dell&rsquo;Assemblea e del Consiglio Direttivo, nei casi di urgenza pu&ograve; esercitare i poteri del Consiglio Direttivo, salvo ratifica da parte di questo alla prima riunione.<br style="margin: 0px; padding: 0px;" />
-  Compiti del Presidente:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    convocare e presiedere le riunioni dell&#39;Assemblea dei soci e del Consiglio Direttivo;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    proporre il Vicepresidente;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    gestire i fondi in relazione alle attivit&agrave; programmate.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Il Vicepresidente sostituisce il Presidente tutte le volte che quest&rsquo;ultimo sar&agrave; impossibilitato ad adempiere i propri compiti.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 12 - Tesoriere</strong><br style="margin: 0px; padding: 0px;" />
-  Il Tesoriere viene nominato dal Consiglio Direttivo.<br style="margin: 0px; padding: 0px;" />
-  Compiti del Tesoriere:</p>
-<ul style="margin: 0px; padding: 1em 1em 1em 1.2em; list-style-image: url(http://www.gaspar8.net/img/arrow.gif); color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    &egrave; responsabile della tenuta dei libri contabili dell&#39;Associazione;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    redige i bilanci;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    collabora con il Presiedente nella gestione dei fondi per le attivit&agrave;, controfirmandone gli atti relativi;</li>
-  <li style="margin: 0px; padding: 0px 0px 1em;">
-    &egrave; referente dell&rsquo;attivit&agrave; di ricerca fondi e finanziamenti.</li>
-</ul>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 13 - Collegio dei Probiviri</strong><br style="margin: 0px; padding: 0px;" />
-  Tutte le eventuali controversie sociali tra i soci e tra questi e l&rsquo;Associazione o i suoi organi, saranno sottoposte, con esclusione di ogni altra giurisdizione, alla competenze di tre<span class="Apple-converted-space">&nbsp;</span><em style="margin: 0px; padding: 0px;">Probiviri</em><span class="Apple-converted-space">&nbsp;</span>nominati dall&rsquo;Assemblea.<br style="margin: 0px; padding: 0px;" />
-  Il Collegio dei Probiviri &egrave; composto da tre membri, effettivi dura in carica tre anni ed i suoi componenti sono rieleggibili.<br style="margin: 0px; padding: 0px;" />
-  Essi giudicheranno<span class="Apple-converted-space">&nbsp;</span><em style="margin: 0px; padding: 0px;">ex bono et aequo</em><span class="Apple-converted-space">&nbsp;</span>senza formalit&agrave; di procedura. Il loro lodo sar&agrave; inappellabile.<br style="margin: 0px; padding: 0px;" />
-  Delle proprie riunioni il Collegio dei Probiviri redige un verbale da annotare su apposito libro. Le decisioni del Collegio dei Probiviri sono comunicate agli interessati a cura del Presidente dell&rsquo;Associazione.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 14 - Scioglimento dell&rsquo;Associazione</strong><br style="margin: 0px; padding: 0px;" />
-  Lo scioglimento dell&rsquo;Associazione &egrave; deliberato dall&rsquo;Assemblea dei soci, la quale provveder&agrave; alla nomina di uno o pi&ugrave; liquidatori.<br style="margin: 0px; padding: 0px;" />
-  In caso di scioglimento per qualunque causa, il patrimonio dell&rsquo;Associazione sar&agrave; devoluto ad altre organizzazioni non lucrative di utilit&agrave; sociale o a fini di pubblica utilit&agrave;.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">articolo 15 - Disposizioni finali</strong><br style="margin: 0px; padding: 0px;" />
-  Per tutto ci&ograve; che non &egrave; espressamente previsto dal presente statuto, si applicano le disposizioni previste dall&rsquo;eventuale regolamento interno, dal Codice civile e dalle vigenti norme in materia.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-
+<p>Termini di servizio</p>            
             ]]>
           </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     
-    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
-      <name>Amici G.A.S.</name>
-      <code>amicigas</code>
-      <orderNm>350</orderNm>
-      <htmls>
-        <it.mate.econyx.shared.model.impl.HtmlContentTx>
-          <type>M</type>
-          <content>
-            <![CDATA[
-            
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Semplici F.A.Q. (o, per dirla in italiano, prime domande e risposte) per un approccio alla realt&agrave; dei G.A.S.</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <strong style="margin: 0px; padding: 0px;">Cosa sono i Gruppi di Acquisto Solidale (G.A.S.)?</strong><br style="margin: 0px; padding: 0px;" />
-  Un gruppo d&rsquo;acquisto e&#39; formato da un insieme di persone che decidono di incontrarsi per acquistare all&rsquo;ingrosso prodotti alimentari o di uso comune, da ridistribuire tra loro.<br style="margin: 0px; padding: 0px;" />
-  <strong style="margin: 0px; padding: 0px;">Si ma... perch&eacute; si chiama solidale?</strong><br style="margin: 0px; padding: 0px;" />
-  Un gruppo d&rsquo;acquisto diventa solidale nel momento in cui decide di utilizzare il concetto di solidariet&agrave; come criterio guida nella scelta dei prodotti. Solidariet&agrave; che parte dai membri del gruppo e si estende ai piccoli produttori che forniscono i prodotti, al rispetto dell&rsquo;ambiente, ai popoli del sud del mondo e a colore che - a causa della ingiusta ripartizione delle ricchezze - subiscono le conseguenze inique di questo modello di sviluppo.<br style="margin: 0px; padding: 0px;" />
-  <strong style="margin: 0px; padding: 0px;">Perch&eacute; nasce una G.A.S.?</strong><br style="margin: 0px; padding: 0px;" />
-  Ogni GAS nasce per motivazioni proprie, spesso per&ograve; alla base vi &egrave; una critica profonda verso il modello di consumo e di economia globale ora imperante, insieme alla ricerca di una alternativa praticabile da subito.<br style="margin: 0px; padding: 0px;" />
-  Il gruppo aiuta a non sentirsi soli nella propria critica al consumismo, a scambiarsi esperienze ed appoggio, a verificare le proprie scelte.<br style="margin: 0px; padding: 0px;" />
-  <strong style="margin: 0px; padding: 0px;">Come nasce un G.A.S.?</strong><br style="margin: 0px; padding: 0px;" />
-  Uno comincia a parlare dell&rsquo;idea degli acquisti collettivi nel proprio giro di amici, e se trova altri interessati si forma il gruppo. Insieme ci si occupa di ricercare nella zona piccoli produttori rispettosi dell&rsquo;uomo e dell&rsquo;ambiente, di raccogliere gli ordini tra chi aderisce, di acquistare i prodotti e distribuirli... e si parte!<br style="margin: 0px; padding: 0px;" />
-  <strong style="margin: 0px; padding: 0px;">Criteri solidali per la scelta dei prodotti</strong><br style="margin: 0px; padding: 0px;" />
-  I gruppi cercano prodotti provenienti da piccoli produttori locali per avere la possibilit&agrave; di conoscerli direttamente e per ridurre l&rsquo;inquinamento e lo spreco di energia derivanti dal trasporto. Inoltre si cercano prodotti biologici o ecologici che siano stati realizzati rispettando le condizioni di lavoro.<br style="margin: 0px; padding: 0px;" />
-  <strong style="margin: 0px; padding: 0px;">Una rete</strong><br style="margin: 0px; padding: 0px;" />
-  I gruppi di acquisto sono collegati fra di loro in una rete che serve ad aiutarli e a diffondere questa esperienza attraverso lo scambio di informazioni. Attualmente in Italia sono censiti un centinaio di G.A.S.<a class="esterno" href="http://www.retegas.org/" style="margin: 0px; padding: 0px 1.5em 0px 0px; text-decoration: none; color: rgb(176, 20, 3); background-image: url(http://www.gaspar8.net/img/esterno.gif); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: 100% 0px; background-repeat: no-repeat no-repeat;" title="collegamento esterno al sito della rete nazionale dei GAS">www.retegas.org</a></p>
-<br style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);" />
-<h2 style="margin: 15px 0px; padding: 0px; color: rgb(0, 102, 0); text-align: left; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(1, 128, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Cam<em style="margin: 0px; padding: 0px;">Bio</em>Logica</h2>
-<p>
-  <a name="cambiologica" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-position: initial initial; background-repeat: initial initial;"></a></p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  <img alt="cambiologica" class="imgleft" height="188" src="http://www.gaspar8.net/img/cambiologica.jpg" style="margin: 0px; padding: 0px 10px 0px 0px; float: left;" title="foto del GAS CamBioLogica" width="250" />Il Gruppo di Acquisto Cam<em style="margin: 0px; padding: 0px;">Bio</em>Logica nasce nel dicembre del 2004 per volont&agrave; di un piccolissimo gruppo di famiglie che vogliono sperimentare una via alternativa a quella del delirio consumistico di massa, inconsapevolmente asservito al profitto di pochi e sostenuto mediante comportamenti spesso scorretti a livello sociale e ambientale.<span class="Apple-converted-space">&nbsp;</span><br style="margin: 0px; padding: 0px;" />
-  &Egrave; la via del consumo critico, che nel tempo ci ha portato ad essere dei consumatori consapevoli, sostenitori di realt&agrave; economiche piccole e locali che producono cose buone a 360&deg;.<br style="margin: 0px; padding: 0px;" />
-  Prodotti biologici che garantiscono la genuinit&agrave; e il rispetto della natura; prodotti di piccole aziende locali per rendere possibile un rapporto produttore - consumatore e ridurre l&rsquo;impatto ambientale di trasporti e imballaggi; prodotti di aziende che garantiscono rispettose condizioni di lavoro e operano nell&rsquo;inserimento di persone ai margini del sistema produttivo; prodotti equi e solidali.<br style="margin: 0px; padding: 0px;" />
-  Oggi il gruppo &egrave; costituito da una trentina di famiglie; acquista prodotti freschi settimanalmente e generi non deteriorabili (conserve, succhi, caff&egrave;, biscotti, carta, detersivi, ecc&hellip;) trimestralmente.<br style="margin: 0px; padding: 0px;" />
-  &Egrave; collegato alla rete romana dei G.A.S. con la quale collaboriamo per rendere la nostra presenza sempre pi&ugrave; forte nel territorio e da pochi giorni &egrave; diventato Associazione di promozione sociale perch&eacute; il nostro lavoro possa essere messo a disposizione di sempre pi&ugrave; persone.<span class="Apple-converted-space">&nbsp;</span><br style="margin: 0px; padding: 0px;" />
-  Referenti: Federica e Marco,<span class="Apple-converted-space">&nbsp;</span><a href="mailto:federicarosato@gmail.com" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: initial initial; background-repeat: initial initial;" title="scrivi">federicarosato@gmail.com</a></p>
-<br style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);" />
-<h2 style="margin: 15px 0px; padding: 0px; color: rgb(0, 102, 0); text-align: left; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(1, 128, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Banda Gassotti</h2>
-<p>
-  <a name="gassotti" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-position: initial initial; background-repeat: initial initial;"></a></p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  Banda Gassotti nasce nel 2004 dalla volont&agrave;&nbsp; di un piccolo gruppo di famiglie di uscire dalle maglie dell&#39;economia delle grandi distribuzioni attraverso un percorso di consapevolezza sul consumo critico e la decrescita.<br style="margin: 0px; padding: 0px;" />
-  Attualmente ci sono 25 famiglie che fanno parte del gruppo.<br style="margin: 0px; padding: 0px;" />
-  Il gruppo ha aderito da subito alla Retegas nazionale di cui ne condivide i principi e lo statuto; Banda Gassotti &egrave; inoltre sempre stata presente agli incontri formativi della rete regionale, che ritiene siano molto importanti&nbsp; per accrescere e condividere valori ed esperienze comuni.<br style="margin: 0px; padding: 0px;" />
-  Negli anni siamo riusciti ad avere un paniere quasi completo , e ultimamente stiamo cercando di condividere gli acquisti da produttori fuori regione con altri gruppi della rete laziale. Siamo inoltre presenti nel territorio col progetto di distribuzione del latte biologico alla spina, che &egrave; diventato ormai un appuntamento fisso bisettimanale di cui usufruisce tutto il quartiere.<br style="margin: 0px; padding: 0px;" />
-  Referente:&nbsp; Daniele Taglieri,<span class="Apple-converted-space">&nbsp;</span><a href="mailto:bandagassotti@autistici.org" style="margin: 0px; padding: 0px; text-decoration: none; color: rgb(176, 20, 3); background-color: rgb(255, 255, 255); border-bottom-color: rgb(176, 20, 3); border-bottom-style: dashed; border-bottom-width: 1px; background-position: initial initial; background-repeat: initial initial;" title="scrivi">bandagassotti@autistici.org</a></p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-<p style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
-  &nbsp;</p>
-            
-            ]]>
-          </content>
-        </it.mate.econyx.shared.model.impl.HtmlContentTx>
-      </htmls>
-    </it.mate.econyx.shared.model.impl.WebContentPageTx>
-    
-    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
-      <name>I produttori</name>
-      <code>produttori</code>
-      <orderNm>400</orderNm>
-      <htmls>
-        <it.mate.econyx.shared.model.impl.HtmlContentTx>
-          <type>S</type>
-          <content>
-            <![CDATA[
-<p>
-  <a href="#produttori.arvalia">Arvalia</a></p>
-<p>
-  <a href="#produttori.tomasoni">Tomasoni</a></p>
-<p>
-  <a href="#produttori.silano">Silano</a></p>
-<p>
-  <a href="#produttori.coltellese">Coltellese</a></p>
-<p>
-  <a href="#produttori.dea">Dea Nocciola</a></p>
-<p>
-  <a href="#produttori.valente">Valente</a></p>
-<p>
-  <a href="#produttori.osti">Osti</a></p>
-<p>
-  <a href="#produttori.cascina">Riserva della Cascina</a></p>
-            ]]>
-          </content>
-        </it.mate.econyx.shared.model.impl.HtmlContentTx>
-        <it.mate.econyx.shared.model.impl.HtmlContentTx>
-          <type>M</type>
-          <content>
-            <![CDATA[
-            
-<p>
-  <span style="font-size:14px;"><strong><a name="produttori.arvalia"></a>ARVALIA</strong> (ortofrutta)<br />
-  Piccola Azienda agricola situata nella campagna viterbese e impegnata nella produzione di ortaggi che coltiva con metodi biologici. Presso l&#39;Azienda viene realizzata la vendita dei prodotti propri che possono essere anche consegnati a domicilio sia a Viterbo e dintorni, sia a Roma.<br />
-  La gamma dei prodotti biologici offerti &egrave; ampia e comprende sia quelli coltivati in azienda che da altri produttori, nonch&eacute; quelli distribuiti dal commercio equo e solidale.<br />
-  Da segnalare la nuova apertura del <em>Bio Ristoro</em> dove poter assaggiare piatti con prodotti biologici laziali. Dall&#39;agriturismo sono facilmente raggiungibili l&#39;oasi del benessere delle Terme dei Papi, il centro storico di Viterbo, la necropoli etrusca di Castel d&#39;Asso e le pozze d&#39;acqua sulfurea del Bullicame.<br />
-  Referente Patrizia Merlino<br />
-  tel: 0761 344051<br />
-  e-mail: <a href="mailto:puntovendita@arvalia.it" title="scrivi email">puntovendita@arvalia.it</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.tomasoni"></a> <img alt="logo" class="imgleft" height="150" src="http://www.gaspar8.net/img/logotomasoni.jpg" title="logo dell'azienda Tomasoni" width="200" /><strong>TOMASONI F.lli snc</strong> (formaggi e latticini)<br />
-  Siamo uno dei pi&ugrave; piccoli caseifici associati al Consorzio per la tutela del formaggio Grana Padano.<br />
-  La nostra &egrave; un&rsquo;azienda artigianale a conduzione familiare che continua nella tradizione&nbsp; producendo formaggi fin dal lontano 1815.<br />
-  Il passaggio dal convenzionale al biologico &egrave; avvenuto nel 2001. Quella che sembrava una scommessa fin troppo azzardata, ci ha invece portato a convertirci totalmente al biologico e a promuoverne i principi che abbracciano tutto il benessere dell&rsquo;uomo e dell&rsquo;ambiente che lo circonda.<br />
-  Un progetto che da &ldquo;colturale&rdquo; diventa &ldquo;culturale&rdquo; fino a dimostrare che un nuovo &ldquo;stile di vita&rdquo; &egrave; possibile. Uno stile rispettoso dell&rsquo;ambiente, della conservazione delle biodiversit&agrave;, delle diversit&agrave; locali, delle risorse naturali, oltre che interessato alla qualit&agrave; della vita.<br />
-  Il caseificio Tomasoni, trasforma solo latte da agricoltura biologica proveniente da stalle della pianura lombarda.<br />
-  Attualmente vengono prodotti: grana padano, ricotta, robiola nostrana, fontal, mozzarella, caciotta, crescenza, latte fresco in bottiglia.<br />
-  Il latte lavorato come i prodotti ottenuti sono certificati da ICEA.<br />
-  Negli anni, la ditta Tomasoni ha sviluppato sempre di pi&ugrave; i rapporti con i Gruppi di Acquisto Solidale che sono diventati, in Italia, i principali &ldquo;clienti-amici&rdquo; dell&rsquo;azienda.<br />
-  Caseificio Tomasoni F.lli snc<br />
-  Via Roma, 30 - 25023 Gottolengo (BS)<br />
-  tel: 030 951007 fax: 030 9518147<br />
-  e-mail: <a href="mailto:info@biocaseificiotomasoni.it" title="scrivi email">info@biocaseificiotomasoni.it</a><br />
-  web: <a class="esterno" href="http://www.biocaseificiotomasoni.it/" title="vai al sito">www.biocaseificiotomasoni.it</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.silano"></a><strong>SILANO</strong> (formaggi e latticini)<br />
-  L&#39;Azienda agricola &quot;Silano&quot; nasce oltre 20 anni fa, raccogliendo l&#39;esperienza e la tradizione tramandate da generazioni, con passione e seriet&agrave;. La sede dell&#39;azienda &egrave; situata nel cuore dell&rsquo;Irpinia, a Villanova del Battista (AV). Ci occupiamo principalmente della produzione del latte e della trasformazione in formaggi e latticini. La genuinit&agrave; e la bont&agrave; dei nostri prodotti motiva e spinge la voglia di diffonderli e valorizzarli con tutte le nostre forze e le nostre energie.<br />
-  Referente Gianluca Silano<br />
-  tel/fax: 0825 826334<br />
-  e-mail: <a href="mailto:aziendasilano@tiscali.it" title="scrivi email">aziendasilano@tiscali.it</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.coltellese"></a> <img alt="foto" class="imgleft" height="150" src="http://www.gaspar8.net/img/coltellese.jpg" title="foto dell'azienda Coltellese" width="200" /><strong>ALTA MONTAGNA BIO </strong> (carne e salumi)<br />
-  L&rsquo;Azienda Agricola Biologica Alta Montagna Bio (gi&agrave; Coltellese) &egrave; a conduzione interamente&nbsp;famigliare, con annessa macelleria aziendale. La nostra azienda sorge a 1000 mt s.l.m. ai piedi delle catene montuose&nbsp;tra il&nbsp;Parco&nbsp;dei Monti della Laga e quello dei Sibillini.<br />
-  La nostra mandria si nutre esclusivamente del pascolo montano nei periodi tra maggio e dicembre e di prodotti quali fieno, paglia e granelle, coltivati direttamente&nbsp;in azienda, nei restanti mesi.<br />
-  Nella rimessa troviamo anche i suini, allevati pi&ugrave; o meno allo stesso modo.&nbsp;Il nostro sistema di&nbsp;produzione, che rispecchia i vecchi metodi contadini, &egrave; approvato e sostenuto&nbsp;dall&#39;associazione di controllo del biologico ICEA.<br />
-  Azienda Agricola Alta Montagna Bio<br />
-  Fr. Mole, 02011 Accumoli (RI)<br />
-  Referente&nbsp; Giudo Pica<br />
-  tel: 0746 808565 cell: 347 8294588<br />
-  e-mail: <a href="mailto:picaguido@hotmail.it" title="scrivi email">picaguido@hotmail.it</a><br />
-  web: <a class="esterno" href="http://www.altamontagnabio.it/">http://www.altamontagnabio.it</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.dea"></a><strong>DEA NOCCIOLA s.r.l.</strong> (creme spalmabili)<br />
-  Dea Nocciola nasce tra le colline etrusche della Sabina, antica zona a vocazione rurale dell&#39;Alto Lazio. Qui, in una stazione di posta romana (risalente al 300 d.C.) ai piedi del castello di Borghetto, in un ambiente incontaminato e testimone di secoli di storia, l&rsquo;Azienda seleziona con passione l&#39;eccellenza dei prodotti del territorio: nocciole della variet&agrave; Tonda Gentile Romana, marroncini della Tuscia, olio extra vergine di oliva della Sabina; materie con cui produce creme di gianduia e composte di castagne.</span></p>
-<br />
-<p>
-  <span style="font-size:14px;">DEA NOCCIOLA non fa uso di addensanti, emulsionati, coloranti, aromi ed essenze, non utilizza materie grasse raffinate ma soltanto materie provenienti da agricoltura biologica certificata; tutto quello che non &egrave; prodotto dal territorio proviene dal mercato Equo e Solidale.</span></p>
-<p>
-  <span style="font-size:14px;">Referente Manuela De Angelis<br />
-  Via Taschini, 11 - Localit&agrave; Borghetto di Civita Castellana (VT)<br />
-  tel. 0761 090926 fax: 0761/090929 cell. 323 2268273<br />
-  e-mail: <a href="mailto:manuela@deanocciola.com">manuela@deanocciola.com</a><br />
-  web: <a class="esterno" href="http://www.deanocciola.com/">www.deanocciola.com</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.valente"></a><strong>VALENTE</strong> (olio di oliva extravergine)<br />
-  L&#39;azienda di Antonio Valente, agricoltore diretto, &egrave; localizzata nel comune di Torremaggiore (FG), nel sub Appennino Daunio ai margini nord occidentali del Tavoliere delle Puglie, zona dove da secoli si produce olio di altissima qualit&agrave; con caratteristiche di profumo e fragranza che nulla ha da invidiare dai pregiati oli toscani. Nel territorio insistono cooperative che esportano questo olio in tutto il mondo. L&rsquo;Azienda intende crearsi una clientela diretta di consumatori che apprezzano il buon mangiare con prodotti genuini e di qualit&agrave;.<br />
-  La sua produzione si aggira intorno a solo 8.000 lt di olio l&#39;anno.</span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.osti"></a><strong>OSTI</strong> (mele)<br />
-  L&#39;Azienda &egrave; inserita nel contesto delle Dolomiti di Brenta ad un altitudine di circa 600 m. E&#39; un&#39;azienda frutticola biologica sita in vicinanza di un torrente e di un bosco.<br />
-  Referente Marco Osti<br />
-  Via Fontanele, 22 - Spormaggiore (TN)<br />
-  tel: 0461/653337 cell: 328/3626483<br />
-  e-mail: <a href="mailto:sorgebio@hotmail.it" title="scrivi email">sorgebio@hotmail.it</a></span></p>
-<p>
-  &nbsp;</p>
-<p>
-  <span style="font-size:14px;"><a name="produttori.cascina"></a><strong>RISERVA DELLA CASCINA</strong> (vino, olio, miele)<br />
-  Partendo da Roma e percorrendo l&#39;Appia Antica, a soli 16 Km dal Campidoglio troviamo l&#39;azienda &quot;Riserva della Cascina&quot; dove la famiglia Brannetti, da sempre dedita all&#39;agricoltura, ha deciso di indirizzarsi esclusivamente alla vitivinicoltura dal 1946, con l&#39;obiettivo costante di migliorare la qualit&agrave; del prodotto, reimpiantando i migliori tralci dei vitigni regionali ed avvalendosi delle migliori tecniche di vinificazione. Biologici &quot;dentro&quot;, rispettosi della terra e della salute dell&#39;uomo, i Brannetti non hanno mai utilizzato diserbanti o prodotti chimici tossici nella coltivazione delle loro viti.<br />
-  Non &egrave; quindi una sorpresa sapere che gi&agrave; dal 1994, veri pionieri in ambito vitivinicolo, Giuseppe e Daniela hanno ottenuto, con il controllo dell&#39;ente &quot;Suolo e Salute&quot;, la certificazione biologica. La loro azienda agricola &quot;Riserva della Cascina&quot;, dal magnifico colpo d&#39;occhio anche per quel che riguarda l&#39;aspetto paesaggistico, prende il nome dalle antiche mappe catastali del terreno che si affaccia sull&#39;Appia Antica e si estende all&#39;interno del parco omonimo per circa 18 ettari, di cui 15 di vigneto coltivato in allevamento a filari.<br />
-  Referente Daniela Vecchi<br />
-  Via F.lli Wright, 12 - 00043 Ciampino (RM)<br />
-  tel: 06 7917221 &ndash; fax: 06 7917221<br />
-  e-mail: <a href="mailto:riservadellacascina@inwind.it" title="scrivi email">riservadellacascina@inwind.it</a></span></p>
-<p>
-  &nbsp;</p>
-            
-            ]]>
-         </content>
-        </it.mate.econyx.shared.model.impl.HtmlContentTx>
-      </htmls>
-    </it.mate.econyx.shared.model.impl.WebContentPageTx>
-
     <it.mate.econyx.shared.model.impl.PortalFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
       <name>Acquisti online</name>
       <code>acquisti</code>
       <orderNm>600</orderNm>
       <templateName>home3Columns</templateName>
       <childreen>
-        <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-          <name>ORTOFRUTTA</name>
-          <code>ortofrutta</code>
+      
+      
+        <it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+          <name>PRODUTTORE UNO</name>
+          <code>produttoreUno</code>
           <templateName>home3Columns</templateName>
           <orderNm>510</orderNm>
-          <childreen>
-          
-            <it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
-              <name>ORTO DEI TERZI</name>
-              <code>ortodeiterzi</code>
-              <templateName>home3Columns</templateName>
-              <orderNm>511</orderNm>
-              <entity class="it.mate.econyx.shared.model.impl.ProduttoreTx">
-                <codice>PRD001</codice>
-                <nome>ORTO DEI TERZI</nome>
-              </entity>
-            </it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
-          
-            <!-- 
-            <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-              <name>ORTO DEI TERZI</name>
-              <code>ortodeiterzi</code>
-              <templateName>home3Columns</templateName>
-              
-              <htmls>
-                <it.mate.econyx.shared.model.impl.HtmlContentTx>
-                  <type>M</type>
-                  <content>&lt;p&gt;
-                      Attenzione: l&#39;ordine verr&#224; chiuso &lt;strong&gt;DOMENICA 2 Dicembre&lt;/strong&gt; alle ore 21:00.
-                    &lt;/p&gt;
-                  </content>
-                </it.mate.econyx.shared.model.impl.HtmlContentTx>
-              </htmls>              
-
-              <orderNm>511</orderNm>
-              <childreen>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>CASSETTONE MINI (5 KG)</name>
-                  <code>cassetmini</code>
-                  <orderNm>100</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCOR001</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>CASSETTONE PICCOLO (7 KG)</name>
-                  <code>cassetpiccolo</code>
-                  <orderNm>200</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCOR002</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>CASSETTONE MEDIO (8,5 KG)</name>
-                  <code>cassetmedio</code>
-                  <orderNm>300</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCOR003</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>CASSETTONE GRANDE (10 KG)</name>
-                  <code>cassetgrande</code>
-                  <orderNm>400</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCOR004</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-              </childreen>
-            </it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-            
-            -->
-            
-          </childreen>
-        </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-        <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-          <name>FORMAGGI</name>
-          <code>formaggi</code>
-          <orderNm>530</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+            <codice>PRD001</codice>
+          </entity>
+        </it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+      
+        <it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+          <name>PRODUTTORE DUE</name>
+          <code>produttoreDue</code>
           <templateName>home3Columns</templateName>
-          <childreen>
-            <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-              <name>MARTI</name>
-              <code>marti</code>
-              <orderNm>531</orderNm>
-              <templateName>home3Columns</templateName>
-              <childreen>
-              
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>MOZZARELLE</name>
-                  <code>mozzarelle</code>
-                  <orderNm>100</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR001</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>TRECCE</name>
-                  <code>trecce</code>
-                  <orderNm>200</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR002</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>PRIMO SALE</name>
-                  <code>primosale</code>
-                  <orderNm>300</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR003</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>SCAMORZE</name>
-                  <code>scamorze</code>
-                  <orderNm>400</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR004</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>PROVOLA</name>
-                  <code>provola</code>
-                  <orderNm>500</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR005</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>RICOTTA</name>
-                  <code>ricotta</code>
-                  <orderNm>600</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR006</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>STRACCHINO</name>
-                  <code>stracchino</code>
-                  <orderNm>700</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR007</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>YOGURT</name>
-                  <code>yogurt</code>
-                  <orderNm>800</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCMAR008</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-                
-              </childreen>
-            </it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-          </childreen>
-        </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-        
-        <it.mate.econyx.shared.model.impl.PortalFolderPageTx>
-          <name>PESCE</name>
-          <code>pesce</code>
-          <orderNm>540</orderNm>
+          <orderNm>510</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+            <codice>PRD002</codice>
+          </entity>
+        </it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+      
+        <it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+          <name>PRODUTTORE TRE</name>
+          <code>produttoreTre</code>
           <templateName>home3Columns</templateName>
-          <childreen>
-            <it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-              <name>FISHBOX</name>
-              <code>fishbox</code>
-              <orderNm>501</orderNm>
-              <templateName>home3Columns</templateName>
-              <childreen>
-              
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX</name>
-                  <code>fishbox1</code>
-                  <orderNm>10</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS01</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>SPECIAL BOX</name>
-                  <code>specialbox</code>
-                  <orderNm>20</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS02</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX 3</name>
-                  <code>fishbox3</code>
-                  <orderNm>30</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS03</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX DELUXE</name>
-                  <code>fishboxdeluxe</code>
-                  <orderNm>40</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS04</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX DA FORNO</name>
-                  <code>fishboxforno</code>
-                  <orderNm>50</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS05</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX POLPETTI</name>
-                  <code>fishboxpolpetti</code>
-                  <orderNm>60</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS06</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX TOTANI</name>
-                  <code>fishboxtotani</code>
-                  <orderNm>70</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS07</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX SEPPIE</name>
-                  <code>fishboxseppie</code>
-                  <orderNm>80</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS08</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>FISHBOX PESCE RITROVATO</name>
-                  <code>fishboxritrovato</code>
-                  <orderNm>90</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS09</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>BOX ALICI</name>
-                  <code>fishboxalici</code>
-                  <orderNm>100</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS10</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>COZZE</name>
-                  <code>cozze</code>
-                  <orderNm>110</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS11</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-                <it.mate.econyx.shared.model.impl.ProductPageTx>
-                  <name>VONGOLE</name>
-                  <code>vongole</code>
-                  <orderNm>120</orderNm>
-                  <templateName>home3Columns</templateName>
-                  <htmls/>
-                  <entity class="it.mate.econyx.shared.model.impl.ArticoloTx">
-                    <codice>PCFIS12</codice>
-                  </entity>
-                </it.mate.econyx.shared.model.impl.ProductPageTx>
-    
-              </childreen>
-            </it.mate.econyx.shared.model.impl.ProductFolderPageTx>
-          </childreen>
-        </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
+          <orderNm>510</orderNm>
+          <entity class="it.mate.econyx.shared.model.impl.ProduttoreTx">
+            <codice>PRD003</codice>
+          </entity>
+        </it.mate.econyx.shared.model.impl.ProducerFolderPageTx>
+      
       </childreen>
     </it.mate.econyx.shared.model.impl.PortalFolderPageTx>
     
@@ -1805,57 +1060,13 @@
       <emailToCustomerSendType>N</emailToCustomerSendType>
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <disablingOrderStateCodes>INS</disablingOrderStateCodes>
-      
       <nextStateCode>CON</nextStateCode>
       <nextStateDescription>CONSEGNA IN CORSO</nextStateDescription>
       <printButtonEnabled>false</printButtonEnabled>
       <askDeliveryInformations>false</askDeliveryInformations>
       <quantityUpdatable>false</quantityUpdatable>
-      
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
 
-    <!--     
-    
-    <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-      <code>CON</code>
-      <orderNm>30</orderNm>
-      <description>acquisito</description>
-      <requiredOrderStateCodes>INS</requiredOrderStateCodes>
-      <emailToCustomerSendType>N</emailToCustomerSendType>
-      <emailToAdminsSendType>N</emailToAdminsSendType>
-      <emailContent>Buongiorno ${order.customer.portalUser.screenName},
-      e' stato acquisito il tuo ordine n. ${order.code} di ${order.producer.nome}.
-      </emailContent>
-      <attachOrderReport>true</attachOrderReport>
-      <disablingOrderStateCodes>CON</disablingOrderStateCodes>
-      <nextStateCode>ISH</nextStateCode>
-      <nextStateDescription>CONSEGNA IN CORSO</nextStateDescription>
-      <printButtonEnabled>true</printButtonEnabled>
-      <askDeliveryInformations>true</askDeliveryInformations>
-      <quantityUpdatable>true</quantityUpdatable>
-    </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-    
-    <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-      <code>ISH</code>
-      <orderNm>40</orderNm>
-      <description>in consegna</description>
-      <requiredOrderStateCodes>CON</requiredOrderStateCodes>
-      <emailToCustomerSendType>N</emailToCustomerSendType>
-      <emailToAdminsSendType>N</emailToAdminsSendType>
-      <emailContent>Buongiorno ${order.customer.portalUser.screenName},
-      e' stato messo in consegna il tuo ordine n. ${order.code} di ${order.producer.nome}.
-      </emailContent>
-      <attachOrderReport>true</attachOrderReport>
-      <disablingOrderStateCodes>ISH</disablingOrderStateCodes>
-      <nextStateCode>SHI</nextStateCode>
-      <nextStateDescription>CONSEGNA EFFETTUATA</nextStateDescription>
-      <printButtonEnabled>true</printButtonEnabled>
-      <askDeliveryInformations>true</askDeliveryInformations>
-      <quantityUpdatable>true</quantityUpdatable>
-    </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
-    
-     -->
-    
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
       <code>CON</code>
       <orderNm>40</orderNm>
@@ -1868,13 +1079,11 @@
       </emailContent>
       <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>CON</disablingOrderStateCodes>
-      
       <nextStateCode>SHI</nextStateCode>
       <nextStateDescription>CONSEGNA EFFETTUATA</nextStateDescription>
       <printButtonEnabled>true</printButtonEnabled>
       <askDeliveryInformations>true</askDeliveryInformations>
       <quantityUpdatable>true</quantityUpdatable>
-      
     </it.mate.econyx.shared.model.impl.OrderStateConfigTx>
     
     <it.mate.econyx.shared.model.impl.OrderStateConfigTx>
@@ -1886,13 +1095,6 @@
       <emailToAdminsSendType>N</emailToAdminsSendType>
       <emailContent>Buongiorno ${order.customer.portalUser.screenName},
       e' stato confermato il tuo ordine n. ${order.code} di ${order.producer.nome}.
-      
-      Informazioni per il ritiro:
-      
-      ${order.deliveryInformations}
-      
-      Grazie
-      Gaspar8.net
       </emailContent>
       <attachOrderReport>true</attachOrderReport>
       <disablingOrderStateCodes>SHI</disablingOrderStateCodes>

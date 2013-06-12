@@ -3,7 +3,7 @@
 
   <application>nxpearl</application>
   
-  <version>0001</version>
+  <version>v01</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
