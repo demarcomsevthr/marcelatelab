@@ -7,16 +7,17 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 
 @Api (
   name="qu",
-  version="v1" /* ,
+  version="v1" ,
   description="Qu Api Test",
   scopes={"ss0", "ss1"},
-  defaultVersion=AnnotationBoolean.TRUE */
+  defaultVersion=AnnotationBoolean.TRUE 
 )
 public class QuEndpoint {
   
@@ -25,7 +26,15 @@ public class QuEndpoint {
   @ApiMethod (name="getMessage", httpMethod=HttpMethod.GET, path="message")
   public QuMessage getQuMessage() {
     List<PortalUser> users = AdaptersUtil.getPortalUserAdapter().findAll();
-    String msg = String.format("trovati %s utenti", users.size());
+    String msg = String.format("method getQuMessage - trovati %s utenti", users.size());
+    logger.debug(msg);
+    return new QuMessage(msg);
+  }
+
+  @ApiMethod (name="otherMessage", httpMethod=HttpMethod.GET, path="otherMessage")
+  public QuMessage getOtherMessage() {
+    List<PortalUser> users = AdaptersUtil.getPortalUserAdapter().findAll();
+    String msg = String.format("method getOtherMessage - trovati %s utenti", users.size());
     logger.debug(msg);
     return new QuMessage(msg);
   }

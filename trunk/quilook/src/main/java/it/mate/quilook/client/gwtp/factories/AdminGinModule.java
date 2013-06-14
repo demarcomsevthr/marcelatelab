@@ -29,7 +29,7 @@ public class AdminGinModule extends AbstractGinModule {
     bind(PortalUserView.class).to(PortalUserView.NotImpl.class);
     bind(PortalUserListView.class).to(PortalUserListViewImpl.class);
     bind(PortalUserEditView.class).to(PortalUserEditViewImpl.class);
-    
+
   }
   
 }

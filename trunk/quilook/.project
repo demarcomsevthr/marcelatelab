@@ -26,17 +26,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.google.appengine.eclipse.core.enhancerbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>com.google.appengine.eclipse.core.gaeProjectChangeNotifier</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.google.appengine.eclipse.core.projectValidator</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -45,6 +35,12 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
-		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>appengine-web-link</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/main/webapp/WEB-INF/appengine-web.xml</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

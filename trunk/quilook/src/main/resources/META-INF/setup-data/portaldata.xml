@@ -1,0 +1,58 @@
+<it.mate.econyx.server.model.PortalDataExportModel>
+
+  <createProducts>false</createProducts>
+  
+  <checkDocumentResources>true</checkDocumentResources>
+
+  <users>
+  
+    <it.mate.econyx.shared.model.impl.PortalUserTx>
+      <screenName>Test Example</screenName>
+      <emailAddress>test@example.com</emailAddress>
+      <password>vertigine</password>
+      <passwordEncrypted>false</passwordEncrypted>
+      <active>true</active>
+      <adminUser>true</adminUser>
+    </it.mate.econyx.shared.model.impl.PortalUserTx>
+    
+    <portalUser class="it.mate.econyx.shared.model.impl.PortalUserTx">
+      <screenName>De Marco Marcello</screenName>
+      <emailAddress>demarco.m73@gmail.com</emailAddress>
+      <password>vertigine</password>
+      <passwordEncrypted>false</passwordEncrypted>
+      <active>true</active>
+      <adminUser>true</adminUser>
+    </portalUser>
+    
+  </users>
+  
+  <pages>
+  
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="false" homePage="true">
+      <name>Home</name>
+      <code>home</code>
+      <orderNm>100</orderNm>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+          <![CDATA[
+<p>Pagina home here</p>          
+           ]]>
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    
+  </pages>
+  
+  <documentFolders>
+  </documentFolders>
+  
+  <articleFolders>
+  </articleFolders>
+  
+  <orderStates>
+  </orderStates> 
+  
+</it.mate.econyx.server.model.PortalDataExportModel>
