@@ -10,6 +10,7 @@ import it.mate.econyx.client.activities.PortalPageActivity;
 import it.mate.econyx.client.activities.PortalUserActivity;
 import it.mate.econyx.client.activities.ProductActivity;
 import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.client.factories.AppClientFactoryCore;
 import it.mate.econyx.client.places.ArticlePlace;
 import it.mate.econyx.client.places.CalendarPlace;
 import it.mate.econyx.client.places.DocumentPlace;
