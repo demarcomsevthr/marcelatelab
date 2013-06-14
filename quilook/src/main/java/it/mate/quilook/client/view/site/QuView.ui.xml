@@ -7,9 +7,13 @@
     
     <g:VerticalPanel>
     
+      <g:Button ui:field="initStaticDataBtn" text="Init Static Data"></g:Button>
+  
       <g:Button ui:field="rpcTestBtn" text="RPC Test"></g:Button>
   
       <g:Button ui:field="restTestBtn" text="Rst Test"></g:Button>
+      
+      <g:Anchor href="/_ah/api/qu/v1/message" text="Qu Message Test" target="_blank"></g:Anchor>
     
     </g:VerticalPanel>
   

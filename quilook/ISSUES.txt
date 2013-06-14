@@ -11,6 +11,10 @@
 
 		http://www.cartoonize.net/ > CARTOONIZER + SNAGIT
 		
+		
+		CLOUD CONSOLE:
+		
+		https://cloud.google.com/console#c=p&pid=255786940946
 
 		
 
@@ -20,8 +24,13 @@
     ______________________________________________________________________________________
 
 
-	SNAPSHOT 11/06/2013
+	SNAPSHOT 14/06/2013
 	
+		> ENDPOINTS TEST [14/06/2013]
+			- compilazione con batch OK [bin/build-endpoints.bat] [serve gae 1.8.1 come runtime]
+			- test su localhost OK [http://localhost:8080/_ah/api/qu/v1/message]
+		
+		
 		> GWTP TEST [03/06/2013]
 			- è possibile fare l'equivalente della mvp portlet ?
 			- https://code.google.com/p/gwt-platform/

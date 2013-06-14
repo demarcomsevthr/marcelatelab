@@ -13,7 +13,7 @@
     <gwt.version>2.5.1</gwt.version>
     <gwtp.version>0.8.4</gwtp.version>
     <gin.version>1.5.0</gin.version>
-    <gae.version>1.7.7.1</gae.version>
+    <gae.version>1.8.0</gae.version>
     <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
   </properties>
   
@@ -142,7 +142,7 @@
         <configuration>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
           <webappDirectory>${webappDirectory}</webappDirectory>
-          <module>it.mate.econyx.main</module>
+          <module>it.mate.quilook.main</module>
         </configuration>
       </plugin>
 

@@ -1,6 +1,7 @@
 package it.mate.quilook.client.view.site;
 
 import it.mate.econyx.client.factories.AppClientFactory;
+import it.mate.econyx.shared.services.GeneralServiceAsync;
 import it.mate.gwtcommons.client.ui.IFrame;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.quilook.client.factories.SiteGinjector;
@@ -24,6 +25,8 @@ public class QuView extends Composite {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   QuServiceAsync quService = AppClientFactory.IMPL.castGinjector(SiteGinjector.class).getQuService();
+  
+  GeneralServiceAsync generalService = AppClientFactory.IMPL.castGinjector(SiteGinjector.class).getGeneralService();
   
   public QuView() {
     initUI();
@@ -53,6 +56,18 @@ public class QuView extends Composite {
       Panel panel = (Panel)getWidget();
       panel.add(new IFrame(UriUtils.fromTrustedString("/re/quTest")));
     }
+  }
+  
+  @UiHandler ("initStaticDataBtn")
+  public void initStaticDataBtn(ClickEvent event) {
+    generalService.importPortalData(new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+        Window.alert("Errore: "+caught.getMessage());
+      }
+      public void onSuccess(Void result) {
+        Window.alert("Import dei dati accodato");
+      }
+    });
   }
   
 }

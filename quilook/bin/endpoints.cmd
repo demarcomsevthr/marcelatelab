@@ -21,8 +21,8 @@ if NOT EXIST "%JAR_FILE2%" (
 
 set CLASSPATH="%JAR_FILE1%";"%JAR_FILE2%";"%SDK_LIB%\shared\servlet-api.jar";"%SDK_LIB%\appengine-tools-api.jar";"%SDK_LIB%\opt\user\datanucleus\v1\jdo2-api-2.3-eb.jar";"%SDK_LIB%\user\*"
 
-@echo on
+set JAVACMD=%JAVA_HOME%\bin\java
 
-%JAVA_HOME%\bin\java -cp %CLASSPATH% com.google.api.server.spi.tools.EndpointsTool %*
+%JAVACMD% -cp %CLASSPATH% com.google.api.server.spi.tools.EndpointsTool %*
 
 endlocal

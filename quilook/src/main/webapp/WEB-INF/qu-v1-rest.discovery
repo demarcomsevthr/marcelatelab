@@ -1,11 +1,11 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"381e4s_8vUCNPclzPT4yxtto0eA/I8Hm9bdZvSOXcBec4rtrw5qD6W4\"",
+ "etag": "\"381e4s_8vUCNPclzPT4yxtto0eA/DyQo-3Uj62w4x5OhQSXOwpblL9I\"",
  "discoveryVersion": "v1",
  "id": "qu:v1",
  "name": "qu",
  "version": "v1",
- "description": "This is an API",
+ "description": "Qu Api Test",
  "ownerDomain": "google.com",
  "ownerName": "Google",
  "icons": {
@@ -13,9 +13,9 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://quilook.appspot.com/_ah/api/qu/v1/",
+ "baseUrl": "https://quilooknet.appspot.com/_ah/api/qu/v1/",
  "basePath": "/_ah/api/qu/v1/",
- "rootUrl": "https://quilook.appspot.com/_ah/api/",
+ "rootUrl": "https://quilooknet.appspot.com/_ah/api/",
  "servicePath": "qu/v1/",
  "batchPath": "batch",
  "parameters": {
@@ -78,6 +78,14 @@
   "getMessage": {
    "id": "qu.getMessage",
    "path": "message",
+   "httpMethod": "GET",
+   "response": {
+    "$ref": "QuMessage"
+   }
+  },
+  "otherMessage": {
+   "id": "qu.otherMessage",
+   "path": "otherMessage",
    "httpMethod": "GET",
    "response": {
     "$ref": "QuMessage"

@@ -1,12 +1,13 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://quilook.appspot.com/_ah/api",
+  "root" : "https://quilooknet.appspot.com/_ah/api",
   "name" : "qu",
   "version" : "v1",
-  "defaultVersion" : false,
+  "description" : "Qu Api Test",
+  "defaultVersion" : true,
   "adapter" : {
-    "bns" : "https://quilook.appspot.com/_ah/spi",
+    "bns" : "https://quilooknet.appspot.com/_ah/spi",
     "deadline" : 10.0,
     "type" : "lily"
   },
@@ -24,10 +25,24 @@
     "maxAge" : 0
   },
   "methods" : {
+    "qu.otherMessage" : {
+      "path" : "otherMessage",
+      "httpMethod" : "GET",
+      "scopes" : [ "ss0", "ss1" ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "it.mate.quilook.server.endpoints.QuEndpoint.getOtherMessage",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "qu.getMessage" : {
       "path" : "message",
       "httpMethod" : "GET",
-      "scopes" : [ ],
+      "scopes" : [ "ss0", "ss1" ],
       "audiences" : [ ],
       "clientIds" : [ ],
       "rosyMethod" : "it.mate.quilook.server.endpoints.QuEndpoint.getQuMessage",
@@ -52,6 +67,11 @@
       }
     },
     "methods" : {
+      "it.mate.quilook.server.endpoints.QuEndpoint.getOtherMessage" : {
+        "response" : {
+          "$ref" : "QuMessage"
+        }
+      },
       "it.mate.quilook.server.endpoints.QuEndpoint.getQuMessage" : {
         "response" : {
           "$ref" : "QuMessage"
