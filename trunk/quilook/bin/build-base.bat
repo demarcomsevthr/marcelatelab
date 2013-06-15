@@ -6,6 +6,8 @@ echo.
 
 title BUILDING APP %APPNAME% [%*]
 
+%~d0
+
 call %~dp0\setenv.bat
 
 SET BASEAPPDIR=%~dp0\..
@@ -36,6 +38,9 @@ set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 
 :NO_DEPENDENCIES
 
+
+@echo on
+%~d0
 cd %BASEAPPDIR%
 call %MVN2CMD% %*
 

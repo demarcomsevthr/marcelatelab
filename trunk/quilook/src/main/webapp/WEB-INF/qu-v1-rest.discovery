@@ -1,11 +1,11 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"381e4s_8vUCNPclzPT4yxtto0eA/DyQo-3Uj62w4x5OhQSXOwpblL9I\"",
+ "etag": "\"381e4s_8vUCNPclzPT4yxtto0eA/C7xOJ7EbPcJrxobs71Ijv7YEoX8\"",
  "discoveryVersion": "v1",
  "id": "qu:v1",
  "name": "qu",
  "version": "v1",
- "description": "Qu Api Test",
+ "description": "This is an API",
  "ownerDomain": "google.com",
  "ownerName": "Google",
  "icons": {
@@ -78,14 +78,6 @@
   "getMessage": {
    "id": "qu.getMessage",
    "path": "message",
-   "httpMethod": "GET",
-   "response": {
-    "$ref": "QuMessage"
-   }
-  },
-  "otherMessage": {
-   "id": "qu.otherMessage",
-   "path": "otherMessage",
    "httpMethod": "GET",
    "response": {
     "$ref": "QuMessage"
