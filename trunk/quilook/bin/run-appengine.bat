@@ -4,14 +4,15 @@ set APPNAME=quilook
 
 call %~dp0\setenv.bat
 
-::GOTO RUN_GAE
+GOTO RUN_GAE
 
 set SKIP_DEPENDENCIES_CLEAN=true
 set SKIP_PAUSE=true
 call %~dp0\build-base.bat compile datanucleus:enhance antrun:run war:exploded
-call %~dp0\build-endpoints.bat
 
 :RUN_GAE
+
+call %~dp0\build-endpoints.bat
 
 set JDWP_OPTS=-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n
 

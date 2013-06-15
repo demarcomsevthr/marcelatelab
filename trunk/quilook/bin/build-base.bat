@@ -41,6 +41,10 @@ set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 
 @echo on
 %~d0
+
+cd %BASEAPPDIR%
+::call %MVN2CMD% install
+
 cd %BASEAPPDIR%
 call %MVN2CMD% %*
 

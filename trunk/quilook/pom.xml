@@ -68,6 +68,8 @@
 
   <build>
 
+    <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+    
     <plugins>
 
       <plugin>

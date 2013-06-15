@@ -26,9 +26,19 @@
 
 	SNAPSHOT 14/06/2013
 	
-		> ENDPOINTS TEST [14/06/2013]
-			- compilazione con batch OK [bin/build-endpoints.bat] [serve gae 1.8.1 come runtime]
+		>> @Home NON FUNZIONA MAVEN BATCH!!! [15/06/2013]
+			- dopo passaggio a juno (ma gli altri prj funzionano!)
+			- funziona solo la build maven da eclipse!
+			>> tolta la build da tutti i batch (run-appengine e deploy-appspot)
+		
+	
+		> ENDPOINTS TEST [15/06/2013]
+			- compilazione con batch OK [bin/build-endpoints.bat] [serve gae 1.8.x come runtime]
 			- test su localhost OK [http://localhost:8080/_ah/api/qu/v1/message]
+			- test su appspot OK [https://quilooknet.appspot.com/_ah/api/qu/v1/message]
+				>> ATTENZIONE: FUNZIONA SOLO IN HTTPS
+				>> IMPORTANTE: rispondeva con not found (404) perchè mancava favicon.ico !!! 
+				   (see post http://stackoverflow.com/questions/15047744/gae-cloud-endpoints-api-not-updating-after-deploy)
 		
 		
 		> GWTP TEST [03/06/2013]
