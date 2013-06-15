@@ -4,7 +4,7 @@ set APPNAME=quilook
 
 call %~dp0\setenv.bat
 
-GOTO RUN_GAE
+::GOTO RUN_GAE
 
 set SKIP_DEPENDENCIES_CLEAN=true
 set SKIP_PAUSE=true
