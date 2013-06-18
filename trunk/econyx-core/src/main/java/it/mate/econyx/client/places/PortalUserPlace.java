@@ -15,6 +15,8 @@ public class PortalUserPlace extends Place implements ReversiblePlace, HasToken,
 
   public static String VIEW = "view";
 
+  public static String LOGIN = "login";
+
   private String token;
   
   private Object model;

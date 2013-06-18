@@ -1,0 +1,41 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui"
+       xmlns:c="urn:import:com.google.gwt.user.cellview.client" 
+       xmlns:gwtcommons="urn:import:it.mate.gwtcommons.client.ui">
+       
+  <ui:style>
+  
+  @external ecx-loginBtn;
+  
+  .ecx-loginBtn {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 2px;
+    box-shadow: 2px 2px 4px #DDDDDD;
+    height: 60px;
+    margin: 3px;
+    width: 100px;	
+    float: left;
+  }
+  
+  </ui:style>     
+
+  <g:VerticalPanel width="100%">
+    <g:HTMLPanel addStyleNames="ecxLoginView">
+      Login View!
+
+      <div>
+        <a class="ecx-loginBtn" style="background: #fff url(/images/login-logos.png); background-position: -1px -1px" 
+           href="javascript:openid.signin('google');" title="log in with Google"></a>      
+      </div>      
+      
+    </g:HTMLPanel>
+  </g:VerticalPanel>
+
+</ui:UiBinder>
