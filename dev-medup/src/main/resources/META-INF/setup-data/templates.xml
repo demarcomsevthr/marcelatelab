@@ -31,11 +31,26 @@
     </widgets>
   </factory>
 
+  <factory id="loginTemplate" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory" parent="homeBase">
+    <widgets>
+      <factory parent="homeWrapperLogin" />
+      <factory parent="footer" />
+    </widgets>
+  </factory>
+
   <factory id="homeWrapperWelcome" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
     <layout vertical="true" stylename="tpl-HomeWrapper"/>
     <widgets>
       <factory parent="headerWrapper" />
       <factory parent="pageWrapperWelcome" />
+    </widgets>
+  </factory>
+  
+  <factory id="homeWrapperLogin" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-HomeWrapper"/>
+    <widgets>
+      <factory parent="headerWrapper" />
+      <factory parent="pageWrapperLogin" />
     </widgets>
   </factory>
   
@@ -69,15 +84,24 @@
               ]]></beans:value>
             </beans:property>
           </factory>
+          
+          <factory type="it.mate.portlets.client.ui.HtmlPortlet.Factory">
+            <beans:property name="html">
+              <beans:value><![CDATA[
+                <div class="tpl-LoginBanner" style="width:100%;">
+                  <a href="#login">Login</a>
+                </div>
+              ]]></beans:value>
+            </beans:property>
+          </factory>
+          
           <!-- 
           <factory type="it.mate.econyx.client.portlets.PortalUserPortlet.Factory" />
            -->
         </widgets>
         <constraints>
           <constraint/>
-          <!-- 
           <constraint size="160px" />
-           -->
         </constraints>
       </factory>
       
@@ -138,7 +162,7 @@
 
 <div style="line-height:120%">
 <p>
-   Presentazione qui
+   Presentazione statica qui
 <p>
 	&nbsp;</p>
 </div>
@@ -146,6 +170,36 @@
               ]]></beans:value>
             </beans:property>
           </factory>
+          
+        </widgets>
+        <constraints>
+          <constraint size="160px" />
+          <constraint/>
+        </constraints>
+      </factory>  
+    </widgets>
+  </factory>
+    
+  <factory id="pageWrapperLogin" type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+    <layout vertical="true" stylename="tpl-PageWrapper"/>
+    <widgets>
+      <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+        <layout vertical="false" stylename="tpl-InnerBody"/>
+        <widgets>
+          <factory type="it.mate.portlets.client.ui.TableLayoutPanel.Factory">
+            <layout vertical="true"/>
+            <widgets>
+              <factory parent="explorerWrapper" />
+              <factory parent="calendarWrapper" />
+            </widgets>
+            <constraints>
+              <constraint size="200px" overflow="visible"/>
+              <constraint/>
+              <constraint/>
+            </constraints>
+          </factory>
+          
+          <factory type="it.mate.econyx.client.portlets.LoginPortlet.Factory"/>
           
         </widgets>
         <constraints>

@@ -63,6 +63,12 @@
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+      <name>Login</name>
+      <code>login</code>
+      <orderNm>910</orderNm>
+      <templateName>loginTemplate</templateName>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
   </pages>
   
   <documentFolders>
