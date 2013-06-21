@@ -75,8 +75,8 @@
                 <div class="tpl-headerBanner" style="width:100%;">
                   <div style="padding-left: 100px;">
                     <div style="background: url('images/logotr.gif') no-repeat scroll left top transparent; height: 152px;">
-                      <div style="font: 46px Arial; font-weight: 500; color: #FB350E; padding-left: 280px; padding-top: 20px;">
-                        Medup
+                      <div style="font: 36px trebuchet ms,arial,sans-serif; font-weight: 500; color: #467AA7; padding-left: 120px; padding-top: 60px;">
+                        Medup Healthcare Services
                       </div>
                     </div>
                   </div>
@@ -160,12 +160,44 @@
             <beans:property name="html">
               <beans:value><![CDATA[
 
-<div style="line-height:120%">
-<p>
-   Presentazione statica qui
-<p>
-	&nbsp;</p>
+<table class="tpl-basePage">
+  <tr>
+    <td height="100px">
+<div style="line-height:120%; padding-left:20px; padding-bottom: 50px;">
+<p style="font-family: verdana,arial,sans-serif; font-size: 14px;">
+   <b>Welcome</b></p>
+<p class="tpl-basePage">
+  This site provides a collection of utilities for healthcare professionists, patients and caregivers to improve 
+  the treatment of people affected of Chronic Kidney Disease.</p>
 </div>
+    </td>
+    <td rowspan="9">
+<div>
+  <img src="/main/images/doctors.gif" alt="doctors">
+</div>    
+    </td>
+  </tr>
+  <tr>
+    <td>
+<div style="line-height:120%; padding-left:20px;">
+<p style="font-family: verdana,arial,sans-serif; font-size: 14px;">
+   <b>CKD Risk Calculator</b></p>
+   <table>
+     <tr>
+       <td style="padding-top: 20px;">
+  <img src="/main/images/ckd-icon-72.png" alt="ckd">
+       </td>
+       <td>
+<p class="tpl-basePage" style="padding-left:10px;">
+  This app has the aim to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.</p>
+       </td>
+     </tr>
+   </table>
+</div>
+    </td>
+  </tr>
+</table>
+
 
               ]]></beans:value>
             </beans:property>
@@ -210,7 +242,7 @@
     </widgets>
   </factory>
     
-  <factory id="explorerWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Home" stylename="tpl-leftColumn">
+  <factory id="explorerWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Services" stylename="tpl-leftColumn">
     <layout width="160px"/>
     <widgets>
       <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />

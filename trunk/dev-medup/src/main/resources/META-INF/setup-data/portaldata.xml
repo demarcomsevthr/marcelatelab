@@ -26,29 +26,26 @@
     
   </users>
   
-  <customers>
-  </customers>
+  <customers/>
   
-  <productTypes>
-  </productTypes>
+  <productTypes/>
   
-  <unitOfMeasures>
-  </unitOfMeasures>
+  <unitOfMeasures/>
   
-  <producers>
-  </producers>
+  <producers/>
   
-  <products>
-  </products>
+  <products/>
   
   <pages>
+  
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="true" homePage="true">
       <name>Home</name>
       <code>home</code>
       <orderNm>100</orderNm>
       <templateName>welcome</templateName>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
-    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+    
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
       <name>CKD Risk Calc</name>
       <code>ckdriskcalc</code>
       <orderNm>200</orderNm>
@@ -57,27 +54,93 @@
           <type>M</type>
           <content>
           <![CDATA[
-<p>CKD Risk Calc</p>
+
+<div style="line-height:120%; padding-left:20px;">
+<p style="font-family: verdana,arial,sans-serif; font-size: 14px;">
+   <b>CKD Risk Calculator</b></p>
+   <table>
+     <tr>
+       <td style="padding-top: 20px;">
+  <img src="/main/images/ckd-icon-72.png" alt="ckd">
+       </td>
+       <td>
+<p class="tpl-basePage">
+  The aim of this app is to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.</p>
+       </td>
+     </tr>
+   </table>
+</div>
+
            ]]>
 </content>
         </it.mate.econyx.shared.model.impl.HtmlContentTx>
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    
+    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+      <name>News</name>
+      <code>news</code>
+      <orderNm>300</orderNm>
+      <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
+       <name>News library</name>
+      </entity>
+    </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
+    
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+      <name>Contacts</name>
+      <code>contacts</code>
+      <orderNm>400</orderNm>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+          <![CDATA[
+<div style="line-height:120%; padding-left:20px;">
+<p class="tpl-basePage">
+  For any questions please contact us at <a href="mailto:dev.medup@gmail.com">dev.medup@gmail.com</a>.</p>
+</div>
+           ]]>
+</content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
       <name>Login</name>
       <code>login</code>
       <orderNm>910</orderNm>
       <templateName>loginTemplate</templateName>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+      <name>Today event</name>
+      <code>event</code>
+      <orderNm>920</orderNm>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+            <![CDATA[
+              <div id="Place:CalendarPlace;PlaceToken:calDateView" class="ecxPlaceHolder"></div>
+            ]]>
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    
   </pages>
   
-  <documentFolders>
-  </documentFolders>
+  <documentFolders/>
   
   <articleFolders>
+    <it.mate.econyx.shared.model.impl.ArticleFolderTx>
+      <name>News library</name>
+      <orderNm>100</orderNm>
+      <articles>
+      </articles>
+    </it.mate.econyx.shared.model.impl.ArticleFolderTx>
   </articleFolders>
   
-  <orderStates>
-  </orderStates> 
+  <orderStates/>
   
 </it.mate.econyx.server.model.PortalDataExportModel>
