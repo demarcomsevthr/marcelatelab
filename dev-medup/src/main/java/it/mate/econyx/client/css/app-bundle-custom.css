@@ -140,6 +140,13 @@ a, a:active, a:focus {
 
 }
 
+.tpl-basePage {
+  font-family: Trebuchet MS,Arial,Helvetica,sans-serif; 
+  color: #303030; 
+  font-size:13px; 
+  line-height: 23px;
+}
+
 /************************************************************************************
 
    NAV CSS
