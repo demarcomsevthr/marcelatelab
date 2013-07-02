@@ -1,6 +1,7 @@
 package it.mate.ckd.client.i18n;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
 import com.google.gwt.i18n.client.Messages;
 
 public interface LocalizedMessages extends Messages {
@@ -27,5 +28,8 @@ public interface LocalizedMessages extends Messages {
   
   @DefaultMessage("VERY HIGH")
   String CKDOutputView_veryHighRisk_text();
+  
+  @DefaultMessage("false")
+  String HomeView_devInfo_visible();
   
 }
