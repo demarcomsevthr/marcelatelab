@@ -59,7 +59,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     
     paramBtn.setText(LocalizedMessages.IMPL.HomeView_paramBtn_text());
-    
+
+    devInfo.setVisible(Boolean.parseBoolean(LocalizedMessages.IMPL.HomeView_devInfo_visible()));
     String info = "Width " + Window.getClientWidth();
     info += " Height " + Window.getClientHeight();
     if (OsDetectionPatch.isTabletLandscape()) {
