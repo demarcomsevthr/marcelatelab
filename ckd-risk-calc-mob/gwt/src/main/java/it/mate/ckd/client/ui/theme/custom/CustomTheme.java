@@ -7,6 +7,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.googlecode.mgwt.ui.client.MGWT;
 
 
@@ -31,6 +32,12 @@ public class CustomTheme {
       return instance;
     }
   }
+  
+  
+  public static String getUserBackground() {
+    return Window.getClientHeight() + "px";
+  }
+  
   
   public interface CustomBundle {
     
