@@ -31,6 +31,11 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
+    
+    GwtUtils.log("client width = " + Window.getClientWidth());
+    GwtUtils.log("client height = " + Window.getClientHeight());
+    GwtUtils.log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
+    
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       @Override
       public void onUncaughtException(Throwable ex) {
