@@ -10,7 +10,7 @@
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
 
-  <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel}" ui:field="wrapperPanel">
+  <g:HTMLPanel addStyleNames="{style.homePanel} {style.inputPanel} ckdInputView_HtmlPanel" ui:field="wrapperPanel" width="100%">
 
     <table cellspacing="0" cellpadding="0" class="ckdInputPanelTable" id="ckdInputPanelTable">
     
@@ -164,10 +164,9 @@
     </table> 
     
     <g:VerticalPanel horizontalAlignment="center" width="100%">
-       <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em">
+       <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em" addStyleNames="ckd-EstimateBtn">
          <ui:attribute name="text" description="text" key="estimate.text"/>
        </m:Button>
-       <gc:Spacer height="1em"/>
     </g:VerticalPanel> 
   
   </g:HTMLPanel>
