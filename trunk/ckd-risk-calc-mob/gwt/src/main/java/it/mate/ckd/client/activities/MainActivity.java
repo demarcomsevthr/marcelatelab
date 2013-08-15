@@ -3,11 +3,13 @@ package it.mate.ckd.client.activities;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.places.MainPlace;
+import it.mate.ckd.client.utils.AndroidBackButtonHandler;
 import it.mate.ckd.client.view.CKDInputViewWrapper;
 import it.mate.ckd.client.view.CKDOutputViewWrapper;
 import it.mate.ckd.client.view.HomeView;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -35,9 +37,13 @@ public class MainActivity extends MGWTAbstractActivity implements
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          AppClientFactory.IMPL.getPhoneGap().exitApp();
+        }
+      });
     }
     if (place.getToken().equals(MainPlace.CKD_INPUT)) {
-//    CKDInputView view = AppClientFactory.IMPL.getGinjector().getCKDInputView();
       CKDInputViewWrapper view = AppClientFactory.IMPL.getGinjector().getCKDInputView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
@@ -45,13 +51,22 @@ public class MainActivity extends MGWTAbstractActivity implements
       if (ckd != null) {
         view.setModel(ckd, "ckd");
       }
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
     }
     if (place.getToken().equals(MainPlace.CKD_OUTPUT)) {
-//    CKDOutputView view = AppClientFactory.IMPL.getGinjector().getCKDOutputView();
       CKDOutputViewWrapper view = AppClientFactory.IMPL.getGinjector().getCKDOutputView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
       view.setModel(GwtUtils.getClientAttribute(CKD_ATTR), "ckd");
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToCkdInput();
+        }
+      });
     }
   }
 
