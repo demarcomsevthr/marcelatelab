@@ -1,0 +1,279 @@
+
+@external homePanel, verLbl, boxSpacer, valoriLbl;
+
+@external inputPanel, firstColumn, secondColumn, spin-Button;
+
+@external outputPanel;
+
+@external gwt*, dialog*;
+
+@external mgwt*;
+
+@external ckd*;
+
+.mgwt-ScrollPanel-container {
+  width: 100%;
+}
+
+.homePanel {
+
+}
+
+.homePanel * {
+  vertical-align: middle;
+}
+
+.homePanel td {
+  padding-top: 0.1em;
+}
+
+.homePanel input {
+  width: 2.6em;
+  text-align: center;
+}
+
+.homePanel button {
+  font-weight: bolder;
+}
+
+.mgwt-Button.ckdParamBtn.mgwt-Button-round {
+  width: 10em;
+}
+
+.ckdAppPresentation {
+  color: rgb(248, 242, 242);
+  padding-top: 20px;
+  font-weight: bold;  
+}
+
+.inputPanel button {
+  border: solid 1px rgb(192,192,192);
+  padding: 4px;
+  margin: 2px;
+  -webkit-border-radius: 2px;
+  background-color: rgb(230,230,230);
+}
+
+.inputPanel .gwt-Label {
+  font-family: Verdana;
+  font-weight: 600;
+  color: rgba(26, 26, 0, 0.90);
+}
+
+.inputPanel .firstColumn {
+  padding-left: 12px;
+  height: 44px;
+}
+
+.inputPanel .secondColumn {
+  text-align: center;
+  width: 3.6em;
+}
+
+.inputPanel .gwt-Anchor {
+  text-decoration: underline;
+  font-weight: 600;
+  font-style: italic;
+  color: rgba(255, 255, 0, 0.9);
+}
+
+.inputPanel .mgwt-InputBox-box {
+  -webkit-border-radius: 6px;
+}
+
+.outputPanel {
+  
+}
+
+.outputPanel .gwt-Label {
+  font-family: Verdana;
+  color: rgba(26, 26, 0, 0.90);
+}
+
+.outputPanel .ckd-Label {
+  font-weight: 600;  
+  width: 9em;
+  padding-left: 2em;
+}
+
+.outputPanel .ckd-LeftPaddingBox {
+/*  width: 1.6em; */
+  width: 0em;  
+}
+
+.outputPanel .gwt-Label.ckd-Label {
+  width: 120px;
+}
+
+.mgwt-Button.ckd-HelpBtn {
+  width: 6em;
+  padding: 6px 6px;
+  position: absolute;
+  top: 370px;
+  left: 108px;
+}
+
+.ckdInputPanelTable {
+  width: 100%;
+}
+
+/*
+  background: lightgrey;
+*/
+.ckd-Gfr, .ckd-Stadium {
+  font-weight: 600;
+  text-align: center;
+  padding-top: 2px;
+  border: 1px solid black;
+  -webkit-border-radius: 4px;
+  background: rgb(230, 230, 230);
+  color: black !important;
+}
+
+.ckd-Gfr {
+  width: 7.1em;
+  height: 1.4em;
+}
+
+.ckd-Stadium {
+  width: 2.8em;
+  height: 1.4em;
+}
+
+.ckd-Risk {
+  font-weight: 600;
+  text-align: center;
+  padding-top: 2px;
+  border: 1px solid black;
+  -webkit-border-radius: 4px;
+  width: 10.34em;
+  height: 1.4em;
+}
+
+.mgwt-Button.ckd-BsaBtnSelected {
+  border-color: yellow !important;
+}
+
+.mgwt-Button.ckd-Bsa {
+  padding: 4px;
+}
+
+.ckd-Label {
+  
+}
+
+.ckd-CheckBox {
+  background-color: white;
+  border: 1px solid grey;
+  -webkit-border-radius: 4px;
+  padding: 2px 2px;
+}
+
+.verLbl {
+
+}
+
+.valoriLbl {
+  font-weight: bolder;
+  background-color: rgba(105, 225, 255, 0.91);
+  height: 1.6em;
+  width: 272px;
+  padding-top: 5px;
+  -webkit-border-radius: 6px;
+  color: rgb(80, 80, 80) !important;
+  font-family: Verdana !important;
+}
+
+.ckd-MDRD {
+  padding-top: 2px;
+}
+
+.ckdMdrdLabel1 {
+
+}
+
+.ckdMdrdLabel2 {
+
+}
+
+.gwt-HTML.ckd-Label.ckd-BsaLabel {
+
+}
+
+.boxSpacer {
+  width: 0.05em !important;
+}
+
+.gwt-CheckBox * {
+  width: 1em !important;
+  text-align: center;
+}
+
+.gwt-TextBox.ckd-Risk {
+  font-weight: 600;
+}
+
+.mgwt-Button {
+  border: solid 3px rgba(0, 0, 0, 0.40) !important;
+}
+
+.mgwt-Button-round {
+  border-bottom-left-radius: 8px 8px !important;
+  border-bottom-right-radius: 8px 8px !important;
+  border-top-left-radius: 8px 8px !important;
+  border-top-right-radius: 8px 8px !important;
+}
+
+.mgwt-Button.spin-Button {
+  padding: 6px 8px;
+  border: solid 1px !important;
+}
+
+.mgwt-TextBox .mgwt-InputBox-box {
+  font: normal 28px Helvetica !important;
+}
+
+.mgwt-HeaderButton-text {
+  max-width: 74px !important;
+}
+
+.ckd-HelpPanel {
+  padding: 10px;
+}
+
+.gwt-HTML.ckd-HelpPanel * {
+
+}
+
+.gwt-DialogBox {
+  background-color: #ccc;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  /* font-family: Verdana; */
+}
+
+.gwt-DialogBox .dialogTop {
+  font-weight: 600;
+}
+
+.gwt-DialogBox .dialogTopCenterInner {
+  background-color: lightyellow;
+  -webkit-border-radius: 4px;
+  padding: 3px 3px 3px 9px;
+}
+
+.gwt-DialogBox .dialogMiddleCenter {
+  padding-top: 8px;
+  padding-right: 14px;
+}
+
+.gwt-DialogBox .dialogContent .gwt-HTML {
+  padding: 5px;
+  font-weight: 600;
+}
+
+.gwt-DialogBox .dialogContent .gwt-Button {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 10px;
+}
