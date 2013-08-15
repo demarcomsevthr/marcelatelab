@@ -6,9 +6,9 @@ import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
+import it.mate.ckd.client.utils.AndroidBackButtonHandler;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -31,8 +31,6 @@ import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
-import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
-import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
 
@@ -42,6 +40,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private PhoneGap phoneGap;
   
+  private static int TABLET_IOS_WRAPPER_PCT = 70;
+  private static int TABLET_AND_WRAPPER_PCT = 80;
+
   @Override
   public void initModule(final Panel modulePanel) {
     
@@ -83,33 +84,16 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
     
-//  MGWTCustomTheme.getInstance().getMGWTClientBundle().getMainCss().ensureInjected();
     CustomTheme.Instance.get().css().ensureInjected();
 
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
 
-    /*
-    if (OsDetectionPatch.isTablet()) {
-      StyleInjector.injectAtEnd(TabletTheme.Instance.get().css().getText());
-    }
-    */
-    
-    
     if (MGWT.getOsDetection().isTablet()) {
-//  if (OsDetectionPatch.isTablet()) {
-
-      Window.alert("Tablet Display To Do!");
-      
-      // StyleInjector.inject(AppBundle.INSTANCE.css().getText());
-
-//    createTabletDisplay(clientFactory);
-      
+      Window.alert("Internal error. MGWT Tablet Display Not Supported!");
     } else {
-
       createPhoneDisplay(clientFactory);
-
     }
 
     AppHistoryObserver historyObserver = new AppHistoryObserver();
@@ -130,45 +114,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     RootPanel.get().add(display);
     // 21/02/2013
 //  ZIndexPatch.apply();
-  }
-
-  private void createTabletDisplay(AppClientFactory clientFactory) {
-    GwtUtils.log(">>>>>> CREATING TABLET DISPLAY");
-    SimplePanel landscapeDisplay = new SimplePanel();
-    TabletPortraitOverlay tabletPortraitOverlay = new TabletPortraitOverlay();
-    AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
-    new OrientationRegionHandler(landscapeDisplay, tabletPortraitOverlay, display);
-    MainActivityMapper activityMapper = new MainActivityMapper(clientFactory);
-    MainAnimationMapper animationMapper = new MainAnimationMapper();
-    AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
-    activityManager.setDisplay(display);
-    RootPanel.get().add(display);
-  }
-
-  /*
-  private void initDisplay_SAVE(Panel modulePanel) {
     
-    ViewPort viewPort = new MGWTSettings.ViewPort();
-    viewPort.setTargetDensity(DENSITY.MEDIUM);
-    viewPort.setUserScaleAble(false).setMinimumScale(1.0).setMinimumScale(1.0).setMaximumScale(1.0);
-
-    MGWTSettings settings = new MGWTSettings();
-    settings.setViewPort(viewPort);
-    settings.setIconUrl("logo.png");
-    settings.setAddGlosToIcon(true);
-    settings.setFullscreen(true);
-    settings.setPreventScrolling(true);
-
-    MGWT.applySettings(settings);
-
-    MvpPhonePanel mvpPanel = new MvpPhonePanel();
-    modulePanel.clear();
-    modulePanel.add(mvpPanel);
-    mvpPanel.initMvp(AppClientFactoryImpl.this, getGinjector().getMainActivityMapper());
-    
+    AndroidBackButtonHandler.start();
   }
-  */
-  
+
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     super.initMvp(panel, getPlaceHistoryMapper(), activityMapper);
   }
@@ -200,5 +149,18 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
     return placeController;
   }
+  
+  @Override
+  public PhoneGap getPhoneGap() {
+    return phoneGap;
+  }
+
+  @Override
+  public int getWrapperPct() {
+    int wrapperPct = MGWT.getOsDetection().isIOs() ? TABLET_IOS_WRAPPER_PCT : TABLET_AND_WRAPPER_PCT;
+    return wrapperPct;
+  }
+  
+  
   
 }
