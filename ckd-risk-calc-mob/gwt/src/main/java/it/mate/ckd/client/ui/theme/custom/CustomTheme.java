@@ -26,7 +26,13 @@ public class CustomTheme {
             instance = GWT.create(CustomBundleIOs.class);
           }
         } else {
-          instance = GWT.create(CustomBundleAndroid.class);
+          if (OsDetectionPatch.isTabletLandscape()) {
+            instance = GWT.create(CustomBundleAPadLandscape.class);
+          } else if (OsDetectionPatch.isTabletPortrait()) {
+            instance = GWT.create(CustomBundleAPadPortrait.class);
+          } else {
+            instance = GWT.create(CustomBundleAndroid.class);
+          }
         }
       }
       return instance;
@@ -67,7 +73,17 @@ public class CustomTheme {
   }
   
   public interface CustomBundleAndroid extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android/main.css"})
+    @Source({"css/main-no-fonts.css", "css/android/fonts-phone.css", "css/android/main.css"})
+    public CustomMainCss css();
+  }
+  
+  public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
+    @Source({"css/main-no-fonts.css", "css/android/fonts-apad.css", "css/android/main.css", "css/apad/apad-landscape.css"})
+    public CustomMainCss css();
+  }
+  
+  public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
+    @Source({"css/main-no-fonts.css", "css/android/fonts-apad.css", "css/android/main.css", "css/apad/apad-portrait.css"})
     public CustomMainCss css();
   }
   
@@ -77,13 +93,17 @@ public class CustomTheme {
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/main.css", "css/ipad/landscape/main.css"})
+    @Source({"css/main.css", "css/ios/main.css", "css/ipad/ipad-landscape.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/main.css", "css/ipad/portrait/main.css"})
+    @Source({"css/main.css", "css/ios/main.css", "css/ipad/ipad-portrait.css"})
     public CustomMainCss css();
+  }
+  
+  public interface CssBuild1001 {
+    
   }
   
 }
