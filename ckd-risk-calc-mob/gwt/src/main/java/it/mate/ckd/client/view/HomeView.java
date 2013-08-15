@@ -1,5 +1,6 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
@@ -41,7 +42,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Button paramBtn;
   @UiField Label devInfo;
-
+  
   public HomeView() {
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
@@ -76,12 +77,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("homeWrapperPanel", new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
-          int height = Window.getClientHeight() * 70 / 100;
+          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+          int height = Window.getClientHeight() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
           int verMargin = ( Window.getClientHeight() - height ) / 2;
           wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
           wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
-          int width = Window.getClientWidth() * 70 / 100;
+          int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);

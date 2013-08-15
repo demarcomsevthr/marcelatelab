@@ -1,5 +1,6 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
@@ -76,20 +77,19 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("outputWrapperPanel", new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
-          int height = Window.getClientHeight() * 70 / 100;
+          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+          int height = Window.getClientHeight() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
-          int width = Window.getClientWidth() * 70 / 100;
+          int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
           wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
-          
           Element btnElem = ckdHelpBtn.getElement();
           int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
           int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
           btnElem.getStyle().setLeft(btnLeft, Unit.PX);
           btnElem.getStyle().setTop(btnTop, Unit.PX);
-          
         }
       });
     }

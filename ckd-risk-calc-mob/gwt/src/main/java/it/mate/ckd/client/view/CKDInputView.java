@@ -1,5 +1,6 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.SpinnerDoubleBox;
 import it.mate.ckd.client.ui.SpinnerIntegerBox;
@@ -85,9 +86,10 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("inputWrapperPanel", new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
-          int height = Window.getClientHeight() * 70 / 100;
+          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+          int height = Window.getClientHeight() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
-          int width = Window.getClientWidth() * 70 / 100;
+          int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
