@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.googlecode.gwtphonegap.client.PhoneGap;
 
 public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
@@ -30,5 +31,9 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper);
   
   public com.google.web.bindery.event.shared.EventBus getBinderyEventBus();
+  
+  public PhoneGap getPhoneGap();
+  
+  public int getWrapperPct();
   
 }
