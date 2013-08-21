@@ -1,6 +1,7 @@
 package it.mate.ckd.client.ui;
 
 import it.mate.ckd.client.config.ClientProperties;
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
@@ -111,7 +112,14 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   }
   
   public Double getValue() {
-    return valueBox.getValue();
+    Double res = valueBox.getValue();
+    
+    if (AppConstants.Cast.SpinnerDoubleBox_enSeparator_fix_enabled() && valueBox.getText().contains(",") && !("it".equals(getLocalLanguageCookie()))) {
+      String appo = valueBox.getText().replace(",", ".");
+      res = GwtUtils.getDefaultCurrencyFmt().parse(appo);
+    }
+    
+    return res;
   }
   
   public class SpinAnchor extends Anchor {
@@ -131,4 +139,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     this.maxValue = maxValue;
   }
   
+  private static native String getLocalLanguageCookie() /*-{
+    return $wnd.getLocalLanguageCookie();
+  }-*/;
+
 }

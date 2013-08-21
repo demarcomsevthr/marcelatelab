@@ -1,6 +1,6 @@
 package it.mate.ckd.client.view;
 
-import it.mate.ckd.client.i18n.LocalizedMessages;
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.view.CKDOutputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
@@ -26,7 +26,7 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
     
     initWidget(outputView.asWidget());
     
-    getHeaderBackButton().setText(LocalizedMessages.IMPL.CKDOutputView_headerBackButton_text());
+    getHeaderBackButton().setText(AppConstants.IMPL.CKDOutputView_headerBackButton_text());
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToCkdInput();

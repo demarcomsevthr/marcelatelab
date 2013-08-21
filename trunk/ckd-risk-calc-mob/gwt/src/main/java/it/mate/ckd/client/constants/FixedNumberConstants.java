@@ -1,4 +1,4 @@
-package it.mate.ckd.client.i18n;
+package it.mate.ckd.client.constants;
 
 import com.google.gwt.i18n.client.Constants;
 

@@ -1,7 +1,7 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
-import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.utils.OsDetectionPatch;
@@ -59,9 +59,9 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    paramBtn.setText(LocalizedMessages.IMPL.HomeView_paramBtn_text());
+    paramBtn.setText(AppConstants.IMPL.HomeView_paramBtn_text());
 
-    devInfo.setVisible(Boolean.parseBoolean(LocalizedMessages.IMPL.HomeView_devInfo_visible()));
+    devInfo.setVisible(Boolean.parseBoolean(AppConstants.IMPL.HomeView_devInfo_visible()));
     String info = "Width " + Window.getClientWidth();
     info += " Height " + Window.getClientHeight();
     if (OsDetectionPatch.isTabletLandscape()) {

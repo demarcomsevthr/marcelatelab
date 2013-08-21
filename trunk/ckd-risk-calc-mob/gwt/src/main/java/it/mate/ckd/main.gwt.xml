@@ -23,7 +23,7 @@
        mgwt.os values = iphone, android
        ipad non va bene per il layout
    -->
-  <set-property name="mgwt.os" value="android" />
+  <set-property name="mgwt.os" value="iphone" />
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 
@@ -35,7 +35,7 @@
     <when-type-is class="it.mate.ckd.client.factories.AppClientFactory"/>
   </replace-with>
   
-  <replace-with class="it.mate.ckd.client.i18n.FixedNumberConstantsImpl">
+  <replace-with class="it.mate.ckd.client.constants.FixedNumberConstantsImpl">
     <when-type-is class="com.google.gwt.i18n.client.constants.NumberConstantsImpl"/>
   </replace-with>
   
