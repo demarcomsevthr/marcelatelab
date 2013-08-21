@@ -4,7 +4,11 @@ function setLocalLanguageCookie(value) {
 }
 
 function getLocalLanguageCookie() {
-  var lang = window.localStorage.getItem("ckd-language");
+  return window.localStorage.getItem("ckd-language");
+}
+
+function switchLocalLanguage() {
+  var lang = getLocalLanguageCookie();
   if (lang == 'it') {
     if (window.location.href.indexOf('index-it') == -1) {
       var href = window.location.href.replace('index.html', 'index-it.html');
@@ -20,5 +24,5 @@ function getLocalLanguageCookie() {
   return lang;
 }
 
-var appLanguage = getLocalLanguageCookie();
+var appLanguage = switchLocalLanguage();
 

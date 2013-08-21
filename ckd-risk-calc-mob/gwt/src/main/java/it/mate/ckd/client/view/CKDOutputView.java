@@ -1,7 +1,7 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
-import it.mate.ckd.client.i18n.LocalizedMessages;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
@@ -142,16 +142,16 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
       riskPanel.setVisible(true);
     }
     if (risk == CKD.LOW_RISK) {
-      irc = LocalizedMessages.IMPL.CKDOutputView_lowRisk_text();
+      irc = AppConstants.IMPL.CKDOutputView_lowRisk_text();
       ircBckCol = "#00FF00";
     } else if (risk == CKD.MIDDLE_RISK) {
-      irc = LocalizedMessages.IMPL.CKDOutputView_middleRisk_text();
+      irc = AppConstants.IMPL.CKDOutputView_middleRisk_text();
       ircBckCol = "#FFFF00";
     } else if (risk == CKD.HIGH_RISK) {
-      irc = LocalizedMessages.IMPL.CKDOutputView_highRisk_text();
+      irc = AppConstants.IMPL.CKDOutputView_highRisk_text();
       ircBckCol = "#FFCC00";
     } else if (risk == CKD.VERY_HIGH_RISK) {
-      irc = LocalizedMessages.IMPL.CKDOutputView_veryHighRisk_text();
+      irc = AppConstants.IMPL.CKDOutputView_veryHighRisk_text();
       ircBckCol = "#FF0000";
     }
     riskBox.setText(irc);
