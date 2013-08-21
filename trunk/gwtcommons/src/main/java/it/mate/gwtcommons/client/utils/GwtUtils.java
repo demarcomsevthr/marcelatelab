@@ -169,6 +169,10 @@ public class GwtUtils {
     return decimalFMT.format(number);
   }
   
+  public static NumberFormat getDefaultCurrencyFmt() {
+    return currencyFMT;
+  }
+  
   public static Date getDate (int day, int month, int year) {
     return formatFromCache(dt10Pattern).parse(day+"/"+month+"/"+year);
   }
