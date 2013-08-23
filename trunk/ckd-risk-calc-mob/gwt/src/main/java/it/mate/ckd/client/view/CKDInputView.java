@@ -54,7 +54,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   @UiField Anchor creatinineUmAnc;
   @UiField Anchor albuminUmAnc;
   
-  @UiField Button ckdOutputBtn;
+//@UiField Button ckdOutputBtn;
   
   private CKD ckd = new CKD();
   

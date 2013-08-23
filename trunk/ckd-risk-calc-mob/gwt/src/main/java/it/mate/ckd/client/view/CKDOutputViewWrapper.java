@@ -1,9 +1,11 @@
 package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDOutputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
+import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
@@ -21,6 +23,12 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
+    
+    if (OsDetectionPatch.isTablet()) {
+      setTitleHtml(AppConstants.IMPL.tabletAppName());
+    } else {
+      setTitleHtml(AppConstants.IMPL.phoneAppName());
+    }
     
     outputView = new CKDOutputView();
     

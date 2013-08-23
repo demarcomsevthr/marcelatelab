@@ -22,8 +22,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.ui.client.dialog.AlertDialog;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
@@ -66,6 +68,8 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   
   @UiField Button ckdHelpBtn;
   
+  @UiField VerticalPanel verticalPanel1;
+  
   private CKD ckd;
   
   public CKDOutputView() {
@@ -82,14 +86,18 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
           int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+          
           wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          
           Element btnElem = ckdHelpBtn.getElement();
           int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
           int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
           btnElem.getStyle().setLeft(btnLeft, Unit.PX);
           btnElem.getStyle().setTop(btnTop, Unit.PX);
+
         }
       });
     }
@@ -167,6 +175,13 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     } else {
       PhonegapUtils.openInAppBrowser("help.html");
     }
+  }
+  
+  @UiHandler ("referralDecisionMakingBtn")
+  public void onReferralDecisionMakingBtn (TouchStartEvent event) {
+    Button btn = (Button)event.getSource();
+    GwtUtils.log("pressed " + btn.getTitle());
+    new AlertDialog("Suggested decision making", "Monitor").show();
   }
   
 }

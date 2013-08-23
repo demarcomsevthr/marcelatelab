@@ -17,6 +17,9 @@ if "%SKIP_DEPENDENCIES%"=="true" GOTO NO_DEPENDENCIES
 cd %BASEAPPDIR%\..\..\gwtcommons
 call mvn2 %DEP_CLEAN% compile package install
 
+cd %BASEAPPDIR%\..\..\phgcommons
+call mvn2 %DEP_CLEAN% compile package install
+
 :NO_DEPENDENCIES
 
 if "%GWT_LOG_LEVEL%"=="" SET GWT_LOG_LEVEL=INFO

@@ -5,7 +5,7 @@
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"       
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default"
-       >
+       xmlns:p="urn:import:it.mate.phgcommons.client.ui">
 
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
@@ -164,9 +164,14 @@
     </table> 
     
     <g:VerticalPanel horizontalAlignment="center" width="100%">
+       <!-- 
        <m:Button ui:field="ckdOutputBtn" text="" round="true" width="10em" addStyleNames="ckd-EstimateBtn">
          <ui:attribute name="text" description="text" key="estimate.text"/>
        </m:Button>
+        -->
+       <p:SmartButton ui:field="ckdOutputBtn" text="" round="true" width="10em" addStyleNames="ckd-EstimateBtn">
+         <ui:attribute name="text" description="text" key="estimate.text"/>
+       </p:SmartButton>
     </g:VerticalPanel> 
   
   </g:HTMLPanel>

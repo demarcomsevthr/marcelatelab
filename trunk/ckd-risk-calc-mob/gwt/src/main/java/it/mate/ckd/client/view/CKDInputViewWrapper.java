@@ -1,5 +1,6 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputViewWrapper.Presenter;
@@ -8,6 +9,7 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -31,6 +33,12 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
+    
+    if (OsDetectionPatch.isTablet()) {
+      setTitleHtml(AppConstants.IMPL.tabletAppName());
+    } else {
+      setTitleHtml(AppConstants.IMPL.phoneAppName());
+    }
     
     HorizontalPanel layoutPanel = new HorizontalPanel();
     

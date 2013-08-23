@@ -117,9 +117,6 @@
   width: 100%;
 }
 
-/*
-  background: lightgrey;
-*/
 .ckd-Gfr, .ckd-Stadium {
   font-weight: 600;
   text-align: center;
@@ -169,10 +166,6 @@
   padding: 2px 2px;
 }
 
-.verLbl {
-
-}
-
 .valoriLbl {
   font-weight: bolder;
   background-color: rgba(105, 225, 255, 0.91);
@@ -186,18 +179,6 @@
 
 .ckd-MDRD {
   padding-top: 2px;
-}
-
-.ckdMdrdLabel1 {
-
-}
-
-.ckdMdrdLabel2 {
-
-}
-
-.gwt-HTML.ckd-Label.ckd-BsaLabel {
-
 }
 
 .boxSpacer {
@@ -241,15 +222,10 @@
   padding: 10px;
 }
 
-.gwt-HTML.ckd-HelpPanel * {
-
-}
-
 .gwt-DialogBox {
   background-color: #ccc;
   padding: 5px;
   -webkit-border-radius: 4px;
-  /* font-family: Verdana; */
 }
 
 .gwt-DialogBox .dialogTop {
@@ -277,3 +253,64 @@
   padding-right: 15px;
   margin-left: 10px;
 }
+
+
+.mgwt-SmartButton {
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 19px;
+  text-align: center;
+  -webkit-appearance: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, 
+    from(rgba(234, 234, 234, 0.9)), 
+  	color-stop(0.5, rgba(195, 195, 195, 0.7)), 
+  	color-stop(0.5, rgba(166, 166, 166, 0.7)), 
+  	to(rgba(167, 167, 167, 0.8)));
+  border-bottom-left-radius: 9px 9px !important;
+  border-bottom-right-radius: 9px 9px !important;
+  border-top-left-radius: 9px 9px !important;
+  border-top-right-radius: 9px 9px !important;
+  border: solid 3px rgba(0, 0, 0, 0.4);
+  color: #000000;
+  outline: none;
+}
+
+
+
+@if (it.mate.ckd.client.constants.AppConstants.Cast.isExtendedVersion()) {
+	
+  .ckd-Risk {
+    width: 7.1em;
+  }
+  
+  .ckd-ReferralDecisionMakingGroup {
+    visibility: true;
+  }
+  
+  .mgwt-Button.ckd-ReferralDecisionMakingButton {
+    font-size: 10px;
+    font-weight: bolder;
+    padding: 4px 8px;
+    margin: 0;
+    border: solid 1px rgba(0, 0, 0, 0.4) !important;
+  }
+  
+} @else {
+	
+  .ckd-Risk {
+    width: 10.34em;
+  }
+  
+  .ckd-ReferralDecisionMakingGroup {
+    visibility: false;
+    width: 0;
+  }
+  
+}
+
+

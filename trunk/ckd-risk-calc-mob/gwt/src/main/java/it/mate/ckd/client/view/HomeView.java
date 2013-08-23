@@ -10,6 +10,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.List;
 
@@ -20,11 +21,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class HomeView extends BaseMgwtView <Presenter> {
 
@@ -40,7 +41,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField (provided=true) CustomMainCss style;
   
   @UiField Panel wrapperPanel;
-  @UiField Button paramBtn;
+  @UiField HasText paramBtn;
   @UiField Label devInfo;
   
   public HomeView() {
@@ -55,6 +56,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   private void initUI() {
 
+    if (OsDetectionPatch.isTablet()) {
+      setTitleHtml(AppConstants.IMPL.tabletAppName());
+    } else {
+      setTitleHtml(AppConstants.IMPL.phoneAppName());
+    }
+    
     getHeaderPanel().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
@@ -111,5 +118,19 @@ public class HomeView extends BaseMgwtView <Presenter> {
       }
     });
   }
+
+  /*
+  @UiHandler("testBtn1")
+  public void onTestBtn1 (TouchStartEvent event) {
+    GwtUtils.log("test button 1 press");
+    AppClientFactory.IMPL.getPhoneGap().getNotification().alert("Test button 1 press");
+  }
+
+  @UiHandler("testBtn2")
+  public void onTestBtn2 (TouchStartEvent event) {
+    GwtUtils.log("test button 2 press");
+    AppClientFactory.IMPL.getPhoneGap().getNotification().alert("Test button 2 press");
+  }
+  */
 
 }

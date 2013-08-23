@@ -7,6 +7,15 @@ public interface AppConstants extends Messages {
 
   AppConstants IMPL = GWT.create(AppConstants.class);
   
+  @DefaultMessage("false")
+  String extendedVersion();
+  
+  @DefaultMessage("")
+  String tabletAppName();
+  
+  @DefaultMessage("")
+  String phoneAppName();
+  
   @DefaultMessage("Insert parameters")
   String HomeView_paramBtn_text();
   
@@ -38,6 +47,10 @@ public interface AppConstants extends Messages {
     
     public static boolean SpinnerDoubleBox_enSeparator_fix_enabled() {
       return Boolean.parseBoolean(AppConstants.IMPL.SpinnerDoubleBox_enSeparator_fix_enabled());
+    }
+    
+    public static boolean isExtendedVersion() {
+      return Boolean.parseBoolean(AppConstants.IMPL.extendedVersion());
     }
     
   }
