@@ -12,7 +12,11 @@
 @external ckd*;
 
 
+/* 23/08/2013
 .homePanel * {
+*/
+
+.homePanel td {
   font-size: 16px;
 }
 

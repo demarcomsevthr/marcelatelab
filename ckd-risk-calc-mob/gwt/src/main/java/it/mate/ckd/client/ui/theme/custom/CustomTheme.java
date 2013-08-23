@@ -73,32 +73,32 @@ public class CustomTheme {
   }
   
   public interface CustomBundleAndroid extends CustomBundle, ClientBundle {
-    @Source({"css/main-no-fonts.css", "css/android/fonts-phone.css", "css/android/main.css"})
+    @Source({"css/main.css", "css/android/fonts-phone.css", "css/android/android.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main-no-fonts.css", "css/android/fonts-apad.css", "css/android/main.css", "css/apad/apad-landscape.css"})
+    @Source({"css/main.css", "css/android/fonts-apad.css", "css/android/android.css", "css/android/apad-landscape.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main-no-fonts.css", "css/android/fonts-apad.css", "css/android/main.css", "css/apad/apad-portrait.css"})
+    @Source({"css/main.css", "css/android/fonts-apad.css", "css/android/android.css", "css/android/apad-portrait.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIOs extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/main.css"})
+    @Source({"css/main.css", "css/ios/fonts-iphone.css", "css/ios/ios.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/main.css", "css/ipad/ipad-landscape.css"})
+    @Source({"css/main.css", "css/ios/fonts-ipad.css", "css/ios/ios.css", "css/ios/ipad-landscape.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/main.css", "css/ipad/ipad-portrait.css"})
+    @Source({"css/main.css", "css/ios/fonts-ipad.css", "css/ios/ios.css", "css/ios/ipad-portrait.css"})
     public CustomMainCss css();
   }
   

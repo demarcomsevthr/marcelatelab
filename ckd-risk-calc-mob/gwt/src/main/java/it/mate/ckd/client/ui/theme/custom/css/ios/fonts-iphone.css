@@ -12,89 +12,89 @@
 @external ckd*;
 
 
-.mgwt-ScrollPanel-container * {
-  font-size: 22px;
-}
-
-.mgwt-Button {
-  font-size: 38px;
-}
-
 /* 23/08/2013
 .homePanel * {
-*/
+ */
 .homePanel td {
-  font-size: 32px;
-}
-
-.homePanel button {
-  font-size: 32px;
-}
-
-.ckdAppPresentation {
-  font-size: 44pt;
-}
-
-.inputPanel .gwt-Label {
-  font-size: 22pt;
-}
-
-.outputPanel .gwt-Label {
-  font-size: 20pt;
-}
-
-.mgwt-Button.ckd-HelpBtn {
-  font-size: 24px;
-}
-
-.ckd-Gfr, .ckd-Stadium {
-  font-size: 24pt;
-}
-
-.ckd-Risk {
-  font-size: 28pt;
-}
-
-.mgwt-Button.ckd-Bsa {
-  font-size: 32px;
-}
-
-.verLbl {
   font-size: 16px;
 }
 
-.valoriLbl {
-  font-size: 20pt !important;
+.homePanel button {
+  font-size: 16px;
 }
 
-.ckdMdrdLabel1 {
-  font-size: 20pt;
-}
-
-.ckdMdrdLabel2 {
-  font-size: 16pt;
-}
-
-.gwt-HTML.ckd-Label.ckd-BsaLabel {
-  font-size: 18pt;
-}
-
-.gwt-TextBox.ckd-Risk {
-  font-size: 28pt;
-}
-
-.gwt-HTML.ckd-HelpPanel * {
-  font-size: 24px;
-}
-
-.gwt-DialogBox {
+.ckdAppPresentation {
   font-size: 22pt;
 }
 
+.inputPanel .gwt-Label {
+  font-size: 11pt;
+}
+
+.outputPanel .gwt-Label {
+  font-size: 10pt;
+}
+
+.mgwt-Button.ckd-HelpBtn {
+  font-size: 12px;
+}
+
+.ckd-Gfr, .ckd-Stadium {
+  font-size: 12pt;
+}
+
+.mgwt-Button.ckd-HelpBtn {
+  font-size: 12px;
+}
+
+.ckd-Gfr, .ckd-Stadium {
+  font-size: 12pt;
+}
+
+.ckd-Risk {
+  font-size: 14pt;
+}
+
+.mgwt-Button.ckd-Bsa {
+  font-size: 16px;
+}
+
+.verLbl {
+  font-size: 8px;
+}
+
+.valoriLbl {
+  font-size: 10pt !important;
+}
+
+.ckdMdrdLabel1 {
+  font-size:10pt;
+}
+
+.ckdMdrdLabel2 {
+  font-size:8pt;
+}
+
+.gwt-HTML.ckd-Label.ckd-BsaLabel {
+  font-size: 9pt;
+}
+
+.gwt-TextBox.ckd-Risk {
+  font-size: 14pt;
+}
+
+.gwt-HTML.ckd-HelpPanel * {
+  font-size: 12px;
+}
+
+.gwt-DialogBox {
+  font-size: 11pt;
+}
+
 .gwt-DialogBox .dialogTop {
-  font-size: 26pt;
+  font-size: 13pt;
 }
 
 .gwt-DialogBox .dialogContent .gwt-Button {
-  font-size: 28pt;
+  font-size: 14pt;
 }

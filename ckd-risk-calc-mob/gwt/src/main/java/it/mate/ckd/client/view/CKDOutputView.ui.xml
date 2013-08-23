@@ -9,13 +9,13 @@
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
   
-  <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel}" ui:field="wrapperPanel">
+  <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel} ckd-output-HtmlPanel-1" ui:field="wrapperPanel">
   
     <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
       <ui:attribute name="text" description="text" key="helpBtn.text"/>
     </m:Button>
     
-    <g:VerticalPanel width="100%">
+    <g:VerticalPanel width="100%" ui:field="verticalPanel1"  addStyleNames="ckd-output-VerticalPanel-1" horizontalAlignment="center">
     
       <!-- ==========    COCKCROFT SECTION    ========== -->
     
@@ -45,11 +45,18 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="cockcroftRiskBox" addStyleNames="{style.ckdRisk}"/>
         
+        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+          <gc:Spacer width="0.3em"/>
+          <m:Button ui:field="referralDecisionMakingBtn" text="?" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
+            title="CockroftReferralDecisionMakingBtn" />
+        </g:HorizontalPanel>
+        
       </g:HorizontalPanel>
       
       <g:HorizontalPanel ui:field="bsaPanel">
         <gc:Spacer width="7.6em"/>
         <g:HTML ui:field="bsaHtml" HTML="BSA = 0.00" addStyleNames="{style.ckdLabel} ckd-BsaLabel"></g:HTML>
+        <gc:Spacer width="0px" addStyleNames="ckd-bsaRightSpacer"/>
       </g:HorizontalPanel>
 
       <g:HorizontalPanel>

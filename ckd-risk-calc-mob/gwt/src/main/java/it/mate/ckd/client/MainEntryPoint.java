@@ -30,6 +30,7 @@ public class MainEntryPoint implements EntryPoint {
 
   @Override
   public void onModuleLoad() {
+    GwtUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
     
     GwtUtils.log("client width = " + Window.getClientWidth());
