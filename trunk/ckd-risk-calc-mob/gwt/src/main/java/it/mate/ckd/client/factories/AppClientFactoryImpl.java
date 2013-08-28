@@ -6,9 +6,9 @@ import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
-import it.mate.ckd.client.utils.AndroidBackButtonHandler;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
+import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;

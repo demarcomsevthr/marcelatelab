@@ -4,12 +4,12 @@ import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
-import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.List;

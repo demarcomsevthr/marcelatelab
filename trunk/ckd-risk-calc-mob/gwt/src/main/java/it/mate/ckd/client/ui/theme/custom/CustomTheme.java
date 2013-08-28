@@ -1,6 +1,6 @@
 package it.mate.ckd.client.ui.theme.custom;
 
-import it.mate.ckd.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundle;

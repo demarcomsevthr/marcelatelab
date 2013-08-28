@@ -6,13 +6,13 @@ import it.mate.ckd.client.ui.SpinnerDoubleBox;
 import it.mate.ckd.client.ui.SpinnerIntegerBox;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
-import it.mate.ckd.client.utils.IPhoneScrollPatch;
-import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.MessageBoxUtils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.IPhoneScrollPatch;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 

@@ -7,6 +7,7 @@ import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,9 +34,17 @@ public class MainEntryPoint implements EntryPoint {
     GwtUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
     
-    GwtUtils.log("client width = " + Window.getClientWidth());
-    GwtUtils.log("client height = " + Window.getClientHeight());
     GwtUtils.log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
+    String layoutInfo = "Width " + Window.getClientWidth();
+    layoutInfo += " Height " + Window.getClientHeight();
+    if (OsDetectionPatch.isTabletLandscape()) {
+      layoutInfo += " isTabletLandscape";
+    } else if (OsDetectionPatch.isTabletPortrait()) {
+      layoutInfo += " isTabletPortrait";
+    } else {
+      layoutInfo += " isPhone";
+    }
+    GwtUtils.log("Layout = " + layoutInfo);
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       @Override

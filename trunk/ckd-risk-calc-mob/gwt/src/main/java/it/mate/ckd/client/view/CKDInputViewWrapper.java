@@ -2,13 +2,13 @@ package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.model.CKD;
-import it.mate.ckd.client.utils.OsDetectionPatch;
 import it.mate.ckd.client.view.CKDInputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.dom.client.Element;
