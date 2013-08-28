@@ -79,7 +79,7 @@ body {
 
 .outputPanel .ckd-Label {
   width: 20em;
-  padding-left: 4em;
+  padding-left: 2.8em;
 }
 
 .ckd-Gfr {
@@ -108,4 +108,8 @@ body {
 
 .ckdMdrdLabel2 {
   display: inline;
+}
+
+.ckd-outputSectionSeparator {
+  height: 1.5em !important;
 }

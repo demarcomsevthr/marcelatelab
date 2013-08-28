@@ -122,3 +122,7 @@ body {
 .outputPanel .gwt-Label {
   font-size: 15pt;
 }
+
+.ckd-outputSectionSeparator {
+  height: 0.6em !important;
+}

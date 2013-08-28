@@ -3,7 +3,6 @@ package it.mate.ckd.client.activities;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.places.MainPlace;
-import it.mate.ckd.client.utils.AndroidBackButtonHandler;
 import it.mate.ckd.client.view.CKDInputViewWrapper;
 import it.mate.ckd.client.view.CKDOutputViewWrapper;
 import it.mate.ckd.client.view.HomeView;
@@ -11,6 +10,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;

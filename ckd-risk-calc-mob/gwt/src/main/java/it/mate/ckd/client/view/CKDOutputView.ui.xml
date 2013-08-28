@@ -14,8 +14,10 @@
     <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
       <ui:attribute name="text" description="text" key="helpBtn.text"/>
     </m:Button>
-    
+
+    <!--     
     <g:VerticalPanel width="100%" ui:field="verticalPanel1"  addStyleNames="ckd-output-VerticalPanel-1" horizontalAlignment="center">
+     -->
     
       <!-- ==========    COCKCROFT SECTION    ========== -->
     
@@ -60,8 +62,9 @@
       </g:HorizontalPanel>
 
       <g:HorizontalPanel>
-        <gc:Spacer height="0.4em"/>
+        <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
       </g:HorizontalPanel>
+      
       
       
       <!-- ==========    MDRD 1 SECTION    ========== -->
@@ -97,7 +100,7 @@
       </g:HorizontalPanel>
       
       <g:HorizontalPanel>
-        <gc:Spacer height="0.4em"/>
+        <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
       </g:HorizontalPanel>
       
       
@@ -134,7 +137,7 @@
       </g:HorizontalPanel>
       
       <g:HorizontalPanel>
-        <gc:Spacer height="0.4em"/>
+        <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
       </g:HorizontalPanel>
       
       
@@ -168,10 +171,13 @@
       </g:HorizontalPanel>
       
       <g:HorizontalPanel>
-        <gc:Spacer height="0.4em"/>
+        <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
       </g:HorizontalPanel>
-    
+      
+      
+    <!-- 
     </g:VerticalPanel>
+     -->
   
   </g:HTMLPanel>
   

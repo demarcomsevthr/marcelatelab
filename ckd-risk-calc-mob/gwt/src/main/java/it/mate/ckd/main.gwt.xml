@@ -20,9 +20,9 @@
 
 
   <!-- 23/08/2013 
-       CON QUESTE DUE SET SI RIDUCONO ULTERIORMENTE LE PERMUTAZIONI
+       CON QUESTE DUE PROPERTY SI RIDUCONO A 2 LE PERMUTAZIONI:
        DA USARE SOLO PER PRODURRE LA VERSIONE DI RELEASE
-       (NON FUNZIONA IN DESKTOP)
+       (NON FUNZIONA SU DESKTOP)
        
   <set-property name="phonegap.env" value="yes" />
   <set-property name="mobile.user.agent" value="mobilesafari" />
@@ -30,14 +30,16 @@
   -->
   
   
-
-  <add-linker name="xsiframe" />
   
   <!-- 
        VALORI DA UTILIZZARE = iphone, android
        (ipad non va bene per il layout)
    -->
-  <set-property name="mgwt.os" value="iphone" />
+  <set-property name="mgwt.os" value="android" />
+  
+  
+
+  <add-linker name="xsiframe" />
   
   <set-configuration-property name="mgwt.css" value="pretty" />
 

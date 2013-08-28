@@ -5,12 +5,12 @@ import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
-import it.mate.ckd.client.utils.OsDetectionPatch;
-import it.mate.ckd.client.utils.PhonegapUtils;
 import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -22,7 +22,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.dialog.AlertDialog;
@@ -68,7 +67,7 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   
   @UiField Button ckdHelpBtn;
   
-  @UiField VerticalPanel verticalPanel1;
+//@UiField VerticalPanel verticalPanel1;
   
   private CKD ckd;
   
@@ -86,6 +85,15 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
           int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          
+          /* 28/08/2013
+//        verticalPanel1.getElement().getStyle().setWidth(width, Unit.PX);
+          List<Element> tds = JQueryUtils.selectList("table.ckd-output-VerticalPanel-1 td");
+          for (Element td : tds) {
+            GwtUtils.log("find elem " + td);
+            td.getStyle().setWidth(width, Unit.PX);
+          }
+          */
           
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
