@@ -286,7 +286,7 @@
 
 
 
-@if (it.mate.ckd.client.constants.AppConstants.Cast.isExtendedVersion()) {
+@if (it.mate.ckd.client.constants.AppProperties.Global.isExtendedVersion()) {
 	
   .ckd-Risk {
     width: 7.1em;

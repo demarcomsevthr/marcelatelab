@@ -1,6 +1,7 @@
 package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
@@ -68,7 +69,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
     paramBtn.setText(AppConstants.IMPL.HomeView_paramBtn_text());
 
-    devInfo.setVisible(Boolean.parseBoolean(AppConstants.IMPL.HomeView_devInfo_visible()));
+    devInfo.setVisible(AppProperties.IMPL.HomeView_devInfo_visible());
     String info = "Width " + Window.getClientWidth();
     info += " Height " + Window.getClientHeight();
     if (OsDetectionPatch.isTabletLandscape()) {

@@ -187,7 +187,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
           MessageBoxUtils.popupOk("Wrong value for creatinine");
           return;
         }
-        if (ckd.getScrMgDl(creatininaSpinBox.getValue()) > 3) {
+        if (ckd.getScrMgDl(creatininaSpinBox.getValue()) > 30) {
           MessageBoxUtils.popupOk("Wrong value for creatinine");
           return;
         }

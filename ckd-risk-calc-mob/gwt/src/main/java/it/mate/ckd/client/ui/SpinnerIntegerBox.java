@@ -1,9 +1,11 @@
 package it.mate.ckd.client.ui;
 
-import it.mate.ckd.client.config.ClientProperties;
+import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -20,7 +22,7 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
   private SpinControl leftSpin;
   private SpinControl rightSpin;
   
-  private boolean disableSpinButtons = ClientProperties.IMPL.SpinnerIntegerBox_disableSpinButtons(); 
+  private boolean disableSpinButtons = AppProperties.IMPL.SpinnerIntegerBox_disableSpinButtons(); 
   
   private CustomTheme.CustomBundle bundle = CustomTheme.Instance.get();
   
@@ -69,6 +71,16 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
         }
       });
       
+    }
+    
+    if (AppProperties.IMPL.SpinnerIntegerBox_keyPress_fix_enabled()) {
+      valueBox.addKeyPressHandler(new KeyPressHandler() {
+        public void onKeyPress(KeyPressEvent event) {
+          if (event.getCharCode() == ',') {
+            event.preventDefault();
+          }
+        }
+      });
     }
     
   }
