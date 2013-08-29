@@ -32,11 +32,13 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   
   private final boolean useAnchor = MGWT.getOsDetection().isAndroid();
   
-  private static boolean changeColorOnClick = false;
+  private boolean changeColorOnClick = false;
   
-  private static int revertOriginalColorDelay = -1;
+  private int revertOriginalColorDelay = -1;
   
-  private final String originalColor;
+  private String originalColor;
+  
+  private String tag;
   
   public SmartButton() {
     
@@ -52,24 +54,42 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     addStyleName("mgwt-Button");
     addStyleName("mgwt-Button-round");
     originalColor = getElement().getStyle().getColor();
-    
-    if (useAnchor) {
-      if (changeColorOnClick) {
-        addClickHandler(new ClickHandler() {
-          public void onClick(ClickEvent event) {
-            SmartButton.this.getElement().getStyle().setColor("white");
-            if (revertOriginalColorDelay > 0) {
-              GwtUtils.deferredExecution(revertOriginalColorDelay, new Delegate<Void>() {
-                public void execute(Void element) {
-                  SmartButton.this.getElement().getStyle().setColor(originalColor);
-                }
-              });
-            }
-          }
-        });
-      }
+    if (originalColor == null || "".equals(originalColor)) {
+      originalColor = "black";
     }
 
+    addChangeColorOnClickHandler();
+
+  }
+  
+  private void addChangeColorOnClickHandler() {
+    if (changeColorOnClick) {
+      addClickHandler(new ClickHandler() {
+        public void onClick(ClickEvent event) {
+          SmartButton.this.getElement().getStyle().setColor("white");
+          if (revertOriginalColorDelay > 0) {
+            GwtUtils.deferredExecution(revertOriginalColorDelay, new Delegate<Void>() {
+              public void execute(Void element) {
+                setOriginalColor();
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+  
+  public void setOriginalColor() {
+    GwtUtils.deferredExecution(10, new Delegate<Void>() {
+      public void execute(Void element) {
+        SmartButton.this.getElement().getStyle().clearColor();
+      }
+    });
+  }
+  
+  public void setChangeColorOnClick(boolean changeColorOnClick) {
+    this.changeColorOnClick = changeColorOnClick;
+    addChangeColorOnClickHandler();
   }
   
   public SmartButton(String html) {
@@ -111,7 +131,17 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   }
   
   public class WrappedTouchStartEvent extends TouchStartEvent {
-    
+    private WrappedTouchStartEvent withSource(Object source) {
+      super.setSource(source);
+      return this;
+    }
+  }
+
+  public class WrappedTouchEndEvent extends TouchEndEvent {
+    private WrappedTouchEndEvent withSource(Object source) {
+      super.setSource(source);
+      return this;
+    }
   }
 
   @Override
@@ -119,9 +149,7 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     if (useAnchor) {
       return addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
-//        DomEvent.fireNativeEvent(createTouchEvent(Document.get(), "touchstart"), SmartButton.this);
-//        handler.onTouchStart(null);
-          handler.onTouchStart(new WrappedTouchStartEvent());
+          handler.onTouchStart(new WrappedTouchStartEvent().withSource(SmartButton.this));
         }
       });
     } else {
@@ -129,16 +157,12 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     }
   }
 
-  public class WrappedTouchEndEvent extends TouchEndEvent {
-    
-  }
-
   @Override
   public HandlerRegistration addTouchEndHandler(final TouchEndHandler handler) {
     if (useAnchor) {
       return addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
-          handler.onTouchEnd(new WrappedTouchEndEvent());
+          handler.onTouchEnd(new WrappedTouchEndEvent().withSource(SmartButton.this));
         }
       });
     } else {
@@ -151,7 +175,7 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     if (useAnchor) {
       return addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
-          handler.onTouchStart(new WrappedTouchStartEvent());
+          handler.onTouchStart(new WrappedTouchStartEvent().withSource(SmartButton.this));
         }
       });
     } else {
@@ -192,6 +216,16 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
       return (Button)impl;
     }
   }
+  
+  public String getTag() {
+    return tag;
+  }
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  
   
   
   // Per farlo funzionare bisognare verificare se si trova su win/mobile
