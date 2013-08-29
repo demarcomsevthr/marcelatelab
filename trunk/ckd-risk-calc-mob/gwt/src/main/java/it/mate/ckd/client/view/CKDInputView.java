@@ -12,7 +12,6 @@ import it.mate.gwtcommons.client.ui.MessageBoxUtils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.IPhoneScrollPatch;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -21,7 +20,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Panel;
@@ -81,6 +79,21 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
       }
     });
     
+    
+    
+    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "inputWrapperPanel", false, new Delegate<Element>() {
+      public void execute(final Element wrapperPanelElem) {
+        GwtUtils.onAvailable("ckdInputPanelTable", new Delegate<Element>() {
+          public void execute(Element inputPanelTableElem) {
+            int width = inputPanelTableElem.getClientWidth();
+            int horMargin = ( wrapperPanelElem.getClientWidth() - width ) / 2;
+            inputPanelTableElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+            inputPanelTableElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          }
+        });
+      }
+    });
+    /*
     wrapperPanel.getElement().setId("inputWrapperPanel");
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("inputWrapperPanel", new Delegate<Element>() {
@@ -104,6 +117,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         }
       });
     }
+    */
     
     etaSpinBox.setMinValue(0);
     creatininaSpinBox.setMinValue(0d);

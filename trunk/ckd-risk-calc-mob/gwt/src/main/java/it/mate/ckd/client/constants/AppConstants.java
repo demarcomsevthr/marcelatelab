@@ -43,6 +43,54 @@ public interface AppConstants extends Messages {
   @DefaultMessage("false")
   String SpinnerDoubleBox_enSeparator_fix_enabled();
   
+  @DefaultMessage("") String ProtocolStep_1_QuestionText();
+  @DefaultMessage("") String ProtocolStep_1_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_1_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_1_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_1_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_1_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_1_Answer2EndText();
+  
+  @DefaultMessage("") String ProtocolStep_2_QuestionText();
+  @DefaultMessage("") String ProtocolStep_2_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_2_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_2_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_2_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_2_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_2_Answer2EndText();
+  
+  @DefaultMessage("") String ProtocolStep_3_QuestionText();
+  @DefaultMessage("") String ProtocolStep_3_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_3_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_3_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_3_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_3_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_3_Answer2EndText();
+  
+  @DefaultMessage("") String ProtocolStep_4_QuestionText();
+  @DefaultMessage("") String ProtocolStep_4_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_4_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_4_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_4_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_4_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_4_Answer2EndText();
+  
+  @DefaultMessage("") String ProtocolStep_5_QuestionText();
+  @DefaultMessage("") String ProtocolStep_5_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_5_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_5_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_5_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_5_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_5_Answer2EndText();
+  
+  @DefaultMessage("") String ProtocolStep_6_QuestionText();
+  @DefaultMessage("") String ProtocolStep_6_Answer1Text();
+  @DefaultMessage("-1") String ProtocolStep_6_Answer1Step();
+  @DefaultMessage("") String ProtocolStep_6_Answer1EndText();
+  @DefaultMessage("") String ProtocolStep_6_Answer2Text();
+  @DefaultMessage("-1") String ProtocolStep_6_Answer2Step();
+  @DefaultMessage("") String ProtocolStep_6_Answer2EndText();
+  
   public class Cast {
     
     public static boolean SpinnerDoubleBox_enSeparator_fix_enabled() {

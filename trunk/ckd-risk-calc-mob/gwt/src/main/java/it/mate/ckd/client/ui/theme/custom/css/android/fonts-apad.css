@@ -98,3 +98,7 @@
 .gwt-DialogBox .dialogContent .gwt-Button {
   font-size: 28pt;
 }
+
+.mgwt-Button.ckd-ReferralDecisionMakingButton {
+  font-size: 16px;
+}

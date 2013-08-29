@@ -79,7 +79,18 @@ public class HomeView extends BaseMgwtView <Presenter> {
       info += " isPhone";
     }
     devInfo.setText(info);
+
     
+    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "homeWrapperPanel", true, new Delegate<Element>() {
+      public void execute(Element wrapperPanelElem) {
+        List<Element> spacers = JQueryUtils.selectList(".ckdHomeSpacer");
+        for (Element spacer : spacers) {
+          int spacerHeight = spacer.getClientHeight() / 2;
+          spacer.getStyle().setHeight(spacerHeight, Unit.PX);
+        }
+      }
+    });
+    /*
     wrapperPanel.getElement().setId("homeWrapperPanel");
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("homeWrapperPanel", new Delegate<Element>() {
@@ -103,6 +114,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
         }
       });
     }
+    */
+    
   }
   
   @Override

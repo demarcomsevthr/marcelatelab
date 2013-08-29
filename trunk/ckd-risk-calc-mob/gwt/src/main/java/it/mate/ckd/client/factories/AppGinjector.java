@@ -4,6 +4,8 @@ import it.mate.ckd.client.activities.mapper.MainActivityMapper;
 import it.mate.ckd.client.view.CKDInputViewWrapper;
 import it.mate.ckd.client.view.CKDOutputViewWrapper;
 import it.mate.ckd.client.view.HomeView;
+import it.mate.ckd.client.view.ProtocolStepView;
+import it.mate.ckd.client.view.ReferralDecisionView;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 
@@ -21,5 +23,9 @@ public interface AppGinjector extends CommonGinjector {
   
 //public CKDOutputView getCKDOutputView();
   public CKDOutputViewWrapper getCKDOutputView();
+  
+  public ReferralDecisionView getReferralDecisionView();
+  
+  public ProtocolStepView getProtocolStepView();
   
 }
