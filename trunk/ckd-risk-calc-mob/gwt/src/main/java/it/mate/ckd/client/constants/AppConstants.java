@@ -7,9 +7,6 @@ public interface AppConstants extends Messages {
 
   AppConstants IMPL = GWT.create(AppConstants.class);
   
-  @DefaultMessage("false")
-  String extendedVersion();
-  
   @DefaultMessage("")
   String tabletAppName();
   
@@ -36,12 +33,6 @@ public interface AppConstants extends Messages {
   
   @DefaultMessage("VERY HIGH")
   String CKDOutputView_veryHighRisk_text();
-  
-  @DefaultMessage("false")
-  String HomeView_devInfo_visible();
-  
-  @DefaultMessage("false")
-  String SpinnerDoubleBox_enSeparator_fix_enabled();
   
   @DefaultMessage("") String ProtocolStep_1_QuestionText();
   @DefaultMessage("") String ProtocolStep_1_Answer1Text();
@@ -90,17 +81,5 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_6_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_6_Answer2Step();
   @DefaultMessage("") String ProtocolStep_6_Answer2EndText();
-  
-  public class Cast {
-    
-    public static boolean SpinnerDoubleBox_enSeparator_fix_enabled() {
-      return Boolean.parseBoolean(AppConstants.IMPL.SpinnerDoubleBox_enSeparator_fix_enabled());
-    }
-    
-    public static boolean isExtendedVersion() {
-      return Boolean.parseBoolean(AppConstants.IMPL.extendedVersion());
-    }
-    
-  }
   
 }
