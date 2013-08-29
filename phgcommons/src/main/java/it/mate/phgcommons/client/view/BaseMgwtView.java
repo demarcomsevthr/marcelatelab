@@ -1,9 +1,12 @@
 package it.mate.phgcommons.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.widget.HeaderButton;
 import com.googlecode.mgwt.ui.client.widget.HeaderPanel;
@@ -87,6 +90,15 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
 
   public void setPresenter(P presenter) {
     this.presenter = presenter;
+  }
+  
+  protected void initHeaderBackButton(String text, final Delegate<TapEvent> delegate) {
+    getHeaderBackButton().setText(text);
+    getHeaderBackButton().addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        delegate.execute(event);
+      }
+    });
   }
 
   public abstract void setModel(Object model, String tag);  
