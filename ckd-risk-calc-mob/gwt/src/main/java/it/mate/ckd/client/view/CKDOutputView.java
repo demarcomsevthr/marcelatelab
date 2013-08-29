@@ -3,13 +3,14 @@ package it.mate.ckd.client.view;
 import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
+import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -18,19 +19,19 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.ui.client.dialog.AlertDialog;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
+    void goToProtocolStep(ProtocolStep protocolStep);
+    void goToReferralDecision();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }
@@ -67,37 +68,41 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   
   @UiField Button ckdHelpBtn;
   
-//@UiField VerticalPanel verticalPanel1;
-  
   private CKD ckd;
   
   public CKDOutputView() {
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
     initUI();
+
     
+    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "outputWrapperPanel", false, new Delegate<Element>() {
+      public void execute(final Element wrapperPanelElem) {
+        int width = wrapperPanelElem.getClientWidth();
+        int height = wrapperPanelElem.getClientHeight();
+        
+        Element btnElem = ckdHelpBtn.getElement();
+        int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
+        int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
+        btnElem.getStyle().setLeft(btnLeft, Unit.PX);
+        btnElem.getStyle().setTop(btnTop, Unit.PX);
+      }
+    });
+    
+    /*
     wrapperPanel.getElement().setId("outputWrapperPanel");
     if (OsDetectionPatch.isTablet()) {
       GwtUtils.onAvailable("outputWrapperPanel", new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
           int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+          
           int height = Window.getClientHeight() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
           int width = Window.getClientWidth() * wrapperPct / 100;
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
           
-          /* 28/08/2013
-//        verticalPanel1.getElement().getStyle().setWidth(width, Unit.PX);
-          List<Element> tds = JQueryUtils.selectList("table.ckd-output-VerticalPanel-1 td");
-          for (Element td : tds) {
-            GwtUtils.log("find elem " + td);
-            td.getStyle().setWidth(width, Unit.PX);
-          }
-          */
-          
           int horMargin = ( Window.getClientWidth() - width ) / 2;
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
-          
           wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
           
           Element btnElem = ckdHelpBtn.getElement();
@@ -109,6 +114,7 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
         }
       });
     }
+    */
     
   }
 
@@ -185,11 +191,12 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     }
   }
   
-  @UiHandler ("referralDecisionMakingBtn")
+  @UiHandler ({"referralDecisionMakingCockBtn", "referralDecisionMakingMdrd1Btn", "referralDecisionMakingMdrd2Btn", "referralDecisionMakingEpiBtn"})
   public void onReferralDecisionMakingBtn (TouchStartEvent event) {
-    Button btn = (Button)event.getSource();
-    GwtUtils.log("pressed " + btn.getTitle());
-    new AlertDialog("Suggested decision making", "Monitor").show();
+    SmartButton btn = (SmartButton)event.getSource();
+    GwtUtils.log("pressed " + btn.getTag());
+//  new AlertDialog("Suggested decision making", "Monitor").show();
+    getPresenter().goToReferralDecision();
   }
   
 }

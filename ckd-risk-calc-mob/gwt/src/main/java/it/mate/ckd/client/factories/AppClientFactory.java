@@ -2,7 +2,11 @@ package it.mate.ckd.client.factories;
 
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.view.BaseMgwtView;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.googlecode.gwtphonegap.client.PhoneGap;
 
@@ -12,18 +16,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
 
   class Initializer {
     private static AppClientFactory create() {
-      AppClientFactory clientFactory = null;
-      /*
-      String startupModule = GwtUtils.getJSVar("startupModule", null);
-      if ("admin".equals(startupModule)) {
-        clientFactory = new AdminClientFactoryImpl();
-      } else if ("site".equals(startupModule)) {
-        clientFactory = new SiteClientFactoryImpl();
-      } else {
-        Window.alert("Internal error: startupModule property not set!");
-      }
-      */
-      clientFactory = new AppClientFactoryImpl();
+      AppClientFactory clientFactory = new AppClientFactoryImpl();
       return clientFactory;
     }
   }
@@ -35,5 +28,9 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public PhoneGap getPhoneGap();
   
   public int getWrapperPct();
+  
+  public void adaptWrapperPanelOnTablet(Panel wrapperPanel, String id, boolean adaptVerMargin, Delegate<Element> delegate);
+
+  public void initTitle(BaseMgwtView view);
   
 }

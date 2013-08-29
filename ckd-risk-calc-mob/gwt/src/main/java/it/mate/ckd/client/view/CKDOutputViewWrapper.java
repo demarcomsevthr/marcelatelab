@@ -1,6 +1,7 @@
 package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.CKDOutputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
@@ -16,6 +17,8 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
   
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
+    void goToProtocolStep(ProtocolStep protocolStep);
+    void goToReferralDecision();
   }
 
   public CKDOutputViewWrapper() {
@@ -60,6 +63,12 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
       }
       public void goToCkdInput() {
         presenter.goToCkdInput();
+      }
+      public void goToProtocolStep(ProtocolStep protocolStep) {
+        presenter.goToProtocolStep(protocolStep);
+      }
+      public void goToReferralDecision() {
+        presenter.goToReferralDecision();
       }
     });
   }

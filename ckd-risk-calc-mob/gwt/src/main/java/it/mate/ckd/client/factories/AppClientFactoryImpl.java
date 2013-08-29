@@ -2,15 +2,22 @@ package it.mate.ckd.client.factories;
 
 import it.mate.ckd.client.activities.mapper.MainActivityMapper;
 import it.mate.ckd.client.activities.mapper.MainAnimationMapper;
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.places.AppHistoryObserver;
 import it.mate.ckd.client.places.MainPlace;
 import it.mate.ckd.client.places.MainPlaceHistoryMapper;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
@@ -161,6 +168,54 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return wrapperPct;
   }
   
+  
+  public void adaptWrapperPanelOnTablet(Panel wrapperPanel, String id, final boolean adaptVerMargin, final Delegate<Element> delegate) {
+    wrapperPanel.getElement().setId(id);
+    if (OsDetectionPatch.isTablet()) {
+      GwtUtils.onAvailable(id, new Delegate<Element>() {
+        public void execute(Element wrapperPanelElem) {
+          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+          
+          int height = Window.getClientHeight() * wrapperPct / 100;
+          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
+
+          if (adaptVerMargin) {
+            int verMargin = ( Window.getClientHeight() - height ) / 2;
+            wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
+            wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
+          }
+          
+          int width = Window.getClientWidth() * wrapperPct / 100;
+          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          
+          int horMargin = ( Window.getClientWidth() - width ) / 2;
+          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          
+          /*
+          List<Element> spacers = JQueryUtils.selectList(".ckdHomeSpacer");
+          for (Element spacer : spacers) {
+            int spacerHeight = spacer.getClientHeight() / 2;
+            spacer.getStyle().setHeight(spacerHeight, Unit.PX);
+          }
+          */
+          
+          if (delegate != null) {
+            delegate.execute(wrapperPanelElem);
+          }
+          
+        }
+      });
+    }
+  }
+
+  public void initTitle(BaseMgwtView view) {
+    if (OsDetectionPatch.isTablet()) {
+      view.setTitleHtml(AppConstants.IMPL.tabletAppName());
+    } else {
+      view.setTitleHtml(AppConstants.IMPL.phoneAppName());
+    }
+  }
   
   
 }

@@ -4,7 +4,7 @@
        xmlns:ckd="urn:import:it.mate.ckd.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"       
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default">
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui">
 
   <ui:with field="bundle" type="it.mate.ckd.client.ui.theme.custom.CustomTheme.CustomBundle"/>
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
@@ -49,8 +49,8 @@
         
         <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
           <gc:Spacer width="0.3em"/>
-          <m:Button ui:field="referralDecisionMakingBtn" text="?" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
-            title="CockroftReferralDecisionMakingBtn" />
+          <p:SmartButton ui:field="referralDecisionMakingCockBtn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
+            tag="cockroft" />
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
@@ -97,6 +97,12 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="mdrdRiskBox" addStyleNames="{style.ckdRisk}"/>
         
+        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+          <gc:Spacer width="0.3em"/>
+          <p:SmartButton ui:field="referralDecisionMakingMdrd1Btn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
+            tag="cockroft" />
+        </g:HorizontalPanel>
+        
       </g:HorizontalPanel>
       
       <g:HorizontalPanel>
@@ -134,6 +140,12 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="mdrdNcRiskBox" addStyleNames="{style.ckdRisk}"/>
         
+        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+          <gc:Spacer width="0.3em"/>
+          <p:SmartButton ui:field="referralDecisionMakingMdrd2Btn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
+            tag="cockroft" />
+        </g:HorizontalPanel>
+        
       </g:HorizontalPanel>
       
       <g:HorizontalPanel>
@@ -167,6 +179,12 @@
         
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="epiRiskBox" addStyleNames="{style.ckdRisk}"/>
+        
+        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+          <gc:Spacer width="0.3em"/>
+          <p:SmartButton ui:field="referralDecisionMakingEpiBtn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
+            tag="cockroft" />
+        </g:HorizontalPanel>
         
       </g:HorizontalPanel>
       

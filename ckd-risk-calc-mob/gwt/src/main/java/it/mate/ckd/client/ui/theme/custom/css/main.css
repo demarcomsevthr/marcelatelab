@@ -298,6 +298,31 @@
     padding: 4px 8px;
     margin: 0;
     border: solid 1px rgba(0, 0, 0, 0.4) !important;
+    color: rgb(170, 0, 0);
+  }
+  
+  .ckd-ReferralDecisionMakingGroup td {
+    padding: 0;
+  }
+  
+  .ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .gwt-HTML {
+    font-size: 38px !important;
+  }
+  
+  .gwt-Label.ckdSuggestedReferralDecision {
+    padding-left: 20px;
+    color: yellow;
+  }
+  
+  .ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
+    font-size: 32px;
+  }
+  
+  .ckdProtocolStepViewPanel .ckdProtocolBackBtn {
+    font-size: 14px !important;
+    width: 3em;
+    height: 1em;
+    padding: 8px 10px;
   }
   
 } @else {
