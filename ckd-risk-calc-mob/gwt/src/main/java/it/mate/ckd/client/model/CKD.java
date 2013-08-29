@@ -97,13 +97,22 @@ public class CKD {
   }
   
   private double getScrMgDl() {
+    /*
     double scr = this.scr;
+    if (scrUnit == PMOL_L_UNIT) {
+      scr = scr / 88.4;
+    }
+    */
+    return getScrMgDl(this.scr);
+  }
+  
+  public double getScrMgDl(double originalValue) {
+    double scr = originalValue;
     if (scrUnit == PMOL_L_UNIT) {
       scr = scr / 88.4;
     }
     return scr;
   }
-  
 
   public CKD setScr(double scr) {
     this.scr = scr;
