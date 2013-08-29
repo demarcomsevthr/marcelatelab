@@ -254,6 +254,10 @@
   margin-left: 10px;
 }
 
+.gwt-DialogBox .dialogTop {
+  color: black;
+}
+
 
 .mgwt-SmartButton {
   display: block;
