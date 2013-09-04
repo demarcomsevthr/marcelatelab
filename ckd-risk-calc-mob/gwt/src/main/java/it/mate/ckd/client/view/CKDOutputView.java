@@ -193,8 +193,14 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   
   @UiHandler ({"referralDecisionMakingCockBtn", "referralDecisionMakingMdrd1Btn", "referralDecisionMakingMdrd2Btn", "referralDecisionMakingEpiBtn"})
   public void onReferralDecisionMakingBtn (TouchStartEvent event) {
-    SmartButton btn = (SmartButton)event.getSource();
-    GwtUtils.log("pressed " + btn.getTag());
+    Widget w = (Widget)event.getSource();
+    SmartButton sbtn = null;
+    if (event.getSource() instanceof SmartButton) {
+      sbtn = (SmartButton)event.getSource();
+    } else if (w.getParent() instanceof SmartButton) {
+      sbtn = (SmartButton)w.getParent();
+    }
+    GwtUtils.log("pressed " + sbtn.getTag());
 //  new AlertDialog("Suggested decision making", "Monitor").show();
     getPresenter().goToReferralDecision();
   }

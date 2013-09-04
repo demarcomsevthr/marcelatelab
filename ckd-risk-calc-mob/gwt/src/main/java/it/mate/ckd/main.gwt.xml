@@ -24,18 +24,18 @@
        DA USARE SOLO PER PRODURRE LA VERSIONE DI RELEASE
        (NON FUNZIONA SU DESKTOP)
        
-  <set-property name="phonegap.env" value="yes" />
-  <set-property name="mobile.user.agent" value="mobilesafari" />
   
   -->
   
+  <set-property name="phonegap.env" value="yes" />
+  <set-property name="mobile.user.agent" value="mobilesafari" />
   
   
   <!-- 
        VALORI DA UTILIZZARE = iphone, android
        (ipad non va bene per il layout)
    -->
-  <set-property name="mgwt.os" value="android" />
+  <set-property name="mgwt.os" value="iphone" />
   
   
 
