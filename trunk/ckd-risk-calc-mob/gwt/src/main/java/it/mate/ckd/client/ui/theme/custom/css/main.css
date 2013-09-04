@@ -311,6 +311,7 @@
   
   .ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .gwt-HTML {
     font-size: 38px !important;
+    color: white;
   }
   
   .gwt-Label.ckdSuggestedReferralDecision {
