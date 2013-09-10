@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.List;
@@ -69,18 +70,24 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
     paramBtn.setText(AppConstants.IMPL.HomeView_paramBtn_text());
 
-    devInfo.setVisible(AppProperties.IMPL.HomeView_devInfo_visible());
-    String info = "Width " + Window.getClientWidth();
-    info += " Height " + Window.getClientHeight();
-    if (OsDetectionPatch.isTabletLandscape()) {
-      info += " isTabletLandscape";
-    } else if (OsDetectionPatch.isTabletPortrait()) {
-      info += " isTabletPortrait";
-    } else {
-      info += " isPhone";
+    if (AppProperties.IMPL.HomeView_devInfo_visible()) {
+      devInfo.setVisible(true);
+      String info = "Width " + Window.getClientWidth();
+      info += " Height " + Window.getClientHeight();
+      if (OsDetectionPatch.isTabletLandscape()) {
+        info += " isTabletLandscape";
+      } else if (OsDetectionPatch.isTabletPortrait()) {
+        info += " isTabletPortrait";
+      } else {
+        info += " isPhone";
+      }
+      devInfo.setText(info);
+      
+    } else if (AppProperties.IMPL.HomeView_langInfo_visible()) {
+      devInfo.setVisible(true);
+      String info = "Language = " + PhonegapUtils.getNavigator().getLanguage();
+      devInfo.setText(info);
     }
-    devInfo.setText(info);
-
     
     AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "homeWrapperPanel", true, new Delegate<Element>() {
       public void execute(Element wrapperPanelElem) {

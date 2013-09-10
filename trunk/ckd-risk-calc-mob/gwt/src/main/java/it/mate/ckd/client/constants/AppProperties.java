@@ -21,6 +21,9 @@ public interface AppProperties extends Constants {
   boolean HomeView_devInfo_visible();
   
   @DefaultBooleanValue(false)
+  boolean HomeView_langInfo_visible();
+  
+  @DefaultBooleanValue(false)
   boolean SpinnerDoubleBox_enSeparator_fix_enabled();
   
   @DefaultBooleanValue(false)

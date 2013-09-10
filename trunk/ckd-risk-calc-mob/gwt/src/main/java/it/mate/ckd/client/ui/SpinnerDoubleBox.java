@@ -3,6 +3,7 @@ package it.mate.ckd.client.ui;
 import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -15,6 +16,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 
 public class SpinnerDoubleBox extends Composite implements HasValueChangeHandlers<Double> {
@@ -39,6 +41,14 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     initUI();
   }
   
+  public class CMDoubleBox extends MDoubleBox {
+    
+    public ValueBoxBase<Double> getBox() {
+      return box;
+    }
+    
+  }
+  
   private void initUI() {
     
     HorizontalPanel hp = new HorizontalPanel();
@@ -51,8 +61,23 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       hp.add(leftSpin);
     }
     
-    valueBox = new MDoubleBox();
+    //TODO: 06/09/2013
+    
+//  valueBox = new MDoubleBox();
+    valueBox = new CMDoubleBox();
     valueBox.getElement().setPropertyString("type", "number");
+    
+    ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("type", "number");
+    ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("step", "0.1");
+//  ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("type", "text");
+//  ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("pattern", "[0-9]*[.][0-9]*");
+    
+    /*
+    GwtUtils.log("type = " + valueBox.getElement().getPropertyString("type"));
+    valueBox.getElement().setAttribute("type", "number");
+    GwtUtils.log("type = " + valueBox.getElement().getPropertyString("type"));
+    GwtUtils.log(valueBox.getElement().getInnerHTML());
+    */
     
     hp.add(valueBox);
     
@@ -78,11 +103,19 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
         }
       });
     }
+    
+    final String language = PhonegapUtils.getNavigator().getLanguage();
 
     if (AppProperties.IMPL.SpinnerDoubleBox_keyPress_fix_enabled()) {
       valueBox.addKeyPressHandler(new KeyPressHandler() {
         public void onKeyPress(KeyPressEvent event) {
-          if (event.getCharCode() == ',') {
+
+          char separatorToAvoid = ',';
+          if (language != null && language.toLowerCase().startsWith("it")) {
+            separatorToAvoid = '.';
+          }
+          
+          if (event.getCharCode() == separatorToAvoid) {
             event.preventDefault();
           }
         }
