@@ -5,6 +5,7 @@ import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -47,6 +48,14 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       return box;
     }
     
+    public double getValueAsDouble() {
+      return getValueAsNumber(box.getElement());
+    }
+    
+    private native double getValueAsNumber(JavaScriptObject elem) /*-{
+      return elem.valueAsNumber;
+    }-*/;
+  
   }
   
   private void initUI() {
@@ -111,9 +120,11 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
         public void onKeyPress(KeyPressEvent event) {
 
           char separatorToAvoid = ',';
+          /*
           if (language != null && language.toLowerCase().startsWith("it")) {
             separatorToAvoid = '.';
           }
+          */
           
           if (event.getCharCode() == separatorToAvoid) {
             event.preventDefault();
@@ -156,7 +167,19 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   }
   
   public Double getValue() {
-    Double res = valueBox.getValue();
+    
+    Double res = null;
+
+    // TODO 10/09/2013
+    if (valueBox instanceof CMDoubleBox) {
+      CMDoubleBox doubleBox = (CMDoubleBox)valueBox;
+      res = doubleBox.getValueAsDouble();
+      
+      GwtUtils.log("getting value " + res);
+      
+    } else {
+      res = valueBox.getValue();
+    }
     
     if (AppProperties.IMPL.SpinnerDoubleBox_enSeparator_fix_enabled() && valueBox.getText().contains(",") && !("it".equals(getLocalLanguageCookie()))) {
       String appo = valueBox.getText().replace(",", ".");
