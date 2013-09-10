@@ -79,6 +79,8 @@ public class GwtUtils {
 
   private final static NumberFormat currencyFMT = NumberFormat.getFormat("0.00");
   
+  private final static NumberFormat decimalFMT = NumberFormat.getFormat("0.00");
+  
   private static final String ATTR_CLIENT_WAIT_PANEL = "common.client.waitPanel";
   
   private static final String ATTR_CLIENT_DEFAULT_WAIT_PANEL = "common.client.defaultWaitPanel";
@@ -167,6 +169,19 @@ public class GwtUtils {
     }
     NumberFormat decimalFMT = NumberFormat.getFormat(pattern.toString());
     return decimalFMT.format(number);
+  }
+  
+  public static Double composeDouble (int intPart, int decimalPart) {
+    return decimalFMT.parse(intPart+"."+decimalPart);
+  }
+  
+  public static int getDecimals(double value) {
+    String [] parts = decimalFMT.format(value).split("\\.");
+    if (parts.length == 2) {
+      return Integer.parseInt(parts[1]);
+    } else {
+      return 0;
+    }
   }
   
   public static NumberFormat getDefaultCurrencyFmt() {
