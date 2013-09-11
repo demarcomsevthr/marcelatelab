@@ -161,6 +161,14 @@ public class GwtUtils {
   }
   
   public static String formatDecimal (Double number, int decimals) {
+    return createDecimalFormat(decimals).format(number);
+  }
+  
+  public static Double composeDouble (int intPart, int decimalPart, int decimals) {
+    return createDecimalFormat(decimals).parse(intPart+"."+decimalPart);
+  }
+  
+  private static NumberFormat createDecimalFormat(int decimals) {
     StringBuffer pattern = new StringBuffer("0");
     for (int ip = 0; ip < decimals; ip++) {
       if (ip == 0)
@@ -168,15 +176,11 @@ public class GwtUtils {
       pattern.append("0");
     }
     NumberFormat decimalFMT = NumberFormat.getFormat(pattern.toString());
-    return decimalFMT.format(number);
+    return decimalFMT;
   }
   
-  public static Double composeDouble (int intPart, int decimalPart) {
-    return decimalFMT.parse(intPart+"."+decimalPart);
-  }
-  
-  public static int getDecimals(double value) {
-    String [] parts = decimalFMT.format(value).split("\\.");
+  public static int getDecimals(double value, int decimals) {
+    String [] parts = createDecimalFormat(decimals).format(value).split("\\.");
     if (parts.length == 2) {
       return Integer.parseInt(parts[1]);
     } else {
