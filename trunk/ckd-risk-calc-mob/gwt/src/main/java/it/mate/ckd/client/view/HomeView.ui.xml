@@ -36,9 +36,7 @@
        
       <gc:Spacer height="1em"/>
       
-      <g:Label text="" addStyleNames="{style.verLbl}">
-        <ui:attribute name="text" description="text" key="app.versionCredits"/>
-      </g:Label>
+      <g:Label text="" addStyleNames="{style.verLbl}" ui:field="versionCreditsLbl"/>
 
       <g:HTMLPanel>
         <div id="debugDiv" class="{style.verLbl}"></div>
