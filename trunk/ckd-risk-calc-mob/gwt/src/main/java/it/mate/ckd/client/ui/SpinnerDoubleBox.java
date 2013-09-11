@@ -2,28 +2,31 @@ package it.mate.ckd.client.ui;
 
 import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ValueBoxBase;
+import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
 
 public class SpinnerDoubleBox extends Composite implements HasValueChangeHandlers<Double> {
   
-//private MDoubleBox valueBox;
-  
-  private MIntegerBox intValueBox;
-  private MIntegerBox decValueBox;
-  
-//private DoubleBox valueBox;
+  private ValueBox valueBox;
   
   private SpinControl leftSpin;
   private SpinControl rightSpin;
@@ -43,6 +46,7 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     initUI();
   }
   
+  
   private void initUI() {
     
     HorizontalPanel hp = new HorizontalPanel();
@@ -54,23 +58,16 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       GwtUtils.setStyleAttribute(leftSpin, "paddingRight", "6px");
       hp.add(leftSpin);
     }
-    
-    HorizontalPanel innerHp = new HorizontalPanel();
-    innerHp.setBorderWidth(0);
-    innerHp.setSpacing(0);
-    
-    intValueBox = new MIntegerBox();
-    intValueBox.addStyleName("mgwt-SpinnerDouble-int-part");
-    decValueBox = new MIntegerBox();
-    decValueBox.addStyleName("mgwt-SpinnerDouble-dec-part");
-    
-    intValueBox.getElement().setPropertyString("type", "number");
-    decValueBox.getElement().setPropertyString("type", "number");
-    
-    innerHp.add(intValueBox);
-    innerHp.add(decValueBox);
 
-    hp.add(innerHp);
+    if (MGWT.getOsDetection().isIOs()) {
+      valueBox = new ValueBoxPatch();
+    } else {
+      valueBox = new ValueBoxGwt();
+//    valueBox = new ValueBoxMgwt();
+    }
+    
+
+    hp.add(valueBox.create());
     
     if (!disableSpinButtons) {
       rightSpin = new SpinControl(bundle.plusImage());
@@ -95,35 +92,19 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       });
     }
     
-    final String language = PhonegapUtils.getNavigator().getLanguage();
-
-    /*
-    if (AppProperties.IMPL.SpinnerDoubleBox_keyPress_fix_enabled()) {
-      valueBox.addKeyPressHandler(new KeyPressHandler() {
-        public void onKeyPress(KeyPressEvent event) {
-          char separatorToAvoid = ',';
-          if (event.getCharCode() == separatorToAvoid) {
-            event.preventDefault();
-          }
-        }
-      });
-    }
-    */
-    
   }
   
   @Override
   public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
     needFireEvents = true;
-//  return valueBox.addValueChangeHandler(handler);
-    return null;
+    return valueBox.addValueChangeHandler(handler);
   }
   
   private void inc(double increment) {
-    if (intValueBox.getValue() == null)
+    if (valueBox.getValue() == null)
       return;
     
-    double value = GwtUtils.composeDouble(intValueBox.getValue(), decValueBox.getValue());
+    double value = valueBox.getValue();
     value += increment;
     boolean accept = true;
     if (minValue != null) {
@@ -133,13 +114,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
       accept = accept && value <= maxValue;
     }
     if (accept) {
-      setValueImpl(value, needFireEvents);
+      valueBox.setValue(value, needFireEvents);
     }
-  }
-  
-  private void setValueImpl(double value, boolean fireEvents) {
-    intValueBox.setValue((int)value, fireEvents);
-    decValueBox.setValue(GwtUtils.getDecimals(value), fireEvents);
   }
   
   public void setIncrement(double increment) {
@@ -147,13 +123,11 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   }
   
   public void setValue(double value) {
-    setValueImpl(value, false);
+    valueBox.setValue(value, false);
   }
   
   public Double getValue() {
-    Double res = null;
-    res = GwtUtils.composeDouble(intValueBox.getValue(), decValueBox.getValue());
-    return res;
+    return valueBox.getValue();
   }
   
   public class SpinAnchor extends Anchor {
@@ -176,5 +150,143 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
   private static native String getLocalLanguageCookie() /*-{
     return $wnd.getLocalLanguageCookie();
   }-*/;
+  
+  
+  
+  public interface ValueBox {
+    public Widget create();
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler);
+    public Double getValue();
+    public void setValue(double value, boolean fireEvents);
+  }
+  
+  public class ValueBoxPatch implements ValueBox {
+    private MIntegerBox intValueBox;
+    private MIntegerBox decValueBox;
+    
+    public Widget create() {
+      HorizontalPanel innerHp = new HorizontalPanel();
+      innerHp.setBorderWidth(0);
+      innerHp.setSpacing(0);
+      intValueBox = new MIntegerBox();
+      intValueBox.addStyleName("mgwt-SpinnerDouble-int-part");
+      decValueBox = new MIntegerBox();
+      decValueBox.addStyleName("mgwt-SpinnerDouble-dec-part");
+      
+//    intValueBox.getElement().setPropertyString("type", "number");
+//    decValueBox.getElement().setPropertyString("type", "number");
+      
+      intValueBox.getElement().setPropertyString("type", "text");
+      intValueBox.getElement().setPropertyString("pattern", "[0-9]*");
+      decValueBox.getElement().setPropertyString("type", "text");
+      decValueBox.getElement().setPropertyString("pattern", "[0-9]*");
+      
+      innerHp.add(intValueBox);
+      innerHp.add(decValueBox);
+      
+      return innerHp;
+    }
+    
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
+      return null;
+    }
+
+    public Double getValue() {
+      if (intValueBox.getValue() == null)
+        return null;
+      Double value = GwtUtils.composeDouble(intValueBox.getValue(), decValueBox.getValue(), 1);
+      return value;
+    }
+    
+    public void setValue(double value, boolean fireEvents) {
+      intValueBox.setValue((int)value, fireEvents);
+      decValueBox.setValue(GwtUtils.getDecimals(value, 1), fireEvents);
+    }
+    
+  }
+  
+  public class ValueBoxMgwt implements ValueBox {
+    private CMDoubleBox valueBox;
+    public Widget create() {
+      valueBox = new CMDoubleBox();
+      valueBox.getElement().setPropertyString("type", "number");
+      
+      valueBox.getBox().getElement().setPropertyString("type", "number");
+      valueBox.getBox().getElement().setPropertyString("step", "0.1");
+      
+//    ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("type", "text");
+//    ((CMDoubleBox)valueBox).getBox().getElement().setPropertyString("pattern", "[0-9]*[.][0-9]*");
+
+      if (AppProperties.IMPL.SpinnerDoubleBox_keyPress_fix_enabled()) {
+        valueBox.addKeyPressHandler(new KeyPressHandler() {
+          public void onKeyPress(KeyPressEvent event) {
+            char separatorToAvoid = ',';
+            
+            /*
+//          String language = PhonegapUtils.getNavigator().getLanguage();
+            if (language != null && language.toLowerCase().startsWith("it")) {
+              separatorToAvoid = '.';
+            }
+            */
+            
+            if (event.getCharCode() == separatorToAvoid) {
+              event.preventDefault();
+            }
+          }
+        });
+      }
+      
+      return valueBox;
+    }
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
+      return valueBox.addValueChangeHandler(handler);
+    }
+    public Double getValue() {
+      return valueBox.getValueAsDouble();
+    }
+    public void setValue(double value, boolean fireEvents) {
+      valueBox.setValue(value, fireEvents);
+    }
+  }
+  
+  public class ValueBoxGwt implements ValueBox {
+    private DoubleBox valueBox;
+    public Widget create() {
+      valueBox = new DoubleBox();
+      // simulo i css di mgwt
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          valueBox.getElement().addClassName("mgwt-InputBox-box");
+          valueBox.getElement().getParentElement().addClassName("mgwt-TextBox");
+        }
+      });
+      valueBox.getElement().setPropertyString("type", "number");
+      return valueBox;
+    }
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
+      return valueBox.addValueChangeHandler(handler);
+    }
+    public Double getValue() {
+      return valueBox.getValue();
+    }
+    public void setValue(double value, boolean fireEvents) {
+      valueBox.setValue(value, fireEvents);
+    }
+  }
+  
+  
+  public class CMDoubleBox extends MDoubleBox {
+    public ValueBoxBase<Double> getBox() {
+      return box;
+    }
+    public double getValueAsDouble() {
+      return getValueAsNumber(box.getElement());
+    }
+    private native double getValueAsNumber(JavaScriptObject elem) /*-{
+      return elem.valueAsNumber;
+    }-*/;
+  }
+  
 
 }
