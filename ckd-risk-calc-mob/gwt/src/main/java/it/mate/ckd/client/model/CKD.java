@@ -18,6 +18,8 @@ public class CKD {
   
   public final static int VERY_HIGH_RISK = 4;
   
+  private final static double FACTOR_PMOLL_TO_MGDL = 88.4;
+  
   double scr;
   
   int scrUnit = MG_DL_UNIT;
@@ -97,19 +99,13 @@ public class CKD {
   }
   
   private double getScrMgDl() {
-    /*
-    double scr = this.scr;
-    if (scrUnit == PMOL_L_UNIT) {
-      scr = scr / 88.4;
-    }
-    */
     return getScrMgDl(this.scr);
   }
   
   public double getScrMgDl(double originalValue) {
     double scr = originalValue;
     if (scrUnit == PMOL_L_UNIT) {
-      scr = scr / 88.4;
+      scr = convertPMollToMgDl(scr);
     }
     return scr;
   }
@@ -175,7 +171,7 @@ public class CKD {
   private Integer getAlbuminMgG() {
     Integer albumin = this.albumin;
     if (albUnit == MG_MMOL_UNIT) {
-      albumin = albumin * 10;
+      albumin = convertMMolToMgG(albumin);
     }
     return albumin;
   }
@@ -259,6 +255,34 @@ public class CKD {
   
   public boolean isUseBsa() {
     return useBsa;
+  }
+  
+  public static Double convertPMollToMgDl(Double pmoll) {
+    if (pmoll == null)
+      return null;
+    if (pmoll == 0d)
+      return 0d;
+    return pmoll / FACTOR_PMOLL_TO_MGDL;
+  }
+
+  public static Double convertMgDlToPMoll(Double mgdl) {
+    if (mgdl == null)
+      return null;
+    return mgdl * FACTOR_PMOLL_TO_MGDL;
+  }
+
+  public static Integer convertMMolToMgG (Integer mmol) {
+    if (mmol == null)
+      return null;
+    return mmol * 10;
+  }
+  
+  public static Integer convertMgGToMMol (Integer mgg) {
+    if (mgg == null)
+      return null;
+    if (mgg == 0)
+      return 0;
+    return mgg / 10;
   }
   
 }

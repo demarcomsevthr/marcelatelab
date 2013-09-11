@@ -150,6 +150,11 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   public void onCreatinineUmAnc (ClickEvent event) {
     ckd.setScrUnit(ckd.getScrUnit() == CKD.MG_DL_UNIT ? CKD.PMOL_L_UNIT : CKD.MG_DL_UNIT);
     updateCreatinineUmAnc();
+    if (ckd.getScrUnit() == CKD.PMOL_L_UNIT) {
+      creatininaSpinBox.setValue(CKD.convertMgDlToPMoll(creatininaSpinBox.getValue()));
+    } else {
+      creatininaSpinBox.setValue(CKD.convertPMollToMgDl(creatininaSpinBox.getValue()));
+    }
   }
   private void updateCreatinineUmAnc() {
     creatinineUmAnc.setHTML(ckd.getScrUnit() == CKD.MG_DL_UNIT ? "mg/dl" : "mmol/l");
@@ -159,6 +164,11 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
   public void onAlbuminUmAnc (ClickEvent event) {
     ckd.setAlbUnit(ckd.getAlbUnit() == CKD.MG_G_UNIT ? CKD.MG_MMOL_UNIT : CKD.MG_G_UNIT);
     updateAlbuminUmAnc();
+    if (ckd.getAlbUnit() == CKD.MG_MMOL_UNIT) {
+      albuminuriaSpinBox.setValue(CKD.convertMgGToMMol(albuminuriaSpinBox.getValue()));
+    } else {
+      albuminuriaSpinBox.setValue(CKD.convertMMolToMgG(albuminuriaSpinBox.getValue()));
+    }
   }
   private void updateAlbuminUmAnc () {
     albuminUmAnc.setHTML(ckd.getAlbUnit() == CKD.MG_G_UNIT ? "mg/g" : "<div>mg/</div><div>mmol</div>");

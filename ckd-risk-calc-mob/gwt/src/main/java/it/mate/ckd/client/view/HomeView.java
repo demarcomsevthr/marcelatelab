@@ -45,6 +45,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField HasText paramBtn;
   @UiField Label devInfo;
+  @UiField Label versionCreditsLbl;
   
   public HomeView() {
     bundle = CustomTheme.Instance.get();
@@ -123,6 +124,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
       });
     }
     */
+    
+    versionCreditsLbl.setText(AppConstants.IMPL.versionCredits());
     
   }
   

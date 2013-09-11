@@ -13,6 +13,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("")
   String phoneAppName();
   
+  @DefaultMessage("Version 0.0 - Powered by Medup Dev.")
+  String versionCredits();
+  
   @DefaultMessage("Insert parameters")
   String HomeView_paramBtn_text();
   
