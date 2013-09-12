@@ -60,8 +60,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     }
 
     if (MGWT.getOsDetection().isIOs()) {
-      valueBox = new ValueBoxPatch();
-//    valueBox = new ValueBoxGwt();
+//    valueBox = new ValueBoxGwt();      /*  1.0.5.F  */
+      valueBox = new ValueBoxPatch();    /*  1.0.5.G  */
     } else {
       valueBox = new ValueBoxGwt();
     }
