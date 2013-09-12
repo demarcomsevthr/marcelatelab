@@ -1,3 +1,9 @@
+## ATTENZIONE
+## non copiare come file (problemi di CR dos/unix)
+## copiare tramite editor di testo
+## poi dare i permessi di esecuzione (chmod +x)
+## e controllare i path
+
 #!/bin/bash
 SOUR="/Volumes/VMware Shared Folders/shared/ckd-www"
 DEST="/Users/marcello/Documents/phonegap-2.4.0/ckd-risk/www"
