@@ -160,6 +160,14 @@ public class GwtUtils {
     return currencyFMT.format(number);
   }
   
+  public static String replace(String text, String regex, String replacement) {
+    return text.replaceAll(regex, replacement);
+  }
+  
+  public static Double parseDecimal (String text) {
+    return decimalFMT.parse(text);
+  }
+  
   public static String formatDecimal (Double number, int decimals) {
     return createDecimalFormat(decimals).format(number);
   }
