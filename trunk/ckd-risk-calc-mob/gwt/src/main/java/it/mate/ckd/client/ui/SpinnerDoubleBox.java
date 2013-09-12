@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.MGWT;
@@ -61,7 +62,8 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
 
     if (MGWT.getOsDetection().isIOs()) {
 //    valueBox = new ValueBoxGwt();      /*  1.0.5.F  */
-      valueBox = new ValueBoxPatch();    /*  1.0.5.G  */
+//    valueBox = new ValueBoxPatch();    /*  1.0.5.G  */
+      valueBox = new ValueBoxGwtText();  /*  1.0.5.H  */
     } else {
       valueBox = new ValueBoxGwt();
     }
@@ -272,6 +274,54 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     }
     public void setValue(double value, boolean fireEvents) {
       valueBox.setValue(value, fireEvents);
+    }
+  }
+  
+  public class ValueBoxGwtText implements ValueBox {
+    private TextBox valueBox;
+    public Widget create() {
+      valueBox = new TextBox();
+      // simulo i css di mgwt
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          valueBox.getElement().addClassName("mgwt-InputBox-box");
+          valueBox.getElement().getParentElement().addClassName("mgwt-TextBox");
+        }
+      });
+      valueBox.getElement().setPropertyString("type", "text");
+      valueBox.getElement().setPropertyString("pattern", "[0-9]*[.][0-9]*");
+      
+      valueBox.addKeyPressHandler(new KeyPressHandler() {
+        public void onKeyPress(KeyPressEvent event) {
+          if (event.getCharCode() == ',') {
+            event.preventDefault();
+          }
+          if (event.getCharCode() >= ' ') {
+            if (event.getCharCode() == '.') {
+              //OK
+            } else if (event.getCharCode() >= '0' && event.getCharCode() <= '9') {
+              //OK
+            } else {
+              event.preventDefault();
+            }
+          }
+        }
+      });
+      
+      return valueBox;
+    }
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
+//    return valueBox.addValueChangeHandler(handler);
+      return null;
+    }
+    public Double getValue() {
+      String text = valueBox.getValue();
+      text = GwtUtils.replace(text, ",", ".");
+      return GwtUtils.parseDecimal(text);
+    }
+    public void setValue(double value, boolean fireEvents) {
+      String text = GwtUtils.formatDecimal(value, 2);
+      valueBox.setValue(text, fireEvents);
     }
   }
   
