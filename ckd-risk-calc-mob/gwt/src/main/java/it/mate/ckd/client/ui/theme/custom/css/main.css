@@ -293,7 +293,7 @@
   }
   
   .ckd-ReferralDecisionMakingGroup {
-    visibility: true;
+    visibility: visible;
   }
   
   .mgwt-Button.ckd-ReferralDecisionMakingButton {
@@ -337,7 +337,7 @@
   }
   
   .ckd-ReferralDecisionMakingGroup {
-    visibility: false;
+    visibility: hidden;
     width: 0;
   }
   
