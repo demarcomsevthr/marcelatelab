@@ -105,12 +105,19 @@
   width: 120px;
 }
 
+/*
 .mgwt-Button.ckd-HelpBtn {
   width: 6em;
   padding: 6px 6px;
   position: absolute;
   top: 370px;
   left: 108px;
+}
+*/
+
+.mgwt-Button.ckd-HelpBtn {
+  width: 6em;
+  padding: 6px 6px;
 }
 
 .ckdInputPanelTable {
@@ -336,9 +343,10 @@
     width: 10.34em;
   }
   
-  .ckd-ReferralDecisionMakingGroup {
+  .ckd-ReferralDecisionMakingGroup * {
     visibility: hidden;
     width: 0;
+    height: 0;
   }
   
 }

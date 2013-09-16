@@ -79,6 +79,10 @@ body {
   display: inline;
 }
 
+.ckd-outputSectionSeparator {
+  height: 0.2em !important;
+}
+
 /*
  *   SOLO PER DEBUG
  *

@@ -10,10 +10,12 @@
   <ui:with field="style" type="it.mate.ckd.client.ui.theme.custom.CustomMainCss"/>
   
   <g:HTMLPanel addStyleNames="{style.homePanel} {style.outputPanel} ckd-output-HtmlPanel-1" ui:field="wrapperPanel">
-  
+
+    <!-- 16/09/2013 SPOSTATO SOTTO 
     <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
       <ui:attribute name="text" description="text" key="helpBtn.text"/>
     </m:Button>
+     -->  
 
     <!--     
     <g:VerticalPanel width="100%" ui:field="verticalPanel1"  addStyleNames="ckd-output-VerticalPanel-1" horizontalAlignment="center">
@@ -187,9 +189,17 @@
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
-      
+
+      <!--       
       <g:HorizontalPanel>
         <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
+      </g:HorizontalPanel>
+       -->
+
+      <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
+        <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
+          <ui:attribute name="text" description="text" key="helpBtn.text"/>
+        </m:Button>
       </g:HorizontalPanel>
       
       

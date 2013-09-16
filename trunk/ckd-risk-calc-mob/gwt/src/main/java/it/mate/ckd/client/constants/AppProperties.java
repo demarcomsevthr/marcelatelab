@@ -24,6 +24,9 @@ public interface AppProperties extends Constants {
   boolean HomeView_langInfo_visible();
   
   @DefaultBooleanValue(false)
+  boolean CKDOutputView_adjust_ckdHelpBtn_position();
+  
+  @DefaultBooleanValue(false)
   boolean SpinnerDoubleBox_enSeparator_fix_enabled();
   
   @DefaultBooleanValue(false)
