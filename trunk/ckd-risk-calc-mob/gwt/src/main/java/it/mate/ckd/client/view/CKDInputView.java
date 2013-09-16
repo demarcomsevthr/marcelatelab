@@ -193,7 +193,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         }
         if (!isSet(creatininaSpinBox.getValue()))
           return;
-        if (creatininaSpinBox.getValue() < 0) {
+        if (ckd.getScrMgDl(creatininaSpinBox.getValue()) < 0.294) {
           MessageBoxUtils.popupOk("Wrong value for creatinine");
           return;
         }
