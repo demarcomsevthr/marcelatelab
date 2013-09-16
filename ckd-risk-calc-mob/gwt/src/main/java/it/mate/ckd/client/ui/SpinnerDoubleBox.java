@@ -61,9 +61,9 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     }
 
     if (MGWT.getOsDetection().isIOs()) {
-//    valueBox = new ValueBoxGwt();      /*  1.0.5.F  */
+      valueBox = new ValueBoxGwt();      /*  1.0.5.F  */
 //    valueBox = new ValueBoxPatch();    /*  1.0.5.G  */
-      valueBox = new ValueBoxGwtText();  /*  1.0.5.H  */
+//    valueBox = new ValueBoxGwtText();  /*  1.0.5.H  */
     } else {
       valueBox = new ValueBoxGwt();
     }
@@ -264,6 +264,24 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
         }
       });
       valueBox.getElement().setPropertyString("type", "number");
+      
+      valueBox.addKeyPressHandler(new KeyPressHandler() {
+        public void onKeyPress(KeyPressEvent event) {
+          if (event.getCharCode() == ',') {
+            event.preventDefault();
+          }
+          if (event.getCharCode() >= ' ') {
+            if (event.getCharCode() == '.') {
+              //OK
+            } else if (event.getCharCode() >= '0' && event.getCharCode() <= '9') {
+              //OK
+            } else {
+              event.preventDefault();
+            }
+          }
+        }
+      });
+      
       return valueBox;
     }
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Double> handler) {
