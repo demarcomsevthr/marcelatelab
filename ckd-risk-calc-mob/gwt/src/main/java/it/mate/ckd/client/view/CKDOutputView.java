@@ -1,6 +1,7 @@
 package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.model.ProtocolStep;
@@ -78,14 +79,17 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     
     AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "outputWrapperPanel", false, new Delegate<Element>() {
       public void execute(final Element wrapperPanelElem) {
-        int width = wrapperPanelElem.getClientWidth();
-        int height = wrapperPanelElem.getClientHeight();
         
-        Element btnElem = ckdHelpBtn.getElement();
-        int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
-        int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
-        btnElem.getStyle().setLeft(btnLeft, Unit.PX);
-        btnElem.getStyle().setTop(btnTop, Unit.PX);
+        if (AppProperties.IMPL.CKDOutputView_adjust_ckdHelpBtn_position()) {
+          int width = wrapperPanelElem.getClientWidth();
+          int height = wrapperPanelElem.getClientHeight();
+          Element btnElem = ckdHelpBtn.getElement();
+          int btnLeft = (width - btnElem.getOffsetWidth()) / 2;
+          int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
+          btnElem.getStyle().setLeft(btnLeft, Unit.PX);
+          btnElem.getStyle().setTop(btnTop, Unit.PX);
+        }
+        
       }
     });
     
