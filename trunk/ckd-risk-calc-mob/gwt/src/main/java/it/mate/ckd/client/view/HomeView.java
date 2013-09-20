@@ -10,15 +10,21 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.phgcommons.client.utils.MgwtDialogs;
+import it.mate.phgcommons.client.utils.MgwtDialogs.ButtonType;
+import it.mate.phgcommons.client.utils.MgwtDialogs.OptionCallback;
+import it.mate.phgcommons.client.utils.MgwtDialogs.OptionsDialogEntry;
 import it.mate.phgcommons.client.utils.OsDetectionPatch;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -138,7 +144,46 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void onParamBtn(TouchStartEvent event) {
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
-        getPresenter().goToCkdInput();
+        
+        
+        // TODO: CHECK THE 
+        
+        String rating = PhonegapUtils.getLocalStorageItem("ckd-free-rating");
+        
+        GwtUtils.log("rating = " + rating);
+        
+        
+//      DialogUtil.create(new DialogUtil.Configuration().setCaptionText(null).setBodyText("Rate it?"));
+        
+        /* D. BURKA UTILS CUSTOMIZATION */
+        List<OptionsDialogEntry> options = new ArrayList<OptionsDialogEntry>();
+        options.add(new OptionsDialogEntry().setHtml(SafeHtmlUtils.fromTrustedString("<div style=\"color:white\">If you like this App, take a moment to rate it.</div>")) );
+        options.add(new OptionsDialogEntry().setButtonText("No, Thanks").setButtonType(ButtonType.NORMAL));
+        options.add(new OptionsDialogEntry().setButtonText("Remind Me Later").setButtonType(ButtonType.NORMAL));
+        options.add(new OptionsDialogEntry().setButtonText("Yes Now").setButtonType(ButtonType.NORMAL));
+        MgwtDialogs.options(options, new OptionCallback() {
+          public void onOptionSelected(int index) {
+            
+            //TODO: CHECK THE RESULTS AND DECIDE IF CONTINUE
+            
+            getPresenter().goToCkdInput();
+          }
+        });
+        
+        /* D. BURKA UTILS TEST
+        List<OptionsDialogEntry> options = new ArrayList<OptionsDialogEntry>();
+        options.add(new OptionsDialogEntry("No, thanks",  ButtonType.NORMAL));
+        options.add(new OptionsDialogEntry("Later",  ButtonType.NORMAL));
+        options.add(new OptionsDialogEntry("Rate it now",  ButtonType.NORMAL));
+        Dialogs.options(options, new OptionCallback() {
+          public void onOptionSelected(int index) {
+            
+          }
+        });
+        */
+        
+//      getPresenter().goToCkdInput();
+        
       }
     });
   }
