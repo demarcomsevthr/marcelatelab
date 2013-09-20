@@ -1,4 +1,12 @@
 
+function setLocalStorageItem(name, value) {
+  window.localStorage.setItem(name, value);
+}
+
+function getLocalStorageItem(name) {
+  return window.localStorage.getItem(name);
+}
+
 function setLocalLanguageCookie(value) {
   window.localStorage.setItem("ckd-language", value);
 }
