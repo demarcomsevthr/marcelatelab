@@ -11,6 +11,8 @@
 
 @external ckd*;
 
+@external phg*;
+
 .mgwt-ScrollPanel-container {
   width: 100%;
 }
@@ -360,4 +362,53 @@
   margin-left: 0.2em;
   font-size: 22px !important;
   margin-top: 0.1em;
+}
+
+
+.phg-PopinDialog-Wrapper {
+	background: transparent;
+}
+
+.gwt-Label.phg-PopinDialog-TitleWrapper {
+  background: rgb(95, 110, 139);
+  border-top-left-radius: 16px 16px;
+  border-top-right-radius: 16px 16px;
+  border-top: 3px solid #bcc2cd;
+  border-left: 3px solid #bcc2cd;
+  border-right: 3px solid #bcc2cd;
+  padding-top: 5px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 10px;
+}
+
+.phg-PopinDialog-BodyWrapper {
+  background: rgb(36, 56, 93);
+  border-bottom-left-radius: 16px 16px;
+  border-bottom-right-radius: 16px 16px;
+  border-bottom: 3px solid #bcc2cd;
+  border-left: 3px solid #bcc2cd;
+  border-right: 3px solid #bcc2cd;
+  padding-left: 50px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  padding-top: 5px;
+}
+
+.phg-PopinDialog-Wrapper * {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.phg-PopinDialog-BodyWrapper div div {
+  padding-top: 20px;
+}
+
+.gwt-Label.phg-PopinDialog-TitleWrapper {
+  font-size: 24px;
+}
+
+.phg-PopinDialog-BodyWrapper * {
+  font-size: 20px;
 }

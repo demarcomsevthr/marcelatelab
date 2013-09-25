@@ -45,6 +45,7 @@ public class MainEntryPoint implements EntryPoint {
       layoutInfo += " isPhone";
     }
     GwtUtils.log("Layout = " + layoutInfo);
+    GwtUtils.log("(see it.mate.phgcommons.client.utils.OsDetectionPatch for details)");
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       @Override

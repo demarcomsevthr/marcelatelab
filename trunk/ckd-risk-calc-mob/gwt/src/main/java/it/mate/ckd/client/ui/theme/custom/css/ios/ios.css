@@ -1,6 +1,6 @@
 @url bgr bgrImage;
 
-@eval userBackground it.mate.ckd.client.ui.theme.custom.CustomTheme.getUserBackground();
+@eval windowHeight it.mate.ckd.client.ui.theme.custom.CustomTheme.getWindowHeight();
 
 body {
   background-image: -webkit-gradient(linear , left top, left bottom, 
@@ -8,5 +8,5 @@ body {
   	color-stop(0.80, rgba(85, 184, 209, 0.72)), 
   	color-stop(0.90, rgba(5, 123, 252, 0.8))) ;
   background-repeat: repeat;
-  background-size: 20px userBackground;
+  background-size: 20px windowHeight;
 }
