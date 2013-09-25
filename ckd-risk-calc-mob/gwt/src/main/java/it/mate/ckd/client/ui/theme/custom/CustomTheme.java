@@ -39,10 +39,21 @@ public class CustomTheme {
     }
   }
   
-  
-  public static String getUserBackground() {
+  /*
+  public static String getwindowHeight() {
     return Window.getClientHeight() + "px";
   }
+  */
+  
+  public static String getWindowHeight() {
+    return Window.getClientHeight() + "px";
+  }
+  
+  public static String getWindowWidth() {
+    return Window.getClientWidth() + "px";
+  }
+  
+  
   
   
   public interface CustomBundle {
