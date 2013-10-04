@@ -99,23 +99,12 @@
 }
 
 .outputPanel .ckd-LeftPaddingBox {
-/*  width: 1.6em; */
   width: 0em;  
 }
 
 .outputPanel .gwt-Label.ckd-Label {
   width: 120px;
 }
-
-/*
-.mgwt-Button.ckd-HelpBtn {
-  width: 6em;
-  padding: 6px 6px;
-  position: absolute;
-  top: 370px;
-  left: 108px;
-}
-*/
 
 .mgwt-Button.ckd-HelpBtn {
   width: 6em;
@@ -179,7 +168,8 @@
   font-weight: bolder;
   background-color: rgba(105, 225, 255, 0.91);
   height: 1.6em;
-  width: 272px;
+  /* width: 272px; */
+  width: 98%;
   padding-top: 5px;
   -webkit-border-radius: 6px;
   color: rgb(80, 80, 80) !important;
@@ -301,7 +291,7 @@
     width: 7.1em;
   }
   
-  .ckd-ReferralDecisionMakingGroup {
+  .ckd-ExtendedVerGroup {
     visibility: visible;
   }
   
@@ -314,7 +304,7 @@
     color: rgb(170, 0, 0);
   }
   
-  .ckd-ReferralDecisionMakingGroup td {
+  .ckd-ExtendedVerGroup td {
     padding: 0;
   }
   
@@ -339,16 +329,38 @@
     padding: 8px 10px;
   }
   
+  .ckd-outputWorkflowHelp {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    color: #3F3F3F;
+    font-family: verdana;
+    font-weight: bolder;
+    font-size: 14px;
+  }
+
+  .ckd-outputWorkflowHelp .gwt-Image {
+    background-size: 80% !important;
+    margin-top: 4px;
+    margin-left: 6px;
+  }
+  
 } @else {
 	
   .ckd-Risk {
     width: 10.34em;
   }
   
-  .ckd-ReferralDecisionMakingGroup * {
+  .ckd-ExtendedVerGroup * {
     visibility: hidden;
     width: 0;
     height: 0;
+  }
+  
+  .ckd-outputWorkflowHelp {
+    width: 0;
+    height: 0;
+    overflow: hidden;
   }
   
 }
@@ -412,3 +424,47 @@
 .phg-PopinDialog-BodyWrapper * {
   font-size: 20px;
 }
+
+.mgwt-HeaderPanel-right .mgwt-HeaderButton-text {
+  width: 24px;
+  min-width: 24px;
+  margin-right: 8px;
+}
+
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
+  font-size: 11px;
+  font-weight: normal;
+  margin: 2px;
+  padding: 9px 2px;
+}
+
+.ckd-SimpleContainer1 {
+  width: 80%;
+  background-color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display: none;
+}
+
+.ckd-SimpleContainer1 .ckd-SimpleContainer2t div {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: rgb(150, 255, 200);
+  padding-top: 0.8em;
+  padding-bottom: 1.2em;
+  font-family: verdana;
+  font-weight: bold;
+  font-size: 0.88em;
+}
+
+.ckd-SimpleContainer1 .ckd-SimpleContainer2b div {
+  background-color: white;
+  padding-top: 0.6em;
+  padding-bottom: 1em;
+/*
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  */
+}
+
+

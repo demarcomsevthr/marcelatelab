@@ -40,6 +40,16 @@ public class CKD {
   
   boolean useBsa;
   
+  String selectedGFR;
+  
+  public static final String SELECTED_GFR_COCKROFT = "cockroft";
+  
+  public static final String SELECTED_GFR_MDRD1 = "mdrd1";
+  
+  public static final String SELECTED_GFR_MDRD2 = "mdrd2";
+  
+  public static final String SELECTED_GFR_EPI = "epi";
+  
   public double getCockcroftGFR() {
     double gfr = (140d - age) * weight;
     gfr /= (72d * getScrMgDl());
@@ -283,6 +293,14 @@ public class CKD {
     if (mgg == 0)
       return 0;
     return mgg / 10;
+  }
+
+  public String getSelectedGFR() {
+    return selectedGFR;
+  }
+
+  public void setSelectedGFR(String selectedGFR) {
+    this.selectedGFR = selectedGFR;
   }
   
 }

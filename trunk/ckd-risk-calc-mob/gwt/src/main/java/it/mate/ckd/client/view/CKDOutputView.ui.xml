@@ -49,10 +49,9 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="cockcroftRiskBox" addStyleNames="{style.ckdRisk}"/>
         
-        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+        <g:HorizontalPanel addStyleNames="ckd-ExtendedVerGroup">
           <gc:Spacer width="0.3em"/>
-          <p:SmartButton ui:field="referralDecisionMakingCockBtn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
-            tag="cockroft" />
+          <p:TouchImage ui:field="manageRiskCockBtn" resource="{bundle.workflowImage}" tag="cockroft" />   
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
@@ -99,10 +98,9 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="mdrdRiskBox" addStyleNames="{style.ckdRisk}"/>
         
-        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+        <g:HorizontalPanel addStyleNames="ckd-ExtendedVerGroup">
           <gc:Spacer width="0.3em"/>
-          <p:SmartButton ui:field="referralDecisionMakingMdrd1Btn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
-            tag="cockroft" />
+          <p:TouchImage ui:field="manageRiskMdrd1Btn" resource="{bundle.workflowImage}" tag="mdrd1" />   
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
@@ -142,10 +140,9 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="mdrdNcRiskBox" addStyleNames="{style.ckdRisk}"/>
         
-        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+        <g:HorizontalPanel addStyleNames="ckd-ExtendedVerGroup">
           <gc:Spacer width="0.3em"/>
-          <p:SmartButton ui:field="referralDecisionMakingMdrd2Btn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
-            tag="cockroft" />
+          <p:TouchImage ui:field="manageRiskMdrd2Btn" resource="{bundle.workflowImage}" tag="mdrd2" />   
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
@@ -182,10 +179,9 @@
         <gc:Spacer addStyleNames="{style.boxSpacer}"/>
         <g:Label ui:field="epiRiskBox" addStyleNames="{style.ckdRisk}"/>
         
-        <g:HorizontalPanel addStyleNames="ckd-ReferralDecisionMakingGroup">
+        <g:HorizontalPanel addStyleNames="ckd-ExtendedVerGroup">
           <gc:Spacer width="0.3em"/>
-          <p:SmartButton ui:field="referralDecisionMakingEpiBtn" text="manage >>>" round="true" addStyleNames="ckd-ReferralDecisionMakingButton"
-            tag="cockroft" />
+          <p:TouchImage ui:field="manageRiskEpiBtn" resource="{bundle.workflowImage}" tag="epi" />   
         </g:HorizontalPanel>
         
       </g:HorizontalPanel>
@@ -196,11 +192,18 @@
       </g:HorizontalPanel>
        -->
 
+      <!-- 
       <g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="center" width="100%">
         <m:Button ui:field="ckdHelpBtn" text="" round="true" addStyleNames="ckd-HelpBtn">
           <ui:attribute name="text" description="text" key="helpBtn.text"/>
         </m:Button>
       </g:HorizontalPanel>
+       -->
+
+      <g:HTMLPanel addStyleNames="ckd-outputWorkflowHelp" ui:field="workflowHelpPanel" visible="false">
+        Tap on <g:Image resource="{bundle.workflowImage}"/> to continue
+      </g:HTMLPanel>      
+       
       
       
     <!-- 

@@ -1,6 +1,5 @@
 package it.mate.ckd.client.view;
 
-import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
@@ -11,12 +10,10 @@ import it.mate.ckd.client.view.CKDOutputView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.ui.SmartButton;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.ui.HasTag;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -25,14 +22,16 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
     void goToProtocolStep(ProtocolStep protocolStep);
+    void goToExtendedView(String selectedGFR);
     void goToReferralDecision();
+    void openHelpPage();
+    boolean applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDOutputView> { }
@@ -67,20 +66,24 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   @UiField Panel bsaPanel;
   @UiField HTML bsaHtml;
   
-  @UiField Button ckdHelpBtn;
+  @UiField Panel workflowHelpPanel;
+  
+//@UiField Button ckdHelpBtn;
   
   private CKD ckd;
+  
+  private boolean riskVisible = false;
   
   public CKDOutputView() {
     bundle = CustomTheme.Instance.get();
     style = bundle.css();
     initUI();
 
-    
     AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "outputWrapperPanel", false, new Delegate<Element>() {
       public void execute(final Element wrapperPanelElem) {
         
         if (AppProperties.IMPL.CKDOutputView_adjust_ckdHelpBtn_position()) {
+          /*
           int width = wrapperPanelElem.getClientWidth();
           int height = wrapperPanelElem.getClientHeight();
           Element btnElem = ckdHelpBtn.getElement();
@@ -88,6 +91,7 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
           int btnTop = (height - btnElem.getOffsetHeight() * 3 / 2);
           btnElem.getStyle().setLeft(btnLeft, Unit.PX);
           btnElem.getStyle().setTop(btnTop, Unit.PX);
+          */
         }
         
       }
@@ -137,19 +141,30 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
       this.ckd = (CKD)model;
       Double bsa = ckd.getBSA();
       ckd.setUseBsa(bsa != null);
+      
+      riskVisible = getPresenter().applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel, null) || riskVisible;
+      riskVisible = getPresenter().applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel, 60d) || riskVisible;
+      riskVisible = getPresenter().applyCKD(ckd, ckd.getMdrdNcGFR(), mdrdNcGfrBox, mdrdNcGfrStadium, mdrdNcRiskBox, mdrdNcRiskPanel, 60d) || riskVisible;
+      riskVisible = getPresenter().applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel, null) || riskVisible;
+
+      /*
       applyCKD(ckd, ckd.getCockcroftGFR(), cockcroftGfrBox, cockcroftGfrStadium, cockcroftRiskBox, cockcroftRiskPanel, null);
       applyCKD(ckd, ckd.getMdrdGFR(), mdrdGfrBox, mdrdGfrStadium, mdrdRiskBox, mdrdRiskPanel, 60d);
       applyCKD(ckd, ckd.getMdrdNcGFR(), mdrdNcGfrBox, mdrdNcGfrStadium, mdrdNcRiskBox, mdrdNcRiskPanel, 60d);
       applyCKD(ckd, ckd.getCkdEpiGFR(), epiGfrBox, epiGfrStadium, epiRiskBox, epiRiskPanel, null);
+      */
+      
       if (bsa != null) {
         bsaPanel.setVisible(true);
         bsaHtml.setHTML("BSA = " + GwtUtils.formatDecimal(bsa, 2) + " m&#178;");
       } else {
         bsaPanel.setVisible(false);
       }
+      workflowHelpPanel.setVisible(riskVisible);
     }
   }
-  
+
+  /*
   private void applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead) {
     if (overhead != null && gfr > overhead) {
       gfrBox.setText(">"+GwtUtils.formatDecimal(overhead, 0));
@@ -166,6 +181,7 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
       riskPanel.setVisible(false);
     } else {
       riskPanel.setVisible(true);
+      riskVisible = true;
     }
     if (risk == CKD.LOW_RISK) {
       irc = AppConstants.IMPL.CKDOutputView_lowRisk_text();
@@ -184,29 +200,27 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     riskBox.getElement().getStyle().setColor(ircCol);
     riskBox.getElement().getStyle().setBackgroundColor(ircBckCol);
   }
+  */
 
+  /*
   @UiHandler ("ckdHelpBtn")
   public void onHelpBtn(TouchStartEvent event) {
-    String appLanguage = GwtUtils.getJSVar("appLanguage", null);
-    if ("it".equals(appLanguage)) {
-      PhonegapUtils.openInAppBrowser("help-it.html");
-    } else {
-      PhonegapUtils.openInAppBrowser("help.html");
-    }
+    getPresenter().openHelpPage();
   }
+  */
   
-  @UiHandler ({"referralDecisionMakingCockBtn", "referralDecisionMakingMdrd1Btn", "referralDecisionMakingMdrd2Btn", "referralDecisionMakingEpiBtn"})
+  @UiHandler ({"manageRiskCockBtn", "manageRiskMdrd1Btn", "manageRiskMdrd2Btn", "manageRiskEpiBtn"})
   public void onReferralDecisionMakingBtn (TouchStartEvent event) {
     Widget w = (Widget)event.getSource();
-    SmartButton sbtn = null;
-    if (event.getSource() instanceof SmartButton) {
-      sbtn = (SmartButton)event.getSource();
-    } else if (w.getParent() instanceof SmartButton) {
-      sbtn = (SmartButton)w.getParent();
+    HasTag btn = null;
+    if (event.getSource() instanceof HasTag) {
+      btn = (HasTag)event.getSource();
+    } else if (w.getParent() instanceof HasTag) {
+      btn = (HasTag)w.getParent();
     }
-    GwtUtils.log("pressed " + sbtn.getTag());
-//  new AlertDialog("Suggested decision making", "Monitor").show();
-    getPresenter().goToReferralDecision();
+    GwtUtils.log("pressed " + btn.getTag());
+//  getPresenter().goToReferralDecision();
+    getPresenter().goToExtendedView(btn.getTag());
   }
   
 }

@@ -1,15 +1,19 @@
 package it.mate.ckd.client.view;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.CKDOutputViewWrapper.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.mvp.BaseView;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.ui.client.widget.HeaderButton;
 
 public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
 
@@ -18,7 +22,10 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
     void goToProtocolStep(ProtocolStep protocolStep);
+    void goToExtendedView(String selectedGFR);
     void goToReferralDecision();
+    void openHelpPage();
+    boolean applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead);
   }
 
   public CKDOutputViewWrapper() {
@@ -27,7 +34,7 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
 
   private void initUI() {
     
-    if (OsDetectionPatch.isTablet()) {
+    if (OsDetectionUtils.isTablet()) {
       setTitleHtml(AppConstants.IMPL.tabletAppName());
     } else {
       setTitleHtml(AppConstants.IMPL.phoneAppName());
@@ -41,6 +48,16 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         getPresenter().goToCkdInput();
+      }
+    });
+    
+    
+    HeaderButton helpBtn = new HeaderButton();
+    helpBtn.setText("?");
+    getHeaderPanel().setRightWidget(helpBtn);
+    helpBtn.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        getPresenter().openHelpPage();
       }
     });
     
@@ -69,6 +86,15 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
       }
       public void goToReferralDecision() {
         presenter.goToReferralDecision();
+      }
+      public void openHelpPage() {
+        presenter.openHelpPage();
+      }
+      public void goToExtendedView(String selectedGFR) {
+        presenter.goToExtendedView(selectedGFR);
+      }
+      public boolean applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead) {
+        return presenter.applyCKD(ckd, gfr, gfrBox, gfrStadiumBox, riskBox, riskPanel, overhead);
       }
     });
   }

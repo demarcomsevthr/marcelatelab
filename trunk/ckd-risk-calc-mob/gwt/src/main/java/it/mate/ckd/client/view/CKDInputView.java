@@ -25,12 +25,14 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 
 public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Presenter> */ {
 
   public interface Presenter extends BasePresenter {
     void goToCkdOutput(CKD ckd);
     void goToHome();
+    void checkRatingDialog(final Delegate<PopinDialog> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CKDInputView> { }
@@ -220,7 +222,17 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
           .setFemale(fBtn.getValue())
           .setBlack(bBtn.getValue())
           .setHeight(altezzaSpinBox.getValue());
-        getPresenter().goToCkdOutput(ckd);
+        
+
+        // 04/10/2013
+//      getPresenter().goToCkdOutput(ckd);
+        
+        getPresenter().checkRatingDialog(new Delegate<PopinDialog>() {
+          public void execute(PopinDialog element) {
+            getPresenter().goToCkdOutput(ckd);
+          }
+        });
+        
       }
     });
     
