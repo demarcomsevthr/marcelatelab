@@ -3,17 +3,17 @@ package it.mate.phgcommons.client.utils;
 import com.google.gwt.user.client.Window;
 import com.googlecode.mgwt.ui.client.MGWT;
 
-public class OsDetectionPatch {
+public class OsDetectionUtils {
   
-  private final static int IPAD_LAND_WIDTH = 1024;
-  private final static int IPAD_LAND_HEIGHT = 748;
-  private final static int IPAD_PORT_WIDTH = 768;
-  private final static int IPAD_PORT_HEIGHT = 1004;
+  public final static int IPAD_LAND_WIDTH = 1024;
+  public final static int IPAD_LAND_HEIGHT = 748;
+  public final static int IPAD_PORT_WIDTH = 768;
+  public final static int IPAD_PORT_HEIGHT = 1004;
   
-  private final static int APAD_LAND_WIDTH = 1280;
-  private final static int APAD_LAND_HEIGHT = 800;
-  private final static int APAD_PORT_WIDTH = 800;
-  private final static int APAD_PORT_HEIGHT = 1280;
+  public final static int APAD_LAND_WIDTH = 1280;
+  public final static int APAD_LAND_HEIGHT = 800;
+  public final static int APAD_PORT_WIDTH = 800;
+  public final static int APAD_PORT_HEIGHT = 1280;
   
   private static int getDisplayHeight() {
     return Window.getClientHeight();
@@ -25,6 +25,14 @@ public class OsDetectionPatch {
   
   public static boolean isTablet() {
     return (isTabletLandscape() || isTabletPortrait());
+  }
+  
+  public static boolean isIOs() {
+    return MGWT.getOsDetection().isIOs();
+  }
+
+  public static boolean isAndroid() {
+    return MGWT.getOsDetection().isAndroid();
   }
 
   /*

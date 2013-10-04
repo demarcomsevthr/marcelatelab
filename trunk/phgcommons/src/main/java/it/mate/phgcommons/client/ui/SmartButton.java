@@ -26,7 +26,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class SmartButton extends Composite implements HasClickHandlers, HasTouchHandlers,
-      HasText {
+      HasText, HasTag {
 
   private Widget impl;
   
