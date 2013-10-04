@@ -1,6 +1,6 @@
 package it.mate.ckd.client.ui.theme.custom;
 
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -18,17 +18,17 @@ public class CustomTheme {
     public static CustomBundle get() {
       if (instance == null) {
         if (MGWT.getOsDetection().isIOs()) {
-          if (OsDetectionPatch.isTabletLandscape()) {
+          if (OsDetectionUtils.isTabletLandscape()) {
             instance = GWT.create(CustomBundleIPadLandscape.class);
-          } else if (OsDetectionPatch.isTabletPortrait()) {
+          } else if (OsDetectionUtils.isTabletPortrait()) {
             instance = GWT.create(CustomBundleIPadPortrait.class);
           } else {
             instance = GWT.create(CustomBundleIOs.class);
           }
         } else {
-          if (OsDetectionPatch.isTabletLandscape()) {
+          if (OsDetectionUtils.isTabletLandscape()) {
             instance = GWT.create(CustomBundleAPadLandscape.class);
-          } else if (OsDetectionPatch.isTabletPortrait()) {
+          } else if (OsDetectionUtils.isTabletPortrait()) {
             instance = GWT.create(CustomBundleAPadPortrait.class);
           } else {
             instance = GWT.create(CustomBundleAndroid.class);
@@ -80,6 +80,9 @@ public class CustomTheme {
     
     @Source("resources/ico-plus.png")
     ImageResource plusImage();
+    
+    @Source("resources/workflow36b.png")
+    ImageResource workflowImage();
     
   }
   

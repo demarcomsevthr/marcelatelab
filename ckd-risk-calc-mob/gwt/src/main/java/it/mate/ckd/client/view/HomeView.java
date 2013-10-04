@@ -7,13 +7,9 @@ import it.mate.ckd.client.ui.theme.custom.CustomMainCss;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.ckd.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.ui.MyAnchor;
-import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
-import it.mate.phgcommons.client.utils.MgwtDialogs;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
@@ -22,8 +18,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -31,8 +25,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
@@ -41,6 +33,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     void goToCkdInput();
+    void checkRatingDialog(final Delegate<PopinDialog> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -67,7 +60,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   private void initUI() {
 
-    if (OsDetectionPatch.isTablet()) {
+    if (OsDetectionUtils.isTablet()) {
       setTitleHtml(AppConstants.IMPL.tabletAppName());
     } else {
       setTitleHtml(AppConstants.IMPL.phoneAppName());
@@ -83,9 +76,9 @@ public class HomeView extends BaseMgwtView <Presenter> {
       devInfo.setVisible(true);
       String info = "Width " + Window.getClientWidth();
       info += " Height " + Window.getClientHeight();
-      if (OsDetectionPatch.isTabletLandscape()) {
+      if (OsDetectionUtils.isTabletLandscape()) {
         info += " isTabletLandscape";
-      } else if (OsDetectionPatch.isTabletPortrait()) {
+      } else if (OsDetectionUtils.isTabletPortrait()) {
         info += " isTabletPortrait";
       } else {
         info += " isPhone";
@@ -117,20 +110,32 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
   
-  private PopinDialog ratingDialog;
-  
-//private PopupPanel ratingDialog;
-  
   @UiHandler("paramBtn")
   public void onParamBtn(TouchStartEvent event) {
+
+    /* spostato in estimate
+    getPresenter().checkRatingDialog(new Delegate<PopinDialog>() {
+      public void execute(PopinDialog element) {
+        getPresenter().goToCkdInput();
+      }
+    });
+    */
     
-    
-    
+    getPresenter().goToCkdInput();
+
+//  createRatingDialog();
+
+  }
+  
+
+  /*
+  private PopinDialog ratingDialog;
+  
+  private void createRatingDialog () {
     String rating = PhonegapUtils.getLocalStorageItem("ckd-free-rating");
     if (rating == null) {
       rating = "4";
     }
-    GwtUtils.log("rating count = " + rating);
     
     int ratingCount = Integer.parseInt(rating);
     if (ratingCount < 0) {
@@ -179,11 +184,14 @@ public class HomeView extends BaseMgwtView <Presenter> {
       });
       
     }
-    
   }
+  */
   
-  @SuppressWarnings("unused")
-  private PopupPanel ratingDialog (String title, Widget body) {
+
+  /*
+  private PopupPanel ratingDialog;
+  
+  private PopupPanel createPopupRatingDialog (String title, Widget body) {
     PopupPanel dialog = new PopupPanel();
 
     SimpleContainer dialogWrapper = new SimpleContainer();
@@ -200,6 +208,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     dialog.center();
     return dialog;
   }
+  */
   
 
 }

@@ -12,7 +12,7 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.core.shared.GWT;
@@ -171,7 +171,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   public void adaptWrapperPanelOnTablet(Panel wrapperPanel, String id, final boolean adaptVerMargin, final Delegate<Element> delegate) {
     wrapperPanel.getElement().setId(id);
-    if (OsDetectionPatch.isTablet()) {
+    if (OsDetectionUtils.isTablet()) {
       GwtUtils.onAvailable(id, new Delegate<Element>() {
         public void execute(Element wrapperPanelElem) {
           int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
@@ -210,7 +210,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
 
   public void initTitle(BaseMgwtView view) {
-    if (OsDetectionPatch.isTablet()) {
+    if (OsDetectionUtils.isTablet()) {
       view.setTitleHtml(AppConstants.IMPL.tabletAppName());
     } else {
       view.setTitleHtml(AppConstants.IMPL.phoneAppName());

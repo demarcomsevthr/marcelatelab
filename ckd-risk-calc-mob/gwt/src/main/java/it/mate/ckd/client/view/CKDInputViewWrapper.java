@@ -8,17 +8,18 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
-import it.mate.phgcommons.client.utils.OsDetectionPatch;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 
 public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
   
-  private boolean isTablet = OsDetectionPatch.isTablet();
+  private boolean isTablet = OsDetectionUtils.isTablet();
   
   private CKDInputView inputView;
   private CKDOutputView outputView;
@@ -26,6 +27,7 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     void goToCkdOutput(CKD ckd);
     void goToHome();
+    void checkRatingDialog(final Delegate<PopinDialog> delegate);
   }
 
   public CKDInputViewWrapper() {
@@ -34,7 +36,7 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
 
   private void initUI() {
     
-    if (OsDetectionPatch.isTablet()) {
+    if (OsDetectionUtils.isTablet()) {
       setTitleHtml(AppConstants.IMPL.tabletAppName());
     } else {
       setTitleHtml(AppConstants.IMPL.phoneAppName());
@@ -96,6 +98,9 @@ public class CKDInputViewWrapper extends BaseMgwtView <Presenter> {
         } else {
           presenter.goToCkdOutput(ckd);
         }
+      }
+      public void checkRatingDialog(Delegate<PopinDialog> delegate) {
+        presenter.checkRatingDialog(delegate);
       }
     });
     
