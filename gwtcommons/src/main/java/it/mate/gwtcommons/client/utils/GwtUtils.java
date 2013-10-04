@@ -744,10 +744,22 @@ public class GwtUtils {
     log(klass, methodName, "platform = " + Window.Navigator.getPlatform());
     log(klass, methodName, "user.agent = " + Window.Navigator.getUserAgent());
     log(klass, methodName, "current locale = " + LocaleInfo.getCurrentLocale().getLocaleName());
-    log(klass, methodName, "startup module = " + getJSVar("startupModule", "??"));
-    log(klass, methodName, "startup activity = " + getJSVar("startupActivity", "??"));
-    log(klass, methodName, "client user id = " + getJSVar("clientUserId", "??"));
-    log(klass, methodName, "context path = " + getJSVar("contextPath", ""));
+    String startupModule = getJSVar("startupModule", null);
+    if (startupModule != null) {
+      log(klass, methodName, "startup module = " + startupModule);
+    }
+    String startupActivity = getJSVar("startupActivity", null);
+    if (startupActivity != null) {
+      log(klass, methodName, "startup activity = " + startupActivity);
+    }
+    String clientUserId = getJSVar("clientUserId", null);
+    if (clientUserId != null) {
+      log(klass, methodName, "client user id = " + clientUserId);
+    }
+    String contextPath = getJSVar("contextPath", null);
+    if (contextPath != null) {
+      log(klass, methodName, "context path = " + contextPath);
+    }
   }
   
   public static void log (String message) {
