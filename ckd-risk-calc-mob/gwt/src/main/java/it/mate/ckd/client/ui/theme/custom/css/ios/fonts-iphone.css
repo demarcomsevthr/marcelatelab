@@ -98,3 +98,19 @@
 .gwt-DialogBox .dialogContent .gwt-Button {
   font-size: 14pt;
 }
+
+.ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .ckd-stepPanel .gwt-HTML {
+  font-size: 28px;
+}
+
+.ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
+  font-size: 18px;
+}
+
+.ckd-ProtocolHeaderButton-text {
+  font-size: 12px;
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  font-size: 8pt;
+}
