@@ -309,7 +309,6 @@
   }
   
   .ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .gwt-HTML {
-    font-size: 38px !important;
     color: white;
   }
   
@@ -319,7 +318,7 @@
   }
   
   .ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
-    font-size: 32px;
+
   }
   
   .ckdProtocolStepViewPanel .ckdProtocolBackBtn {
@@ -431,6 +430,10 @@
   margin-right: 8px;
 }
 
+.ckdExtendedVerViewPanel {
+  overflow: hidden !important;
+}
+
 .ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
   font-size: 11px;
   font-weight: normal;
@@ -438,15 +441,16 @@
   padding: 9px 2px;
 }
 
-.ckd-SimpleContainer1 {
+.ckd-suggestionPanel {
   width: 80%;
   background-color: white;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   display: none;
+  text-align: center;
 }
 
-.ckd-SimpleContainer1 .ckd-SimpleContainer2t div {
+.ckd-suggestionPanel .ckd-suggestionPanel-top div {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background-color: rgb(150, 255, 200);
@@ -457,14 +461,142 @@
   font-size: 0.88em;
 }
 
-.ckd-SimpleContainer1 .ckd-SimpleContainer2b div {
+.ckd-suggestionPanel .ckd-suggestionPanel-content div {
   background-color: white;
   padding-top: 0.6em;
   padding-bottom: 1em;
-/*
+}
+
+
+.ckd-ProtocolHeaderPanel {
+  /* height: 40px; */
+  border-bottom: 1px solid #2d3642;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, 
+  	from(rgba(176, 188, 205, 1)), 
+  	to(rgba(129, 149, 175, 1)));  
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  margin-top: 6px;
+  margin-left: 85px;
+  margin-right: 30px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.ckd-ProtocolHeaderButton {
+  margin: 6px 0 0 12px;
+}
+
+.ckd-ProtocolHeaderButton-border-container {
+  position: absolute;
+  z-index: 1;
+  top: 12.66px;
+  left: 7px;
+  -webkit-transform: rotate(53deg);
+}
+
+.ckd-ProtocolHeaderButton-border-content {
+  background-image: -webkit-gradient(linear, left top, right bottom, 
+  		from(#9fb3cc), to(#5b80ab), 
+  		color-stop(0.5, #6b8bb2), color-stop(0.51, #597eaa));
+  display: block;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-right: none;
+  border-top: none;
+  -webkit-transform: skew(17deg);
+  -webkit-border-radius: 4px;
+}
+
+.ckd-ProtocolHeaderButton-text {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  color: white;
+  font-weight: bold;
+  background-image: -webkit-gradient(linear, left top, left bottom, 
+  		from(#9fb3cc), to(#5b80ab), 
+  		color-stop(0.5, #6b8bb2), color-stop(0.51, #597eaa) );
+  z-index: 2;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-left: none;
+  margin: 0;
+  padding: 1px;
+  text-align: center;
+  min-width: 40px;
+  max-width: 60px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  height: 54px;
+  -webkit-border-radius: 4px;
+  -webkit-background-origin: border-box;
+  position: absolute;
+  top: 3px;
+  left: 23px;
+  vertical-align: top;
+}  
+
+
+.mgwt-HeaderButton-back .mgwt-HeaderButton-border-container {
+  top: 3.5px !important;
+}
+
+
+@eval protocolStepPanelLeft it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelLeft();
+
+@eval protocolStepPanelHeight it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelHeight();
+
+.ckd-ProtocolStepPanel {
+  width: 80%;
+  background-color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  text-align: center;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  border: solid 8px rgba(58, 41, 41, 0.68);	
+  height: protocolStepPanelHeight;
+  position: absolute;
+  top: 5%;
+  left: protocolStepPanelLeft;
+}
+
+.ckd-ProtocolStepPanel-top {
+  /*
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   */
+  background-color: rgb(150, 255, 200);
+  padding-top: 0.8em;
+  padding-bottom: 1.2em;
+  font-family: verdana;
+  font-weight: bold;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 46%;
+}
+
+.ckd-ProtocolStepPanel-center div.gwt-HTML {
+  color: rgb(0, 0, 0);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.ckd-ProtocolStepPanel-bottom {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  width: 82%;
+  margin-left: 9%;
+}
+
+.ckd-ProtocolStepPanel-button {
+
 }
 
 

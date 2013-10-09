@@ -7,15 +7,18 @@ import it.mate.ckd.client.view.ExtendedVerView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.gwtcommons.client.utils.JQueryUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,9 +46,11 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   
   @UiField Label albBox;
   
-  @UiField Panel suggestedIndicationPanel;
+  @UiField Panel suggestionPanel;
   @UiField Label suggestedIndicationTitleLbl;
   @UiField Label suggestedIndicationLbl;
+  
+  boolean suggestionPanelVisible = false;
   
   public ExtendedVerView() {
     initUI();
@@ -65,6 +70,15 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         getPresenter().goToCkdOutput(null);
       }
     });
+    
+  }
+  
+  @Override
+  public void onAttach(AttachEvent event) {
+    // 09/10/2013
+    // se non faccio cosi' su iphone non si vede il suggestion panel
+    // (rimane a 0 la height del parent)
+    AppClientFactory.IMPL.applyWrapperPanelIPhonePatch(this, wrapperPanel);
   }
   
   @Override
@@ -92,41 +106,82 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     showSuggestedIndications("Suggested referral decision", "Refer");
   }
   
+  @UiHandler ("protocolBtn")
+  public void onProtocolBtn (TouchStartEvent event) {
+    getPresenter().goToProtocolStep(null);
+  }
+  
   @UiHandler ("monitoringBtn")
   public void onMonitoringBtn (TouchStartEvent event) {
     showSuggestedIndications("Suggested monitoring frequency", "1 time per year");
   }
   
   private void showSuggestedIndications(final String title, final String indication) {
+
+    GwtUtils.log("start method");
     
-    final Element panelElement = suggestedIndicationPanel.getElement();
+    final Element suggestionPanelElement = suggestionPanel.getElement();
     
     Delegate<Void> showDelegate = new Delegate<Void>() {
       public void execute(Void element) {
         
+        GwtUtils.log("start delegate");
+        
         suggestedIndicationTitleLbl.setText(title);
         suggestedIndicationLbl.setText(indication);
         
-        JQueryUtils.StyleProperties startProperties = JQueryUtils.createStyleProperties();
+        int startTop = 0;
+        
+        if (OsDetectionUtils.isTablet()) {
+          String mts = wrapperPanel.getElement().getStyle().getMarginTop();
+          mts = mts.substring(0, mts.indexOf("px"));
+          int wrapperPanelMargin = Integer.parseInt(mts);
+          startTop = Window.getClientHeight() - wrapperPanelMargin * 2;
+        } else {
+          startTop = Window.getClientHeight() - getHeaderPanel().getOffsetHeight();
+        }
+        
+        GwtUtils.log("wrapperPanelWidth = " + wrapperPanel.getOffsetWidth());
+        int startLeft = ( wrapperPanel.getOffsetWidth() - (wrapperPanel.getOffsetWidth() * 80 / 100) ) / 2; 
+        
+        GwtUtils.log("startTop = " + startTop);
+        GwtUtils.log("startLeft = " + startLeft);
+
+        JQuery.StyleProperties startProperties = JQuery.createStyleProperties();
         startProperties.setPosition(Style.Position.ABSOLUTE);
-        startProperties.setTop(440, Style.Unit.PX);
-        startProperties.setLeft(30, Style.Unit.PX);
+        startProperties.setTop( startTop, Style.Unit.PX);
+        startProperties.setLeft(startLeft, Style.Unit.PX);
+        startProperties.setDisplay(Style.Display.BLOCK);
         
-        JQueryUtils.StyleProperties endProperties = JQueryUtils.createStyleProperties();
-        endProperties.setTop(320, Style.Unit.PX);
-        endProperties.setHeight(120, Style.Unit.PX);
+        int endHeight = 120;
         
-        JQueryUtils.animate(
-            JQueryUtils.fadeIn(
-                JQueryUtils.css(JQueryUtils.castElement(panelElement), startProperties), 0), 
-            endProperties, 3000);
+        if (OsDetectionUtils.isTabletLandscape()) {
+          endHeight = 240;
+        } else if (OsDetectionUtils.isTabletPortrait()) {
+          endHeight = 240;
+        } else {
+          endHeight = 120;
+        }
         
+        JQuery.StyleProperties endProperties = JQuery.createStyleProperties();
+        endProperties.setTop( (startTop - endHeight) , Style.Unit.PX);
+        endProperties.setHeight(endHeight, Style.Unit.PX);
+
+        JQuery.withElement(suggestionPanelElement).css(startProperties)
+            .fadeIn(JQuery.createOptions().setDuration("2000").setQueue(false))
+//          .animate(endProperties, JQuery.createOptions().setDuration("3000").setQueue(true));
+            .animate(endProperties, 2000);
+        
+        suggestionPanelVisible = true;
+
       }
     };
     
-    if (suggestedIndicationPanel.isVisible()) {
+    if (suggestionPanelVisible) {
+//  if (suggestionPanel.isVisible()) {
+      GwtUtils.log("suggestionPanel is Visible !");
       int hideDuration = 2000;
-      JQueryUtils.fadeOut(JQueryUtils.castElement(panelElement), hideDuration);
+      JQuery.withElement(suggestionPanelElement).fadeOut(hideDuration);
       GwtUtils.deferredExecution(hideDuration, showDelegate);
     } else {
       showDelegate.execute(null);

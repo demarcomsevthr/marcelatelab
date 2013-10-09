@@ -83,8 +83,7 @@ body {
   height: 0.2em !important;
 }
 
-/*
- *   SOLO PER DEBUG
- *
- */
+.ckd-suggestionBtn {
+  width: 80%;
+}
 

@@ -52,29 +52,33 @@
       <g:SimplePanel addStyleNames="ckd-chooseOptionLbl">
         <g:Label text="Choose an option:"></g:Label>
       </g:SimplePanel>
-      <p:SmartButton text="See suggested referral decision" ui:field="referralBtn"/>
-      <p:SmartButton text="See suggested protocol for further investigation" ui:field="protocolBtn"/>
-      <p:SmartButton text="See suggested monitoring frequency" ui:field="monitoringBtn"/>
+      <p:SmartButton text="See suggested referral decision" ui:field="referralBtn" addStyleNames="ckd-suggestionBtn"/>
+      <p:SmartButton text="See suggested protocol for further investigation" ui:field="protocolBtn" addStyleNames="ckd-suggestionBtn"/>
+      <p:SmartButton text="See suggested monitoring frequency" ui:field="monitoringBtn" addStyleNames="ckd-suggestionBtn"/>
     
     </g:VerticalPanel>
     
     <gc:Spacer height="1em"/>
-      
+
+    <!--       
     <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%">
+    </g:VerticalPanel>
+     -->
+     
+    <gc:SimpleContainer>
     
-      <gc:SimpleContainer addStyleNames="ckd-SimpleContainer1" ui:field="suggestedIndicationPanel">
-        <gc:SimpleContainer addStyleNames="ckd-SimpleContainer2t">
+      <!-- visible="false" -->
+    
+      <gc:SimpleContainer addStyleNames="ckd-suggestionPanel" ui:field="suggestionPanel" >
+        <gc:SimpleContainer addStyleNames="ckd-suggestionPanel-top">
           <g:Label ui:field="suggestedIndicationTitleLbl"/>
         </gc:SimpleContainer>
-        <gc:SimpleContainer addStyleNames="ckd-SimpleContainer2b">
+        <gc:SimpleContainer addStyleNames="ckd-suggestionPanel-content">
           <g:Label ui:field="suggestedIndicationLbl"/>
         </gc:SimpleContainer>
       </gc:SimpleContainer>
+    </gc:SimpleContainer> 
     
-    </g:VerticalPanel>
-    
-    
-
   </g:HTMLPanel>
   
 </ui:UiBinder>

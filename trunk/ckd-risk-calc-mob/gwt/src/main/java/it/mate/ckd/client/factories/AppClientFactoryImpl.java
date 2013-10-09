@@ -174,9 +174,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (OsDetectionUtils.isTablet()) {
       GwtUtils.onAvailable(id, new Delegate<Element>() {
         public void execute(Element wrapperPanelElem) {
-          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
           
-          int height = Window.getClientHeight() * wrapperPct / 100;
+          int height = getTabletWrapperHeight();
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
 
           if (adaptVerMargin) {
@@ -185,7 +184,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
             wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
           }
           
-          int width = Window.getClientWidth() * wrapperPct / 100;
+          int width = getTabletWrapperWidth();
           wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
           
           int horMargin = ( Window.getClientWidth() - width ) / 2;
@@ -207,6 +206,32 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         }
       });
     }
+  }
+  
+  @SuppressWarnings("rawtypes")
+  public void applyWrapperPanelIPhonePatch(BaseMgwtView mgwtView, final Panel wrapperPanel) {
+    if (!OsDetectionUtils.isTablet()) {
+      GwtUtils.log("applying wrapperPanel IPhone patch on " + mgwtView.getHeaderPanel().getElement().getId());
+      GwtUtils.onAvailable(mgwtView.getHeaderPanel().getElement().getId(), new Delegate<Element>() {
+        public void execute(Element headerPanelElement) {
+          GwtUtils.log(""+headerPanelElement.getClientHeight());
+          wrapperPanel.setHeight((Window.getClientHeight() - headerPanelElement.getClientHeight()) + "px");
+          wrapperPanel.setWidth(Window.getClientWidth() + "px");
+        }
+      });
+    }
+  }
+  
+  public int getTabletWrapperHeight() {
+    int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+    int height = Window.getClientHeight() * wrapperPct / 100;
+    return height;
+  }
+
+  public int getTabletWrapperWidth() {
+    int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
+    int width = Window.getClientWidth() * wrapperPct / 100;
+    return width;
   }
 
   public void initTitle(BaseMgwtView view) {
