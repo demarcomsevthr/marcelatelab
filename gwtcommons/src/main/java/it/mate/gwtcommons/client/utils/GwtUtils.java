@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -761,7 +762,7 @@ public class GwtUtils {
       log(klass, methodName, "context path = " + contextPath);
     }
   }
-  
+
   public static void log (String message) {
     log(null, -1, null, message, null);
   }
@@ -1015,4 +1016,29 @@ public class GwtUtils {
     return getParentWidgetByClassAndStyle(parent, classname, stylename);
   }
   
+  public native static void setPropertyImpl(JavaScriptObject obj, String name, String value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setPropertyImpl(JavaScriptObject obj, String name, Integer value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setPropertyImpl(JavaScriptObject obj, String name, boolean value) /*-{
+    obj[name] = value;
+  }-*/;
+  
+  public native static Object getPropertyImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+  
+  public native static boolean getPropertyBoolImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return false;
+    }
+    return obj[name];
+  }-*/;
+
+
 }
