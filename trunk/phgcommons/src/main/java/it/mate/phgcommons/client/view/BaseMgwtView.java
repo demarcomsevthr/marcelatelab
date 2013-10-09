@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -54,6 +55,18 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     main.add(headerPanel);
     main.add(scrollPanel);
     
+    headerPanel.getElement().setId("mgwtHeaderPanel");
+    
+    main.addAttachHandler(new AttachEvent.Handler() {
+      public void onAttachOrDetach(AttachEvent event) {
+        onAttach(event);
+      }
+    });
+    
+  }
+  
+  public void onAttach(AttachEvent event) {
+
   }
   
   public void setTitleHtml (String html) {
@@ -76,7 +89,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     return scrollPanel;
   }
   
-  protected HeaderPanel getHeaderPanel() {
+  public HeaderPanel getHeaderPanel() {
     return headerPanel;
   }
   

@@ -21,6 +21,7 @@ public class PhonegapUtils {
     }
     GwtUtils.log("Current layout = " + layoutInfo);
     if (OsDetectionUtils.isIOs()) {
+      GwtUtils.log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
       GwtUtils.log("IOs landscape layout is " + OsDetectionUtils.IPAD_LAND_WIDTH + " x " + OsDetectionUtils.IPAD_LAND_HEIGHT);
       GwtUtils.log("IOs portrait  layout is " + OsDetectionUtils.IPAD_PORT_WIDTH + " x " + OsDetectionUtils.IPAD_PORT_HEIGHT);
     } else {

@@ -5,6 +5,8 @@ import com.googlecode.mgwt.ui.client.MGWT;
 
 public class OsDetectionUtils {
   
+  public final static int IPHONE_WIDTH = 320;
+  public final static int IPHONE_HEIGHT = 480;
   public final static int IPAD_LAND_WIDTH = 1024;
   public final static int IPAD_LAND_HEIGHT = 748;
   public final static int IPAD_PORT_WIDTH = 768;
