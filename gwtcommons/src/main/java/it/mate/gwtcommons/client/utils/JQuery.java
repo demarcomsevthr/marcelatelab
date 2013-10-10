@@ -81,6 +81,14 @@ public class JQuery extends JavaScriptObject {
     return animateImpl(properties, duration);
   }
   
+  public final JQuery animate(StyleProperties properties, int duration, final Delegate<Void> delegate) {
+    return animateImpl(properties, duration, new JQueryCallback() {
+      public void execute() {
+        delegate.execute(null);
+      }
+    });
+  }
+  
   public final JQuery animate(StyleProperties properties, Options options) {
     GwtUtils.log(options.toMyString());
     return animateImpl(properties, options);
@@ -147,6 +155,18 @@ public class JQuery extends JavaScriptObject {
     }
   }
   
+  /**
+   * 
+   * NOTA
+   * 
+   * NON USO direttamente Delegate perche' mi da problemi la signature con il generic
+   *
+   */
+  
+  private static interface JQueryCallback {
+    public void execute();
+  }
+  
   /* --------------------------------------------------------------------------------------------------- */
   
   protected JQuery() {
@@ -177,6 +197,13 @@ public class JQuery extends JavaScriptObject {
     return this.animate(properties, duration);
   }-*/;
   
+  private native JQuery animateImpl(StyleProperties properties, int duration, JQueryCallback callback) /*-{
+    var jsCallback = $entry(function() {
+      callback.@it.mate.gwtcommons.client.utils.JQuery.JQueryCallback::execute()();
+    });
+    return this.animate(properties, duration, "swing", jsCallback);
+  }-*/;
+
   private native JQuery animateImpl(StyleProperties properties, Options options) /*-{
     return this.animate(properties, options);
   }-*/;
