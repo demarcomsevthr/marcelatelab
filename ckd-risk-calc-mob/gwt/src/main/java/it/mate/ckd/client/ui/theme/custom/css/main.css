@@ -477,10 +477,8 @@
 }
 
 .ckd-ProtocolHeaderPanel-center {
-  margin-top: 6px;
   margin-left: 85px;
   margin-right: 30px;
-  margin-bottom: 8px;
   text-align: center;
   font-weight: bold;
   color: white;
@@ -523,18 +521,14 @@
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-left: none;
   margin: 0;
-  padding: 1px;
   text-align: center;
   min-width: 40px;
   max-width: 60px;
   text-overflow: ellipsis;
   overflow: hidden;
-  /* white-space: nowrap; */
-  height: 54px;
   -webkit-border-radius: 4px;
   -webkit-background-origin: border-box;
   position: absolute;
-  top: 3px;
   left: 23px;
   vertical-align: top;
 }  
@@ -547,8 +541,6 @@
 
 @eval protocolStepPanelLeft it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelLeft();
 
-@eval protocolStepPanelHeight it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelHeight();
-
 .ckd-ProtocolStepPanel {
   width: 80%;
   background-color: white;
@@ -557,10 +549,8 @@
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   text-align: center;
-  margin-top: 80px;
   padding-bottom: 20px;
   border: solid 8px rgba(58, 41, 41, 0.68);	
-  height: protocolStepPanelHeight;
   position: absolute;
   top: 5%;
   left: protocolStepPanelLeft;

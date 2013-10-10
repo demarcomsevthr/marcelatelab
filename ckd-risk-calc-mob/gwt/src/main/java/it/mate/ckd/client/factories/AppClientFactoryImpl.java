@@ -119,6 +119,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
     activityManager.setDisplay(display);
     RootPanel.get().add(display);
+    
     // 21/02/2013
 //  ZIndexPatch.apply();
     
@@ -191,14 +192,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
           wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
           
-          /*
-          List<Element> spacers = JQueryUtils.selectList(".ckdHomeSpacer");
-          for (Element spacer : spacers) {
-            int spacerHeight = spacer.getClientHeight() / 2;
-            spacer.getStyle().setHeight(spacerHeight, Unit.PX);
-          }
-          */
-          
           if (delegate != null) {
             delegate.execute(wrapperPanelElem);
           }
@@ -214,7 +207,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       GwtUtils.log("applying wrapperPanel IPhone patch on " + mgwtView.getHeaderPanel().getElement().getId());
       GwtUtils.onAvailable(mgwtView.getHeaderPanel().getElement().getId(), new Delegate<Element>() {
         public void execute(Element headerPanelElement) {
-          GwtUtils.log(""+headerPanelElement.getClientHeight());
           wrapperPanel.setHeight((Window.getClientHeight() - headerPanelElement.getClientHeight()) + "px");
           wrapperPanel.setWidth(Window.getClientWidth() + "px");
         }
@@ -241,6 +233,5 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       view.setTitleHtml(AppConstants.IMPL.phoneAppName());
     }
   }
-  
   
 }
