@@ -81,10 +81,10 @@ public class JQuery extends JavaScriptObject {
     return animateImpl(properties, duration);
   }
   
-  public final JQuery animate(StyleProperties properties, int duration, final Delegate<Void> delegate) {
+  public final JQuery animate(StyleProperties properties, int duration, final Delegate<Void> completion) {
     return animateImpl(properties, duration, new JQueryCallback() {
       public void execute() {
-        delegate.execute(null);
+        completion.execute(null);
       }
     });
   }
@@ -114,6 +114,14 @@ public class JQuery extends JavaScriptObject {
     return fadeOutImpl(duration);
   }
   
+  public final JQuery fadeOut(int duration, final Delegate<Void> completion) {
+    return fadeOutImpl(duration, new JQueryCallback() {
+      public void execute() {
+        completion.execute(null);
+      }
+    });
+  }
+  
   public final JQuery hide(int duration) {
     return hideImpl(duration);
   }
@@ -138,7 +146,7 @@ public class JQuery extends JavaScriptObject {
     private static Options create() {
       return JavaScriptObject.createObject().cast();
     }
-    public final Options setDuration(String duration) {
+    public final Options setDuration(int duration) {
       GwtUtils.setPropertyImpl(this, "duration", duration);
       return this;
     }
@@ -197,11 +205,11 @@ public class JQuery extends JavaScriptObject {
     return this.animate(properties, duration);
   }-*/;
   
-  private native JQuery animateImpl(StyleProperties properties, int duration, JQueryCallback callback) /*-{
-    var jsCallback = $entry(function() {
-      callback.@it.mate.gwtcommons.client.utils.JQuery.JQueryCallback::execute()();
+  private native JQuery animateImpl(StyleProperties properties, int duration, JQueryCallback completion) /*-{
+    var jsCompletion = $entry(function() {
+      completion.@it.mate.gwtcommons.client.utils.JQuery.JQueryCallback::execute()();
     });
-    return this.animate(properties, duration, "swing", jsCallback);
+    return this.animate(properties, duration, "swing", jsCompletion);
   }-*/;
 
   private native JQuery animateImpl(StyleProperties properties, Options options) /*-{
@@ -228,6 +236,13 @@ public class JQuery extends JavaScriptObject {
     return this.fadeOut(duration);
   }-*/;
   
+  private native JQuery fadeOutImpl(int duration, JQueryCallback completion) /*-{
+    var jsCompletion = $entry(function() {
+      completion.@it.mate.gwtcommons.client.utils.JQuery.JQueryCallback::execute()();
+    });
+    return this.fadeOut(duration, jsCompletion);
+  }-*/;
+
   private native JQuery hideImpl(int duration) /*-{
     return this.hide(duration);
   }-*/;
