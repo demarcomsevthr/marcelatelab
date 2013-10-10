@@ -430,6 +430,10 @@
   margin-right: 8px;
 }
 
+.mgwt-HeaderButton-back .mgwt-HeaderButton-border-container {
+  top: 3.5px !important;
+}
+
 .ckdExtendedVerViewPanel {
   overflow: hidden !important;
 }
@@ -467,9 +471,11 @@
   padding-bottom: 1em;
 }
 
+.gwt-Label.ckd-suggestedIndicationLbl {
+  margin: 10px;
+}
 
 .ckd-ProtocolHeaderPanel {
-  /* height: 40px; */
   border-bottom: 1px solid #2d3642;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, 
   	from(rgba(176, 188, 205, 1)), 
@@ -477,7 +483,6 @@
 }
 
 .ckd-ProtocolHeaderPanel-center {
-  margin-left: 85px;
   margin-right: 30px;
   text-align: center;
   font-weight: bold;
@@ -534,11 +539,6 @@
 }  
 
 
-.mgwt-HeaderButton-back .mgwt-HeaderButton-border-container {
-  top: 3.5px !important;
-}
-
-
 @eval protocolStepPanelLeft it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelLeft();
 
 .ckd-ProtocolStepPanel {
@@ -557,10 +557,6 @@
 }
 
 .ckd-ProtocolStepPanel-top {
-  /*
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  */
   background-color: rgb(150, 255, 200);
   padding-top: 0.8em;
   padding-bottom: 1.2em;
@@ -569,7 +565,7 @@
 }
 
 .ckd-ProtocolStepPanel-center {
-  height: 46%;
+  font-family: verdana;
 }
 
 .ckd-ProtocolStepPanel-center div.gwt-HTML {

@@ -21,34 +21,11 @@
         <P:ProtocolStepView.BackStepButton ui:field="backBtn" addStyleNames="ckd-ProtocolHeaderButton-text" text="Prev Step"/>
       </g:HTMLPanel>
 
-      <!--       
-      <g:HTML addStyleNames="ckd-ProtocolHeaderButton">
-        <div class="ckd-ProtocolHeaderButton-border-container">
-          <span class="ckd-ProtocolHeaderButton-border-content"></span>
-        </div>
-        <p class="ckd-ProtocolHeaderButton-text">Prev Step</p>
-      </g:HTML>
-       -->
-
     </gc:SimpleContainer>
   
     <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%" height="80%" ui:field="stepPanel" addStyleNames="ckd-stepPanel">
-    
-      <!-- 
-      <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%" height="300px">
-        <p:SmartButton ui:field="backBtn" text="Back" addStyleNames="ckdProtocolBackBtn" visible="false"/>
-        <g:HTML ui:field="questionHtml"></g:HTML>
-        <g:HorizontalPanel>
-          <p:SmartButton ui:field="answer1Btn"/>
-          <p:SmartButton ui:field="answer2Btn"/>
-        </g:HorizontalPanel>
-      </g:VerticalPanel>
-       -->
-       
-      <!--  
-      <p:SmartButton ui:field="backBtn" text="Back" addStyleNames="ckdProtocolBackBtn" visible="false" height="0" width="0"/>
-       -->
-      
+
+      <!--     
       <gc:SimpleContainer>
         <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
           <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">
@@ -64,18 +41,25 @@
             <p:SmartButton ui:field="gfrBtn" text="Return to GFR" visible="false"/>
           </gc:SimpleContainer>
         </gc:SimpleContainer>
-      </gc:SimpleContainer> 
-      
+      </gc:SimpleContainer>
+       --> 
 
-      <!--       
-      <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%" height="200px" ui:field="endPanel" visible="false">
-        <g:HTML ui:field="endHtml"></g:HTML>
-        <p:SmartButton ui:field="gfrBtn" text="Go To GFR" width="6em"/>
-      </g:VerticalPanel>
-       -->
-    
     </g:VerticalPanel>
   
+    <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
+      <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">
+        <g:Label text="Step 1"/>
+      </gc:SimpleContainer>
+      <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-center">
+        <g:HTML ui:field="questionHtml"></g:HTML>
+        <g:HTML ui:field="endHtml" visible="false"></g:HTML>
+      </gc:SimpleContainer>
+      <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-bottom">
+        <p:SmartButton ui:field="answer1Btn" text="Yes" addStyleNames="ckd-ProtocolStepPanel-button"/>
+        <p:SmartButton ui:field="answer2Btn" text="No" addStyleNames="ckd-ProtocolStepPanel-button"/>
+        <p:SmartButton ui:field="gfrBtn" text="Return to GFR" visible="false"/>
+      </gc:SimpleContainer>
+    </gc:SimpleContainer>
 
   </g:HTMLPanel>
   

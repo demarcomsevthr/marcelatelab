@@ -91,9 +91,24 @@
   font-size: 32px;
 }
 
+.ckd-ProtocolHeaderPanel-center {
+  margin-left: 85px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
 .ckd-ProtocolStepPanel {
-  margin-top: 80px;
-  height: 400px;
+  margin-top: 60px;
+  height: 360px;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 42%;
+}
+
+.ckd-ProtocolStepPanel-center * {
+  font-size: 32px;
 }
 
 .ckd-ProtocolHeaderButton-text {
@@ -101,10 +116,4 @@
   padding: 1px;
   height: 54px;
   top: 3px;
-}
-
-.ckd-ProtocolHeaderPanel-center {
-  font-size: 20px;
-  margin-top: 6px;
-  margin-bottom: 8px;
 }

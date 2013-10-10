@@ -6,7 +6,6 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ExtendedVerView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -52,6 +51,12 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   
   boolean suggestionPanelVisible = false;
   
+  private CKD ckd;
+  
+  private int referralDecisionCode;
+  
+  private int monitoringFrequencyCode;
+  
   public ExtendedVerView() {
     initUI();
   }
@@ -84,18 +89,26 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (model instanceof CKD) {
-      CKD ckd = (CKD)model;
+      this.ckd = (CKD)model;
       if (CKD.SELECTED_GFR_COCKROFT.equals(ckd.getSelectedGFR())) {
         getPresenter().applyCKD(ckd, ckd.getCockcroftGFR(), gfrBox, gfrStadium, riskBox, riskPanel, null);
+        referralDecisionCode = ckd.getReferralDecision(ckd.getCockcroftGFR());
+        monitoringFrequencyCode = ckd.getMonitoringFrequency(ckd.getCockcroftGFR());
       }
       if (CKD.SELECTED_GFR_MDRD1.equals(ckd.getSelectedGFR())) {
         getPresenter().applyCKD(ckd, ckd.getMdrdGFR(), gfrBox, gfrStadium, riskBox, riskPanel, null);
+        referralDecisionCode = ckd.getReferralDecision(ckd.getMdrdGFR());
+        monitoringFrequencyCode = ckd.getMonitoringFrequency(ckd.getMdrdGFR());
       }
       if (CKD.SELECTED_GFR_MDRD2.equals(ckd.getSelectedGFR())) {
         getPresenter().applyCKD(ckd, ckd.getMdrdNcGFR(), gfrBox, gfrStadium, riskBox, riskPanel, null);
+        referralDecisionCode = ckd.getReferralDecision(ckd.getMdrdNcGFR());
+        monitoringFrequencyCode = ckd.getMonitoringFrequency(ckd.getMdrdNcGFR());
       }
       if (CKD.SELECTED_GFR_EPI.equals(ckd.getSelectedGFR())) {
         getPresenter().applyCKD(ckd, ckd.getCkdEpiGFR(), gfrBox, gfrStadium, riskBox, riskPanel, null);
+        referralDecisionCode = ckd.getReferralDecision(ckd.getCkdEpiGFR());
+        monitoringFrequencyCode = ckd.getMonitoringFrequency(ckd.getCkdEpiGFR());
       }
       albBox.setText(""+ckd.getAlbumin());
     }
@@ -103,7 +116,31 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
 
   @UiHandler ("referralBtn")
   public void onReferralBtn (TouchStartEvent event) {
-    showSuggestedIndications("Suggested referral decision", "Refer");
+    String text = "";
+    String color = null;
+    if (referralDecisionCode == CKD.REFERRAL_DECISION_NONE) {
+      text = "None";
+      color = "green";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_YELLOW) {
+      text = "Monitor";
+      color = "yellow";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_ORANGE) {
+      text = "Monitor";
+      color = "orange";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_RED) {
+      text = "Monitor";
+      color = "red";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_ORANGE) {
+      text = "Refer with Nephrology Service";
+      color = "orange";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED) {
+      text = "Refer with Nephrology Service";
+      color = "red";
+    } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_RED) {
+      text = "Refer";
+      color = "red";
+    }
+    showSuggestedIndications("Suggested referral decision", text, color);
   }
   
   @UiHandler ("protocolBtn")
@@ -113,25 +150,43 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   
   @UiHandler ("monitoringBtn")
   public void onMonitoringBtn (TouchStartEvent event) {
-    showSuggestedIndications("Suggested monitoring frequency", "1 time per year");
+    String text = "";
+    String color = null;
+    if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_GREEN) {
+      text = "1 time/year if CKD";
+      color = "green";
+    } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_YELLOW) {
+      text = "1 time/year";
+      color = "yellow";
+    } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_2_ORANGE) {
+      text = "2 time/year";
+      color = "orange";
+    } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_3_RED) {
+      text = "3 time/year";
+      color = "red";
+    } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_4_DEEP_RED) {
+      text = "4+ time/year";
+      color = "#8A0808";
+    }
+    showSuggestedIndications("Suggested monitoring frequency", text, color);
   }
   
-  private void showSuggestedIndications(final String title, final String indication) {
-
-    GwtUtils.log("start method");
-    
+  private void showSuggestedIndications(final String title, final String text, final String bckColor) {
     final Element suggestionPanelElement = suggestionPanel.getElement();
     
     Delegate<Void> showDelegate = new Delegate<Void>() {
       public void execute(Void element) {
-        
-        GwtUtils.log("start delegate");
-        
         suggestedIndicationTitleLbl.setText(title);
-        suggestedIndicationLbl.setText(indication);
-        
+        suggestedIndicationLbl.setText(text);
+        suggestedIndicationLbl.getElement().getStyle().setBorderWidth(1, Style.Unit.PX);
+        suggestedIndicationLbl.getElement().getStyle().setBorderStyle(Style.BorderStyle.SOLID);
+        suggestedIndicationLbl.getElement().getStyle().setBorderColor("black");
+        if (bckColor != null) {
+          suggestedIndicationLbl.getElement().getStyle().setBackgroundColor(bckColor);
+        } else {
+          suggestedIndicationLbl.getElement().getStyle().clearBackgroundColor();
+        }
         int startTop = 0;
-        
         if (OsDetectionUtils.isTablet()) {
           String mts = wrapperPanel.getElement().getStyle().getMarginTop();
           mts = mts.substring(0, mts.indexOf("px"));
@@ -140,21 +195,13 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         } else {
           startTop = Window.getClientHeight() - getHeaderPanel().getOffsetHeight();
         }
-        
-        GwtUtils.log("wrapperPanelWidth = " + wrapperPanel.getOffsetWidth());
         int startLeft = ( wrapperPanel.getOffsetWidth() - (wrapperPanel.getOffsetWidth() * 80 / 100) ) / 2; 
-        
-        GwtUtils.log("startTop = " + startTop);
-        GwtUtils.log("startLeft = " + startLeft);
-
         JQuery.StyleProperties startProperties = JQuery.createStyleProperties();
         startProperties.setPosition(Style.Position.ABSOLUTE);
         startProperties.setTop( startTop, Style.Unit.PX);
         startProperties.setLeft(startLeft, Style.Unit.PX);
         startProperties.setDisplay(Style.Display.BLOCK);
-        
         int endHeight = 120;
-        
         if (OsDetectionUtils.isTabletLandscape()) {
           endHeight = 240;
         } else if (OsDetectionUtils.isTabletPortrait()) {
@@ -162,27 +209,21 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         } else {
           endHeight = 120;
         }
-        
         JQuery.StyleProperties endProperties = JQuery.createStyleProperties();
         endProperties.setTop( (startTop - endHeight) , Style.Unit.PX);
         endProperties.setHeight(endHeight, Style.Unit.PX);
-
         JQuery.withElement(suggestionPanelElement).css(startProperties)
-            .fadeIn(JQuery.createOptions().setDuration("2000").setQueue(false))
+            .fadeIn(JQuery.createOptions().setDuration(2000).setQueue(false))
 //          .animate(endProperties, JQuery.createOptions().setDuration("3000").setQueue(true));
             .animate(endProperties, 2000);
-        
         suggestionPanelVisible = true;
-
       }
     };
     
     if (suggestionPanelVisible) {
-//  if (suggestionPanel.isVisible()) {
-      GwtUtils.log("suggestionPanel is Visible !");
       int hideDuration = 2000;
-      JQuery.withElement(suggestionPanelElement).fadeOut(hideDuration);
-      GwtUtils.deferredExecution(hideDuration, showDelegate);
+      JQuery.withElement(suggestionPanelElement).fadeOut(hideDuration, showDelegate);
+//    GwtUtils.deferredExecution(hideDuration, showDelegate);
     } else {
       showDelegate.execute(null);
     }

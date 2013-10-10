@@ -60,21 +60,13 @@
     
     <gc:Spacer height="1em"/>
 
-    <!--       
-    <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%">
-    </g:VerticalPanel>
-     -->
-     
     <gc:SimpleContainer>
-    
-      <!-- visible="false" -->
-    
       <gc:SimpleContainer addStyleNames="ckd-suggestionPanel" ui:field="suggestionPanel" >
         <gc:SimpleContainer addStyleNames="ckd-suggestionPanel-top">
           <g:Label ui:field="suggestedIndicationTitleLbl"/>
         </gc:SimpleContainer>
         <gc:SimpleContainer addStyleNames="ckd-suggestionPanel-content">
-          <g:Label ui:field="suggestedIndicationLbl"/>
+          <g:Label ui:field="suggestedIndicationLbl" addStyleNames="ckd-suggestedIndicationLbl"/>
         </gc:SimpleContainer>
       </gc:SimpleContainer>
     </gc:SimpleContainer> 
