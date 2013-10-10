@@ -6,7 +6,6 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -42,7 +41,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField Panel stepPanel;
-//@UiField Panel endPanel;
   @UiField HTML questionHtml;
   @UiField SmartButton answer1Btn;
   @UiField SmartButton answer2Btn;
@@ -57,6 +55,8 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   private ProtocolStep currentProtocolStep;
   
   private LinkedList<ProtocolStep> history = new LinkedList<ProtocolStep>();
+  
+  private final static int PROTOCOL_STEP_PANEL_LEFT_PCT = 9;
   
   public ProtocolStepView() {
     initUI();
@@ -106,19 +106,18 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       answer2Btn.setText(currentProtocolStep.getAnswer2Text());
       answer1Btn.setOriginalColor();
       answer2Btn.setOriginalColor();
-//    endPanel.setVisible(false);
       backBtnPanel.setVisible(history.size() > 0);
     }
   }
 
   @UiHandler ("answer1Btn")
   public void onAnswer1Btn(TouchStartEvent event) {
-    checkStep(currentProtocolStep.getAnswer1EndText(), currentProtocolStep.getAnswer1Step());
+    goToNextStep(currentProtocolStep.getAnswer1EndText(), currentProtocolStep.getAnswer1Step());
   }
   
   @UiHandler ("answer2Btn")
   public void onAnswer2Btn(TouchStartEvent event) {
-    checkStep(currentProtocolStep.getAnswer2EndText(), currentProtocolStep.getAnswer2Step());
+    goToNextStep(currentProtocolStep.getAnswer2EndText(), currentProtocolStep.getAnswer2Step());
   }
   
   @UiHandler ("backBtn")
@@ -133,53 +132,72 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       }
     });
 
-    /*
-    ProtocolStep step = history.getLast();
-    history.removeLast();
-    setModel(step, "step");
-    */
-    
   }
-  
-  private void checkStep(String endText, int nextStepId) {
-    if (endText != null && !"".equals(endText.trim())) {
-      
-      questionHtml.setVisible(false);
-      answer1Btn.setVisible(false);
-      answer2Btn.setVisible(false);
-      
-      endHtml.setHTML(endText);
-      endHtml.setVisible(true);
-      gfrBtn.setVisible(true);
-//    endPanel.setVisible(true);
-    }
-    final ProtocolStep nextStep = ProtocolStep.getProtocolStepById(nextStepId);
-    if (nextStep != null) {
-      
-      doAnimation1(-1, new Delegate<Void>() {
-        public void execute(Void element) {
-          history.add(currentProtocolStep);
-          setModel(nextStep, "step");
-          doAnimation2();
-        }
-      });
-      
-    }
-  }
-  
-
-  private final static int PROTOCOL_STEP_PANEL_LEFT_PCT = 9;
   
   public static String getProtocolStepPanelLeft() {
     return PROTOCOL_STEP_PANEL_LEFT_PCT + "%";
   }
   
-  public static String getProtocolStepPanelHeight() {
-    if (OsDetectionUtils.isTablet()) {
-      return "400px";
+  private void goToNextStep(final String endText, int nextStepId) {
+    if (endText != null && !"".equals(endText.trim())) {
+      
+      doAnimation1(-1, new Delegate<Void>() {
+        public void execute(Void element) {
+          backBtnPanel.setVisible(false);
+          questionHtml.setVisible(false);
+          answer1Btn.setVisible(false);
+          answer2Btn.setVisible(false);
+          endHtml.setHTML(endText);
+          endHtml.setVisible(true);
+          gfrBtn.setVisible(true);
+          doAnimation2();
+        }
+      });
+      
     } else {
-      return "260px";
+      
+      final ProtocolStep nextStep = ProtocolStep.getProtocolStepById(nextStepId);
+      if (nextStep != null) {
+        
+        doAnimation1(-1, new Delegate<Void>() {
+          public void execute(Void element) {
+            history.add(currentProtocolStep);
+            setModel(nextStep, "step");
+            doAnimation2();
+          }
+        });
+        
+      }
     }
+  }
+  
+
+  private void doAnimation1(final int versus, final Delegate<Void> delegate) {
+    JQuery.StyleProperties step1Properties = JQuery.createStyleProperties();
+    step1Properties.setLeft(versus * 100, Style.Unit.PCT);
+    JQuery.withElement(protocolStepPanel.getElement())
+//      .animate(step1Properties, 2000);
+        .animate(step1Properties, 2000, new Delegate<Void>() {
+          public void execute(Void element) {
+            JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
+            step2Properties.setLeft((-1) * versus * 100, Style.Unit.PCT);
+            JQuery.withElement(protocolStepPanel.getElement())
+                .css(step2Properties);
+            delegate.execute(null);
+          }
+        });
+    
+    /*
+    GwtUtils.deferredExecution(2000, new Delegate<Void>() {
+      public void execute(Void element) {
+        JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
+        step2Properties.setLeft((-1) * versus * 100, Style.Unit.PCT);
+        JQuery.withElement(protocolStepPanel.getElement())
+            .css(step2Properties);
+        delegate.execute(null);
+      }
+    });
+    */
   }
   
   private void doAnimation2() {
@@ -189,24 +207,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         .animate(step3Properties, 2000);
   }
   
-  private void doAnimation1(final int versus, final Delegate<Void> delegate) {
-    JQuery.StyleProperties step1Properties = JQuery.createStyleProperties();
-    step1Properties.setLeft(versus * 100, Style.Unit.PCT);
-    JQuery.withElement(protocolStepPanel.getElement())
-        .animate(step1Properties, 2000);
-    GwtUtils.deferredExecution(2000, new Delegate<Void>() {
-      public void execute(Void element) {
-        GwtUtils.log("do animation 1");
-        JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
-        step2Properties.setLeft((-1) * versus * 100, Style.Unit.PCT);
-        JQuery.withElement(protocolStepPanel.getElement())
-            .css(step2Properties);
-        delegate.execute(null);
-      }
-    });
-  }
-  
-
   public static class BackStepButton extends TouchWidget {
     Element p;
     public BackStepButton() {

@@ -39,11 +39,6 @@ public class CustomTheme {
     }
   }
   
-  /*
-  public static String getwindowHeight() {
-    return Window.getClientHeight() + "px";
-  }
-  */
   
   public static String getWindowHeight() {
     return Window.getClientHeight() + "px";
@@ -87,32 +82,32 @@ public class CustomTheme {
   }
   
   public interface CustomBundleAndroid extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android/fonts-phone.css", "css/android/android.css"})
+    @Source({"css/main.css", "css/android/phone.css", "css/android/android.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android/fonts-apad.css", "css/android/android.css", "css/android/apad-landscape.css"})
+    @Source({"css/main.css", "css/android/tablet.css", "css/android/android.css", "css/android/tablet-landscape.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android/fonts-apad.css", "css/android/android.css", "css/android/apad-portrait.css"})
+    @Source({"css/main.css", "css/android/tablet.css", "css/android/android.css", "css/android/tablet-portrait.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIOs extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/fonts-iphone.css", "css/ios/ios.css"})
+    @Source({"css/main.css", "css/ios/phone.css", "css/ios/ios.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/fonts-ipad.css", "css/ios/ios.css", "css/ios/ipad-landscape.css"})
+    @Source({"css/main.css", "css/ios/tablet.css", "css/ios/ios.css", "css/ios/tablet-landscape.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios/fonts-ipad.css", "css/ios/ios.css", "css/ios/ipad-portrait.css"})
+    @Source({"css/main.css", "css/ios/tablet.css", "css/ios/ios.css", "css/ios/tablet-portrait.css"})
     public CustomMainCss css();
   }
   
