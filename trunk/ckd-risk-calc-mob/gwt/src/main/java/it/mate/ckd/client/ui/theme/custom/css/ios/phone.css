@@ -107,9 +107,20 @@
   font-size: 18px;
 }
 
+.ckd-ProtocolHeaderPanel-center {
+  font-size: 8pt;
+  margin-left: 105px;
+  margin-bottom: 10px;
+}
+
 .ckd-ProtocolStepPanel {
   margin-top: 56px;
   height: 300px;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 46%;
+  font-size: 22px;
 }
 
 .ckd-ProtocolHeaderButton-text {
@@ -118,9 +129,4 @@
   padding-top: 5px;
   height: 50px;
   top: 2.5px;
-}
-
-.ckd-ProtocolHeaderPanel-center {
-  font-size: 8pt;
-  margin-bottom: 10px;
 }

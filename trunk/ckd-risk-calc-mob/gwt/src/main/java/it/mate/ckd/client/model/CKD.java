@@ -218,6 +218,93 @@ public class CKD {
     }
     return risk;
   }
+  
+  public static final int REFERRAL_DECISION_NONE = 0;
+  public static final int REFERRAL_DECISION_MONITOR_YELLOW = 1;
+  public static final int REFERRAL_DECISION_MONITOR_ORANGE = 2;
+  public static final int REFERRAL_DECISION_MONITOR_RED = 3;
+  public static final int REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_ORANGE = 4;
+  public static final int REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED = 5;
+  public static final int REFERRAL_DECISION_REFER_RED = 6;
+  
+  public int getReferralDecision(double gfr) {
+    int result = REFERRAL_DECISION_NONE;
+    if (getAlbuminMgG() < 30) {
+      if (gfr >= 60) {
+        result = REFERRAL_DECISION_NONE;
+      } else if (gfr >= 45) {
+        result = REFERRAL_DECISION_MONITOR_YELLOW;
+      } else if (gfr >= 30) {
+        result = REFERRAL_DECISION_MONITOR_ORANGE;
+      } else if (gfr >= 15) {
+        result = REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED;
+      } else {
+        result = REFERRAL_DECISION_REFER_RED;
+      }
+    } else if (getAlbuminMgG() <= 300) {
+      if (gfr >= 60) {
+        result = REFERRAL_DECISION_MONITOR_YELLOW;
+      } else if (gfr >= 45) {
+        result = REFERRAL_DECISION_MONITOR_ORANGE;
+      } else if (gfr >= 30) {
+        result = REFERRAL_DECISION_MONITOR_RED;
+      } else if (gfr >= 15) {
+        result = REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED;
+      } else {
+        result = REFERRAL_DECISION_REFER_RED;
+      }
+    } else {
+      if (gfr >= 60) {
+        result = REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_ORANGE;
+      } else {
+        result = REFERRAL_DECISION_REFER_RED;
+      }
+    }
+    return result;
+  }
+  
+  public static final int MONITORING_FREQUENCY_1_GREEN = 1;
+  public static final int MONITORING_FREQUENCY_1_YELLOW = 10;
+  public static final int MONITORING_FREQUENCY_2_ORANGE = 2;
+  public static final int MONITORING_FREQUENCY_3_RED = 3;
+  public static final int MONITORING_FREQUENCY_4_DEEP_RED = 4;
+  
+  public int getMonitoringFrequency(double gfr) {
+    int result = MONITORING_FREQUENCY_1_GREEN;
+    if (getAlbuminMgG() < 30) {
+      if (gfr >= 60) {
+        result = MONITORING_FREQUENCY_1_GREEN;
+      } else if (gfr >= 45) {
+        result = MONITORING_FREQUENCY_1_YELLOW;
+      } else if (gfr >= 30) {
+        result = MONITORING_FREQUENCY_2_ORANGE;
+      } else if (gfr >= 15) {
+        result = MONITORING_FREQUENCY_3_RED;
+      } else {
+        result = MONITORING_FREQUENCY_4_DEEP_RED;
+      }
+    } else if (getAlbuminMgG() <= 300) {
+      if (gfr >= 60) {
+        result = MONITORING_FREQUENCY_1_YELLOW;
+      } else if (gfr >= 45) {
+        result = MONITORING_FREQUENCY_2_ORANGE;
+      } else if (gfr >= 15) {
+        result = MONITORING_FREQUENCY_3_RED;
+      } else {
+        result = MONITORING_FREQUENCY_4_DEEP_RED;
+      }
+    } else {
+      if (gfr >= 60) {
+        result = MONITORING_FREQUENCY_2_ORANGE;
+      } else if (gfr >= 30) {
+        result = MONITORING_FREQUENCY_3_RED;
+      } else {
+        result = MONITORING_FREQUENCY_4_DEEP_RED;
+      }
+    }
+    return result;
+  }
+  
 
   public double getScr() {
     return scr;

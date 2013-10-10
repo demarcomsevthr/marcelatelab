@@ -6,6 +6,7 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -176,7 +177,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     JQuery.StyleProperties step1Properties = JQuery.createStyleProperties();
     step1Properties.setLeft(versus * 100, Style.Unit.PCT);
     JQuery.withElement(protocolStepPanel.getElement())
-//      .animate(step1Properties, 2000);
         .animate(step1Properties, 2000, new Delegate<Void>() {
           public void execute(Void element) {
             JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
