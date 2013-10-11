@@ -6,7 +6,6 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -23,6 +22,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -48,6 +48,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   @UiField HTML endHtml;
   @UiField Widget backBtnPanel;
   @UiField Widget gfrBtn;
+  @UiField Label stepNumberLbl;
   
   @UiField Panel protocolHeaderPanel;
   
@@ -102,6 +103,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   public void setModel(Object model, String tag) {
     if (model instanceof ProtocolStep) {
       currentProtocolStep = (ProtocolStep)model;
+      stepNumberLbl.setText("Step " + currentProtocolStep.getId());
       questionHtml.setHTML(currentProtocolStep.getQuestionText());
       answer1Btn.setText(currentProtocolStep.getAnswer1Text());
       answer2Btn.setText(currentProtocolStep.getAnswer2Text());
@@ -123,7 +125,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   
   @UiHandler ("backBtn")
   public void onBackBtn(TouchStartEvent event) {
-    
     doAnimation1(+1, new Delegate<Void>() {
       public void execute(Void element) {
         ProtocolStep step = history.getLast();
@@ -132,7 +133,11 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         doAnimation2();
       }
     });
-
+  }
+  
+  @UiHandler ("gfrBtn")
+  public void onGfrBtn(TouchStartEvent event) {
+    getPresenter().goToCkdOutput(null);
   }
   
   public static String getProtocolStepPanelLeft() {
@@ -144,6 +149,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       
       doAnimation1(-1, new Delegate<Void>() {
         public void execute(Void element) {
+          stepNumberLbl.setText("Finish");
           backBtnPanel.setVisible(false);
           questionHtml.setVisible(false);
           answer1Btn.setVisible(false);

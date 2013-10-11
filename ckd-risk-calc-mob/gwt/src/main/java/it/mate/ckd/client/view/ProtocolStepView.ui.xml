@@ -48,7 +48,7 @@
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
       <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">
-        <g:Label text="Step 1"/>
+        <g:Label text="Step 1" ui:field="stepNumberLbl"/>
       </gc:SimpleContainer>
       <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-center">
         <g:HTML ui:field="questionHtml"></g:HTML>
@@ -57,7 +57,7 @@
       <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-bottom">
         <p:SmartButton ui:field="answer1Btn" text="Yes" addStyleNames="ckd-ProtocolStepPanel-button"/>
         <p:SmartButton ui:field="answer2Btn" text="No" addStyleNames="ckd-ProtocolStepPanel-button"/>
-        <p:SmartButton ui:field="gfrBtn" text="Return to GFR" visible="false"/>
+        <p:SmartButton ui:field="gfrBtn" text="Finish" visible="false"/>
       </gc:SimpleContainer>
     </gc:SimpleContainer>
 

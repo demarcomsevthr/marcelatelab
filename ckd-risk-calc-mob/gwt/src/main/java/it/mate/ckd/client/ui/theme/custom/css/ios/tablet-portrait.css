@@ -92,10 +92,12 @@ body {
   margin-left: 10px;
 }
 
-
-
 .ckd-suggestionBtn {
   width: 80%;
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  margin-left: 95px;
 }
 
 .ckd-ProtocolStepPanel {

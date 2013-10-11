@@ -171,6 +171,18 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     showSuggestedIndications("Suggested monitoring frequency", text, color);
   }
   
+  private static int getSuggestionPanelWidthPct() {
+    if (OsDetectionUtils.isTablet()) {
+      return 80;
+    } else {
+      return 90;
+    }
+  }
+  
+  public static String getSuggestionPanelWidth() {
+    return getSuggestionPanelWidthPct() + "%";
+  }
+  
   private void showSuggestedIndications(final String title, final String text, final String bckColor) {
     final Element suggestionPanelElement = suggestionPanel.getElement();
     
@@ -195,7 +207,7 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         } else {
           startTop = Window.getClientHeight() - getHeaderPanel().getOffsetHeight();
         }
-        int startLeft = ( wrapperPanel.getOffsetWidth() - (wrapperPanel.getOffsetWidth() * 80 / 100) ) / 2; 
+        int startLeft = ( wrapperPanel.getOffsetWidth() - (wrapperPanel.getOffsetWidth() * getSuggestionPanelWidthPct() / 100) ) / 2 - 8; 
         JQuery.StyleProperties startProperties = JQuery.createStyleProperties();
         startProperties.setPosition(Style.Position.ABSOLUTE);
         startProperties.setTop( startTop, Style.Unit.PX);
@@ -203,7 +215,7 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         startProperties.setDisplay(Style.Display.BLOCK);
         int endHeight = 120;
         if (OsDetectionUtils.isTabletLandscape()) {
-          endHeight = 240;
+          endHeight = 180;
         } else if (OsDetectionUtils.isTabletPortrait()) {
           endHeight = 240;
         } else {
