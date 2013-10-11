@@ -87,12 +87,16 @@ body {
   width: 80%;
 }
 
+.ckd-ProtocolHeaderPanel-center {
+  margin-left: 85px;
+}
+
 .ckd-ProtocolStepPanel {
   margin-top: 60px;
   height: 360px;
 }
 
 .ckd-ProtocolStepPanel-center {
-  height: 42%;
+  height: 34%;
 }
 

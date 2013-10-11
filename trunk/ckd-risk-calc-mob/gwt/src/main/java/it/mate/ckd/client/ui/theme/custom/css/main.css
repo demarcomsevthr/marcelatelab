@@ -457,8 +457,10 @@
   font-family: verdana;
 }
 
+@eval suggestionPanelWidth it.mate.ckd.client.view.ExtendedVerView.getSuggestionPanelWidth();
+
 .ckd-suggestionPanel {
-  width: 80%;
+  width: suggestionPanelWidth;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   display: none;
@@ -467,9 +469,6 @@
 
 .ckd-suggestionPanel {
   border: solid 8px rgba(58, 41, 41, 0.68);	
-  /*
-  background-color: white;
-  */
   background-color: rgba(58, 41, 41, 0.68);
 }
 

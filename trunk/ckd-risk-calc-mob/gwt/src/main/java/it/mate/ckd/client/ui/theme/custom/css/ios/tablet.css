@@ -104,10 +104,9 @@
 }
 
 .ckd-ProtocolHeaderPanel-center {
-  margin-left: 85px;
+  font-size: 18px;
   margin-top: 6px;
   margin-bottom: 12px;
-  font-size: 18px;
 }
 
 .ckd-ProtocolStepPanel-center * {
