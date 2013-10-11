@@ -66,6 +66,7 @@
           <g:Label ui:field="suggestedIndicationTitleLbl"/>
         </gc:SimpleContainer>
         <gc:SimpleContainer addStyleNames="ckd-suggestionPanel-content">
+          <gc:Spacer height="1px" addStyleNames="ckd-suggestionPanel-content-spacer"/>
           <g:Label ui:field="suggestedIndicationLbl" addStyleNames="ckd-suggestedIndicationLbl"/>
         </gc:SimpleContainer>
       </gc:SimpleContainer>

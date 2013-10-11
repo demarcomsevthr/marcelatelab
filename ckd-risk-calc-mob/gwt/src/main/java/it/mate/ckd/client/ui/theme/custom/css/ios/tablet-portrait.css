@@ -98,3 +98,16 @@ body {
   width: 80%;
 }
 
+.ckd-ProtocolStepPanel {
+  margin-top: 80px;
+  height: 480px;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 48%;
+}
+
+.ckd-ProtocolHeaderButton-border-container, .ckd-ProtocolHeaderButton-text {
+  margin-top: 10px;
+}
+

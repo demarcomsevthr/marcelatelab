@@ -445,13 +445,32 @@
   padding: 9px 2px;
 }
 
+.ckd-chooseOptionLbl {
+  font-family: Verdana;
+  color: rgba(26, 26, 0, 0.9);
+  font-weight: 600;
+  font-size: 12pt;
+  margin-top: 20px;
+}
+
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.ckd-suggestionBtn {
+  font-family: verdana;
+}
+
 .ckd-suggestionPanel {
   width: 80%;
-  background-color: white;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   display: none;
   text-align: center;
+}
+
+.ckd-suggestionPanel {
+  border: solid 8px rgba(58, 41, 41, 0.68);	
+  /*
+  background-color: white;
+  */
+  background-color: rgba(58, 41, 41, 0.68);
 }
 
 .ckd-suggestionPanel .ckd-suggestionPanel-top div {
@@ -465,10 +484,15 @@
   font-size: 0.88em;
 }
 
+.ckd-suggestionPanel-content {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+}
+
 .ckd-suggestionPanel .ckd-suggestionPanel-content div {
   background-color: white;
   padding-top: 0.6em;
-  padding-bottom: 1em;
 }
 
 .gwt-Label.ckd-suggestedIndicationLbl {

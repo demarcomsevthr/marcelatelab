@@ -87,8 +87,20 @@
   font-size: 38px;
 }
 
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.ckd-suggestionBtn {
+  font-size: 16px;
+}
+
 .ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
   font-size: 32px;
+}
+
+.ckd-suggestionPanel-content {
+  margin-top: -15px;
+}
+
+.ckd-suggestionPanel .ckd-suggestionPanel-content div {
+  padding-bottom: 1em;
 }
 
 .ckd-ProtocolHeaderPanel-center {
@@ -96,15 +108,6 @@
   margin-top: 6px;
   margin-bottom: 12px;
   font-size: 18px;
-}
-
-.ckd-ProtocolStepPanel {
-  margin-top: 60px;
-  height: 360px;
-}
-
-.ckd-ProtocolStepPanel-center {
-  height: 42%;
 }
 
 .ckd-ProtocolStepPanel-center * {
