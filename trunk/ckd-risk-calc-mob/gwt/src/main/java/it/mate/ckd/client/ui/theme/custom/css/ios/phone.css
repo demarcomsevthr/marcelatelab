@@ -103,6 +103,18 @@
   font-size: 28px;
 }
 
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.ckd-suggestionBtn {
+  font-size: 12px;
+}
+
+.ckd-suggestionPanel-content {
+  margin-top: -5px;
+}
+
+.ckd-suggestionPanel .ckd-suggestionPanel-content div {
+  padding-bottom: 0.5em;
+}
+
 .ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
   font-size: 18px;
 }
