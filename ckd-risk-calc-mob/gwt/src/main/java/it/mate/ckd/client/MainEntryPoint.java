@@ -36,8 +36,6 @@ public class MainEntryPoint implements EntryPoint {
       }
     });
     
-    PhonegapUtils.log("NavVer " + Window.Navigator.getAppVersion());
-
     startApp();
     
   }

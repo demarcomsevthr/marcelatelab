@@ -16,7 +16,10 @@ public class CustomTheme {
   public static class Instance {
     private static CustomBundle instance = null;
     public static CustomBundle get() {
-      if (instance == null) {
+      return get(false);
+    }
+    public static CustomBundle get(boolean forceReset) {
+      if (instance == null || forceReset) {
         if (MGWT.getOsDetection().isIOs()) {
           if (OsDetectionUtils.isTabletLandscape()) {
             instance = GWT.create(CustomBundleIPadLandscape.class);
