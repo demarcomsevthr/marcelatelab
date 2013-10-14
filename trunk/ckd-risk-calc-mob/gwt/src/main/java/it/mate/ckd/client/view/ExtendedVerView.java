@@ -69,7 +69,7 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     AppClientFactory.IMPL.initTitle(this);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "protocolWrapperPanel", true, null);
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "extendedWrapperPanel", true, 40, null);
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToCkdOutput(null);
@@ -83,7 +83,8 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     // 09/10/2013
     // se non faccio cosi' su iphone non si vede il suggestion panel
     // (rimane a 0 la height del parent)
-    AppClientFactory.IMPL.applyWrapperPanelIPhonePatch(this, wrapperPanel);
+//  AppClientFactory.IMPL.adaptWrapperPanel(this, wrapperPanel);
+    // spostato in adaptWrapperPanelOnTablet
   }
   
   @Override
