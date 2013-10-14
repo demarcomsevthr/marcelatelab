@@ -83,7 +83,7 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
     
     
     
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "inputWrapperPanel", false, new Delegate<Element>() {
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "inputWrapperPanel", false, 0, new Delegate<Element>() {
       public void execute(final Element wrapperPanelElem) {
         GwtUtils.onAvailable("ckdInputPanelTable", new Delegate<Element>() {
           public void execute(Element inputPanelTableElem) {

@@ -79,7 +79,7 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     style = bundle.css();
     initUI();
 
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "outputWrapperPanel", false, new Delegate<Element>() {
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "outputWrapperPanel", false, 0, new Delegate<Element>() {
       public void execute(final Element wrapperPanelElem) {
         
         if (AppProperties.IMPL.CKDOutputView_adjust_ckdHelpBtn_position()) {

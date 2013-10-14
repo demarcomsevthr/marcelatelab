@@ -41,7 +41,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField Panel stepPanel;
   @UiField HTML questionHtml;
   @UiField SmartButton answer1Btn;
   @UiField SmartButton answer2Btn;
@@ -72,31 +71,52 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     AppClientFactory.IMPL.initTitle(this);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "protocolWrapperPanel", true, null);
+
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "protocolWrapperPanel", true, 40, null);
+    
+    /*
+    if (OsDetectionUtils.isTabletLandscape()) {
+      wrapperPanel.getElement().getStyle().setMarginTop(90, Style.Unit.PX);
+      wrapperPanel.getElement().getStyle().clearMarginBottom();
+    }
+    */
+    
     initHeaderBackButton("GFR", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToCkdOutput(null);
       }
     });
     
-    
     answer1Btn.setChangeColorOnClick(true);
     answer2Btn.setChangeColorOnClick(true);
     
     if (OsDetectionUtils.isTablet()) {
-      
+      /*
       JQuery.StyleProperties protocolHeaderPanelStyles = JQuery.createStyleProperties();
       protocolHeaderPanelStyles.setPosition(Style.Position.ABSOLUTE);
       JQuery.withElement(protocolHeaderPanel.getElement()).css(protocolHeaderPanelStyles);
-      
+      */
+      protocolHeaderPanel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
     }
     
   }
   
   @Override
   public void onAttach(AttachEvent event) {
-    AppClientFactory.IMPL.applyWrapperPanelIPhonePatch(this, wrapperPanel);
     wrapperPanel.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+    
+    // PATCH 12/10/2013
+    /*
+    if (OsDetectionUtils.isTabletLandscape()) {
+      GwtUtils.deferredExecution(200, new Delegate<Void>() {
+        public void execute(Void element) {
+          wrapperPanel.getElement().getStyle().setMarginTop(90, Unit.PX);
+          wrapperPanel.getElement().getStyle().clearMarginBottom();
+        }
+      });
+    }
+    */
+    
   }
   
   @Override
@@ -177,7 +197,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       }
     }
   }
-  
 
   private void doAnimation1(final int versus, final Delegate<Void> delegate) {
     JQuery.StyleProperties step1Properties = JQuery.createStyleProperties();
@@ -192,18 +211,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
             delegate.execute(null);
           }
         });
-    
-    /*
-    GwtUtils.deferredExecution(2000, new Delegate<Void>() {
-      public void execute(Void element) {
-        JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
-        step2Properties.setLeft((-1) * versus * 100, Style.Unit.PCT);
-        JQuery.withElement(protocolStepPanel.getElement())
-            .css(step2Properties);
-        delegate.execute(null);
-      }
-    });
-    */
   }
   
   private void doAnimation2() {

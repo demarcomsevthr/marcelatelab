@@ -49,6 +49,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private static int TABLET_IOS_WRAPPER_PCT = 70;
   private static int TABLET_AND_WRAPPER_PCT = 80;
+  
+  private static int HEADER_PANEL_HEIGHT = 40;
 
   @Override
   public void initModule(final Panel modulePanel) {
@@ -169,18 +171,20 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return wrapperPct;
   }
   
-  
-  public void adaptWrapperPanelOnTablet(Panel wrapperPanel, String id, final boolean adaptVerMargin, final Delegate<Element> delegate) {
+  public void adaptWrapperPanel(Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
     wrapperPanel.getElement().setId(id);
     if (OsDetectionUtils.isTablet()) {
       GwtUtils.onAvailable(id, new Delegate<Element>() {
         public void execute(Element wrapperPanelElem) {
           
           int height = getTabletWrapperHeight();
+          
+          GwtUtils.log("applying wrapperPanel height = " + height);
+          
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
 
           if (adaptVerMargin) {
-            int verMargin = ( Window.getClientHeight() - height ) / 2;
+            int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
             wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
             wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
           }
@@ -198,21 +202,33 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           
         }
       });
+      
+    } else {
+      
+      //09/10/2013
+      // Patch per IPhone per far funzionare le animazioni jquery
+      
+      wrapperPanel.setHeight((Window.getClientHeight() - HEADER_PANEL_HEIGHT ) + "px");
+      wrapperPanel.setWidth(Window.getClientWidth() + "px");
+      
     }
   }
-  
+
+  /*
   @SuppressWarnings("rawtypes")
-  public void applyWrapperPanelIPhonePatch(BaseMgwtView mgwtView, final Panel wrapperPanel) {
-    if (!OsDetectionUtils.isTablet()) {
-      GwtUtils.log("applying wrapperPanel IPhone patch on " + mgwtView.getHeaderPanel().getElement().getId());
-      GwtUtils.onAvailable(mgwtView.getHeaderPanel().getElement().getId(), new Delegate<Element>() {
-        public void execute(Element headerPanelElement) {
+  public void adaptWrapperPanel(BaseMgwtView mgwtView, final Panel wrapperPanel) {
+    GwtUtils.onAvailable(mgwtView.getHeaderPanel().getElement().getId(), new Delegate<Element>() {
+      public void execute(Element headerPanelElement) {
+        if (OsDetectionUtils.isTablet()) {
+//        adaptWrapperPanelOnTablet(wrapperPanel, id, adaptVerMargin, delegate);
+        } else {
           wrapperPanel.setHeight((Window.getClientHeight() - headerPanelElement.getClientHeight()) + "px");
           wrapperPanel.setWidth(Window.getClientWidth() + "px");
         }
-      });
-    }
+      }
+    });
   }
+  */
   
   public int getTabletWrapperHeight() {
     int wrapperPct = AppClientFactory.IMPL.getWrapperPct();

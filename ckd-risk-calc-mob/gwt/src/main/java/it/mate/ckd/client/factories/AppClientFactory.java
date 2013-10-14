@@ -29,7 +29,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public int getWrapperPct();
   
-  public void adaptWrapperPanelOnTablet(Panel wrapperPanel, String id, boolean adaptVerMargin, Delegate<Element> delegate);
+  public void adaptWrapperPanel(Panel wrapperPanel, String id, boolean adaptVerMargin, int headerPanelHeight, Delegate<Element> delegate);
 
   public int getTabletWrapperHeight();
   
@@ -37,6 +37,6 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void initTitle(BaseMgwtView view);
   
-  public void applyWrapperPanelIPhonePatch(BaseMgwtView mgwtView, final Panel wrapperPanel);
+//public void adaptWrapperPanel(BaseMgwtView mgwtView, final Panel wrapperPanel);
   
 }

@@ -42,7 +42,7 @@ public class ReferralDecisionView extends BaseMgwtView<Presenter> {
     AppClientFactory.IMPL.initTitle(this);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "protocolWrapperPanel", true, null);
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "protocolWrapperPanel", false, 0, null);
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToCkdOutput(null);

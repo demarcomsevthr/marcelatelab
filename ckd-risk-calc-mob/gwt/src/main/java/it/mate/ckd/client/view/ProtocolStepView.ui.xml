@@ -5,46 +5,19 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:P="urn:import:it.mate.ckd.client.view">
        
-  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ckdHomePanel, ckdProtocolStepViewPanel">
-  
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ckdHomePanel, ckdProtocolStepViewPanel, outputPanel">
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolHeaderPanel" ui:field="protocolHeaderPanel">
-    
       <g:HTML addStyleNames="ckd-ProtocolHeaderPanel-center">
         Protocol for the further investigation of a subject with positive reagent strip or quantitative test for albuminuria/proteinuria
       </g:HTML>
-      
       <g:HTMLPanel addStyleNames="ckd-ProtocolHeaderButton" ui:field="backBtnPanel">
         <div class="ckd-ProtocolHeaderButton-border-container">
           <span class="ckd-ProtocolHeaderButton-border-content"></span>
         </div>
         <P:ProtocolStepView.BackStepButton ui:field="backBtn" addStyleNames="ckd-ProtocolHeaderButton-text" text="Prev Step"/>
       </g:HTMLPanel>
-
     </gc:SimpleContainer>
-  
-    <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%" height="80%" ui:field="stepPanel" addStyleNames="ckd-stepPanel">
-
-      <!--     
-      <gc:SimpleContainer>
-        <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
-          <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">
-            <g:Label text="Step 1"/>
-          </gc:SimpleContainer>
-          <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-center">
-            <g:HTML ui:field="questionHtml"></g:HTML>
-            <g:HTML ui:field="endHtml" visible="false"></g:HTML>
-          </gc:SimpleContainer>
-          <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-bottom">
-            <p:SmartButton ui:field="answer1Btn" text="Yes" addStyleNames="ckd-ProtocolStepPanel-button"/>
-            <p:SmartButton ui:field="answer2Btn" text="No" addStyleNames="ckd-ProtocolStepPanel-button"/>
-            <p:SmartButton ui:field="gfrBtn" text="Return to GFR" visible="false"/>
-          </gc:SimpleContainer>
-        </gc:SimpleContainer>
-      </gc:SimpleContainer>
-       --> 
-
-    </g:VerticalPanel>
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
       <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">

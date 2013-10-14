@@ -76,6 +76,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       devInfo.setVisible(true);
       String info = "Width " + Window.getClientWidth();
       info += " Height " + Window.getClientHeight();
+      /*
       if (OsDetectionUtils.isTabletLandscape()) {
         info += " isTabletLandscape";
       } else if (OsDetectionUtils.isTabletPortrait()) {
@@ -83,6 +84,10 @@ public class HomeView extends BaseMgwtView <Presenter> {
       } else {
         info += " isPhone";
       }
+      */
+      
+      info += " NavVer " + Window.Navigator.getAppVersion();
+      
       devInfo.setText(info);
       
     } else if (AppProperties.IMPL.HomeView_langInfo_visible()) {
@@ -91,7 +96,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       devInfo.setText(info);
     }
     
-    AppClientFactory.IMPL.adaptWrapperPanelOnTablet(wrapperPanel, "homeWrapperPanel", true, new Delegate<Element>() {
+    AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "homeWrapperPanel", true, 0, new Delegate<Element>() {
       public void execute(Element wrapperPanelElem) {
         List<Element> spacers = JQueryUtils.selectList(".ckdHomeSpacer");
         for (Element spacer : spacers) {
