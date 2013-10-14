@@ -76,7 +76,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
       devInfo.setVisible(true);
       String info = "Width " + Window.getClientWidth();
       info += " Height " + Window.getClientHeight();
-      /*
       if (OsDetectionUtils.isTabletLandscape()) {
         info += " isTabletLandscape";
       } else if (OsDetectionUtils.isTabletPortrait()) {
@@ -84,9 +83,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
       } else {
         info += " isPhone";
       }
-      */
-      
-      info += " NavVer " + Window.Navigator.getAppVersion();
       
       devInfo.setText(info);
       

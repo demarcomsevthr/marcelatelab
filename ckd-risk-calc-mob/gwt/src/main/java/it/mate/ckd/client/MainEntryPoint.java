@@ -21,12 +21,12 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    GwtUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    PhonegapUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
     PhonegapUtils.logEnvironment();
     
-    GwtUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    GwtUtils.log("AppConstants.versionCredits = "+AppConstants.IMPL.versionCredits());
+    PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhonegapUtils.log("AppConstants.versionCredits = "+AppConstants.IMPL.versionCredits());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
@@ -35,6 +35,8 @@ public class MainEntryPoint implements EntryPoint {
         ex.printStackTrace();
       }
     });
+    
+    PhonegapUtils.log("NavVer " + Window.Navigator.getAppVersion());
 
     startApp();
     
