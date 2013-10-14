@@ -498,7 +498,12 @@
   margin: 10px;
 }
 
+/**** PROTOCOL HEADER PANEL ****/
+
 .ckd-ProtocolHeaderPanel {
+  position: absolute;
+  top: 0px;
+  left: 0px;
   border-bottom: 1px solid #2d3642;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, 
   	from(rgba(176, 188, 205, 1)), 
@@ -518,9 +523,9 @@
 
 .ckd-ProtocolHeaderButton-border-container {
   position: absolute;
-  z-index: 1;
   top: 12.66px;
   left: 7px;
+  z-index: 1;
   -webkit-transform: rotate(53deg);
 }
 
@@ -539,6 +544,8 @@
 }
 
 .ckd-ProtocolHeaderButton-text {
+  position: absolute;
+  left: 23px;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
   color: white;
   font-weight: bold;
@@ -549,18 +556,20 @@
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-left: none;
   margin: 0;
-  text-align: center;
   min-width: 40px;
   max-width: 60px;
   text-overflow: ellipsis;
   overflow: hidden;
+  text-align: center;
+  vertical-align: top;
   -webkit-border-radius: 4px;
   -webkit-background-origin: border-box;
-  position: absolute;
-  left: 23px;
-  vertical-align: top;
 }  
 
+
+
+
+/**** PROTOCOL STEP PANEL ****/
 
 @eval protocolStepPanelLeft it.mate.ckd.client.view.ProtocolStepView.getProtocolStepPanelLeft();
 

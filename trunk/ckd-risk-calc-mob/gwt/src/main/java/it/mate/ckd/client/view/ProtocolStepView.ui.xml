@@ -8,15 +8,17 @@
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ckdHomePanel, ckdProtocolStepViewPanel, outputPanel">
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolHeaderPanel" ui:field="protocolHeaderPanel">
-      <g:HTML addStyleNames="ckd-ProtocolHeaderPanel-center">
-        Protocol for the further investigation of a subject with positive reagent strip or quantitative test for albuminuria/proteinuria
-      </g:HTML>
+      <!-- 
       <g:HTMLPanel addStyleNames="ckd-ProtocolHeaderButton" ui:field="backBtnPanel">
         <div class="ckd-ProtocolHeaderButton-border-container">
           <span class="ckd-ProtocolHeaderButton-border-content"></span>
         </div>
         <P:ProtocolStepView.BackStepButton ui:field="backBtn" addStyleNames="ckd-ProtocolHeaderButton-text" text="Prev Step"/>
       </g:HTMLPanel>
+       -->
+      <g:HTML addStyleNames="ckd-ProtocolHeaderPanel-center">
+        Protocol for the further investigation of a subject with positive reagent strip or quantitative test for albuminuria/proteinuria
+      </g:HTML>
     </gc:SimpleContainer>
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
@@ -33,6 +35,13 @@
         <p:SmartButton ui:field="gfrBtn" text="Finish" visible="false"/>
       </gc:SimpleContainer>
     </gc:SimpleContainer>
+    
+      <g:HTMLPanel addStyleNames="ckd-ProtocolHeaderButton" ui:field="protocolHeaderButton">
+        <div class="ckd-ProtocolHeaderButton-border-container">
+          <span class="ckd-ProtocolHeaderButton-border-content"></span>
+        </div>
+        <P:ProtocolStepView.BackStepButton ui:field="backBtn" addStyleNames="ckd-ProtocolHeaderButton-text" text="Prev Step"/>
+      </g:HTMLPanel>
 
   </g:HTMLPanel>
   

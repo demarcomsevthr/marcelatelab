@@ -6,9 +6,11 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.LinkedList;
@@ -45,7 +47,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   @UiField SmartButton answer1Btn;
   @UiField SmartButton answer2Btn;
   @UiField HTML endHtml;
-  @UiField Widget backBtnPanel;
+  @UiField Widget protocolHeaderButton;
   @UiField Widget gfrBtn;
   @UiField Label stepNumberLbl;
   
@@ -117,6 +119,18 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     }
     */
     
+    if (OsDetectionUtils.isTabletLandscape()) {
+      GwtUtils.deferredExecution(200, new Delegate<Void>() {
+        public void execute(Void element) {
+          protocolHeaderButton.getElement().getStyle().setHeight(43, Style.Unit.PX);
+          protocolHeaderButton.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+          protocolHeaderButton.getElement().getStyle().setPaddingTop(0, Style.Unit.PX);
+          protocolHeaderButton.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
+        }
+      });
+    }
+    
+    
   }
   
   @Override
@@ -129,8 +143,26 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       answer2Btn.setText(currentProtocolStep.getAnswer2Text());
       answer1Btn.setOriginalColor();
       answer2Btn.setOriginalColor();
-      backBtnPanel.setVisible(history.size() > 0);
+      protocolHeaderButton.setVisible(history.size() > 0);
     }
+    
+    if (OsDetectionUtils.isTabletLandscape()) {
+      GwtUtils.deferredExecution(200, new Delegate<Void>() {
+        public void execute(Void element) {
+          
+          PhonegapUtils.log("CKD - applying ckd-ProtocolHeaderButton * margin top patch");
+          JQuery.selectFirstElement(".ckd-ProtocolHeaderButton-border-container").getStyle().setMarginTop(0, Style.Unit.PX);
+          JQuery.selectFirstElement(".ckd-ProtocolHeaderButton-text").getStyle().setMarginTop(0, Style.Unit.PX);
+          
+          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton absolute top = " + protocolHeaderButton.getAbsoluteTop());
+          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton height = " + protocolHeaderButton.getElement().getStyle().getHeight());
+          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton margin top = " + protocolHeaderButton.getElement().getStyle().getMarginTop());
+          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton padding top = " + protocolHeaderButton.getElement().getStyle().getPaddingTop());
+          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton border width = " + protocolHeaderButton.getElement().getStyle().getBorderWidth());
+        }
+      });
+    }
+    
   }
 
   @UiHandler ("answer1Btn")
@@ -170,7 +202,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       doAnimation1(-1, new Delegate<Void>() {
         public void execute(Void element) {
           stepNumberLbl.setText("Finish");
-          backBtnPanel.setVisible(false);
+          protocolHeaderButton.setVisible(false);
           questionHtml.setVisible(false);
           answer1Btn.setVisible(false);
           answer2Btn.setVisible(false);
