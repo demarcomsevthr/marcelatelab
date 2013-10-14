@@ -50,6 +50,7 @@ public class JQuery extends JavaScriptObject {
     return Options.create();
   }
   
+  
   /* --------------------------------------------------------------------------------------------------- */
   
   public final Element toElement() {
@@ -130,6 +131,13 @@ public class JQuery extends JavaScriptObject {
     return dequeueImpl(queueName);
   }
   
+  public final JQuery bind(String eventName, final Delegate<Void> delegate) {
+    return bindImpl(eventName, new JQueryCallback() {
+      public void execute() {
+        delegate.execute(null);
+      }
+    });
+  }
   
   
   /* --------------------------------------------------------------------------------------------------- */
@@ -188,7 +196,7 @@ public class JQuery extends JavaScriptObject {
   private static native JavaScriptObject jQueryImpl(Element element) /*-{
     return $wnd.jQuery(element);
   }-*/;
-
+  
   private native JavaScriptObject getImpl() /*-{
     return this.get();
   }-*/;
@@ -249,6 +257,13 @@ public class JQuery extends JavaScriptObject {
   
   private native JQuery dequeueImpl(String queueName) /*-{
     return this.dequeue(queueName);
+  }-*/;
+  
+  private native JQuery bindImpl(String eventname, JQueryCallback handler) /*-{
+    var jsHandler = $entry(function() {
+      handler.@it.mate.gwtcommons.client.utils.JQuery.JQueryCallback::execute()();
+    });
+    return this.bind(eventname, jsHandler);
   }-*/;
 
 }
