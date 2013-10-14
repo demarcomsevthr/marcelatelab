@@ -9,7 +9,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 public class PhonegapUtils {
   
   public static void logEnvironment() {
-    GwtUtils.log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
+    log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
     String layoutInfo = "Width " + Window.getClientWidth();
     layoutInfo += " Height " + Window.getClientHeight();
     if (OsDetectionUtils.isTabletLandscape()) {
@@ -19,16 +19,16 @@ public class PhonegapUtils {
     } else {
       layoutInfo += " isPhone";
     }
-    GwtUtils.log("Current layout = " + layoutInfo);
+    log("Current layout = " + layoutInfo);
     if (OsDetectionUtils.isIOs()) {
-      GwtUtils.log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
-      GwtUtils.log("IOs landscape layout is " + OsDetectionUtils.IPAD_LAND_WIDTH + " x " + OsDetectionUtils.IPAD_LAND_HEIGHT);
-      GwtUtils.log("IOs portrait  layout is " + OsDetectionUtils.IPAD_PORT_WIDTH + " x " + OsDetectionUtils.IPAD_PORT_HEIGHT);
+      log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
+      log("IOs landscape layout is " + OsDetectionUtils.IPAD_LAND_WIDTH + " x " + OsDetectionUtils.IPAD_LAND_HEIGHT);
+      log("IOs portrait  layout is " + OsDetectionUtils.IPAD_PORT_WIDTH + " x " + OsDetectionUtils.IPAD_PORT_HEIGHT);
     } else {
-      GwtUtils.log("Android landscape layout is " + OsDetectionUtils.APAD_LAND_WIDTH + " x " + OsDetectionUtils.APAD_LAND_HEIGHT);
-      GwtUtils.log("Android portrait  layout is " + OsDetectionUtils.APAD_PORT_WIDTH + " x " + OsDetectionUtils.APAD_PORT_HEIGHT);
+      log("Android landscape layout is " + OsDetectionUtils.APAD_LAND_WIDTH + " x " + OsDetectionUtils.APAD_LAND_HEIGHT);
+      log("Android portrait  layout is " + OsDetectionUtils.APAD_PORT_WIDTH + " x " + OsDetectionUtils.APAD_PORT_HEIGHT);
     }
-    GwtUtils.log("(see "+ OsDetectionUtils.class.getName() +" for details)");
+    log("(see "+ OsDetectionUtils.class.getName() +" for details)");
   }
   
   public static void openInAppBrowser(String url) {
@@ -60,5 +60,14 @@ public class PhonegapUtils {
     }-*/;
   }
   
+  public static void log(String text) {
+    GwtUtils.log(text);
+    logImpl(text);
+  }
+  
+  public static native void logImpl(String text) /*-{
+    $wnd.console.log(text);
+  }-*/;
+
 
 }
