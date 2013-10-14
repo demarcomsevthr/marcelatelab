@@ -104,6 +104,7 @@ body {
   overflow: hidden;
 }
 
+/*
 .ckd-ProtocolHeaderButton {
   position: absolute !important;
   top: -12px !important;
@@ -129,13 +130,13 @@ body {
   margin: 0px !important;
   padding: 0px !important;
 }
+*/
 
 .ckd-ProtocolHeaderPanel-center {
-  margin-left: 85px;
+  margin-left: 88px;
 }
 
 .ckd-ProtocolHeaderButton-border-container, .ckd-ProtocolHeaderButton-text {
   margin-top: 0px !important;
 }
-
 
