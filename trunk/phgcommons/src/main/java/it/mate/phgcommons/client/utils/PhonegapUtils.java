@@ -1,6 +1,8 @@
 package it.mate.phgcommons.client.utils;
 
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Window;
@@ -29,6 +31,7 @@ public class PhonegapUtils {
       log("Android portrait  layout is " + OsDetectionUtils.APAD_PORT_WIDTH + " x " + OsDetectionUtils.APAD_PORT_HEIGHT);
     }
     log("(see "+ OsDetectionUtils.class.getName() +" for details)");
+    log("NavVer " + Window.Navigator.getAppVersion());
   }
   
   public static void openInAppBrowser(String url) {
@@ -69,5 +72,8 @@ public class PhonegapUtils {
     $wnd.console.log(text);
   }-*/;
 
+  public static void addOrientationChangeHandler(Delegate<Void> delegate) {
+    JQuery.select("body").bind("orientationchange", delegate);
+  }
 
 }
