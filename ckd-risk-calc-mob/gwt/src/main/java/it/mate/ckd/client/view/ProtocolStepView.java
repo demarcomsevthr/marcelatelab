@@ -6,11 +6,9 @@ import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.LinkedList;
@@ -75,14 +73,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
 
     AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "protocolWrapperPanel", true, 40, null);
-    
-    /*
-    if (OsDetectionUtils.isTabletLandscape()) {
-      wrapperPanel.getElement().getStyle().setMarginTop(90, Style.Unit.PX);
-      wrapperPanel.getElement().getStyle().clearMarginBottom();
-    }
-    */
-    
     initHeaderBackButton("GFR", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToCkdOutput(null);
@@ -93,11 +83,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     answer2Btn.setChangeColorOnClick(true);
     
     if (OsDetectionUtils.isTablet()) {
-      /*
-      JQuery.StyleProperties protocolHeaderPanelStyles = JQuery.createStyleProperties();
-      protocolHeaderPanelStyles.setPosition(Style.Position.ABSOLUTE);
-      JQuery.withElement(protocolHeaderPanel.getElement()).css(protocolHeaderPanelStyles);
-      */
       protocolHeaderPanel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
     }
     
@@ -106,31 +91,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   @Override
   public void onAttach(AttachEvent event) {
     wrapperPanel.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
-    
-    // PATCH 12/10/2013
-    /*
-    if (OsDetectionUtils.isTabletLandscape()) {
-      GwtUtils.deferredExecution(200, new Delegate<Void>() {
-        public void execute(Void element) {
-          wrapperPanel.getElement().getStyle().setMarginTop(90, Unit.PX);
-          wrapperPanel.getElement().getStyle().clearMarginBottom();
-        }
-      });
-    }
-    */
-    
-    if (OsDetectionUtils.isTabletLandscape()) {
-      GwtUtils.deferredExecution(200, new Delegate<Void>() {
-        public void execute(Void element) {
-          protocolHeaderButton.getElement().getStyle().setHeight(43, Style.Unit.PX);
-          protocolHeaderButton.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
-          protocolHeaderButton.getElement().getStyle().setPaddingTop(0, Style.Unit.PX);
-          protocolHeaderButton.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-        }
-      });
-    }
-    
-    
   }
   
   @Override
@@ -145,24 +105,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       answer2Btn.setOriginalColor();
       protocolHeaderButton.setVisible(history.size() > 0);
     }
-    
-    if (OsDetectionUtils.isTabletLandscape()) {
-      GwtUtils.deferredExecution(200, new Delegate<Void>() {
-        public void execute(Void element) {
-          
-          PhonegapUtils.log("CKD - applying ckd-ProtocolHeaderButton * margin top patch");
-          JQuery.selectFirstElement(".ckd-ProtocolHeaderButton-border-container").getStyle().setMarginTop(0, Style.Unit.PX);
-          JQuery.selectFirstElement(".ckd-ProtocolHeaderButton-text").getStyle().setMarginTop(0, Style.Unit.PX);
-          
-          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton absolute top = " + protocolHeaderButton.getAbsoluteTop());
-          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton height = " + protocolHeaderButton.getElement().getStyle().getHeight());
-          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton margin top = " + protocolHeaderButton.getElement().getStyle().getMarginTop());
-          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton padding top = " + protocolHeaderButton.getElement().getStyle().getPaddingTop());
-          PhonegapUtils.log("CKD - .ckd-ProtocolHeaderButton border width = " + protocolHeaderButton.getElement().getStyle().getBorderWidth());
-        }
-      });
-    }
-    
   }
 
   @UiHandler ("answer1Btn")
