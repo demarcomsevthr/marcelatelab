@@ -40,6 +40,8 @@ public class CKD {
   
   boolean useBsa;
   
+  boolean useIbw;
+  
   String selectedGFR;
   
   public static final String SELECTED_GFR_COCKROFT = "cockroft";
@@ -51,7 +53,14 @@ public class CKD {
   public static final String SELECTED_GFR_EPI = "epi";
   
   public double getCockcroftGFR() {
-    double gfr = (140d - age) * weight;
+    double actualWeight = weight;
+    if (useIbw) {
+      Double ibw = getIBW();
+      if (ibw != null) {
+        actualWeight = ibw;
+      }
+    }
+    double gfr = (140d - age) * actualWeight;
     gfr /= (72d * getScrMgDl());
     gfr *= (female ? 0.85 : 1d);
     return convertGfr(gfr);
@@ -106,6 +115,20 @@ public class CKD {
     bsa = bsa * Math.pow(height, 0.725);
     bsa = bsa * 0.007184;
     return bsa;
+  }
+  
+  public Double getIBW() {
+    if (height == null || height == 0) {
+      return null;
+    }
+    double hm = ((double)height) / 100;
+    double ibw = Math.pow(hm, 2);
+    if (isFemale()) {
+      ibw = ibw * 20.6;
+    } else {
+      ibw = ibw * 22.1;
+    }
+    return ibw;
   }
   
   private double getScrMgDl() {
@@ -352,6 +375,14 @@ public class CKD {
   
   public boolean isUseBsa() {
     return useBsa;
+  }
+  
+  public void setUseIbw(boolean useIbw) {
+    this.useIbw = useIbw;
+  }
+  
+  public boolean isUseIbw() {
+    return useIbw;
   }
   
   public static Double convertPMollToMgDl(Double pmoll) {

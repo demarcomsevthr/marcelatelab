@@ -21,9 +21,6 @@
       
       <gc:Spacer height="8em"/>
       
-      <!-- 
-      <m:Button round="true" ui:field="paramBtn" addStyleNames="ckdParamBtn"/>
-       -->
       <p:SmartButton round="true" ui:field="paramBtn" addStyleNames="ckdParamBtn"/>
       
       <gc:Spacer height="5.4em" addStyleNames="ckdHomeSpacer"/>
@@ -42,13 +39,6 @@
         <div id="debugDiv" class="{style.verLbl}"></div>
         <g:Label ui:field="devInfo" addStyleNames="verLbl"/>
       </g:HTMLPanel>
-      
-      <!-- 
-      <g:HorizontalPanel>
-        <ckd:SmartButton text="Smart 1" width="6em" ui:field="testBtn1"/>
-        <m:Button round="true" text = "Smart 2" width="6em" ui:field="testBtn2"/>
-      </g:HorizontalPanel>
-       -->
       
     </g:VerticalPanel>
 
