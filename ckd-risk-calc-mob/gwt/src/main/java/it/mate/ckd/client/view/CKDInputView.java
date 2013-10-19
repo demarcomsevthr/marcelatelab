@@ -95,31 +95,6 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
         });
       }
     });
-    /*
-    wrapperPanel.getElement().setId("inputWrapperPanel");
-    if (OsDetectionPatch.isTablet()) {
-      GwtUtils.onAvailable("inputWrapperPanel", new Delegate<Element>() {
-        public void execute(final Element wrapperPanelElem) {
-          int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
-          int height = Window.getClientHeight() * wrapperPct / 100;
-          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
-          int width = Window.getClientWidth() * wrapperPct / 100;
-          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
-          int horMargin = ( Window.getClientWidth() - width ) / 2;
-          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
-          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
-          GwtUtils.onAvailable("ckdInputPanelTable", new Delegate<Element>() {
-            public void execute(Element inputPanelTableElem) {
-              int width = inputPanelTableElem.getClientWidth();
-              int horMargin = ( wrapperPanelElem.getClientWidth() - width ) / 2;
-              inputPanelTableElem.getStyle().setMarginLeft(horMargin, Unit.PX);
-              inputPanelTableElem.getStyle().setMarginRight(horMargin, Unit.PX);
-            }
-          });
-        }
-      });
-    }
-    */
     
     etaSpinBox.setMinValue(0);
     creatininaSpinBox.setMinValue(0d);
@@ -222,10 +197,6 @@ public class CKDInputView extends DetailView<Presenter> /* BaseMgwtView <Present
           .setFemale(fBtn.getValue())
           .setBlack(bBtn.getValue())
           .setHeight(altezzaSpinBox.getValue());
-        
-
-        // 04/10/2013
-//      getPresenter().goToCkdOutput(ckd);
         
         getPresenter().checkRatingDialog(new Delegate<PopinDialog>() {
           public void execute(PopinDialog element) {
