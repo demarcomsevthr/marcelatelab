@@ -13,11 +13,7 @@ public class MainPlace extends Place {
   
   public static final String CKD_EXTENDED_VIEW = "ckdExtendedView";
   
-  public static final String CKD_REFERRAL_DECISION = "ckdReferralDecision";
-  
   public static final String CKD_PROTOCOL_STEP = "ckdProtocolStep";
-  
-//public static final String CKD_OUTPUT_HELP = "ckdOutputHelp";
   
   private String token;
 
