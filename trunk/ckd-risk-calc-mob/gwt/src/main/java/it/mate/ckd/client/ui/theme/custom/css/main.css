@@ -106,16 +106,17 @@
   width: 120px;
 }
 
-.gwt-HTML.ckd-Label.ckd-IbwLabel {
-  width: 8em;
+.ckd-IbwBtnTable td {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: 1px;
 }
 
-.gwt-Anchor.ckd-UseIbwBtn {
-  color: yellow;
+.gwt-Anchor.ckd-Label.ckd-IbwBtn {
   font-size: 12px;
-  font-family: Trebuchet MS;
+  font-family: Verdana;
   font-weight: 600;
-  position: absolute;
 }
 
 .mgwt-Button.ckd-HelpBtn {
