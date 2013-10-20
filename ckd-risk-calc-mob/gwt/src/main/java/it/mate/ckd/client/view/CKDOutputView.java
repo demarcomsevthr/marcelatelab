@@ -64,8 +64,8 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
   @UiField Panel bsaPanel;
   @UiField HTML bsaHtml;
   @UiField Panel ibwPanel;
-  @UiField HTML ibwHtml;
-  @UiField Anchor useIbwBtn;
+  @UiField Anchor weightBtn;
+  @UiField Anchor ibwBtn;
   
   @UiField Panel workflowHelpPanel;
   
@@ -108,7 +108,15 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
       }
       if (ibw != null) {
         ibwPanel.setVisible(true);
-        ibwHtml.setHTML("IBW = " + GwtUtils.formatDecimal(ibw, 1) + " Kg");
+        weightBtn.setHTML("Weight = " + GwtUtils.formatDecimal((double)ckd.getWeight(), 1) + " Kg");
+        ibwBtn.setHTML("IBW = " + GwtUtils.formatDecimal(ibw, 1) + " Kg");
+        if (ckd.isUseIbw()) {
+          weightBtn.getElement().getStyle().clearColor();
+          ibwBtn.getElement().getStyle().setColor("yellow");
+        } else {
+          weightBtn.getElement().getStyle().setColor("yellow");
+          ibwBtn.getElement().getStyle().clearColor();
+        }
       } else {
         ibwPanel.setVisible(false);
       }
@@ -130,15 +138,15 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     getPresenter().goToExtendedView(btn.getTag());
   }
   
-  @UiHandler ("useIbwBtn")
-  public void onUseIbwBtn (ClickEvent event) {
-    if (ckd.isUseIbw()) {
-      ckd.setUseIbw(false);
-      useIbwBtn.setText("Use IBW");
-    } else {
-      ckd.setUseIbw(true);
-      useIbwBtn.setText("Do Not Use IBW");
-    }
+  @UiHandler ("ibwBtn")
+  public void onIbwBtn (ClickEvent event) {
+    ckd.setUseIbw(true);
+    setModel(ckd, null);
+  }
+  
+  @UiHandler ("weightBtn")
+  public void onWeightBtn (ClickEvent event) {
+    ckd.setUseIbw(false);
     setModel(ckd, null);
   }
   

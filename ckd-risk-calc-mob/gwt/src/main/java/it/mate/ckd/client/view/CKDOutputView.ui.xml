@@ -62,12 +62,12 @@
         <gc:Spacer width="0px" addStyleNames="ckd-bsaRightSpacer"/>
       </g:HorizontalPanel>
       
-      <g:HorizontalPanel ui:field="ibwPanel">
-        <gc:Spacer width="7.6em"/>
-        <g:HTML ui:field="ibwHtml" HTML="IBW = 0.00" addStyleNames="{style.ckdLabel} ckd-IbwLabel"></g:HTML>
-        <gc:Spacer width="0px" addStyleNames="ckd-bsaRightSpacer"/>
-        <g:Anchor text="Use IBW" ui:field="useIbwBtn" addStyleNames="ckd-UseIbwBtn"/>
-      </g:HorizontalPanel>
+      <g:HorizontalPanel ui:field="ibwPanel" spacing="0" addStyleNames="ckd-IbwBtnTable" width="100%">
+        <gc:Spacer width="20px"/>
+        <g:Anchor text="Weight = 0" ui:field="weightBtn" addStyleNames="ckd-Label ckd-IbwBtn"/>
+        <g:Anchor text="IBW = 0" ui:field="ibwBtn" addStyleNames="ckd-Label ckd-IbwBtn"/>
+        <gc:Spacer width="20px"/>
+       </g:HorizontalPanel>
 
       <g:HorizontalPanel>
         <gc:Spacer height="0.4em" addStyleNames="ckd-outputSectionSeparator"/>
