@@ -23,7 +23,9 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
     void goToCkdInput();
     void goToProtocolStep(ProtocolStep protocolStep);
     void goToExtendedView(String selectedGFR);
+    /*
     void goToReferralDecision();
+    */
     void openHelpPage();
     boolean applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead);
   }
@@ -83,9 +85,6 @@ public class CKDOutputViewWrapper extends BaseMgwtView <Presenter> {
       }
       public void goToProtocolStep(ProtocolStep protocolStep) {
         presenter.goToProtocolStep(protocolStep);
-      }
-      public void goToReferralDecision() {
-        presenter.goToReferralDecision();
       }
       public void openHelpPage() {
         presenter.openHelpPage();

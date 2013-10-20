@@ -106,9 +106,16 @@
   width: 120px;
 }
 
+.gwt-HTML.ckd-Label.ckd-IbwLabel {
+  width: 8em;
+}
+
 .gwt-Anchor.ckd-UseIbwBtn {
   color: yellow;
   font-size: 12px;
+  font-family: Trebuchet MS;
+  font-weight: 600;
+  position: absolute;
 }
 
 .mgwt-Button.ckd-HelpBtn {

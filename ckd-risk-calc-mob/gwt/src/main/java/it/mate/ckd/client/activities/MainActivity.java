@@ -102,6 +102,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    /*
     if (place.getToken().equals(MainPlace.CKD_REFERRAL_DECISION)) {
       ReferralDecisionView view = AppClientFactory.IMPL.getGinjector().getReferralDecisionView();
       view.setPresenter(this);
@@ -113,6 +114,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    */
     if (place.getToken().equals(MainPlace.CKD_PROTOCOL_STEP)) {
       ProtocolStepView view = AppClientFactory.IMPL.getGinjector().getProtocolStepView();
       view.setPresenter(this);
@@ -158,10 +160,12 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_OUTPUT));
   }
   
+  /*
   @Override
   public void goToReferralDecision() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_REFERRAL_DECISION));
   }
+  */
   
   @Override
   public void goToProtocolStep(ProtocolStep protocolStep) {

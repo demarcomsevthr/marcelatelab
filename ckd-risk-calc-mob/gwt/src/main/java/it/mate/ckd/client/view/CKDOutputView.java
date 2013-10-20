@@ -28,7 +28,6 @@ public class CKDOutputView extends DetailView<Presenter> /* BaseMgwtView <Presen
     void goToCkdInput();
     void goToProtocolStep(ProtocolStep protocolStep);
     void goToExtendedView(String selectedGFR);
-    void goToReferralDecision();
     void openHelpPage();
     boolean applyCKD(CKD ckd, double gfr, Label gfrBox, Label gfrStadiumBox, Label riskBox, Panel riskPanel, Double overhead);
   }
