@@ -3,12 +3,21 @@
 
 	> Save for Enterprise or Ad-Hoc Deploy
 	> Save As ckd201b6
-	> Application url = 
+	> Application url =
+	
 		https://marcelatelab.googlecode.com/svn/trunk/ckd-risk-calc-mob/gwt/deploy/ckd201b6.ipa
+		
 	> Title = CKD 2.0.1.B6
 	> Download url da mandare al tester:
+	
 		itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/ckd-risk-calc-mob/gwt/deploy/ckd201b6.plist
 
+	__________________________________________________________________________________
+
+	[21/10/2013] 
+	
+	SPOSTATI I DEPLOY DA GPH/marcelatelab/ckd-risk-calc-mob/downloads a GPH/marcelatelab/ckd-risk-calc-mob/source
+	CAUSA disattivazione downloads a partire da gennaio 2014
 
 	__________________________________________________________________________________
 
