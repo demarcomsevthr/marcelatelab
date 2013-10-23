@@ -7,11 +7,20 @@ it.mate.gendtest = it.mate.gendtest || {};
 
 it.mate.gendtest.greetings = it.mate.gendtest.greetings || {};
 
-it.mate.gendtest.greetings.CLIENT_ID = '929530856992.apps.googleusercontent.com';
+// REGISTERED APP = GEnd Test First Web Client //-> PROVATO OK [web origin = https://gendtest.appspot.com]
+//it.mate.gendtest.greetings.CLIENT_ID = '929530856992.apps.googleusercontent.com';
+
+// REGISTERED APP = GEnd Test Second Web Client //-> PROVATO KO [missing web origin]
+//it.mate.gendtest.greetings.CLIENT_ID = '929530856992-bb0ht17h9o9vbvg43sv0pvu6gfpinhr8.apps.googleusercontent.com';
+
+// REGISTERED APP = My Native Client //-> PROVATO KO [missing web origin]
+//it.mate.gendtest.greetings.CLIENT_ID = '929530856992-tgsgml6l0au4b4q12r296o0bdk6o7e4f.apps.googleusercontent.com';
+
+// REGISTERED APP = My Localhost Web Client //-> PROVATO OK [web origin = http://localhost]
+it.mate.gendtest.greetings.CLIENT_ID = '929530856992-051orvog0ch2q68bmfggrksu7gp1ifap.apps.googleusercontent.com';
+
 
 it.mate.gendtest.greetings.SCOPES = 'https://www.googleapis.com/auth/userinfo.email';
-
-
 
 
 it.mate.gendtest.greetings.init = function(apiRoot) {
