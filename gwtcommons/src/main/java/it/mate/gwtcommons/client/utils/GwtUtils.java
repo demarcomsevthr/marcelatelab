@@ -1026,13 +1026,20 @@ public class GwtUtils {
     obj[name] = value;
   }-*/;
   
-  public native static Object getPropertyImpl(JavaScriptObject obj, String name) /*-{
+  public native static JavaScriptObject getPropertyJsoImpl(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return null;
     }
     return obj[name];
   }-*/;
   
+  public native static Object getPropertyImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+
   public native static boolean getPropertyBoolImpl(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return false;
