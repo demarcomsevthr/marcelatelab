@@ -22,19 +22,16 @@ it.mate.gendtest.greetings.CLIENT_ID = '929530856992-051orvog0ch2q68bmfggrksu7gp
 
 it.mate.gendtest.greetings.SCOPES = 'https://www.googleapis.com/auth/userinfo.email';
 
+it.mate.gendtest.greetings.signedIn = false;
 
 it.mate.gendtest.greetings.init = function(apiRoot) {
   var apisToLoad;
   var callback = function() {
     if (--apisToLoad == 0) {
       it.mate.gendtest.greetings.enableButtons();
-      
-      it.mate.gendtest.greetings.signin(true,
-    		  it.mate.gendtest.greetings.userAuthed);      
-      
+      it.mate.gendtest.greetings.signin(true, it.mate.gendtest.greetings.userAuthed);      
     }
   }
-
   apisToLoad = 2; // must match number of calls to gapi.client.load()
   gapi.client.load('greetings', 'v1', callback, apiRoot);
   gapi.client.load('oauth2', 'v2', callback);
@@ -50,14 +47,11 @@ it.mate.gendtest.greetings.signin = function(mode, callback) {
 
 it.mate.gendtest.greetings.auth = function() {
   if (!it.mate.gendtest.greetings.signedIn) {
-	  
     var logoutFrame = document.getElementById('logoutIFrame');
 	if (logoutFrame != null) {
 	  logoutFrame.parentElement.removeChild(logoutFrame);
 	}
-	  
-    it.mate.gendtest.greetings.signin(false,
-	  it.mate.gendtest.greetings.userAuthed);
+    it.mate.gendtest.greetings.signin(false, it.mate.gendtest.greetings.userAuthed);
   } else {
     it.mate.gendtest.greetings.logout();
     it.mate.gendtest.greetings.signedIn = false;
@@ -65,8 +59,6 @@ it.mate.gendtest.greetings.auth = function() {
     document.getElementById('authedGreeting').disabled = true;
   }
 };	
-
-it.mate.gendtest.greetings.signedIn = false;
 
 it.mate.gendtest.greetings.userAuthed = function() {
   var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
