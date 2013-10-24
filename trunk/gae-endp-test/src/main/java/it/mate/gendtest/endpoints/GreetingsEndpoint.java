@@ -15,7 +15,10 @@ import com.google.appengine.api.users.User;
           "929530856992.apps.googleusercontent.com",
           "929530856992-bb0ht17h9o9vbvg43sv0pvu6gfpinhr8.apps.googleusercontent.com",
           "929530856992-tgsgml6l0au4b4q12r296o0bdk6o7e4f.apps.googleusercontent.com",
-          "929530856992-051orvog0ch2q68bmfggrksu7gp1ifap.apps.googleusercontent.com" })
+          "929530856992-051orvog0ch2q68bmfggrksu7gp1ifap.apps.googleusercontent.com" }
+   
+    
+)
 public class GreetingsEndpoint {
   
   public static List<Greetings> greetings = new ArrayList<Greetings>();
