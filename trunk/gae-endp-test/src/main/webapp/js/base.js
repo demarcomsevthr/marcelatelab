@@ -29,7 +29,6 @@ it.mate.gendtest.greetings.init = function(apiRoot) {
     if (--apisToLoad == 0) {
       it.mate.gendtest.greetings.enableButtons();
       
-      /* TODO: PROVARE A COMMENTARE */
       it.mate.gendtest.greetings.signin(true,
     		  it.mate.gendtest.greetings.userAuthed);      
       
