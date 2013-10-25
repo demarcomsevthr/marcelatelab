@@ -1,0 +1,22 @@
+<assembly>
+	<id>clientcode</id>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+		<format>dir</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>target/${project.artifactId}</directory>
+			<includes>
+				<include>main/**.*</include>
+				<include>main/images/**.*</include>
+                <include>main/images/commons/**.*</include>
+                <include>main/images/messagebox/**.*</include>
+                <include>images/**.*</include>
+        		<include>**/*.html</include>
+				<include>**/*.js</include>
+			</includes>
+			<outputDirectory>../../../assets/www</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>
