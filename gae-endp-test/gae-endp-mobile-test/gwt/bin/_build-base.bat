@@ -22,10 +22,10 @@ if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 set SAVE_SKIP_PAUSE=%SKIP_PAUSE%
 set SKIP_PAUSE=true
 
-cd %BASEAPPDIR%\..\..\gwtcommons
+cd %BASEAPPDIR%\..\..\..\gwtcommons
 call mvn2 %DEP_CLEAN% compile package install
 
-cd %BASEAPPDIR%\..\..\phgcommons
+cd %BASEAPPDIR%\..\..\..\phgcommons
 call mvn2 %DEP_CLEAN% compile package install
 
 set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
