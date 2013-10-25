@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
+  
+    <g:Label text="Home view here I am"></g:Label>
+    
+    <g:Anchor text="Sign In" ui:field="signAnchor"/>
+    
+    <m:Button text="list" ui:field="listBtn"/>
+    
+    <g:VerticalPanel ui:field="outputPanel"></g:VerticalPanel>
+
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
