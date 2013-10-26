@@ -2,6 +2,7 @@ package it.mate.gend.client.api;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,11 @@ public class GreetingsProxy {
 
 //private static final String CLIENT_ID = "770939113776.apps.googleusercontent.com";
   
-  private static final String CLIENT_ID = "929530856992-8sdg8clc0dk3is3hvn7aaoajvcgt07vr.apps.googleusercontent.com";
+//private static final String CLIENT_ID = "929530856992-8sdg8clc0dk3is3hvn7aaoajvcgt07vr.apps.googleusercontent.com";
+
+  private static final String CLIENT_ID = "929530856992-tgsgml6l0au4b4q12r296o0bdk6o7e4f.apps.googleusercontent.com";
+
+  private static final String CLIENT_SECRET = "uzYaikAhZp5JiwCl-Q25Ujgt";
 
   private static final String SCOPES = "https://www.googleapis.com/auth/userinfo.email";
   
@@ -129,8 +134,12 @@ public class GreetingsProxy {
   }-*/;
 
   private void signIn(boolean immediate) {
-    signInImpl(immediate, CLIENT_ID, SCOPES, new Callback() {
-      public void execute(JavaScriptObject jso) {
+    GwtUtils.log("calling signInImpl");
+    signInImpl(immediate, CLIENT_ID, CLIENT_SECRET, SCOPES, new TokenCallback() {
+      public void execute(String token) {
+        PhonegapUtils.log("authorization success " + token);
+        
+        /*
         userAuthedImpl(new Callback() {
           public void execute(JavaScriptObject jso) {
             signedIn = true;
@@ -139,26 +148,72 @@ public class GreetingsProxy {
             }
           }
         });
+        */
+      }
+    }, new Callback() {
+      public void execute(JavaScriptObject jso) {
+        PhonegapUtils.log("authorization failure");
       }
     });
   }
   
-  public void auth() {
-    if (signedIn) {
-      signOut();
-    } else {
-      signIn(false);
-    }
-  }
+  private native void signInImpl (Boolean mode, String clientId, String clientSecret, String scopes, TokenCallback success, Callback failure) /*-{
+    
+    //Build the OAuth consent page URL
+    var authUrl = 'https://accounts.google.com/o/oauth2/auth?' + $wnd.$.param({
+      client_id: clientId,
+      redirect_uri: 'http://localhost',
+      response_type: 'code',
+      scope: scopes
+    });
+    
+    //Open the OAuth consent page in the InAppBrowser
+    var authWindow = $wnd.open(authUrl, '_blank', 'location=no,toolbar=no');
+
+    $wnd.$(authWindow).on('loadstart', function(e) {
+        $wnd.glbDebugHook();
+        var url = e.originalEvent.url;
+        
+        var code = /\?code=(.+)$/.exec(url);
+        var error = /\?error=(.+)$/.exec(url);
+
+        if (code || error) {
+            //Always close the browser when match is found
+            authWindow.close();
+        }
+
+        if (code) {
+          
+            code = code[1].split(' ')[0];
+          
+            //Exchange the authorization code for an access token
+            $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
+                code: code,
+                client_id: clientId,
+                client_secret: clientSecret,
+                redirect_uri: 'http://localhost',
+                grant_type: 'authorization_code'
+            }).done(function(data) {
+                success.@it.mate.gend.client.api.GreetingsProxy.TokenCallback::execute(Ljava/lang/String;)(data.access_token);
+            }).fail(function(response) {
+                failure.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(response.responseJSON);
+            });
+        } else if (error) {
+          failure.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(error[1]);
+        }
+        
+    });
+    
+  }-*/;
   
-  private void signOut() {
-    signedIn = false;
-    if (signedOutDelegate != null) {
-      signedOutDelegate.execute(null);
-    }
-  }
-  
-  private native void signInImpl(Boolean mode, String cliendId, String scopes, Callback pCallback) /*-{
+  /**
+   * 
+
+
+
+   */
+
+  private native void signInImpl_WITH_GAPI_AUTH_ (Boolean mode, String cliendId, String scopes, Callback pCallback) /*-{
     $wnd.gapi.auth.authorize({
         client_id: cliendId,
         scope: scopes,
@@ -176,8 +231,27 @@ public class GreetingsProxy {
     });
   }-*/;
 
+  public void auth() {
+    if (signedIn) {
+      signOut();
+    } else {
+      signIn(false);
+    }
+  }
+  
+  private void signOut() {
+    signedIn = false;
+    if (signedOutDelegate != null) {
+      signedOutDelegate.execute(null);
+    }
+  }
+  
   private static interface Callback {
     public void execute(JavaScriptObject jso);
+  }
+  
+  public static interface TokenCallback {
+    public void execute(String text);
   }
   
   public static class ResponseCollection extends JavaScriptObject {

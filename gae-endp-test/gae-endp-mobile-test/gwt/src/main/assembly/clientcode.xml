@@ -10,11 +10,9 @@
 			<includes>
 				<include>main/**.*</include>
 				<include>main/images/**.*</include>
-                <include>main/images/commons/**.*</include>
-                <include>main/images/messagebox/**.*</include>
-                <include>images/**.*</include>
-        		<include>**/*.html</include>
-				<include>**/*.js</include>
+				<include>*.html</include>
+				<include>*.js</include>
+				<include>*.map</include>
 			</includes>
 			<outputDirectory>../../../assets/www</outputDirectory>
 		</fileSet>
