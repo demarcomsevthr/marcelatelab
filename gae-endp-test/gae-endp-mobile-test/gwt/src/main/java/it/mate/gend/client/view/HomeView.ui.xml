@@ -13,6 +13,11 @@
     
     <m:Button text="list" ui:field="listBtn"/>
     
+    <g:HorizontalPanel>
+      <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
+      <m:Button text="add" ui:field="addBtn"/>
+    </g:HorizontalPanel>
+    
     <g:VerticalPanel ui:field="outputPanel"></g:VerticalPanel>
 
   </g:HTMLPanel>
