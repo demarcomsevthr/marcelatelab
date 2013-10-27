@@ -8,6 +8,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
+import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class HomeView extends BaseMgwtView <Presenter> {
 
@@ -39,6 +41,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Panel outputPanel;
   @UiField Anchor signAnchor;
+  @UiField MTextBox messageBox;
   
   private GreetingsProxy proxy;
   
@@ -97,6 +100,17 @@ public class HomeView extends BaseMgwtView <Presenter> {
             GwtUtils.log(greetings.getMessage());
             outputPanel.add(new Label(greetings.getMessage()));
           }
+        }
+      });
+    }
+  }
+  
+  @UiHandler ("addBtn")
+  public void onAddBtn (TouchEndEvent event) {
+    if (proxy.isInitialized()) {
+      proxy.addGreeting(messageBox.getText(), new Delegate<Void>() {
+        public void execute(Void results) {
+          PhonegapUtils.log("message added");
         }
       });
     }

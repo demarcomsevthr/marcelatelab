@@ -88,7 +88,22 @@ public class GreetingsProxy {
   private native void listImpl(Callback pCallback) /*-{
     $wnd.gapi.client.greetings.list().execute(function(resp) {
       if (!resp.code) {
-        // $wnd.glbDebugHook(resp);
+        pCallback.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
+      }
+    });
+  }-*/;
+  
+  public void addGreeting(String message, final Delegate<Void> delegate) {
+    addGreetingImpl(message, new Callback() {
+      public void execute(JavaScriptObject jso) {
+        delegate.execute(null);
+      }
+    });
+  }
+  
+  private native void addGreetingImpl(String message, Callback pCallback) /*-{
+    $wnd.gapi.client.greetings.add({'message': message}).execute(function(resp) {
+      if (!resp.code) {
         pCallback.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
       }
     });
@@ -135,11 +150,12 @@ public class GreetingsProxy {
 
   private void signIn(boolean immediate) {
     GwtUtils.log("calling signInImpl");
-    signInImpl(immediate, CLIENT_ID, CLIENT_SECRET, SCOPES, new TokenCallback() {
-      public void execute(String token) {
-        PhonegapUtils.log("authorization success " + token);
-        
-        /*
+    
+    final Delegate<Token> tokenDelegate = new Delegate<Token>() {
+      public void execute(Token token) {
+        PhonegapUtils.log("setting gapi auth token");
+        setTokenImpl(token);
+        PhonegapUtils.log("calling user authed");
         userAuthedImpl(new Callback() {
           public void execute(JavaScriptObject jso) {
             signedIn = true;
@@ -148,7 +164,21 @@ public class GreetingsProxy {
             }
           }
         });
-        */
+      }
+    };
+    
+    //TODO : recuperare token da localStorage
+    // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
+    
+    signInImpl(immediate, CLIENT_ID, CLIENT_SECRET, SCOPES, new Callback() {
+      public void execute(JavaScriptObject jso) {
+        Token token = jso.cast();
+        PhonegapUtils.log("authorization success with token '" + token + "'");
+        
+        //TODO : salvare token in localStorage
+        
+        tokenDelegate.execute(token);
+
       }
     }, new Callback() {
       public void execute(JavaScriptObject jso) {
@@ -157,7 +187,7 @@ public class GreetingsProxy {
     });
   }
   
-  private native void signInImpl (Boolean mode, String clientId, String clientSecret, String scopes, TokenCallback success, Callback failure) /*-{
+  private native void signInImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
     
     //Build the OAuth consent page URL
     var authUrl = 'https://accounts.google.com/o/oauth2/auth?' + $wnd.$.param({
@@ -173,19 +203,19 @@ public class GreetingsProxy {
     $wnd.$(authWindow).on('loadstart', function(e) {
         $wnd.glbDebugHook();
         var url = e.originalEvent.url;
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
         
         var code = /\?code=(.+)$/.exec(url);
         var error = /\?error=(.+)$/.exec(url);
-
+        
         if (code || error) {
             //Always close the browser when match is found
             authWindow.close();
         }
 
         if (code) {
-          
-            code = code[1].split(' ')[0];
-          
+            code = @it.mate.gend.client.api.GreetingsProxy::purgeBlanks(Ljava/lang/String;)(code[1]);
+            @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received auth code '" + code + "'");
             //Exchange the authorization code for an access token
             $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
                 code: code,
@@ -194,7 +224,8 @@ public class GreetingsProxy {
                 redirect_uri: 'http://localhost',
                 grant_type: 'authorization_code'
             }).done(function(data) {
-                success.@it.mate.gend.client.api.GreetingsProxy.TokenCallback::execute(Ljava/lang/String;)(data.access_token);
+                success.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
+                // (Ljava/lang/String;)(data.access_token)
             }).fail(function(response) {
                 failure.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(response.responseJSON);
             });
@@ -206,12 +237,38 @@ public class GreetingsProxy {
     
   }-*/;
   
-  /**
-   * 
+  protected static class Token extends JavaScriptObject {
+    protected Token() { }
+    protected final String getAccessToken() {
+      return (String)GwtUtils.getPropertyImpl(this, "access_token");
+    }
+    protected final String getError() {
+      return (String)GwtUtils.getPropertyImpl(this, "error");
+    }
+    protected final String getExpiresIn() {
+      return (String)GwtUtils.getPropertyImpl(this, "expires_in");
+    }
+    protected final String getState() {
+      return (String)GwtUtils.getPropertyImpl(this, "state");
+    }
+    protected final String toMyString() {
+      return "Token [getAccessToken()=" + getAccessToken() + ", getError()=" + getError() + ", getExpiresIn()=" + getExpiresIn() + ", getState()=" + getState()
+          + "]";
+    }
+  }
 
-
-
-   */
+  protected static String purgeBlanks(String code) {
+    int pos;
+    if ((pos = code.indexOf(' ')) > -1) {
+      code = code.substring(pos);
+    }
+    PhonegapUtils.log("purged code = '" + code + "'");
+    return code;
+  }
+  
+  private native void setTokenImpl (Token token) /*-{
+    $wnd.gapi.auth.setToken(token);
+  }-*/;
 
   private native void signInImpl_WITH_GAPI_AUTH_ (Boolean mode, String cliendId, String scopes, Callback pCallback) /*-{
     $wnd.gapi.auth.authorize({
@@ -227,6 +284,8 @@ public class GreetingsProxy {
     var request = $wnd.gapi.client.oauth2.userinfo.get().execute(function(resp) {
       if (!resp.code) {
         pCallback.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
+      } else {
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
       }
     });
   }-*/;
@@ -248,10 +307,6 @@ public class GreetingsProxy {
   
   private static interface Callback {
     public void execute(JavaScriptObject jso);
-  }
-  
-  public static interface TokenCallback {
-    public void execute(String text);
   }
   
   public static class ResponseCollection extends JavaScriptObject {
