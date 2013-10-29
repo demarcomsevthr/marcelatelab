@@ -11,8 +11,9 @@
 				<include>main/**.*</include>
 				<include>main/images/**.*</include>
 				<include>*.html</include>
-				<include>*.js</include>
-				<include>*.map</include>
+				<include>app*.js</include>
+                <include>jquery*.js</include>
+        		<include>*.map</include>
 			</includes>
 			<outputDirectory>../../../assets/www</outputDirectory>
 		</fileSet>

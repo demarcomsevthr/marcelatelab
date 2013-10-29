@@ -12,6 +12,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ScriptElement;
+import com.google.gwt.user.client.Window;
 
 
 /*******************************************************************************
@@ -20,25 +21,19 @@ import com.google.gwt.dom.client.ScriptElement;
  * 
  * FOR gendtest >> https://code.google.com/apis/console/#project:929530856992
  * 
- * FOR gendtest3 >> https://code.google.com/apis/console/#project:770939113776
- * 
  * 
  */
 
 
-public class GreetingsProxy {
+public class GreetingsProxy extends AbstractEndpointProxy {
   
   private static final String API_ROOT = "https://gendtest.appspot.com/_ah/api";
   
-  private static final String GOOGLE_CLIENT_API = "https://apis.google.com/js/client.js";
+  private static final String CLIENT_ID_DESKTOP = "929530856992-8sdg8clc0dk3is3hvn7aaoajvcgt07vr.apps.googleusercontent.com";
 
-//private static final String CLIENT_ID = "770939113776.apps.googleusercontent.com";
-  
-//private static final String CLIENT_ID = "929530856992-8sdg8clc0dk3is3hvn7aaoajvcgt07vr.apps.googleusercontent.com";
+  private static final String CLIENT_ID_MOBILE = "929530856992-tgsgml6l0au4b4q12r296o0bdk6o7e4f.apps.googleusercontent.com";
 
-  private static final String CLIENT_ID = "929530856992-tgsgml6l0au4b4q12r296o0bdk6o7e4f.apps.googleusercontent.com";
-
-  private static final String CLIENT_SECRET = "uzYaikAhZp5JiwCl-Q25Ujgt";
+  private static final String CLIENT_SECRET_MOBILE = "uzYaikAhZp5JiwCl-Q25Ujgt";
 
   private static final String SCOPES = "https://www.googleapis.com/auth/userinfo.email";
   
@@ -60,6 +55,10 @@ public class GreetingsProxy {
 
   public boolean isInitialized() {
     return initialized;
+  }
+  
+  public boolean isSignedIn() {
+    return signedIn;
   }
   
   public void setSignedInDelegate(Delegate<Void> signedInDelegate) {
@@ -109,6 +108,22 @@ public class GreetingsProxy {
     });
   }-*/;
 
+  public void addLoggedGreeting(String message, final Delegate<Void> delegate) {
+    addLoggedGreetingImpl(message, new Callback() {
+      public void execute(JavaScriptObject jso) {
+        delegate.execute(null);
+      }
+    });
+  }
+  
+  private native void addLoggedGreetingImpl(String message, Callback pCallback) /*-{
+    $wnd.gapi.client.greetings.addLogged({'message': message}).execute(function(resp) {
+      if (!resp.code) {
+        pCallback.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
+      }
+    });
+  }-*/;
+
   protected void initClientApi() {
     createGlobalInitEndpointImpl(this);
     String source = GOOGLE_CLIENT_API+"?onload=_proxyInitEndpointCallback";
@@ -151,43 +166,79 @@ public class GreetingsProxy {
   private void signIn(boolean immediate) {
     GwtUtils.log("calling signInImpl");
     
-    final Delegate<Token> tokenDelegate = new Delegate<Token>() {
-      public void execute(Token token) {
-        PhonegapUtils.log("setting gapi auth token");
-        setTokenImpl(token);
-        PhonegapUtils.log("calling user authed");
-        userAuthedImpl(new Callback() {
-          public void execute(JavaScriptObject jso) {
-            signedIn = true;
-            if (signedInDelegate != null) {
-              signedInDelegate.execute(null);
-            }
-          }
-        });
-      }
-    };
-    
-    //TODO : recuperare token da localStorage
-    // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
-    
-    signInImpl(immediate, CLIENT_ID, CLIENT_SECRET, SCOPES, new Callback() {
-      public void execute(JavaScriptObject jso) {
-        Token token = jso.cast();
-        PhonegapUtils.log("authorization success with token '" + token + "'");
-        
-        //TODO : salvare token in localStorage
-        
-        tokenDelegate.execute(token);
-
-      }
-    }, new Callback() {
+    Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
         PhonegapUtils.log("authorization failure");
       }
-    });
+    };
+    
+    if (Window.Navigator.getUserAgent().toLowerCase().contains("windows nt")) {
+      
+      PhonegapUtils.log("desktop version");
+      signInDesktopImpl(immediate, CLIENT_ID_DESKTOP, null, SCOPES, new Callback() {
+        public void execute(JavaScriptObject jso) {
+          PhonegapUtils.log("calling user authed");
+          userAuthedImpl(new Callback() {
+            public void execute(JavaScriptObject jso) {
+              signedIn = true;
+              if (signedInDelegate != null) {
+                signedInDelegate.execute(null);
+              }
+            }
+          });
+        }
+      }, failure);
+      
+    } else {
+      
+      PhonegapUtils.log("mobile version");
+      final Delegate<Token> tokenDelegate = new Delegate<Token>() {
+        public void execute(Token token) {
+          PhonegapUtils.log("setting gapi auth token");
+          setTokenImpl(token);
+          PhonegapUtils.log("calling user authed");
+          userAuthedImpl(new Callback() {
+            public void execute(JavaScriptObject jso) {
+              signedIn = true;
+              if (signedInDelegate != null) {
+                signedInDelegate.execute(null);
+              }
+            }
+          });
+        }
+      };
+      
+      //TODO : recuperare token da localStorage
+      // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
+      
+      signInMobileImpl(immediate, CLIENT_ID_MOBILE, CLIENT_SECRET_MOBILE, SCOPES, new Callback() {
+        public void execute(JavaScriptObject jso) {
+          Token token = jso.cast();
+          PhonegapUtils.log("authorization success with token '" + token + "'");
+          
+          //TODO : salvare token in localStorage
+          
+          tokenDelegate.execute(token);
+
+        }
+      }, failure);
+      
+    }
+    
+    
   }
   
-  private native void signInImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
+  private native void signInDesktopImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
+    $wnd.gapi.auth.authorize({
+        client_id: clientId,
+        scope: scopes,
+        immediate: mode},
+      function() {
+        success.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
+      });
+  }-*/;
+
+  private native void signInMobileImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
     
     //Build the OAuth consent page URL
     var authUrl = 'https://accounts.google.com/o/oauth2/auth?' + $wnd.$.param({
@@ -268,16 +319,6 @@ public class GreetingsProxy {
   
   private native void setTokenImpl (Token token) /*-{
     $wnd.gapi.auth.setToken(token);
-  }-*/;
-
-  private native void signInImpl_WITH_GAPI_AUTH_ (Boolean mode, String cliendId, String scopes, Callback pCallback) /*-{
-    $wnd.gapi.auth.authorize({
-        client_id: cliendId,
-        scope: scopes,
-        immediate: mode},
-      function() {
-        pCallback.@it.mate.gend.client.api.GreetingsProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
-      });
   }-*/;
 
   private native void userAuthedImpl(Callback pCallback) /*-{

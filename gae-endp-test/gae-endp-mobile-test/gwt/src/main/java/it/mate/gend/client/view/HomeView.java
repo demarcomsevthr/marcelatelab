@@ -116,6 +116,17 @@ public class HomeView extends BaseMgwtView <Presenter> {
     }
   }
   
+  @UiHandler ("addLoggedBtn")
+  public void onAddLoggedBtn (TouchEndEvent event) {
+    if (proxy.isInitialized() && proxy.isSignedIn()) {
+      proxy.addLoggedGreeting(messageBox.getText(), new Delegate<Void>() {
+        public void execute(Void results) {
+          PhonegapUtils.log("message logged added");
+        }
+      });
+    }
+  }
+  
   @UiHandler ("signAnchor")
   public void onSignBtn (ClickEvent event) {
     proxy.auth();
