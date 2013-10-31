@@ -7,7 +7,6 @@ import it.mate.ckd.client.view.CKDOutputViewWrapper;
 import it.mate.ckd.client.view.ExtendedVerView;
 import it.mate.ckd.client.view.HomeView;
 import it.mate.ckd.client.view.ProtocolStepView;
-import it.mate.ckd.client.view.ReferralDecisionView;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 
@@ -28,7 +27,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public ExtendedVerView getExtendedVerView();
   
-  public ReferralDecisionView getReferralDecisionView();
+//public ReferralDecisionView getReferralDecisionView();
   
   public ProtocolStepView getProtocolStepView();
   

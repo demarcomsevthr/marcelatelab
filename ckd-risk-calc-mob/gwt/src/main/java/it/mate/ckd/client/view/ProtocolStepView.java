@@ -34,6 +34,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToProtocolStep(ProtocolStep protocolStep);
     void goToCkdOutput(CKD ckd);
+    void goToExtendedView(String selectedGFR);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ProtocolStepView> { }
@@ -75,7 +76,8 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     AppClientFactory.IMPL.adaptWrapperPanel(wrapperPanel, "protocolWrapperPanel", true, 40, null);
     initHeaderBackButton("GFR", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
-        getPresenter().goToCkdOutput(null);
+//      getPresenter().goToCkdOutput(null);
+        getPresenter().goToExtendedView(null);
       }
     });
     

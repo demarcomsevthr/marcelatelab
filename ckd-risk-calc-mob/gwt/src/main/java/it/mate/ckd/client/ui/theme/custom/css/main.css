@@ -300,8 +300,16 @@
 
 @if (it.mate.ckd.client.constants.AppProperties.Global.isExtendedVersion()) {
 	
+  .outputPanel .gwt-Label.ckd-Label {
+    width: 100px;
+  }
+
+  .ckd-Gfr {
+    width: 9.1em;
+  }
+
   .ckd-Risk {
-    width: 7.1em;
+    width: 9.1em;
   }
   
   .ckd-ExtendedVerGroup {
