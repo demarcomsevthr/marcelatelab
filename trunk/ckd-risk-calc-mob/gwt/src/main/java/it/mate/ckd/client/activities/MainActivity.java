@@ -10,7 +10,6 @@ import it.mate.ckd.client.view.CKDOutputViewWrapper;
 import it.mate.ckd.client.view.ExtendedVerView;
 import it.mate.ckd.client.view.HomeView;
 import it.mate.ckd.client.view.ProtocolStepView;
-import it.mate.ckd.client.view.ReferralDecisionView;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.ui.MyAnchor;
@@ -37,7 +36,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   /* CKDInputView.Presenter,  */ CKDInputViewWrapper.Presenter,  
   /* CKDOutputView.Presenter, */ CKDOutputViewWrapper.Presenter,
   ExtendedVerView.Presenter,
-  ReferralDecisionView.Presenter,
+  /* ReferralDecisionView.Presenter, */
   ProtocolStepView.Presenter {
 
   
@@ -187,9 +186,11 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void goToExtendedView(String selectedGFR) {
-    CKD ckd = (CKD)GwtUtils.getClientAttribute(CKD_ATTR);
-    if (ckd != null) {
-      ckd.setSelectedGFR(selectedGFR);
+    if (selectedGFR != null) {
+      CKD ckd = (CKD)GwtUtils.getClientAttribute(CKD_ATTR);
+      if (ckd != null) {
+        ckd.setSelectedGFR(selectedGFR);
+      }
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_EXTENDED_VIEW));
   }
