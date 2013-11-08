@@ -12,9 +12,6 @@
 @external ckd*;
 
 
-/* 23/08/2013
-.homePanel * {
- */
 .homePanel td {
   font-size: 16px;
 }
@@ -135,14 +132,25 @@
 
 .ckd-ProtocolHeaderPanel-center {
   font-size: 8pt;
-  margin-left: 95px;
+  margin-left: 90px;
   margin-bottom: 10px;
+  height: 48px;
+  margin-top: -6px;
+  margin-right: 10px;
 }
 
 .ckd-ProtocolHeaderButton-text {
-  font-size: 16px;
+  font-size: 12px;
   padding: 1px;
   padding-top: 5px;
   height: 50px;
-  top: 2.5px;
 }
+
+.ckd-ProtocolHeaderButton-border-container {
+  top: 10.4px;
+}
+	
+.ckd-ProtocolHeaderButton-text {
+  top: 0.4px;
+}	
+

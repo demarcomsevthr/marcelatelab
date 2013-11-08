@@ -37,6 +37,18 @@ public interface AppConstants extends Messages {
   @DefaultMessage("VERY HIGH")
   String CKDOutputView_veryHighRisk_text();
   
+  @DefaultMessage("") String ExtendedView_referralDecision_None_text();
+  @DefaultMessage("") String ExtendedView_referralDecision_Monitor_text();
+  @DefaultMessage("") String ExtendedView_referralDecision_Refer_text();
+  @DefaultMessage("") String ExtendedView_referralDecision_ReferWithNephrologyService_text();
+  @DefaultMessage("") String ExtendedView_monitoringFrequency_1IfCKD_text();
+  @DefaultMessage("") String ExtendedView_monitoringFrequency_1_text();
+  @DefaultMessage("") String ExtendedView_monitoringFrequency_2_text();
+  @DefaultMessage("") String ExtendedView_monitoringFrequency_3_text();
+  @DefaultMessage("") String ExtendedView_monitoringFrequency_4_text();
+  
+  @DefaultMessage("") String ProtocolStep_FinishText();
+  
   @DefaultMessage("") String ProtocolStep_1_QuestionText();
   @DefaultMessage("") String ProtocolStep_1_Answer1Text();
   @DefaultMessage("-1") String ProtocolStep_1_Answer1Step();
@@ -44,6 +56,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_1_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_1_Answer2Step();
   @DefaultMessage("") String ProtocolStep_1_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_1_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_1_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_1_Answer3EndText();
   
   @DefaultMessage("") String ProtocolStep_2_QuestionText();
   @DefaultMessage("") String ProtocolStep_2_Answer1Text();
@@ -52,6 +67,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_2_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_2_Answer2Step();
   @DefaultMessage("") String ProtocolStep_2_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_2_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_2_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_2_Answer3EndText();
   
   @DefaultMessage("") String ProtocolStep_3_QuestionText();
   @DefaultMessage("") String ProtocolStep_3_Answer1Text();
@@ -60,6 +78,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_3_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_3_Answer2Step();
   @DefaultMessage("") String ProtocolStep_3_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_3_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_3_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_3_Answer3EndText();
   
   @DefaultMessage("") String ProtocolStep_4_QuestionText();
   @DefaultMessage("") String ProtocolStep_4_Answer1Text();
@@ -68,6 +89,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_4_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_4_Answer2Step();
   @DefaultMessage("") String ProtocolStep_4_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_4_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_4_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_4_Answer3EndText();
   
   @DefaultMessage("") String ProtocolStep_5_QuestionText();
   @DefaultMessage("") String ProtocolStep_5_Answer1Text();
@@ -76,6 +100,9 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_5_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_5_Answer2Step();
   @DefaultMessage("") String ProtocolStep_5_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_5_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_5_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_5_Answer3EndText();
   
   @DefaultMessage("") String ProtocolStep_6_QuestionText();
   @DefaultMessage("") String ProtocolStep_6_Answer1Text();
@@ -84,5 +111,8 @@ public interface AppConstants extends Messages {
   @DefaultMessage("") String ProtocolStep_6_Answer2Text();
   @DefaultMessage("-1") String ProtocolStep_6_Answer2Step();
   @DefaultMessage("") String ProtocolStep_6_Answer2EndText();
+  @DefaultMessage("") String ProtocolStep_6_Answer3Text();
+  @DefaultMessage("-1") String ProtocolStep_6_Answer3Step();
+  @DefaultMessage("") String ProtocolStep_6_Answer3EndText();
   
 }

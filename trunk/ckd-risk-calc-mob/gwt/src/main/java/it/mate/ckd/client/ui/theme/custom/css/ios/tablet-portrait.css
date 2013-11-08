@@ -113,3 +113,19 @@ body {
   margin-top: 10px;
 }
 
+/**** PROTOCOL HEADER PANEL 2 ****/
+
+.ckd-ProtocolHeaderPanel2 {
+  width: 556px;
+}
+
+.ckd-ProtocolHeaderButton2-text {
+  font-size: 13px;
+  top: 8px;
+}	
+
+.ckd-ProtocolHeaderPanel2-center {
+  width: 490px;
+  font-size: 14px;
+}
+

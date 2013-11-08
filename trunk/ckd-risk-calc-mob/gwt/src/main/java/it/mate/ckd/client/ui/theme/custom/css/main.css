@@ -585,8 +585,57 @@
   vertical-align: top;
   -webkit-border-radius: 4px;
   -webkit-background-origin: border-box;
+  width: 44px;
 }  
 
+
+
+/**** PROTOCOL HEADER PANEL 2 ****/
+
+.ckd-ProtocolHeaderPanel2 {
+  width: 320px;
+  height: 52px;
+}
+
+.ckd-ProtocolHeaderButton2-border-container span {
+  position: absolute;
+}
+
+.ckd-ProtocolHeaderButton2-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  left: 20px;
+  width: 30px;
+  top: 9px;
+}
+
+@eval backStepImage1Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage1();
+.ckd-ProtocolHeaderButton2-image-1 {
+  background-image: backStepImage1Url;
+}
+
+@eval backStepImage2Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage2();
+.ckd-ProtocolHeaderButton2-image-2 {
+  background-image: backStepImage2Url;
+}
+
+@eval backStepImage3Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage3();
+.ckd-ProtocolHeaderButton2-image-3 {
+  background-image: backStepImage3Url;
+}
+
+.ckd-ProtocolHeaderPanel2-center {
+  font-size: 11px;
+  font-weight: bold;
+  position: relative;
+  top: -25px;
+  left: 65px;
+  width: 245px;
+  height: 22px;
+  text-align: center;
+}
 
 
 

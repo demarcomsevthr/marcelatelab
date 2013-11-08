@@ -11,7 +11,10 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_1_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_1_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_1_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_1_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_1_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_1_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_1_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_1_Answer3EndText()),
   
   STEP2 (2, 
       AppConstants.IMPL.ProtocolStep_2_QuestionText(), 
@@ -20,7 +23,10 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_2_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_2_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_2_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_2_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_2_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_2_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_2_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_2_Answer3EndText()),
       
   STEP3 (3, 
       AppConstants.IMPL.ProtocolStep_3_QuestionText(), 
@@ -29,7 +35,10 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_3_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_3_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_3_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_3_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_3_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_3_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_3_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_3_Answer3EndText()),
           
   STEP4 (4, 
       AppConstants.IMPL.ProtocolStep_4_QuestionText(), 
@@ -38,7 +47,10 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_4_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_4_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_4_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_4_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_4_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_4_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_4_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_4_Answer3EndText()),
               
   STEP5 (5, 
       AppConstants.IMPL.ProtocolStep_5_QuestionText(), 
@@ -47,7 +59,10 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_5_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_5_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_5_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_5_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_5_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_5_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_5_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_5_Answer3EndText()),
                   
   STEP6 (6, 
       AppConstants.IMPL.ProtocolStep_6_QuestionText(), 
@@ -56,10 +71,15 @@ public enum ProtocolStep {
       AppConstants.IMPL.ProtocolStep_6_Answer1EndText(),
       AppConstants.IMPL.ProtocolStep_6_Answer2Text(), 
       Integer.parseInt(AppConstants.IMPL.ProtocolStep_6_Answer2Step()), 
-      AppConstants.IMPL.ProtocolStep_6_Answer2EndText()),
+      AppConstants.IMPL.ProtocolStep_6_Answer2EndText(),
+      AppConstants.IMPL.ProtocolStep_6_Answer3Text(), 
+      Integer.parseInt(AppConstants.IMPL.ProtocolStep_6_Answer3Step()), 
+      AppConstants.IMPL.ProtocolStep_6_Answer3EndText()),
                       
-  START (STEP1)
+  START (STEP1),
   
+  END (9, "", "", -1, "", "", -1, "", "", -1, "")
+                          
   ;
   
   
@@ -76,39 +96,51 @@ public enum ProtocolStep {
   /*********************************************************/
   
   private int id;
-  private String questionText;
+  private String bodyText;
   private String answer1Text;
   private int answer1Step;
   private String answer1EndText;
   private String answer2Text;
   private int answer2Step;
   private String answer2EndText;
+  private String answer3Text;
+  private int answer3Step;
+  private String answer3EndText;
   
-  private ProtocolStep(int id, String questionText, 
+  private ProtocolStep(int id, String bodyText, 
       String answer1Text, int answer1Step, String answer1EndText, 
-      String answer2Text, int answer2Step, String answer2EndText) {
+      String answer2Text, int answer2Step, String answer2EndText,
+      String answer3Text, int answer3Step, String answer3EndText) {
     this.id = id;
-    this.questionText = questionText;
+    this.bodyText = bodyText;
     this.answer1Text = answer1Text;
     this.answer1Step = answer1Step;
     this.answer1EndText = answer1EndText;
     this.answer2Text = answer2Text;
     this.answer2Step = answer2Step;
     this.answer2EndText = answer2EndText;
+    this.answer3Text = answer3Text;
+    this.answer3Step = answer3Step;
+    this.answer3EndText = answer3EndText;
   }
   
   private ProtocolStep(ProtocolStep that) {
-    this(that.id, that.questionText, 
+    this(that.id, that.bodyText, 
         that.answer1Text, that.answer1Step, that.answer1EndText, 
-        that.answer2Text, that.answer2Step, that.answer2EndText);
+        that.answer2Text, that.answer2Step, that.answer2EndText,
+        that.answer3Text, that.answer3Step, that.answer3EndText);
   }
 
   public int getId() {
     return id;
   }
   
-  public String getQuestionText() {
-    return questionText;
+  public String getBodyText() {
+    return bodyText;
+  }
+  
+  public void setBodyText(String bodyText) {
+    this.bodyText = bodyText;
   }
   
   public boolean equals (ProtocolStep that) {
@@ -137,6 +169,18 @@ public enum ProtocolStep {
 
   public String getAnswer2EndText() {
     return answer2EndText;
+  }
+
+  public String getAnswer3Text() {
+    return answer3Text;
+  }
+
+  public int getAnswer3Step() {
+    return answer3Step;
+  }
+
+  public String getAnswer3EndText() {
+    return answer3EndText;
   }
   
 }
