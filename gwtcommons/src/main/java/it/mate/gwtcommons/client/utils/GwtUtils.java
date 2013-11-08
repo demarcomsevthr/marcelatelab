@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -137,6 +138,14 @@ public class GwtUtils {
   
   public static boolean isDevMode() {
     return devModeActive;
+  }
+  
+  public static String getHostPageBaseURL() {
+    return GWT.getHostPageBaseURL();
+  }
+
+  public static String getModuleBaseURL() {
+    return GWT.getModuleBaseURL();
   }
 
   @SuppressWarnings("deprecation")
@@ -1046,6 +1055,11 @@ public class GwtUtils {
     }
     return obj[name];
   }-*/;
+  
+  public static String unescapeHtml(String text) {
+    HTML html = new HTML(text);
+    return html.getText();
+  }
 
 
 }
