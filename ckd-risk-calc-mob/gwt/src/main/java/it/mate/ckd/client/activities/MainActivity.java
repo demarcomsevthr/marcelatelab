@@ -1,6 +1,7 @@
 package it.mate.ckd.client.activities;
 
 import it.mate.ckd.client.constants.AppConstants;
+import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.model.ProtocolStep;
@@ -33,10 +34,9 @@ import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
   HomeView.Presenter, 
-  /* CKDInputView.Presenter,  */ CKDInputViewWrapper.Presenter,  
-  /* CKDOutputView.Presenter, */ CKDOutputViewWrapper.Presenter,
+  CKDInputViewWrapper.Presenter,  
+  CKDOutputViewWrapper.Presenter,
   ExtendedVerView.Presenter,
-  /* ReferralDecisionView.Presenter, */
   ProtocolStepView.Presenter {
 
   
@@ -66,10 +66,9 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.CKD_INPUT)) {
       CKDInputViewWrapper view = AppClientFactory.IMPL.getGinjector().getCKDInputViewWrapper();
-//    CKDInputView view = AppClientFactory.IMPL.getGinjector().getCKDInputView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
-      CKD ckd = (CKD)GwtUtils.getClientAttribute(CKD_ATTR);
+      CKD ckd = getCKDAttribute();
       if (ckd != null) {
         view.setModel(ckd, "ckd");
       }
@@ -83,7 +82,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       CKDOutputViewWrapper view = AppClientFactory.IMPL.getGinjector().getCKDOutputView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
-      view.setModel(GwtUtils.getClientAttribute(CKD_ATTR), "ckd");
+      view.setModel(getCKDAttribute(), "ckd");
       AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
         public void execute(String element) {
           goToCkdInput();
@@ -94,26 +93,13 @@ public class MainActivity extends MGWTAbstractActivity implements
       ExtendedVerView view = AppClientFactory.IMPL.getGinjector().getExtendedVerView();
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
-      view.setModel(GwtUtils.getClientAttribute(CKD_ATTR), "ckd");
+      view.setModel(getCKDAttribute(), "ckd");
       AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
         public void execute(String element) {
           goToCkdOutput(null);
         }
       });
     }
-    /*
-    if (place.getToken().equals(MainPlace.CKD_REFERRAL_DECISION)) {
-      ReferralDecisionView view = AppClientFactory.IMPL.getGinjector().getReferralDecisionView();
-      view.setPresenter(this);
-      panel.setWidget(view.asWidget());
-      view.setModel(GwtUtils.getClientAttribute(CKD_ATTR), "ckd");
-      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
-        public void execute(String element) {
-          goToCkdOutput(null);
-        }
-      });
-    }
-    */
     if (place.getToken().equals(MainPlace.CKD_PROTOCOL_STEP)) {
       ProtocolStepView view = AppClientFactory.IMPL.getGinjector().getProtocolStepView();
       view.setPresenter(this);
@@ -130,7 +116,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
   }
-
+  
   @Override
   public BaseView getView() {
     return null;
@@ -158,13 +144,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_OUTPUT));
   }
-  
-  /*
-  @Override
-  public void goToReferralDecision() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CKD_REFERRAL_DECISION));
-  }
-  */
   
   @Override
   public void goToProtocolStep(ProtocolStep protocolStep) {
@@ -294,6 +273,21 @@ public class MainActivity extends MGWTAbstractActivity implements
       
     }
     
+  }
+
+  private CKD getCKDAttribute() {
+    CKD ckd = (CKD)GwtUtils.getClientAttribute(CKD_ATTR);
+    if (ckd == null && AppProperties.IMPL.useDebugCKD()) {
+      GwtUtils.log("generate a debug CKD");
+      ckd = new CKD();
+      ckd.setAge(50);
+      ckd.setScr(1d);
+      ckd.setWeight(70);
+      ckd.setHeight(178);
+      ckd.setAlbumin(30);
+      ckd.setSelectedGFR("cockroft");
+    }
+    return ckd;
   }
 
 }

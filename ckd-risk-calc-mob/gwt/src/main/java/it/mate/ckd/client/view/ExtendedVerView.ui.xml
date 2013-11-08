@@ -50,11 +50,19 @@
     <g:VerticalPanel horizontalAlignment="CENTER" verticalAlignment="MIDDLE" width="100%">
     
       <g:SimplePanel addStyleNames="ckd-chooseOptionLbl">
-        <g:Label text="Choose an option:"></g:Label>
+        <g:HTML HTML="" addStyleNames="gwt-Label">
+          <ui:attribute name="HTML" description="text" key="chooseOption.text"/>
+        </g:HTML>
       </g:SimplePanel>
-      <p:SmartButton text="See suggested referral decision" ui:field="referralBtn" addStyleNames="ckd-suggestionBtn"/>
-      <p:SmartButton text="See suggested protocol for further investigation" ui:field="protocolBtn" addStyleNames="ckd-suggestionBtn"/>
-      <p:SmartButton text="See suggested monitoring frequency" ui:field="monitoringBtn" addStyleNames="ckd-suggestionBtn"/>
+      <p:SmartButton text="" ui:field="referralBtn" addStyleNames="ckd-suggestionBtn">
+        <ui:attribute name="text" description="text" key="referralBtn.text"/>
+      </p:SmartButton>
+      <p:SmartButton text="" ui:field="protocolBtn" addStyleNames="ckd-suggestionBtn">
+        <ui:attribute name="text" description="text" key="protocolBtn.text"/>
+      </p:SmartButton>
+      <p:SmartButton text="" ui:field="monitoringBtn" addStyleNames="ckd-suggestionBtn">
+        <ui:attribute name="text" description="text" key="monitoringBtn.text"/>
+      </p:SmartButton>
     
     </g:VerticalPanel>
     
@@ -72,6 +80,16 @@
       </gc:SimpleContainer>
     </gc:SimpleContainer> 
     
+    <gc:SimpleContainer visible="false">
+      <g:Label text="" ui:field="referralBtn$suggestionPanelTitle">
+          <ui:attribute name="text" description="text" key="referralBtn.suggestionPanelTitleText"/>
+      </g:Label>
+      <g:Label text="" ui:field="monitoringBtn$suggestionPanelTitle">
+          <ui:attribute name="text" description="text" key="monitoringBtn.suggestionPanelTitleText"/>
+      </g:Label>
+    </gc:SimpleContainer>
+    
   </g:HTMLPanel>
+  
   
 </ui:UiBinder>

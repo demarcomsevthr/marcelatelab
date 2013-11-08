@@ -1,11 +1,13 @@
 package it.mate.ckd.client.view;
 
+import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.model.ProtocolStep;
 import it.mate.ckd.client.view.ExtendedVerView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -49,6 +51,9 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   @UiField Label suggestedIndicationTitleLbl;
   @UiField Label suggestedIndicationLbl;
   
+  @UiField Label referralBtn$suggestionPanelTitle;
+  @UiField Label monitoringBtn$suggestionPanelTitle;
+  
   boolean suggestionPanelVisible = false;
   
   private CKD ckd;
@@ -56,6 +61,8 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   private int referralDecisionCode;
   
   private int monitoringFrequencyCode;
+  
+  private static final int ANIMATION_DURATION = 800;
   
   public ExtendedVerView() {
     initUI();
@@ -80,11 +87,7 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   
   @Override
   public void onAttach(AttachEvent event) {
-    // 09/10/2013
-    // se non faccio cosi' su iphone non si vede il suggestion panel
-    // (rimane a 0 la height del parent)
-//  AppClientFactory.IMPL.adaptWrapperPanel(this, wrapperPanel);
-    // spostato in adaptWrapperPanelOnTablet
+
   }
   
   @Override
@@ -120,28 +123,28 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     String text = "";
     String color = null;
     if (referralDecisionCode == CKD.REFERRAL_DECISION_NONE) {
-      text = "None";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_None_text());
       color = "green";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_YELLOW) {
-      text = "Monitor";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
       color = "yellow";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_ORANGE) {
-      text = "Monitor";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
       color = "orange";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_RED) {
-      text = "Monitor";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
       color = "red";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_ORANGE) {
-      text = "Refer with Nephrology Service";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_ReferWithNephrologyService_text());
       color = "orange";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED) {
-      text = "Refer with Nephrology Service";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_ReferWithNephrologyService_text());
       color = "red";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_RED) {
-      text = "Refer";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Refer_text());
       color = "red";
     }
-    showSuggestedIndications("Suggested referral decision", text, color);
+    showSuggestedIndications(referralBtn$suggestionPanelTitle.getText(), text, color);
   }
   
   @UiHandler ("protocolBtn")
@@ -154,22 +157,22 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     String text = "";
     String color = null;
     if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_GREEN) {
-      text = "1 time/year if CKD";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_1IfCKD_text());
       color = "green";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_YELLOW) {
-      text = "1 time/year";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_1_text());
       color = "yellow";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_2_ORANGE) {
-      text = "2 time/year";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_2_text());
       color = "orange";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_3_RED) {
-      text = "3 time/year";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_3_text());
       color = "red";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_4_DEEP_RED) {
-      text = "4+ time/year";
+      text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_4_text());
       color = "#8A0808";
     }
-    showSuggestedIndications("Suggested monitoring frequency", text, color);
+    showSuggestedIndications(monitoringBtn$suggestionPanelTitle.getText(), text, color);
   }
   
   private static int getSuggestionPanelWidthPct() {
@@ -226,17 +229,14 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
         endProperties.setTop( (startTop - endHeight) , Style.Unit.PX);
         endProperties.setHeight(endHeight, Style.Unit.PX);
         JQuery.withElement(suggestionPanelElement).css(startProperties)
-            .fadeIn(JQuery.createOptions().setDuration(2000).setQueue(false))
-//          .animate(endProperties, JQuery.createOptions().setDuration("3000").setQueue(true));
-            .animate(endProperties, 2000);
+            .fadeIn(JQuery.createOptions().setDuration(ANIMATION_DURATION).setQueue(false))
+            .animate(endProperties, ANIMATION_DURATION);
         suggestionPanelVisible = true;
       }
     };
     
     if (suggestionPanelVisible) {
-      int hideDuration = 2000;
-      JQuery.withElement(suggestionPanelElement).fadeOut(hideDuration, showDelegate);
-//    GwtUtils.deferredExecution(hideDuration, showDelegate);
+      JQuery.withElement(suggestionPanelElement).fadeOut(ANIMATION_DURATION, showDelegate);
     } else {
       showDelegate.execute(null);
     }

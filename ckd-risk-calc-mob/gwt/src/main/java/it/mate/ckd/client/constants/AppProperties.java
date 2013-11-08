@@ -18,6 +18,9 @@ public interface AppProperties extends Constants {
   boolean extendedVersion();
   
   @DefaultBooleanValue(false)
+  boolean useDebugCKD();
+  
+  @DefaultBooleanValue(false)
   boolean HomeView_devInfo_visible();
   
   @DefaultBooleanValue(false)
