@@ -7,8 +7,10 @@
   <name>gae-endp-test</name>
 
   <properties>
-    <appengine.target.version>1.8.6</appengine.target.version>
+    <appengine.target.version>1.8.7</appengine.target.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.version>3.2.4.RELEASE</spring.version>
+    <log4j.version>1.2.14</log4j.version>
   </properties>
 
   <repositories>
@@ -21,9 +23,9 @@
 
   </repositories>
 
-
   <dependencies>
 
+    <!-- GAE -->
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-1.0-sdk</artifactId>
@@ -45,7 +47,44 @@
       <artifactId>javax.inject</artifactId>
       <version>1</version>
     </dependency>
+    
+    <!-- SPRING WEB -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    
+    <!-- JACKSON MAPPER -->
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.9.13</version>
+    </dependency>
+    <dependency>
+  	  <groupId>com.fasterxml.jackson.core</groupId>
+	  <artifactId>jackson-databind</artifactId>
+	  <version>2.2.3</version>
+    </dependency>
 
+    <!-- LOG4J -->
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.5.11</version>
+      <scope>runtime</scope>
+    </dependency>
+    
   </dependencies>
 
   <build>
