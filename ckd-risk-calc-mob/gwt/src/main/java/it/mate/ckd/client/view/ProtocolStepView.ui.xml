@@ -3,7 +3,7 @@
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget" 
        xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
-       xmlns:P="urn:import:it.mate.ckd.client.view">
+       xmlns:P="urn:import:it.mate.ckd.client.view" xmlns:c="urn:import:it.mate.ckd.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ckdHomePanel, ckdProtocolStepViewPanel, outputPanel">
   
@@ -20,6 +20,8 @@
       </g:HTML>
     </gc:SimpleContainer>
      -->
+
+    <!--      
     <gc:SimpleContainer addStyleNames="ckd-ProtocolHeaderPanel ckd-ProtocolHeaderPanel2" ui:field="protocolHeaderPanel">
       <g:HTMLPanel addStyleNames="ckd-ProtocolHeaderButton2" ui:field="protocolHeaderButton">
         <div class="ckd-ProtocolHeaderButton2-border-container">
@@ -33,6 +35,11 @@
         <ui:attribute name="HTML" description="text" key="protocolHeaderPanel.center.text"/>
       </g:HTML>
     </gc:SimpleContainer>
+     -->
+     
+     <c:ProtocolHeaderPanel ui:field="protocolHeaderPanel" headerHtml="">
+        <ui:attribute name="headerHtml" description="text" key="protocolHeaderPanel.center.text"/>
+     </c:ProtocolHeaderPanel>
   
     <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel" ui:field="protocolStepPanel">
       <gc:SimpleContainer addStyleNames="ckd-ProtocolStepPanel-top">

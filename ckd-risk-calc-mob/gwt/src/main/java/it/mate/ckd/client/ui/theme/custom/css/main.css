@@ -611,17 +611,17 @@
   top: 9px;
 }
 
-@eval backStepImage1Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage1();
+@eval backStepImage1Url it.mate.ckd.client.ui.ProtocolHeaderPanel.getBackStepImage1();
 .ckd-ProtocolHeaderButton2-image-1 {
   background-image: backStepImage1Url;
 }
 
-@eval backStepImage2Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage2();
+@eval backStepImage2Url it.mate.ckd.client.ui.ProtocolHeaderPanel.getBackStepImage2();
 .ckd-ProtocolHeaderButton2-image-2 {
   background-image: backStepImage2Url;
 }
 
-@eval backStepImage3Url it.mate.ckd.client.view.ProtocolStepView.getBackStepImage3();
+@eval backStepImage3Url it.mate.ckd.client.ui.ProtocolHeaderPanel.getBackStepImage3();
 .ckd-ProtocolHeaderButton2-image-3 {
   background-image: backStepImage3Url;
 }
