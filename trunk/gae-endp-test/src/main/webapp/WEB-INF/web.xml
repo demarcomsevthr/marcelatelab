@@ -28,7 +28,32 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </user-data-constraint>
   </security-constraint>
   -->
+  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/web-context.xml</param-value>
+  </context-param>
 
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>rest</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>rest</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>init</servlet-name>
+    <servlet-class>it.mate.gendtest.services.InitServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+ 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
