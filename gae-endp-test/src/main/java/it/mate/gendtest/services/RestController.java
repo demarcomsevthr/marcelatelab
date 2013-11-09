@@ -1,6 +1,6 @@
 package it.mate.gendtest.services;
 
-import it.mate.gendtest.model.Request;
+import it.mate.gendtest.model.Command;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,18 @@ public class RestController {
   
   @Autowired private GendAdapter adapter;
 
-  @RequestMapping ("/getPendingRequest/{cliendId}")
-  public @ResponseBody Request getPendingRequest(@PathVariable("cliendId") String clientId) {
-    logger.debug("reached adapter = " + adapter);
-    return adapter.getPendingRequest(clientId);
+  @RequestMapping ("/getRandomCommand/{cliendId}")
+  public @ResponseBody Command getRandomCommand(@PathVariable("cliendId") String clientId) {
+    Command request = adapter.getRandomCommand(clientId);
+    logger.debug("returning " + request);
+    return request;
+  }
+  
+  @RequestMapping ("/getPendingCommand/{cliendId}")
+  public @ResponseBody Command getPendingCommand(@PathVariable("cliendId") String clientId) {
+    Command request = adapter.popPendingCommand(clientId);
+    logger.debug("returning " + request);
+    return request;
   }
   
 }
