@@ -21,7 +21,7 @@ public class PhonegapUtils {
     } else {
       layoutInfo += " isPhone";
     }
-    log("Current layout = " + layoutInfo);
+    log("CURRENT LAYOUT = " + layoutInfo);
     if (OsDetectionUtils.isIOs()) {
       log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
       log("IOs landscape layout is " + OsDetectionUtils.IPAD_LAND_WIDTH + " x " + OsDetectionUtils.IPAD_LAND_HEIGHT);
