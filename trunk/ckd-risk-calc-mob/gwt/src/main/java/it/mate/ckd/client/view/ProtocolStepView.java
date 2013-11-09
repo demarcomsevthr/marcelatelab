@@ -4,10 +4,10 @@ import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.ckd.client.model.CKD;
 import it.mate.ckd.client.model.ProtocolStep;
+import it.mate.ckd.client.ui.ProtocolHeaderPanel;
 import it.mate.ckd.client.view.ProtocolStepView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -16,8 +16,6 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import java.util.LinkedList;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.logical.shared.AttachEvent;
@@ -30,7 +28,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 
 public class ProtocolStepView extends BaseMgwtView<Presenter> {
 
@@ -50,13 +48,18 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   @UiField SmartButton answer2Btn;
   @UiField SmartButton answer3Btn;
   @UiField HTML endHtml;
-  @UiField Widget protocolHeaderButton;
   @UiField SmartButton finishBtn;
   @UiField Label stepNumberLbl;
-  @UiField Panel protocolHeaderPanel;
   @UiField Panel protocolStepPanel;
-  @UiField HTML protocolHeaderPanelCenterHtml;
   @UiField Panel protocolStepPanelCenter;
+
+  /*
+  @UiField Widget protocolHeaderButton;
+  @UiField Panel protocolHeaderPanel;
+  @UiField HTML protocolHeaderPanelCenterHtml;
+  */
+  @UiField ProtocolHeaderPanel protocolHeaderPanel;
+  
   
   private ProtocolStep currentProtocolStep;
   
@@ -94,6 +97,8 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       protocolHeaderPanel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
     }
     
+    addBackBtnHandler();
+    
   }
   
   @Override
@@ -109,7 +114,12 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         protocolStepPanelCenter.getElement().getStyle().clearHeight();
         finishBtn.setText(AppConstants.IMPL.ProtocolStep_FinishText());
         stepNumberLbl.setText(AppConstants.IMPL.ProtocolStep_FinishText());
+
+        /*
         protocolHeaderButton.setVisible(true);
+        */
+        protocolHeaderPanel.getHeaderButton().setVisible(true);
+        
         switchPanelsVisibility(true);
         endHtml.setHTML(currentProtocolStep.getBodyText());
       } else {
@@ -133,6 +143,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         answer2Btn.setOriginalColor();
         answer3Btn.setOriginalColor();
       }
+      /*
       if (history.size() > 0) {
         protocolHeaderButton.setVisible(true);
         protocolHeaderPanelCenterHtml.getElement().getStyle().clearMarginLeft();
@@ -148,6 +159,23 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
           protocolHeaderPanelCenterHtml.getElement().getStyle().setWidth(280, Style.Unit.PX);
         }
       }
+      */
+      if (history.size() > 0) {
+        protocolHeaderPanel.getHeaderButton().setVisible(true);
+        protocolHeaderPanel.getHeaderHTML().getElement().getStyle().clearMarginLeft();
+        protocolHeaderPanel.getHeaderHTML().getElement().getStyle().clearMarginTop();
+        protocolHeaderPanel.getHeaderHTML().getElement().getStyle().clearWidth();
+      } else {
+        protocolHeaderPanel.getHeaderButton().setVisible(false);
+        protocolHeaderPanel.getHeaderHTML().getElement().getStyle().setMarginLeft(-40, Style.Unit.PX);
+        protocolHeaderPanel.getHeaderHTML().getElement().getStyle().setMarginTop(30, Style.Unit.PX);
+        if (OsDetectionUtils.isTabletPortrait()) {
+          protocolHeaderPanel.getHeaderHTML().getElement().getStyle().setWidth(490, Style.Unit.PX);
+        } else {
+          protocolHeaderPanel.getHeaderHTML().getElement().getStyle().setWidth(280, Style.Unit.PX);
+        }
+      }
+      
     }
   }
   
@@ -179,7 +207,8 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   public void onAnswer3Btn(TouchStartEvent event) {
     goToNextStep(currentProtocolStep.getAnswer3EndText(), currentProtocolStep.getAnswer3Step());
   }
-  
+
+  /*
   @UiHandler ("backBtn")
   public void onBackBtn(TouchStartEvent event) {
     doAnimation1(+1, new Delegate<Void>() {
@@ -192,6 +221,23 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       }
     });
   }
+  */
+  private void addBackBtnHandler() {
+    protocolHeaderPanel.addBackBtnTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+        doAnimation1(+1, new Delegate<Void>() {
+          public void execute(Void element) {
+            ProtocolStep step = history.getLast();
+            history.removeLast();
+            switchPanelsVisibility(false);
+            setModel(step, "step");
+            doAnimation2();
+          }
+        });
+      }
+    });
+  }
+  
   
   private void switchPanelsVisibility(boolean isEndStep) {
     questionHtml.setVisible(!isEndStep);
@@ -212,32 +258,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   }
   
   private void goToNextStep(final String endText, int nextStepId) {
-    
-    /*
-    if (endText != null && !"".equals(endText.trim())) {
-      doAnimation1(-1, new Delegate<Void>() {
-        public void execute(Void element) {
-          stepNumberLbl.setText(AppConstants.IMPL.ProtocolStep_FinishText());
-          protocolHeaderButton.setVisible(true);
-          switchPanelsVisibility(true);
-          endHtml.setHTML(endText);
-          doAnimation2();
-        }
-      });
-    } else {
-      final ProtocolStep nextStep = ProtocolStep.getProtocolStepById(nextStepId);
-      if (nextStep != null) {
-        doAnimation1(-1, new Delegate<Void>() {
-          public void execute(Void element) {
-            history.add(currentProtocolStep);
-            setModel(nextStep, "step");
-            doAnimation2();
-          }
-        });
-      }
-    }
-    */
-    
     ProtocolStep nextStep = null;
     if (endText != null && !"".equals(endText.trim())) {
       nextStep = ProtocolStep.END;
@@ -278,7 +298,8 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     JQuery.withElement(protocolStepPanel.getElement())
         .animate(step3Properties, ANIMATION_DURATION);
   }
-  
+
+  /*
   public static class BackStepButton extends TouchWidget {
     Element p;
     public BackStepButton() {
@@ -301,5 +322,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   public static String getBackStepImage3() {
     return "url('" + GWT.getModuleBaseURL() + "images/back-step-3.png" + "')";
   }
+  */
   
 }
