@@ -135,9 +135,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     });
     */
     
+    PhonegapUtils.log("initializing commands proxy...");
+    
     commandsProxy = new CommandsProxy(new Delegate<Void>() {
       public void execute(Void element) {
-        GwtUtils.log("commands proxy initialized");
+        PhonegapUtils.log("commands proxy initialized");
         historyHandler.handleCurrentHistory();
       }
     });

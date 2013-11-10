@@ -16,14 +16,16 @@
     <m:Button text="Wifi ON" ui:field="wifiOnBtn"/>
     
     <m:Button text="Wifi OFF" ui:field="wifiOffBtn"/>
-    
-    <g:HorizontalPanel>
+
+    <g:VerticalPanel visible="false">
       <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
       <m:Button text="add" ui:field="addBtn"/>
       <m:Button text="add logged" ui:field="addLoggedBtn"/>
-    </g:HorizontalPanel>
+    </g:VerticalPanel>    
     
-    <g:VerticalPanel ui:field="outputPanel"></g:VerticalPanel>
+    <g:VerticalPanel ui:field="outputPanel">
+      <g:Label ui:field="outputLbl"></g:Label>
+    </g:VerticalPanel>
 
   </g:HTMLPanel>
   
