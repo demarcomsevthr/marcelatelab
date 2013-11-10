@@ -15,7 +15,7 @@ it.mate.gendtest.commands.init = function(apiRoot) {
     }
   }
   apisToLoad = 1; // must match number of calls to gapi.client.load()
-  gapi.client.load('commands', 'v1', callback, apiRoot);
+  gapi.client.load('commandsAPI', 'v1', callback, apiRoot);
 };
 
 it.mate.gendtest.commands.enableButtons = function() {
@@ -28,7 +28,7 @@ it.mate.gendtest.commands.enableButtons = function() {
 };
 
 it.mate.gendtest.commands.sendEnableCommand = function(message) {
-  gapi.client.commands.addAction({
+  gapi.client.commandsAPI.addAction({
       'action': 1
   }).execute(function(resp) {
       if (!resp.code) {
@@ -38,7 +38,7 @@ it.mate.gendtest.commands.sendEnableCommand = function(message) {
 };
 
 it.mate.gendtest.commands.sendDisableCommand = function(message) {
-  gapi.client.commands.addAction({
+  gapi.client.commandsAPI.addAction({
 	      'action': 2
   }).execute(function(resp) {
       if (!resp.code) {
