@@ -43,6 +43,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel outputPanel;
   @UiField Anchor signAnchor;
   @UiField MTextBox messageBox;
+  @UiField Label outputLbl;
   
   private GreetingsProxy greetingsProxy;
   
@@ -100,6 +101,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       commandsProxy.sendEnableCommand("", new Delegate<Void>() {
         public void execute(Void results) {
           PhonegapUtils.log("Wifi ON posted");
+          outputLbl.setText("WiFi ON command posted");
         }
       });
     }
@@ -111,6 +113,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       commandsProxy.sendDisableCommand("", new Delegate<Void>() {
         public void execute(Void results) {
           PhonegapUtils.log("Wifi OFF posted");
+          outputLbl.setText("WiFi OFF command posted");
         }
       });
     }
