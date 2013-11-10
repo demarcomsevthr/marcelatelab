@@ -6,12 +6,19 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <appengine.target.version>1.8.7</appengine.target.version>
     <spring.version>3.2.4.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
   </properties>
 
   <dependencies>
 
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-1.0-sdk</artifactId>
+      <version>${appengine.target.version}</version>
+    </dependency>
+    
     <!-- SPRING WEB -->
     <dependency>
       <groupId>org.springframework</groupId>

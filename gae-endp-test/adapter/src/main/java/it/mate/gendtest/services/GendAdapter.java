@@ -7,13 +7,13 @@ import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
 @Service
 public class GendAdapter {
   
   private static Logger logger = Logger.getLogger(GendAdapter.class);
 
-  private static Command pending = new Command();
-  
   @PostConstruct
   public void onPostConstruct() {
     logger.info("initialized " + this);
@@ -32,14 +32,27 @@ public class GendAdapter {
   }
   
   public Command popPendingCommand(String clientId) {
-    Command result = pending;
-    pending = new Command();
+    Command result = getPendingCommand();
+    setPendingCommand(new Command());
     return result;
   }
   
   public void setPendingAction(int action) {
-    pending = new Command(action);
+    Command pending = new Command(action);
+    setPendingCommand(pending);
     logger.debug("pending " + pending);
+  }
+  
+  private Command getPendingCommand() {
+    Command result = (Command)MemcacheServiceFactory.getMemcacheService().get("PENDING_COMMAND");
+    if (result == null) {
+      result = new Command();
+    }
+    return result;
+  }
+  
+  private void setPendingCommand(Command command) {
+    MemcacheServiceFactory.getMemcacheService().put("PENDING_COMMAND", command);
   }
   
 }
