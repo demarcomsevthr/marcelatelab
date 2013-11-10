@@ -28,6 +28,11 @@ public class AbstractEndpointProxy {
     this.apiName = apiName;
     this.initDelegate = initDelegate;
     this.useAuthentication = useAuthentication;
+    initClientApi();
+  }
+  
+  public boolean isInitialized() {
+    return initialized;
   }
 
   protected void initClientApi() {
