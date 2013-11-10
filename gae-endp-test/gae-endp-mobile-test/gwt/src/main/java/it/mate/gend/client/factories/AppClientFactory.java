@@ -1,5 +1,6 @@
 package it.mate.gend.client.factories;
 
+import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
@@ -38,7 +39,9 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void initTitle(BaseMgwtView view);
   
-  public GreetingsProxy getProxy();
+  public GreetingsProxy getGreetingsProxy();
+  
+  public CommandsProxy getCommandsProxy();
   
 //public void adaptWrapperPanel(BaseMgwtView mgwtView, final Panel wrapperPanel);
   

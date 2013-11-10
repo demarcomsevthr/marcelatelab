@@ -1,5 +1,6 @@
 package it.mate.gend.client.view;
 
+import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
 import it.mate.gend.client.constants.AppConstants;
 import it.mate.gend.client.factories.AppClientFactory;
@@ -43,7 +44,9 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Anchor signAnchor;
   @UiField MTextBox messageBox;
   
-  private GreetingsProxy proxy;
+  private GreetingsProxy greetingsProxy;
+  
+  private CommandsProxy commandsProxy;
   
   public HomeView() {
     initUI();
@@ -67,19 +70,22 @@ public class HomeView extends BaseMgwtView <Presenter> {
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    proxy = AppClientFactory.IMPL.getProxy();
-    
-    proxy.setSignedInDelegate(new Delegate<Void>() {
+    commandsProxy = AppClientFactory.IMPL.getCommandsProxy();
+    greetingsProxy = AppClientFactory.IMPL.getGreetingsProxy();
+
+    /*
+    greetingsProxy.setSignedInDelegate(new Delegate<Void>() {
       public void execute(Void element) {
         signAnchor.setText("Sign Out");
       }
     });
     
-    proxy.setSignedOutDelegate(new Delegate<Void>() {
+    greetingsProxy.setSignedOutDelegate(new Delegate<Void>() {
       public void execute(Void element) {
         signAnchor.setText("Sign In");
       }
     });
+    */
     
   }
   
@@ -88,12 +94,34 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
 
+  @UiHandler ("wifiOnBtn")
+  public void onWifiOnBtn (TouchEndEvent event) {
+    if (commandsProxy.isInitialized()) {
+      commandsProxy.sendEnableCommand("", new Delegate<Void>() {
+        public void execute(Void results) {
+          PhonegapUtils.log("Wifi ON posted");
+        }
+      });
+    }
+  }
+  
+  @UiHandler ("wifiOffBtn")
+  public void onWifiOffBtn (TouchEndEvent event) {
+    if (commandsProxy.isInitialized()) {
+      commandsProxy.sendDisableCommand("", new Delegate<Void>() {
+        public void execute(Void results) {
+          PhonegapUtils.log("Wifi OFF posted");
+        }
+      });
+    }
+  }
+  
   @UiHandler ("listBtn")
   public void onListBtn(TouchEndEvent event) {
-    if (proxy.isInitialized()) {
+    if (greetingsProxy.isInitialized()) {
       GwtUtils.log("touch");
       outputPanel.clear();
-      proxy.list(new Delegate<List<GreetingsProxy.Greetings>>() {
+      greetingsProxy.list(new Delegate<List<GreetingsProxy.Greetings>>() {
         public void execute(List<GreetingsProxy.Greetings> results) {
           GwtUtils.log("the results >>>>>");
           for (GreetingsProxy.Greetings greetings : results) {
@@ -107,8 +135,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("addBtn")
   public void onAddBtn (TouchEndEvent event) {
-    if (proxy.isInitialized()) {
-      proxy.addGreeting(messageBox.getText(), new Delegate<Void>() {
+    if (greetingsProxy.isInitialized()) {
+      greetingsProxy.addGreeting(messageBox.getText(), new Delegate<Void>() {
         public void execute(Void results) {
           PhonegapUtils.log("message added");
         }
@@ -118,8 +146,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("addLoggedBtn")
   public void onAddLoggedBtn (TouchEndEvent event) {
-    if (proxy.isInitialized() && proxy.isSignedIn()) {
-      proxy.addLoggedGreeting(messageBox.getText(), new Delegate<Void>() {
+    if (greetingsProxy.isInitialized() && greetingsProxy.isSignedIn()) {
+      greetingsProxy.addLoggedGreeting(messageBox.getText(), new Delegate<Void>() {
         public void execute(Void results) {
           PhonegapUtils.log("message logged added");
         }
@@ -129,7 +157,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("signAnchor")
   public void onSignBtn (ClickEvent event) {
-    proxy.auth();
+    greetingsProxy.auth();
   }
   
 }
