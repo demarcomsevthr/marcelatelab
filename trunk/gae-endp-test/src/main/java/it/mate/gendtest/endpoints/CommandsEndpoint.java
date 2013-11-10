@@ -9,10 +9,27 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 
-@Api (name="commands", version="v1", description="Commands API - build 1")
+/**
+ * 
+ *  NOTA BENE
+ *  
+ *  PER TEST IN LOCALE:
+ *  
+ *  http://127.0.0.1:8080/_ah/api/commandsAPI/v1/get/1
+ *  (non funziona l'api explorer in locale)
+ *  
+ * 
+ *  SU APPSPOT:
+ *  RICORDARSI DI ANDARE SEMPRE IN https !!!
+ *
+ */
+
+
+
+@Api (name="commandsAPI", version="v1", description="Commands API - build 1")
 public class CommandsEndpoint {
   
-  @ApiMethod (name="getCommand", httpMethod=HttpMethod.GET)
+  @ApiMethod (name="get", httpMethod=HttpMethod.GET)
   public Command getCommand(@Named("id") Integer id) {
     return AdapterUtil.getAdapter().popPendingCommand("");
   }
