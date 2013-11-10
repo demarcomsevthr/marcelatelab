@@ -2,6 +2,7 @@ package it.mate.gend.client.factories;
 
 import it.mate.gend.client.activities.mapper.MainActivityMapper;
 import it.mate.gend.client.activities.mapper.MainAnimationMapper;
+import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
 import it.mate.gend.client.constants.AppConstants;
 import it.mate.gend.client.places.AppHistoryObserver;
@@ -54,7 +55,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private static int HEADER_PANEL_HEIGHT = 40;
   
-  private GreetingsProxy proxy;
+  private CommandsProxy commandsProxy;
+
+  private GreetingsProxy greetingsProxy;
 
   @Override
   public void initModule(final Panel modulePanel) {
@@ -122,18 +125,31 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     final MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
     historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
-    
+
+    /*
     proxy = new GreetingsProxy(new Delegate<Void>() {
       public void execute(Void element) {
         GwtUtils.log("greetings proxy initialized");
         historyHandler.handleCurrentHistory();
       }
     });
+    */
+    
+    commandsProxy = new CommandsProxy(new Delegate<Void>() {
+      public void execute(Void element) {
+        GwtUtils.log("commands proxy initialized");
+        historyHandler.handleCurrentHistory();
+      }
+    });
 
   }
+
+  public GreetingsProxy getGreetingsProxy() {
+    return greetingsProxy;
+  }
   
-  public GreetingsProxy getProxy() {
-    return proxy;
+  public CommandsProxy getCommandsProxy() {
+    return commandsProxy;
   }
   
   private void createPhoneDisplay(AppClientFactory clientFactory) {

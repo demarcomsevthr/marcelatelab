@@ -7,11 +7,15 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
   
-    <g:Label text="Home view here I am"></g:Label>
+    <g:Label text="Home view"></g:Label>
     
     <g:Anchor text="Sign In" ui:field="signAnchor"/>
     
     <m:Button text="list" ui:field="listBtn"/>
+    
+    <m:Button text="Wifi ON" ui:field="wifiOnBtn"/>
+    
+    <m:Button text="Wifi OFF" ui:field="wifiOffBtn"/>
     
     <g:HorizontalPanel>
       <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
