@@ -49,6 +49,8 @@
   
   <inherits name="it.mate.phgcommons.phgcommons" />
   
+  <inherits name="it.mate.gendtest.Adapter" />
+  
   <inherits name="com.google.web.bindery.autobean.AutoBean"/>
   
   <replace-with class="it.mate.gend.client.factories.AppClientFactoryImpl">

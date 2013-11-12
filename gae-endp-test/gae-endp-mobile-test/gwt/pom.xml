@@ -39,6 +39,12 @@
       <version>1.1.2</version>
     </dependency>
 
+    <dependency>
+      <groupId>it.mate</groupId>
+      <artifactId>gae-endp-test-adapter</artifactId>
+      <version>0.1</version>
+    </dependency>
+
   </dependencies>
   
   <build>

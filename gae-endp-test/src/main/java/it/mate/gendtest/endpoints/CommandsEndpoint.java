@@ -1,11 +1,13 @@
 package it.mate.gendtest.endpoints;
 
-import it.mate.gendtest.model.Command;
 import it.mate.gendtest.services.AdapterUtil;
-import it.mate.gendtest.shared.MyAutoBeanFactory;
-import it.mate.gendtest.shared.TestCommand;
+import it.mate.gendtest.shared.model.Command;
+import it.mate.gendtest.shared.model.TestCommand;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
+
+import org.apache.log4j.Logger;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -32,6 +34,13 @@ import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 
 @Api (name="commandsAPI", version="v1", description="Commands API - build 1")
 public class CommandsEndpoint {
+
+  private static Logger logger = Logger.getLogger(CommandsEndpoint.class);
+  
+  @PostConstruct
+  public void onPostConstruct() {
+    logger.debug("initialized " + this);
+  }
   
   @ApiMethod (name="get", httpMethod=HttpMethod.GET)
   public Command getCommand(@Named("id") Integer id) {
@@ -53,7 +62,7 @@ public class CommandsEndpoint {
     
     MyAutoBeanFactory factory = AutoBeanFactorySource.create(MyAutoBeanFactory.class);
     TestCommand command = AutoBeanCodex.decode(factory, TestCommand.class, json).as();
-    System.out.println("command = " + command);
+    logger.debug("received command = " + TestCommand.Utils.toString(command));
     
     return VoidResult.VOID;
   }

@@ -1,6 +1,6 @@
 package it.mate.gendtest.services;
 
-import it.mate.gendtest.model.Command;
+import it.mate.gendtest.shared.model.Command;
 
 import javax.annotation.PostConstruct;
 

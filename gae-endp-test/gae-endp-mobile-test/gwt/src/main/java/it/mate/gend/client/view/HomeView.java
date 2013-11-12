@@ -2,12 +2,12 @@ package it.mate.gend.client.view;
 
 import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
+import it.mate.gend.client.api.MyAutoBeanFactory;
 import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.factories.AppClientFactory;
-import it.mate.gend.client.model.MyAutoBeanFactory;
-import it.mate.gend.client.model.TestCommand;
-import it.mate.gend.client.model.TestCommandImpl;
 import it.mate.gend.client.view.HomeView.Presenter;
+import it.mate.gendtest.shared.model.TestCommand;
+import it.mate.gendtest.shared.model.TestCommandImpl;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -27,8 +27,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
@@ -174,12 +172,21 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
     MyAutoBeanFactory factory = GWT.create(MyAutoBeanFactory.class);
     
-    AutoBeanFactorySource source;
-    
-    
     TestCommand command;
     
-//  command = factory.getTestCommand().as();
+    command = new TestCommandImpl();
+    command.setAction(1);
+    command.setClientId("MDM");
+    command.setCreated(new Date());
+    
+    commandsProxy.sendTestCommand(command, new Delegate<Void>() {
+      public void execute(Void element) {
+        PhonegapUtils.log("test command send");
+      }
+    });
+    
+
+    /*
     command = factory.getTestCommand(new TestCommandImpl()).as();
     
     GwtUtils.log("command = " + command);
@@ -198,6 +205,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
     command = AutoBeanCodex.decode(factory, TestCommand.class, json).as();
     GwtUtils.log("command = " + TestCommand.Utils.toString(command));
+    */
 
     /*
     command = new TestCommandImpl();
