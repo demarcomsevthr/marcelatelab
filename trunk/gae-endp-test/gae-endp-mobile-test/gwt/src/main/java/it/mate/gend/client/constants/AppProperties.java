@@ -1,23 +1,22 @@
 package it.mate.gend.client.constants;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
-import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.i18n.client.Constants;
 
-public interface AppProperties extends Messages {
+public interface AppProperties extends Constants {
 
   AppProperties IMPL = GWT.create(AppProperties.class);
   
-  @DefaultMessage("")
+  @DefaultStringValue("")
   String tabletAppName();
   
-  @DefaultMessage("")
+  @DefaultStringValue("")
   String phoneAppName();
   
-  @DefaultMessage("Version 0.0 - Powered by Medup Dev.")
+  @DefaultStringValue("Version 0.1 - Powered by MDM")
   String versionCredits();
   
-  @DefaultMessage("Insert parameters")
+  @DefaultStringValue("Insert parameters")
   String HomeView_paramBtn_text();
   
   @DefaultBooleanValue(false)

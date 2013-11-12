@@ -13,10 +13,12 @@
     
     <m:Button text="list" ui:field="listBtn"/>
     
-    <m:Button text="Wifi ON" ui:field="wifiOnBtn"/>
+    <p:SmartButton text="Wifi ON" ui:field="wifiOnBtn"></p:SmartButton>
     
-    <m:Button text="Wifi OFF" ui:field="wifiOffBtn"/>
-
+    <p:SmartButton text="Wifi OFF" ui:field="wifiOffBtn"></p:SmartButton>
+    
+    <p:SmartButton text="Test Bean" ui:field="testBeanBtn"></p:SmartButton>
+    
     <g:VerticalPanel visible="false">
       <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
       <m:Button text="add" ui:field="addBtn"/>
