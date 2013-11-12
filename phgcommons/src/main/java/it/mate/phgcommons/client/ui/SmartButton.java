@@ -40,6 +40,8 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   
   private String tag;
   
+  private boolean rounded = true;
+  
   public SmartButton() {
     
     if (useAnchor) {
@@ -52,14 +54,32 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
 
     setStyleName("mgwt-SmartButton");
     addStyleName("mgwt-Button");
-    addStyleName("mgwt-Button-round");
+    setRounded(rounded);
     originalColor = getElement().getStyle().getColor();
     if (originalColor == null || "".equals(originalColor)) {
       originalColor = "black";
     }
+    
+    if (MGWT.getOsDetection().isAndroid()) {
+      changeColorOnClick = true;
+      revertOriginalColorDelay = 100; 
+    }
 
     addChangeColorOnClickHandler();
 
+  }
+  
+  public void setRounded(boolean rounded) {
+    this.rounded = rounded;
+    if (rounded) {
+      addStyleName("mgwt-Button-round");
+    } else {
+      removeStyleName("mgwt-Button-round");
+    }
+  }
+  
+  public void setRounded(String text) {
+    setRounded(Boolean.parseBoolean(text));
   }
   
   private void addChangeColorOnClickHandler() {
