@@ -2,7 +2,7 @@ package it.mate.gend.client.view;
 
 import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
-import it.mate.gend.client.constants.AppConstants;
+import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.factories.AppClientFactory;
 import it.mate.gend.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -60,9 +60,9 @@ public class HomeView extends BaseMgwtView <Presenter> {
   private void initUI() {
 
     if (OsDetectionUtils.isTablet()) {
-      setTitleHtml(AppConstants.IMPL.tabletAppName());
+      setTitleHtml(AppProperties.IMPL.tabletAppName());
     } else {
-      setTitleHtml(AppConstants.IMPL.phoneAppName());
+      setTitleHtml(AppProperties.IMPL.phoneAppName());
     }
     
     initHeaderBackButton("Home", new Delegate<TapEvent>() {

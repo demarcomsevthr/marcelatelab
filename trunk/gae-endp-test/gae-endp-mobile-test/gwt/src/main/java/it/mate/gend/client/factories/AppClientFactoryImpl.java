@@ -4,7 +4,7 @@ import it.mate.gend.client.activities.mapper.MainActivityMapper;
 import it.mate.gend.client.activities.mapper.MainAnimationMapper;
 import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
-import it.mate.gend.client.constants.AppConstants;
+import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.places.AppHistoryObserver;
 import it.mate.gend.client.places.MainPlace;
 import it.mate.gend.client.places.MainPlaceHistoryMapper;
@@ -51,6 +51,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private PhoneGap phoneGap;
   
   private static int TABLET_IOS_WRAPPER_PCT = 70;
+  
   private static int TABLET_AND_WRAPPER_PCT = 80;
   
   private static int HEADER_PANEL_HEIGHT = 40;
@@ -161,10 +162,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
     activityManager.setDisplay(display);
     RootPanel.get().add(display);
-    
-    // 21/02/2013
-//  ZIndexPatch.apply();
-    
     AndroidBackButtonHandler.start();
   }
 
@@ -247,29 +244,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       
       //09/10/2013
       // Patch per IPhone per far funzionare le animazioni jquery
-      
       wrapperPanel.setHeight((Window.getClientHeight() - HEADER_PANEL_HEIGHT ) + "px");
       wrapperPanel.setWidth(Window.getClientWidth() + "px");
       
     }
   }
 
-  /*
-  @SuppressWarnings("rawtypes")
-  public void adaptWrapperPanel(BaseMgwtView mgwtView, final Panel wrapperPanel) {
-    GwtUtils.onAvailable(mgwtView.getHeaderPanel().getElement().getId(), new Delegate<Element>() {
-      public void execute(Element headerPanelElement) {
-        if (OsDetectionUtils.isTablet()) {
-//        adaptWrapperPanelOnTablet(wrapperPanel, id, adaptVerMargin, delegate);
-        } else {
-          wrapperPanel.setHeight((Window.getClientHeight() - headerPanelElement.getClientHeight()) + "px");
-          wrapperPanel.setWidth(Window.getClientWidth() + "px");
-        }
-      }
-    });
-  }
-  */
-  
   public int getTabletWrapperHeight() {
     int wrapperPct = AppClientFactory.IMPL.getWrapperPct();
     int height = Window.getClientHeight() * wrapperPct / 100;
@@ -282,11 +262,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return width;
   }
 
+  @SuppressWarnings("rawtypes")
   public void initTitle(BaseMgwtView view) {
     if (OsDetectionUtils.isTablet()) {
-      view.setTitleHtml(AppConstants.IMPL.tabletAppName());
+      view.setTitleHtml(AppProperties.IMPL.tabletAppName());
     } else {
-      view.setTitleHtml(AppConstants.IMPL.phoneAppName());
+      view.setTitleHtml(AppProperties.IMPL.phoneAppName());
     }
   }
   

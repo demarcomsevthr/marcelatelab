@@ -1,6 +1,6 @@
 package it.mate.gend.client;
 
-import it.mate.gend.client.constants.AppConstants;
+import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.factories.AppClientFactory;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -26,7 +26,7 @@ public class MainEntryPoint implements EntryPoint {
     PhonegapUtils.logEnvironment();
     
     PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhonegapUtils.log("AppConstants.versionCredits = "+AppConstants.IMPL.versionCredits());
+    PhonegapUtils.log("AppConstants.versionCredits = "+AppProperties.IMPL.versionCredits());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
