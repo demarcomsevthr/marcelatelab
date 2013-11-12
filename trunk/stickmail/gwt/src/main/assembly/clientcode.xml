@@ -1,0 +1,21 @@
+<assembly>
+	<id>clientcode</id>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+		<format>dir</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>target/${project.artifactId}</directory>
+			<includes>
+				<include>main/**.*</include>
+				<include>main/images/**.*</include>
+				<include>*.html</include>
+				<include>app*.js</include>
+                <include>jquery*.js</include>
+        		<include>*.map</include>
+			</includes>
+			<outputDirectory>../../android/assets/www</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>
