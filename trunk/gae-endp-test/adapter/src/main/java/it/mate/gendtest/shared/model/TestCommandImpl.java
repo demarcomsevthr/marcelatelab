@@ -1,4 +1,4 @@
-package it.mate.gend.client.model;
+package it.mate.gendtest.shared.model;
 
 import java.util.Date;
 

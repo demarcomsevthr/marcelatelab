@@ -1,4 +1,6 @@
-package it.mate.gend.client.model;
+package it.mate.gend.client.api;
+
+import it.mate.gendtest.shared.model.TestCommand;
 
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;

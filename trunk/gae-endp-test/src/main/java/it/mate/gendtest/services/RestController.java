@@ -1,6 +1,6 @@
 package it.mate.gendtest.services;
 
-import it.mate.gendtest.model.Command;
+import it.mate.gendtest.shared.model.Command;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

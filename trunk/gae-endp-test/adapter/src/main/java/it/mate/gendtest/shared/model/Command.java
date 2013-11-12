@@ -1,4 +1,4 @@
-package it.mate.gendtest.model;
+package it.mate.gendtest.shared.model;
 
 import java.io.Serializable;
 
