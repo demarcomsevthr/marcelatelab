@@ -513,6 +513,8 @@
 .ckd-suggestionPanel .ckd-suggestionPanel-content div {
   background-color: white;
   padding-top: 0.6em;
+  font-size: 11pt;
+  font-weight: 600;
 }
 
 .gwt-Label.ckd-suggestedIndicationLbl {
@@ -597,7 +599,11 @@
   height: 52px;
 }
 
-.ckd-ProtocolHeaderButton2-border-container span {
+.ckd-ProtocolHeaderButton2-button-container {
+  margin-left: 5px;
+}
+
+.ckd-ProtocolHeaderButton2-button-container span {
   position: absolute;
 }
 
@@ -606,7 +612,7 @@
   font-weight: bold;
   color: white;
   position: relative;
-  left: 20px;
+  left: 25px;
   width: 30px;
   top: 9px;
 }

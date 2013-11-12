@@ -1,5 +1,5 @@
 
-	FAST EXAMPLE
+	FAST DEPLOY
 
 	> Save for Enterprise or Ad-Hoc Deploy
 	> Save As ckd201b6

@@ -121,30 +121,30 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   @UiHandler ("referralBtn")
   public void onReferralBtn (TouchStartEvent event) {
     String text = "";
-    String color = null;
+    String bckColor = null;
     if (referralDecisionCode == CKD.REFERRAL_DECISION_NONE) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_None_text());
-      color = "green";
+      bckColor = "green";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_YELLOW) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
-      color = "yellow";
+      bckColor = "yellow";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_ORANGE) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
-      color = "orange";
+      bckColor = "orange";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_MONITOR_RED) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Monitor_text());
-      color = "red";
+      bckColor = "red";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_ORANGE) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_ReferWithNephrologyService_text());
-      color = "orange";
+      bckColor = "orange";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_WITH_NEPHROLOGY_SERVICE_RED) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_ReferWithNephrologyService_text());
-      color = "red";
+      bckColor = "red";
     } else if (referralDecisionCode == CKD.REFERRAL_DECISION_REFER_RED) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_referralDecision_Refer_text());
-      color = "red";
+      bckColor = "red";
     }
-    showSuggestedIndications(referralBtn$suggestionPanelTitle.getText(), text, color);
+    showSuggestedIndications(referralBtn$suggestionPanelTitle.getText(), text, bckColor, null);
   }
   
   @UiHandler ("protocolBtn")
@@ -155,24 +155,27 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
   @UiHandler ("monitoringBtn")
   public void onMonitoringBtn (TouchStartEvent event) {
     String text = "";
-    String color = null;
+    String bckColor = null;
+    String txtColor = null;
     if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_GREEN) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_1IfCKD_text());
-      color = "green";
+      bckColor = "green";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_1_YELLOW) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_1_text());
-      color = "yellow";
+      bckColor = "yellow";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_2_ORANGE) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_2_text());
-      color = "orange";
+      bckColor = "orange";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_3_RED) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_3_text());
-      color = "red";
+      bckColor = "red";
+      txtColor = "yellow";
     } else if (monitoringFrequencyCode == CKD.MONITORING_FREQUENCY_4_DEEP_RED) {
       text = GwtUtils.unescapeHtml(AppConstants.IMPL.ExtendedView_monitoringFrequency_4_text());
-      color = "#8A0808";
+      bckColor = "#8A0808";
+      txtColor = "yellow";
     }
-    showSuggestedIndications(monitoringBtn$suggestionPanelTitle.getText(), text, color);
+    showSuggestedIndications(monitoringBtn$suggestionPanelTitle.getText(), text, bckColor, txtColor);
   }
   
   private static int getSuggestionPanelWidthPct() {
@@ -187,7 +190,7 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
     return getSuggestionPanelWidthPct() + "%";
   }
   
-  private void showSuggestedIndications(final String title, final String text, final String bckColor) {
+  private void showSuggestedIndications(final String title, final String text, final String bckColor, final String txtColor) {
     final Element suggestionPanelElement = suggestionPanel.getElement();
     
     Delegate<Void> showDelegate = new Delegate<Void>() {
@@ -201,6 +204,11 @@ public class ExtendedVerView extends BaseMgwtView<Presenter> {
           suggestedIndicationLbl.getElement().getStyle().setBackgroundColor(bckColor);
         } else {
           suggestedIndicationLbl.getElement().getStyle().clearBackgroundColor();
+        }
+        if (txtColor != null) {
+          suggestedIndicationLbl.getElement().getStyle().setColor(txtColor);
+        } else {
+          suggestedIndicationLbl.getElement().getStyle().clearColor();
         }
         int startTop = 0;
         if (OsDetectionUtils.isTablet()) {
