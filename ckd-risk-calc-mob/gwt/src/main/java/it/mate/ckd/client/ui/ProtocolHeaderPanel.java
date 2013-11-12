@@ -25,7 +25,7 @@ public class ProtocolHeaderPanel extends SimpleContainer {
   
   private HTML headerHtml;
 
-  private DivElement imageContainer;
+  private DivElement btnContainer;
   private SpanElement spanImage1;
   private SpanElement spanImage2;
   private SpanElement spanImage3;
@@ -39,15 +39,15 @@ public class ProtocolHeaderPanel extends SimpleContainer {
   
   private void initUI() {
     headerButtonPanel = new HTMLPanel("");
-    imageContainer = Document.get().createDivElement();
+    btnContainer = Document.get().createDivElement();
     spanImage1 = Document.get().createSpanElement();
     spanImage2 = Document.get().createSpanElement();
     spanImage3 = Document.get().createSpanElement();
-    imageContainer.appendChild(spanImage1);
-    imageContainer.appendChild(spanImage2);
-    imageContainer.appendChild(spanImage3);
+    btnContainer.appendChild(spanImage1);
+    btnContainer.appendChild(spanImage2);
+    btnContainer.appendChild(spanImage3);
     applyBackBtnDimensions();
-    headerButtonPanel.getElement().appendChild(imageContainer);
+    headerButtonPanel.getElement().appendChild(btnContainer);
     backBtn = new BackButton();
     setBackBtnText("Prev Step");
     headerButtonPanel.add(backBtn);
@@ -93,23 +93,24 @@ public class ProtocolHeaderPanel extends SimpleContainer {
   }
 
   private void applyBackBtnDimensions() {
+    int marginLeft = 5;
     spanImage1.getStyle().setWidth(14, Unit.PX);
     spanImage1.getStyle().setHeight(backBtnHeight, Unit.PX);
     spanImage1.getStyle().setProperty("backgroundSize", "14px " + backBtnHeight + "px");
     spanImage2.getStyle().setWidth(backBtnWidth, Unit.PX);
     spanImage2.getStyle().setHeight(backBtnHeight, Unit.PX);
     spanImage2.getStyle().setProperty("backgroundSize", backBtnWidth + "px " + backBtnHeight + "px");
-    spanImage2.getStyle().setLeft(14, Unit.PX);
+    spanImage2.getStyle().setLeft(marginLeft + 14, Unit.PX);
     spanImage3.getStyle().setWidth(8, Unit.PX);
     spanImage3.getStyle().setHeight(backBtnHeight, Unit.PX);
     spanImage3.getStyle().setProperty("backgroundSize", "8px " + backBtnHeight + "px");
-    spanImage3.getStyle().setLeft(14 + backBtnWidth - 2, Unit.PX);
+    spanImage3.getStyle().setLeft(marginLeft + 14 + backBtnWidth - 2, Unit.PX);
   }
   
   private void applyStyleNames() {
     addStyleName(classNamePrefix+"HeaderPanel");
     addStyleName(classNamePrefix+"HeaderPanel2");
-    imageContainer.addClassName(classNamePrefix+"HeaderButton2-border-container");
+    btnContainer.addClassName(classNamePrefix+"HeaderButton2-button-container");
     spanImage1.addClassName(classNamePrefix+"HeaderButton2-image-1");
     spanImage2.addClassName(classNamePrefix+"HeaderButton2-image-2");
     spanImage3.addClassName(classNamePrefix+"HeaderButton2-image-3");
