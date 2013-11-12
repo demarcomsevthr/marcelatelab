@@ -4,6 +4,9 @@ import it.mate.gend.client.api.CommandsProxy;
 import it.mate.gend.client.api.GreetingsProxy;
 import it.mate.gend.client.constants.AppProperties;
 import it.mate.gend.client.factories.AppClientFactory;
+import it.mate.gend.client.model.MyAutoBeanFactory;
+import it.mate.gend.client.model.TestCommand;
+import it.mate.gend.client.model.TestCommandImpl;
 import it.mate.gend.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -12,6 +15,7 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -23,6 +27,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
+import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
@@ -161,6 +167,44 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("signAnchor")
   public void onSignBtn (ClickEvent event) {
     greetingsProxy.auth();
+  }
+  
+  @UiHandler ("testBeanBtn")
+  public void onTestBeanBtn (TouchEndEvent event) {
+    
+    MyAutoBeanFactory factory = GWT.create(MyAutoBeanFactory.class);
+    
+    AutoBeanFactorySource source;
+    
+    
+    TestCommand command;
+    
+//  command = factory.getTestCommand().as();
+    command = factory.getTestCommand(new TestCommandImpl()).as();
+    
+    GwtUtils.log("command = " + command);
+    
+    String json;
+    json = "{'action': 1, 'clientId': 'mdm'}";
+    command = new TestCommandImpl();
+    command.setAction(1);
+    command.setClientId("MDM");
+    command.setCreated(new Date());
+    json = AutoBeanCodex.encode(factory.getTestCommand(command)).getPayload();
+//  json = "{'action': 1, 'clientId': 'mdm', 'created': 'Tue Nov 12 06:04:35 CET 2013'}";
+    json = "{'action': 1, 'clientId': 'mdm', 'created': '1384232854000'}";
+    
+    GwtUtils.log("json = " + json);
+    
+    command = AutoBeanCodex.decode(factory, TestCommand.class, json).as();
+    GwtUtils.log("command = " + TestCommand.Utils.toString(command));
+
+    /*
+    command = new TestCommandImpl();
+    AutoBeanCodex.decodeInto(StringQuoter.split(json), factory.getTestCommand(command));
+    GwtUtils.log("command = " + command);
+    */
+
   }
   
 }

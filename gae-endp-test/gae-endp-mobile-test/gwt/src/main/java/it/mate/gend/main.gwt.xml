@@ -49,6 +49,8 @@
   
   <inherits name="it.mate.phgcommons.phgcommons" />
   
+  <inherits name="com.google.web.bindery.autobean.AutoBean"/>
+  
   <replace-with class="it.mate.gend.client.factories.AppClientFactoryImpl">
     <when-type-is class="it.mate.gend.client.factories.AppClientFactory"/>
   </replace-with>
