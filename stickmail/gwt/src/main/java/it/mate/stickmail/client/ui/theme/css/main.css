@@ -11,15 +11,20 @@
 
 @external phg*;
 
+@external ui*;
+
 @url bgr bgrImage;
 
-@eval windowHeight it.mate.gend.client.ui.theme.CustomTheme.getWindowHeight();
+@eval windowHeight it.mate.stickmail.client.ui.theme.CustomTheme.getWindowHeight();
 
 body {
+  /*
   background-image: -webkit-gradient(linear , left top, left bottom, 
   	color-stop(0.20, rgba(64, 127, 221, 0.75)), 
   	color-stop(0.80, rgba(85, 184, 209, 0.72)), 
   	color-stop(0.90, rgba(5, 123, 252, 0.8))) ;
+  */
+  background-color: white;
   background-repeat: repeat;
   background-size: 20px windowHeight;
 }
@@ -50,8 +55,20 @@ body {
 }
 
 .homePanel a {
-  color: blue;
+  color: black;
   font-family: Trebuchet MS;
   font-weight: 600;
 }
 
+.gwt-JQDateBox {
+  width: 90% !important;
+  margin-left: 10px !important;
+}
+
+.ui-datebox-grid {
+  background: #FDEEF4;
+}		
+    
+.ui-datebox-gridheader {
+  background: #565051;
+}

@@ -95,8 +95,4 @@ public class CustomTheme {
     public CustomMainCss css();
   }
   
-  public interface CssBuild1001 {
-    
-  }
-  
 }
