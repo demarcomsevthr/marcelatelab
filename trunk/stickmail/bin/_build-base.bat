@@ -1,12 +1,14 @@
 @ECHO OFF
 
-echo BUILDING APP %APPNAME%...
+echo BUILDING APP %APPNAME% %MODULE%
 echo.
 echo.
 
-title BUILDING APP %APPNAME% [%*]
+title BUILDING APP %APPNAME% %MODULE% [%*]
 
-call %~dp0\setenv.bat
+if "%MODULE%"=="" GOTO NO_MODULE_SET
+
+call %~dp0\_setenv.bat
 
 SET BASEAPPDIR=%~dp0..
 SET MVN2CMD=%BASEAPPDIR%\bin\_mvn2.bat
@@ -17,24 +19,23 @@ set DEP_CLEAN=clean
 
 if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 
-set SAVE_SKIP_PAUSE=%SKIP_PAUSE%
-set SKIP_PAUSE=true
-
 cd %BASEAPPDIR%\adapter
 call %MVN2CMD% %DEP_CLEAN% install
 
-set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
-
 :NO_DEPENDENCIES
 
-cd %BASEAPPDIR%
+cd %BASEAPPDIR%\%MODULE%
 call %MVN2CMD% %*
 
 if "%SKIP_PAUSE%"=="true" GOTO NO_PAUSE
 pause
+GOTO END
+
+:NO_MODULE_SET
+echo NO MODULE SET
+GOTO END
 
 :NO_PAUSE
-
 :END
 title Ready
 cd %BASEAPPDIR%
