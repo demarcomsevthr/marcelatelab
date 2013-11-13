@@ -23,6 +23,7 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchMoveHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class SmartButton extends Composite implements HasClickHandlers, HasTouchHandlers,
@@ -43,6 +44,8 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   private boolean rounded = true;
   
   public SmartButton() {
+    
+    MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();    
     
     if (useAnchor) {
       impl = new Anchor();
