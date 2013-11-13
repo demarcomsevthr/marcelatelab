@@ -94,6 +94,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     MGWT.applySettings(settings);
     
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
+//  MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();
     
     CustomTheme.Instance.get().css().ensureInjected();
     
@@ -121,6 +122,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
 
+    historyHandler.handleCurrentHistory();
+    
     /*
     proxy = new GreetingsProxy(new Delegate<Void>() {
       public void execute(Void element) {
@@ -130,7 +133,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     });
     */
     
-    historyHandler.handleCurrentHistory();
   }
 
   private void createPhoneDisplay(AppClientFactory clientFactory) {

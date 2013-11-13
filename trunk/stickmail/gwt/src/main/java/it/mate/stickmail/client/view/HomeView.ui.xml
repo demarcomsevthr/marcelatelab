@@ -3,31 +3,27 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui">
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" xmlns:s="urn:import:it.mate.stickmail.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
   
     <g:Label text="Home view"></g:Label>
     
-    <g:Anchor text="Sign In" ui:field="signAnchor"/>
+    <p:SmartButton text="Sign In"></p:SmartButton>
     
-    <m:Button text="list" ui:field="listBtn"/>
-    
-    <p:SmartButton text="Wifi ON" ui:field="wifiOnBtn"></p:SmartButton>
-    
-    <p:SmartButton text="Wifi OFF" ui:field="wifiOffBtn"></p:SmartButton>
-    
-    <p:SmartButton text="Test Bean" ui:field="testBeanBtn"></p:SmartButton>
-    
-    <g:VerticalPanel visible="false">
-      <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
-      <m:Button text="add" ui:field="addBtn"/>
-      <m:Button text="add logged" ui:field="addLoggedBtn"/>
-    </g:VerticalPanel>    
+    <p:SmartButton text="Test"></p:SmartButton>
     
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
     </g:VerticalPanel>
+
+    <!--     
+    <m:Button text="MGWT Button!"></m:Button>
+     -->
+     
+    <s:JQDateBox></s:JQDateBox>
+    
+    <s:JQFlipBox></s:JQFlipBox>
 
   </g:HTMLPanel>
   
