@@ -1,22 +1,29 @@
 package it.mate.stickmail;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
+import org.apache.cordova.CordovaChromeClient;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.DroidGap;
 
-public class MainActivity extends Activity {
+import android.content.res.Resources;
+import android.os.Bundle;
+
+
+public class MainActivity extends DroidGap {
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  public void onCreate(Bundle savedInstanceState) {
+
+    Resources res = getResources();
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    super.loadUrl(res.getString(R.string.startup_url));
+
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_main, menu);
-    return true;
+  public void init() {
+    super.init(new CordovaWebView(this), new GWTCordovaWebViewClient(this), new CordovaChromeClient(this));
+    System.out.println("init");
   }
 
 }
+
