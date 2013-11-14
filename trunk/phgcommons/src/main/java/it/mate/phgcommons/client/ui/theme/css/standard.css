@@ -1,0 +1,10 @@
+
+@external phg*;
+
+@url calendarImageUrl calendarImage;
+
+.phg-DateBox {
+  background-image: calendarImageUrl;
+  background-repeat: no-repeat;
+  background-position: 98% 42%;
+}

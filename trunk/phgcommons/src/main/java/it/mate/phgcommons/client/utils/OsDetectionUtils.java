@@ -64,4 +64,9 @@ public class OsDetectionUtils {
     return false;
   }
   
+  
+  public static boolean isDesktop() {
+    return Window.Navigator.getUserAgent().toLowerCase().contains("windows nt");
+  }
+  
 }
