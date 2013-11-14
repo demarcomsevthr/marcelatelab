@@ -3,7 +3,7 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui">
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
   
@@ -21,6 +21,8 @@
     <s:JQDateBox></s:JQDateBox>
     <s:JQFlipBox></s:JQFlipBox>
      -->
+     
+    <ph:PhDateBox width="10em" ui:field="dateBox"></ph:PhDateBox>
 
   </g:HTMLPanel>
   

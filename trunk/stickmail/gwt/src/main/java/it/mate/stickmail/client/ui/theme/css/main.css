@@ -73,3 +73,18 @@ body {
 .ui-datebox-gridheader {
   background: #565051;
 }
+
+input.phg-DateBox {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 19px;
+  text-align: center;
+  -webkit-appearance: none;
+}
