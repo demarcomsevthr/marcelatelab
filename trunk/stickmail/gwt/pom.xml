@@ -86,6 +86,24 @@
           <extra>target/extra</extra>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>../android/assets/www</directory>
+              <includes>
+                <include>**/*.*</include>
+              </includes>
+              <excludes>
+                <exclude>cordova*.*</exclude>
+              </excludes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>      
 
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>

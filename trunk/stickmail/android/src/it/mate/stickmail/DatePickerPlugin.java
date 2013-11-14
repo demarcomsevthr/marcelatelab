@@ -18,11 +18,16 @@ import android.widget.DatePicker;
  */
 
 public class DatePickerPlugin extends CordovaPlugin {
+  
+  private final static String ACTION_SHOW_DATE_DIALOG = "showDateDialog";
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-    showDateDialog(callbackContext);
-    return true;
+    if (ACTION_SHOW_DATE_DIALOG.equals(action)) {
+      showDateDialog(callbackContext);
+      return true;
+    }
+    return false;
   }
 
   private synchronized void showDateDialog(final CallbackContext callbackContext) {
@@ -30,17 +35,17 @@ public class DatePickerPlugin extends CordovaPlugin {
 
       @Override
       public void run() {
-        final JSONObject object = new JSONObject();
+        final JSONObject result = new JSONObject();
         Calendar c = Calendar.getInstance();
         DatePickerDialog dlg = new DatePickerDialog(cordova.getActivity(), new DatePickerDialog.OnDateSetListener() {
 
           @Override
           public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             try {
-              object.put("year", year);
-              object.put("month", monthOfYear);
-              object.put("day", dayOfMonth);
-              callbackContext.success(object);
+              result.put("year", year);
+              result.put("month", monthOfYear);
+              result.put("day", dayOfMonth);
+              callbackContext.success(result);
 
             } catch (JSONException e) {
               callbackContext.error(e.getMessage());
