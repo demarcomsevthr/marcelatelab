@@ -1056,6 +1056,13 @@ public class GwtUtils {
     return obj[name];
   }-*/;
   
+  public native static int getPropertyIntImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return false;
+    }
+    return obj[name];
+  }-*/;
+
   public static String unescapeHtml(String text) {
     HTML html = new HTML(text);
     return html.getText();
