@@ -1,13 +1,18 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
-import it.mate.stickmail.client.ui.DatePickerPlugin;
 import it.mate.stickmail.client.view.HomeView.Presenter;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -66,7 +71,17 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("testBtn")
   public void onTestBtn (TouchEndEvent event) {
-    DatePickerPlugin.showDateDialog();
+    DatePickerPluginUtil.showDateDialog(new Delegate<Date>() {
+      public void execute(Date value) {
+        PhonegapUtils.log("received " + value);
+      }
+    });
+  }
+  
+
+  @UiHandler ("dateBox")
+  public void onDateChange (ValueChangeEvent<Date> event) {
+    PhonegapUtils.log("received " + event.getValue());
   }
   
 }

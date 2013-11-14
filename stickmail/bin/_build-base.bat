@@ -19,6 +19,12 @@ set DEP_CLEAN=clean
 
 if "%SKIP_DEPENDENCIES_CLEAN%"=="true" set DEP_CLEAN=
 
+cd %BASEAPPDIR%\..\gwtcommons
+call %MVN2CMD% %DEP_CLEAN% install
+
+cd %BASEAPPDIR%\..\phgcommons
+call %MVN2CMD% %DEP_CLEAN% install
+
 cd %BASEAPPDIR%\adapter
 call %MVN2CMD% %DEP_CLEAN% install
 
