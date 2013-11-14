@@ -3,7 +3,7 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" xmlns:s="urn:import:it.mate.stickmail.client.ui">
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
   
@@ -11,19 +11,16 @@
     
     <p:SmartButton text="Sign In"></p:SmartButton>
     
-    <p:SmartButton text="Test"></p:SmartButton>
+    <p:SmartButton text="Test DatePicker" ui:field="testBtn"></p:SmartButton>
     
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
     </g:VerticalPanel>
 
-    <!--     
-    <m:Button text="MGWT Button!"></m:Button>
-     -->
-     
+    <!--      
     <s:JQDateBox></s:JQDateBox>
-    
     <s:JQFlipBox></s:JQFlipBox>
+     -->
 
   </g:HTMLPanel>
   

@@ -17,7 +17,7 @@ import android.widget.DatePicker;
  * 
  */
 
-public class DateUtil extends CordovaPlugin {
+public class DatePickerPlugin extends CordovaPlugin {
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
