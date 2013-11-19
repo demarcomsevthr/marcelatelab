@@ -11,7 +11,7 @@
     
     <p:SmartButton text="Sign In"></p:SmartButton>
     
-    <p:SmartButton text="Test DatePicker" ui:field="testBtn"></p:SmartButton>
+    <p:SmartButton text="Test" ui:field="testBtn"></p:SmartButton>
     
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
@@ -23,6 +23,8 @@
      -->
      
     <ph:PhDateBox width="10em" ui:field="dateBox"></ph:PhDateBox>
+    
+    <ph:PhTimeBox width="10em" ui:field="timeBox"></ph:PhTimeBox>
 
   </g:HTMLPanel>
   
