@@ -103,9 +103,10 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   }
   
   public void setOriginalColor() {
-    GwtUtils.deferredExecution(10, new Delegate<Void>() {
+    GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
         SmartButton.this.getElement().getStyle().clearColor();
+        SmartButton.this.getElement().getStyle().clearBackgroundColor();
       }
     });
   }
