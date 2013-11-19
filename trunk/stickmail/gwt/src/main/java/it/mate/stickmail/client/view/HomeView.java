@@ -1,10 +1,10 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
+import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.view.HomeView.Presenter;
@@ -35,6 +35,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Panel outputPanel;
   @UiField Label outputLbl;
+  
+  @UiField PhTimeBox timeBox;
   
   public HomeView() {
     initUI();
@@ -71,17 +73,29 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("testBtn")
   public void onTestBtn (TouchEndEvent event) {
+    /*
     DatePickerPluginUtil.showDateDialog(new Delegate<Date>() {
       public void execute(Date value) {
         PhonegapUtils.log("received " + value);
       }
     });
+    */
+    
+    Time time = new Time(21, 30);
+    PhonegapUtils.log("setting " + time);
+    timeBox.setValue(time);
+    
   }
   
 
   @UiHandler ("dateBox")
   public void onDateChange (ValueChangeEvent<Date> event) {
-    PhonegapUtils.log("received " + event.getValue());
+    PhonegapUtils.log("new value is " + event.getValue());
+  }
+  
+  @UiHandler ("timeBox")
+  public void onTimeChange (ValueChangeEvent<Time> event) {
+    PhonegapUtils.log("new value is " + event.getValue());
   }
   
 }

@@ -53,7 +53,7 @@
         <plugin name="Echo" value="org.apache.cordova.Echo" />
         <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser" />
         
-        <plugin name="DatePickerPlugin" value="it.mate.stickmail.DatePickerPlugin" />
+        <plugin name="DatePickerPlugin" value="it.mate.stickmail.plugins.DatePickerPlugin" />
         
     </plugins>
   </cordova>
