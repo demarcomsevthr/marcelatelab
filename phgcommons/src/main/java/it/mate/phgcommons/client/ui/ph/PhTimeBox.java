@@ -1,12 +1,11 @@
 package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.Time;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.InputElement;
@@ -19,22 +18,24 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeHandlers {
+public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeHandlers {
 
   private InputElement element;
   
-  private Date value = new Date();
+  private Time value;
   
-  private List<ValueChangeHandler<Date>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Date>>();
+  private List<ValueChangeHandler<Time>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Time>>();
   
-  public PhDateBox() {
+  private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
+  
+  public PhTimeBox() {
     element = DOM.createInputText().cast();
     setElement(element);
     addStyleName("phg-DateBox");
@@ -42,7 +43,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     if (OsDetectionUtils.isDesktop()) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
-          Date value = GwtUtils.stringToDate(element.getValue(), "dd/MM/yyyy");
+          Time value = stringToTime(element.getValue());
           setValue(value, true);
         }
       });
@@ -50,8 +51,8 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          DatePickerPluginUtil.showDateDialog(getValue(), new Delegate<Date>() {
-            public void execute(Date value) {
+          DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
+            public void execute(Time value) {
               setValue(value, true);
             }
           });
@@ -61,7 +62,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     
   }
 
-  public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Date> handler) {
+  public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Time> handler) {
     this.valueChangeHandlers.add(handler);
     HandlerRegistration registration = new HandlerRegistration() {
       public void removeHandler() {
@@ -75,27 +76,35 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     return addDomHandler(handler, ChangeEvent.getType());
   }
 
-  public Date getValue() {
+  public Time getValue() {
     return value;
   }
 
-  public void setValue(Date value) {
+  public void setValue(Time value) {
     setValue(value, true);
   }
 
-  public void setValue(Date value, boolean fireEvents) {
+  public void setValue(Time value, boolean fireEvents) {
     this.value = value;
-    element.setValue(GwtUtils.dateToString(value, "dd/MM/yyyy"));
+    element.setValue(timeToString(value));
     if (fireEvents) {
-      DateChangeEvent.fire(this, value);
+      TimeChangeEvent.fire(this, value);
     }
+  }
+  
+  private String timeToString(Time time) {
+    return fmt.format(time.asDate());
+  }
+  
+  private Time stringToTime(String text) {
+    return new Time(fmt.parse(text));
   }
   
   @Override
   public void fireEvent(GwtEvent<?> event) {
-    if (event instanceof DateChangeEvent) {
-      DateChangeEvent dateChangeEvent = (DateChangeEvent)event;
-      for (ValueChangeHandler<Date> handler : valueChangeHandlers) {
+    if (event instanceof TimeChangeEvent) {
+      TimeChangeEvent dateChangeEvent = (TimeChangeEvent)event;
+      for (ValueChangeHandler<Time> handler : valueChangeHandlers) {
         handler.onValueChange(dateChangeEvent);
       }
     } else {
@@ -103,26 +112,27 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     }
   }
   
-  public static class DateChangeEvent extends ValueChangeEvent<Date> {
+  public static class TimeChangeEvent extends ValueChangeEvent<Time> {
 
-    public static <S extends HasValueChangeHandlers<Date> & HasHandlers> void fire(S source, Date value) {
-      source.fireEvent(new DateChangeEvent(value));
+    public static <S extends HasValueChangeHandlers<Time> & HasHandlers> void fire(S source, Time value) {
+      source.fireEvent(new TimeChangeEvent(value));
     }
     
-    public static <S extends HasValueChangeHandlers<Date> & HasHandlers> void fireIfNotEqualDates(S source, Date oldValue, Date newValue) {
+    public static <S extends HasValueChangeHandlers<Time> & HasHandlers> void fireIfNotEqualDates(S source, Time oldValue, Time newValue) {
       if (ValueChangeEvent.shouldFire(source, oldValue, newValue)) {
-        source.fireEvent(new DateChangeEvent(newValue));
+        source.fireEvent(new TimeChangeEvent(newValue));
       }
     }
 
-    protected DateChangeEvent(Date value) {
+    protected TimeChangeEvent(Time value) {
       // The date must be copied in case one handler causes it to change.
-      super(CalendarUtil.copyDate(value));
+      super(new Time(value.getHour(), value.getMinute()));
     }
 
     @Override
-    public Date getValue() {
-      return CalendarUtil.copyDate(super.getValue());
+    public Time getValue() {
+      Time value = super.getValue();
+      return new Time(value.getHour(), value.getMinute());
     }
     
   }
