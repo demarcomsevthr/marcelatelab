@@ -205,6 +205,10 @@ public class MainActivity extends MGWTAbstractActivity implements
     } else if (risk == CKD.VERY_HIGH_RISK) {
       irc = AppConstants.IMPL.CKDOutputView_veryHighRisk_text();
       ircBckCol = "#FF0000";
+    } else if (risk == CKD.VERY_HIGH_RISK_DEEP_RED) {
+      irc = AppConstants.IMPL.CKDOutputView_veryHighRisk_text();
+      ircCol = "yellow";
+      ircBckCol = "#8A0808";
     }
     riskBox.setText(irc);
     riskBox.getElement().getStyle().setColor(ircCol);
