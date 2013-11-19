@@ -313,7 +313,11 @@ public class GwtUtils {
   }
   
   public static Date stringToDate (String text) {
-    return formatFromCache(dt8Pattern).parse(text);
+    return stringToDate(text, dt8Pattern);
+  }
+  
+  public static Date stringToDate (String text, String pattern) {
+    return formatFromCache(pattern).parse(text);
   }
   
   public static Element getElement (String id) {
