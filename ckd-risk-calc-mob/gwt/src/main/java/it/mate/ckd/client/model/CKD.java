@@ -18,6 +18,8 @@ public class CKD {
   
   public final static int VERY_HIGH_RISK = 4;
   
+  public final static int VERY_HIGH_RISK_DEEP_RED = 5;
+  
   private final static double FACTOR_PMOLL_TO_MGDL = 88.4;
   
   double scr;
@@ -221,23 +223,31 @@ public class CKD {
         risk = MIDDLE_RISK;
       } else if (gfr >= 30) {
         risk = HIGH_RISK;
-      } else {
+      } else if (gfr >= 15) {
         risk = VERY_HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK_DEEP_RED;
       }
     } else if (getAlbuminMgG() < 300) {
       if (gfr >= 60) {
         risk = MIDDLE_RISK;
       } else if (gfr >= 45) {
         risk = HIGH_RISK;
-      } else {
+      } else if (gfr >= 15) {
         risk = VERY_HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK_DEEP_RED;
       }
-    } else {
+    } else if (getAlbuminMgG() < 2000) {
       if (gfr >= 60) {
         risk = HIGH_RISK;
-      } else {
+      } else if (gfr >= 15) {
         risk = VERY_HIGH_RISK;
+      } else {
+        risk = VERY_HIGH_RISK_DEEP_RED;
       }
+    } else {
+      risk = VERY_HIGH_RISK_DEEP_RED;
     }
     return risk;
   }

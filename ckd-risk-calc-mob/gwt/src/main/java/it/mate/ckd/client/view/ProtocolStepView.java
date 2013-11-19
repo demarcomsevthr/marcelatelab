@@ -67,7 +67,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   
   private final static int PROTOCOL_STEP_PANEL_LEFT_PCT = 9;
   
-  private final static int ANIMATION_DURATION = 1000;
+  private final static int ANIMATION_DURATION = 200;
   
   public ProtocolStepView() {
     initUI();
@@ -89,9 +89,11 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
       }
     });
     
+    /*
     answer1Btn.setChangeColorOnClick(true);
     answer2Btn.setChangeColorOnClick(true);
     answer3Btn.setChangeColorOnClick(true);
+    */
     
     if (OsDetectionUtils.isTablet()) {
       protocolHeaderPanel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
@@ -142,6 +144,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         answer1Btn.setOriginalColor();
         answer2Btn.setOriginalColor();
         answer3Btn.setOriginalColor();
+        
       }
       /*
       if (history.size() > 0) {
