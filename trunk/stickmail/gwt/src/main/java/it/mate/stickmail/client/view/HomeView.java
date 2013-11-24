@@ -93,6 +93,11 @@ public class HomeView extends BaseMgwtView <Presenter> {
     PhonegapUtils.log("new value is " + event.getValue());
   }
   
+  @UiHandler ("calBox")
+  public void onCalChange (ValueChangeEvent<Date> event) {
+    PhonegapUtils.log("new value is " + event.getValue());
+  }
+  
   @UiHandler ("timeBox")
   public void onTimeChange (ValueChangeEvent<Time> event) {
     PhonegapUtils.log("new value is " + event.getValue());

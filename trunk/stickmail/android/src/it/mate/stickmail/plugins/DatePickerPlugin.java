@@ -13,6 +13,7 @@ import android.app.TimePickerDialog;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 /**
@@ -33,32 +34,49 @@ public class DatePickerPlugin extends CordovaPlugin {
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     
     if (ACTION_SHOW_DATE_DIALOG.equals(action)) {
-      Integer mm = null, yy = null, dd = null;
-      if (args.length() > 0 && args.get(0) != null) {
-        JSONObject obj = args.getJSONObject(0);
-        mm = obj.getJSONObject("month").getInt("a");
-        yy = obj.getJSONObject("year").getInt("a");
-        dd = obj.getJSONObject("day").getInt("a");
-      }
-      showDateDialog(mm, yy, dd, callbackContext);
+      showDateDialog(createCalendar(args), callbackContext);
       return true;
     } else if (ACTION_SHOW_TIME_DIALOG.equals(action)) {
       showTimeDialog(callbackContext);
       return true;
     } else if (ACTION_SHOW_CALENDAR_VIEW.equals(action)) {
-      showCalendarView(null, null, null, callbackContext);
+      showCalendarView(createCalendar(args), callbackContext);
       return true;
     }
     return false;
   }
   
-  private synchronized void showCalendarView(final Integer mm, final Integer yy, final Integer dd, final CallbackContext callbackContext) {
+  private Calendar createCalendar(JSONArray args) throws JSONException {
+    Integer mm = null, yy = null, dd = null;
+    if (args.length() > 0 && args.get(0) != null) {
+      JSONObject obj = args.getJSONObject(0);
+      mm = obj.getJSONObject("month").getInt("a");
+      yy = obj.getJSONObject("year").getInt("a");
+      dd = obj.getJSONObject("day").getInt("a");
+    }
+    Calendar c = Calendar.getInstance();
+    if (mm != null) {
+      c.set(Calendar.MONTH, mm);
+    }
+    if (yy != null) {
+      c.set(Calendar.YEAR, yy);
+    }
+    if (dd != null) {
+      c.set(Calendar.DAY_OF_MONTH, dd);
+    }
+    return c;
+  }
+  
+  private synchronized void showCalendarView(final Calendar c, final CallbackContext callbackContext) {
     Runnable runnable = new Runnable() {
       public void run() {
         final JSONObject result = new JSONObject();
         CalendarView calView = new CalendarView(cordova.getActivity());
-        LayoutParams layout = DatePickerPlugin.this.webView.getLayoutParams();
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        calView.setLayoutParams(params);
+        /*
         calView.layout(0, 100, layout.width, layout.height - 100);
+        */
         calView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
           public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
             try {
@@ -71,27 +89,24 @@ public class DatePickerPlugin extends CordovaPlugin {
             }
           }
         });
+        //DatePickerPlugin.this.webView.addView(calView);
         
+//      LinearLayout layout = (LinearLayout)webView;
+        
+        LinearLayout layout = (LinearLayout)DatePickerPlugin.this.webView.getRootView();
+        layout.addView(calView);
+        
+       
       }
     };
     this.cordova.getActivity().runOnUiThread(runnable);
   }
   
 
-  private synchronized void showDateDialog(final Integer mm, final Integer yy, final Integer dd, final CallbackContext callbackContext) {
+  private synchronized void showDateDialog(final Calendar c, final CallbackContext callbackContext) {
     Runnable runnable = new Runnable() {
       public void run() {
         final JSONObject result = new JSONObject();
-        Calendar c = Calendar.getInstance();
-        if (mm != null) {
-          c.set(Calendar.MONTH, mm);
-        }
-        if (yy != null) {
-          c.set(Calendar.YEAR, yy);
-        }
-        if (dd != null) {
-          c.set(Calendar.DAY_OF_MONTH, dd);
-        }
         DatePickerDialog dlg = new DatePickerDialog(cordova.getActivity(), new DatePickerDialog.OnDateSetListener() {
           public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             try {
