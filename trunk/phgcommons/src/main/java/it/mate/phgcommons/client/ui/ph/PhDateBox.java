@@ -50,15 +50,19 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          DatePickerPluginUtil.showDateDialog(getValue(), new Delegate<Date>() {
-            public void execute(Date value) {
-              setValue(value, true);
-            }
-          });
+          onPluginTapEvent(event);
         }
       });
     }
     
+  }
+  
+  protected void onPluginTapEvent(TapEvent event) {
+    DatePickerPluginUtil.showDateDialog(getValue(), new Delegate<Date>() {
+      public void execute(Date value) {
+        setValue(value, true);
+      }
+    });
   }
 
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Date> handler) {

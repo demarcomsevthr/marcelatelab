@@ -11,38 +11,38 @@ import com.google.gwt.dom.client.Document;
 
 public class DatePickerPluginUtil {
   
-  private static boolean doSimulation = OsDetectionUtils.isDesktop();
-  
   private final static String ACTION_SHOW_DATE_DIALOG = "showDateDialog";
 
   private final static String ACTION_SHOW_TIME_DIALOG = "showTimeDialog";
 
+  private final static String ACTION_SHOW_CALENDAR_VIEW = "showCalendarView";
+
   public static void showDateDialog(Date value, final Delegate<Date> delegate) {
-    if (doSimulation) {
-      execSimulImpl("showDateDialog", new JsCallback() {
-        public void execute(JavaScriptObject jso) {
-          JsDateTimeResult res = JsDateTimeResult.from(jso);
-          PhonegapUtils.log("received " + res.asString());
-          delegate.execute(res.asDate());
-        }
-      }, new JsCallback() {
-        public void execute(JavaScriptObject jso) {
-          PhonegapUtils.log("error executing plugin");
-        }
-      });
-    } else {
-      execImpl(ACTION_SHOW_DATE_DIALOG, JsDateTimeResult.fromDate(value), new JsCallback() {
-        public void execute(JavaScriptObject jso) {
-          JsDateTimeResult res = JsDateTimeResult.from(jso);
-          PhonegapUtils.log("received " + res.asString());
-          delegate.execute(res.asDate());
-        }
-      }, new JsCallback() {
-        public void execute(JavaScriptObject jso) {
-          PhonegapUtils.log("error executing plugin");
-        }
-      });
-    }
+    execImpl(ACTION_SHOW_DATE_DIALOG, JsDateTimeResult.fromDate(value), new JsCallback() {
+      public void execute(JavaScriptObject jso) {
+        JsDateTimeResult res = JsDateTimeResult.from(jso);
+        PhonegapUtils.log("received " + res.asString());
+        delegate.execute(res.asDate());
+      }
+    }, new JsCallback() {
+      public void execute(JavaScriptObject jso) {
+        PhonegapUtils.log("error executing plugin");
+      }
+    });
+  }
+  
+  public static void showCalendarView(Date value, final Delegate<Date> delegate) {
+    execImpl(ACTION_SHOW_CALENDAR_VIEW, JsDateTimeResult.fromDate(value), new JsCallback() {
+      public void execute(JavaScriptObject jso) {
+        JsDateTimeResult res = JsDateTimeResult.from(jso);
+        PhonegapUtils.log("received " + res.asString());
+        delegate.execute(res.asDate());
+      }
+    }, new JsCallback() {
+      public void execute(JavaScriptObject jso) {
+        PhonegapUtils.log("error executing plugin");
+      }
+    });
   }
   
   public static void showTimeDialog(final Delegate<Time> delegate) {
