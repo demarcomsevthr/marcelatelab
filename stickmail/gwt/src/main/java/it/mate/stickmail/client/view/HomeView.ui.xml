@@ -26,6 +26,8 @@
     
     <ph:PhTimeBox width="10em" ui:field="timeBox"></ph:PhTimeBox>
 
+    <ph:PhCalendarBox width="10em" ui:field="calBox"></ph:PhCalendarBox>
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>
