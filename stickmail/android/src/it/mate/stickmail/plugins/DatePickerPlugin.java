@@ -9,12 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TimePicker;
+//import android.view.ViewGroup.LayoutParams;
 
 /**
  * 
@@ -71,15 +72,22 @@ public class DatePickerPlugin extends CordovaPlugin {
     Runnable runnable = new Runnable() {
       public void run() {
         final JSONObject result = new JSONObject();
+        
+        final Dialog dialog = new Dialog(cordova.getActivity());
+        
+        
         CalendarView calView = new CalendarView(cordova.getActivity());
+        /*
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         calView.setLayoutParams(params);
+        */
         /*
         calView.layout(0, 100, layout.width, layout.height - 100);
         */
         calView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
           public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
             try {
+              dialog.dismiss();
               result.put("year", year);
               result.put("month", month);
               result.put("day", dayOfMonth);
@@ -92,9 +100,16 @@ public class DatePickerPlugin extends CordovaPlugin {
         //DatePickerPlugin.this.webView.addView(calView);
         
 //      LinearLayout layout = (LinearLayout)webView;
-        
+
+        /*
         LinearLayout layout = (LinearLayout)DatePickerPlugin.this.webView.getRootView();
         layout.addView(calView);
+        */
+
+        dialog.addContentView(calView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//      dialog.setContentView(calView);
+        dialog.show();
+        
         
        
       }
