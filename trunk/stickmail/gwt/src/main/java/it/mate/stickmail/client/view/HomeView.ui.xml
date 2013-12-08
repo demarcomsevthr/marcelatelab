@@ -28,6 +28,8 @@
 
     <ph:PhCalendarBox width="10em" ui:field="calBox"></ph:PhCalendarBox>
     
+    <p:SmartButton text="Cal Test" ui:field="calTest"></p:SmartButton>
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>

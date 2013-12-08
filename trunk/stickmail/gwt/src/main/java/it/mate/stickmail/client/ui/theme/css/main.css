@@ -11,6 +11,8 @@
 
 @external phg*;
 
+@external stm*;
+
 @external ui*;
 
 @url bgr bgrImage;
@@ -88,3 +90,15 @@ input.phg-DateBox {
   text-align: center;
   -webkit-appearance: none;
 }
+
+.stm-CalTestLabel {
+  width: 278px;
+  height: 208px;
+  border: 1px solid red;
+  background: white;
+  color: black;
+  font-size: 86px;
+  text-align: center;
+  padding-top: 90px;
+}
+
