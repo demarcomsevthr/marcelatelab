@@ -8,3 +8,24 @@
   background-repeat: no-repeat;
   background-position: 98% 42%;
 }
+
+.phg-CalendarDialog {
+  color: black;
+}
+
+.phg-CalendarDialog-MonthWrapper {
+  border: 1px solid red;
+  background: white;
+  color: black;
+  font-size: 26px;
+  text-align: center;
+}
+
+.phg-CalendarDialog-MonthTable {
+  width: 100%
+}
+
+.phg-CalendarDialog-MonthHeader {
+
+}
+
