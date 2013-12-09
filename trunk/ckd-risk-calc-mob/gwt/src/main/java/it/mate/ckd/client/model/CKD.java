@@ -17,8 +17,10 @@ public class CKD {
   public final static int HIGH_RISK = 3;
   
   public final static int VERY_HIGH_RISK = 4;
-  
-  public final static int VERY_HIGH_RISK_DEEP_RED = 5;
+
+  // 04/12/2013: mi chiede di ritornare indietro (https://mail.google.com/mail/u/0/?shva=1#search/gorini/1426ff07b267cfb8)
+  public final static int VERY_HIGH_RISK_DEEP_RED = VERY_HIGH_RISK;
+//public final static int VERY_HIGH_RISK_DEEP_RED = 5;
   
   private final static double FACTOR_PMOLL_TO_MGDL = 88.4;
   

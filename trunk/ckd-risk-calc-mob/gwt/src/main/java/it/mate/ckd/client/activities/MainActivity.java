@@ -217,6 +217,12 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void checkRatingDialog(final Delegate<PopinDialog> delegate) {
+
+    // 04/12/2013: in extended version non mostro il rating dialog
+    if (AppProperties.IMPL.extendedVersion()) {
+      delegate.execute(null);
+      return;
+    }
     
     String rating = PhonegapUtils.getLocalStorageItem("ckd-free-rating");
     if (rating == null) {
