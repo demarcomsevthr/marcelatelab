@@ -96,6 +96,14 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
     });
     
     
+    /* 
+     * 
+     * TODO
+     * 
+     * see com.google.gwt.user.client.ui.PopupPanel.previewNativeEvent(NativePreviewEvent)
+     * 
+     */
+    
     nativePreviewHandlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
       public void onPreviewNativeEvent(NativePreviewEvent event) {
         previewNativeEvent(event);
