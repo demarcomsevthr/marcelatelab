@@ -21,6 +21,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
+import com.googlecode.mgwt.ui.client.dialog.Dialog;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
@@ -101,6 +102,7 @@ public class CalendarDialog {
     backPopup = popup;
     
     popup = new PopupPanel();
+    popup.setModal(true);
     popup.addStyleName("phg-CalendarDialog");
     setHidden(popup);
     
@@ -251,7 +253,7 @@ public class CalendarDialog {
     
     int row = 1;
     for (int day = 1; day <= month.getLastDayOfMonth(); day++) {
-      final Date date = new Date(month.getYear() - 1900, month.getMonth(), day);
+      final Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
       int col = date.getDay();
       TouchHTML html = new TouchHTML("" + day);
       html.addTouchEndHandler(new TouchEndHandler() {
