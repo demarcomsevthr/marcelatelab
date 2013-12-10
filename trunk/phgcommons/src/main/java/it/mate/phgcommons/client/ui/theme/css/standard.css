@@ -13,8 +13,19 @@
   color: black;
 }
 
+.phg-CalendarDialog-Header {
+  background-color: black;
+  color: white;
+  height: 36px;
+}
+
+.phg-CalendarDialog-Header .phg-TouchHTML {
+  text-align: center;
+  padding-top: 5px;
+}
+
 .phg-CalendarDialog-MonthWrapper {
-  border: 1px solid red;
+  border: 1px solid rgb(120,120,120);
   background: white;
   color: black;
   font-size: 26px;
@@ -22,10 +33,42 @@
 }
 
 .phg-CalendarDialog-MonthTable {
-  width: 100%
+  width: 100%;
+  padding: 6px;
 }
 
 .phg-CalendarDialog-MonthHeader {
+  color: #778088;
+  font-family: Trebuchet MS;
+  font-weight: 600;
+}
 
+.phg-CalendarDialog-MonthHeader-WeekDay {
+  font-family: Trebuchet MS;
+  font-size: 12px;
+  color: #778088;
+  padding-bottom: 6px;
+}
+
+.phg-CalendarDialog-Month-Day {
+  border-bottom: 1px solid #bcc0c1;
+  border-right: 1px solid #bcc0c1;
+  color: #bcc0c1;
+  background-color: rgb(245, 247, 249);
+  height: 32px;
+  font-size: 22px;
+  padding-top: 8px;
+}
+
+.phg-CalendarDialog-Month-Day.phg-firstRow {
+  border-top: 1px solid #bcc0c1;
+}
+
+.phg-CalendarDialog-Month-Day.phg-firstCol {
+  border-left: 1px solid #bcc0c1;
+}
+
+.phg-CalendarDialog-Month-Day.phg-outsideMonth {
+  background-color: rgb(215,217,219);
 }
 

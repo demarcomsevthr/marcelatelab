@@ -4,11 +4,9 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.EventUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -59,6 +57,10 @@ public class CalendarDialog {
       CalendarUtil.addDaysToDate(temp, -1);
       return temp.getDate();
     }
+    public String getName() {
+      return enNames[date.getMonth()];
+    }
+    private String[] enNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
   }
   
   private PopupPanel popup;
@@ -81,7 +83,7 @@ public class CalendarDialog {
   
   private int width = 280;
   
-  private int height = 300;
+  private int height = 310;
   
   private TouchHTML selectedDateField;
   
@@ -99,16 +101,6 @@ public class CalendarDialog {
   
   public void hide() {
     popup.hide();
-    /*
-    if (modalHandlerRegistration != null) {
-      GwtUtils.deferredExecution(500, new Delegate<Void>() {
-        public void execute(Void element) {
-          PhonegapUtils.log("removing modalHandler");
-          modalHandlerRegistration.removeHandler();
-        }
-      });
-    }
-    */
     EventUtils.removeModalHandler(modalHandlerRegistration);
   }
   
@@ -124,34 +116,14 @@ public class CalendarDialog {
     
     SimpleContainer container = new SimpleContainer();
     
-    scrollPanel = new ScrollPanel();
-    
-    scrollPanel.setWidth(width+"px");
-    scrollPanel.setHeight(height+"px");
-    scrollPanel.setScrollingEnabledY(false);
-    scrollPanel.setScrollingEnabledX(true);
-    scrollPanel.setHideScrollBar(true);
-    
-    SimplePanel wrapperPanel = new SimplePanel();
-    wrapperPanel.setHeight(height+"px");
-    wrapperPanel.setWidth((width*3)+"px");
-    scrollPanel.setWidget(wrapperPanel);
+    HorizontalPanel header = new HorizontalPanel();
+    header.addStyleName("phg-CalendarDialog-Header");
+    header.setWidth(width+"px");
 
-    HorizontalPanel horizontalPanel = new HorizontalPanel();
-    horizontalPanel.setHeight(height+"px");
-    horizontalPanel.setWidth((width*3)+"px");
-    wrapperPanel.setWidget(horizontalPanel);
-    
-    horizontalPanel.add(createMonthWidget(curMonth.clone().addMonths(-1)));
-    horizontalPanel.add(createMonthWidget(curMonth));
-    horizontalPanel.add(createMonthWidget(curMonth.clone().addMonths(+1)));
-
-    container.add(scrollPanel);
-    
-    HorizontalPanel bottom = new HorizontalPanel();
-
-    TouchHTML setBox = new TouchHTML("set");
+    TouchHTML setBox = new TouchHTML("DONE");
+    setBox.setWidth((width * 20 / 100) + "px");
     TouchHTML cancelBox = new TouchHTML("cancel");
+    cancelBox.setWidth((width * 20 / 100) + "px");
     cancelBox.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         CalendarDialog.this.hide();
@@ -159,18 +131,35 @@ public class CalendarDialog {
     });
     
     selectedDateField = new TouchHTML();
-    selectedDateField.setHeight("20px");
-    selectedDateField.getElement().getStyle().setColor("black");
-    selectedDateField.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+    selectedDateField.setWidth((width * 60 / 100) + "px");
     setSelectedDate(selectedDate);
-    bottom.add(setBox);
-    bottom.setCellWidth(setBox, (width * 15 / 100) + "px");
-    bottom.add(selectedDateField);
-    bottom.setCellWidth(selectedDateField, (width * 70 / 100) + "px");
-    bottom.add(cancelBox);
-    bottom.setCellWidth(cancelBox, (width * 15 / 100) + "px");
+    header.add(setBox);
+    header.add(selectedDateField);
+    header.add(cancelBox);
     
-    container.add(bottom);
+    container.add(header);
+    
+    scrollPanel = new ScrollPanel();
+    scrollPanel.setWidth(width+"px");
+    scrollPanel.setHeight(height+"px");
+    scrollPanel.setScrollingEnabledY(false);
+    scrollPanel.setScrollingEnabledX(true);
+    scrollPanel.setHideScrollBar(true);
+    
+    SimplePanel scrolledAreaPanel = new SimplePanel();
+    scrolledAreaPanel.setHeight(height+"px");
+    scrolledAreaPanel.setWidth((width*3)+"px");
+    scrollPanel.setWidget(scrolledAreaPanel);
+
+    HorizontalPanel horizontalPanel = new HorizontalPanel();
+    horizontalPanel.setHeight(height+"px");
+    horizontalPanel.setWidth((width*3)+"px");
+    scrolledAreaPanel.setWidget(horizontalPanel);
+    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(-1)));
+    horizontalPanel.add(createMonthPanel(curMonth));
+    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(+1)));
+
+    container.add(scrollPanel);
     
     popup.add(container);
     
@@ -201,7 +190,6 @@ public class CalendarDialog {
             needRecreatePopup = false;
             initPopup();
           } else {
-            GwtUtils.log("assistedScrollPending end");
             assistedScrollPending = false;
             scrollPending = false;
           }
@@ -213,16 +201,16 @@ public class CalendarDialog {
           if (endX < (startX - 50)) {
             curMonth.addMonths(-1);
             assistedScrollPending = true;
-            GwtUtils.log("assistedScrollPending start");
             needRecreatePopup = true;
             internalScrollTo(startX - endX - width, 360);
-          }
-          if (endX > (startX + 50)) {
+          } else if (endX > (startX + 50)) {
             curMonth.addMonths(+1);
             assistedScrollPending = true;
-            GwtUtils.log("assistedScrollPending start");
             needRecreatePopup = true;
             internalScrollTo(startX - endX + width, 360);
+          } else if (endX != startX) {
+            assistedScrollPending = true;
+            internalScrollTo(startX - endX, 360);
           } else {
             scrollPending = false;
           }
@@ -252,7 +240,7 @@ public class CalendarDialog {
   }
   
   @SuppressWarnings("deprecation")
-  private Widget createMonthWidget (Month month) {
+  private Widget createMonthPanel (Month month) {
     
     SimplePanel wrapper = new SimplePanel();
     wrapper.addStyleName("phg-CalendarDialog-MonthWrapper");
@@ -261,34 +249,84 @@ public class CalendarDialog {
     
     FlexTable table = new FlexTable();
     table.addStyleName("phg-CalendarDialog-MonthTable");
+    table.setCellSpacing(0);
     
-    HTML header = new HTML("" + month.getMonth()+"/"+month.getYear());
+    HTML header = new HTML("" + month.getName()+" "+month.getYear());
     header.addStyleName("phg-CalendarDialog-MonthHeader");
     table.setWidget(0, 0, header);
     GwtUtils.setFlexCellColSpan(table, 0, 0, 7);
     
-    int row = 1;
+    table.setWidget(1, 0, createWeekDay("Sun"));
+    table.setWidget(1, 1, createWeekDay("Mon"));
+    table.setWidget(1, 2, createWeekDay("Tue"));
+    table.setWidget(1, 3, createWeekDay("Wed"));
+    table.setWidget(1, 4, createWeekDay("Thu"));
+    table.setWidget(1, 5, createWeekDay("Fri"));
+    table.setWidget(1, 6, createWeekDay("Sat"));
+    
+    int row = 2;
+    
+    Date date1 = new Date(month.getYear() - 1900, month.getMonth() - 1, 1);
+    int day1 = date1.getDay();
+    if (day1 > 0) {
+      for (int col = 0; col < day1; col++) {
+        Date date = CalendarUtil.copyDate(date1);
+        CalendarUtil.addDaysToDate(date, -(day1 - col));
+        row = createDayCell(table, row, col, date, true);
+      }
+    }
+    
     for (int day = 1; day <= month.getLastDayOfMonth(); day++) {
-      final Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
-      int col = date.getDay();
-      TouchHTML html = new TouchHTML("" + day);
-      html.addTouchEndHandler(new TouchEndHandler() {
-        public void onTouchEnd(TouchEndEvent event) {
-          PhonegapUtils.log("scrollPending = " + scrollPending);
-          if (!scrollPending) {
-            PhonegapUtils.log("touch on " + GwtUtils.dateToString(date, "dd/MM/yyyy"));
-            setSelectedDate(date);
-          }
-        }
-      });
-      table.setWidget(row, col, html);
-      if (col == 6) {
-        row++;
+      Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
+      row = createDayCell(table, row, date.getDay(), date, false);
+    }
+    
+    Date date31 = new Date(month.getYear() - 1900, month.getMonth() - 1, month.getLastDayOfMonth());
+    int day31 = date31.getDay();
+    if (day31 < 6) {
+      for (int col = day31 + 1; col <= 6; col++) {
+        Date date = CalendarUtil.copyDate(date31);
+        CalendarUtil.addDaysToDate(date, (col - day31));
+        row = createDayCell(table, row, col, date, true);
       }
     }
     
     wrapper.setWidget(table);
     return wrapper;
+  }
+  
+  private int createDayCell(FlexTable table, int row, int col, final Date date, boolean outside) {
+    int day = date.getDate();
+    TouchHTML html = new TouchHTML("" + day);
+    html.addStyleName("phg-CalendarDialog-Month-Day");
+    if (row == 2) {
+      html.addStyleName("phg-firstRow");
+    }
+    if (col == 0) {
+      html.addStyleName("phg-firstCol");
+    }
+    if (outside) {
+      html.addStyleName("phg-outsideMonth");
+    }
+    html.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        if (!scrollPending) {
+          setSelectedDate(date);
+        }
+      }
+    });
+    table.setWidget(row, col, html);
+    if (col == 6) {
+      row++;
+    }
+    return row;
+  }
+  
+  private HTML createWeekDay(String text) {
+    HTML weekDay = new HTML();
+    weekDay.addStyleName("phg-CalendarDialog-MonthHeader-WeekDay");
+    weekDay.setText(text);
+    return weekDay;
   }
   
   public void setSelectedDate(Date selectedDate) {
@@ -302,7 +340,6 @@ public class CalendarDialog {
   
   private void makePopupModal() {
     if (modalHandlerRegistration == null) {
-      
       EventUtils.createModalHandler(new EventUtils.PanelGetter() {
         public Panel getPanel() {
           return popup;
@@ -312,77 +349,7 @@ public class CalendarDialog {
           modalHandlerRegistration = registration;
         }
       });
-
-      /*
-      GwtUtils.deferredExecution(new Delegate<Void>() {
-        public void execute(Void element) {
-          modalHandlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-            public void onPreviewNativeEvent(NativePreviewEvent event) {
-              previewNativeEvent(event);
-            }
-          });
-        }
-      });
-      */
-      
     }
   }
-  
-
-  /*
-  private void previewNativeEvent(NativePreviewEvent event) {
-    
-    Event nativeEvent = Event.as(event.getNativeEvent());
-    String msg = "nativeEvent type " + nativeEvent.getType() + " ("+nativeEvent.getTypeInt()+")";
-    
-    boolean eventTargetsThis = false;
-    EventTarget target = nativeEvent.getEventTarget();
-    if (Element.is(target)) {
-      eventTargetsThis = popup.getElement().isOrHasChild(Element.as(target));
-    }
-    if (eventTargetsThis) {
-      msg += " targets popup";
-    } else {
-      msg += " not targets popup";
-    }
-    
-    if (event.isFirstHandler()) {
-      msg += " first handler";
-    } else {
-      msg += " not first handler";
-    }
-    
-    if (event.isCanceled()) {
-      msg += " canceled";
-    }
-    if (event.isConsumed()) {
-      msg += " consumed";
-    }
-    
-    // If the event has been canceled or consumed, ignore it
-    if (event.isCanceled() || event.isConsumed()) {
-      
-      // We need to ensure that we cancel the event even if its been consumed so
-      // that popups lower on the stack do not auto hide
-      event.cancel();
-      
-    } else {
-      
-      if (eventTargetsThis) {
-        event.consume();
-      }
-      
-      event.cancel();
-      
-    }
-    
-    int type = nativeEvent.getTypeInt();
-    
-    if (type != 64 && type != 32 && type != 16) {
-      PhonegapUtils.log(msg);
-    }
-    
-  }
-  */
   
 }
