@@ -1,7 +1,6 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -108,13 +107,15 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("calTest")
   public void onCalTest (TouchEndEvent event) {
+    PhonegapUtils.log("opening new CalendarDialog...");
     CalendarDialog calendar = new CalendarDialog();
     calendar.show();
   }
   
   @UiHandler ("touchBtn")
   public void onTouchBtn (TapEvent event) {
-    GwtUtils.log("touch btn tapped");
+    PhonegapUtils.log("touch btn tapped");
+    outputLbl.setText("touchBtn tapped - " + System.currentTimeMillis());
   }
   
 }

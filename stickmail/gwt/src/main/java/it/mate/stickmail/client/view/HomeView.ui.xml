@@ -10,24 +10,24 @@
   
     <g:Label text="Home view"></g:Label>
     
-    <p:SmartButton text="Sign In"></p:SmartButton>
+    <p:TouchButton text="Sign In"/>
     
-    <p:SmartButton text="Test" ui:field="testBtn"></p:SmartButton>
+    <p:TouchButton text="Test" ui:field="testBtn"/>
     
-    <p:TouchButton text="Touch Button" ui:field="touchBtn"></p:TouchButton>
+    <p:TouchButton text="Touch" ui:field="touchBtn"/>
+    
+    <ph:PhDateBox width="10em" ui:field="dateBox"/>
+    
+    <ph:PhTimeBox width="10em" ui:field="timeBox"/>
+
+    <ph:PhCalendarBox width="10em" ui:field="calBox"/>
+    
+    <p:TouchButton text="Calendar Test" ui:field="calTest"/>
     
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
     </g:VerticalPanel>
 
-    <ph:PhDateBox width="10em" ui:field="dateBox"></ph:PhDateBox>
-    
-    <ph:PhTimeBox width="10em" ui:field="timeBox"></ph:PhTimeBox>
-
-    <ph:PhCalendarBox width="10em" ui:field="calBox"></ph:PhCalendarBox>
-    
-    <p:SmartButton text="Cal Test" ui:field="calTest"></p:SmartButton>
-    
   </g:HTMLPanel>
   
 </ui:UiBinder>
