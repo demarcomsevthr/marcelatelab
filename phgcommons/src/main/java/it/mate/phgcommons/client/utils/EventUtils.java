@@ -60,7 +60,6 @@ public class EventUtils {
     if (registration != null) {
       GwtUtils.deferredExecution(500, new Delegate<Void>() {
         public void execute(Void element) {
-          PhonegapUtils.log("removing modalHandler");
           registration.removeHandler();
         }
       });
@@ -70,30 +69,11 @@ public class EventUtils {
   private static void previewNativeEvent(NativePreviewEvent event, PanelGetter panelGetter) {
     
     Event nativeEvent = Event.as(event.getNativeEvent());
-    String msg = "nativeEvent type " + nativeEvent.getType() + " ("+nativeEvent.getTypeInt()+")";
     
     boolean eventTargetsThis = false;
     EventTarget target = nativeEvent.getEventTarget();
     if (Element.is(target)) {
       eventTargetsThis = panelGetter.getPanel().getElement().isOrHasChild(Element.as(target));
-    }
-    if (eventTargetsThis) {
-      msg += " targets popup";
-    } else {
-      msg += " not targets popup";
-    }
-    
-    if (event.isFirstHandler()) {
-      msg += " first handler";
-    } else {
-      msg += " not first handler";
-    }
-    
-    if (event.isCanceled()) {
-      msg += " canceled";
-    }
-    if (event.isConsumed()) {
-      msg += " consumed";
     }
     
     // If the event has been canceled or consumed, ignore it
@@ -111,12 +91,6 @@ public class EventUtils {
       
       event.cancel();
       
-    }
-    
-    int type = nativeEvent.getTypeInt();
-    
-    if (type != 64 && type != 32 && type != 16) {
-      PhonegapUtils.log(msg);
     }
     
   }
