@@ -3,16 +3,19 @@ package it.mate.phgcommons.client.ui;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.EventUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -21,7 +24,6 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
-import com.googlecode.mgwt.ui.client.dialog.Dialog;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
@@ -85,6 +87,8 @@ public class CalendarDialog {
   
   private Date selectedDate = new Date();
   
+  private HandlerRegistration modalHandlerRegistration;
+  
   public CalendarDialog() {
     curMonth = new Month();
   }
@@ -95,6 +99,17 @@ public class CalendarDialog {
   
   public void hide() {
     popup.hide();
+    /*
+    if (modalHandlerRegistration != null) {
+      GwtUtils.deferredExecution(500, new Delegate<Void>() {
+        public void execute(Void element) {
+          PhonegapUtils.log("removing modalHandler");
+          modalHandlerRegistration.removeHandler();
+        }
+      });
+    }
+    */
+    EventUtils.removeModalHandler(modalHandlerRegistration);
   }
   
   private void initPopup() {
@@ -102,9 +117,10 @@ public class CalendarDialog {
     backPopup = popup;
     
     popup = new PopupPanel();
-    popup.setModal(true);
     popup.addStyleName("phg-CalendarDialog");
     setHidden(popup);
+    
+    makePopupModal();
     
     SimpleContainer container = new SimpleContainer();
     
@@ -283,5 +299,90 @@ public class CalendarDialog {
       selectedDateField.setHtml(SafeHtmlUtils.fromTrustedString(" "));
     }
   }
+  
+  private void makePopupModal() {
+    if (modalHandlerRegistration == null) {
+      
+      EventUtils.createModalHandler(new EventUtils.PanelGetter() {
+        public Panel getPanel() {
+          return popup;
+        }
+      }, new Delegate<HandlerRegistration>() {
+        public void execute(HandlerRegistration registration) {
+          modalHandlerRegistration = registration;
+        }
+      });
+
+      /*
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          modalHandlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+            public void onPreviewNativeEvent(NativePreviewEvent event) {
+              previewNativeEvent(event);
+            }
+          });
+        }
+      });
+      */
+      
+    }
+  }
+  
+
+  /*
+  private void previewNativeEvent(NativePreviewEvent event) {
+    
+    Event nativeEvent = Event.as(event.getNativeEvent());
+    String msg = "nativeEvent type " + nativeEvent.getType() + " ("+nativeEvent.getTypeInt()+")";
+    
+    boolean eventTargetsThis = false;
+    EventTarget target = nativeEvent.getEventTarget();
+    if (Element.is(target)) {
+      eventTargetsThis = popup.getElement().isOrHasChild(Element.as(target));
+    }
+    if (eventTargetsThis) {
+      msg += " targets popup";
+    } else {
+      msg += " not targets popup";
+    }
+    
+    if (event.isFirstHandler()) {
+      msg += " first handler";
+    } else {
+      msg += " not first handler";
+    }
+    
+    if (event.isCanceled()) {
+      msg += " canceled";
+    }
+    if (event.isConsumed()) {
+      msg += " consumed";
+    }
+    
+    // If the event has been canceled or consumed, ignore it
+    if (event.isCanceled() || event.isConsumed()) {
+      
+      // We need to ensure that we cancel the event even if its been consumed so
+      // that popups lower on the stack do not auto hide
+      event.cancel();
+      
+    } else {
+      
+      if (eventTargetsThis) {
+        event.consume();
+      }
+      
+      event.cancel();
+      
+    }
+    
+    int type = nativeEvent.getTypeInt();
+    
+    if (type != 64 && type != 32 && type != 16) {
+      PhonegapUtils.log(msg);
+    }
+    
+  }
+  */
   
 }
