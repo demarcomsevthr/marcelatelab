@@ -3,7 +3,8 @@
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
   
@@ -13,15 +14,12 @@
     
     <p:SmartButton text="Test" ui:field="testBtn"></p:SmartButton>
     
+    <p:TouchButton text="Touch Button" ui:field="touchBtn"></p:TouchButton>
+    
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
     </g:VerticalPanel>
 
-    <!--      
-    <s:JQDateBox></s:JQDateBox>
-    <s:JQFlipBox></s:JQFlipBox>
-     -->
-     
     <ph:PhDateBox width="10em" ui:field="dateBox"></ph:PhDateBox>
     
     <ph:PhTimeBox width="10em" ui:field="timeBox"></ph:PhTimeBox>

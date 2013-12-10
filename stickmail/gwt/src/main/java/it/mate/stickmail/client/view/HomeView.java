@@ -1,6 +1,7 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -20,6 +21,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.MGWT;
 
@@ -108,6 +110,11 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void onCalTest (TouchEndEvent event) {
     CalendarDialog calendar = new CalendarDialog();
     calendar.show();
+  }
+  
+  @UiHandler ("touchBtn")
+  public void onTouchBtn (TapEvent event) {
+    GwtUtils.log("touch btn tapped");
   }
   
 }
