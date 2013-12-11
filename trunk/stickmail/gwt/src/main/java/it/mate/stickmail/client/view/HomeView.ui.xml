@@ -6,7 +6,7 @@
        ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
        xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
        
-  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="homePanel">
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
     <g:Label text="Home view"></g:Label>
     
