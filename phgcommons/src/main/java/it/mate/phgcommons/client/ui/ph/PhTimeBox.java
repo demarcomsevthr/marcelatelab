@@ -1,6 +1,7 @@
 package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.ui.TimePickerDialog;
 import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.Time;
@@ -35,12 +36,15 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   
   private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
   
+  private final static boolean USE_TIME_PICKER_PLUGIN = false;
+  
+  @SuppressWarnings("unused")
   public PhTimeBox() {
     element = DOM.createInputText().cast();
     setElement(element);
     addStyleName("phg-DateBox");
     
-    if (OsDetectionUtils.isDesktop()) {
+    if (OsDetectionUtils.isDesktop() && USE_TIME_PICKER_PLUGIN) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
           Time value = stringToTime(element.getValue());
@@ -51,11 +55,15 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
-            public void execute(Time value) {
-              setValue(value, true);
-            }
-          });
+          if (USE_TIME_PICKER_PLUGIN) {
+            DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
+              public void execute(Time value) {
+                setValue(value, true);
+              }
+            });
+          } else {
+            TimePickerDialog dialog = new TimePickerDialog();
+          }
         }
       });
     }

@@ -5,7 +5,9 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.EventUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -28,6 +30,10 @@ import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
 
 public class CalendarDialog {
+  
+  public interface SelectedDateChangeHandler {
+    public void onSelectedDateChange(Date date);
+  }
   
   @SuppressWarnings("deprecation")
   private class Month {
@@ -102,12 +108,14 @@ public class CalendarDialog {
   
   private HandlerRegistration modalHandlerRegistration;
   
+  private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
+  
   public CalendarDialog() {
     curMonth = new Month();
-    initDimensions();
+    init();
   }
   
-  private void initDimensions() {
+  private void init() {
     popupLeft = 0;
     popupTop = 52;
     popupHeight = 360;
@@ -118,7 +126,7 @@ public class CalendarDialog {
   }
   
   public void show() {
-    initPopup();
+    initUI();
   }
   
   public void hide() {
@@ -126,7 +134,22 @@ public class CalendarDialog {
     EventUtils.removeModalHandler(modalHandlerRegistration);
   }
   
-  private void initPopup() {
+  public HandlerRegistration addSelectedDateChangeHandler(final SelectedDateChangeHandler handler) {
+    selectedDateChangeHandlers.add(handler);
+    return new HandlerRegistration() {
+      public void removeHandler() {
+        selectedDateChangeHandlers.remove(handler);
+      }
+    };
+  }
+  
+  private void fireSelectedDateChange(Date date) {
+    for (SelectedDateChangeHandler handler : selectedDateChangeHandlers) {
+      handler.onSelectedDateChange(date);
+    }
+  }
+  
+  private void initUI() {
     
     backPopup = popup;
     
@@ -145,6 +168,12 @@ public class CalendarDialog {
 
     TouchHTML setBox = new TouchHTML("DONE");
     setBox.setWidth((popupWidth * 20 / 100) + "px");
+    setBox.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        fireSelectedDateChange(selectedDate);
+        CalendarDialog.this.hide();
+      }
+    });
     TouchHTML cancelBox = new TouchHTML("cancel");
     cancelBox.setWidth((popupWidth * 20 / 100) + "px");
     cancelBox.addTapHandler(new TapHandler() {
@@ -186,7 +215,6 @@ public class CalendarDialog {
     
     popup.add(container);
     
-//  popup.center();
     popup.setPopupPosition(popupLeft, popupTop);
     popup.show();
     
@@ -213,7 +241,7 @@ public class CalendarDialog {
           lastX = getCurrentX();
           if (needRecreatePopup) {
             needRecreatePopup = false;
-            initPopup();
+            initUI();
           } else {
             assistedScrollPending = false;
             scrollPending = false;
