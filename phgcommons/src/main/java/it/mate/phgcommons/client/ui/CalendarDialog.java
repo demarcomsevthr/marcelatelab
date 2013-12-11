@@ -10,6 +10,7 @@ import java.util.Date;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -81,9 +82,19 @@ public class CalendarDialog {
   
   private PopupPanel backPopup = null;
   
-  private int width = 280;
+  private int popupTop;
   
-  private int height = 310;
+  private int popupLeft;
+  
+  private int popupWidth;
+  
+  private int popupHeight;
+  
+  private int headerHeight;
+  
+  private int dayHeight;
+  
+  private int scrollHeight;
   
   private TouchHTML selectedDateField;
   
@@ -93,6 +104,17 @@ public class CalendarDialog {
   
   public CalendarDialog() {
     curMonth = new Month();
+    initDimensions();
+  }
+  
+  private void initDimensions() {
+    popupLeft = 0;
+    popupTop = 52;
+    popupHeight = 360;
+    popupWidth = Window.getClientWidth();
+    headerHeight = 36;
+    dayHeight = 36;
+    scrollHeight = popupHeight - headerHeight;
   }
   
   public void show() {
@@ -118,12 +140,13 @@ public class CalendarDialog {
     
     HorizontalPanel header = new HorizontalPanel();
     header.addStyleName("phg-CalendarDialog-Header");
-    header.setWidth(width+"px");
+    header.setWidth(popupWidth+"px");
+    header.setHeight(headerHeight+"px");
 
     TouchHTML setBox = new TouchHTML("DONE");
-    setBox.setWidth((width * 20 / 100) + "px");
+    setBox.setWidth((popupWidth * 20 / 100) + "px");
     TouchHTML cancelBox = new TouchHTML("cancel");
-    cancelBox.setWidth((width * 20 / 100) + "px");
+    cancelBox.setWidth((popupWidth * 20 / 100) + "px");
     cancelBox.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         CalendarDialog.this.hide();
@@ -131,7 +154,7 @@ public class CalendarDialog {
     });
     
     selectedDateField = new TouchHTML();
-    selectedDateField.setWidth((width * 60 / 100) + "px");
+    selectedDateField.setWidth((popupWidth * 60 / 100) + "px");
     setSelectedDate(selectedDate);
     header.add(setBox);
     header.add(selectedDateField);
@@ -140,20 +163,20 @@ public class CalendarDialog {
     container.add(header);
     
     scrollPanel = new ScrollPanel();
-    scrollPanel.setWidth(width+"px");
-    scrollPanel.setHeight(height+"px");
+    scrollPanel.setWidth(popupWidth+"px");
+    scrollPanel.setHeight(scrollHeight+"px");
     scrollPanel.setScrollingEnabledY(false);
     scrollPanel.setScrollingEnabledX(true);
     scrollPanel.setHideScrollBar(true);
     
     SimplePanel scrolledAreaPanel = new SimplePanel();
-    scrolledAreaPanel.setHeight(height+"px");
-    scrolledAreaPanel.setWidth((width*3)+"px");
+    scrolledAreaPanel.setHeight(scrollHeight+"px");
+    scrolledAreaPanel.setWidth((popupWidth*3)+"px");
     scrollPanel.setWidget(scrolledAreaPanel);
 
     HorizontalPanel horizontalPanel = new HorizontalPanel();
-    horizontalPanel.setHeight(height+"px");
-    horizontalPanel.setWidth((width*3)+"px");
+    horizontalPanel.setHeight(scrollHeight+"px");
+    horizontalPanel.setWidth((popupWidth*3)+"px");
     scrolledAreaPanel.setWidget(horizontalPanel);
     horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(-1)));
     horizontalPanel.add(createMonthPanel(curMonth));
@@ -163,11 +186,13 @@ public class CalendarDialog {
     
     popup.add(container);
     
-    popup.center();
+//  popup.center();
+    popup.setPopupPosition(popupLeft, popupTop);
+    popup.show();
     
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
-        internalScrollTo(width, 0);
+        internalScrollTo(popupWidth, 0);
         if (backPopup != null) {
           backPopup.hide();
         }
@@ -202,12 +227,12 @@ public class CalendarDialog {
             curMonth.addMonths(-1);
             assistedScrollPending = true;
             needRecreatePopup = true;
-            internalScrollTo(startX - endX - width, 360);
+            internalScrollTo(startX - endX - popupWidth, 360);
           } else if (endX > (startX + 50)) {
             curMonth.addMonths(+1);
             assistedScrollPending = true;
             needRecreatePopup = true;
-            internalScrollTo(startX - endX + width, 360);
+            internalScrollTo(startX - endX + popupWidth, 360);
           } else if (endX != startX) {
             assistedScrollPending = true;
             internalScrollTo(startX - endX, 360);
@@ -244,8 +269,8 @@ public class CalendarDialog {
     
     SimplePanel wrapper = new SimplePanel();
     wrapper.addStyleName("phg-CalendarDialog-MonthWrapper");
-    wrapper.setWidth((width-2)+"px");
-    wrapper.setHeight((height-2)+"px");
+    wrapper.setWidth((popupWidth-2)+"px");
+    wrapper.setHeight((scrollHeight-2)+"px");
     
     FlexTable table = new FlexTable();
     table.addStyleName("phg-CalendarDialog-MonthTable");
@@ -299,6 +324,7 @@ public class CalendarDialog {
     int day = date.getDate();
     TouchHTML html = new TouchHTML("" + day);
     html.addStyleName("phg-CalendarDialog-Month-Day");
+    html.setHeight(dayHeight+"px");
     if (row == 2) {
       html.addStyleName("phg-firstRow");
     }
