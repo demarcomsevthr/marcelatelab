@@ -1,7 +1,6 @@
 package it.mate.phgcommons.client.ui.ph;
 
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
+import it.mate.phgcommons.client.ui.CalendarDialog;
 
 import java.util.Date;
 
@@ -15,11 +14,20 @@ public class PhCalendarBox extends PhDateBox {
   
   @Override
   protected void onPluginTapEvent(TapEvent event) {
+    /*
     DatePickerPluginUtil.showCalendarView(getValue(), new Delegate<Date>() {
       public void execute(Date value) {
         setValue(value, true);
       }
     });
+    */
+    CalendarDialog calendar = new CalendarDialog();
+    calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
+      public void onSelectedDateChange(Date date) {
+        setValue(date, true);
+      }
+    });
+    calendar.show();
   }
 
 }

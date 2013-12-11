@@ -70,3 +70,66 @@
   background-color: rgb(215,217,219);
 }
 
+.phg-TimePickerDialog {
+  color: black;
+  background-color: rgb(239, 239, 239);
+}
+
+.phg-TimePickerDialog-Header {
+  color: white;
+  background-color: black;
+}
+
+.phg-TimePickerDialog-TimeRow {
+  width: 60%;
+  padding-left: 16%;
+}
+
+.phg-TimePickerDialog-TimeDigit {
+  background-color: #fff;
+  margin: 6px;
+  text-align: center;
+  font-size: 40px;
+  padding: 6px;
+  border: 2px solid #23238e;
+  border-radius: 5px;
+  height: 42px;
+  padding-top: 4px;
+}
+
+.phg-TimePickerDialog-Keypad {
+  padding-left: 11.5%;
+}
+
+.phg-TimePickerDialog-KeypadCell {
+  border: 1px solid #bababa;
+  background-image: -webkit-gradient(linear , left top, left bottom, 
+  		color-stop(0.00, rgb(244, 244, 244)), 
+  		color-stop(1.00, rgb(212, 212, 212))) ;
+  width: 56px;
+  height: 44px;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 26px;
+  padding-top: 10px;
+}
+
+.phg-TimePickerDialog-Bottom {
+  padding-left: 16%;
+  padding-top: 10px;
+}
+
+.phg-TimePickerDialog-BottomButton {
+  border: 1px solid #bababa;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f4f4f4), color-stop(1, #d4d4d4));
+  height: 30px;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 18px;
+  width: 100px;
+  padding-top: 6px;
+  margin-left: 4px;
+}
+

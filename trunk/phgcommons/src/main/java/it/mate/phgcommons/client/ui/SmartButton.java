@@ -26,6 +26,12 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
+/**
+ * @deprecated
+ * 
+ * Use it.mate.phgcommons.client.ui.TouchButton instead
+ *
+ */
 public class SmartButton extends Composite implements HasClickHandlers, HasTouchHandlers,
       HasText, HasTag {
 

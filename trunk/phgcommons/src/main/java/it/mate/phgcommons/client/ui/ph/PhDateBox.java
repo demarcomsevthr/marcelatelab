@@ -2,6 +2,7 @@ package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
@@ -34,12 +35,15 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
   
   private List<ValueChangeHandler<Date>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Date>>();
   
+  private final static boolean USE_DATE_PICKER_PLUGIN = false;
+  
+  @SuppressWarnings("unused")
   public PhDateBox() {
     element = DOM.createInputText().cast();
     setElement(element);
     addStyleName("phg-DateBox");
     
-    if (OsDetectionUtils.isDesktop()) {
+    if (OsDetectionUtils.isDesktop() && USE_DATE_PICKER_PLUGIN) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
           Date value = GwtUtils.stringToDate(element.getValue(), "dd/MM/yyyy");
@@ -58,11 +62,21 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
   }
   
   protected void onPluginTapEvent(TapEvent event) {
-    DatePickerPluginUtil.showDateDialog(getValue(), new Delegate<Date>() {
-      public void execute(Date value) {
-        setValue(value, true);
-      }
-    });
+    if (USE_DATE_PICKER_PLUGIN) {
+      DatePickerPluginUtil.showDateDialog(getValue(), new Delegate<Date>() {
+        public void execute(Date value) {
+          setValue(value, true);
+        }
+      });
+    } else {
+      CalendarDialog calendar = new CalendarDialog();
+      calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
+        public void onSelectedDateChange(Date date) {
+          setValue(date, true);
+        }
+      });
+      calendar.show();
+    }
   }
 
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Date> handler) {
