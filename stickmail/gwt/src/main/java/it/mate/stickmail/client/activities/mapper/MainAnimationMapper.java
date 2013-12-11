@@ -10,15 +10,12 @@ public class MainAnimationMapper implements AnimationMapper {
 
   @Override
   public Animation getAnimation(Place parOldPlace, Place parNewPlace) {
-    if (parNewPlace instanceof MainPlace && parOldPlace instanceof MainPlace) {
+    if (parNewPlace instanceof MainPlace) {
       MainPlace newPlace = (MainPlace)parNewPlace;
-      MainPlace oldPlace = (MainPlace)parOldPlace;
-      if (newPlace.getToken().equals(MainPlace.HOME)) {
-        if (oldPlace == null || oldPlace.getToken().equals(MainPlace.HOME)) {
-          return null;
-        }
-        return Animation.SLIDE_REVERSE;
+      if (parOldPlace instanceof MainPlace) {
+        MainPlace oldPlace = (MainPlace)parOldPlace;
       }
+      return Animation.SWAP;
     }
     return Animation.SLIDE;
   }
