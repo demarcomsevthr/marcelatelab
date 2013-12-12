@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.EventUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -126,12 +127,14 @@ public class CalendarDialog {
   }
   
   public void show() {
+    PhonegapUtils.setSuspendUncaughtExceptionAlerts(true);
     initUI();
   }
   
   public void hide() {
     popup.hide();
     EventUtils.removeModalHandler(modalHandlerRegistration);
+    PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
   }
   
   public HandlerRegistration addSelectedDateChangeHandler(final SelectedDateChangeHandler handler) {

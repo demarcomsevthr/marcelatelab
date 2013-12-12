@@ -75,5 +75,15 @@ public class PhonegapUtils {
   public static void addOrientationChangeHandler(Delegate<Void> delegate) {
     JQuery.select("body").bind("orientationchange", delegate);
   }
+  
+  private static boolean suspendUncaughtExceptionAlerts;
+  
+  public static void setSuspendUncaughtExceptionAlerts(boolean flag) {
+    suspendUncaughtExceptionAlerts = flag;
+  }
+
+  public static boolean isSuspendUncaughtExceptionAlerts() {
+    return suspendUncaughtExceptionAlerts;
+  }
 
 }
