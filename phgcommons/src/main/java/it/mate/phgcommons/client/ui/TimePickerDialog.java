@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 
 public class TimePickerDialog {
   
@@ -45,6 +47,10 @@ public class TimePickerDialog {
   
   private Time selectedTime = new Time(0, 0);
   
+  private int selectedIndex = 0;
+  
+  private TouchHTML digits[] = new TouchHTML[4];
+  
   public TimePickerDialog() {
     this(null);
   }
@@ -67,29 +73,15 @@ public class TimePickerDialog {
     header.addStyleName("phg-TimePickerDialog-Header");
     container.add(header);
     
-    HorizontalPanel timeRow = new HorizontalPanel();
-    timeRow.addStyleName("phg-TimePickerDialog-TimeRow");
-    container.add(timeRow);
+    HorizontalPanel digitsRow = new HorizontalPanel();
+    digitsRow.addStyleName("phg-TimePickerDialog-TimeRow");
+    container.add(digitsRow);
     
-    
-    TouchHTML hoursDigit0Html = new TouchHTML(""+getDigit(selectedTime.getHour(), 0));
-    hoursDigit0Html.addStyleName("phg-TimePickerDialog-TimeDigit");
-    timeRow.add(hoursDigit0Html);
-    
-    TouchHTML hoursDigit1Html = new TouchHTML(""+getDigit(selectedTime.getHour(), 1));
-    hoursDigit1Html.addStyleName("phg-TimePickerDialog-TimeDigit");
-    timeRow.add(hoursDigit1Html);
-    
-    timeRow.add(new Label(":"));
-    
-    TouchHTML minutesDigit0Html = new TouchHTML(""+getDigit(selectedTime.getMinute(), 0));
-    minutesDigit0Html.addStyleName("phg-TimePickerDialog-TimeDigit");
-    timeRow.add(minutesDigit0Html);
-    
-    TouchHTML minutesDigit1Html = new TouchHTML(""+getDigit(selectedTime.getMinute(), 1));
-    minutesDigit1Html.addStyleName("phg-TimePickerDialog-TimeDigit");
-    timeRow.add(minutesDigit1Html);
-    
+    digitsRow.add(createDigitHtml(0, getDigit(selectedTime.getHour(), 0)));
+    digitsRow.add(createDigitHtml(1, getDigit(selectedTime.getHour(), 1)));
+    digitsRow.add(new Label(":"));
+    digitsRow.add(createDigitHtml(2, getDigit(selectedTime.getMinute(), 0)));
+    digitsRow.add(createDigitHtml(3, getDigit(selectedTime.getMinute(), 1)));
     
     FlexTable keypad = new FlexTable();
     keypad.addStyleName("phg-TimePickerDialog-Keypad");
@@ -135,6 +127,18 @@ public class TimePickerDialog {
       popup.show();
     }
     
+  }
+  
+  private TouchHTML createDigitHtml(final int index, int value) {
+    TouchHTML digit = new TouchHTML(""+value);
+    digit.addStyleName("phg-TimePickerDialog-TimeDigit");
+    digit.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        selectedIndex = index;
+      }
+    });
+    digits[index] = digit;
+    return digit;
   }
   
   private TouchHTML createKeypadCell(String text) {
