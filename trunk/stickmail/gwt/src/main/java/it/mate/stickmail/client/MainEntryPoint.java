@@ -29,9 +29,11 @@ public class MainEntryPoint implements EntryPoint {
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
-        Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
         log.log(Level.SEVERE, "uncaught exception", ex);
         ex.printStackTrace();
+        if (!PhonegapUtils.isSuspendUncaughtExceptionAlerts()) {
+          Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
+        }
       }
     });
     
