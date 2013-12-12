@@ -112,7 +112,7 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
     });
   }
   
-  public void setChangeColorOnClick(boolean changeColorOnClick) {
+  public void setChangeColorOnTap(boolean changeColorOnClick) {
     this.changeColorOnTap = changeColorOnClick;
     addChangeColorOnTap();
   }
