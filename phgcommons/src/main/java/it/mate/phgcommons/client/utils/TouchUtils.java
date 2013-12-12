@@ -45,6 +45,9 @@ public class TouchUtils {
    */
   private static FocusPanel patch20131211$focusPanel;
   public static void executePatch20131211() {
+    executePatch20131211(0);
+  }
+  public static void executePatch20131211(int delay) {
     if (!OsDetectionUtils.isAndroid())
       return;
     if (patch20131211$focusPanel == null) {
@@ -53,7 +56,7 @@ public class TouchUtils {
       patch20131211$focusPanel.setHeight("1px");
       RootPanel.get().add(patch20131211$focusPanel);
     }
-    GwtUtils.deferredExecution(new Delegate<Void>() {
+    GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
         patch20131211$focusPanel.setFocus(true);
       }

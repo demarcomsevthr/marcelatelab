@@ -85,5 +85,5 @@ public class PhonegapUtils {
   public static boolean isSuspendUncaughtExceptionAlerts() {
     return suspendUncaughtExceptionAlerts;
   }
-
+  
 }

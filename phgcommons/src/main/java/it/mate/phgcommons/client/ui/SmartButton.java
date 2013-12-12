@@ -2,21 +2,19 @@ package it.mate.phgcommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.TouchUtils;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.HasTouchHandlers;
 import com.googlecode.mgwt.dom.client.event.touch.TouchCancelHandler;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchMoveHandler;
@@ -25,6 +23,7 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 /**
  * @deprecated
@@ -32,14 +31,14 @@ import com.googlecode.mgwt.ui.client.widget.Button;
  * Use it.mate.phgcommons.client.ui.TouchButton instead
  *
  */
-public class SmartButton extends Composite implements HasClickHandlers, HasTouchHandlers,
+public class SmartButton extends Composite implements HasClickHandlers, HasTouchHandlers, HasTapHandlers, 
       HasText, HasTag {
 
   private Widget impl;
   
-  private final boolean useAnchor = MGWT.getOsDetection().isAndroid();
+  private final boolean isAndroid = MGWT.getOsDetection().isAndroid();
   
-  private boolean changeColorOnClick = false;
+  private boolean changeColorOnTap = false;
   
   private int revertOriginalColorDelay = -1;
   
@@ -49,12 +48,16 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   
   private boolean rounded = true;
   
+  private String colorOnTap = "white";
+  
   public SmartButton() {
     
     MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();    
     
-    if (useAnchor) {
-      impl = new Anchor();
+    if (isAndroid) {
+//    impl = new Anchor();
+//    impl = new TouchHTML();
+      impl = new TouchAnchor();
     } else {
       impl = new Button();
     }
@@ -70,11 +73,11 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     }
     
     if (MGWT.getOsDetection().isAndroid()) {
-      changeColorOnClick = true;
+      changeColorOnTap = true;
       revertOriginalColorDelay = 100; 
     }
 
-    addChangeColorOnClickHandler();
+    addChangeColorOnTap();
 
   }
   
@@ -91,8 +94,8 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     setRounded(Boolean.parseBoolean(text));
   }
   
-  private void addChangeColorOnClickHandler() {
-    if (changeColorOnClick) {
+  private void addChangeColorOnTap() {
+    if (changeColorOnTap) {
       addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
           SmartButton.this.getElement().getStyle().setColor("white");
@@ -117,9 +120,9 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
     });
   }
   
-  public void setChangeColorOnClick(boolean changeColorOnClick) {
-    this.changeColorOnClick = changeColorOnClick;
-    addChangeColorOnClickHandler();
+  public void setChangeColorOnTap(boolean changeColorOnClick) {
+    this.changeColorOnTap = changeColorOnClick;
+    addChangeColorOnTap();
   }
   
   public SmartButton(String html) {
@@ -145,106 +148,57 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
 
   @Override
   public HandlerRegistration addClickHandler(ClickHandler handler) {
-    if (useAnchor) {
-      return getAnchorImpl().addClickHandler(handler);
+    if (isAndroid) {
+      return getAndroidImpl().addClickHandler(handler);
     } else {
-      return getButtonImpl().addTouchStartHandler(new TouchStartHandler() {
+      return getTouchWidgetImpl().addTouchStartHandler(new TouchStartHandler() {
         public void onTouchStart(TouchStartEvent event) {
-          boolean touchPresent = event.getTouches() != null && event.getTouches().length() > 0;
-          int pageX = touchPresent ? event.getTouches().get(0).getPageX() : ((Widget)event.getSource()).getAbsoluteLeft();
-          int pageY = touchPresent ? event.getTouches().get(0).getPageY() : ((Widget)event.getSource()).getAbsoluteTop();
-          NativeEvent nativeEvent = Document.get().createClickEvent(0, pageX, pageY, pageX, pageY, false, false, false, false);
-          DomEvent.fireNativeEvent(nativeEvent, SmartButton.this);
+          TouchUtils.fireClickEventFromTouchEvent(SmartButton.this, event);
         }
       });
     }
   }
   
-  public class WrappedTouchStartEvent extends TouchStartEvent {
-    private WrappedTouchStartEvent withSource(Object source) {
-      super.setSource(source);
-      return this;
-    }
-  }
-
-  public class WrappedTouchEndEvent extends TouchEndEvent {
-    private WrappedTouchEndEvent withSource(Object source) {
-      super.setSource(source);
-      return this;
-    }
+  @Override
+  public HandlerRegistration addTapHandler(TapHandler handler) {
+    return getTouchWidgetImpl().addTapHandler(handler);
   }
 
   @Override
   public HandlerRegistration addTouchStartHandler(final TouchStartHandler handler) {
-    if (useAnchor) {
-      return addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          handler.onTouchStart(new WrappedTouchStartEvent().withSource(SmartButton.this));
-        }
-      });
-    } else {
-      return getButtonImpl().addTouchStartHandler(handler);
-    }
+    return getTouchWidgetImpl().addTouchStartHandler(handler);
   }
 
   @Override
   public HandlerRegistration addTouchEndHandler(final TouchEndHandler handler) {
-    if (useAnchor) {
-      return addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          handler.onTouchEnd(new WrappedTouchEndEvent().withSource(SmartButton.this));
-        }
-      });
-    } else {
-      return getButtonImpl().addTouchEndHandler(handler);
-    }
+    return getTouchWidgetImpl().addTouchEndHandler(handler);
   }
 
   @Override
   public HandlerRegistration addTouchHandler(final TouchHandler handler) {
-    if (useAnchor) {
-      return addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent event) {
-          handler.onTouchStart(new WrappedTouchStartEvent().withSource(SmartButton.this));
-        }
-      });
-    } else {
-      return getButtonImpl().addTouchHandler(handler);
-    }
+    return getTouchWidgetImpl().addTouchHandler(handler);
   }
   
   @Override
   public HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler) {
-    if (useAnchor) {
-      return null;
-    } else {
-      return getButtonImpl().addTouchMoveHandler(handler);
-    }
+    return getTouchWidgetImpl().addTouchMoveHandler(handler);
   }
 
   @Override
   public HandlerRegistration addTouchCancelHandler(TouchCancelHandler handler) {
-    if (useAnchor) {
-      return null;
-    } else {
-      return getButtonImpl().addTouchCancelHandler(handler);
-    }
+    return getTouchWidgetImpl().addTouchCancelHandler(handler);
   }
   
-  private Anchor getAnchorImpl() {
-    if (useAnchor) {
-      return (Anchor)impl;
+  private TouchAnchor getAndroidImpl() {
+    if (isAndroid) {
+      return (TouchAnchor)impl;
     } else {
       return null;
     }
   }
   
-  private Button getButtonImpl() {
-    if (useAnchor) {
-      return null;
-    } else {
-      return (Button)impl;
-    }
+  private TouchWidget getTouchWidgetImpl() {
+    return (TouchWidget)impl;
   }
   
   public String getTag() {
@@ -254,19 +208,5 @@ public class SmartButton extends Composite implements HasClickHandlers, HasTouch
   public void setTag(String tag) {
     this.tag = tag;
   }
-
   
-  
-  
-  // Per farlo funzionare bisognare verificare se si trova su win/mobile
-  // gli eventi touch sono definiti solo sul browser dei mobile
-  
-  private native NativeEvent createTouchEvent(Document doc, String type) /*-{
-    var evt = doc.createEvent('TouchEvent');
-//  evt.initTouchEvent(type, true, true);
-    evt.initUIEvent(type, true, true);
-    return evt;
-  }-*/;
-  
-
 }

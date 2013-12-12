@@ -3,6 +3,10 @@
 
 @url calendarImageUrl calendarImage;
 
+.phg-TouchAnchor {
+  text-decoration: none;
+}
+
 .phg-DateBox {
   background-image: calendarImageUrl;
   background-repeat: no-repeat;
