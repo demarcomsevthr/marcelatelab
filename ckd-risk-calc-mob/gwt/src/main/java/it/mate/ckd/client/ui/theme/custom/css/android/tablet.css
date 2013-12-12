@@ -102,3 +102,42 @@
 .mgwt-Button.ckd-ReferralDecisionMakingButton {
   font-size: 16px;
 }
+
+/** EXTENDED VERSION **/
+
+.ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .ckd-stepPanel .gwt-HTML {
+  font-size: 38px;
+}
+
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.ckd-suggestionBtn {
+  font-size: 16px;
+}
+
+.ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
+  font-size: 32px;
+}
+
+.ckd-suggestionPanel-content {
+  margin-top: -15px;
+}
+
+.ckd-suggestionPanel .ckd-suggestionPanel-content div {
+  padding-bottom: 1em;
+}
+
+.ckd-ProtocolHeaderButton-text {
+  font-size: 20px;
+  padding: 1px;
+  height: 54px;
+  top: 3px;
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  font-size: 18px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+
+.ckd-ProtocolStepPanel-center * {
+  font-size: 32px;
+}

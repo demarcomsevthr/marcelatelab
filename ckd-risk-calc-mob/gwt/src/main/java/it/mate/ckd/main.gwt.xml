@@ -35,7 +35,7 @@
        VALORI DA UTILIZZARE = iphone, android
        (ipad non va bene per il layout)
    -->
-  <set-property name="mgwt.os" value="iphone" />
+  <set-property name="mgwt.os" value="android" />
   
   
 

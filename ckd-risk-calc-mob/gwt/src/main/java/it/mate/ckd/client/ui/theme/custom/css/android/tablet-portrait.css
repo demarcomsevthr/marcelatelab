@@ -113,3 +113,43 @@ body {
 .ckd-outputSectionSeparator {
   height: 1.5em !important;
 }
+
+/** EXTENDED VERSION **/
+
+.ckd-suggestionBtn {
+  width: 80%;
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  margin-left: 95px;
+}
+
+.ckd-ProtocolStepPanel {
+  margin-top: 80px;
+  height: 480px;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 48%;
+}
+
+.ckd-ProtocolHeaderButton-border-container, .ckd-ProtocolHeaderButton-text {
+  margin-top: 10px;
+}
+
+/**** PROTOCOL HEADER PANEL 2 ****/
+
+.ckd-ProtocolHeaderPanel2 {
+  width: 556px;
+}
+
+.ckd-ProtocolHeaderButton2-text {
+  font-size: 13px;
+  top: 8px;
+}	
+
+.ckd-ProtocolHeaderPanel2-center {
+  width: 490px;
+  font-size: 14px;
+}
+
