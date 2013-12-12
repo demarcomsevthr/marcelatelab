@@ -91,3 +91,60 @@
 .gwt-DialogBox .dialogContent .gwt-Button {
   font-size: 14pt;
 }
+
+/** EXTENDED VERSION **/
+
+.ckdReferralDecisionViewPanel .gwt-Label, .ckdProtocolStepViewPanel .ckd-stepPanel .gwt-HTML {
+  font-size: 28px;
+}
+
+.ckdExtendedVerViewPanel .mgwt-SmartButton.mgwt-Button.ckd-suggestionBtn {
+  font-size: 12px;
+}
+
+.ckd-suggestionPanel-content {
+  margin-top: -5px;
+}
+
+.ckd-suggestionPanel .ckd-suggestionPanel-content div {
+  padding-bottom: 0.5em;
+}
+
+.ckdProtocolStepViewPanel .mgwt-SmartButton.mgwt-Button.mgwt-Button-round {
+  font-size: 18px;
+}
+
+.ckd-ProtocolStepPanel {
+  margin-top: 56px;
+  height: 300px;
+}
+
+.ckd-ProtocolStepPanel-center {
+  height: 46%;
+  font-size: 22px;
+}
+
+.ckd-ProtocolHeaderPanel-center {
+  font-size: 8pt;
+  margin-left: 90px;
+  margin-bottom: 10px;
+  height: 48px;
+  margin-top: -6px;
+  margin-right: 10px;
+}
+
+.ckd-ProtocolHeaderButton-text {
+  font-size: 12px;
+  padding: 1px;
+  padding-top: 5px;
+  height: 50px;
+}
+
+.ckd-ProtocolHeaderButton-border-container {
+  top: 10.4px;
+}
+	
+.ckd-ProtocolHeaderButton-text {
+  top: 0.4px;
+}	
+

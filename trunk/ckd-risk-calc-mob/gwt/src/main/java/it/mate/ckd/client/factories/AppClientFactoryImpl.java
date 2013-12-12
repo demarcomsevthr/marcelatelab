@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -78,6 +79,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private void initDisplay(Panel modulePanel) {
     
     // SuperDevModeUtil.showDevMode();
+    
+    GwtUtils.setMobileOptimizations(true);
 
     ViewPort viewPort = new MGWTSettings.ViewPort();
     viewPort.setTargetDensity(DENSITY.MEDIUM);
@@ -93,6 +96,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     MGWT.applySettings(settings);
     
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
+    
+    DefaultTheme.Impl.get().css().ensureInjected();
     
     CustomTheme.Instance.get().css().ensureInjected();
     
