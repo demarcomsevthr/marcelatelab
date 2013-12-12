@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -97,6 +98,8 @@ public class GwtUtils {
 
   
   private static boolean devModeActive = Window.Location.getQueryString().contains("gwt.codesvr");
+  
+  private static boolean mobileOptimizations = false;
   
   
   public static String getPortletContextPath() {
@@ -378,20 +381,41 @@ public class GwtUtils {
     deferredExecution(0, callback);
   }
   
+  // TODO: IN TEST 
+  // [13/12/2013]
+  // Android touch anchor issues
+  // (see TouchAnchor)
   public static void deferredExecution (int delayMillis, final Delegate<Void> delegate) {
-    if (delayMillis > 0) {
-      new Timer() {
-        public void run() {
-          deferredExecution(0, delegate);
-        }
-      }.schedule(delayMillis);
-      return;
-    }
-    createMockElement(new Delegate<Element>() {
-      public void execute(Element element) {
-        delegate.execute(null);
+    if (mobileOptimizations) {
+      if (delayMillis <= 0) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+          public void execute() {
+            delegate.execute(null);
+          }
+        });
+      } else {
+        Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+          public boolean execute() {
+            delegate.execute(null);
+            return false;
+          }
+        }, delayMillis);
       }
-    });
+    } else {
+      if (delayMillis > 0) {
+        new Timer() {
+          public void run() {
+            deferredExecution(0, delegate);
+          }
+        }.schedule(delayMillis);
+        return;
+      }
+      createMockElement(new Delegate<Element>() {
+        public void execute(Element element) {
+          delegate.execute(null);
+        }
+      });
+    }
   }
   
   private static void createMockElement (final Delegate<Element> callback) {
@@ -1072,5 +1096,8 @@ public class GwtUtils {
     return html.getText();
   }
 
+  public static void setMobileOptimizations(boolean mobileOptimizations) {
+    GwtUtils.mobileOptimizations = mobileOptimizations;
+  }
 
 }
