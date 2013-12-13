@@ -1,7 +1,7 @@
 
 	=== PROCEDIMENTO ===
 
-	1) find images ('kidney' 900px)
+	1) find images (es: 'kidney' 900px)
 
 	2) cartoonize http://www.cartoonize.net/
 
