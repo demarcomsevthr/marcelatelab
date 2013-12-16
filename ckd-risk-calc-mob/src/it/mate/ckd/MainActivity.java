@@ -15,7 +15,12 @@ public class MainActivity extends DroidGap {
 
     Resources res = getResources();
     super.onCreate(savedInstanceState);
-    super.loadUrl(res.getString(R.string.startup_url));
+
+    // FREE VERSION:
+//  super.loadUrl(res.getString(it.mate.ckd.R.string.startup_url));
+    
+    // PRO VERSION:
+    super.loadUrl(res.getString(it.mate.ckd.pro.R.string.startup_url));
 
   }
 
@@ -26,23 +31,3 @@ public class MainActivity extends DroidGap {
   }
 
 }
-
-
-/*
-public class MainActivity extends Activity {
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.activity_main, menu);
-    return true;
-  }
-
-}
-*/
