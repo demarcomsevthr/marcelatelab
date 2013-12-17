@@ -68,7 +68,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   
   public ProtocolStepView() {
     if (OsDetectionUtils.isAndroid()) {
-      animationDuration = 1000;
+      animationDuration = 600;
     } else {
       animationDuration = 200;
     }
