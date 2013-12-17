@@ -11,10 +11,13 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.SmartButton;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.LinkedList;
 
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.WhiteSpace;
@@ -53,23 +56,22 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   @UiField Panel protocolStepPanel;
   @UiField Panel protocolStepPanelCenter;
 
-  /*
-  @UiField Widget protocolHeaderButton;
-  @UiField Panel protocolHeaderPanel;
-  @UiField HTML protocolHeaderPanelCenterHtml;
-  */
   @UiField ProtocolHeaderPanel protocolHeaderPanel;
-  
   
   private ProtocolStep currentProtocolStep;
   
   private LinkedList<ProtocolStep> history = new LinkedList<ProtocolStep>();
   
-  private final static int PROTOCOL_STEP_PANEL_LEFT_PCT = 9;
+  private final static int PROTOCOL_STEP_PANEL_INITIAL_LEFT_PCT = 9;
   
-  private final static int ANIMATION_DURATION = 200;
+  private int animationDuration;
   
   public ProtocolStepView() {
+    if (OsDetectionUtils.isAndroid()) {
+      animationDuration = 1000;
+    } else {
+      animationDuration = 200;
+    }
     initUI();
   }
 
@@ -88,12 +90,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         getPresenter().goToExtendedView(null);
       }
     });
-    
-    /*
-    answer1Btn.setChangeColorOnClick(true);
-    answer2Btn.setChangeColorOnClick(true);
-    answer3Btn.setChangeColorOnClick(true);
-    */
     
     if (OsDetectionUtils.isTablet()) {
       protocolHeaderPanel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
@@ -116,12 +112,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         protocolStepPanelCenter.getElement().getStyle().clearHeight();
         finishBtn.setText(AppConstants.IMPL.ProtocolStep_FinishText());
         stepNumberLbl.setText(AppConstants.IMPL.ProtocolStep_FinishText());
-
-        /*
-        protocolHeaderButton.setVisible(true);
-        */
         protocolHeaderPanel.getHeaderButton().setVisible(true);
-        
         switchPanelsVisibility(true);
         endHtml.setHTML(currentProtocolStep.getBodyText());
       } else {
@@ -146,23 +137,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         answer3Btn.setOriginalColor();
         
       }
-      /*
-      if (history.size() > 0) {
-        protocolHeaderButton.setVisible(true);
-        protocolHeaderPanelCenterHtml.getElement().getStyle().clearMarginLeft();
-        protocolHeaderPanelCenterHtml.getElement().getStyle().clearMarginTop();
-        protocolHeaderPanelCenterHtml.getElement().getStyle().clearWidth();
-      } else {
-        protocolHeaderButton.setVisible(false);
-        protocolHeaderPanelCenterHtml.getElement().getStyle().setMarginLeft(-40, Style.Unit.PX);
-        protocolHeaderPanelCenterHtml.getElement().getStyle().setMarginTop(30, Style.Unit.PX);
-        if (OsDetectionUtils.isTabletPortrait()) {
-          protocolHeaderPanelCenterHtml.getElement().getStyle().setWidth(490, Style.Unit.PX);
-        } else {
-          protocolHeaderPanelCenterHtml.getElement().getStyle().setWidth(280, Style.Unit.PX);
-        }
-      }
-      */
       if (history.size() > 0) {
         protocolHeaderPanel.getHeaderButton().setVisible(true);
         protocolHeaderPanel.getHeaderHTML().getElement().getStyle().clearMarginLeft();
@@ -178,7 +152,6 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
           protocolHeaderPanel.getHeaderHTML().getElement().getStyle().setWidth(280, Style.Unit.PX);
         }
       }
-      
     }
   }
   
@@ -211,36 +184,21 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     goToNextStep(currentProtocolStep.getAnswer3EndText(), currentProtocolStep.getAnswer3Step());
   }
 
-  /*
-  @UiHandler ("backBtn")
-  public void onBackBtn(TouchStartEvent event) {
-    doAnimation1(+1, new Delegate<Void>() {
-      public void execute(Void element) {
-        ProtocolStep step = history.getLast();
-        history.removeLast();
-        switchPanelsVisibility(false);
-        setModel(step, "step");
-        doAnimation2();
-      }
-    });
-  }
-  */
   private void addBackBtnHandler() {
     protocolHeaderPanel.addBackBtnTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
-        doAnimation1(+1, new Delegate<Void>() {
+        doTransition1(+1, new Delegate<Void>() {
           public void execute(Void element) {
             ProtocolStep step = history.getLast();
             history.removeLast();
             switchPanelsVisibility(false);
             setModel(step, "step");
-            doAnimation2();
+            doTransition2();
           }
         });
       }
     });
   }
-  
   
   private void switchPanelsVisibility(boolean isEndStep) {
     questionHtml.setVisible(!isEndStep);
@@ -257,7 +215,7 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
   }
   
   public static String getProtocolStepPanelLeft() {
-    return PROTOCOL_STEP_PANEL_LEFT_PCT + "%";
+    return PROTOCOL_STEP_PANEL_INITIAL_LEFT_PCT + "%";
   }
   
   private void goToNextStep(final String endText, int nextStepId) {
@@ -270,21 +228,27 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
     }
     
     final ProtocolStep fNextStep = nextStep;
-    doAnimation1(-1, new Delegate<Void>() {
+    doTransition1(-1, new Delegate<Void>() {
       public void execute(Void element) {
         history.add(currentProtocolStep);
         setModel(fNextStep, "step");
-        doAnimation2();
+        doTransition2();
       }
     });
     
   }
 
-  private void doAnimation1(final int versus, final Delegate<Void> delegate) {
+  private void doTransition1(final int versus, final Delegate<Void> delegate) {
+    
+    if (OsDetectionUtils.isAndroid()) {
+      doTransition1Css(versus, delegate);
+      return;
+    }
+    
     JQuery.StyleProperties step1Properties = JQuery.createStyleProperties();
     step1Properties.setLeft(versus * 100, Style.Unit.PCT);
     JQuery.withElement(protocolStepPanel.getElement())
-        .animate(step1Properties, ANIMATION_DURATION, new Delegate<Void>() {
+        .animate(step1Properties, animationDuration, new Delegate<Void>() {
           public void execute(Void element) {
             JQuery.StyleProperties step2Properties = JQuery.createStyleProperties();
             step2Properties.setLeft((-1) * versus * 100, Style.Unit.PCT);
@@ -295,36 +259,65 @@ public class ProtocolStepView extends BaseMgwtView<Presenter> {
         });
   }
   
-  private void doAnimation2() {
+  private void doTransition2() {
+    if (OsDetectionUtils.isAndroid()) {
+      doTransition2Css();
+      return;
+    }
     JQuery.StyleProperties step3Properties = JQuery.createStyleProperties();
-    step3Properties.setLeft(PROTOCOL_STEP_PANEL_LEFT_PCT, Style.Unit.PCT);
+    step3Properties.setLeft(PROTOCOL_STEP_PANEL_INITIAL_LEFT_PCT, Style.Unit.PCT);
     JQuery.withElement(protocolStepPanel.getElement())
-        .animate(step3Properties, ANIMATION_DURATION);
+        .animate(step3Properties, animationDuration);
   }
 
-  /*
-  public static class BackStepButton extends TouchWidget {
-    Element p;
-    public BackStepButton() {
-      p = Document.get().createPElement();
-      setElement(p);
-    }
-    public void setText(String text) {
-      p.setInnerText(text);
-    }
+  
+  private int transition2StartX;
+  
+  private void doTransition1Css(final int versus, final Delegate<Void> delegate) {
+    
+    final long startTime = System.currentTimeMillis();
+    
+    final AnimationCallback animationCallback = new AnimationCallback() {
+      public void execute(double now) {
+        if (now >= startTime + animationDuration) {
+          int endX = (-1) * versus * 100;
+          protocolStepPanel.getElement().getStyle().setLeft(endX, Style.Unit.PCT);
+          transition2StartX = 0 - endX;
+          delegate.execute(null);
+          return;
+        }
+        double currDeltaTm = (now - startTime) / animationDuration;
+        int currX = (int)Math.round(currDeltaTm * versus * 100);
+        WebkitCssUtil.translatePct(protocolStepPanel.getElement(), currX, 0);
+        AnimationScheduler.get().requestAnimationFrame(this, protocolStepPanel.getElement());
+      }
+    };
+
+    animationCallback.execute(startTime);
+    
   }
   
-  public static String getBackStepImage1() {
-    return "url('" + GWT.getModuleBaseURL() + "images/back-step-1.png" + "')";
+
+  private void doTransition2Css() {
+    
+    final long startTime = System.currentTimeMillis();
+
+    final AnimationCallback animationCallback = new AnimationCallback() {
+      public void execute(double now) {
+        if (now >= startTime + animationDuration) {
+          WebkitCssUtil.resetTransform(protocolStepPanel.getElement());
+          protocolStepPanel.getElement().getStyle().clearLeft();
+          return;
+        }
+        double currDeltaTm = (now - startTime) / animationDuration;
+        int currX = (int)Math.round(currDeltaTm * transition2StartX);
+        WebkitCssUtil.translatePct(protocolStepPanel.getElement(), currX, 0);
+        AnimationScheduler.get().requestAnimationFrame(this, protocolStepPanel.getElement());
+      }
+    };
+
+    animationCallback.execute(startTime);
+    
   }
-  
-  public static String getBackStepImage2() {
-    return "url('" + GWT.getModuleBaseURL() + "images/back-step-2.png" + "')";
-  }
-  
-  public static String getBackStepImage3() {
-    return "url('" + GWT.getModuleBaseURL() + "images/back-step-3.png" + "')";
-  }
-  */
   
 }
