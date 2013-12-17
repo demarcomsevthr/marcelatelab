@@ -25,8 +25,11 @@
     
      -->
 
+    <!--
+         Versione minima = 4.0 (14): attiva una serie di ottimizzazioni grafiche 
+     -->
     <uses-sdk
-        android:minSdkVersion="13"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
     
 	<uses-permission android:name="android.permission.INTERNET" />

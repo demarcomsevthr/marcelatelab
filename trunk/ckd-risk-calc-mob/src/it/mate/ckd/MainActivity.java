@@ -6,6 +6,7 @@ import org.apache.cordova.DroidGap;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
 
 
 public class MainActivity extends DroidGap {
@@ -27,6 +28,8 @@ public class MainActivity extends DroidGap {
   @Override
   public void init() {
     super.init(new CordovaWebView(this), new GWTCordovaWebViewClient(this), new CordovaChromeClient(this));
+    // Disabilito accelerazione hardware
+    super.appView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     System.out.println("init");
   }
 
