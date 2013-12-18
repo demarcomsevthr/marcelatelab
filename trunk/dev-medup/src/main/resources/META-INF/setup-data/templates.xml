@@ -185,7 +185,7 @@
    <table>
      <tr>
        <td style="padding-top: 20px;">
-  <img src="/main/images/ckd-icon-72.png" alt="ckd">
+  <img src="/main/images/ckd-icon-72-2.png" alt="ckd">
        </td>
        <td>
 <p class="tpl-basePage" style="padding-left:10px;">
@@ -194,6 +194,25 @@
      </tr>
    </table>
 </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Go to the stores to get the app:
+      <table>
+        <tr>
+          <td>
+            <a href="https://itunes.apple.com/app/ckd-risk-calc-pro/id773220859" target="_blank">
+              <img src="/images/app-store.png" alt="app store" style="height:42px;">
+            </a>
+          </td>
+          <td>
+            <a href="https://play.google.com/store/apps/details?id=it.mate.ckd" target="_blank">
+              <img src="/images/google-play.png" alt="google play">
+            </a>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

@@ -1,0 +1,138 @@
+<it.mate.econyx.server.model.PortalDataExportModel>
+  <loadMethod>0</loadMethod>
+  <createProducts>false</createProducts>
+  <checkImageResources>false</checkImageResources>
+  <checkDocumentResources>false</checkDocumentResources>
+  <users>
+    <it.mate.econyx.shared.model.impl.PortalUserTx>
+      <screenName>De Marco Marcello</screenName>
+      <emailAddress>demarco.m73@gmail.com</emailAddress>
+      <password>82hTrdSaKRgqkKWtyGFo4Q==</password>
+      <passwordEncrypted>true</passwordEncrypted>
+      <active>true</active>
+      <adminUser>true</adminUser>
+    </it.mate.econyx.shared.model.impl.PortalUserTx>
+    <it.mate.econyx.shared.model.impl.PortalUserTx>
+      <screenName>Test Example</screenName>
+      <emailAddress>test@example.com</emailAddress>
+      <password>82hTrdSaKRgqkKWtyGFo4Q==</password>
+      <passwordEncrypted>true</passwordEncrypted>
+      <active>true</active>
+      <adminUser>true</adminUser>
+    </it.mate.econyx.shared.model.impl.PortalUserTx>
+  </users>
+  <customers/>
+  <products/>
+  <productTypes/>
+  <unitOfMeasures/>
+  <pages>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="true" homePage="true">
+      <name><![CDATA[Home]]></name>
+      <code>home</code>
+      <orderNm>100</orderNm>
+      <templateName>welcome</templateName>
+      <htmls/>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
+      <name><![CDATA[CKD Risk Calc]]></name>
+      <code>ckdriskcalc</code>
+      <orderNm>200</orderNm>
+      <templateName>home</templateName>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+          
+
+&lt;div style=&quot;line-height:120%; padding-left:20px;&quot;&gt;
+&lt;p style=&quot;font-family: verdana,arial,sans-serif; font-size: 14px;&quot;&gt;
+   &lt;b&gt;CKD Risk Calculator&lt;/b&gt;&lt;/p&gt;
+   &lt;table&gt;
+     &lt;tr&gt;
+       &lt;td style=&quot;padding-top: 20px;&quot;&gt;
+  &lt;img src=&quot;/main/images/ckd-icon-72.png&quot; alt=&quot;ckd&quot;&gt;
+       &lt;/td&gt;
+       &lt;td&gt;
+&lt;p class=&quot;tpl-basePage&quot;&gt;
+  The aim of this app is to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.&lt;/p&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+&lt;/div&gt;
+
+           
+</content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+      <name><![CDATA[News]]></name>
+      <code>news</code>
+      <orderNm>300</orderNm>
+      <templateName>home</templateName>
+      <htmls/>
+      <entity class="it.mate.econyx.shared.model.impl.ArticleFolderTx">
+        <code>1001</code>
+        <name><![CDATA[News library]]></name>
+        <orderNm>100</orderNm>
+        <articles/>
+      </entity>
+    </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+      <name><![CDATA[Contacts]]></name>
+      <code>contacts</code>
+      <orderNm>400</orderNm>
+      <templateName>home</templateName>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+          
+&lt;div style=&quot;line-height:120%; padding-left:20px;&quot;&gt;
+&lt;p class=&quot;tpl-basePage&quot;&gt;
+  For any questions please contact us at &lt;a href=&quot;mailto:dev.medup@gmail.com&quot;&gt;dev.medup@gmail.com&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+           
+</content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+      <name><![CDATA[Login]]></name>
+      <code>login</code>
+      <orderNm>910</orderNm>
+      <templateName>loginTemplate</templateName>
+      <htmls/>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="false" homePage="false">
+      <name><![CDATA[Today event]]></name>
+      <code>event</code>
+      <orderNm>920</orderNm>
+      <templateName>home</templateName>
+      <htmls>
+        <it.mate.econyx.shared.model.impl.HtmlContentTx>
+          <type>M</type>
+          <content>
+            
+              &lt;div id=&quot;Place:CalendarPlace;PlaceToken:calDateView&quot; class=&quot;ecxPlaceHolder&quot;&gt;&lt;/div&gt;
+            
+          </content>
+        </it.mate.econyx.shared.model.impl.HtmlContentTx>
+      </htmls>
+    </it.mate.econyx.shared.model.impl.WebContentPageTx>
+  </pages>
+  <producers/>
+  <images/>
+  <listaModalitaSpedizione/>
+  <listaModalitaPagamento/>
+  <orderStates/>
+  <articleFolders>
+    <it.mate.econyx.shared.model.impl.ArticleFolderTx>
+      <code>1001</code>
+      <name><![CDATA[News library]]></name>
+      <orderNm>100</orderNm>
+      <articles/>
+    </it.mate.econyx.shared.model.impl.ArticleFolderTx>
+  </articleFolders>
+  <documentFolders/>
+</it.mate.econyx.server.model.PortalDataExportModel>
