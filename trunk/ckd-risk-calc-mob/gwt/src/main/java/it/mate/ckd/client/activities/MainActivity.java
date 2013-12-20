@@ -19,6 +19,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.MgwtDialogs;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -47,6 +48,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   private final static String STEP_ATTR = "step";
   
   private PopinDialog ratingDialog;
+  
+  private PopinDialog advDialog;
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -216,10 +219,50 @@ public class MainActivity extends MGWTAbstractActivity implements
     return riskVisible;
   }
   
+  
+  // 19/12/2013
+  public void showAdvDialog(final Delegate<PopinDialog> delegate) {
+    if (AppProperties.IMPL.extendedVersion()) {
+      delegate.execute(null);
+      return;
+    }
+    // su android ancora non lo gestisco
+    if (OsDetectionUtils.isAndroid()) {
+      delegate.execute(null);
+      return;
+    }
+    final SimpleContainer dialogPanel = new SimpleContainer();
+    dialogPanel.add(new SimplePanel(new MyAnchor("Yes Now", new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        advDialog.hide();
+        PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id773220859");
+//      PhonegapUtils.openInAppBrowser("https://itunes.apple.com/app/ckd-risk-calc-pro/id773220859");
+        delegate.execute(advDialog);
+      }
+    })));
+    dialogPanel.add(new SimplePanel(new MyAnchor("No, Thanks", new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        advDialog.hide();
+        delegate.execute(advDialog);
+      }
+    })));
+    GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+      public void execute(Void element) {
+        advDialog = MgwtDialogs.popin("Do you want to take a look at the PRO version of this App?", dialogPanel);
+      }
+    });
+  }
+  
   public void checkRatingDialog(final Delegate<PopinDialog> delegate) {
 
     // 04/12/2013: in extended version non mostro il rating dialog
     if (AppProperties.IMPL.extendedVersion()) {
+      delegate.execute(null);
+      return;
+    }
+    
+    // su android ancora non lo gestisco
+    if (OsDetectionUtils.isAndroid()) {
       delegate.execute(null);
       return;
     }
