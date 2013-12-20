@@ -120,7 +120,9 @@
             <layout vertical="true"/>
             <widgets>
               <factory parent="explorerWrapper" />
+              <!-- 
               <factory parent="calendarWrapper" />
+               -->
             </widgets>
             <constraints>
               <constraint size="200px" overflow="visible"/>
@@ -147,11 +149,12 @@
             <layout vertical="true"/>
             <widgets>
               <factory parent="explorerWrapper" />
+              <!-- 
               <factory parent="calendarWrapper" />
+               -->
             </widgets>
             <constraints>
               <constraint size="200px" overflow="visible"/>
-              <constraint/>
               <constraint/>
             </constraints>
           </factory>
@@ -192,13 +195,9 @@
   This app has the aim to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.</p>
        </td>
      </tr>
-   </table>
-</div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Go to the stores to get the app:
+     <tr>
+    <td class="tpl-stores-adv" colspan="2">
+      Go to the stores to take a look at the app:
       <table>
         <tr>
           <td>
@@ -214,6 +213,12 @@
         </tr>
       </table>
     </td>
+     </tr>
+   </table>
+</div>
+    </td>
+  </tr>
+  <tr>
   </tr>
 </table>
 
@@ -241,7 +246,9 @@
             <layout vertical="true"/>
             <widgets>
               <factory parent="explorerWrapper" />
+              <!-- 
               <factory parent="calendarWrapper" />
+               -->
             </widgets>
             <constraints>
               <constraint size="200px" overflow="visible"/>
@@ -261,7 +268,7 @@
     </widgets>
   </factory>
     
-  <factory id="explorerWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Services" stylename="tpl-leftColumn">
+  <factory id="explorerWrapper" type="it.mate.portlets.client.ui.BoxContainerPortlet.Factory" title="Our tools" stylename="tpl-leftColumn">
     <layout width="160px"/>
     <widgets>
       <factory type="it.mate.econyx.client.portlets.PortalPageExplorerPortlet.Factory" />

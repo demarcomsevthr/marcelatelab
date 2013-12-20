@@ -19,8 +19,23 @@ a, a:active, a:focus {
     outline: medium none;
 }
 
-.gwt-TreeItem, .gwt-Tree > div {
-  font: 14px Verdana;
+.gwt-Tree > div {
+  padding-left: 12px !important;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background: none;
+}
+
+.gwt-Tree .gwt-TreeItem {
+  padding: 1px 0px;
+  margin: 0px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: Lucida Grande, Geneva, Verdana, Arial;
+  font-size: 12px;
+  font-weight: bold;
+  color: #0088CC;
 }
 
 
@@ -135,9 +150,7 @@ a, a:active, a:focus {
   -moz-border-radius: 10px;
   border-radius: 10px;  
   margin: 2px auto 10px;
-  
   background: #fff; /* Old browsers */
-
 }
 
 .tpl-basePage {
@@ -145,6 +158,12 @@ a, a:active, a:focus {
   color: #303030; 
   font-size:13px; 
   line-height: 23px;
+}
+
+.tpl-stores-adv {
+  padding-top: 50px;
+  font: 13px Trebuchet MS, Arial, Helvetica, sans-serif !important;
+  padding-bottom: 20px;
 }
 
 /************************************************************************************
@@ -180,16 +199,13 @@ a, a:active, a:focus {
 }
 
 .navBar .navPropertyContainer {
-  /*
-    background: url("/images/bgr_top_properties.gif") no-repeat scroll left top transparent;
-    */
-    color: #333333;
-    font-size: 1px;
-    height: 27px;
-    margin: 0;
-    overflow: hidden;
-    padding: 0 0 0 10px;
-    text-align: right;
+  color: #333333;
+  font-size: 1px;
+  height: 27px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 0 0 10px;
+  text-align: right;
 }
 
 .navElement {
@@ -395,23 +411,14 @@ a, a:active, a:focus {
 }
 
 .ecxCalendarWidgetCell .ecxCalDay {
-  /*
-  background: url(/main/images/commons/cal-num-bg.png) left top repeat-x;
-   */
   background-color: #EFEFEF;
 }
 
 .ecxCalendarWidgetCell.ecxCalendarWidgetHeaderWeek {
-  /*
-  background: #fff url(/main/images/commons/cal-days-bg.png) left bottom repeat-x;
-   */
   background-color: #D9E2E1
 }
 
 .ecxCalendarWidgetCellNum {
-  /*
-  border: 1px solid #9A9A9A;
-   */
   padding-top: 0;
   background-color: #EFEFEF;
   border-right: 1px solid #A2ADBC;
@@ -423,3 +430,10 @@ a, a:active, a:focus {
   border-bottom: 1px solid #A2ADBC;
   border-right: 1px solid #A2ADBC;	
 }
+
+.ecx-AppDescription {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 100px;
+}
+
