@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     
     package="it.mate.ckd.pro"
-    android:versionCode="3"
-    android:versionName="2.0" 
+    android:versionCode="5"
+    android:versionName="2.0.1" 
     
     >
     
@@ -11,7 +11,15 @@
     
     == SUBMISSION VERSION HISTORY ==
     
-    package="it.mate.ckd.pro"       // PRO - 16/12/2013
+    package="it.mate.ckd.pro"       // PRO - 20/12/2013
+    android:versionCode="5"
+    android:versionName="2.0.1" 
+    
+    package="it.mate.ckd"           // FREE - 20/12/2013
+    android:versionCode="4"
+    android:versionName="1.0.3" 
+    
+    package="it.mate.ckd.pro"       // PRO - 20/12/2013
     android:versionCode="3"
     android:versionName="2.0" 
     
