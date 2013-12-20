@@ -4,6 +4,8 @@
 	________________________________________________________________________
 
 	
+	Android		PRO		2.0.1(5)	20/12/2013	(non avevo aggiornato ProtocolStepView con le animazioni css!)
+	
 	Android		Free	1.0.3(4)	20/12/2013
 	
 	Android		PRO		2.0(3)		20/12/2013
