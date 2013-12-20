@@ -16,10 +16,8 @@ public class MainActivity extends DroidGap {
     Resources res = getResources();
     super.onCreate(savedInstanceState);
 
-    // FREE VERSION:
+    // PRO / FREE VERSION:
 //  super.loadUrl(res.getString(it.mate.ckd.R.string.startup_url));
-    
-    // PRO VERSION:
     super.loadUrl(res.getString(it.mate.ckd.pro.R.string.startup_url));
 
   }
