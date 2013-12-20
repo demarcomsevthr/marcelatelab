@@ -46,7 +46,7 @@
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     
     <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="false" homePage="false">
-      <name>CKD Risk Calc</name>
+      <name>CKD Risk Calculator</name>
       <code>ckdriskcalc</code>
       <orderNm>200</orderNm>
       <htmls>
@@ -61,11 +61,12 @@
    <table>
      <tr>
        <td style="padding-top: 20px;">
-  <img src="/main/images/ckd-icon-72.png" alt="ckd">
+  <img src="/main/images/ckd-icon-72-2.png" alt="ckd">
        </td>
-       <td>
+       <td class="ecx-AppDescription">
 <p class="tpl-basePage">
-  The aim of this app is to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.</p>
+  The aim of this app is to evaluate the progression risk of Chronic Kidney Disease (CKD) based on the latest International Guidelines.
+</p>
        </td>
      </tr>
    </table>
@@ -77,7 +78,7 @@
       </htmls>
     </it.mate.econyx.shared.model.impl.WebContentPageTx>
     
-    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+    <it.mate.econyx.shared.model.impl.ArticleFolderPageTx visibleInExplorer="false" visibleInMenu="true" homePage="false">
       <name>News</name>
       <code>news</code>
       <orderNm>300</orderNm>
@@ -86,7 +87,7 @@
       </entity>
     </it.mate.econyx.shared.model.impl.ArticleFolderPageTx>
     
-    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="true" visibleInMenu="true" homePage="false">
+    <it.mate.econyx.shared.model.impl.WebContentPageTx visibleInExplorer="false" visibleInMenu="true" homePage="false">
       <name>Contacts</name>
       <code>contacts</code>
       <orderNm>400</orderNm>
