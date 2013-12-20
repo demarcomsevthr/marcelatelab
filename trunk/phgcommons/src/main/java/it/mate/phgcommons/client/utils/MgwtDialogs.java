@@ -1,6 +1,7 @@
 package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.ui.SimpleContainer;
+import it.mate.phgcommons.client.ui.ModalPopinDialog;
 
 import java.util.List;
 
@@ -45,7 +46,10 @@ public class MgwtDialogs {
   }
   
   public static PopinDialog popin (String title, Widget body) {
-    PopinDialog popinDialog = new PopinDialog();
+    
+    // 19/12/2013
+//  PopinDialog popinDialog = new PopinDialog();
+    PopinDialog popinDialog = new ModalPopinDialog();
 
     SimpleContainer dialogWrapper = new SimpleContainer();
     dialogWrapper.addStyleName("phg-PopinDialog-Wrapper");
