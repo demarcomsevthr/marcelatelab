@@ -11,6 +11,8 @@ public class Command implements Serializable {
   
   public final static int WIFI_DISABLE_ACTION = 2;
   
+  public final static int SHUTDOWN_PC_ACTION = 3;
+  
   private int action;
   
   public Command() { 
