@@ -9,14 +9,27 @@ import android.os.Bundle;
 
 
 public class MainActivity extends DroidGap {
+  
+  Resources res;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
 
-    Resources res = getResources();
+    res = getResources();
     super.onCreate(savedInstanceState);
     super.loadUrl(res.getString(R.string.startup_url));
+    
+    this.appView.addJavascriptInterface(new JsConfigWrapper(), "jsConfigWrapper");
+    
+  }
 
+  class JsConfigWrapper {
+    public String getTestFacadeModuleUrl() {
+      return res.getString(R.string.test_facade_module_url);
+    }
+    public String getTestFacadeRelativeUrl() {
+      return res.getString(R.string.test_facade_relative_url);
+    }
   }
 
   @Override

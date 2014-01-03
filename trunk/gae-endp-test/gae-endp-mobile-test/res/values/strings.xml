@@ -6,4 +6,8 @@
     <string name="menu_settings">Settings</string>
     <string name="startup_url">file:///android_asset/www/index.html</string>
     
+    <string name="test_facade_module_url">http://same.server.it/</string>
+    <string name="test_facade_relative_url">.testFacade</string>
+    
+    
 </resources>
