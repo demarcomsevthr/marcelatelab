@@ -19,6 +19,8 @@
     
     <p:SmartButton text="Test Bean" ui:field="testBeanBtn"></p:SmartButton>
     
+    <p:SmartButton text="Test Plugin" ui:field="testPluginBtn"></p:SmartButton>
+    
     <g:VerticalPanel visible="false">
       <m:MTextBox ui:field="messageBox" width="10em" height="2em"/>
       <m:Button text="add" ui:field="addBtn"/>

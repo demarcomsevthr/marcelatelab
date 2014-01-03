@@ -128,22 +128,16 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
 
     /*
-    proxy = new GreetingsProxy(new Delegate<Void>() {
-      public void execute(Void element) {
-        GwtUtils.log("greetings proxy initialized");
-        historyHandler.handleCurrentHistory();
-      }
-    });
-    */
-    
     PhonegapUtils.log("initializing commands proxy...");
-    
     commandsProxy = new CommandsProxy(new Delegate<Void>() {
       public void execute(Void element) {
         PhonegapUtils.log("commands proxy initialized");
         historyHandler.handleCurrentHistory();
       }
     });
+    */
+    
+    historyHandler.handleCurrentHistory();
 
   }
 
