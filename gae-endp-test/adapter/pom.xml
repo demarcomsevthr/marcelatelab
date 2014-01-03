@@ -5,6 +5,8 @@
   <version>0.1</version>
   
   <properties>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <appengine.target.version>1.8.7</appengine.target.version>
     <spring.version>3.2.4.RELEASE</spring.version>
@@ -67,7 +69,28 @@
 
   <build>
 
-    <plugins>
+    <resources>
+      <!-- ATTENZIONE: occorre inserire i sorgenti nel jar per il GWT compiler -->
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+          <include>**/*.css</include>
+          <include>**/client/**/*.java</include>
+          <include>**/client/**/*.png</include>
+          <include>**/shared/**/*.java</include>
+          <include>**/public/**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>log4j*.properties</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    
+      <plugins>
     
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
