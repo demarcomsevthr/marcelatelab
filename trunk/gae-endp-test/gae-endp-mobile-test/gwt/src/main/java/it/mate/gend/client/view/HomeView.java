@@ -11,12 +11,14 @@ import it.mate.gendtest.shared.model.TestCommandImpl;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.NativePropertiesPluginWrapper;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -165,6 +167,21 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("signAnchor")
   public void onSignBtn (ClickEvent event) {
     greetingsProxy.auth();
+  }
+  
+  @UiHandler ("testPluginBtn")
+  public void onTestPluginBtn (TouchEndEvent event) {
+    
+    NativePropertiesPluginWrapper.getProperties(new Delegate<Map<String, String>>() {
+      public void execute(Map<String, String> results) {
+        
+        for (String name : results.keySet()) {
+          String value = results.get(name);
+          PhonegapUtils.log(name + " = " + value);
+        }
+      }
+    });
+    
   }
   
   @UiHandler ("testBeanBtn")

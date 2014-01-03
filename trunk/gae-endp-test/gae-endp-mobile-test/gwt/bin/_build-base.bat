@@ -28,6 +28,9 @@ call mvn2 %DEP_CLEAN% compile package install
 cd %BASEAPPDIR%\..\..\..\phgcommons
 call mvn2 %DEP_CLEAN% compile package install
 
+cd %BASEAPPDIR%\..\..\adapter
+call mvn2 %DEP_CLEAN% compile package install
+
 set SKIP_PAUSE=%SAVE_SKIP_PAUSE%
 
 :NO_DEPENDENCIES
