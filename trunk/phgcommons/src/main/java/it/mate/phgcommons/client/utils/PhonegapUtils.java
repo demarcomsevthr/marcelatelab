@@ -86,4 +86,15 @@ public class PhonegapUtils {
     return suspendUncaughtExceptionAlerts;
   }
   
+  public static String getNativeProperty(String name) {
+    return getNativePropertyImpl(name.substring(0, 1).toUpperCase()+name.substring(1));
+  }
+
+  private static native String getNativePropertyImpl(String name) /*-{
+    if (!$wnd.jsNativePropertiesWrapper) {
+      return null;
+    }
+    return eval("window.jsNativePropertiesWrapper.get"+name+"()");
+  }-*/;
+
 }
