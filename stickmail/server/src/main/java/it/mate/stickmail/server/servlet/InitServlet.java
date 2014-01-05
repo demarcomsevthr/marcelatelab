@@ -1,4 +1,4 @@
-package it.mate.stickmail.services;
+package it.mate.stickmail.server.servlet;
 
 import it.mate.stickmail.server.services.AdapterUtil;
 
