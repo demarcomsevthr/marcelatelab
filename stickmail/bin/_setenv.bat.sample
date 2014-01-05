@@ -1,9 +1,10 @@
 
-set JAVA_HOME=P:\OPT\java\jdk1.7.0_17
+set JAVA_HOME=D:\OPT\jdk1.7.0_21
 
-SET M2_HOME=P:\OPT\apache-maven\apache-maven-3.1.1
+if NOT "%M2_HOME%"=="" GOTO M2_HOME_SET
+
+SET M2_HOME=D:\OPT\apache-maven-2.2.1
+
+:M2_HOME_SET
 
 SET ANT_HOME=D:\OPT\ant\apache-ant-1.9.2
-
-
-
