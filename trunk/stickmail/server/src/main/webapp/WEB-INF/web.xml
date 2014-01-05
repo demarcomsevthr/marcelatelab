@@ -14,7 +14,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   
   <servlet>
     <servlet-name>init</servlet-name>
-    <servlet-class>it.mate.stickmail.services.InitServlet</servlet-class>
+    <servlet-class>it.mate.stickmail.server.servlet.InitServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
  
