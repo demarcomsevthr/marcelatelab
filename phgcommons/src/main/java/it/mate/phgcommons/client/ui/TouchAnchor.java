@@ -44,7 +44,7 @@ public class TouchAnchor extends TouchWidget implements HasClickHandlers, HasTag
     addStyleName("phg-TouchAnchor");
     addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        TouchUtils.executePatch20131211();
+        TouchUtils.applyFocusPatch();
       }
     });
   }

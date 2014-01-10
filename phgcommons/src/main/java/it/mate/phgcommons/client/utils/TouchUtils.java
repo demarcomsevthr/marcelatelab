@@ -43,22 +43,22 @@ public class TouchUtils {
    * Lo attivo solo per Android (su Ios non ho riscontro di questa issue).
    * 
    */
-  private static FocusPanel patch20131211$focusPanel;
-  public static void executePatch20131211() {
+  private static FocusPanel focusPatch20131211$focusPanel;
+  public static void applyFocusPatch() {
     executePatch20131211(0);
   }
   public static void executePatch20131211(int delay) {
     if (!OsDetectionUtils.isAndroid())
       return;
-    if (patch20131211$focusPanel == null) {
-      patch20131211$focusPanel = new FocusPanel();
-      patch20131211$focusPanel.setWidth("1px");
-      patch20131211$focusPanel.setHeight("1px");
-      RootPanel.get().add(patch20131211$focusPanel);
+    if (focusPatch20131211$focusPanel == null) {
+      focusPatch20131211$focusPanel = new FocusPanel();
+      focusPatch20131211$focusPanel.setWidth("1px");
+      focusPatch20131211$focusPanel.setHeight("1px");
+      RootPanel.get().add(focusPatch20131211$focusPanel);
     }
     GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
-        patch20131211$focusPanel.setFocus(true);
+        focusPatch20131211$focusPanel.setFocus(true);
       }
     });
   }

@@ -35,7 +35,7 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
 
     addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        TouchUtils.executePatch20131211();
+        TouchUtils.applyFocusPatch();
       }
     });
 
