@@ -5,11 +5,18 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Panel;
 import com.googlecode.mgwt.ui.client.MGWT;
 
 public class PhonegapUtils {
   
+  private static int tabletWrapperPct = 80;
+  
+  private static int HEADER_PANEL_HEIGHT = 40;
+
   public static void logEnvironment() {
     log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
     String layoutInfo = "Width " + Window.getClientWidth();
@@ -97,4 +104,52 @@ public class PhonegapUtils {
     return eval("window.jsNativePropertiesWrapper.get"+name+"()");
   }-*/;
 
+  public static void adaptWrapperPanel(Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
+    wrapperPanel.getElement().setId(id);
+    if (OsDetectionUtils.isTablet()) {
+      GwtUtils.onAvailable(id, new Delegate<Element>() {
+        public void execute(Element wrapperPanelElem) {
+          int height = getTabletWrapperHeight();
+          GwtUtils.log("applying wrapperPanel height = " + height);
+          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
+          if (adaptVerMargin) {
+            int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
+            wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
+            wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
+          }
+          int width = getTabletWrapperWidth();
+          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+          int horMargin = ( Window.getClientWidth() - width ) / 2;
+          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+          if (delegate != null) {
+            delegate.execute(wrapperPanelElem);
+          }
+        }
+      });
+      
+    } else {
+      
+      //09/10/2013
+      // Patch per IPhone per far funzionare le animazioni jquery
+      wrapperPanel.setHeight((Window.getClientHeight() - HEADER_PANEL_HEIGHT ) + "px");
+      wrapperPanel.setWidth(Window.getClientWidth() + "px");
+      
+    }
+  }
+  
+  private static int getTabletWrapperHeight() {
+    int height = Window.getClientHeight() * tabletWrapperPct / 100;
+    return height;
+  }
+  
+  private static int getTabletWrapperWidth() {
+    int width = Window.getClientWidth() * tabletWrapperPct / 100;
+    return width;
+  }
+  
+  public static void setTabletWrapperPct(int tabletWrapperPct) {
+    PhonegapUtils.tabletWrapperPct = tabletWrapperPct;
+  }
+  
 }
