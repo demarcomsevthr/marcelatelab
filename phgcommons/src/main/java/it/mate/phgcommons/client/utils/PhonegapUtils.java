@@ -39,6 +39,11 @@ public class PhonegapUtils {
     }
     log("(see "+ OsDetectionUtils.class.getName() +" for details)");
     log("NavVer " + Window.Navigator.getAppVersion());
+    log("Device.name " + getDeviceName());
+    log("Device.phonegap " + getDevicePhonegap());
+    log("Device.platform " + getDevicePlatform());
+    log("Device.uuid " + getDeviceUuid());
+    log("Device.version " + getDeviceVersion());
   }
   
   public static void openInAppBrowser(String url) {
@@ -151,5 +156,41 @@ public class PhonegapUtils {
   public static void setTabletWrapperPct(int tabletWrapperPct) {
     PhonegapUtils.tabletWrapperPct = tabletWrapperPct;
   }
+  
+  public static native String getDeviceName() /*-{
+    if (!$wnd.device) {
+      return "desktop";
+    }
+    return $wnd.device.name;
+  }-*/;
+
+  public static native String getDevicePhonegap() /*-{
+    if (!$wnd.device) {
+      return "desktop";
+    }
+    return $wnd.device.phonegap;
+  }-*/;
+
+  public static native String getDevicePlatform() /*-{
+    if (!$wnd.device) {
+      return "desktop";
+    }
+    return $wnd.device.platform;
+  }-*/;
+
+  public static native String getDeviceUuid() /*-{
+    if (!$wnd.device) {
+      return "desktop";
+    }
+    return $wnd.device.uuid;
+  }-*/;
+
+  public static native String getDeviceVersion() /*-{
+    if (!$wnd.device) {
+      return "desktop";
+    }
+    return $wnd.device.version;
+  }-*/;
+
   
 }
