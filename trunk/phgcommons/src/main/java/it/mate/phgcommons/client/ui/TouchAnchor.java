@@ -36,6 +36,11 @@ public class TouchAnchor extends TouchWidget implements HasClickHandlers, HasTag
     this(new Anchor(html));
   }
   
+  public TouchAnchor(SafeHtml html, TapHandler handler) {
+    this(html);
+    addTapHandler(handler);
+  }
+  
   protected TouchAnchor(Anchor anchor) {
     this.anchor = anchor;
     wrapper = DOM.createDiv();
