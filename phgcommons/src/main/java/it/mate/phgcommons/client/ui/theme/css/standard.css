@@ -7,6 +7,10 @@
   text-decoration: none;
 }
 
+.phg-TouchAnchor a {
+  text-decoration: none;
+}
+
 .phg-DateBox {
   background-image: calendarImageUrl;
   background-repeat: no-repeat;
@@ -135,5 +139,68 @@
   width: 100px;
   padding-top: 6px;
   margin-left: 4px;
+}
+
+.phg-PopinDialog-Wrapper {
+  background: transparent;
+}
+
+.phg-PopinDialog-TitleWrapper {
+  background: rgb(95, 110, 139);
+  border-top-left-radius: 16px 16px;
+  border-top-right-radius: 16px 16px;
+  border-top: 3px solid #bcc2cd;
+  border-left: 3px solid #bcc2cd;
+  border-right: 3px solid #bcc2cd;
+  padding-top: 5px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.phg-PopinDialog-BodyWrapper {
+  background: rgb(36, 56, 93);
+  border-bottom-left-radius: 16px 16px;
+  border-bottom-right-radius: 16px 16px;
+  border-bottom: 3px solid #bcc2cd;
+  border-left: 3px solid #bcc2cd;
+  border-right: 3px solid #bcc2cd;
+  padding-left: 50px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  padding-top: 5px;
+}
+
+.phg-PopinDialog-Wrapper, .phg-PopinDialog-Wrapper a {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.phg-PopinDialog-BodyWrapper div div {
+  padding-top: 20px;
+}
+
+.phg-PopinDialog-MessageRow {
+  font-size: 0.7em;
+  margin-left: -1.8em;
+  margin-top: -1.2em;
+  margin-right: -1.0em;
+  margin-bottom: -1.2em;
+}
+
+.phg-PopinDialog-ButtonsRow {
+  margin-left: -0.5em;
+  margin-bottom: -0.5em;
+}
+
+.phg-PopinDialog-ButtonsRow td {
+  width: 2em;
+  padding: 0.6em;
+}
+
+.phg-PopinDialog-Wrapper {
+  font-size: 20px;
 }
 
