@@ -13,7 +13,7 @@ import it.mate.ckd.client.view.HomeView;
 import it.mate.ckd.client.view.ProtocolStepView;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
-import it.mate.gwtcommons.client.ui.MyAnchor;
+import it.mate.gwtcommons.client.ui.AnchorWithClickHandler;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -232,7 +232,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       return;
     }
     final SimpleContainer dialogPanel = new SimpleContainer();
-    dialogPanel.add(new SimplePanel(new MyAnchor("Yes Now", new ClickHandler() {
+    dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Yes Now", new ClickHandler() {
       public void onClick(ClickEvent event) {
         advDialog.hide();
         PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id773220859");
@@ -240,7 +240,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         delegate.execute(advDialog);
       }
     })));
-    dialogPanel.add(new SimplePanel(new MyAnchor("No, Thanks", new ClickHandler() {
+    dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("No, Thanks", new ClickHandler() {
       public void onClick(ClickEvent event) {
         advDialog.hide();
         delegate.execute(advDialog);
@@ -286,7 +286,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       delegate.execute(ratingDialog);
     } else {
       final SimpleContainer dialogPanel = new SimpleContainer();
-      dialogPanel.add(new SimplePanel(new MyAnchor("Yes Now", new ClickHandler() {
+      dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Yes Now", new ClickHandler() {
         public void onClick(ClickEvent event) {
           PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked yes");
@@ -294,7 +294,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id669006296");
         }
       })));
-      dialogPanel.add(new SimplePanel(new MyAnchor("Remind Me Later", new ClickHandler() {
+      dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Remind Me Later", new ClickHandler() {
         public void onClick(ClickEvent event) {
           PhonegapUtils.setLocalStorageItem("ckd-free-rating", "4");
           GwtUtils.log("clicked maybe");
@@ -303,7 +303,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           delegate.execute(ratingDialog);
         }
       })));
-      dialogPanel.add(new SimplePanel(new MyAnchor("No, Thanks", new ClickHandler() {
+      dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("No, Thanks", new ClickHandler() {
         public void onClick(ClickEvent event) {
           PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked no");
