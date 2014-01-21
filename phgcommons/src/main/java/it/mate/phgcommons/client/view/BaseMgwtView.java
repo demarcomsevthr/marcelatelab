@@ -81,7 +81,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     scrollPanel.setWidget(widget);
   }
   
-  protected HTML getTitle() {
+  public HTML getTitle() {
     return title;
   }
   
