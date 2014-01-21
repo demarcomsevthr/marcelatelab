@@ -16,6 +16,8 @@ public class PhonegapUtils {
   private static int tabletWrapperPct = 80;
   
   private static int HEADER_PANEL_HEIGHT = 40;
+  
+  private static boolean useLogPlugin = false;
 
   public static void logEnvironment() {
     log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
@@ -77,7 +79,13 @@ public class PhonegapUtils {
   
   public static void log(String text) {
     GwtUtils.log(text);
-    logImpl(text);
+    if (useLogPlugin) {
+      if (!OsDetectionUtils.isDesktop()) {
+        LogPluginWrapper.debug(text);
+      }
+    } else {
+      logImpl(text);
+    }
   }
   
   public static native void logImpl(String text) /*-{
@@ -192,5 +200,8 @@ public class PhonegapUtils {
     return $wnd.device.version;
   }-*/;
 
+  public static void setUseLogPlugin(boolean useLogPlugin) {
+    PhonegapUtils.useLogPlugin = useLogPlugin;
+  }
   
 }
