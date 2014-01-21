@@ -113,13 +113,13 @@ public class CalendarDialog {
   
   public CalendarDialog() {
     curMonth = new Month();
-    init();
+    initDefaults();
   }
   
-  private void init() {
+  private void initDefaults() {
     popupLeft = 0;
     popupTop = 52;
-    popupHeight = 360;
+    popupHeight = 392;
     popupWidth = Window.getClientWidth();
     headerHeight = 36;
     dayHeight = 36;
@@ -135,6 +135,11 @@ public class CalendarDialog {
     popup.hide();
     EventUtils.removeModalHandler(modalHandlerRegistration);
     PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
+    onHide();
+  }
+  
+  protected void onHide() {
+    
   }
   
   public HandlerRegistration addSelectedDateChangeHandler(final SelectedDateChangeHandler handler) {
@@ -351,7 +356,7 @@ public class CalendarDialog {
     return wrapper;
   }
   
-  private int createDayCell(FlexTable table, int row, int col, final Date date, boolean outside) {
+  private int createDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
     int day = date.getDate();
     TouchHTML html = new TouchHTML("" + day);
     html.addStyleName("phg-CalendarDialog-Month-Day");
@@ -362,7 +367,7 @@ public class CalendarDialog {
     if (col == 0) {
       html.addStyleName("phg-firstCol");
     }
-    if (outside) {
+    if (outsideCurrentMonth) {
       html.addStyleName("phg-outsideMonth");
     }
     html.addTouchEndHandler(new TouchEndHandler() {
@@ -372,6 +377,7 @@ public class CalendarDialog {
         }
       }
     });
+    customizeDayCell(html, table, row, col, date, outsideCurrentMonth);
     table.setWidget(row, col, html);
     if (col == 6) {
       row++;
@@ -407,6 +413,14 @@ public class CalendarDialog {
         }
       });
     }
+  }
+  
+  protected void customizeDayCell(TouchHTML dayHtml, FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
+    
+  }
+  
+  public PopupPanel getPopupPanel() {
+    return popup;
   }
   
 }

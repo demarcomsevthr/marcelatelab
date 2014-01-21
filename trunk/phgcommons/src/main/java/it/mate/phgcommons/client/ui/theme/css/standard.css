@@ -1,7 +1,13 @@
 
-@external phg*;
+@external phg*, gwt*;
 
 @url calendarImageUrl calendarImage;
+
+.gwt-PopupPanel {
+  border: none;
+  padding: 0;
+  background: white;
+}
 
 .phg-TouchAnchor {
   text-decoration: none;
