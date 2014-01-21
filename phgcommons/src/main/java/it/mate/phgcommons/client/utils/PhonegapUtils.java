@@ -79,10 +79,8 @@ public class PhonegapUtils {
   
   public static void log(String text) {
     GwtUtils.log(text);
-    if (useLogPlugin) {
-      if (!OsDetectionUtils.isDesktop()) {
-        LogPlugin.debug(text);
-      }
+    if (useLogPlugin && OsDetectionUtils.isAndroid()) {
+      LogPlugin.debug(text);
     } else {
       logImpl(text);
     }
