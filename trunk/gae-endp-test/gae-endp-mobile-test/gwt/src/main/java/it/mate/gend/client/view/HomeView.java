@@ -11,7 +11,7 @@ import it.mate.gendtest.shared.model.TestCommandImpl;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.NativePropertiesPluginWrapper;
+import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -172,7 +172,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("testPluginBtn")
   public void onTestPluginBtn (TouchEndEvent event) {
     
-    NativePropertiesPluginWrapper.getProperties(new Delegate<Map<String, String>>() {
+    NativePropertiesPlugin.getProperties(new Delegate<Map<String, String>>() {
       public void execute(Map<String, String> results) {
         
         for (String name : results.keySet()) {
