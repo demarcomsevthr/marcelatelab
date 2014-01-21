@@ -26,6 +26,22 @@ public class NativePropertiesPluginWrapper extends AbstractPluginWrapper {
     });
   }
   
+  public static void getPropertiesAsString(final Delegate<Map<String, String>> delegate) {
+    execString("NativePropertiesPlugin", "getPropertiesAsString", null, new Delegate<String>() {
+      public void execute(String results) {
+        Map<String, String> properties = new HashMap<String, String>();
+        String[] propTokens = results.split("|");
+        for (String propToken : propTokens) {
+          String[] tokens = propToken.split("=");
+          String name = tokens[0];
+          String value = tokens[1];
+          properties.put(name, value);
+        }
+        delegate.execute(properties);
+      }
+    });
+  }
+  
   protected static class JsEntry extends JavaScriptObject {
     protected JsEntry() { }
     public final String getName() {
