@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.utils;
 
 
-public class LogPluginWrapper extends AbstractPluginWrapper {
+public class LogPlugin extends AbstractPluginWrapper {
 
   public static void debug(String msg) {
     execVoid("LogPlugin", "debug", msg, null);

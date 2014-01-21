@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
 
-public class NativePropertiesPluginWrapper extends AbstractPluginWrapper {
+public class NativePropertiesPlugin extends AbstractPluginWrapper {
 
+  /*
   public static void getProperties(final Delegate<Map<String, String>> delegate) {
     exec("NativePropertiesPlugin", "getProperties", null, new Delegate<JavaScriptObject>() {
       public void execute(JavaScriptObject results) {
@@ -25,21 +25,27 @@ public class NativePropertiesPluginWrapper extends AbstractPluginWrapper {
       }
     });
   }
+  */
   
-  public static void getPropertiesAsString(final Delegate<Map<String, String>> delegate) {
-    execString("NativePropertiesPlugin", "getPropertiesAsString", null, new Delegate<String>() {
-      public void execute(String results) {
-        Map<String, String> properties = new HashMap<String, String>();
-        String[] propTokens = results.split("|");
-        for (String propToken : propTokens) {
-          String[] tokens = propToken.split("=");
-          String name = tokens[0];
-          String value = tokens[1];
-          properties.put(name, value);
+  public static void getProperties(final Delegate<Map<String, String>> delegate) {
+    if (OsDetectionUtils.isDesktop()) {
+      delegate.execute(new HashMap<String, String>());
+    } else {
+      execString("NativePropertiesPlugin", "getPropertiesAsString", null, new Delegate<String>() {
+        public void execute(String results) {
+//        PhonegapUtils.log("received " + results);
+          Map<String, String> properties = new HashMap<String, String>();
+          String[] propTokens = results.split("\\|");
+          for (String propToken : propTokens) {
+            String[] tokens = propToken.split("=");
+            String name = tokens[0];
+            String value = tokens[1];
+            properties.put(name, value);
+          }
+          delegate.execute(properties);
         }
-        delegate.execute(properties);
-      }
-    });
+      });
+    }
   }
   
   protected static class JsEntry extends JavaScriptObject {
