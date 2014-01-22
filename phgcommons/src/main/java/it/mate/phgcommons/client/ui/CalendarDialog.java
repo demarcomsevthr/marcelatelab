@@ -109,6 +109,8 @@ public class CalendarDialog {
   
   private HandlerRegistration modalHandlerRegistration;
   
+  private boolean modal = true;
+  
   private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
   
   public CalendarDialog() {
@@ -165,7 +167,9 @@ public class CalendarDialog {
     popup.addStyleName("phg-CalendarDialog");
     setHidden(popup);
     
-    makePopupModal();
+    if (modal) {
+      makePopupModal();
+    }
     
     SimpleContainer container = new SimpleContainer();
     
@@ -421,6 +425,10 @@ public class CalendarDialog {
   
   public PopupPanel getPopupPanel() {
     return popup;
+  }
+  
+  public void setModal(boolean modal) {
+    this.modal = modal;
   }
   
 }
