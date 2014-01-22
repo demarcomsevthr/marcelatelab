@@ -30,7 +30,13 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   }
 
   private void initUI() {
-    main = new LayoutPanel();
+    main = new LayoutPanel() {
+      @Override
+      protected void onUnload() {
+        BaseMgwtView.this.onUnload();
+        super.onUnload();
+      }
+    };
     scrollPanel = new ScrollPanel();
     headerPanel = new HeaderPanel();
     title = new HTML();
@@ -67,6 +73,10 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   
   public void onAttach(AttachEvent event) {
 
+  }
+  
+  public void onUnload() {
+    
   }
   
   public void setTitleHtml (String html) {

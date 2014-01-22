@@ -431,4 +431,8 @@ public class CalendarDialog {
     this.modal = modal;
   }
   
+  public boolean isVisible() {
+    return popup.isVisible();
+  }
+  
 }
