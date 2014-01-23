@@ -32,6 +32,14 @@ import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
 
 public class CalendarDialog {
   
+  private static String language = "en";
+  
+  private static final String[] MONTH_NAMES_EN = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+  private static final String[] MONTH_NAMES_IT = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+  
+  private static final String[] DAY_NAMES_EN = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+  private static final String[] DAY_NAMES_IT = {"Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"};
+  
   public interface SelectedDateChangeHandler {
     public void onSelectedDateChange(Date date);
   }
@@ -66,9 +74,8 @@ public class CalendarDialog {
       return temp.getDate();
     }
     public String getName() {
-      return enNames[date.getMonth()];
+      return "it".equals(language) ? MONTH_NAMES_IT[date.getMonth()] : MONTH_NAMES_EN[date.getMonth()];
     }
-    private String[] enNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
   }
   
   private PopupPanel popup;
@@ -329,6 +336,10 @@ public class CalendarDialog {
     table.setWidget(1, 5, createWeekDay("Fri"));
     table.setWidget(1, 6, createWeekDay("Sat"));
     
+    for (int idn = 0; idn < 7; idn++) {
+      table.setWidget(1, idn, createWeekDay("it".equals(language) ? DAY_NAMES_IT[idn] : DAY_NAMES_EN[idn]));
+    }
+    
     int row = 2;
     
     Date date1 = new Date(month.getYear() - 1900, month.getMonth() - 1, 1);
@@ -433,6 +444,14 @@ public class CalendarDialog {
   
   public boolean isVisible() {
     return popup.isVisible();
+  }
+  
+  public static void setLanguage(String language) {
+    if ("it".equalsIgnoreCase(language)) {
+      CalendarDialog.language = language;
+    } else {
+      CalendarDialog.language = "en";
+    }
   }
   
 }
