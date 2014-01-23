@@ -38,5 +38,11 @@ public class MTextBoxPatched extends MTextBox {
       }
     }
   }
+  
+  public void setType(String type) {
+    if ("password".equalsIgnoreCase(type)) {
+      box.getElement().setAttribute("type", "password");
+    }
+  }
 
 }
