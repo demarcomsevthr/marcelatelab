@@ -43,22 +43,24 @@ public class TouchUtils {
    * Lo attivo solo per Android (su Ios non ho riscontro di questa issue).
    * 
    */
-  private static FocusPanel focusPatch20131211$focusPanel;
+  private static FocusPanel focusPatch20131211$focusWidget;
   public static void applyFocusPatch() {
     executePatch20131211(0);
   }
   public static void executePatch20131211(int delay) {
     if (!OsDetectionUtils.isAndroid())
       return;
-    if (focusPatch20131211$focusPanel == null) {
-      focusPatch20131211$focusPanel = new FocusPanel();
-      focusPatch20131211$focusPanel.setWidth("1px");
-      focusPatch20131211$focusPanel.setHeight("1px");
-      RootPanel.get().add(focusPatch20131211$focusPanel);
+    if (focusPatch20131211$focusWidget == null) {
+      focusPatch20131211$focusWidget = new FocusPanel();
+      focusPatch20131211$focusWidget.setWidth("1px");
+      focusPatch20131211$focusWidget.setHeight("1px");
+      RootPanel.get().add(focusPatch20131211$focusWidget);
     }
     GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
-        focusPatch20131211$focusPanel.setFocus(true);
+        focusPatch20131211$focusWidget.setFocus(true);
+        NativeEvent clickEvent = Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);
+        DomEvent.fireNativeEvent(clickEvent, focusPatch20131211$focusWidget);
       }
     });
   }

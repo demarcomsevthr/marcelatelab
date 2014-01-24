@@ -26,6 +26,8 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
@@ -328,14 +330,6 @@ public class CalendarDialog {
     table.setWidget(0, 0, header);
     GwtUtils.setFlexCellColSpan(table, 0, 0, 7);
     
-    table.setWidget(1, 0, createWeekDay("Sun"));
-    table.setWidget(1, 1, createWeekDay("Mon"));
-    table.setWidget(1, 2, createWeekDay("Tue"));
-    table.setWidget(1, 3, createWeekDay("Wed"));
-    table.setWidget(1, 4, createWeekDay("Thu"));
-    table.setWidget(1, 5, createWeekDay("Fri"));
-    table.setWidget(1, 6, createWeekDay("Sat"));
-    
     for (int idn = 0; idn < 7; idn++) {
       table.setWidget(1, idn, createWeekDay("it".equals(language) ? DAY_NAMES_IT[idn] : DAY_NAMES_EN[idn]));
     }
@@ -385,9 +379,16 @@ public class CalendarDialog {
     if (outsideCurrentMonth) {
       html.addStyleName("phg-outsideMonth");
     }
+    html.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+//      PhonegapUtils.log("TouchStartEvent");
+      }
+    });
     html.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        if (!scrollPending) {
+        if (scrollPending) {
+          PhonegapUtils.log("scrollPending!");
+        } else {
           setSelectedDate(date);
         }
       }
