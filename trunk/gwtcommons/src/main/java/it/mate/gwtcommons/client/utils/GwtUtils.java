@@ -377,14 +377,10 @@ public class GwtUtils {
     return timer;
   }
   
-  public static void deferredExecution (final Delegate<Void> callback) {
+  public static void deferredExecution (Delegate<Void> callback) {
     deferredExecution(0, callback);
   }
   
-  // TODO: IN TEST 
-  // [13/12/2013]
-  // Android touch anchor issues
-  // (see TouchAnchor)
   public static void deferredExecution (int delayMillis, final Delegate<Void> delegate) {
     if (mobileOptimizations) {
       if (delayMillis <= 0) {
