@@ -210,3 +210,17 @@
   font-size: 20px;
 }
 
+.phg-InvisibleTouch {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 4px;
+  height: 4px;
+  background-color: transparent;
+  border: none;
+}
+
+.phg-InvisibleTouch input {
+  border: 0px !important;
+  z-index: +1 !important;
+}
