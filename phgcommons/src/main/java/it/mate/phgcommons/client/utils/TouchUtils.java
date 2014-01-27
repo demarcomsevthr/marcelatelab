@@ -40,29 +40,50 @@ public class TouchUtils {
    * Constato anche che "spostando" il focus su altri elementi nella pagina (tappandoli), 
    * viene fatto il rendering "accodato" (lo noto soprattutto nel simulatore dove i tempi sono piu "dilatati").
    * Detto cio provo a simulare programmaticamente uno spostamento di focus su un elemento invisibile della pagina.
-   * Lo attivo solo per Android (su Ios non ho riscontro di questa issue).
    * 
    */
-  private static FocusPanel focusPatch20131211$focusWidget;
+  private static FocusPanel touchUtils$focusPatch$focusWidget;
+  
   public static void applyFocusPatch() {
     executePatch20131211(0);
   }
-  public static void executePatch20131211(int delay) {
-    if (!OsDetectionUtils.isAndroid())
-      return;
-    if (focusPatch20131211$focusWidget == null) {
-      focusPatch20131211$focusWidget = new FocusPanel();
-      focusPatch20131211$focusWidget.setWidth("1px");
-      focusPatch20131211$focusWidget.setHeight("1px");
-      RootPanel.get().add(focusPatch20131211$focusWidget);
+  private static void executePatch20131211(int delay) {
+    if (touchUtils$focusPatch$focusWidget != null) {
+      touchUtils$focusPatch$focusWidget.setVisible(false);
     }
+    touchUtils$focusPatch$focusWidget = new FocusPanel();
+    touchUtils$focusPatch$focusWidget.addStyleName("phg-InvisibleTouch");
+    RootPanel.get().add(touchUtils$focusPatch$focusWidget);
     GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
-        focusPatch20131211$focusWidget.setFocus(true);
+        touchUtils$focusPatch$focusWidget.setFocus(true);
         NativeEvent clickEvent = Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);
-        DomEvent.fireNativeEvent(clickEvent, focusPatch20131211$focusWidget);
+        DomEvent.fireNativeEvent(clickEvent, touchUtils$focusPatch$focusWidget);
       }
     });
   }
+  
+  public static void applyFocusPatch2() {
+    executePatch20140127(0);
+  }
+  private static void executePatch20140127(int delay) {
+    if (touchUtils$focusPatch$focusWidget != null) {
+      PhonegapUtils.log("hiding focus patch widget");
+      touchUtils$focusPatch$focusWidget.setVisible(false);
+    }
+    PhonegapUtils.log("creating focus patch widget");
+    touchUtils$focusPatch$focusWidget = new FocusPanel();
+    touchUtils$focusPatch$focusWidget.addStyleName("phg-InvisibleTouch");
+    RootPanel.get().add(touchUtils$focusPatch$focusWidget);
+    GwtUtils.deferredExecution(delay, new Delegate<Void>() {
+      public void execute(Void element) {
+        touchUtils$focusPatch$focusWidget.setFocus(true);
+        NativeEvent clickEvent = Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);
+        DomEvent.fireNativeEvent(clickEvent, touchUtils$focusPatch$focusWidget);
+        PhonegapUtils.log("fired click event on focus patch widget");
+      }
+    });
+  }
+  
 
 }
