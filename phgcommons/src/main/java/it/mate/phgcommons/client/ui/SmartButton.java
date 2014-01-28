@@ -26,7 +26,6 @@ import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 /**
- * @deprecated
  * 
  * Use it.mate.phgcommons.client.ui.TouchButton instead
  *
