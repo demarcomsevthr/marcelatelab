@@ -58,4 +58,6 @@
   
   <public path="public" />
 
+  <collapse-all-properties />
+  
 </module>
