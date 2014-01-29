@@ -22,9 +22,9 @@ SET BASEDIR=%~dp0
 
 SET PROJNAME=template-project
 
-SET PACKAGE=it.melograno.extsio
+SET PACKAGE=it.mate.stickmail
 
-SET APPNAME=ExtsioMobile
+SET APPNAME=StickMail
 
 cd %BASEDIR%
 
@@ -64,5 +64,13 @@ echo.
 echo FINISH
 pause
 cd %BASEDIR%
+
+echo.
+echo.
+echo >>>>>>>>>>>>>  ATTENZIONE  <<<<<<<<<<<<<<
+echo RICORDARSI DI RIPULIRE IL PATH DI SISTEMA AL TERMINE DELLA BUILD 
+echo.
+echo.
+echo.
 
 ::EXIT
