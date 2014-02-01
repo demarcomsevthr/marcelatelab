@@ -4,6 +4,7 @@ set MODULE=server
 set SKIP_PAUSE=false
 set SKIP_GWT_DEPENDENCIES=true
 SET M2_HOME=D:\OPT\apache-maven-3.1.1
+
 set goals=
 set goals=%goals% clean
 set goals=%goals% compile
