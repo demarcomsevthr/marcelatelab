@@ -4,12 +4,14 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.stickmail.client.api.StickMailProxy;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.googlecode.gwtphonegap.client.PhoneGap;
 
+@SuppressWarnings("rawtypes")
 public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public static final AppClientFactory IMPL = Initializer.create();
@@ -36,5 +38,9 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public int getTabletWrapperWidth();
   
   public void initTitle(BaseMgwtView view);
+  
+  public void initEndpointProxy(Delegate<StickMailProxy> delegate);
+  
+  public StickMailProxy getStickMailProxy();
   
 }

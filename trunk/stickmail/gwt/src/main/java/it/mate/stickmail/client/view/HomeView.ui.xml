@@ -10,7 +10,7 @@
   
     <g:Label text="Home view"></g:Label>
     
-    <p:TouchButton text="Sign In"/>
+    <p:TouchButton text="Sign In" ui:field="signInBtn"/>
     
     <p:TouchButton text="Test" ui:field="testBtn"/>
     
