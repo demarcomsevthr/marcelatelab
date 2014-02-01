@@ -1,13 +1,16 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.stickmail.client.api.StickMailProxy;
 import it.mate.stickmail.client.constants.AppProperties;
+import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.view.HomeView.Presenter;
 
 import java.util.Date;
@@ -66,6 +69,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
+    AppClientFactory.IMPL.initEndpointProxy(new Delegate<StickMailProxy>() {
+      public void execute(StickMailProxy element) {
+        PhonegapUtils.log("proxy initialized");
+      }
+    });
+    
   }
   
   @Override
@@ -116,6 +125,17 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void onTouchBtn (TapEvent event) {
     PhonegapUtils.log("touch btn tapped");
     outputLbl.setText("touchBtn tapped - " + System.currentTimeMillis());
+  }
+  
+  @UiHandler ("signInBtn")
+  public void onSignInBtn (TouchEndEvent event) {
+    
+    AppClientFactory.IMPL.getStickMailProxy().testService(new Delegate<String>() {
+      public void execute(String results) {
+        PhonegapUtils.log("test service result " + results);
+      }
+    });
+
   }
   
 }
