@@ -17,6 +17,8 @@ public class EndpointResponse implements Serializable {
   
   private String payload;
   
+  private String buildNumber;
+  
   public EndpointResponse() {  }
 
   public EndpointResponse(int statusCode) {
@@ -42,6 +44,15 @@ public class EndpointResponse implements Serializable {
 
   public void setPayload(String payload) {
     this.payload = payload;
+  }
+  
+  public EndpointResponse setBuildNumber(String buildNumber) {
+    this.buildNumber = buildNumber;
+    return this;
+  }
+  
+  public String getBuildNumber() {
+    return buildNumber;
   }
   
 }
