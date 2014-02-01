@@ -21,6 +21,21 @@ public class CommandsProxy extends AbstractEndpointProxy {
     super(API_ROOT, API_NAME, false, initDelegate);
   }
   
+  @Override
+  protected String getDesktopClientId() {
+    return null;
+  }
+
+  @Override
+  protected String getMobileClientId() {
+    return null;
+  }
+
+  @Override
+  protected String getMobileClientSecret() {
+    return null;
+  }
+
   public void sendEnableCommand(String message, final Delegate<Void> delegate) {
     sendCommandImpl(message, 1, new Callback() {
       public void execute(JavaScriptObject jso) {
