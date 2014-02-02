@@ -8,7 +8,7 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.api.StickMailProxy;
+import it.mate.stickmail.client.api.StickMailEPProxy;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.view.HomeView.Presenter;
@@ -69,8 +69,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    AppClientFactory.IMPL.initEndpointProxy(new Delegate<StickMailProxy>() {
-      public void execute(StickMailProxy element) {
+    AppClientFactory.IMPL.initEndpointProxy(new Delegate<StickMailEPProxy>() {
+      public void execute(StickMailEPProxy element) {
         PhonegapUtils.log("proxy initialized");
       }
     });
@@ -129,13 +129,15 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("signInBtn")
   public void onSignInBtn (TouchEndEvent event) {
-    
-    AppClientFactory.IMPL.getStickMailProxy().testService(new Delegate<String>() {
-      public void execute(String results) {
-        PhonegapUtils.log("test service result " + results);
+    AppClientFactory.IMPL.getStickMailEPProxy().auth(new Delegate<Void>() {
+      public void execute(Void element) {
+        AppClientFactory.IMPL.getStickMailEPProxy().authUser(null);
+      }
+    }, new Delegate<Void>() {
+      public void execute(Void element) {
+        
       }
     });
-
   }
   
 }

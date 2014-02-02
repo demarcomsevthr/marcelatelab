@@ -11,7 +11,7 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.activities.mapper.MainActivityMapper;
 import it.mate.stickmail.client.activities.mapper.MainAnimationMapper;
-import it.mate.stickmail.client.api.StickMailProxy;
+import it.mate.stickmail.client.api.StickMailEPProxy;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.places.AppHistoryObserver;
 import it.mate.stickmail.client.places.MainPlace;
@@ -56,7 +56,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private static int HEADER_PANEL_HEIGHT = 40;
   
-  private StickMailProxy stickMailProxy;
+  private StickMailEPProxy stickMailEPProxy;
 
   @Override
   public void initModule(final Panel modulePanel) {
@@ -258,14 +258,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public void initEndpointProxy(final Delegate<StickMailProxy> delegate) {
+  public void initEndpointProxy(final Delegate<StickMailEPProxy> delegate) {
     PhonegapUtils.log("initializing endpoint proxy...");
-    stickMailProxy = new StickMailProxy(new Delegate<Void>() {
+    stickMailEPProxy = new StickMailEPProxy(new Delegate<Void>() {
       public void execute(Void element) {
         PhonegapUtils.log("endpoint proxy initialized");
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
-            delegate.execute(stickMailProxy);
+            delegate.execute(stickMailEPProxy);
           }
         });
       }
@@ -273,8 +273,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public StickMailProxy getStickMailProxy() {
-    return stickMailProxy;
+  public StickMailEPProxy getStickMailEPProxy() {
+    return stickMailEPProxy;
   }
   
 }
