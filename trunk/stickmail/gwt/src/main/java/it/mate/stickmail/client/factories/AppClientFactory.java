@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.api.StickMailProxy;
+import it.mate.stickmail.client.api.StickMailEPProxy;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Panel;
@@ -39,8 +39,8 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void initTitle(BaseMgwtView view);
   
-  public void initEndpointProxy(Delegate<StickMailProxy> delegate);
+  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate);
   
-  public StickMailProxy getStickMailProxy();
+  public StickMailEPProxy getStickMailEPProxy();
   
 }
