@@ -1,6 +1,6 @@
 package it.mate.stickmail.server.endpoint;
 
-import it.mate.stickmail.server.services.StickAdapter;
+import it.mate.stickmail.shared.model.AuthUser;
 import it.mate.stickmail.shared.model.EndpointResponse;
 
 import org.apache.log4j.Logger;
@@ -8,23 +8,21 @@ import org.apache.log4j.Logger;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
+import com.google.api.server.spi.config.Named;
+import com.google.appengine.api.users.User;
 
 /**
  *  ATTENZIONE
  *  
  *  TIPS & TRICKS
  *  
- *      - NON FUNZIONA LA @PostConstruct
- *        PERO' EMPIRICAMENTE RILEVO CHE SE LA TOLGO NON FUNZIONA IL WRAPPER JS gapi.client...
- *  
+ *      - NEL NOME DEL SERVER NON CI DEVONO ESSERE CARATTERI "STRANI" 
+ *        (Es: stickmail-server.appspot.com -> -) [01/02/2014]
+ *      
  *      - NON FUNZIONANO I METODI CHE INIZIANO CON GET (DA 404)
  *        NON HO PROVATO IL METODO POST... (ma potrebbe non funzionare analogamente)
  *        (sembra anche ininfluente l'utilizza della property name dell'annotation)
  *        
- *      - SE NON FUNZIONA IL WRAPPER JS gapi.client PROVARE A MODIFICARE L'ENDPOINT (IN MODO CHE VENGA RICREATO)  
- *      
- *      - IMPORTANTE: NEL NOME DEL SERVER NON CI DEVONO ESSERE CARATTERI "STRANI" (-) [01/02/2014]
- *      
  *      
  *      
  * 
@@ -56,45 +54,31 @@ public class StickMailEndpoint {
 
   private static Logger logger = Logger.getLogger(StickMailEndpoint.class);
 
-//private MyAutoBeanFactory factory;
-  
-  private StickAdapter adapter;
-
-  /*
-  @PostConstruct
-  public void onPostConstruct() {
-    System.out.println("NON SERVE A NIENTE E NON VIENE ESEGUITA, MA EMPIRICAMENTE RILEVO CHE SE LA TOLGO NON FUNZIONA IL CLIENT JS GAPI.CLIENT...");
-  }
-  */
-  
-  private void ensureInstances() {
-    boolean initOk = false;
-    /*
-    if (factory == null) {
-      factory = AutoBeanFactorySource.create(MyAutoBeanFactory.class);
-      initOk = true;
-    }
-    if (adapter == null) {
-      adapter = AdapterUtil.getAdapter();
-      initOk = true;
-    }
-    if (initOk) {
-      logger.debug("initialized " + this);
-    }
-    */
-  }
-  
   @ApiMethod (name="buildNumber", httpMethod=HttpMethod.GET)
   public EndpointResponse buildNumber() {
-//  logger.debug("executing method - received payload " + payload);
-    ensureInstances();
+    logger.debug("request buildNumber");
     EndpointResponse response = EndpointResponse.OK;
-//  response.setPayload("SERVICE IS ACTIVE AND HAS RECEIVED " + payload);
     response.setPayload("SERVICE IS ACTIVE");
     response.setBuildNumber("1002");
     return response;
   }
 
+  @ApiMethod (name="authUser", httpMethod=HttpMethod.POST)
+  public AuthUser authUser(@Named("token") String token, User googleUser) {
+    logger.debug("request authUser");
+    if (googleUser == null) {
+      logger.error("USER NULL!");
+      return null;
+    }
+    AuthUser authUser = new AuthUser();
+    authUser.setEmail(googleUser.getEmail());
+    authUser.setUserId(googleUser.getUserId());
+    authUser.setNickname(googleUser.getNickname());
+    authUser.setAuthDomain(googleUser.getAuthDomain());
+    authUser.setFederatedIdentity(googleUser.getFederatedIdentity());
+    return authUser;
+  }
+  
   /*
   @ApiMethod (httpMethod=HttpMethod.GET)
   public EndpointResponse serverTime() {
@@ -120,17 +104,6 @@ public class StickMailEndpoint {
       response = EndpointResponse.ERROR;
     }
     return response;
-  }
-  
-  @ApiMethod (name="authUser", httpMethod=HttpMethod.POST)
-  public AuthUser authUser(@Named("token") String token, User googleUser) {
-    AuthUser authUser = new AuthUser();
-    authUser.setEmail(googleUser.getEmail());
-    authUser.setUserId(googleUser.getUserId());
-    authUser.setNickname(googleUser.getNickname());
-    authUser.setAuthDomain(googleUser.getAuthDomain());
-    authUser.setFederatedIdentity(googleUser.getFederatedIdentity());
-    return authUser;
   }
   
   */
