@@ -187,12 +187,12 @@ public abstract class AbstractEndpointProxy {
       PhonegapUtils.log("calling signInDesktopImpl");
       PhonegapUtils.log("clientId " + getDesktopClientId());
       PhonegapUtils.log("scopes " + AUTH_SCOPES);
-//    immediate = false;
       signInDesktopImpl(immediate, getDesktopClientId(), null, AUTH_SCOPES, new Callback() {
         public void execute(JavaScriptObject jso) {
           PhonegapUtils.log("calling userAuthedImpl");
           userAuthedImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
+              PhonegapUtils.log("userAuthedImpl::callback");
               signedIn = true;
               if (signedInDelegate != null) {
                 signedInDelegate.execute(null);
@@ -313,6 +313,12 @@ public abstract class AbstractEndpointProxy {
     });
   }-*/;
 
+  public void auth(Delegate<Void> signInDelegate, Delegate<Void> signOutDelegate) {
+    setSignedInDelegate(signInDelegate);
+    setSignedOutDelegate(signOutDelegate);
+    auth();
+  }
+  
   public void auth() {
     if (signedIn) {
       signOut();
@@ -322,6 +328,7 @@ public abstract class AbstractEndpointProxy {
   }
   
   private void signOut() {
+    PhonegapUtils.log("signOut");
     signedIn = false;
     if (signedOutDelegate != null) {
       signedOutDelegate.execute(null);
