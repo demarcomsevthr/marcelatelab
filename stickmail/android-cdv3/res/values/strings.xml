@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">StickMail</string>
+    <!-- 
+    <string name="endpointApiRoot">http://10.0.2.2:8080/_ah/api</string>
+     -->
+    <string name="endpointApiRoot">https://stickmailsrv.appspot.com/_ah/api</string>
 </resources>
