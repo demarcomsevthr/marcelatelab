@@ -1,6 +1,7 @@
 package it.mate.stickmail.client.api;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.api.AbstractEndpointProxy;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -53,10 +54,8 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
   @Override
   protected void onInit() {
     super.onInit();
-    PhonegapUtils.log("StickMailProxy::onInit");
     testService(new Delegate<String>() {
       public void execute(String result) {
-        PhonegapUtils.log("testService reply " + result);
       }
     });
   }
@@ -86,6 +85,8 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
     authUserImpl(API_NAME, "null", new Callback() {
       public void execute(JavaScriptObject resp) {
         PhonegapUtils.log("received endpoint response " + JSONUtils.stringify(resp));
+        AuthUserJS authUser = resp.cast();
+        PhonegapUtils.log("received authUser " + authUser.toMyString());
       }
     });
   }
@@ -94,11 +95,24 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
     @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("StickMailProxy::authUserImpl");
     $wnd.gapi.client[apiName].authUser({'token': token}).execute(function(resp) {
       if (!resp.code) {
+        var msg = "StickMailEPProxy::authUserImpl : resp = ";
+        msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp.result);
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
         pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
       }
     });
   }-*/;
 
+  protected static class AuthUserJS extends JavaScriptObject {
+    protected AuthUserJS() { }
+    protected final String getEmail() {
+      return (String)GwtUtils.getPropertyImpl(this, "email");
+    }
+    public final String toMyString() {
+      return "AuthUserJS [getEmail()=" + getEmail() + "]";
+    }
+  }
+  
   public void postNewMail(StickMail mail, final Delegate<Integer> delegate) {
 //  String payload = AutoBeanCodex.encode(factory.getStickMail(mail)).getPayload();
     String payload = null;
