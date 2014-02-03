@@ -16,6 +16,7 @@ public abstract class AbstractEndpointProxy {
   protected static final String GOOGLE_CLIENT_API = "https://apis.google.com/js/client.js";
   
   private static final String AUTH_SCOPES = "https://www.googleapis.com/auth/userinfo.email";
+//private static final String AUTH_SCOPES = "https://www.googleapis.com/auth/userinfo.profile";
   
   private String apiRoot;
   
@@ -94,8 +95,6 @@ public abstract class AbstractEndpointProxy {
       public void execute(JavaScriptObject proxyRef) {
         if (proxyRef == null) {
           PhonegapUtils.log("initEndpointApi.callback: ALERT: proxyRef is null!");
-        } else {
-          PhonegapUtils.log("initEndpointApi.callback: proxyRef is " + JSONUtils.stringify(proxyRef));
         }
         initialized = true;
         onInit();
@@ -114,6 +113,9 @@ public abstract class AbstractEndpointProxy {
         $wnd.glbDebugHook($wnd.gapi.client[apiName]);
         var msg = "initEndpointApiImpl: gapi.client = ";
         msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client);
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
+        msg = "initEndpointApiImpl: gapi.client["+apiName+"] = ";
+        msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
         @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
         pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
       }
@@ -304,11 +306,13 @@ public abstract class AbstractEndpointProxy {
   private native void userAuthedImpl(Callback pCallback) /*-{
     var request = $wnd.gapi.client.oauth2.userinfo.get().execute(function(resp) {
       if (!resp.code) {
+        var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
         pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
       } else {
         @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
-        var respJson = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("full resp is '" + respJson + "'");
+        var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
       }
     });
   }-*/;
