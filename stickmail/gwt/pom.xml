@@ -95,11 +95,14 @@
             <fileset>
               <directory>../android/assets/www</directory>
               <includes>
-                <include>**/*.*</include>
+                <include>main/**/*.*</include>
               </includes>
-              <excludes>
-                <exclude>cordova*.*</exclude>
-              </excludes>
+            </fileset>
+            <fileset>
+              <directory>../android-cdv3/assets/www</directory>
+              <includes>
+                <include>main/**/*.*</include>
+              </includes>
             </fileset>
           </filesets>
         </configuration>

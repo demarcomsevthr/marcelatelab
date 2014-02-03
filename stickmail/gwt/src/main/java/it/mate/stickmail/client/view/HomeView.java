@@ -57,21 +57,19 @@ public class HomeView extends BaseMgwtView <Presenter> {
     } else {
       setTitleHtml(AppProperties.IMPL.phoneAppName());
     }
-
     getHeaderBackButton().setVisible(!MGWT.getOsDetection().isAndroid());
-    /*
-    initHeaderBackButton("Home", new Delegate<TapEvent>() {
-      public void execute(TapEvent element) {
-        
-      }
-    });
-    */
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
     AppClientFactory.IMPL.initEndpointProxy(new Delegate<StickMailEPProxy>() {
       public void execute(StickMailEPProxy element) {
-        PhonegapUtils.log("proxy initialized");
+        
+      }
+    }, new Delegate<Boolean>() {
+      public void execute(Boolean isSignedIn) {
+        if (isSignedIn) {
+          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(null);
+        }
       }
     });
     
@@ -129,15 +127,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("signInBtn")
   public void onSignInBtn (TouchEndEvent event) {
-    AppClientFactory.IMPL.getStickMailEPProxy().auth(new Delegate<Void>() {
-      public void execute(Void element) {
-        AppClientFactory.IMPL.getStickMailEPProxy().authUser(null);
-      }
-    }, new Delegate<Void>() {
-      public void execute(Void element) {
-        
-      }
-    });
+    AppClientFactory.IMPL.getStickMailEPProxy().auth();
   }
   
 }
