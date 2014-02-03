@@ -30,16 +30,20 @@ public abstract class AbstractEndpointProxy {
   
   private boolean useAuthentication = false;
   
-  private Delegate<Void> signedInDelegate;
-  
-  private Delegate<Void> signedOutDelegate;
+  private Delegate<Boolean> authDelegate;
   
   protected AbstractEndpointProxy(String apiRoot, String apiName, boolean useAuthentication, Delegate<Void> initDelegate) {
+    this(apiRoot, apiName, useAuthentication, initDelegate, null);
+  }
+  
+  protected AbstractEndpointProxy(String apiRoot, String apiName, boolean useAuthentication, Delegate<Void> initDelegate, Delegate<Boolean> authDelegate) {
     super();
     this.apiRoot = apiRoot;
     this.apiName = apiName;
     this.initDelegate = initDelegate;
     this.useAuthentication = useAuthentication;
+    this.authDelegate = authDelegate;
+    PhonegapUtils.log("initializing endpoint proxy " + apiName + "...");
     JSONUtils.ensureStringify();
     initClientApi();
   }
@@ -62,12 +66,8 @@ public abstract class AbstractEndpointProxy {
     return signedIn;
   }
   
-  public void setSignedInDelegate(Delegate<Void> signedInDelegate) {
-    this.signedInDelegate = signedInDelegate;
-  }
-  
-  public void setSignedOutDelegate(Delegate<Void> signedOutDelegate) {
-    this.signedOutDelegate = signedOutDelegate;
+  public void setAuthDelegate(Delegate<Boolean> authDelegate) {
+    this.authDelegate = authDelegate;
   }
   
   protected void initClientApi() {
@@ -87,7 +87,7 @@ public abstract class AbstractEndpointProxy {
   }-*/;
 
   protected void initEndpointApi() {
-    GwtUtils.log("calling initEndpointImpl method with");
+    GwtUtils.log("calling initEndpointImpl");
     GwtUtils.log("apiRoot = " + apiRoot);
     GwtUtils.log("apiName = " + apiName);
     GwtUtils.log("apiKey = " + getApiKey());
@@ -176,7 +176,6 @@ public abstract class AbstractEndpointProxy {
   }
   
   private void signIn(boolean immediate) {
-    GwtUtils.log("signIn immediate = " + immediate);
     
     Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
@@ -189,15 +188,14 @@ public abstract class AbstractEndpointProxy {
       PhonegapUtils.log("calling signInDesktopImpl");
       PhonegapUtils.log("clientId " + getDesktopClientId());
       PhonegapUtils.log("scopes " + AUTH_SCOPES);
+      PhonegapUtils.log("immediate " + immediate);
       signInDesktopImpl(immediate, getDesktopClientId(), null, AUTH_SCOPES, new Callback() {
         public void execute(JavaScriptObject jso) {
-          PhonegapUtils.log("calling userAuthedImpl");
           userAuthedImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
-              PhonegapUtils.log("userAuthedImpl::callback");
               signedIn = true;
-              if (signedInDelegate != null) {
-                signedInDelegate.execute(null);
+              if (authDelegate != null) {
+                authDelegate.execute(signedIn);
               }
             }
           });
@@ -206,8 +204,12 @@ public abstract class AbstractEndpointProxy {
       
     } else {
       
-      PhonegapUtils.log("mobile version");
-      final Delegate<Token> tokenDelegate = new Delegate<Token>() {
+      PhonegapUtils.log("calling signInMobileImpl");
+      PhonegapUtils.log("clientId " + getMobileClientId());
+      PhonegapUtils.log("scopes " + AUTH_SCOPES);
+      PhonegapUtils.log("immediate " + immediate);
+      
+      final Delegate<Token> gotTokenDelegate = new Delegate<Token>() {
         public void execute(Token token) {
           PhonegapUtils.log("setting gapi auth token");
           setTokenImpl(token);
@@ -215,8 +217,8 @@ public abstract class AbstractEndpointProxy {
           userAuthedImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
               signedIn = true;
-              if (signedInDelegate != null) {
-                signedInDelegate.execute(null);
+              if (authDelegate != null) {
+                authDelegate.execute(signedIn);
               }
             }
           });
@@ -233,7 +235,7 @@ public abstract class AbstractEndpointProxy {
           
           //TODO : salvare token in localStorage
           
-          tokenDelegate.execute(token);
+          gotTokenDelegate.execute(token);
 
         }
       }, failure);
@@ -253,6 +255,16 @@ public abstract class AbstractEndpointProxy {
       });
   }-*/;
 
+  /**
+   *  PER QUESTA SOLUZIONE HO SEGUITO I DUE ARTICOLI:
+   *  
+
+        http://phonegap-tips.com/articles/google-api-oauth-with-phonegaps-inappbrowser.html
+        
+        http://phonegap-tips.com/articles/oauth-with-phonegaps-inappbrowser-expiration-and-revocation.html
+  
+   */
+  
   private native void signInMobileImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
     
     //Build the OAuth consent page URL
@@ -265,8 +277,8 @@ public abstract class AbstractEndpointProxy {
     
     //Open the OAuth consent page in the InAppBrowser
     var authWindow = $wnd.open(authUrl, '_blank', 'location=no,toolbar=no');
-  
-    $wnd.$(authWindow).on('loadstart', function(e) {
+    
+    var loadstartHandler = function(e) {
         $wnd.glbDebugHook();
         var url = e.originalEvent.url;
         @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
@@ -299,15 +311,18 @@ public abstract class AbstractEndpointProxy {
           failure.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(error[1]);
         }
         
-    });
+    };
+  
+    @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('setting loadstart handler');
+    
+    $wnd.$(authWindow).on('loadstart', loadstartHandler);
+//  $wnd.$(authWindow).on('pagestart', loadstartHandler);
     
   }-*/;
   
   private native void userAuthedImpl(Callback pCallback) /*-{
     var request = $wnd.gapi.client.oauth2.userinfo.get().execute(function(resp) {
       if (!resp.code) {
-        var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
         pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
       } else {
         @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
@@ -317,12 +332,6 @@ public abstract class AbstractEndpointProxy {
     });
   }-*/;
 
-  public void auth(Delegate<Void> signInDelegate, Delegate<Void> signOutDelegate) {
-    setSignedInDelegate(signInDelegate);
-    setSignedOutDelegate(signOutDelegate);
-    auth();
-  }
-  
   public void auth() {
     if (signedIn) {
       signOut();
@@ -334,8 +343,8 @@ public abstract class AbstractEndpointProxy {
   private void signOut() {
     PhonegapUtils.log("signOut");
     signedIn = false;
-    if (signedOutDelegate != null) {
-      signedOutDelegate.execute(null);
+    if (authDelegate != null) {
+      authDelegate.execute(signedIn);
     }
   }
   
