@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -17,6 +18,8 @@ import it.mate.stickmail.client.places.AppHistoryObserver;
 import it.mate.stickmail.client.places.MainPlace;
 import it.mate.stickmail.client.places.MainPlaceHistoryMapper;
 import it.mate.stickmail.client.ui.theme.CustomTheme;
+
+import java.util.Map;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
@@ -57,6 +60,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private static int HEADER_PANEL_HEIGHT = 40;
   
   private StickMailEPProxy stickMailEPProxy;
+
+  private Map<String, String> nativeProperties;
 
   @Override
   public void initModule(final Panel modulePanel) {
@@ -128,16 +133,17 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
 
-    historyHandler.handleCurrentHistory();
+//  historyHandler.handleCurrentHistory();
     
-    /*
-    proxy = new GreetingsProxy(new Delegate<Void>() {
-      public void execute(Void element) {
-        GwtUtils.log("greetings proxy initialized");
+    NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
+      public void execute(Map<String, String> properties) {
+        for (String name : properties.keySet()) {
+          PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
+        }
+        AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
       }
     });
-    */
     
   }
 
@@ -258,23 +264,39 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public void initEndpointProxy(final Delegate<StickMailEPProxy> delegate) {
-    PhonegapUtils.log("initializing endpoint proxy...");
+  public void initEndpointProxy(final Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate) {
     stickMailEPProxy = new StickMailEPProxy(new Delegate<Void>() {
       public void execute(Void element) {
-        PhonegapUtils.log("endpoint proxy initialized");
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
             delegate.execute(stickMailEPProxy);
           }
         });
       }
-    });
+    }, authDelegate);
   }
   
   @Override
   public StickMailEPProxy getStickMailEPProxy() {
     return stickMailEPProxy;
+  }
+  
+  @Override
+  public String getNativeProperty(String name, String defValue) {
+    if (nativeProperties == null)
+      return defValue;
+    String value = nativeProperties.get(name);
+    if (value == null)
+      value = defValue;
+    return value;
+  }
+  
+  @Override
+  public boolean getNativeProperty(String name, boolean defValue) {
+    String value = getNativeProperty(name, null);
+    if (value == null)
+      return defValue;
+    return Boolean.parseBoolean(value);
   }
   
 }

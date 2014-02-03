@@ -39,8 +39,12 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void initTitle(BaseMgwtView view);
   
-  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate);
+  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);
   
   public StickMailEPProxy getStickMailEPProxy();
+  
+  public String getNativeProperty(String name, String defValue);
+  
+  public boolean getNativeProperty(String name, boolean defValue);
   
 }
