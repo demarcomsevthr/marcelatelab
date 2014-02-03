@@ -14,10 +14,19 @@
   </properties>
   
   <repositories>
+
     <repository>
       <id>repo1</id>
       <url>http://repo1.maven.org/maven2</url>
     </repository>
+
+    <!--    
+    <repository>
+      <id>melograno</id>
+      <url>http://central</url>
+    </repository>
+    -->
+    
   </repositories>
 
   <dependencies>
@@ -28,13 +37,11 @@
       <version>${appengine.target.version}</version>
     </dependency>
 
-    <!-- 
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
       <version>2.5.1</version>
     </dependency>
-     -->
     
     <!-- SPRING WEB -->
     <dependency>
@@ -62,5 +69,41 @@
     </dependency>
 
   </dependencies>
+  
+  <build>
+  
+    <resources>
+      <!-- ATTENZIONE: occorre inserire i sorgenti nel jar per il GWT compiler -->
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+          <include>**/*.css</include>
+          <include>**/client/**/*.java</include>
+          <include>**/client/**/*.png</include>
+          <include>**/shared/**/*.java</include>
+          <include>**/public/**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>log4j*.properties</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+    </plugins>
+  
+  </build>
   
 </project>
