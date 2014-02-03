@@ -52,6 +52,7 @@ echo.
 echo adding plugins
 pause
 call cordova plugin add org.apache.cordova.device
+call cordova plugin add org.apache.cordova.inappbrowser
 
 echo.
 echo.
