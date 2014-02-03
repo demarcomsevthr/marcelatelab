@@ -1,9 +1,9 @@
 package it.mate.stickmail.server.endpoint;
 
-import it.mate.stickmail.shared.model.AuthUser;
 import it.mate.stickmail.shared.model.EndpointResponse;
+import it.mate.stickmail.shared.model.RemoteUser;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -49,34 +49,38 @@ import com.google.appengine.api.users.User;
 
 
 
-@Api (name="stickmailEP", version="v1", description="Stick Mail API")
+@Api (name="stickmailEP", version="v1", description="Stick Mail API", clientIds={
+    com.google.api.server.spi.Constant.API_EXPLORER_CLIENT_ID,
+    "834127897640.apps.googleusercontent.com",
+    "834127897640-pqkmabsf4d4ichgs0cvuqq0fnhf36rjh.apps.googleusercontent.com"
+})
 public class StickMailEndpoint {
 
-  private static Logger logger = Logger.getLogger(StickMailEndpoint.class);
+  private static Logger logger = Logger.getLogger(StickMailEndpoint.class.getName());
 
-  @ApiMethod (name="buildNumber", httpMethod=HttpMethod.GET)
-  public EndpointResponse buildNumber() {
-    logger.debug("request buildNumber");
+  @ApiMethod (name="getBuildNumber", httpMethod=HttpMethod.GET)
+  public EndpointResponse getBuildNumber() {
+    logger.info("request buildNumber");
     EndpointResponse response = EndpointResponse.OK;
     response.setPayload("SERVICE IS ACTIVE");
     response.setBuildNumber("1002");
     return response;
   }
 
-  @ApiMethod (name="authUser", httpMethod=HttpMethod.POST)
-  public AuthUser authUser(@Named("token") String token, User googleUser) {
-    logger.debug("request authUser");
+  @ApiMethod (name="getRemoteUser", httpMethod=HttpMethod.POST)
+  public RemoteUser getRemoteUser(@Named("token") String token, User googleUser) {
+    logger.info("request authUser");
     if (googleUser == null) {
-      logger.error("USER NULL!");
-      return null;
+      logger.info("USER NULL!");
+      return RemoteUser.NULL_USER;
     }
-    AuthUser authUser = new AuthUser();
-    authUser.setEmail(googleUser.getEmail());
-    authUser.setUserId(googleUser.getUserId());
-    authUser.setNickname(googleUser.getNickname());
-    authUser.setAuthDomain(googleUser.getAuthDomain());
-    authUser.setFederatedIdentity(googleUser.getFederatedIdentity());
-    return authUser;
+    RemoteUser remoteUser = new RemoteUser();
+    remoteUser.setEmail(googleUser.getEmail());
+    remoteUser.setUserId(googleUser.getUserId());
+    remoteUser.setNickname(googleUser.getNickname());
+    remoteUser.setAuthDomain(googleUser.getAuthDomain());
+    remoteUser.setFederatedIdentity(googleUser.getFederatedIdentity());
+    return remoteUser;
   }
   
   /*
