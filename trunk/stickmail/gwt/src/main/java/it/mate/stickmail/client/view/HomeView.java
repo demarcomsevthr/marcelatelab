@@ -2,13 +2,16 @@ package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.phgcommons.client.ui.CalendarDialog;
+import it.mate.phgcommons.client.ui.TouchAnchor;
+import it.mate.phgcommons.client.ui.TouchButton;
+import it.mate.phgcommons.client.ui.TouchImage;
+import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.api.StickMailEPProxy;
+import it.mate.stickmail.client.api.RemoteUserJS;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.view.HomeView.Presenter;
@@ -25,7 +28,9 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.widget.MTextArea;
 
 public class HomeView extends BaseMgwtView <Presenter> {
 
@@ -40,8 +45,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Panel outputPanel;
   @UiField Label outputLbl;
-  
+  @UiField TouchAnchor signBtn;
+  @UiField Label signLbl;
+  @UiField MTextArea bodyArea;
+  @UiField PhCalendarBox calBox;
   @UiField PhTimeBox timeBox;
+  @UiField TouchButton sendBtn;
   
   public HomeView() {
     initUI();
@@ -61,17 +70,35 @@ public class HomeView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    AppClientFactory.IMPL.initEndpointProxy(new Delegate<StickMailEPProxy>() {
-      public void execute(StickMailEPProxy element) {
-        
+    TouchImage optionsBtn = new TouchImage();
+    optionsBtn.addStyleName("ui-optionsBtn");
+    getHeaderPanel().setRightWidget(optionsBtn);
+    optionsBtn.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        PhonegapUtils.log("optons tapped");
       }
-    }, new Delegate<Boolean>() {
+    });
+    
+    AppClientFactory.IMPL.initEndpointProxy(null, new Delegate<Boolean>() {
       public void execute(Boolean isSignedIn) {
         if (isSignedIn) {
-          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(null);
+          signBtn.setText("Sign out");
+          signLbl.setText("");
+          sendBtn.setEnabled(true);
+          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUserJS>() {
+            public void execute(RemoteUserJS remoteUser) {
+              signLbl.setText("Send to " + remoteUser.getEmail());
+            }
+          });
+        } else {
+          signBtn.setText("Sign in");
+          signLbl.setText("");
+          sendBtn.setEnabled(false);
         }
       }
     });
+    
+    onNowBtn(null);
     
   }
   
@@ -80,28 +107,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
 
-  @UiHandler ("testBtn")
-  public void onTestBtn (TouchEndEvent event) {
-    /*
-    DatePickerPluginUtil.showDateDialog(new Delegate<Date>() {
-      public void execute(Date value) {
-        PhonegapUtils.log("received " + value);
-      }
-    });
-    */
-    
-    Time time = new Time(21, 30);
-    PhonegapUtils.log("setting " + time);
-    timeBox.setValue(time);
-    
-  }
-  
-
-  @UiHandler ("dateBox")
-  public void onDateChange (ValueChangeEvent<Date> event) {
-    PhonegapUtils.log("new value is " + event.getValue());
-  }
-  
   @UiHandler ("calBox")
   public void onCalChange (ValueChangeEvent<Date> event) {
     PhonegapUtils.log("new value is " + event.getValue());
@@ -112,22 +117,31 @@ public class HomeView extends BaseMgwtView <Presenter> {
     PhonegapUtils.log("new value is " + event.getValue());
   }
 
+  /*
   @UiHandler ("calTest")
   public void onCalTest (TouchEndEvent event) {
     PhonegapUtils.log("opening new CalendarDialog...");
     CalendarDialog calendar = new CalendarDialog();
     calendar.show();
   }
+  */
   
-  @UiHandler ("touchBtn")
-  public void onTouchBtn (TapEvent event) {
-    PhonegapUtils.log("touch btn tapped");
-    outputLbl.setText("touchBtn tapped - " + System.currentTimeMillis());
-  }
-  
-  @UiHandler ("signInBtn")
+  @UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
     AppClientFactory.IMPL.getStickMailEPProxy().auth();
+  }
+  
+  @UiHandler ("nowBtn")
+  public void onNowBtn (TouchEndEvent event) {
+    Date now = new Date();
+    calBox.setValue(now);
+    timeBox.setValue(Time.fromDate(now));
+  }
+  
+  @UiHandler ("sendBtn")
+  public void onTouchBtn (TapEvent event) {
+    PhonegapUtils.log("SEND BTN tapped");
+    PhonegapUtils.log("body = " + bodyArea.getValue());
   }
   
 }

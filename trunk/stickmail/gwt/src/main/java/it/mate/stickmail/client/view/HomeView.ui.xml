@@ -8,26 +8,29 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
-    <g:Label text="Home view"></g:Label>
+    <g:HorizontalPanel>
+      <g:Label text="" ui:field="signLbl" addStyleNames="ui-sendToLbl"/>
+      <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>
+    </g:HorizontalPanel>
     
-    <p:TouchButton text="Sign In" ui:field="signInBtn"/>
+    <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodyArea"/>
     
-    <p:TouchButton text="Test" ui:field="testBtn"/>
+    <g:Label text="Send on:" addStyleNames="ui-sendOnLbl"/>
     
-    <p:TouchButton text="Touch" ui:field="touchBtn"/>
+    <g:HorizontalPanel>
+      <ph:PhCalendarBox width="10em" ui:field="calBox" addStyleNames="ui-calBox"/>
+      <ph:PhTimeBox width="4em" ui:field="timeBox" addStyleNames="ui-timeBox"/>
+      <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
+    </g:HorizontalPanel>
     
-    <ph:PhDateBox width="10em" ui:field="dateBox"/>
-    
-    <ph:PhTimeBox width="10em" ui:field="timeBox"/>
-
-    <ph:PhCalendarBox width="10em" ui:field="calBox"/>
-    
-    <p:TouchButton text="Calendar Test" ui:field="calTest"/>
+    <p:TouchButton text="STICK MAIL" ui:field="sendBtn"/>
     
     <g:VerticalPanel ui:field="outputPanel">
       <g:Label ui:field="outputLbl"></g:Label>
     </g:VerticalPanel>
 
+    <g:Label text="Build 101" ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>
