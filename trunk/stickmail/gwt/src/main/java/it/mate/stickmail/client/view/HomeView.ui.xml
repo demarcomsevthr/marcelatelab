@@ -18,8 +18,8 @@
     <g:Label text="Send on:" addStyleNames="ui-sendOnLbl"/>
     
     <g:HorizontalPanel>
-      <ph:PhCalendarBox width="10em" ui:field="calBox" addStyleNames="ui-calBox"/>
-      <ph:PhTimeBox width="4em" ui:field="timeBox" addStyleNames="ui-timeBox"/>
+      <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
+      <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
       <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
     </g:HorizontalPanel>
     

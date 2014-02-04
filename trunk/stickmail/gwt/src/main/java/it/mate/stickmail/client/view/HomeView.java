@@ -83,7 +83,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       public void execute(Boolean isSignedIn) {
         if (isSignedIn) {
           signBtn.setText("Sign out");
-          signLbl.setText("");
+          signLbl.setText("Connecting...");
           sendBtn.setEnabled(true);
           AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUserJS>() {
             public void execute(RemoteUserJS remoteUser) {
