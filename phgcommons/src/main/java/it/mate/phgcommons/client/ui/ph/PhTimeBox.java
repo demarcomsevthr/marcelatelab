@@ -62,7 +62,12 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
               }
             });
           } else {
-            TimePickerDialog dialog = new TimePickerDialog();
+            TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
+              public void execute(Time value) {
+                setValue(value, true);
+              }
+            }));
+            dialog.setTime(value);
           }
         }
       });
