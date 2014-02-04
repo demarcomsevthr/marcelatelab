@@ -19,7 +19,10 @@
 
 package it.mate.stickmail;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.webkit.WebView;
+
 import org.apache.cordova.*;
 
 public class StickMail extends CordovaActivity 
@@ -32,6 +35,11 @@ public class StickMail extends CordovaActivity
         // Set by <content src="index.html" /> in config.xml
         super.loadUrl(Config.getStartUrl());
         //super.loadUrl("file:///android_asset/www/index.html")
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+          WebView.setWebContentsDebuggingEnabled(true);
+        }    
+        
     }
 }
 
