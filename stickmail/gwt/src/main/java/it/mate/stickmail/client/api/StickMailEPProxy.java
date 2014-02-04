@@ -13,7 +13,7 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
 
   private static final boolean USE_AUTHENTICATION = true;
 
-  private static final boolean LOCALTEST = true;
+  private static final boolean LOCALTEST = false;
   
   private static final String API_ROOT =
       OsDetectionUtils.isDesktop() ? ( LOCALTEST ? "http://127.0.0.1:8080/_ah/api" : "https://stickmailsrv.appspot.com/_ah/api" ) :

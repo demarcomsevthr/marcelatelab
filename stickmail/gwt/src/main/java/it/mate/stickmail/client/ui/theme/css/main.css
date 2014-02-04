@@ -15,7 +15,7 @@
 
 body {
   background-image: none;
-  background-color: white;
+  background-color: rgba(238, 238, 238, 0.8);
   background-repeat: repeat;
   background-size: 20px windowHeight;
 }
@@ -26,6 +26,23 @@ body {
 
 .mgwt-ScrollPanel-container {
   width: 100%;
+}
+
+.mgwt-TextArea {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 19px;
+  -webkit-appearance: none;  
+}
+
+.mgwt-TextArea .mgwt-InputBox-box {
+  color: black;
 }
 
 .ui-homePanel {
@@ -45,30 +62,28 @@ body {
   text-align: center;
 }
 
+.ui-homePanel textarea {
+  background-color: white;
+}
+
 .ui-homePanel button {
   font-weight: bolder;
 }
 
 .ui-homePanel a {
-  color: rgb(233, 255, 118);
+  color: rgba(30, 0, 253, 0.9);
   font-family: Trebuchet MS;
   font-weight: 600;
+  font-size: 20px;
+  padding: 10px 10px;
 }
 
-.gwt-JQDateBox {
-  width: 90% !important;
-  margin-left: 10px !important;
+.ui-homePanel .mgwt-SmartButton {
+  background: rgba(0, 0, 255, 0.78);
+  color: white;
 }
 
-.ui-datebox-grid {
-  background: #FDEEF4;
-}		
-    
-.ui-datebox-gridheader {
-  background: #565051;
-}
-
-input.phg-DateBox {
+.phg-DateBox, .phg-TimeBox {
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   display: block;
@@ -78,19 +93,67 @@ input.phg-DateBox {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 19px;
   text-align: center;
   -webkit-appearance: none;
+  font-size: 19px;
 }
 
-.stm-CalTestLabel {
-  width: 278px;
-  height: 208px;
-  border: 1px solid red;
-  background: white;
+.ui-optionsBtn {
+  background: url('main/images/options-32-3.png') no-repeat 10px;
+  width: 32px;
+  height: 32px;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
+.ui-homeLbl {
+  padding-top: 20px;
+  padding-left: 20px;
+  font-size: 12px;
+}
+
+.ui-bodyArea {
+  border-radius: 6px;
+  border-top: 2px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+.ui-bodyArea .mgwt-InputBox-box {
+  height: 16em;
+}
+
+.ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
+  margin: -10px -13px;
   color: black;
-  font-size: 86px;
-  text-align: center;
-  padding-top: 90px;
+  background-color: white;
+}
+
+.ui-calBox {
+  margin-left: 1em;
+}
+
+.ui-signBtn {
+  padding-top: 4px;
+}
+
+.ui-signBtn a {
+  font-size: 16px;
+}
+
+.ui-sendToLbl, .ui-sendOnLbl {
+  padding-top: 2%;
+  padding-left: 12px;
+  width: 18em;
+  overflow: hidden;
+  font-size: 18px;
+}
+
+.ui-nowBtn {
+  padding-top: 13px;
+}
+
+.ui-nowBtn a {
+  font-size: 18px;
 }
 

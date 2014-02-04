@@ -264,12 +264,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public void initEndpointProxy(final Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate) {
+  public void initEndpointProxy(final Delegate<StickMailEPProxy> initDelegate, Delegate<Boolean> authDelegate) {
     stickMailEPProxy = new StickMailEPProxy(new Delegate<Void>() {
       public void execute(Void element) {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
-            delegate.execute(stickMailEPProxy);
+            if (initDelegate != null)
+              initDelegate.execute(stickMailEPProxy);
           }
         });
       }
