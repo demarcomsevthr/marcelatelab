@@ -42,7 +42,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   public PhTimeBox() {
     element = DOM.createInputText().cast();
     setElement(element);
-    addStyleName("phg-DateBox");
+    addStyleName("phg-TimeBox");
     
     if (OsDetectionUtils.isDesktop() && USE_TIME_PICKER_PLUGIN) {
       addChangeHandler(new ChangeHandler() {

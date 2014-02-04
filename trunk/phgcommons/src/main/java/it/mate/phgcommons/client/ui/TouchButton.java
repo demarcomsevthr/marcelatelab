@@ -40,7 +40,7 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
   
   private String tag;
   
-  private boolean rounded = true;
+  private boolean rounded = false;
   
   private String colorOnTap = "white";
   
@@ -191,6 +191,14 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
   
   private TouchWidget getTouchWidgetImpl() {
     return (TouchWidget)impl;
+  }
+  
+  public void setEnabled(boolean enabled) {
+    if (enabled) {
+      impl.removeStyleName("mgwt-SmartButton-disabled");
+    } else {
+      impl.addStyleName("mgwt-SmartButton-disabled");
+    }
   }
   
   public String getTag() {

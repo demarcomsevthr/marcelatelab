@@ -3,6 +3,8 @@
 
 @url calendarImageUrl calendarImage;
 
+@url clockImageUrl clockImage;
+
 .gwt-PopupPanel {
   border: none;
   padding: 0;
@@ -19,6 +21,12 @@
 
 .phg-DateBox {
   background-image: calendarImageUrl;
+  background-repeat: no-repeat;
+  background-position: 98% 42%;
+}
+
+.phg-TimeBox {
+  background-image: clockImageUrl;
   background-repeat: no-repeat;
   background-position: 98% 42%;
 }
