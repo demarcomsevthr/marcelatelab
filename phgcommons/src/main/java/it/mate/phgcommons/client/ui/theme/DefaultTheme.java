@@ -34,6 +34,9 @@ public class DefaultTheme {
     @Source("resources/calendar.png")
     DataResource calendarImage();
     
+    @Source("resources/clock.png")
+    DataResource clockImage();
+    
   }
   
   

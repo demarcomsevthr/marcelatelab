@@ -32,4 +32,7 @@ public class Time {
   public String toString() {
     return "Time [" + hour + ":" + minute + "]";
   }
+  public static Time fromDate(Date date) {
+    return new Time(date);
+  }
 }
