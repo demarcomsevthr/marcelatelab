@@ -1,13 +1,18 @@
 @ECHO OFF
 set APPNAME=stickmail
 
+:: SERVE PER COPIARE I POLICY FILE (.gwt.rpc) NEI PATH GIUSTI
 set MODULE=gwt
 set SKIP_PAUSE=true
 set SKIP_DEPENDENCIES_CLEAN=true
+set SKIP_GWT_DEPENDENCIES=true
 set goals=
 set goals=%goals% war:exploded assembly:assembly
 call %~dp0\_build-base.bat %goals%
 
+echo.
+echo.
+echo.
 set MODULE=server
 set SKIP_PAUSE=false
 set SKIP_DEPENDENCIES=true
