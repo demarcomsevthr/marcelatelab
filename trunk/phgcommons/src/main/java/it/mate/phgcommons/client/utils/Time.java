@@ -35,4 +35,7 @@ public class Time {
   public static Time fromDate(Date date) {
     return new Time(date);
   }
+  public Date setToDate(Date date) {
+    return new Date(date.getYear(), date.getMonth(), date.getDate(), hour, minute);
+  }
 }
