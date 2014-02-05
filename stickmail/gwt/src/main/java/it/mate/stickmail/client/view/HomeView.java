@@ -155,6 +155,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
         
         long deltaTime = clientTime.getTime() - serverTime.getTime();
         
+        PhonegapUtils.log("serverTime = " + serverTime);
+        
+        PhonegapUtils.log("clientTime = " + clientTime);
+        
+        PhonegapUtils.log("delta time = " + deltaTime);
+        
         Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() + deltaTime);
         Date serverCreated = new Date(clientTime.getTime() + deltaTime);
         

@@ -17,8 +17,9 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
   private static final boolean LOCALTEST = false;
   
   private static final String API_ROOT =
-      OsDetectionUtils.isDesktop() ? ( LOCALTEST ? "http://127.0.0.1:8080/_ah/api" : "https://stickmailsrv.appspot.com/_ah/api" ) :
-                                     ( AppClientFactory.IMPL.getNativeProperty("endpointApiRoot", "https://stickmailsrv.appspot.com/_ah/api") ) ;
+      OsDetectionUtils.isDesktop() ? 
+          ( LOCALTEST ? "http://127.0.0.1:8080/_ah/api" : "https://stickmailsrv.appspot.com/_ah/api" ) :
+          ( AppClientFactory.IMPL.getNativeProperty("endpointApiRoot", "https://stickmailsrv.appspot.com/_ah/api") ) ;
   
   private static final String API_NAME = "stickmailEP";
   
