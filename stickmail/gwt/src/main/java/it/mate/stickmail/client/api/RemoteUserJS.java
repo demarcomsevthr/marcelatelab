@@ -1,12 +1,23 @@
 package it.mate.stickmail.client.api;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.stickmail.shared.model.RemoteUser;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class RemoteUserJS extends JavaScriptObject {
 
   protected RemoteUserJS() { }
+  
+  public final RemoteUser asRemoteUser() {
+    RemoteUser remoteUser = new RemoteUser();
+    remoteUser.setEmail(getEmail());
+    remoteUser.setNickname(getNickname());
+    remoteUser.setUserId(getUserId());
+    remoteUser.setAuthDomain(getAuthDomain());
+    remoteUser.setFederatedIdentity(getFederatedIdentity());
+    return remoteUser;
+  }
   
   public final String getUserId() {
     return (String)GwtUtils.getPropertyImpl(this, "userId");

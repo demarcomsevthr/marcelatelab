@@ -6,6 +6,7 @@ import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.stickmail.client.factories.AppClientFactory;
+import it.mate.stickmail.shared.model.RemoteUser;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -75,14 +76,14 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
     });
   }-*/;
 
-  public void getRemoteUser(final Delegate<RemoteUserJS> delegate) {
+  public void getRemoteUser(final Delegate<RemoteUser> delegate) {
     PhonegapUtils.log("calling getRemoteUserImpl");
     getRemoteUserImpl(API_NAME, "null", new Callback() {
       public void execute(JavaScriptObject resp) {
-        RemoteUserJS remoteUser = resp.cast();
-        PhonegapUtils.log("received remoteUser " + remoteUser.toStringCustom());
+        RemoteUserJS remoteUserJs = resp.cast();
+        PhonegapUtils.log("received remoteUser " + remoteUserJs.toStringCustom());
         if (delegate != null)
-          delegate.execute(remoteUser);
+          delegate.execute(remoteUserJs.asRemoteUser());
       }
     });
   }

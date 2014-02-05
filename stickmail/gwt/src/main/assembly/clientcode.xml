@@ -29,5 +29,12 @@
       </includes>
       <outputDirectory>../../../android-cdv3/assets/www</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>target/${project.artifactId}/main</directory>
+      <includes>
+        <include>*.gwt.rpc</include>
+      </includes>
+      <outputDirectory>../../../server/src/main/webapp/gwt</outputDirectory>
+    </fileSet>
   </fileSets>
 </assembly>

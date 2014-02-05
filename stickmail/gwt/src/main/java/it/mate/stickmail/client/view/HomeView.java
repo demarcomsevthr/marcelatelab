@@ -11,10 +11,12 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.api.RemoteUserJS;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.view.HomeView.Presenter;
+import it.mate.stickmail.shared.model.RemoteUser;
+import it.mate.stickmail.shared.model.StickMail;
+import it.mate.stickmail.shared.model.impl.StickMailTx;
 
 import java.util.Date;
 
@@ -23,6 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -51,6 +54,10 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField PhCalendarBox calBox;
   @UiField PhTimeBox timeBox;
   @UiField TouchButton sendBtn;
+  
+  private RemoteUser remoteUser;
+  private Date scheduledDate;
+  private Time scheduledTime;
   
   public HomeView() {
     initUI();
@@ -85,8 +92,9 @@ public class HomeView extends BaseMgwtView <Presenter> {
           signBtn.setText("Sign out");
           signLbl.setText("Connecting...");
           sendBtn.setEnabled(true);
-          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUserJS>() {
-            public void execute(RemoteUserJS remoteUser) {
+          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUser>() {
+            public void execute(RemoteUser remoteUser) {
+              HomeView.this.remoteUser = remoteUser;
               signLbl.setText("Send to " + remoteUser.getEmail());
             }
           });
@@ -110,22 +118,15 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("calBox")
   public void onCalChange (ValueChangeEvent<Date> event) {
     PhonegapUtils.log("new value is " + event.getValue());
+    this.scheduledDate = event.getValue();
   }
   
   @UiHandler ("timeBox")
   public void onTimeChange (ValueChangeEvent<Time> event) {
     PhonegapUtils.log("new value is " + event.getValue());
+    this.scheduledTime = event.getValue();
   }
 
-  /*
-  @UiHandler ("calTest")
-  public void onCalTest (TouchEndEvent event) {
-    PhonegapUtils.log("opening new CalendarDialog...");
-    CalendarDialog calendar = new CalendarDialog();
-    calendar.show();
-  }
-  */
-  
   @UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
     AppClientFactory.IMPL.getStickMailEPProxy().auth();
@@ -142,6 +143,42 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void onTouchBtn (TapEvent event) {
     PhonegapUtils.log("SEND BTN tapped");
     PhonegapUtils.log("body = " + bodyArea.getValue());
+    
+    AppClientFactory.IMPL.getGinjector().getStickFacade().getServerTime(new AsyncCallback<Date>() {
+      public void onFailure(Throwable caught) {
+        PhonegapUtils.log("FAILURE");
+        caught.printStackTrace();
+      }
+      public void onSuccess(Date serverTime) {
+        
+        Date clientTime = new Date();
+        
+        long deltaTime = clientTime.getTime() - serverTime.getTime();
+        
+        Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() + deltaTime);
+        Date serverCreated = new Date(clientTime.getTime() + deltaTime);
+        
+        StickMail stickMail = new StickMailTx();
+        stickMail.setBody(bodyArea.getValue());
+        stickMail.setUser(remoteUser);
+        stickMail.setScheduled(serverScheduled);
+        stickMail.setCreated(serverCreated);
+        stickMail.setState(StickMail.STATE_NEW);
+        
+        AppClientFactory.IMPL.getGinjector().getStickFacade().createStickMail(stickMail, new AsyncCallback<Void>() {
+          public void onSuccess(Void result) {
+            PhonegapUtils.log("SUCCESS");
+          }
+          public void onFailure(Throwable caught) {
+            PhonegapUtils.log("FAILURE");
+          }
+        });
+        
+      }
+    });
+
+    
+    
   }
   
 }
