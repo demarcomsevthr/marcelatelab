@@ -18,6 +18,7 @@ import it.mate.stickmail.client.places.AppHistoryObserver;
 import it.mate.stickmail.client.places.MainPlace;
 import it.mate.stickmail.client.places.MainPlaceHistoryMapper;
 import it.mate.stickmail.client.ui.theme.CustomTheme;
+import it.mate.stickmail.shared.service.StickFacadeAsync;
 
 import java.util.Map;
 
@@ -63,6 +64,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
   private Map<String, String> nativeProperties;
 
+  private StickFacadeAsync facade = null;
+  
   @Override
   public void initModule(final Panel modulePanel) {
     
@@ -298,6 +301,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (value == null)
       return defValue;
     return Boolean.parseBoolean(value);
+  }
+  
+  @Override
+  public StickFacadeAsync getStickFacade() {
+    if (facade == null) {
+      facade = getGinjector().getStickFacade();
+    }
+    return facade;
   }
   
 }
