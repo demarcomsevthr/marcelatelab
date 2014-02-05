@@ -1,7 +1,10 @@
 package it.mate.stickmail.server.services;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class AdapterUtil {
 
@@ -9,10 +12,9 @@ public class AdapterUtil {
   
   private static Logger logger = Logger.getLogger(AdapterUtil.class);
   
-  public static synchronized void initContext(ApplicationContext context) {
-    AdapterUtil.context = context;
+  public static synchronized void initContext(ServletContext context) {
+    AdapterUtil.context = WebApplicationContextUtils.getWebApplicationContext(context);
   }
-  
   
   public static StickAdapter getAdapter() {
     if (context == null) {
