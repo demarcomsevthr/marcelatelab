@@ -1,8 +1,16 @@
 @ECHO OFF
 set APPNAME=stickmail
+
+set MODULE=gwt
+set SKIP_PAUSE=true
+set SKIP_DEPENDENCIES_CLEAN=true
+set goals=
+set goals=%goals% war:exploded assembly:assembly
+call %~dp0\_build-base.bat %goals%
+
 set MODULE=server
 set SKIP_PAUSE=false
-set SKIP_GWT_DEPENDENCIES=true
+set SKIP_DEPENDENCIES=true
 call %~dp0\_setenv2.bat
 
 set goals=
