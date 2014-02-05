@@ -34,7 +34,14 @@
       <includes>
         <include>*.gwt.rpc</include>
       </includes>
-      <outputDirectory>../../../server/src/main/webapp/gwt</outputDirectory>
+      <outputDirectory>../../../server/src/main/webapp/main</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/${project.artifactId}/main</directory>
+      <includes>
+        <include>*.gwt.rpc</include>
+      </includes>
+      <outputDirectory>../../src/main/resources</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>

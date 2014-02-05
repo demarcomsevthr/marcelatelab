@@ -144,7 +144,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     PhonegapUtils.log("SEND BTN tapped");
     PhonegapUtils.log("body = " + bodyArea.getValue());
     
-    AppClientFactory.IMPL.getGinjector().getStickFacade().getServerTime(new AsyncCallback<Date>() {
+    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
       public void onFailure(Throwable caught) {
         PhonegapUtils.log("FAILURE");
         caught.printStackTrace();
@@ -165,7 +165,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
         stickMail.setCreated(serverCreated);
         stickMail.setState(StickMail.STATE_NEW);
         
-        AppClientFactory.IMPL.getGinjector().getStickFacade().createStickMail(stickMail, new AsyncCallback<Void>() {
+        AppClientFactory.IMPL.getStickFacade().createStickMail(stickMail, new AsyncCallback<Void>() {
           public void onSuccess(Void result) {
             PhonegapUtils.log("SUCCESS");
           }
