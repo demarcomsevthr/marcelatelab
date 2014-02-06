@@ -11,8 +11,8 @@ public interface StickFacadeAsync {
 
   void getRemoteUser(AsyncCallback<RemoteUser> callback);
 
-  void createStickMail(StickMail stickMail, AsyncCallback<Void> callback);
-
   void getServerTime(AsyncCallback<Date> callback);
+
+  void create(StickMail stickMail, AsyncCallback<StickMail> callback);
 
 }
