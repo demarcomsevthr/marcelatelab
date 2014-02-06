@@ -3,7 +3,7 @@ com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, t
 com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
 com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
 it.mate.stickmail.shared.model.RemoteUser, true, true, true, true, it.mate.stickmail.shared.model.RemoteUser/3388445121, 3388445121
-it.mate.stickmail.shared.model.impl.StickMailTx, false, false, true, true, it.mate.stickmail.shared.model.impl.StickMailTx/3463922375, 3463922375
+it.mate.stickmail.shared.model.impl.StickMailTx, true, true, true, true, it.mate.stickmail.shared.model.impl.StickMailTx/2950405431, 2950405431
 it.mate.stickmail.shared.service.StickFacade, false, false, false, false, _, 1973468423
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
 java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647

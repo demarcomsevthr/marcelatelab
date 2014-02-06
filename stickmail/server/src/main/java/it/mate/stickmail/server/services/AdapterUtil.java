@@ -16,11 +16,11 @@ public class AdapterUtil {
     AdapterUtil.context = WebApplicationContextUtils.getWebApplicationContext(context);
   }
   
-  public static StickAdapter getAdapter() {
+  public static StickAdapterImpl getAdapter() {
     if (context == null) {
       logger.error("error", new IllegalStateException("context not initialized"));
     }
-    return context.getBean(StickAdapter.class);
+    return context.getBean(StickAdapterImpl.class);
   }
   
 }
