@@ -8,6 +8,8 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class StickMailTx implements StickMail {
 
+  private String id;
+  
   private String state;
   
   private Date created;
@@ -17,10 +19,18 @@ public class StickMailTx implements StickMail {
   private String body;
   
   private RemoteUser user;
-  
+
   @Override
   public String toString() {
-    return "StickMailTx [state=" + state + ", created=" + created + ", scheduled=" + scheduled + ", body=" + body + ", user=" + user + "]";
+    return "StickMailTx [id=" + id + ", state=" + state + ", created=" + created + ", scheduled=" + scheduled + ", body=" + body + ", user=" + user + "]";
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getState() {

@@ -13,6 +13,10 @@ public interface StickMail extends Serializable {
 
   public static final String STATE_NOTIFIED = "NO";
 
+  public void setId(String id);
+
+  public String getId();
+
   public void setState(String state);
 
   public String getState();

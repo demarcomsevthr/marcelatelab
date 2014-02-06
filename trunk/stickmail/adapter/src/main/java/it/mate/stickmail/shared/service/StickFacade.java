@@ -16,6 +16,6 @@ public interface StickFacade extends RemoteService {
   
   Date getServerTime();
   
-  void createStickMail(StickMail stickMail);
+  StickMail create(StickMail stickMail);
 
 }
