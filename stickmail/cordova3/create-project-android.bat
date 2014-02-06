@@ -13,7 +13,7 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=P:\OPT\java\jdk1.7.0_17
+SET JAVA_HOME=D:\OPT\jdk1.7.0_21
 
 echo PATH VARIABLE
 echo %path%

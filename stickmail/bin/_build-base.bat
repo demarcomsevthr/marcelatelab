@@ -29,6 +29,13 @@ call %MVN2CMD% %DEP_CLEAN% install
 
 :NO_GWT_DEPENDENCIES
 
+if "%USE_GAE_DEPENDENCIES%"=="" GOTO NO_GAE_DEPENDENCIES
+
+cd %BASEAPPDIR%\..\gaecommons
+call %MVN2CMD% %DEP_CLEAN% install
+
+:NO_GAE_DEPENDENCIES
+
 cd %BASEAPPDIR%\adapter
 call %MVN2CMD% %DEP_CLEAN% install
 
