@@ -15,10 +15,9 @@ import com.googlecode.gwtphonegap.client.util.PhonegapUtil;
 public class AppGinModule extends AbstractGinModule {
 
   private final static String NAT_PROP_FACADE_MODULE_URL = "stickFacadeModuleUrl";
-//private final static String DEFAULT_FACADE_MODULE_URL = "https://servizionline.provinciaromanafbf.it/extsio-cup-portlet/ExtCupMain/";
   private final static String DEFAULT_FACADE_MODULE_URL = "http://127.0.0.1:8080/main/";
-  private final static String NAT_PROP_FACADE_RELATIVE_URL = "stickFacadeRelativeUrl";
-  private final static String DEFAULT_FACADE_RELATIVE_URL = ".stickFacade";
+  private final static String NAT_PROP_FACADE_RELATIVE_PATH = "stickFacadeRelativePath";
+  private final static String DEFAULT_FACADE_RELATIVE_PATH = ".stickFacade";
   
   @Override
   protected void configure() {
@@ -39,12 +38,8 @@ public class AppGinModule extends AbstractGinModule {
       // do nothing
     } else {
       PhonegapUtil.prepareService(service, 
-          DEFAULT_FACADE_MODULE_URL, 
-          DEFAULT_FACADE_RELATIVE_URL);
-          /*
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_MODULE_URL, DEFAULT_FACADE_MODULE_URL), 
-          AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_URL, DEFAULT_FACADE_RELATIVE_URL));
-          */
+          AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_PATH, DEFAULT_FACADE_RELATIVE_PATH));
     }
     PhonegapUtils.log("set on " + service.getServiceEntryPoint());
     return facade;

@@ -161,8 +161,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
         
         PhonegapUtils.log("delta time = " + deltaTime);
         
-        Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() + deltaTime);
-        Date serverCreated = new Date(clientTime.getTime() + deltaTime);
+        Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() - deltaTime);
+        Date serverCreated = new Date(clientTime.getTime() - deltaTime);
         
         StickMail stickMail = new StickMailTx();
         stickMail.setBody(bodyArea.getValue());
@@ -171,8 +171,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
         stickMail.setCreated(serverCreated);
         stickMail.setState(StickMail.STATE_NEW);
         
-        AppClientFactory.IMPL.getStickFacade().createStickMail(stickMail, new AsyncCallback<Void>() {
-          public void onSuccess(Void result) {
+        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+          public void onSuccess(StickMail result) {
             PhonegapUtils.log("SUCCESS");
           }
           public void onFailure(Throwable caught) {
