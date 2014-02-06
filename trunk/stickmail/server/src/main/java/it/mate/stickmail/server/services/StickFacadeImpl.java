@@ -18,13 +18,13 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
 
   private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
   
-  private StickAdapterImpl adapter = null;
+  private StickAdapter adapter = null;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdapterUtil.initContext(config.getServletContext());
-    adapter = AdapterUtil.getAdapter();
+    adapter = AdapterUtil.getStickAdapter();
     logger.debug("initialized " + this);
   }
   
@@ -35,12 +35,17 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
 
   @Override
   public Date getServerTime() {
+    /*
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    return cal.getTime();
+    */
     return new Date();
   }
 
   @Override
   public StickMail create(StickMail stickMail) {
     logger.debug("received " + stickMail);
+    stickMail.setState(StickMail.STATE_SCHEDULED);
     return adapter.create(stickMail);
   }
   

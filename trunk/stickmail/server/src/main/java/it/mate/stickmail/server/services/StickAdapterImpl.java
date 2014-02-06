@@ -2,18 +2,23 @@ package it.mate.stickmail.server.services;
 
 import it.mate.commons.server.dao.Dao;
 import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.stickmail.server.model.StickMailDs;
 import it.mate.stickmail.shared.model.StickMail;
 import it.mate.stickmail.shared.model.impl.StickMailTx;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StickAdapterImpl {
+public class StickAdapterImpl implements StickAdapter {
   
   private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
   
@@ -35,10 +40,44 @@ public class StickAdapterImpl {
    * 
    */
   
+  @Override
   public StickMail create(StickMail entity) {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
   }
 
+  @Override
+  public void checkScheduledMails() {
+    Date NOW = new Date();
+    LoggingUtils.debug(getClass(), "NOW IS " + NOW);
+    List<StickMail> mails = findAllMails();
+    for (StickMail mail : mails) {
+      if (StickMail.Utils.isScheduled(mail)) {
+        LoggingUtils.debug(getClass(), "found mail scheduled on " + mail.getScheduled());
+        if (mail.getScheduled().before(NOW)) {
+          LoggingUtils.debug(getClass(), "SENDING MAIL " + mail);
+          try {
+            AdapterUtil.getMailAdapter().sendStickMail(mail);
+            mail.setState(StickMail.STATE_NOTIFIED);
+            update(mail);
+          } catch (MessagingException ex) {
+            LoggingUtils.error(getClass(), "error", ex);
+          }
+        }
+      }
+    }
+  }
+  
+  public List<StickMail> findAllMails() {
+    List<StickMailDs> mails = dao.findAll(StickMailDs.class);
+    return CloneUtils.clone(mails, StickMailTx.class, StickMail.class);
+  }
+
+  public StickMail update(StickMail entity) {
+    StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    ds = dao.update(ds);
+    return CloneUtils.clone (ds, StickMailTx.class);
+  }
+  
 }

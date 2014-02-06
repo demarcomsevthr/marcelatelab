@@ -16,11 +16,20 @@ public class AdapterUtil {
     AdapterUtil.context = WebApplicationContextUtils.getWebApplicationContext(context);
   }
   
-  public static StickAdapterImpl getAdapter() {
+  private static void assertContext() {
     if (context == null) {
       logger.error("error", new IllegalStateException("context not initialized"));
     }
-    return context.getBean(StickAdapterImpl.class);
+  }
+  
+  public static StickAdapter getStickAdapter() {
+    assertContext();
+    return context.getBean(StickAdapter.class);
+  }
+  
+  public static MailAdapter getMailAdapter() {
+    assertContext();
+    return context.getBean(MailAdapter.class);
   }
   
 }
