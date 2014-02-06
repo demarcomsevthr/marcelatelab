@@ -18,7 +18,7 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
 
   private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
   
-  private StickAdapter adapter = null;
+  private StickAdapterImpl adapter = null;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -39,8 +39,9 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   }
 
   @Override
-  public void createStickMail(StickMail stickMail) {
+  public StickMail create(StickMail stickMail) {
     logger.debug("received " + stickMail);
+    return adapter.create(stickMail);
   }
   
 }

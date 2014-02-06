@@ -12,4 +12,6 @@
 
   <context:component-scan base-package="it.mate.stickmail.server.services"/>
 
+  <bean class="it.mate.commons.server.dao.JdoDaoWithCache"/>
+  
 </beans>

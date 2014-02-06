@@ -1,25 +1,61 @@
 package it.mate.stickmail.server.model;
 
+import it.mate.commons.server.model.HasKey;
 import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 
 import java.util.Date;
 
-public class StickMailDs implements StickMail {
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
+@SuppressWarnings("serial")
+@PersistenceCapable (detachable="true")
+public class StickMailDs implements StickMail, HasKey {
   
+  @PrimaryKey
+  @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
+  Key id;
+  
+  @Persistent
   private String body;
   
+  @Persistent
   private String state;
   
+  @Persistent
   private Date created;
   
+  @Persistent
   private Date scheduled;
 
-  private RemoteUser user;
+  @Persistent
+  private String userId;
+  
+  @Persistent
+  private String userEmail;
 
   @Override
   public String toString() {
-    return Utils.asString(this);
+    return "StickMailDs [id=" + id + ", body=" + body + ", state=" + state + ", created=" + created + ", scheduled=" + scheduled + ", userId=" + userId
+        + ", userEmail=" + userEmail + "]";
+  }
+
+  public Key getKey() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id != null ? KeyFactory.stringToKey(id) : null;
+  }
+
+  public String getId() {
+    return id != null ? KeyFactory.keyToString(id) : null;
   }
 
   public String getBody() {
@@ -55,11 +91,20 @@ public class StickMailDs implements StickMail {
   }
 
   public RemoteUser getUser() {
+    RemoteUser user = new RemoteUser();
+    user.setEmail(userEmail);
+    user.setUserId(userId);
     return user;
   }
 
   public void setUser(RemoteUser user) {
-    this.user = user;
+    if (user == null) {
+      this.userId = null;
+      this.userEmail = null;
+    } else {
+      this.userId = user.getUserId();
+      this.userEmail = user.getEmail();
+    }
   }
 
 }
