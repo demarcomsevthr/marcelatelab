@@ -17,11 +17,13 @@
   <repositories>
 
     <!-- IMPORTANTE: serve per escludere il repo melograno!!! -->
-    
+
+    <!--     
     <repository>
       <id>repo1</id>
       <url>http://repo1.maven.org/maven2</url>
     </repository>
+     -->
 
   </repositories>
 

@@ -14,4 +14,32 @@
 
   <bean class="it.mate.commons.server.dao.JdoDaoWithCache"/>
   
+  <bean class="it.mate.commons.server.utils.PropertiesHolderConfigurer">
+    <property name="location" value="classpath:stickmail.properties"/>
+    <property name="ignoreUnresolvablePlaceholders" value="true"/>
+  </bean>
+  
+  <bean class="it.mate.stickmail.server.services.MailAdapterImpl">
+    <property name="mailSender">
+      <bean class="it.mate.commons.server.utils.JavaMailSenderGaeImpl">
+        <property name="debug" value="${mail.sender.debug}"/>
+        <property name="host" value="${mail.sender.host}"/>
+        <property name="username" value="${mail.sender.username}"/>
+        <property name="password" value="${mail.sender.password}"/>
+        <property name="javaMailProperties">
+          <props>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+          </props>
+        </property>
+      </bean>
+    </property>
+    <property name="mailTemplate">
+      <bean class="org.springframework.mail.SimpleMailMessage">
+        <property name="subject" value="${mail.template.subject}"/>
+        <property name="from" value="${mail.template.from}"/>
+      </bean>
+    </property>
+  </bean>
+  
 </beans>
