@@ -43,6 +43,10 @@ public interface StickMail extends Serializable {
       return "StickMail [body=" + mail.getBody() + ", state=" + mail.getState() + ", scheduled=" + mail.getScheduled() + "]";
     }
     
+    public static boolean isScheduled(StickMail mail) {
+      return STATE_SCHEDULED.equals(mail.getState());
+    }
+    
   }
 
 }
