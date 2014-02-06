@@ -46,9 +46,9 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   }
 
   @Override
-  public void createStickMail(StickMail stickMail) {
+  public StickMail create(StickMail stickMail) {
     logger.debug("received " + stickMail);
-    remoteFacade.createStickMail(stickMail);
+    return remoteFacade.create(stickMail);
   }
   
 }

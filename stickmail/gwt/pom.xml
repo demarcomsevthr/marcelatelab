@@ -111,6 +111,18 @@
                 <include>main/**/*.*</include>
               </includes>
             </fileset>
+            <fileset>
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>*.gwt.rpc</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>../server/src/main/webapp/main</directory>
+              <includes>
+                <include>*.gwt.rpc</include>
+              </includes>
+            </fileset>
           </filesets>
         </configuration>
       </plugin>      
