@@ -48,7 +48,7 @@ public class TouchUtils {
     executePatch20131211(0);
   }
   
-  public static void applyFocusPatch2() {
+  public static void applyFocusPatchDeferred() {
     GwtUtils.deferredExecution(50, new Delegate<Void>() {
       public void execute(Void element) {
         executePatch20131211(0);
@@ -59,10 +59,10 @@ public class TouchUtils {
   private static FocusPanel focusPatch1$focusWidget;
   private static void executePatch20131211(int delay) {
     if (focusPatch1$focusWidget != null) {
-      PhonegapUtils.log("hiding focus patch widget");
+      //PhonegapUtils.log("hiding focus patch widget");
       focusPatch1$focusWidget.setVisible(false);
     }
-    PhonegapUtils.log("creating focus patch widget");
+    //PhonegapUtils.log("creating focus patch widget");
     focusPatch1$focusWidget = new FocusPanel();
     focusPatch1$focusWidget.addStyleName("phg-InvisibleTouch");
     RootPanel.get().add(focusPatch1$focusWidget);
