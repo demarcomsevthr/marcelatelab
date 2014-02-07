@@ -18,6 +18,7 @@ import it.mate.stickmail.client.places.AppHistoryObserver;
 import it.mate.stickmail.client.places.MainPlace;
 import it.mate.stickmail.client.places.MainPlaceHistoryMapper;
 import it.mate.stickmail.client.ui.theme.CustomTheme;
+import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.service.StickFacadeAsync;
 
 import java.util.Map;
@@ -65,6 +66,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private Map<String, String> nativeProperties;
 
   private StickFacadeAsync facade = null;
+  
+  private RemoteUser remoteUser;
   
   @Override
   public void initModule(final Panel modulePanel) {
@@ -269,7 +272,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public void initEndpointProxy(final Delegate<StickMailEPProxy> initDelegate, Delegate<Boolean> authDelegate) {
     if (stickMailEPProxy != null) {
-      initDelegate.execute(stickMailEPProxy);
+      if (initDelegate != null)
+        initDelegate.execute(stickMailEPProxy);
+      if (authDelegate != null)
+        authDelegate.execute(stickMailEPProxy.isSignedIn());
     } else {
       stickMailEPProxy = new StickMailEPProxy(new Delegate<Void>() {
         public void execute(Void element) {
@@ -287,6 +293,24 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public StickMailEPProxy getStickMailEPProxy() {
     return stickMailEPProxy;
+  }
+  
+  // TODO
+  public void getRemoteUser(final Delegate<RemoteUser> delegate) {
+    if (remoteUser != null) {
+      delegate.execute(remoteUser);
+    } else {
+      if (stickMailEPProxy != null) {
+        if (stickMailEPProxy.isSignedIn()) {
+          stickMailEPProxy.getRemoteUser(new Delegate<RemoteUser>() {
+            public void execute(RemoteUser remoteUser) {
+              AppClientFactoryImpl.this.remoteUser = remoteUser;
+              delegate.execute(remoteUser);
+            }
+          });
+        }
+      }
+    }
   }
   
   @Override

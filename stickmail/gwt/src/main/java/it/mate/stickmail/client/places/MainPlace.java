@@ -9,6 +9,8 @@ public class MainPlace extends Place {
   
   public static final String NEW_MAIL = "newMail";
   
+  public static final String MAIL_LIST = "mailList";
+  
   private String token;
 
   public MainPlace() {
