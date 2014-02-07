@@ -14,6 +14,8 @@ SET ANTCMD=%ANT_HOME%\bin\ant.bat
 
 cd %BASEAPPDIR%\android
 
+CALL %ANTCMD% clean
+
 CALL %ANTCMD% release
 
 cd ..
