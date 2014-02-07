@@ -5,6 +5,7 @@ import it.mate.stickmail.shared.model.StickMail;
 import it.mate.stickmail.shared.service.StickFacade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -47,6 +48,11 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
     logger.debug("received " + stickMail);
     stickMail.setState(StickMail.STATE_SCHEDULED);
     return adapter.create(stickMail);
+  }
+
+  @Override
+  public List<StickMail> findMailsByUser(RemoteUser user) {
+    return adapter.findMailsByUser(user);
   }
   
 }
