@@ -4,6 +4,7 @@ import it.mate.commons.server.dao.Dao;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.stickmail.server.model.StickMailDs;
+import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 import it.mate.stickmail.shared.model.impl.StickMailTx;
 
@@ -78,6 +79,12 @@ public class StickAdapterImpl implements StickAdapter {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
     ds = dao.update(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
+  }
+  
+  @Override
+  public List<StickMail> findMailsByUser(RemoteUser user) {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam", String.class.getName() + " userIdParam", null, user.getUserId() );
+    return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
   }
   
 }
