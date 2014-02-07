@@ -22,6 +22,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToNewMail();
+    public void goToMailList();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -66,7 +67,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("mailListBtn")
   public void onMailListBtn (TouchEndEvent event) {
-
+    getPresenter().goToMailList();
   }
   
   @UiHandler ("newMailBtn")

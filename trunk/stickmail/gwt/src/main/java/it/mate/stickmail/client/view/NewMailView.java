@@ -166,7 +166,8 @@ public class NewMailView extends BaseMgwtView <Presenter> {
         
         Date clientTime = new Date();
         
-        long deltaTime = clientTime.getTime() - serverTime.getTime();
+//      long deltaTime = clientTime.getTime() - serverTime.getTime();
+        long deltaTime = 0;
         
         PhonegapUtils.log("serverTime = " + serverTime);
         
@@ -186,7 +187,8 @@ public class NewMailView extends BaseMgwtView <Presenter> {
         
         AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
           public void onSuccess(StickMail result) {
-            PhonegapUtils.log("SUCCESS");
+            PhonegapUtils.log("SUCCESS - created " + result);
+            getPresenter().goToHome();
           }
           public void onFailure(Throwable caught) {
             PhonegapUtils.log("FAILURE");

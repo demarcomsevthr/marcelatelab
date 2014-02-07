@@ -16,10 +16,6 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 
 public class SignPanel extends Composite {
 
-  public interface Presenter {
-    public void goToHome();
-  }
-
   public interface ViewUiBinder extends UiBinder<Widget, SignPanel> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
@@ -29,14 +25,8 @@ public class SignPanel extends Composite {
   
   private RemoteUser remoteUser;
   
-  private Presenter presenter;
-  
   public SignPanel() {
     initUI();
-  }
-
-  public void setPresenter(Presenter presenter) {
-    this.presenter = presenter;
   }
 
   private void initProvidedElements() {
@@ -52,7 +42,7 @@ public class SignPanel extends Composite {
         if (isSignedIn) {
           signBtn.setText("Change");
           signLbl.setText("Connecting...");
-          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUser>() {
+          AppClientFactory.IMPL.getRemoteUser(new Delegate<RemoteUser>() {
             public void execute(RemoteUser remoteUser) {
               SignPanel.this.remoteUser = remoteUser;
               signLbl.setText(remoteUser.getEmail());

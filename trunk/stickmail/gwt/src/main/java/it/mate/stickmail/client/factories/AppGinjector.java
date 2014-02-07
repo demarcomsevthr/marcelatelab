@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.stickmail.client.activities.mapper.MainActivityMapper;
 import it.mate.stickmail.client.view.HomeView;
+import it.mate.stickmail.client.view.MailListView;
 import it.mate.stickmail.client.view.NewMailView;
 import it.mate.stickmail.shared.service.StickFacadeAsync;
 
@@ -17,6 +18,8 @@ public interface AppGinjector extends CommonGinjector {
   public HomeView getHomeView();
   
   public NewMailView getNewMailView();
+  
+  public MailListView getMailListView();
   
   public StickFacadeAsync getStickFacade();
   
