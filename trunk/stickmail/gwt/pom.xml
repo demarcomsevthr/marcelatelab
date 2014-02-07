@@ -106,12 +106,6 @@
               </includes>
             </fileset>
             <fileset>
-              <directory>../android-cdv3/assets/www</directory>
-              <includes>
-                <include>main/**/*.*</include>
-              </includes>
-            </fileset>
-            <fileset>
               <directory>src/main/resources</directory>
               <includes>
                 <include>*.gwt.rpc</include>

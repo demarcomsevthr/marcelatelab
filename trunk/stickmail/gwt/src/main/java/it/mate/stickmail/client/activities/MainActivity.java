@@ -7,6 +7,7 @@ import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.places.MainPlace;
 import it.mate.stickmail.client.view.HomeView;
+import it.mate.stickmail.client.view.NewMailView;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
@@ -14,7 +15,7 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter {
+  HomeView.Presenter, NewMailView.Presenter {
   
   private MainPlace place;
   
@@ -34,6 +35,24 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.NEW_MAIL)) {
+      NewMailView view = AppClientFactory.IMPL.getGinjector().getNewMailView();
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
+    }
+  }
+  
+  public void goToHome() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
+  }
+
+  public void goToNewMail() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_MAIL));
   }
 
   @Override

@@ -18,18 +18,6 @@
       <outputDirectory>../../../android/assets/www</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>target/${project.artifactId}</directory>
-      <includes>
-        <include>main/*.*</include>
-        <include>main/images/*.*</include>
-        <include>main/js/*.*</include>
-        <include>**/*.html</include>
-        <include>**/app*.js</include>
-        <include>**/jquery*.*</include>
-      </includes>
-      <outputDirectory>../../../android-cdv3/assets/www</outputDirectory>
-    </fileSet>
-    <fileSet>
       <directory>target/${project.artifactId}/main</directory>
       <includes>
         <include>*.gwt.rpc</include>

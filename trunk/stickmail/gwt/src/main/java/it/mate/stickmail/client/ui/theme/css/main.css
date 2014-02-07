@@ -11,13 +11,17 @@
 
 @url bgr bgrImage;
 
+@eval windowWidth it.mate.stickmail.client.ui.theme.CustomTheme.getWindowWidth();
+
 @eval windowHeight it.mate.stickmail.client.ui.theme.CustomTheme.getWindowHeight();
+
+@eval homePanelHeight it.mate.stickmail.client.ui.theme.CustomTheme.getHomePanelHeight();
 
 body {
   background-image: none;
   background-color: rgba(238, 238, 238, 0.8);
   background-repeat: repeat;
-  background-size: 20px windowHeight;
+  background-size: windowWidth windowHeight;
 }
 
 .mgwt-HeaderPanel-center {
@@ -48,6 +52,7 @@ body {
 .ui-homePanel {
   color: black;
   font-size: 16px;
+  height: homePanelHeight;
 }
 
 .ui-homePanel * {
@@ -114,6 +119,23 @@ body {
   font-size: 12px;
 }
 
+.ui-subjectBox {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  -webkit-appearance: none;
+  height: 0.8em;
+  background-color: white;
+  font-size: 19px;
+}
+
 .ui-bodyArea {
   border-radius: 6px;
   border-top: 2px solid rgba(0, 0, 0, 0.5);
@@ -121,7 +143,7 @@ body {
 }
 
 .ui-bodyArea .mgwt-InputBox-box {
-  height: 12em;
+  height: 11em;
 }
 
 .ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
@@ -151,8 +173,15 @@ body {
   font-size: 16px;
 }
 
-.ui-sendToLbl, .ui-sendOnLbl {
+.ui-homeLbl {
   padding-top: 2%;
+  padding-left: 12px;
+  width: 13em;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.ui-signedLbl {
   padding-left: 12px;
   width: 13em;
   overflow: hidden;
@@ -165,5 +194,20 @@ body {
 
 .ui-nowBtn a {
   font-size: 18px;
+}
+
+.ui-sendBtn {
+  position: absolute;
+  width: 86%;
+  bottom: 1em;
+  left: 2%;
+}
+
+.ui-homeSpacer1 {
+  height: 3em;
+}
+
+.ui-homeSpacer2 {
+  height: 2em;
 }
 
