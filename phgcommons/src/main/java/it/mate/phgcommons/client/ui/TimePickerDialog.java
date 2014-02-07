@@ -2,13 +2,17 @@ package it.mate.phgcommons.client.ui;
 
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.EventUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -25,6 +29,7 @@ public class TimePickerDialog {
     private int width = 300;
     private int height = 374;
     private Delegate<Time> onCloseDelegate;
+    private boolean modal = true;
     public Options setTitle(String title) {
       this.title = title;
       return this;
@@ -49,6 +54,10 @@ public class TimePickerDialog {
       this.onCloseDelegate = onCloseDelegate;
       return this;
     }
+    public Options setModal(boolean modal) {
+      this.modal = modal;
+      return this;
+    }
   }
   
   private PopupPanel popup;
@@ -60,6 +69,8 @@ public class TimePickerDialog {
   private int currentDigit = 0;
   
   private TouchHTML digits[] = new TouchHTML[4];
+  
+  private HandlerRegistration modalHandlerRegistration;
   
   public TimePickerDialog() {
     this(null);
@@ -81,6 +92,10 @@ public class TimePickerDialog {
     popup.addStyleName("phg-TimePickerDialog");
     popup.setWidth(options.width+"px");
     popup.setHeight(options.height+"px");
+    
+    if (options.modal) {
+      makePopupModal();
+    }
     
     SimpleContainer container = new SimpleContainer();
     
@@ -209,7 +224,8 @@ public class TimePickerDialog {
     TouchHTML okBtn = new TouchHTML("OK");
     okBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        popup.hide();
+//      popup.hide();
+        hide();
         if (options.onCloseDelegate != null) {
           options.onCloseDelegate.execute(currentTime);
         }
@@ -221,7 +237,8 @@ public class TimePickerDialog {
     TouchHTML cancelBtn = new TouchHTML("Cancel");
     cancelBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        popup.hide();
+//      popup.hide();
+        hide();
       }
     });
     cancelBtn.addStyleName("phg-TimePickerDialog-BottomButton");
@@ -236,6 +253,17 @@ public class TimePickerDialog {
       popup.setPopupPosition(options.left, options.top);
       popup.show();
     }
+    
+  }
+  
+  public void hide() {
+    popup.hide();
+    EventUtils.removeModalHandler(modalHandlerRegistration);
+    PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
+    onHide();
+  }
+  
+  protected void onHide() {
     
   }
   
@@ -305,6 +333,20 @@ public class TimePickerDialog {
       value = (value / 10) * 10 + (digit);
     }
     return value;
+  }
+  
+  private void makePopupModal() {
+    if (modalHandlerRegistration == null) {
+      EventUtils.createModalHandler(new EventUtils.PanelGetter() {
+        public Panel getPanel() {
+          return popup;
+        }
+      }, new Delegate<HandlerRegistration>() {
+        public void execute(HandlerRegistration registration) {
+          modalHandlerRegistration = registration;
+        }
+      });
+    }
   }
   
 }
