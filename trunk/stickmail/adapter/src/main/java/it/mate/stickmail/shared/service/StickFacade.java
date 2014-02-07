@@ -4,6 +4,7 @@ import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -17,5 +18,7 @@ public interface StickFacade extends RemoteService {
   Date getServerTime();
   
   StickMail create(StickMail stickMail);
+  
+  List<StickMail> findMailsByUser(RemoteUser user);
 
 }
