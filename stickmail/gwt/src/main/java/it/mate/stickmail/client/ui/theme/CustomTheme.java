@@ -51,6 +51,10 @@ public class CustomTheme {
     return Window.getClientWidth() + "px";
   }
   
+  public static String getHomePanelHeight() {
+    return (Window.getClientHeight() - 50) + "px";
+  }
+  
   
   public interface CustomMainCss extends MainCss {
     

@@ -8,27 +8,11 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
-    <g:HorizontalPanel>
-      <g:Label text="" ui:field="signLbl" addStyleNames="ui-sendToLbl"/>
-      <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>
-    </g:HorizontalPanel>
-    
-    <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodyArea"/>
-    
-    <g:Label text="Send on:" addStyleNames="ui-sendOnLbl"/>
-    
-    <g:HorizontalPanel>
-      <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
-      <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
-      <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
-    </g:HorizontalPanel>
-    
-    <p:TouchButton text="STICK MAIL" ui:field="sendBtn"/>
-    
-    <g:VerticalPanel ui:field="outputPanel">
-      <g:Label ui:field="outputLbl"></g:Label>
-    </g:VerticalPanel>
-
+    <gc:Spacer addStyleNames="ui-homeSpacer1"/>
+    <p:TouchButton text="Scheduled Mails" ui:field="mailListBtn" addStyleNames="ui-homeBtn"/>
+    <gc:Spacer addStyleNames="ui-homeSpacer2"/>
+    <p:TouchButton text="Compose New Mail" ui:field="newMailBtn" addStyleNames="ui-homeBtn"/>
+    <gc:Spacer addStyleNames="ui-homeSpacer2"/>
     <g:Label text="Build 101" ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
   </g:HTMLPanel>

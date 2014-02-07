@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       
+  <g:HorizontalPanel>
+    <g:VerticalPanel>
+      <g:Label text="Signed as" addStyleNames="ui-homeLbl"/>
+      <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
+    </g:VerticalPanel>
+    <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>
+  </g:HorizontalPanel>
+  
+</ui:UiBinder>

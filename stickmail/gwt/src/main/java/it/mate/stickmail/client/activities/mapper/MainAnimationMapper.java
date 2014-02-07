@@ -12,8 +12,14 @@ public class MainAnimationMapper implements AnimationMapper {
   public Animation getAnimation(Place parOldPlace, Place parNewPlace) {
     if (parNewPlace instanceof MainPlace) {
       MainPlace newPlace = (MainPlace)parNewPlace;
+      MainPlace oldPlace = null;
       if (parOldPlace instanceof MainPlace) {
-        MainPlace oldPlace = (MainPlace)parOldPlace;
+        oldPlace = (MainPlace)parOldPlace;
+      }
+      if (newPlace != null && oldPlace != null) {
+        if (oldPlace.getToken().equals(MainPlace.NEW_MAIL) && newPlace.getToken().equals(MainPlace.HOME)) {
+          return Animation.SWAP_REVERSE;
+        }
       }
       return Animation.SWAP;
     }
