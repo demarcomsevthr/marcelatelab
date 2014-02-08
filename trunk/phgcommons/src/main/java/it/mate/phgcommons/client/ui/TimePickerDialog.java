@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.ui;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.EventUtils;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 
@@ -122,6 +123,12 @@ public class TimePickerDialog {
         Widget source = (Widget)event.getSource();
         int newDigit = getWidgetValue(source);
         if (currentDigit == 0) {
+          if (newDigit <= 2) {
+            int hours = currentTime.getHour();
+            currentTime.setHour(setPositionalDigit(hours, 0, newDigit));
+            renderCurrentTime();
+          }
+          /*
           int d1 = getWidgetValue(digits[1]);
           if (d1 <= 3) {
             if (newDigit <= 2) {
@@ -136,6 +143,7 @@ public class TimePickerDialog {
               renderCurrentTime();
             }
           }
+          */
           currentDigit ++;
         } else if (currentDigit == 1) {
           int d0 = getWidgetValue(digits[0]);
@@ -224,10 +232,13 @@ public class TimePickerDialog {
     TouchHTML okBtn = new TouchHTML("OK");
     okBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-//      popup.hide();
-        hide();
-        if (options.onCloseDelegate != null) {
-          options.onCloseDelegate.execute(currentTime);
+        if (currentTime.isValidTime()) {
+          hide();
+          if (options.onCloseDelegate != null) {
+            options.onCloseDelegate.execute(currentTime);
+          }
+        } else {
+          PhgDialogUtils.showMessageDialog("Wrong time!", "Error");
         }
       }
     });
