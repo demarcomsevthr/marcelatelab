@@ -32,7 +32,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private RemoteUser remoteUser;
   
-  private Delegate<RemoteUser> remoteUserDelegate;
+//private Delegate<RemoteUser> remoteUserDelegate;
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -40,7 +40,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    ensureRemoteUser();
+    //ensureRemoteUser();
     if (place.getToken().equals(MainPlace.HOME)) {
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
@@ -73,10 +73,11 @@ public class MainActivity extends MGWTAbstractActivity implements
           goToHome();
         }
       });
-      retrieveModel();
+//    retrieveModel();
     }
   }
   
+  /*
   private void ensureRemoteUser() {
     if (remoteUser == null) {
       AppClientFactory.IMPL.initEndpointProxy(null, new Delegate<Boolean>() {
@@ -118,6 +119,18 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+  }
+  */
+  
+  public void findMailsByUser(RemoteUser remoteUser) {
+    AppClientFactory.IMPL.getStickFacade().findMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
+      public void onSuccess(List<StickMail> results) {
+        view.setModel(results, MailListView.TAG_MAILS);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+    });
   }
   
   public void goToHome() {

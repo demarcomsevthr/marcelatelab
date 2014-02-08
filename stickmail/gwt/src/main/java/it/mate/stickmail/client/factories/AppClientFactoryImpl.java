@@ -61,13 +61,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private static int HEADER_PANEL_HEIGHT = 40;
   
-  private StickMailEPProxy stickMailEPProxy;
-
   private Map<String, String> nativeProperties;
 
   private StickFacadeAsync facade = null;
-  
-  private RemoteUser remoteUser;
   
   @Override
   public void initModule(final Panel modulePanel) {
@@ -269,7 +265,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }
   }
   
-  @Override
+  // TODO --> private
   public void initEndpointProxy(final Delegate<StickMailEPProxy> initDelegate, Delegate<Boolean> authDelegate) {
     if (stickMailEPProxy != null) {
       if (initDelegate != null)
@@ -289,13 +285,16 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       }, authDelegate);
     }
   }
-  
-  @Override
+
+  /*
+   * 
+
+  // TODO --> delete
   public StickMailEPProxy getStickMailEPProxy() {
     return stickMailEPProxy;
   }
   
-  // TODO
+  // TODO --> delete
   public void getRemoteUser(final Delegate<RemoteUser> delegate) {
     if (remoteUser != null) {
       delegate.execute(remoteUser);
@@ -311,6 +310,46 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         }
       }
     }
+  }
+  
+  */
+  
+  private StickMailEPProxy stickMailEPProxy;
+
+  private Delegate<Boolean> authDelegate;
+  
+  private RemoteUser remoteUser;
+  
+  public void setRemoteUserDelegate(final Delegate<RemoteUser> remoteUserDelegate) {
+    if (remoteUser != null) {
+      remoteUserDelegate.execute(remoteUser);
+    } else {
+      if (stickMailEPProxy == null) {
+        authDelegate = new Delegate<Boolean>() {
+          public void execute(Boolean isSigned) {
+            if (isSigned) {
+              stickMailEPProxy.getRemoteUser(new Delegate<RemoteUser>() {
+                public void execute(RemoteUser remoteUser) {
+                  AppClientFactoryImpl.this.remoteUser = remoteUser;
+                  remoteUserDelegate.execute(remoteUser);
+                }
+              });
+            } else {
+              remoteUserDelegate.execute(null);
+            }
+          }
+        };
+        stickMailEPProxy = new StickMailEPProxy(null, authDelegate);
+      } else {
+        boolean isSigned = stickMailEPProxy.isSignedIn();
+        authDelegate.execute(isSigned);
+      }
+    }
+  }
+  
+  // TODO --> interface
+  public void authenticate() {
+    stickMailEPProxy.auth();
   }
   
   @Override

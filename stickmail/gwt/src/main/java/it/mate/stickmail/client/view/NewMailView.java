@@ -152,7 +152,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     PhonegapUtils.log("SEND BTN tapped");
     PhonegapUtils.log("body = " + bodyArea.getValue());
     
-    if (!signPanel.isSigned()) {
+    if (signPanel.getRemoteUser() == null) {
       PhgDialogUtils.showMessageDialog("You must be signed");
       return;
     }
