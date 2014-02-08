@@ -12,6 +12,7 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.ui.SignPanel;
 import it.mate.stickmail.client.view.MailListView.Presenter;
+import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToHome();
+    public void findMailsByUser(RemoteUser remoteUser);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MailListView> { }
@@ -95,15 +97,22 @@ public class MailListView extends BaseMgwtView <Presenter> {
   }
   
   @Override
+  public void setPresenter(Presenter presenter) {
+    super.setPresenter(presenter);
+    signPanel.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
+        if (remoteUser != null) {
+          getPresenter().findMailsByUser(remoteUser);
+        }
+      }
+    });
+  }
+  
+  @Override
   public void setModel(Object model, String tag) {
     if (TAG_MAILS.equals(tag)) {
       if (model != null && model instanceof List) {
         List<StickMail> mails = (List<StickMail>)model;
-        /*
-        for (StickMail mail : mails) {
-          PhonegapUtils.log("received " + mail);
-        }
-        */
         showMailList(mails);
       }
     }

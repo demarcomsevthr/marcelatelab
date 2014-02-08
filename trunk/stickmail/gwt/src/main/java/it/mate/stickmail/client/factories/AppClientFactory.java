@@ -4,7 +4,6 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.api.StickMailEPProxy;
 import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.service.StickFacadeAsync;
 
@@ -41,16 +40,22 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void initTitle(BaseMgwtView view);
   
-  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);
-  
-  public StickMailEPProxy getStickMailEPProxy();
-  
   public String getNativeProperty(String name, String defValue);
   
   public boolean getNativeProperty(String name, boolean defValue);
   
   public StickFacadeAsync getStickFacade();
+
+  /*
+  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);
+  
+  public StickMailEPProxy getStickMailEPProxy();
   
   public void getRemoteUser(final Delegate<RemoteUser> delegate);
+  */
+  
+  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate);
+  
+  public void authenticate();
   
 }

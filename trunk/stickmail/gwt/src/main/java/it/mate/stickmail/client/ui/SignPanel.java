@@ -25,6 +25,8 @@ public class SignPanel extends Composite {
   
   private RemoteUser remoteUser;
   
+  private Delegate<RemoteUser> remoteUserDelegate;
+  
   public SignPanel() {
     initUI();
   }
@@ -37,6 +39,7 @@ public class SignPanel extends Composite {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
+    /*
     AppClientFactory.IMPL.initEndpointProxy(null, new Delegate<Boolean>() {
       public void execute(Boolean isSignedIn) {
         if (isSignedIn) {
@@ -55,20 +58,39 @@ public class SignPanel extends Composite {
         }
       }
     });
+    */
     
+    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
+        SignPanel.this.remoteUser = remoteUser;
+        if (remoteUser != null) {
+          signLbl.setText(remoteUser.getEmail());
+          signBtn.setText("Change");
+        } else {
+          signBtn.setText("Sign in");
+          signLbl.setText("");
+        }
+        if (remoteUserDelegate != null) {
+          remoteUserDelegate.execute(remoteUser);
+        }
+      }
+    });
+    
+  }
+  
+  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
+    this.remoteUserDelegate = remoteUserDelegate;
+    remoteUserDelegate.execute(remoteUser);
   }
   
   @UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
-    AppClientFactory.IMPL.getStickMailEPProxy().auth();
+//  AppClientFactory.IMPL.getStickMailEPProxy().auth();
+    AppClientFactory.IMPL.authenticate();
   }
   
   public RemoteUser getRemoteUser() {
     return remoteUser;
-  }
-  
-  public boolean isSigned() {
-    return remoteUser != null;
   }
   
 }

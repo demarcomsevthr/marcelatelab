@@ -28,9 +28,9 @@ public abstract class AbstractEndpointProxy {
   
   private Delegate<Void> initDelegate;
   
-  private boolean useAuthentication = false;
-  
   private Delegate<Boolean> authDelegate;
+  
+  private boolean useAuthentication = false;
   
   protected AbstractEndpointProxy(String apiRoot, String apiName, boolean useAuthentication, Delegate<Void> initDelegate) {
     this(apiRoot, apiName, useAuthentication, initDelegate, null);
@@ -98,7 +98,8 @@ public abstract class AbstractEndpointProxy {
         }
         initialized = true;
         onInit();
-        initDelegate.execute(null);
+        if (initDelegate != null)
+          initDelegate.execute(null);
         if (useAuthentication) {
           signIn(true);
         }
@@ -176,6 +177,8 @@ public abstract class AbstractEndpointProxy {
   }
   
   private void signIn(boolean immediate) {
+    
+    PhonegapUtils.log("called signIn " + immediate);
     
     Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
