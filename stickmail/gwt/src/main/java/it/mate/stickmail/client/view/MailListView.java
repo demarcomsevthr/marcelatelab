@@ -126,7 +126,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
     boolean odd = false;
     
     for (final StickMail mail : mails) {
-      TouchHTML rowHtml = new TouchHTML(GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm"));
+      TouchHTML rowHtml = new TouchHTML(mail.getSubject() + " - " + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm"));
       rowHtml.addStyleName("ui-row-mail");
       odd = !odd;
       if (odd) {

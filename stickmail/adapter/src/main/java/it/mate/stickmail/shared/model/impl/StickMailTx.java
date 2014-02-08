@@ -18,6 +18,8 @@ public class StickMailTx implements StickMail {
   
   private String body;
   
+  private String subject;
+  
   private RemoteUser user;
 
   @Override
@@ -71,6 +73,14 @@ public class StickMailTx implements StickMail {
 
   public void setCreated(Date created) {
     this.created = created;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
   }
   
 }
