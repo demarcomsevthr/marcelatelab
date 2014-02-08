@@ -89,6 +89,15 @@ body {
   color: white;
 }
 
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box {
+  color: black;
+  text-align: left;
+}
+
+.ui-homePanel .mgwt-TextBox {
+  padding-top: 0.2em;
+}
+
 .phg-DateBox, .phg-TimeBox {
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.5);

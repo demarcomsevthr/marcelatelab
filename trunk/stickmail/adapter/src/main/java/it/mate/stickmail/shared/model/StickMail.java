@@ -36,6 +36,10 @@ public interface StickMail extends Serializable {
   public void setUser(RemoteUser user);
 
   public RemoteUser getUser();
+  
+  public String getSubject();
+
+  public void setSubject(String subject);
 
   public static class Utils {
     

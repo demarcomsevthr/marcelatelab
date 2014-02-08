@@ -39,6 +39,9 @@ public class StickMailDs implements StickMail, HasKey {
   
   @Persistent
   private String userEmail;
+  
+  @Persistent
+  private String subject;
 
   @Override
   public String toString() {
@@ -107,4 +110,12 @@ public class StickMailDs implements StickMail, HasKey {
     }
   }
 
+  public String getSubject() {
+    return subject;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
+  }
+  
 }

@@ -32,6 +32,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
+import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class NewMailView extends BaseMgwtView <Presenter> {
 
@@ -48,6 +49,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   @UiField PhCalendarBox calBox;
   @UiField PhTimeBox timeBox;
   @UiField TouchButton sendBtn;
+  @UiField MTextBox subjectBox;
 
   @UiField SignPanel signPanel;
   /*
@@ -179,6 +181,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
         Date serverCreated = new Date(clientTime.getTime() - deltaTime);
         
         StickMail stickMail = new StickMailTx();
+        stickMail.setSubject(subjectBox.getValue());
         stickMail.setBody(bodyArea.getValue());
         stickMail.setUser(signPanel.getRemoteUser());
         stickMail.setScheduled(serverScheduled);

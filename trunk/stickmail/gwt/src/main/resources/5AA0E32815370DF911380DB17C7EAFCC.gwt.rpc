@@ -5,8 +5,8 @@ com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.g
 it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil, true, true, false, false, it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil/3491685941, 3491685941
 it.mate.stickmail.shared.model.RemoteUser, true, true, true, true, it.mate.stickmail.shared.model.RemoteUser/3388445121, 3388445121
 [Lit.mate.stickmail.shared.model.StickMail;, true, true, false, false, [Lit.mate.stickmail.shared.model.StickMail;/3359830578, 3359830578
-it.mate.stickmail.shared.model.impl.StickMailTx, true, true, true, true, it.mate.stickmail.shared.model.impl.StickMailTx/2950405431, 2950405431
-[Lit.mate.stickmail.shared.model.impl.StickMailTx;, true, true, false, false, [Lit.mate.stickmail.shared.model.impl.StickMailTx;/3096606159, 3096606159
+it.mate.stickmail.shared.model.impl.StickMailTx, true, true, true, true, it.mate.stickmail.shared.model.impl.StickMailTx/2124413184, 2124413184
+[Lit.mate.stickmail.shared.model.impl.StickMailTx;, true, true, false, false, [Lit.mate.stickmail.shared.model.impl.StickMailTx;/2296055750, 2296055750
 it.mate.stickmail.shared.service.StickFacade, false, false, false, false, _, 1973468423
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
 java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647
