@@ -38,4 +38,7 @@ public class Time {
   public Date setToDate(Date date) {
     return new Date(date.getYear(), date.getMonth(), date.getDate(), hour, minute);
   }
+  public boolean isValidTime() {
+    return (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59);
+  }
 }
