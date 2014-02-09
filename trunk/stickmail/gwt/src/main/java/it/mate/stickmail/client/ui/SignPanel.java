@@ -2,6 +2,7 @@ package it.mate.stickmail.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TouchAnchor;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.shared.model.RemoteUser;
 
@@ -64,9 +65,11 @@ public class SignPanel extends Composite {
       public void execute(RemoteUser remoteUser) {
         SignPanel.this.remoteUser = remoteUser;
         if (remoteUser != null) {
+          PhonegapUtils.log("SignPanel::authDelegate: signed in");
           signLbl.setText(remoteUser.getEmail());
           signBtn.setText("Change");
         } else {
+          PhonegapUtils.log("SignPanel::authDelegate: signed out");
           signBtn.setText("Sign in");
           signLbl.setText("");
         }
@@ -86,6 +89,7 @@ public class SignPanel extends Composite {
   @UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
 //  AppClientFactory.IMPL.getStickMailEPProxy().auth();
+    PhonegapUtils.log("SignPanel: signIn Btn pressed");
     AppClientFactory.IMPL.authenticate();
   }
   
