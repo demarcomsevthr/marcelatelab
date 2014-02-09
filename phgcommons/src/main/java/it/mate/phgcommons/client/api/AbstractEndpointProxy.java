@@ -11,6 +11,15 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.Window;
 
+/**
+ * 
+ *  PER L'AUTENTICAZIONE HO SEGUITO I DUE ARTICOLI:
+ *  
+ *    http://phonegap-tips.com/articles/google-api-oauth-with-phonegaps-inappbrowser.html
+ *    http://phonegap-tips.com/articles/oauth-with-phonegaps-inappbrowser-expiration-and-revocation.html
+ *  
+ *  
+ */
 public abstract class AbstractEndpointProxy {
   
   protected static final String GOOGLE_CLIENT_API = "https://apis.google.com/js/client.js";
@@ -33,6 +42,8 @@ public abstract class AbstractEndpointProxy {
   private boolean useAuthentication = false;
   
   private final static boolean SIMPLE_AUTH_MODE = false;
+  
+  private final static int PROXY_BUILD_NUMBER = 103;
   
   protected AbstractEndpointProxy(String apiRoot, String apiName, boolean useAuthentication, Delegate<Void> initDelegate) {
     this(apiRoot, apiName, useAuthentication, initDelegate, null);
@@ -93,7 +104,7 @@ public abstract class AbstractEndpointProxy {
     PhonegapUtils.log("apiRoot = " + apiRoot);
     PhonegapUtils.log("apiName = " + apiName);
     PhonegapUtils.log("apiKey = " + getApiKey());
-    PhonegapUtils.log("proxyBuildNm = 102");
+    PhonegapUtils.log("proxyBuildNm = " + PROXY_BUILD_NUMBER);
     initEndpointApiImpl(apiRoot, apiName, getApiKey(), useAuthentication, new Callback() {
       public void execute(JavaScriptObject proxyRef) {
         if (proxyRef == null) {
@@ -292,7 +303,6 @@ public abstract class AbstractEndpointProxy {
     localStorage.refresh_token = data.refresh_token || localStorage.refresh_token;
     var expiresAt = new Date().getTime() + parseInt(data.expires_in, 10) * 1000 - 60000;
     localStorage.expires_at = expiresAt;
-    localStorage.token = data;
   }-*/;
   
   private native void setTokenInApiImpl (Token token) /*-{
@@ -309,16 +319,6 @@ public abstract class AbstractEndpointProxy {
       });
   }-*/;
 
-  /**
-   *  PER QUESTA SOLUZIONE HO SEGUITO I DUE ARTICOLI:
-   *  
-
-        http://phonegap-tips.com/articles/google-api-oauth-with-phonegaps-inappbrowser.html
-        
-        http://phonegap-tips.com/articles/oauth-with-phonegaps-inappbrowser-expiration-and-revocation.html
-  
-   */
-  
   private native void signInMobileImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
     
     //Build the OAuth consent page URL
@@ -357,7 +357,6 @@ public abstract class AbstractEndpointProxy {
                 grant_type: 'authorization_code'
             }).done(function(data) {
                 success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
-                // (Ljava/lang/String;)(data.access_token)
             }).fail(function(response) {
                 failure.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(response.responseJSON);
             });
@@ -368,9 +367,7 @@ public abstract class AbstractEndpointProxy {
     };
   
     @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('setting loadstart handler');
-    
     $wnd.$(authWindow).on('loadstart', loadstartHandler);
-//  $wnd.$(authWindow).on('pagestart', loadstartHandler);
     
   }-*/;
   
@@ -394,13 +391,45 @@ public abstract class AbstractEndpointProxy {
     }
   }
   
+  public void reAuthorize() {
+    if (signedIn) {
+      revokeTokenImpl(new Callback() {
+        public void execute(JavaScriptObject jso) {
+          signOut();
+          signIn(false);
+        }
+      });
+    } else {
+      signIn(false);
+    }
+  }
+  
   private void signOut() {
-    PhonegapUtils.log("signOut");
+    PhonegapUtils.log("AbstractEndpointProxy: signing out...");
+    signOutImpl();
     signedIn = false;
     if (authDelegate != null) {
       authDelegate.execute(signedIn);
     }
   }
+  
+  private native void revokeTokenImpl(Callback success) /*-{
+    var token = localStorage.access_token;
+    $wnd.$.post('https://accounts.google.com/o/oauth2/revoke', {
+        token: token
+    }).done(function(data) {
+      success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
+    }).fail(function(response) {
+      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('revoking token failure');
+    });
+  }-*/;
+  
+  private native void signOutImpl() /*-{
+    $wnd.gapi.auth.setToken(null);
+    localStorage.access_token = null;
+    localStorage.refresh_token = null;
+    localStorage.expires_at = 0;
+  }-*/;
   
   protected static interface Callback {
     public void execute(JavaScriptObject jso);
