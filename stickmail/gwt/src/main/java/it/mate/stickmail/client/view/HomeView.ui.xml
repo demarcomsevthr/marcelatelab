@@ -13,7 +13,7 @@
     <gc:Spacer addStyleNames="ui-homeSpacer2"/>
     <p:TouchButton text="Compose New Mail" ui:field="newMailBtn" addStyleNames="ui-homeBtn"/>
     <gc:Spacer addStyleNames="ui-homeSpacer2"/>
-    <g:Label text="Build 101" ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
+    <g:Label text="Build 102" ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
   </g:HTMLPanel>
   

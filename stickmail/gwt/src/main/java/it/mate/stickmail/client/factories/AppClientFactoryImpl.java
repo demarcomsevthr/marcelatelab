@@ -349,7 +349,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   // TODO --> interface
   public void authenticate() {
-    stickMailEPProxy.auth();
+    PhonegapUtils.log("AppClientFactoryImpl: calling proxy::auth");
+//  stickMailEPProxy.auth();
+    stickMailEPProxy.reAuthorize();
   }
   
   @Override
