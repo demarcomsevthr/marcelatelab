@@ -32,6 +32,8 @@ public abstract class AbstractEndpointProxy {
   
   private boolean useAuthentication = false;
   
+  private final static boolean SIMPLE_AUTH_MODE = false;
+  
   protected AbstractEndpointProxy(String apiRoot, String apiName, boolean useAuthentication, Delegate<Void> initDelegate) {
     this(apiRoot, apiName, useAuthentication, initDelegate, null);
   }
@@ -87,10 +89,11 @@ public abstract class AbstractEndpointProxy {
   }-*/;
 
   protected void initEndpointApi() {
-    GwtUtils.log("calling initEndpointImpl");
-    GwtUtils.log("apiRoot = " + apiRoot);
-    GwtUtils.log("apiName = " + apiName);
-    GwtUtils.log("apiKey = " + getApiKey());
+    PhonegapUtils.log("calling initEndpointImpl");
+    PhonegapUtils.log("apiRoot = " + apiRoot);
+    PhonegapUtils.log("apiName = " + apiName);
+    PhonegapUtils.log("apiKey = " + getApiKey());
+    PhonegapUtils.log("proxyBuildNm = 102");
     initEndpointApiImpl(apiRoot, apiName, getApiKey(), useAuthentication, new Callback() {
       public void execute(JavaScriptObject proxyRef) {
         if (proxyRef == null) {
@@ -139,48 +142,11 @@ public abstract class AbstractEndpointProxy {
     
   }
   
-  protected static interface Callback {
-    public void execute(JavaScriptObject jso);
-  }
-
-  protected static class Token extends JavaScriptObject {
-    protected Token() { }
-    protected final String getAccessToken() {
-      return (String)GwtUtils.getPropertyImpl(this, "access_token");
-    }
-    protected final String getError() {
-      return (String)GwtUtils.getPropertyImpl(this, "error");
-    }
-    protected final String getExpiresIn() {
-      return (String)GwtUtils.getPropertyImpl(this, "expires_in");
-    }
-    protected final String getState() {
-      return (String)GwtUtils.getPropertyImpl(this, "state");
-    }
-    protected final String toMyString() {
-      return "Token [getAccessToken()=" + getAccessToken() + ", getError()=" + getError() + ", getExpiresIn()=" + getExpiresIn() + ", getState()=" + getState()
-          + "]";
-    }
-  }
-  
-  private native void setTokenImpl (Token token) /*-{
-    $wnd.gapi.auth.setToken(token);
-  }-*/;
-
-  protected static String purgeBlanks(String code) {
-    int pos;
-    if ((pos = code.indexOf(' ')) > -1) {
-      code = code.substring(pos);
-    }
-    PhonegapUtils.log("purged code = '" + code + "'");
-    return code;
-  }
-  
-  private void signIn(boolean immediate) {
+  private void signIn(final boolean immediate) {
     
     PhonegapUtils.log("called signIn " + immediate);
     
-    Callback failure = new Callback() {
+    final Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
         PhonegapUtils.log("authorization failure");
       }
@@ -212,10 +178,10 @@ public abstract class AbstractEndpointProxy {
       PhonegapUtils.log("scopes " + AUTH_SCOPES);
       PhonegapUtils.log("immediate " + immediate);
       
-      final Delegate<Token> gotTokenDelegate = new Delegate<Token>() {
+      final Delegate<Token> validTokenDelegate = new Delegate<Token>() {
         public void execute(Token token) {
           PhonegapUtils.log("setting gapi auth token");
-          setTokenImpl(token);
+          setTokenInApiImpl(token);
           PhonegapUtils.log("calling user authed");
           userAuthedImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
@@ -228,26 +194,111 @@ public abstract class AbstractEndpointProxy {
         }
       };
       
-      //TODO : recuperare token da localStorage
-      // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
       
-      signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
-        public void execute(JavaScriptObject jso) {
-          Token token = jso.cast();
-          PhonegapUtils.log("authorization success with token '" + token + "'");
-          
-          //TODO : salvare token in localStorage
-          
-          gotTokenDelegate.execute(token);
+      if (SIMPLE_AUTH_MODE) {
+        
+        /**
+         * 
+         * VECCHIA VERSIONE
+         * 
+         */
+        
+        signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
+          public void execute(JavaScriptObject jso) {
+            Token token = jso.cast();
+            PhonegapUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+            validTokenDelegate.execute(token);
+          }
+        }, failure);
+        
+      } else {
+        
+        //TODO : recuperare token da localStorage
+        // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
+        
+        getTokenFromStorageImpl(getMobileClientId(), getMobileClientSecret(), new Callback() {
+          // ON SUCCESS
+          public void execute(JavaScriptObject jso) {
+            Token token = null;
+            PhonegapUtils.log("FOUND VALID TOKEN IN LOCAL STORAGE");
+            token = jso.cast();
+            PhonegapUtils.log("found token '" + JSONUtils.stringify(token) + "'");
+            PhonegapUtils.log("calling valid token delegate");
+            validTokenDelegate.execute(token);
+          }
+        }, new Callback() {
+          // ON FAILURE
+          public void execute(JavaScriptObject jso) {
+            signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
+              public void execute(JavaScriptObject data) {
+                Token token = data.cast();
+                PhonegapUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+                
+                //TODO : salva il token in localStorage
+                PhonegapUtils.log("setting token in local storage");
+                setTokenInStorageImpl(data);
+                
+                PhonegapUtils.log("calling valid token delegate");
+                validTokenDelegate.execute(token);
 
-        }
-      }, failure);
+              }
+            }, failure);
+          }
+        });
+        
+      }
       
     }
     
     
   }
   
+  /**
+   * 
+   * ORIGINAL VERSION:
+   * 
+
+    if (new Date().getTime() < localStorage.expires_at) {
+//    success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(localStorage.access_token);
+      success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(localStorage.token);
+    } else if (localStorage.refresh_token) {
+      $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
+
+   */
+
+  //TODO: verificare la chiamata a success con string
+  private native void getTokenFromStorageImpl(String clientId, String clientSecret, Callback success, Callback failure) /*-{
+
+    if (localStorage.refresh_token) {
+      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('refreshing token');
+      $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
+        refresh_token: localStorage.refresh_token,
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'refresh_token'
+      }).done(function(data) {
+        success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
+      }).fail(function(response) {
+        failure.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(response.responseJSON);
+      });
+    } else {
+      failure.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
+    }
+    
+  }-*/;
+  
+  private native void setTokenInStorageImpl(JavaScriptObject data) /*-{
+    localStorage.access_token = data.access_token;
+    localStorage.refresh_token = data.refresh_token || localStorage.refresh_token;
+    var expiresAt = new Date().getTime() + parseInt(data.expires_in, 10) * 1000 - 60000;
+    localStorage.expires_at = expiresAt;
+    localStorage.token = data;
+  }-*/;
+  
+  private native void setTokenInApiImpl (Token token) /*-{
+    $wnd.gapi.auth.setToken(token);
+  }-*/;
+
   private native void signInDesktopImpl (Boolean mode, String clientId, String clientSecret, String scopes, Callback success, Callback failure) /*-{
     $wnd.gapi.auth.authorize({
         client_id: clientId,
@@ -349,6 +400,48 @@ public abstract class AbstractEndpointProxy {
     if (authDelegate != null) {
       authDelegate.execute(signedIn);
     }
+  }
+  
+  protected static interface Callback {
+    public void execute(JavaScriptObject jso);
+  }
+
+  protected static class Token extends JavaScriptObject {
+    protected Token() { }
+    protected final String getAccessToken() {
+      return (String)GwtUtils.getPropertyImpl(this, "access_token");
+    }
+    protected final String getTokenType() {
+      return (String)GwtUtils.getPropertyImpl(this, "token_type");
+    }
+    protected final String getExpiresIn() {
+      return (String)GwtUtils.getPropertyImpl(this, "expires_in");
+    }
+    protected final String getIdToken() {
+      return (String)GwtUtils.getPropertyImpl(this, "id_token");
+    }
+    protected final String getRefreshToken() {
+      return (String)GwtUtils.getPropertyImpl(this, "refresh_token");
+    }
+    protected final String getError() {
+      return (String)GwtUtils.getPropertyImpl(this, "error");
+    }
+    protected final String getState() {
+      return (String)GwtUtils.getPropertyImpl(this, "state");
+    }
+    protected final String toMyString() {
+      return "Token [getAccessToken()=" + getAccessToken() + ", getError()=" + getError() + ", getExpiresIn()=" + getExpiresIn() + ", getState()=" + getState()
+          + "]";
+    }
+  }
+  
+  protected static String purgeBlanks(String code) {
+    int pos;
+    if ((pos = code.indexOf(' ')) > -1) {
+      code = code.substring(pos);
+    }
+    PhonegapUtils.log("purged code = '" + code + "'");
+    return code;
   }
   
 }
