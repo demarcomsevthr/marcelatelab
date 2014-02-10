@@ -123,9 +123,13 @@ body {
 }
 
 .ui-homeLbl {
-  padding-top: 20px;
-  padding-left: 20px;
+  padding-top: 2%;
+  padding-left: 12px;
+  width: 100%;
+  overflow: hidden;
   font-size: 12px;
+  position: absolute;
+  bottom: 1em;
 }
 
 .ui-subjectBox {
@@ -182,14 +186,6 @@ body {
   font-size: 16px;
 }
 
-.ui-homeLbl {
-  padding-top: 2%;
-  padding-left: 12px;
-  width: 13em;
-  overflow: hidden;
-  font-size: 14px;
-}
-
 .ui-signedLbl {
   padding-left: 12px;
   width: 13em;
@@ -220,3 +216,23 @@ body {
   height: 2em;
 }
 
+.ui-scheduled-mails-btn, .ui-new-mail-btn {
+  width: 128px;
+  height: 52px;
+  padding-top: 130px;
+  padding-left: 10px;
+  border: 4px solid rgba(0, 0, 255, 0.3);
+  border-radius: 6px;
+}
+
+.ui-scheduled-mails-btn a, .ui-new-mail-btn a {
+  padding: 0;
+}
+
+.ui-scheduled-mails-btn {
+  background: url('main/images/scheduled-128.png') no-repeat 4px 2px;
+}
+
+.ui-new-mail-btn {
+  background: url('main/images/newmail-128.png') no-repeat 4px 2px;
+}

@@ -9,11 +9,20 @@
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
     <gc:Spacer addStyleNames="ui-homeSpacer1"/>
+    
+    <!-- 
     <p:TouchButton text="Scheduled Mails" ui:field="mailListBtn" addStyleNames="ui-homeBtn"/>
     <gc:Spacer addStyleNames="ui-homeSpacer2"/>
     <p:TouchButton text="Compose New Mail" ui:field="newMailBtn" addStyleNames="ui-homeBtn"/>
     <gc:Spacer addStyleNames="ui-homeSpacer2"/>
-    <g:Label text="Build 102" ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
+     -->
+    
+    <g:HorizontalPanel width="100%" horizontalAlignment="center">
+      <p:TouchAnchor addStyleNames="ui-scheduled-mails-btn" text="Scheduled Mails" ui:field="mailListBtn2"/>
+      <p:TouchAnchor addStyleNames="ui-new-mail-btn" text="New Mail" ui:field="newMailBtn2"/>
+    </g:HorizontalPanel>
+    
+    <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
   </g:HTMLPanel>
   
