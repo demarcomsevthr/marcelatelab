@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">StickMail</string>
+    <string name="app_name">Mail Sticker</string>
     
     <!-- 
     <string name="endpointApiRoot">http://10.0.2.2:8080/_ah/api</string>

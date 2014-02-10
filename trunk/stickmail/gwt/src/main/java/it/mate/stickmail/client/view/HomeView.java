@@ -12,6 +12,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
@@ -30,6 +31,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
+  @UiField Label homeLbl;
   
   public HomeView() {
     initUI();
@@ -58,6 +60,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
       }
     });
     
+    homeLbl.setText(AppProperties.IMPL.versionCredits());
+    
   }
   
   @Override
@@ -65,12 +69,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
 
-  @UiHandler ("mailListBtn")
+  @UiHandler ({ /*"mailListBtn",*/ "mailListBtn2"})
   public void onMailListBtn (TouchEndEvent event) {
     getPresenter().goToMailList();
   }
   
-  @UiHandler ("newMailBtn")
+  @UiHandler ({ /*"newMailBtn",*/ "newMailBtn2"})
   public void onNewMailBtn (TouchEndEvent event) {
     getPresenter().goToNewMail();
   }
