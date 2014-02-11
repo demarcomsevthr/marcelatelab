@@ -24,8 +24,24 @@ body {
   background-size: windowWidth windowHeight;
 }
 
+.mgwt-HeaderPanel {
+  background-color: #3b5998;
+}
+
+/*
 .mgwt-HeaderPanel-center {
   left: 44%;
+}
+*/
+
+.mgwt-HeaderPanel-center {
+  left: 26%;
+  width: 310px;
+  height: 40px;
+  margin-right: -20px;
+  margin-top: 0px;
+  margin-left: -80px;
+  padding-top: 10px;  
 }
 
 .mgwt-ScrollPanel-container {
