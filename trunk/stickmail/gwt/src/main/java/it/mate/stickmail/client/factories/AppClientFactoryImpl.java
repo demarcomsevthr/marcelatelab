@@ -104,6 +104,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MGWT.applySettings(settings);
     
+    MGWTStyle.getTheme().getMGWTClientBundle().getHeaderCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();
     
@@ -209,8 +210,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         public void execute(Element wrapperPanelElem) {
           
           int height = getTabletWrapperHeight();
-          
-          GwtUtils.log("applying wrapperPanel height = " + height);
           
           wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
 

@@ -5,11 +5,9 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.ui.SignPanel;
 import it.mate.stickmail.client.view.MailListView.Presenter;
 import it.mate.stickmail.shared.model.RemoteUser;
@@ -35,7 +33,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
   
   public static final String TAG_MAILS = "mails";
 
-  public interface Presenter extends BasePresenter {
+  public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void findMailsByUser(RemoteUser remoteUser);
   }
@@ -59,11 +57,6 @@ public class MailListView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
-    if (OsDetectionUtils.isTablet()) {
-      setTitleHtml(AppProperties.IMPL.tabletAppName());
-    } else {
-      setTitleHtml(AppProperties.IMPL.phoneAppName());
-    }
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToHome();
@@ -99,7 +92,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
-    signPanel.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+    signPanel.setRemoteUserDelegate(presenter, new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
         if (remoteUser != null) {
           getPresenter().findMailsByUser(remoteUser);

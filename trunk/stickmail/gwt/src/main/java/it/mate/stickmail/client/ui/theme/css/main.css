@@ -44,6 +44,14 @@ body {
   padding-top: 10px;  
 }
 
+.ui-HeaderPanel-home {
+  background: #3b5998 url('main/images/home.png') no-repeat 5%;
+}
+
+.ui-HeaderPanel-center-waiting {
+  background: transparent url('main/images/ajax-loader-24-1.gif') no-repeat 100% 40%;
+}	
+
 .mgwt-ScrollPanel-container {
   width: 100%;
 }
@@ -130,7 +138,7 @@ body {
 }
 
 .ui-optionsBtn {
-  background: url('main/images/options-32-6.png') no-repeat 18px;
+  background: url('main/images/options-32-1.png') no-repeat 18px;
   width: 32px;
   height: 32px;
   padding-left: 15px;
