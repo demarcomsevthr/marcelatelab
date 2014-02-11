@@ -3,15 +3,12 @@ package it.mate.stickmail.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TouchButton;
-import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.ui.SignPanel;
 import it.mate.stickmail.client.view.NewMailView.Presenter;
@@ -30,13 +27,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class NewMailView extends BaseMgwtView <Presenter> {
 
-  public interface Presenter extends BasePresenter {
+  public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
   }
 
@@ -50,13 +46,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   @UiField PhTimeBox timeBox;
   @UiField TouchButton sendBtn;
   @UiField MTextBox subjectBox;
-
   @UiField SignPanel signPanel;
-  /*
-  @UiField TouchAnchor signBtn;
-  @UiField Label signLbl;
-  private RemoteUser remoteUser;
-  */
   
   private Date scheduledDate;
   private Time scheduledTime;
@@ -70,11 +60,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
-    if (OsDetectionUtils.isTablet()) {
-      setTitleHtml(AppProperties.IMPL.tabletAppName());
-    } else {
-      setTitleHtml(AppProperties.IMPL.phoneAppName());
-    }
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToHome();
@@ -82,40 +67,13 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
-    TouchImage optionsBtn = new TouchImage();
-    optionsBtn.addStyleName("ui-optionsBtn");
-    getHeaderPanel().setRightWidget(optionsBtn);
-    optionsBtn.addTouchEndHandler(new TouchEndHandler() {
-      public void onTouchEnd(TouchEndEvent event) {
-        PhonegapUtils.log("optons tapped");
-      }
-    });
-
-    /*
-    AppClientFactory.IMPL.initEndpointProxy(null, new Delegate<Boolean>() {
-      public void execute(Boolean isSignedIn) {
-        if (isSignedIn) {
-          signBtn.setText("Change");
-          signLbl.setText("Connecting...");
-          sendBtn.setEnabled(true);
-          AppClientFactory.IMPL.getStickMailEPProxy().getRemoteUser(new Delegate<RemoteUser>() {
-            public void execute(RemoteUser remoteUser) {
-              NewMailView.this.remoteUser = remoteUser;
-              signLbl.setText(remoteUser.getEmail());
-            }
-          });
-        } else {
-          signBtn.setText("Sign in");
-          signLbl.setText("");
-          sendBtn.setEnabled(false);
-        }
-      }
-    });
-    */
-    
     onNowBtn(null);
-    
+  }
+  
+  @Override
+  public void setPresenter(Presenter presenter) {
+    super.setPresenter(presenter);
+    signPanel.setRemoteUserDelegate(presenter, null);
   }
   
   @Override
@@ -135,13 +93,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     this.scheduledTime = event.getValue();
   }
 
-  /*
-  @UiHandler ("signBtn")
-  public void onSignInBtn (TouchEndEvent event) {
-    AppClientFactory.IMPL.getStickMailEPProxy().auth();
-  }
-  */
-  
   @UiHandler ("nowBtn")
   public void onNowBtn (TouchEndEvent event) {
     Date now = new Date();
@@ -200,8 +151,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
         
       }
     });
-
-    
     
   }
   

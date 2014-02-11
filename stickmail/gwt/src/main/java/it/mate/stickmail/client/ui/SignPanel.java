@@ -1,6 +1,7 @@
 package it.mate.stickmail.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchAnchor;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.stickmail.client.factories.AppClientFactory;
@@ -17,6 +18,12 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 
 public class SignPanel extends Composite {
 
+  public interface Presenter {
+    
+    void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
+
+  }
+  
   public interface ViewUiBinder extends UiBinder<Widget, SignPanel> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
@@ -26,8 +33,6 @@ public class SignPanel extends Composite {
   
   private RemoteUser remoteUser;
   
-  private Delegate<RemoteUser> remoteUserDelegate;
-  
   public SignPanel() {
     initUI();
   }
@@ -35,32 +40,12 @@ public class SignPanel extends Composite {
   private void initProvidedElements() {
 
   }
-
+  
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
+
     /*
-    AppClientFactory.IMPL.initEndpointProxy(null, new Delegate<Boolean>() {
-      public void execute(Boolean isSignedIn) {
-        if (isSignedIn) {
-          signBtn.setText("Change");
-          signLbl.setText("Connecting...");
-          AppClientFactory.IMPL.getRemoteUser(new Delegate<RemoteUser>() {
-            public void execute(RemoteUser remoteUser) {
-              SignPanel.this.remoteUser = remoteUser;
-              signLbl.setText(remoteUser.getEmail());
-            }
-          });
-        } else {
-          signBtn.setText("Sign in");
-          signLbl.setText("");
-          remoteUser = null;
-        }
-      }
-    });
-    */
-    
     AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
         SignPanel.this.remoteUser = remoteUser;
@@ -78,17 +63,34 @@ public class SignPanel extends Composite {
         }
       }
     });
+    */
     
   }
   
-  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
-    this.remoteUserDelegate = remoteUserDelegate;
-    remoteUserDelegate.execute(remoteUser);
+  public void setRemoteUserDelegate(Presenter presenter, final Delegate<RemoteUser> remoteUserDelegate) {
+    presenter.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
+        SignPanel.this.remoteUser = remoteUser;
+        if (remoteUser != null) {
+          PhonegapUtils.log("SignPanel::authDelegate: signed in");
+          signLbl.setText(remoteUser.getEmail());
+          signBtn.setText("Change");
+        } else {
+          PhonegapUtils.log("SignPanel::authDelegate: signed out");
+          signBtn.setText("Sign in");
+          signLbl.setText("");
+        }
+        if (remoteUserDelegate != null) {
+          remoteUserDelegate.execute(remoteUser);
+        }
+      }
+    });
+    if (remoteUserDelegate != null)
+      remoteUserDelegate.execute(remoteUser);
   }
   
   @UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
-//  AppClientFactory.IMPL.getStickMailEPProxy().auth();
     PhonegapUtils.log("SignPanel: signIn Btn pressed");
     AppClientFactory.IMPL.authenticate();
   }
