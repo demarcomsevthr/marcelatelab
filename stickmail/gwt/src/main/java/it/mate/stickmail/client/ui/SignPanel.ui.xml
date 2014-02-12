@@ -8,7 +8,7 @@
        
   <g:HorizontalPanel>
     <g:VerticalPanel>
-      <g:Label text="Signed as" addStyleNames="ui-homeLbl"/>
+      <g:Label text="Signed as" addStyleNames="ui-signLbl"/>
       <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
     </g:VerticalPanel>
     <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>

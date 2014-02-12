@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.event.shared.EventBus;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
@@ -155,6 +156,22 @@ public class MainActivity extends MGWTAbstractActivity implements
       }
     });
   }
+  
+  private void setVisibleChangeUserBtn(boolean visible) {
+    if (visible) {
+      TouchImage optionsBtn = new TouchImage();
+      optionsBtn.addStyleName("ui-changeUserBtn");
+      optionsBtn.addTouchEndHandler(new TouchEndHandler() {
+        public void onTouchEnd(TouchEndEvent event) {
+          PhonegapUtils.log("optons tapped");
+          AppClientFactory.IMPL.authenticate();
+        }
+      });
+      view.getHeaderPanel().setRightWidget(optionsBtn);
+    } else {
+      view.getHeaderPanel().setRightWidget(new Label());
+    }
+  }
 
   @Override
   public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
@@ -162,6 +179,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
         setHeaderWaiting(false);
+        setVisibleChangeUserBtn(remoteUser != null);
         delegate.execute(remoteUser);
       }
     });

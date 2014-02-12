@@ -15,16 +15,6 @@
 
   <set-property name="user.agent" value="safari" />
 
-  <!--  
-       CON QUESTE DUE PROPERTY SI RIDUCONO A 2 LE PERMUTAZIONI:
-       DA USARE SOLO PER PRODURRE LA VERSIONE DI RELEASE
-       (NON FUNZIONA SU DESKTOP)
-       
-  <set-property name="phonegap.env" value="yes" />
-  <set-property name="mobile.user.agent" value="mobilesafari" />
-  
-  -->
-  
   <!-- 
        VALORI DA UTILIZZARE = iphone, android
        (ipad non va bene per il layout)
