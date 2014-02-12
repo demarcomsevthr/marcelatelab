@@ -8,22 +8,13 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
-    <!-- 
-    <g:HorizontalPanel>
-      <g:VerticalPanel>
-        <g:Label text="Signed as" addStyleNames="ui-homeLbl"/>
-        <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
-      </g:VerticalPanel>
-      <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>
-    </g:HorizontalPanel>
-     -->
     <s:SignPanel ui:field="signPanel"/>
     
     <p:MTextBoxPatched ui:field="subjectBox" addStyleNames="ui-subjectBox"/>
     
     <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodyArea"/>
     
-    <g:Label text="Schedule on:" addStyleNames="ui-homeLbl"/>
+    <g:Label text="Schedule on:" addStyleNames="ui-signLbl"/>
     <g:HorizontalPanel>
       <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
       <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
