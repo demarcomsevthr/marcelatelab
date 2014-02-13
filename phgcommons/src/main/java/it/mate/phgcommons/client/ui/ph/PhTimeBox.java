@@ -139,13 +139,13 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
 
     protected TimeChangeEvent(Time value) {
       // The date must be copied in case one handler causes it to change.
-      super(new Time(value.getHour(), value.getMinute()));
+      super(new Time(value.getHours(), value.getMinutes()));
     }
 
     @Override
     public Time getValue() {
       Time value = super.getValue();
-      return new Time(value.getHour(), value.getMinute());
+      return new Time(value.getHours(), value.getMinutes());
     }
     
   }
