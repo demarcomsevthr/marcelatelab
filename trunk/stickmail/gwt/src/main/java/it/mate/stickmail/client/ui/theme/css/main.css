@@ -70,8 +70,14 @@ body {
   -webkit-appearance: none;  
 }
 
-.mgwt-TextArea .mgwt-InputBox-box {
+.ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
   color: black;
+  -webkit-user-modify: initial;
+}
+
+.ui-homePanel .mgwt-TextArea .mgwt-InputBox-box:focus {
+  background-color: white;
+  margin: -8px;
 }
 
 .ui-homePanel {
@@ -203,6 +209,8 @@ body {
   margin: -10px -13px;
   color: black;
   background-color: white;
+  margin: -5px -13px -9px -13px;
+  border-radius: 8px;
 }
 
 .ui-homePanel .ui-calBox {
