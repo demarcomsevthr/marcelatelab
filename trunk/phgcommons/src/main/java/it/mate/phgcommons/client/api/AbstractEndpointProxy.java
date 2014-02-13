@@ -18,14 +18,23 @@ import com.google.gwt.user.client.Window;
  *    http://phonegap-tips.com/articles/google-api-oauth-with-phonegaps-inappbrowser.html
  *    http://phonegap-tips.com/articles/oauth-with-phonegaps-inappbrowser-expiration-and-revocation.html
  *  
+ *  SEE ALSO:
+ *    https://developers.google.com/api-client-library/javascript/reference/referencedocs
+ *    https://developers.google.com/+/api/oauth#login-scopes
+ *    https://developers.google.com/+/web/signin/sign-out
  *  
  */
 public abstract class AbstractEndpointProxy {
   
   protected static final String GOOGLE_CLIENT_API = "https://apis.google.com/js/client.js";
   
+  /**
+   * SEE https://developers.google.com/+/api/oauth#login-scopes
+   */
   private static final String AUTH_SCOPES = "https://www.googleapis.com/auth/userinfo.email";
-//private static final String AUTH_SCOPES = "https://www.googleapis.com/auth/userinfo.profile";
+//private static final String AUTH_SCOPES = "email"; // non funziona!
+//private static final String AUTH_SCOPES = "profile"; // non funziona!
+//private static final String AUTH_SCOPES = "https://www.googleapis.com/auth/userinfo.profile"; // non funziona!
   
   private String apiRoot;
   
@@ -171,7 +180,7 @@ public abstract class AbstractEndpointProxy {
       PhonegapUtils.log("immediate " + immediate);
       signInDesktopImpl(immediate, getDesktopClientId(), null, AUTH_SCOPES, new Callback() {
         public void execute(JavaScriptObject jso) {
-          userAuthedImpl(new Callback() {
+          userAuthedLightImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
               signedIn = true;
               if (authDelegate != null) {
@@ -194,7 +203,7 @@ public abstract class AbstractEndpointProxy {
           PhonegapUtils.log("setting gapi auth token");
           setTokenInApiImpl(token);
           PhonegapUtils.log("calling user authed");
-          userAuthedImpl(new Callback() {
+          userAuthedLightImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
               signedIn = true;
               if (authDelegate != null) {
@@ -209,9 +218,7 @@ public abstract class AbstractEndpointProxy {
       if (SIMPLE_AUTH_MODE) {
         
         /**
-         * 
          * VECCHIA VERSIONE
-         * 
          */
         
         signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
@@ -223,9 +230,6 @@ public abstract class AbstractEndpointProxy {
         }, failure);
         
       } else {
-        
-        //TODO : recuperare token da localStorage
-        // se trovato e ancora valido >> chiamo direttamente il tokenDelegate
         
         getTokenFromStorageImpl(getMobileClientId(), getMobileClientSecret(), new Callback() {
           // ON SUCCESS
@@ -245,7 +249,6 @@ public abstract class AbstractEndpointProxy {
                 Token token = data.cast();
                 PhonegapUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
                 
-                //TODO : salva il token in localStorage
                 PhonegapUtils.log("setting token in local storage");
                 setTokenInStorageImpl(data);
                 
@@ -265,21 +268,15 @@ public abstract class AbstractEndpointProxy {
   }
   
   /**
-   * 
    * ORIGINAL VERSION:
    * 
-
     if (new Date().getTime() < localStorage.expires_at) {
-//    success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(localStorage.access_token);
       success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(localStorage.token);
     } else if (localStorage.refresh_token) {
       $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
-
+        ...
    */
-
-  //TODO: verificare la chiamata a success con string
   private native void getTokenFromStorageImpl(String clientId, String clientSecret, Callback success, Callback failure) /*-{
-
     if (localStorage.refresh_token) {
       @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('refreshing token');
       $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
@@ -295,7 +292,6 @@ public abstract class AbstractEndpointProxy {
     } else {
       failure.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
     }
-    
   }-*/;
   
   private native void setTokenInStorageImpl(JavaScriptObject data) /*-{
@@ -303,6 +299,7 @@ public abstract class AbstractEndpointProxy {
     localStorage.refresh_token = data.refresh_token || localStorage.refresh_token;
     var expiresAt = new Date().getTime() + parseInt(data.expires_in, 10) * 1000 - 60000;
     localStorage.expires_at = expiresAt;
+    localStorage.token = data;
   }-*/;
   
   private native void setTokenInApiImpl (Token token) /*-{
@@ -371,10 +368,14 @@ public abstract class AbstractEndpointProxy {
     
   }-*/;
   
-  private native void userAuthedImpl(Callback pCallback) /*-{
+  private native void userAuthedLightImpl(Callback callback) /*-{
+    callback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
+  }-*/;
+  
+  private native void userAuthedDeepImpl(Callback callback) /*-{
     var request = $wnd.gapi.client.oauth2.userinfo.get().execute(function(resp) {
       if (!resp.code) {
-        pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
+        callback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
       } else {
         @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
         var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
@@ -414,13 +415,16 @@ public abstract class AbstractEndpointProxy {
   }
   
   private native void revokeTokenImpl(Callback success) /*-{
-    var token = localStorage.access_token;
+    var token = localStorage.token;
     $wnd.$.post('https://accounts.google.com/o/oauth2/revoke', {
         token: token
     }).done(function(data) {
       success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
-    }).fail(function(response) {
-      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('revoking token failure');
+    }).fail(function(resp) {
+      var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
+      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('revoking token failure - ' + msg);
+      // chiamo ugualmente la success per andare avanti
+      success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
     });
   }-*/;
   
@@ -429,6 +433,8 @@ public abstract class AbstractEndpointProxy {
     localStorage.access_token = null;
     localStorage.refresh_token = null;
     localStorage.expires_at = 0;
+    localStorage.token = null;
+    $wnd.gapi.auth.signOut();
   }-*/;
   
   protected static interface Callback {

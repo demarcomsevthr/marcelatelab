@@ -108,11 +108,11 @@ public class TimePickerDialog {
     digitsRow.addStyleName("phg-TimePickerDialog-TimeRow");
     container.add(digitsRow);
     
-    digitsRow.add(createDigitHtml(0, getPositionalDigit(currentTime.getHour(), 0)));
-    digitsRow.add(createDigitHtml(1, getPositionalDigit(currentTime.getHour(), 1)));
+    digitsRow.add(createDigitHtml(0, getPositionalDigit(currentTime.getHours(), 0)));
+    digitsRow.add(createDigitHtml(1, getPositionalDigit(currentTime.getHours(), 1)));
     digitsRow.add(new Label(":"));
-    digitsRow.add(createDigitHtml(2, getPositionalDigit(currentTime.getMinute(), 0)));
-    digitsRow.add(createDigitHtml(3, getPositionalDigit(currentTime.getMinute(), 1)));
+    digitsRow.add(createDigitHtml(2, getPositionalDigit(currentTime.getMinutes(), 0)));
+    digitsRow.add(createDigitHtml(3, getPositionalDigit(currentTime.getMinutes(), 1)));
     
     FlexTable keypad = new FlexTable();
     keypad.addStyleName("phg-TimePickerDialog-Keypad");
@@ -124,8 +124,8 @@ public class TimePickerDialog {
         int newDigit = getWidgetValue(source);
         if (currentDigit == 0) {
           if (newDigit <= 2) {
-            int hours = currentTime.getHour();
-            currentTime.setHour(setPositionalDigit(hours, 0, newDigit));
+            int hours = currentTime.getHours();
+            currentTime.setHours(setPositionalDigit(hours, 0, newDigit));
             renderCurrentTime();
           }
           /*
@@ -148,27 +148,27 @@ public class TimePickerDialog {
         } else if (currentDigit == 1) {
           int d0 = getWidgetValue(digits[0]);
           if (d0 == 0 || d0 == 1) {
-            int hours = currentTime.getHour();
-            currentTime.setHour(setPositionalDigit(hours, 1, newDigit));
+            int hours = currentTime.getHours();
+            currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
             renderCurrentTime();
           } else if (d0 == 2) {
             if (newDigit <= 4) {
-              int hours = currentTime.getHour();
-              currentTime.setHour(setPositionalDigit(hours, 1, newDigit));
+              int hours = currentTime.getHours();
+              currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
               renderCurrentTime();
             }
           }
           currentDigit ++;
         } else if (currentDigit == 2) {
           if (newDigit <= 5) {
-            int minutes = currentTime.getMinute();
-            currentTime.setMinute(setPositionalDigit(minutes, 0, newDigit));
+            int minutes = currentTime.getMinutes();
+            currentTime.setMinutes(setPositionalDigit(minutes, 0, newDigit));
             renderCurrentTime();
           }
           currentDigit ++;
         } else if (currentDigit == 3) {
-          int minutes = currentTime.getMinute();
-          currentTime.setMinute(setPositionalDigit(minutes, 1, newDigit));
+          int minutes = currentTime.getMinutes();
+          currentTime.setMinutes(setPositionalDigit(minutes, 1, newDigit));
           renderCurrentTime();
           currentDigit = 0;
         }
@@ -179,7 +179,7 @@ public class TimePickerDialog {
       public void onTouchEnd(TouchEndEvent event) {
         Widget source = (Widget)event.getSource();
         int minutes = getWidgetValue(source);
-        currentTime.setMinute(minutes);
+        currentTime.setMinutes(minutes);
         renderCurrentTime();
       }
     };
@@ -188,7 +188,7 @@ public class TimePickerDialog {
       public void onTouchEnd(TouchEndEvent event) {
         Widget source = (Widget)event.getSource();
         int incr = getWidgetValue(source);
-        int hours = currentTime.getHour();
+        int hours = currentTime.getHours();
         if (incr == +1) {
           if (hours == 23) {
             hours = 00;
@@ -202,7 +202,7 @@ public class TimePickerDialog {
             hours --;
           }
         }
-        currentTime.setHour(hours);
+        currentTime.setHours(hours);
         renderCurrentTime();
       }
     };
@@ -279,10 +279,10 @@ public class TimePickerDialog {
   }
   
   private void renderCurrentTime() {
-    int hours = currentTime.getHour();
+    int hours = currentTime.getHours();
     int d0 = hours / 10;
     int d1 = hours % 10;
-    int minutes = currentTime.getMinute();
+    int minutes = currentTime.getMinutes();
     int d2 = minutes / 10;
     int d3 = minutes % 10;
     setDigitHtmlValue(digits[0], d0);
