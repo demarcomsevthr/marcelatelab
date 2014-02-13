@@ -7,11 +7,13 @@
        xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
        
   <g:HorizontalPanel>
+    <g:Label text="Signed as" ui:field="signPromptLbl" addStyleNames="ui-signLbl"/>
+    <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
+    <!-- 
     <g:VerticalPanel>
-      <g:Label text="Signed as" addStyleNames="ui-signLbl"/>
-      <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
     </g:VerticalPanel>
     <p:TouchAnchor text="Sign In" ui:field="signBtn" addStyleNames="ui-signBtn"/>
+     -->
   </g:HorizontalPanel>
   
 </ui:UiBinder>

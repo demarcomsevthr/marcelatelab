@@ -28,8 +28,9 @@ public class SignPanel extends Composite {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
-  @UiField TouchAnchor signBtn;
+//@UiField TouchAnchor signBtn;
   @UiField Label signLbl;
+  @UiField Label signPromptLbl;
   
   private RemoteUser remoteUser;
   
@@ -44,27 +45,6 @@ public class SignPanel extends Composite {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-
-    /*
-    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
-        SignPanel.this.remoteUser = remoteUser;
-        if (remoteUser != null) {
-          PhonegapUtils.log("SignPanel::authDelegate: signed in");
-          signLbl.setText(remoteUser.getEmail());
-          signBtn.setText("Change");
-        } else {
-          PhonegapUtils.log("SignPanel::authDelegate: signed out");
-          signBtn.setText("Sign in");
-          signLbl.setText("");
-        }
-        if (remoteUserDelegate != null) {
-          remoteUserDelegate.execute(remoteUser);
-        }
-      }
-    });
-    */
-    
   }
   
   public void setRemoteUserDelegate(Presenter presenter, final Delegate<RemoteUser> remoteUserDelegate) {
@@ -73,11 +53,13 @@ public class SignPanel extends Composite {
         SignPanel.this.remoteUser = remoteUser;
         if (remoteUser != null) {
           PhonegapUtils.log("SignPanel::authDelegate: signed in");
+          signPromptLbl.setText("Signed as");
           signLbl.setText(remoteUser.getEmail());
-          signBtn.setText("Change");
+//        signBtn.setText("Change");
         } else {
           PhonegapUtils.log("SignPanel::authDelegate: signed out");
-          signBtn.setText("Sign in");
+          signPromptLbl.setText("Not signed");
+//        signBtn.setText("Sign in");
           signLbl.setText("");
         }
         if (remoteUserDelegate != null) {
@@ -89,7 +71,7 @@ public class SignPanel extends Composite {
       remoteUserDelegate.execute(remoteUser);
   }
   
-  @UiHandler ("signBtn")
+//@UiHandler ("signBtn")
   public void onSignInBtn (TouchEndEvent event) {
     PhonegapUtils.log("SignPanel: signIn Btn pressed");
     AppClientFactory.IMPL.authenticate();

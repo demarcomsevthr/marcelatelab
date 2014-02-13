@@ -144,6 +144,9 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (home) {
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
+    if (!home) {
+      setVisibleChangeUserBtn(true);
+    }
   }
   
   public void addOptionsBtn() {
@@ -179,7 +182,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
         setHeaderWaiting(false);
-        setVisibleChangeUserBtn(remoteUser != null);
+//      setVisibleChangeUserBtn(remoteUser != null);
         delegate.execute(remoteUser);
       }
     });

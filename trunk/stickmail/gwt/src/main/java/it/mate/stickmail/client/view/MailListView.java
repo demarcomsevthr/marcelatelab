@@ -94,7 +94,9 @@ public class MailListView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     signPanel.setRemoteUserDelegate(presenter, new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
-        if (remoteUser != null) {
+        if (remoteUser == null) {
+          showMailList(null);
+        } else {
           getPresenter().findMailsByUser(remoteUser);
         }
       }

@@ -67,7 +67,8 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    onNowBtn(null);
+//  onNowBtn(null);
+    timeBox.setValue(Time.fromDate(new Date()).incHours(1).setMinutes(0));
   }
   
   @Override
