@@ -291,5 +291,15 @@ body {
   border-bottom: 1px solid black;
   background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
   padding-top: 0.5em;
+  padding-left: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.ui-row td:first-child {
+  width: 3em;
+}
+
+.ui-row-scheduled {
+  font-size: 12px;
 }
 

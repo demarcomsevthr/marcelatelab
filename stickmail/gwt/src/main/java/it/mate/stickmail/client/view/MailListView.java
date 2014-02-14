@@ -89,6 +89,12 @@ public class MailListView extends BaseMgwtView <Presenter> {
       }
     });
     
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
+      }
+    });
+    
   }
   
   @Override
@@ -124,7 +130,6 @@ public class MailListView extends BaseMgwtView <Presenter> {
     
     for (final StickMail mail : mails) {
       
-//    SimpleContainer row = new SimpleContainer();
       HorizontalPanel row = new HorizontalPanel();
       row.addStyleName("ui-row");
       list.add(row);
@@ -132,18 +137,8 @@ public class MailListView extends BaseMgwtView <Presenter> {
       PhCheckBox check = new PhCheckBox();
       row.add(check);
       
-      TouchHTML mailHtml = new TouchHTML(mail.getSubject() + " - " + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm"));
+      TouchHTML mailHtml = new TouchHTML("<p class='ui-row-subject'>" + mail.getSubject() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
       row.add(mailHtml);
-      
-      /*
-      mailHtml.addStyleName("ui-row-mail");
-      odd = !odd;
-      if (odd) {
-        mailHtml.addStyleName("ui-odd");
-      } else {
-        mailHtml.addStyleName("ui-even");
-      }
-      */
       
       mailHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
