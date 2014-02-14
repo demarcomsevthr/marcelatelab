@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
+import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -20,6 +21,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -117,30 +119,43 @@ public class MailListView extends BaseMgwtView <Presenter> {
     resultsPanel.clear();
     if (mails == null || mails.size() == 0)
       return;
-    SimpleContainer container = new SimpleContainer();
+    SimpleContainer list = new SimpleContainer();
     boolean odd = false;
     
     for (final StickMail mail : mails) {
-      TouchHTML rowHtml = new TouchHTML(mail.getSubject() + " - " + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm"));
-      rowHtml.addStyleName("ui-row-mail");
+      
+//    SimpleContainer row = new SimpleContainer();
+      HorizontalPanel row = new HorizontalPanel();
+      row.addStyleName("ui-row");
+      list.add(row);
+      
+      PhCheckBox check = new PhCheckBox();
+      row.add(check);
+      
+      TouchHTML mailHtml = new TouchHTML(mail.getSubject() + " - " + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm"));
+      row.add(mailHtml);
+      
+      /*
+      mailHtml.addStyleName("ui-row-mail");
       odd = !odd;
       if (odd) {
-        rowHtml.addStyleName("ui-odd");
+        mailHtml.addStyleName("ui-odd");
       } else {
-        rowHtml.addStyleName("ui-even");
+        mailHtml.addStyleName("ui-even");
       }
-      container.add(rowHtml);
-      rowHtml.addTouchEndHandler(new TouchEndHandler() {
+      */
+      
+      mailHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
             PhonegapUtils.log("selected " + mail);
-//          getPresenter().findPrimaDisponibilita(prestazione, new Date());
           }
         }
       });
+      
     }
     
-    resultsPanel.add(container);
+    resultsPanel.add(list);
 //  TouchUtils.applyFocusPatch();
     TouchUtils.applyFocusPatchDeferred();
   }
