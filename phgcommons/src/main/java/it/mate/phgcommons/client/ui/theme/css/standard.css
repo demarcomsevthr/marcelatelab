@@ -232,3 +232,17 @@
   border: 0px !important;
   z-index: +1 !important;
 }
+
+.phg-CheckBox {
+  width: 28px;
+  height: 28px;
+  border: 1px solid black;
+  background-color: white;
+  margin: 0.2em;
+  border-radius: 1px;
+}
+
+.phg-CheckBox-selected {
+  background: url('main/images/check-28.png') no-repeat rgb(255, 255, 255);
+}
+
