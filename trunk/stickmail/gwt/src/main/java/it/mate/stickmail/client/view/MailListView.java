@@ -146,7 +146,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
     
     resultsPanel.add(list);
 //  TouchUtils.applyFocusPatch();
-    TouchUtils.applyFocusPatchDeferred();
+    TouchUtils.applyFocusPatch();
     
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {

@@ -115,6 +115,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     MGWTStyle.getTheme().getMGWTClientBundle().getHeaderCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();
+//  MGWTStyle.getTheme().getMGWTClientBundle().getInputCss().ensureInjected();
     
     DefaultTheme.Impl.get().css().ensureInjected();
     

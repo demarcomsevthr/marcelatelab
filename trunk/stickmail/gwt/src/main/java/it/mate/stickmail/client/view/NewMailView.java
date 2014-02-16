@@ -8,6 +8,7 @@ import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
+import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.ui.SignPanel;
@@ -104,8 +105,8 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("sendBtn")
   public void onTouchBtn (TapEvent event) {
-    PhonegapUtils.log("SEND BTN tapped");
-    PhonegapUtils.log("body = " + bodyArea.getValue());
+    
+    TouchUtils.applyQuickFixFocusPatch();
     
     if (signPanel.getRemoteUser() == null) {
       PhgDialogUtils.showMessageDialog("You must be signed");
