@@ -139,6 +139,10 @@ public class JQuery extends JavaScriptObject {
     });
   }
   
+  public final JQuery blur() {
+    return blurImpl();
+  }
+  
   
   /* --------------------------------------------------------------------------------------------------- */
   
@@ -265,5 +269,11 @@ public class JQuery extends JavaScriptObject {
     });
     return this.bind(eventname, jsHandler);
   }-*/;
+  
+  private native JQuery blurImpl() /*-{
+    return this.blur();
+  }-*/;
+
+  
 
 }
