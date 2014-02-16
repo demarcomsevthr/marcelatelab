@@ -5,6 +5,7 @@ import it.mate.phgcommons.client.ui.TimePickerDialog;
 import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.Time;
+import it.mate.phgcommons.client.utils.TouchUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
+          TouchUtils.applyQuickFixFocusPatch();
           if (USE_TIME_PICKER_PLUGIN) {
             DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
               public void execute(Time value) {

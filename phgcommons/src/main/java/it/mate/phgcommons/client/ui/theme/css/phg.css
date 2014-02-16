@@ -1,5 +1,5 @@
 
-@external phg*, gwt*;
+@external phg*, gwt*, mgwt*;
 
 @url calendarImageUrl calendarImage;
 
@@ -9,6 +9,19 @@
   border: none;
   padding: 0;
   background: white;
+}
+
+.mgwt-TextBox .mgwt-InputBox-box, .mgwt-PasswordTextBox .mgwt-InputBox-box, .mgwt-TextArea .mgwt-InputBox-box {
+  -webkit-user-modify: initial;
+}
+
+.mgwt-TextBox .mgwt-InputBox-box {
+  margin: -10px -13px;
+}
+
+.mgwt-TextArea .mgwt-InputBox-box {
+  color: black;
+  margin: -10px -13px;
 }
 
 .phg-TouchAnchor {

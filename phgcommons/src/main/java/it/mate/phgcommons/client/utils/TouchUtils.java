@@ -2,6 +2,7 @@ package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
@@ -43,18 +44,31 @@ public class TouchUtils {
    * Lo attivo solo per Android (su Ios non ho riscontro di questa issue).
    * 
    */
-  
+
+  /*
   public static void applyFocusPatch() {
     executePatch20131211(0);
   }
+  */
   
-  public static void applyFocusPatchDeferred() {
+  public static void applyFocusPatch() {
     GwtUtils.deferredExecution(50, new Delegate<Void>() {
       public void execute(Void element) {
         executePatch20131211(0);
       }
     });
   }
+  
+  /**
+   * see http://stackoverflow.com/questions/8335834/how-can-i-hide-the-android-keyboard-using-javascript
+   */
+  public static void applyQuickFixFocusPatch() {
+    PhonegapUtils.log("applying focus patch with readonly - start");
+    applyQuickFixFocusPatchImpl(JQuery.select("input"));
+    applyQuickFixFocusPatchImpl(JQuery.select("textarea"));
+    PhonegapUtils.log("applying focus patch with readonly - end");
+  }
+  
   
   private static FocusPanel focusPatch1$focusWidget;
   private static void executePatch20131211(int delay) {
@@ -116,5 +130,15 @@ public class TouchUtils {
     return Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);
   }
   
+  private static native void applyQuickFixFocusPatchImpl(JQuery element) /*-{
+    element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
+    element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
+    setTimeout(function() {
+        element.blur();  //actually close the keyboard
+        // Remove readonly attribute after keyboard is hidden.
+        element.removeAttr('readonly');
+        element.removeAttr('disabled');
+    }, 100);
+  }-*/;
 
 }

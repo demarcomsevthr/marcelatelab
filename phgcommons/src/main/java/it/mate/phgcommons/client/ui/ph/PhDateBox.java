@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.TouchUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
+          TouchUtils.applyQuickFixFocusPatch();
           onPluginTapEvent(event);
         }
       });

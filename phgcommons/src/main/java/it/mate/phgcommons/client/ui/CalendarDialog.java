@@ -187,10 +187,18 @@ public class CalendarDialog {
     header.setWidth(popupWidth+"px");
     header.setHeight(headerHeight+"px");
 
-    TouchHTML setBox = new TouchHTML("DONE");
-    setBox.setWidth((popupWidth * 20 / 100) + "px");
-    setBox.addTapHandler(new TapHandler() {
+    TouchHTML doneBox = new TouchHTML("DONE");
+    doneBox.setWidth((popupWidth * 20 / 100) + "px");
+    /*
+    doneBox.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
+        fireSelectedDateChange(selectedDate);
+        CalendarDialog.this.hide();
+      }
+    });
+    */
+    doneBox.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
         fireSelectedDateChange(selectedDate);
         CalendarDialog.this.hide();
       }
@@ -206,7 +214,7 @@ public class CalendarDialog {
     selectedDateField = new TouchHTML();
     selectedDateField.setWidth((popupWidth * 60 / 100) + "px");
     setSelectedDate(selectedDate);
-    header.add(setBox);
+    header.add(doneBox);
     header.add(selectedDateField);
     header.add(cancelBox);
     
