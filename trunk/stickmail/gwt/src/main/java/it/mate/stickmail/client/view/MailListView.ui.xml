@@ -13,7 +13,7 @@
     
     <p:TouchButton text="Delete selected mails" ui:field="deleteBtn" addStyleNames="ui-delete-btn"/>
     
-    <m:ScrollPanel ui:field="resultsPanel"/>
+    <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>
   

@@ -23,6 +23,8 @@ public class MainAnimationMapper implements AnimationMapper {
         if (oldPlace.getToken().equals(MainPlace.MAIL_LIST) && newPlace.getToken().equals(MainPlace.HOME)) {
           return Animation.SWAP_REVERSE;
         }
+      } else if (oldPlace == null) {
+        return null;
       }
       return Animation.SWAP;
     }

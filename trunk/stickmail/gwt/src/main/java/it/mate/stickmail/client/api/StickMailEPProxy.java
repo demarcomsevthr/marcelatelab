@@ -1,7 +1,6 @@
 package it.mate.stickmail.client.api;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.api.AbstractEndpointProxy;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;

@@ -285,6 +285,10 @@ body {
   background: url('main/images/newmail-128.png') no-repeat 4px 2px;
 }
 
+.ui-results-panel {
+  border-top: 1px solid black;
+}
+
 .ui-row {
   width: 100%;
   height: 2.5em;

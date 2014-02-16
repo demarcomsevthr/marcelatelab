@@ -89,12 +89,6 @@ public class MailListView extends BaseMgwtView <Presenter> {
       }
     });
     
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
-      }
-    });
-    
   }
   
   @Override
@@ -153,6 +147,13 @@ public class MailListView extends BaseMgwtView <Presenter> {
     resultsPanel.add(list);
 //  TouchUtils.applyFocusPatch();
     TouchUtils.applyFocusPatchDeferred();
+    
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
+      }
+    });
+    
   }
 
   

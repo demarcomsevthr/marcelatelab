@@ -38,7 +38,7 @@
   <replace-with class="it.mate.stickmail.client.factories.AppClientFactoryImpl">
     <when-type-is class="it.mate.stickmail.client.factories.AppClientFactory"/>
   </replace-with>
-  
+
   <entry-point class="it.mate.stickmail.client.MainEntryPoint" />
   
   <extend-property name="locale" values="it"/>
