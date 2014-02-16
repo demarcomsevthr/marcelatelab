@@ -27,4 +27,8 @@ public class JSONUtils {
     return JSON.stringify(jso);
   }-*/;
   
+  public static native JavaScriptObject parse(String json) /*-{
+    return JSON.parse(json);
+  }-*/;
+
 }
