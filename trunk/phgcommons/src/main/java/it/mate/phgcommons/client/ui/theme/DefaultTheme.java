@@ -9,9 +9,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 public class DefaultTheme {
 
   public static class Impl {
-    
     private static ThemeBundle bundle = null;
-    
     public static ThemeBundle get() {
       if (bundle == null) {
         if (MGWT.getOsDetection().isAndroid()) {
@@ -22,33 +20,25 @@ public class DefaultTheme {
       }
       return bundle;
     }
-    
   }
-  
   
   public interface ThemeBundle extends ClientBundle {
-    
-    @Source({"css/standard.css"})
+    @Source({"css/phg.css"})
     public CssResource css();
-
     @Source("resources/calendar.png")
     DataResource calendarImage();
-    
     @Source("resources/clock.png")
     DataResource clockImage();
-    
   }
   
-  
   public interface ThemeBundleAndroid extends ThemeBundle {
-    @Source({"css/standard.css"})
+    @Source({"css/phg.css"})
     public CssResource css();
   }
   
   public interface ThemeBundleIos extends ThemeBundle {
-    @Source({"css/standard.css"})
+    @Source({"css/phg.css"})
     public CssResource css();
   }
-  
   
 }
