@@ -7,7 +7,7 @@ import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.mvp.client.AnimationMapper;
 
 public class MainAnimationMapper implements AnimationMapper {
-
+  
   @Override
   public Animation getAnimation(Place parOldPlace, Place parNewPlace) {
     if (parNewPlace instanceof MainPlace) {
@@ -16,15 +16,15 @@ public class MainAnimationMapper implements AnimationMapper {
       if (parOldPlace instanceof MainPlace) {
         oldPlace = (MainPlace)parOldPlace;
       }
-      if (newPlace != null && oldPlace != null) {
+      if (oldPlace == null) {
+        return Animation.DISSOLVE_REVERSE;
+      } else {
         if (oldPlace.getToken().equals(MainPlace.NEW_MAIL) && newPlace.getToken().equals(MainPlace.HOME)) {
           return Animation.SWAP_REVERSE;
         }
         if (oldPlace.getToken().equals(MainPlace.MAIL_LIST) && newPlace.getToken().equals(MainPlace.HOME)) {
           return Animation.SWAP_REVERSE;
         }
-      } else if (oldPlace == null) {
-        return null;
       }
       return Animation.SWAP;
     }

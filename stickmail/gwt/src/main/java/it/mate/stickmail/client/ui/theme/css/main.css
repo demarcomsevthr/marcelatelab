@@ -28,12 +28,6 @@ body {
   background-color: #3b5998;
 }
 
-/*
-.mgwt-HeaderPanel-center {
-  left: 44%;
-}
-*/
-
 .mgwt-HeaderPanel-center {
   left: 26%;
   width: 310px;
@@ -50,7 +44,6 @@ body {
 
 .ui-HeaderPanel-center-waiting {
   background: transparent url('main/images/ajax-loader-24-1.gif') no-repeat 86% 42%;
-/*  background: transparent url('main/images/ajax-loader-24-1.gif') no-repeat 100% 40%;  */
 }	
 
 .mgwt-ScrollPanel-container {
@@ -71,13 +64,34 @@ body {
 }
 
 .ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
+  margin: -10px -13px;
   color: black;
+  background-color: white;
+  margin: -5px -13px -9px -13px;
+  border-radius: 8px;
   -webkit-user-modify: initial;
 }
 
 .ui-homePanel .mgwt-TextArea .mgwt-InputBox-box:focus {
   background-color: white;
-  margin: -8px;
+}
+
+.ui-homePanel .mgwt-TextBox {
+  padding-top: 0.2em;
+}
+
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box {
+  color: black;
+  text-align: left;
+  -webkit-user-modify: initial;
+  margin: -10px -13px;
+  padding-top: 5px;
+  padding-left: 3px;
+}
+
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:focus {
+  padding-top: 5px;
+  padding-left: 3px;
 }
 
 .ui-homePanel {
@@ -118,15 +132,6 @@ body {
 .ui-homePanel .mgwt-SmartButton {
   background: rgba(0, 0, 255, 0.6);
   color: white;
-}
-
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box {
-  color: black;
-  text-align: left;
-}
-
-.ui-homePanel .mgwt-TextBox {
-  padding-top: 0.2em;
 }
 
 .phg-DateBox, .phg-TimeBox {
@@ -203,14 +208,6 @@ body {
 
 .ui-bodyArea .mgwt-InputBox-box {
   height: 11em;
-}
-
-.ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
-  margin: -10px -13px;
-  color: black;
-  background-color: white;
-  margin: -5px -13px -9px -13px;
-  border-radius: 8px;
 }
 
 .ui-homePanel .ui-calBox {
