@@ -112,6 +112,11 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       return;
     }
     
+    if (subjectBox.getValue().trim().length() == 0) {
+      PhgDialogUtils.showMessageDialog("Subject is empty");
+      return;
+    }
+    
     AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
       public void onFailure(Throwable caught) {
         PhonegapUtils.log("FAILURE");
