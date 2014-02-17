@@ -10,19 +10,22 @@
   
     <gc:Spacer addStyleNames="ui-homeSpacer1"/>
     
-    <!-- 
-    <p:TouchButton text="Scheduled Mails" ui:field="mailListBtn" addStyleNames="ui-homeBtn"/>
-    <gc:Spacer addStyleNames="ui-homeSpacer2"/>
-    <p:TouchButton text="Compose New Mail" ui:field="newMailBtn" addStyleNames="ui-homeBtn"/>
-    <gc:Spacer addStyleNames="ui-homeSpacer2"/>
-     -->
-    
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
       <p:TouchAnchor addStyleNames="ui-scheduled-mails-btn" text="Scheduled Mails" ui:field="mailListBtn2"/>
       <p:TouchAnchor addStyleNames="ui-new-mail-btn" text="New Mail" ui:field="newMailBtn2"/>
     </g:HorizontalPanel>
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
+    
+    <gc:SimpleContainer addStyleNames="ui-firstRunPanel" ui:field="firstRunPanel" >
+      <gc:SimpleContainer addStyleNames="ui-firstRunPanel-top">
+        <g:Label ui:field="firstRunTitleLbl"/>
+      </gc:SimpleContainer>
+      <gc:SimpleContainer addStyleNames="ui-firstRunPanel-content">
+        <gc:Spacer height="1px" addStyleNames="ui-firstRunPanel-content-spacer"/>
+        <g:HTML ui:field="firstRunLbl" addStyleNames="ui-firstRunLbl"/>
+      </gc:SimpleContainer>
+    </gc:SimpleContainer>
     
   </g:HTMLPanel>
   
