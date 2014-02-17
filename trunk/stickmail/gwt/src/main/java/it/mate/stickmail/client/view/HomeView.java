@@ -1,14 +1,23 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.view.HomeView.Presenter;
 
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,6 +37,14 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Label homeLbl;
   
+  @UiField Panel firstRunPanel;
+  @UiField Label firstRunTitleLbl;
+  @UiField HTML firstRunLbl;
+  
+  private static final int ANIMATION_DURATION = 1000;
+  
+  private boolean firstRunPanelVisible = false;
+  
   public HomeView() {
     initUI();
   }
@@ -44,10 +61,18 @@ public class HomeView extends BaseMgwtView <Presenter> {
   }
   
   @Override
+  public void setPresenter(Presenter presenter) {
+    super.setPresenter(presenter);
+    if (isFirstRun()) {
+      showFirstRunPanel2("Hello!", 160, "<p>This is the first time you run this app. </p><br/><p>You have to log in with your <br/>Google account and accept the permission to use your gmail address.</p>");
+    }
+  }
+
+  @Override
   public void setModel(Object model, String tag) {
     
   }
-
+  
   @UiHandler ({ /*"mailListBtn",*/ "mailListBtn2"})
   public void onMailListBtn (TouchEndEvent event) {
     getPresenter().goToMailList();
@@ -56,6 +81,63 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ({ /*"newMailBtn",*/ "newMailBtn2"})
   public void onNewMailBtn (TouchEndEvent event) {
     getPresenter().goToNewMail();
+  }
+  
+  private static int getFirstRunPanelWidthPct() {
+    if (OsDetectionUtils.isTablet()) {
+      return 80;
+    } else {
+      return 90;
+    }
+  }
+  
+  public static String getFirstRunPanelWidth() {
+    return getFirstRunPanelWidthPct() + "%";
+  }
+  
+  private native boolean isFirstRun() /*-{
+    var res = (localStorage.firstRun == null);
+    localStorage.firstRun = true;
+    return res;
+  }-*/;
+  
+  private void showFirstRunPanel2(String title, final int endHeight, String text) {
+    
+    firstRunTitleLbl.setText(title);
+    
+    firstRunLbl.setHTML(SafeHtmlUtils.fromTrustedString(text));
+    
+    final long startTime = System.currentTimeMillis();
+
+    final int startLeft = ( Window.getClientWidth() - (Window.getClientWidth() * getFirstRunPanelWidthPct() / 100) ) / 2 - 8; 
+    
+//  final int startTop = Window.getClientHeight() - getHeaderPanel().getOffsetHeight();
+    final int startTop = 220;
+    
+    Style startProperties = firstRunPanel.getElement().getStyle();
+    
+    startProperties.setPosition(Style.Position.ABSOLUTE);
+    startProperties.setTop( startTop, Style.Unit.PX);
+    startProperties.setLeft(startLeft, Style.Unit.PX);
+    startProperties.setDisplay(Style.Display.BLOCK);
+    
+    final AnimationCallback animationCallback = new AnimationCallback() {
+      public void execute(double now) {
+        if (now >= startTime + ANIMATION_DURATION) {
+//        WebkitCssUtil.resetTransform(firstRunPanel.getElement());
+//        firstRunPanel.getElement().getStyle().clearTop();
+          return;
+        }
+        double currDeltaTm = (now - startTime) / ANIMATION_DURATION;
+        int currY = startTop - (int)Math.round(currDeltaTm * endHeight);
+        GwtUtils.log("translate to " + currY);
+        WebkitCssUtil.translatePx(firstRunPanel.getElement(), 0, currY);
+        AnimationScheduler.get().requestAnimationFrame(this, firstRunPanel.getElement());
+      }
+    };
+
+    animationCallback.execute(startTime);
+    
   }
   
 }
