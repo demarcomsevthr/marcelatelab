@@ -17,6 +17,10 @@
 
 @eval homePanelHeight it.mate.stickmail.client.ui.theme.CustomTheme.getHomePanelHeight();
 
+@eval firstRunPanelWidth it.mate.stickmail.client.view.HomeView.getFirstRunPanelWidth();
+
+@eval firstRunPanelLeft it.mate.stickmail.client.view.HomeView.getFirstRunPanelLeft();
+
 body {
   background-image: none;
   background-color: rgba(238, 238, 238, 0.8);
@@ -304,22 +308,22 @@ body {
   font-size: 12px;
 }
 
-@eval firstRunPanel it.mate.stickmail.client.view.HomeView.getFirstRunPanelWidth();
-
 .ui-firstRunPanel {
-  width: firstRunPanel;
+  position: absolute;	
+  top: homePanelHeight;
+  left: firstRunPanelLeft;
+  width: firstRunPanelWidth;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  display: none;
   text-align: center;
-  border: solid 8px rgba(58, 41, 41, 0.68);	
-  background-color: rgba(58, 41, 41, 0.68);
+  border: solid 5px #bcc2cd;
+  background-color: #bcc2cd;
 }
 
 .ui-firstRunPanel .ui-firstRunPanel-top div {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background-color: rgb(150, 255, 200);
+  background-color: rgba(95, 110, 139, 0.92);
   padding-top: 0.8em;
   padding-bottom: 1.2em;
   font-family: verdana;
@@ -328,13 +332,15 @@ body {
 }
 
 .ui-firstRunPanel-content {
-  background-color: white;
+  background-color: rgb(36, 56, 93);
+  color: white;
   width: 100%;
   height: 100%;
 }
 
 .ui-firstRunPanel .ui-firstRunPanel-content div {
-  background-color: white;
+  background-color: rgb(36, 56, 93);
+  color: white;
   padding-top: 0.6em;
   font-size: 0.72em;
   font-weight: 600;
@@ -342,5 +348,10 @@ body {
 
 .ui-firstRunLbl {
   margin: 10px;
-  padding-bottom: 1em;
+  padding-bottom: 0;
 }
+
+.ui-firstRunPanel div.ui-firstRunLink {
+  font-size: 1.2em;
+}
+
