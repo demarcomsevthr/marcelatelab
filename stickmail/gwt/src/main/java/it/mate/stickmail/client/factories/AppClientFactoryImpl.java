@@ -73,6 +73,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private RemoteUser remoteUser;
   
+  private Delegate<RemoteUser> remoteUserDelegate;
+  
+  
   @Override
   public void initModule(final Panel modulePanel) {
     
@@ -271,7 +274,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }
   }
   
-  // TODO --> private
+  /*
+  // TODO --> delete
   public void initEndpointProxy(final Delegate<StickMailEPProxy> initDelegate, Delegate<Boolean> authDelegate) {
     if (stickMailEPProxy != null) {
       if (initDelegate != null)
@@ -291,8 +295,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       }, authDelegate);
     }
   }
-  
-  private Delegate<RemoteUser> remoteUserDelegate;
+  */
   
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
     this.remoteUserDelegate = remoteUserDelegate;

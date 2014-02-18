@@ -1,17 +1,19 @@
 package it.mate.stickmail.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
 import it.mate.stickmail.client.view.HomeView.Presenter;
+import it.mate.stickmail.shared.model.RemoteUser;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -28,6 +30,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToNewMail();
     public void goToMailList();
+    public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -64,7 +67,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
     if (isFirstRun()) {
-      showFirstRunPanel2("Hello!", 160, "<p>This is the first time you run this app. </p><br/><p>You have to log in with your <br/>Google account and accept the permission to use your gmail address.</p>");
+      doFirstRunTransition("Hello!", 210, "<p>This is the first time you run this app. </p><br/><p>You have to log in with your <br/>Google account and accept the permission to use your gmail address.</p>");
     }
   }
 
@@ -73,14 +76,24 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
   
-  @UiHandler ({ /*"mailListBtn",*/ "mailListBtn2"})
+  @UiHandler ("mailListBtn2")
   public void onMailListBtn (TouchEndEvent event) {
     getPresenter().goToMailList();
   }
   
-  @UiHandler ({ /*"newMailBtn",*/ "newMailBtn2"})
+  @UiHandler ("newMailBtn2")
   public void onNewMailBtn (TouchEndEvent event) {
     getPresenter().goToNewMail();
+  }
+  
+  @UiHandler ("helloBtn")
+  public void onHelloBtn (TouchEndEvent event) {
+    getPresenter().setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser element) {
+        PhonegapUtils.log("hello");
+        firstRunPanel.setVisible(false);
+      }
+    });
   }
   
   private static int getFirstRunPanelWidthPct() {
@@ -95,13 +108,17 @@ public class HomeView extends BaseMgwtView <Presenter> {
     return getFirstRunPanelWidthPct() + "%";
   }
   
+  public static String getFirstRunPanelLeft() {
+    int startLeft = ( Window.getClientWidth() - (Window.getClientWidth() * getFirstRunPanelWidthPct() / 100) ) / 2 - 8; 
+    return startLeft + "px";
+  }
+  
   private native boolean isFirstRun() /*-{
-    var res = (localStorage.firstRun == null);
-    localStorage.firstRun = true;
+    var res = (localStorage.remoteUser == null);
     return res;
   }-*/;
   
-  private void showFirstRunPanel2(String title, final int endHeight, String text) {
+  private void doFirstRunTransition(String title, final int endHeight, String text) {
     
     firstRunTitleLbl.setText(title);
     
@@ -109,18 +126,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
     final long startTime = System.currentTimeMillis();
 
-    final int startLeft = ( Window.getClientWidth() - (Window.getClientWidth() * getFirstRunPanelWidthPct() / 100) ) / 2 - 8; 
-    
-//  final int startTop = Window.getClientHeight() - getHeaderPanel().getOffsetHeight();
-    final int startTop = 220;
-    
-    Style startProperties = firstRunPanel.getElement().getStyle();
-    
-    startProperties.setPosition(Style.Position.ABSOLUTE);
-    startProperties.setTop( startTop, Style.Unit.PX);
-    startProperties.setLeft(startLeft, Style.Unit.PX);
-    startProperties.setDisplay(Style.Display.BLOCK);
-    
+    final int startTop = firstRunPanel.getAbsoluteTop();
+
     final AnimationCallback animationCallback = new AnimationCallback() {
       public void execute(double now) {
         if (now >= startTime + ANIMATION_DURATION) {
@@ -130,7 +137,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
         }
         double currDeltaTm = (now - startTime) / ANIMATION_DURATION;
         int currY = startTop - (int)Math.round(currDeltaTm * endHeight);
-        GwtUtils.log("translate to " + currY);
         WebkitCssUtil.translatePx(firstRunPanel.getElement(), 0, currY);
         AnimationScheduler.get().requestAnimationFrame(this, firstRunPanel.getElement());
       }
