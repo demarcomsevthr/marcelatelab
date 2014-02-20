@@ -13,4 +13,8 @@ public interface StickAdapter {
   
   public List<StickMail> findMailsByUser(RemoteUser user);
   
+  public List<StickMail> findScheduledMailsByUser(RemoteUser user);
+  
+  public void delete(List<StickMail> entities);
+  
 }

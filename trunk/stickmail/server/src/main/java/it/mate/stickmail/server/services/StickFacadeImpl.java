@@ -54,5 +54,14 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   public List<StickMail> findMailsByUser(RemoteUser user) {
     return adapter.findMailsByUser(user);
   }
+
+  @Override
+  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
+    return adapter.findScheduledMailsByUser(user);
+  }
+  
+  public void delete(List<StickMail> mails) {
+    adapter.delete(mails);
+  }
   
 }
