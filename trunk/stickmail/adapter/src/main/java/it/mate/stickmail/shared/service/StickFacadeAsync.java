@@ -18,4 +18,8 @@ public interface StickFacadeAsync {
 
   void findMailsByUser(RemoteUser user, AsyncCallback<List<StickMail>> callback);
 
+  void findScheduledMailsByUser(RemoteUser user, AsyncCallback<List<StickMail>> callback);
+
+  void delete(List<StickMail> mails, AsyncCallback<Void> callback);
+
 }
