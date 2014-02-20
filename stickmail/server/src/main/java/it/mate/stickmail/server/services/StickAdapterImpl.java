@@ -1,6 +1,7 @@
 package it.mate.stickmail.server.services;
 
 import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.stickmail.server.model.StickMailDs;
@@ -85,6 +86,26 @@ public class StickAdapterImpl implements StickAdapter {
   public List<StickMail> findMailsByUser(RemoteUser user) {
     List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam", String.class.getName() + " userIdParam", null, user.getUserId() );
     return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
+  }
+
+  @Override
+  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam && state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "userIdParam"),
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, user.getUserId(), StickMail.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
+  }
+  
+  public void delete(List<StickMail> entities) {
+    if (entities == null)
+      return;
+    for (StickMail entity : entities) {
+      StickMailDs mail = dao.findById(StickMailDs.class, entity.getId());
+      dao.delete(mail);
+    }
   }
   
 }
