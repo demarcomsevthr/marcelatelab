@@ -21,4 +21,8 @@ public interface StickFacade extends RemoteService {
   
   List<StickMail> findMailsByUser(RemoteUser user);
 
+  List<StickMail> findScheduledMailsByUser(RemoteUser user);
+  
+  void delete(List<StickMail> mails);
+
 }
