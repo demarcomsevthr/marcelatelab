@@ -59,5 +59,17 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.findMailsByUser(user);
   }
+
+  @Override
+  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.findScheduledMailsByUser(user);
+  }
+
+  @Override
+  public void delete(List<StickMail> mails) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.delete(mails);
+  }
   
 }

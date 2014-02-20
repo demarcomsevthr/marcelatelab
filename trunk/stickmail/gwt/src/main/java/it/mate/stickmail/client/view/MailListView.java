@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -14,12 +15,16 @@ import it.mate.stickmail.client.view.MailListView.Presenter;
 import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -38,6 +43,8 @@ public class MailListView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void findMailsByUser(RemoteUser remoteUser);
+    public void findScheduledMailsByUser(RemoteUser remoteUser);
+    public void deleteMails(RemoteUser remoteUser, List<StickMail> mails);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MailListView> { }
@@ -49,6 +56,10 @@ public class MailListView extends BaseMgwtView <Presenter> {
   @UiField ScrollPanel resultsPanel;
   
   private boolean scrollInProgress = false;
+  
+  List<StickMail> checkedMails = new ArrayList<StickMail>();
+  
+  private RemoteUser remoteUser;
   
   public MailListView() {
     initUI();
@@ -96,10 +107,12 @@ public class MailListView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     signPanel.setRemoteUserDelegate(presenter, new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
+        MailListView.this.remoteUser = remoteUser;
         if (remoteUser == null) {
           showMailList(null);
         } else {
-          getPresenter().findMailsByUser(remoteUser);
+//        getPresenter().findMailsByUser(remoteUser);
+          getPresenter().findScheduledMailsByUser(remoteUser);
         }
       }
     });
@@ -109,6 +122,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
   public void setModel(Object model, String tag) {
     if (TAG_MAILS.equals(tag)) {
       if (model != null && model instanceof List) {
+        @SuppressWarnings("unchecked")
         List<StickMail> mails = (List<StickMail>)model;
         showMailList(mails);
       }
@@ -120,7 +134,6 @@ public class MailListView extends BaseMgwtView <Presenter> {
     if (mails == null || mails.size() == 0)
       return;
     SimpleContainer list = new SimpleContainer();
-    boolean odd = false;
     
     for (final StickMail mail : mails) {
       
@@ -129,6 +142,17 @@ public class MailListView extends BaseMgwtView <Presenter> {
       list.add(row);
       
       PhCheckBox check = new PhCheckBox();
+      check.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        public void onValueChange(ValueChangeEvent<Boolean> event) {
+          if (!scrollInProgress) {
+            if (event.getValue()) {
+              checkedMails.add(mail);
+            } else {
+              checkedMails.remove(mail);
+            }
+          }
+        }
+      });
       row.add(check);
       
       TouchHTML mailHtml = new TouchHTML("<p class='ui-row-subject'>" + mail.getSubject() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
@@ -137,7 +161,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
       mailHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
-            PhonegapUtils.log("selected " + mail);
+//          PhonegapUtils.log("selected " + mail);
           }
         }
       });
@@ -145,7 +169,6 @@ public class MailListView extends BaseMgwtView <Presenter> {
     }
     
     resultsPanel.add(list);
-//  TouchUtils.applyFocusPatch();
     TouchUtils.applyFocusPatch();
     
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
@@ -155,6 +178,21 @@ public class MailListView extends BaseMgwtView <Presenter> {
     });
     
   }
-
+  
+  @UiHandler ("deleteBtn")
+  public void onDeleteBtn(TouchEndEvent event) {
+    if (checkedMails == null || checkedMails.size() == 0)
+      return;
+    for (StickMail mail : checkedMails) {
+      PhonegapUtils.log("deleting " + mail);
+    }
+    PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected mail?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      public void execute(Integer selectedButton) {
+        if (selectedButton == 1) {
+          getPresenter().deleteMails(remoteUser, checkedMails);
+        }
+      }
+    });
+  }
   
 }

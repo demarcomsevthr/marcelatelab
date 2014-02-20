@@ -93,6 +93,31 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  public void findScheduledMailsByUser(RemoteUser remoteUser) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().findScheduledMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
+      public void onSuccess(List<StickMail> results) {
+        setHeaderWaiting(false);
+        view.setModel(results, MailListView.TAG_MAILS);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+    });
+  }
+  
+  public void deleteMails(final RemoteUser remoteUser, List<StickMail> mails) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().delete(mails, new AsyncCallback<Void>() {
+      public void onSuccess(Void result) {
+        findScheduledMailsByUser(remoteUser);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+    });
+  }
+  
   public void goToHome() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }
