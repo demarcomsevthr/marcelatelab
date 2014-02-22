@@ -12,6 +12,8 @@ public class ModalPopinDialog extends PopinDialog {
 
   private HandlerRegistration modalHandlerRegistration;
   
+  private boolean visible;
+  
   public ModalPopinDialog() {
     super();
   }
@@ -23,13 +25,19 @@ public class ModalPopinDialog extends PopinDialog {
   @Override
   public void show() {
     super.show();
+    this.visible = true;
     makeModal();
   }
   
   @Override
   public void hide() {
     super.hide();
+    this.visible = false;
     EventUtils.removeModalHandler(modalHandlerRegistration);
+  }
+  
+  public boolean isVisible() {
+    return visible;
   }
   
   private void makeModal() {
