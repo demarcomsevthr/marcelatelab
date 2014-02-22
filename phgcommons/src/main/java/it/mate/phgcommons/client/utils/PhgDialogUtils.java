@@ -132,7 +132,7 @@ public class PhgDialogUtils {
     }
     buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
       public void onTap(TapEvent event) {
-        messageDialog.hide();
+        hideMessageDialog();
         if (delegate != null)
           delegate.execute(1);
       }
@@ -146,7 +146,7 @@ public class PhgDialogUtils {
       }
       buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
         public void onTap(TapEvent event) {
-          messageDialog.hide();
+          hideMessageDialog();
           if (delegate != null)
             delegate.execute(2);
         }
@@ -157,7 +157,7 @@ public class PhgDialogUtils {
       buttonMsg = "Cancel";
       buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
         public void onTap(TapEvent event) {
-          messageDialog.hide();
+          hideMessageDialog();
           if (delegate != null)
             delegate.execute(3);
         }
@@ -166,10 +166,21 @@ public class PhgDialogUtils {
 
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
+        if (messageDialog != null) {
+          PhonegapUtils.log("message dialog is just opened!");
+          return;
+        }
         messageDialog = MgwtDialogs.popin(title, dialogContainer);
       }
     });
     
+  }
+  
+  private static void hideMessageDialog() {
+    if (messageDialog != null) {
+      messageDialog.hide();
+      messageDialog = null;
+    }
   }
 
 }
