@@ -36,10 +36,6 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
 
   @Override
   public Date getServerTime() {
-    /*
-    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-    return cal.getTime();
-    */
     return new Date();
   }
 
