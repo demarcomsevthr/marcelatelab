@@ -18,9 +18,11 @@ import it.mate.stickmail.client.view.NewMailView;
 import it.mate.stickmail.shared.model.RemoteUser;
 import it.mate.stickmail.shared.model.StickMail;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.event.shared.EventBus;
@@ -118,6 +120,32 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
+    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+      public void onSuccess(Date serverTime) {
+        Date clientTime = new Date();
+        long deltaTime = 0;
+//      long deltaTime = clientTime.getTime() - serverTime.getTime();
+        PhonegapUtils.log("serverTime = " + serverTime);
+        PhonegapUtils.log("clientTime = " + clientTime);
+        PhonegapUtils.log("delta time = " + deltaTime);
+        stickMail.setCreated(new Date(stickMail.getCreated().getTime() - deltaTime));
+        stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
+        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+          public void onSuccess(StickMail result) {
+            delegate.execute(result);
+          }
+          public void onFailure(Throwable caught) {
+            processFailure(null, caught);
+          }
+        });
+      }
+    });
+  }
+  
   public void goToHome() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }
@@ -144,7 +172,11 @@ public class MainActivity extends MGWTAbstractActivity implements
     setHeaderWaiting(false);
     if (caught != null) {
       PhonegapUtils.log(caught.getClass().getName()+" - "+caught.getMessage());
-      PhgDialogUtils.showMessageDialog(caught.getMessage(), "Errore", PhgDialogUtils.BUTTONS_OK);
+      if (caught instanceof InvocationException) {
+        PhgDialogUtils.showMessageDialog("Maybe data connection is not active", "Errore", PhgDialogUtils.BUTTONS_OK);
+      } else {
+        PhgDialogUtils.showMessageDialog(caught.getMessage(), "Errore", PhgDialogUtils.BUTTONS_OK);
+      }
     }
     if (message != null) {
       PhgDialogUtils.showMessageDialog(message, "Attenzione", PhgDialogUtils.BUTTONS_OK);

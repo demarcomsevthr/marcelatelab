@@ -10,7 +10,6 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.stickmail.client.factories.AppClientFactory;
 import it.mate.stickmail.client.ui.SignPanel;
 import it.mate.stickmail.client.view.NewMailView.Presenter;
 import it.mate.stickmail.shared.model.StickMail;
@@ -23,7 +22,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -35,6 +33,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
+    public void postNewMail(StickMail stickMail, Delegate<StickMail> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, NewMailView> { }
@@ -118,27 +117,31 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       return;
     }
     
+    StickMail stickMail = new StickMailTx();
+    stickMail.setSubject(subjectBox.getValue());
+    stickMail.setBody(bodyArea.getValue());
+    stickMail.setUser(signPanel.getRemoteUser());
+    stickMail.setScheduled(scheduledTime.setToDate(scheduledDate));
+    stickMail.setCreated(new Date());
+    stickMail.setState(StickMail.STATE_NEW);
+    
+    getPresenter().postNewMail(stickMail, new Delegate<StickMail>() {
+      public void execute(StickMail element) {
+        getPresenter().goToHome();
+      }
+    });
+
+    /*
     AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
       public void onFailure(Throwable caught) {
         PhonegapUtils.log("FAILURE");
         caught.printStackTrace();
       }
       public void onSuccess(Date serverTime) {
-        
         Date clientTime = new Date();
-        
-//      long deltaTime = clientTime.getTime() - serverTime.getTime();
         long deltaTime = 0;
-        
-        PhonegapUtils.log("serverTime = " + serverTime);
-        
-        PhonegapUtils.log("clientTime = " + clientTime);
-        
-        PhonegapUtils.log("delta time = " + deltaTime);
-        
         Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() - deltaTime);
         Date serverCreated = new Date(clientTime.getTime() - deltaTime);
-        
         StickMail stickMail = new StickMailTx();
         stickMail.setSubject(subjectBox.getValue());
         stickMail.setBody(bodyArea.getValue());
@@ -146,7 +149,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
         stickMail.setScheduled(serverScheduled);
         stickMail.setCreated(serverCreated);
         stickMail.setState(StickMail.STATE_NEW);
-        
         AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
           public void onSuccess(StickMail result) {
             PhonegapUtils.log("SUCCESS - created " + result);
@@ -156,9 +158,9 @@ public class NewMailView extends BaseMgwtView <Presenter> {
             PhonegapUtils.log("FAILURE");
           }
         });
-        
       }
     });
+    */
     
   }
   
