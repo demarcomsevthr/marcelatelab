@@ -22,8 +22,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
@@ -41,6 +39,8 @@ public class CalendarDialog {
   
   private static final String[] DAY_NAMES_EN = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
   private static final String[] DAY_NAMES_IT = {"Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"};
+  
+  private static final boolean MONDAY_FIRST = true;
   
   public interface SelectedDateChangeHandler {
     public void onSelectedDateChange(Date date);
@@ -189,14 +189,12 @@ public class CalendarDialog {
 
     TouchHTML doneBox = new TouchHTML("DONE");
     doneBox.setWidth((popupWidth * 20 / 100) + "px");
-    /*
-    doneBox.addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
+    doneBox.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
         fireSelectedDateChange(selectedDate);
         CalendarDialog.this.hide();
       }
     });
-    */
     doneBox.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         fireSelectedDateChange(selectedDate);
@@ -205,8 +203,8 @@ public class CalendarDialog {
     });
     TouchHTML cancelBox = new TouchHTML("cancel");
     cancelBox.setWidth((popupWidth * 20 / 100) + "px");
-    cancelBox.addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
+    cancelBox.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
         CalendarDialog.this.hide();
       }
     });
@@ -339,33 +337,58 @@ public class CalendarDialog {
     GwtUtils.setFlexCellColSpan(table, 0, 0, 7);
     
     for (int idn = 0; idn < 7; idn++) {
-      table.setWidget(1, idn, createWeekDay("it".equals(language) ? DAY_NAMES_IT[idn] : DAY_NAMES_EN[idn]));
+      int col = idn;
+      if (MONDAY_FIRST) {
+        col = idn == 0 ? 6 : idn - 1;
+      }
+      table.setWidget(1, col, createWeekDayCell("it".equals(language) ? DAY_NAMES_IT[idn] : DAY_NAMES_EN[idn]));
     }
     
     int row = 2;
     
     Date date1 = new Date(month.getYear() - 1900, month.getMonth() - 1, 1);
     int day1 = date1.getDay();
-    if (day1 > 0) {
-      for (int col = 0; col < day1; col++) {
-        Date date = CalendarUtil.copyDate(date1);
-        CalendarUtil.addDaysToDate(date, -(day1 - col));
-        row = createDayCell(table, row, col, date, true);
+    if (MONDAY_FIRST) {
+      if (day1 >= 0) {
+        if (day1 == 0) day1 = 7;
+        for (int col = 1; col < day1; col++) {
+          Date date = CalendarUtil.copyDate(date1);
+          CalendarUtil.addDaysToDate(date, -(day1 - col));
+          row = createMonthDayCell(table, row, col, date, true);
+        }
+      }
+    } else {
+      if (day1 > 0) {
+        for (int col = 0; col < day1; col++) {
+          Date date = CalendarUtil.copyDate(date1);
+          CalendarUtil.addDaysToDate(date, -(day1 - col));
+          row = createMonthDayCell(table, row, col, date, true);
+        }
       }
     }
     
     for (int day = 1; day <= month.getLastDayOfMonth(); day++) {
       Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
-      row = createDayCell(table, row, date.getDay(), date, false);
+      row = createMonthDayCell(table, row, date.getDay(), date, false);
     }
     
     Date date31 = new Date(month.getYear() - 1900, month.getMonth() - 1, month.getLastDayOfMonth());
     int day31 = date31.getDay();
-    if (day31 < 6) {
-      for (int col = day31 + 1; col <= 6; col++) {
-        Date date = CalendarUtil.copyDate(date31);
-        CalendarUtil.addDaysToDate(date, (col - day31));
-        row = createDayCell(table, row, col, date, true);
+    if (MONDAY_FIRST) {
+      if (day31 > 0 && day31 < 7) {
+        for (int col = day31 + 1; col <= 7; col++) {
+          Date date = CalendarUtil.copyDate(date31);
+          CalendarUtil.addDaysToDate(date, (col - day31));
+          row = createMonthDayCell(table, row, col, date, true);
+        }
+      }
+    } else {
+      if (day31 < 6) {
+        for (int col = day31 + 1; col <= 6; col++) {
+          Date date = CalendarUtil.copyDate(date31);
+          CalendarUtil.addDaysToDate(date, (col - day31));
+          row = createMonthDayCell(table, row, col, date, true);
+        }
       }
     }
     
@@ -373,7 +396,11 @@ public class CalendarDialog {
     return wrapper;
   }
   
-  private int createDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
+  @SuppressWarnings("deprecation")
+  private int createMonthDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
+    if (MONDAY_FIRST) {
+      col = col == 0 ? 6 : col - 1;
+    }
     int day = date.getDate();
     TouchHTML html = new TouchHTML("" + day);
     html.addStyleName("phg-CalendarDialog-Month-Day");
@@ -387,11 +414,12 @@ public class CalendarDialog {
     if (outsideCurrentMonth) {
       html.addStyleName("phg-outsideMonth");
     }
+    /*
     html.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
-//      PhonegapUtils.log("TouchStartEvent");
       }
     });
+    */
     html.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         if (scrollPending) {
@@ -409,7 +437,7 @@ public class CalendarDialog {
     return row;
   }
   
-  private HTML createWeekDay(String text) {
+  private HTML createWeekDayCell(String text) {
     HTML weekDay = new HTML();
     weekDay.addStyleName("phg-CalendarDialog-MonthHeader-WeekDay");
     weekDay.setText(text);
