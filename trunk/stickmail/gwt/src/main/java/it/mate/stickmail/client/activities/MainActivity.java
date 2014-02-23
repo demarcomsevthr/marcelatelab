@@ -121,6 +121,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
+    setHeaderWaiting(true);
     AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
       public void onFailure(Throwable caught) {
         processFailure(null, caught);
@@ -136,6 +137,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
         AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
           public void onSuccess(StickMail result) {
+            setHeaderWaiting(false);
             delegate.execute(result);
           }
           public void onFailure(Throwable caught) {
@@ -173,13 +175,13 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (caught != null) {
       PhonegapUtils.log(caught.getClass().getName()+" - "+caught.getMessage());
       if (caught instanceof InvocationException) {
-        PhgDialogUtils.showMessageDialog("Maybe data connection is not active", "Errore", PhgDialogUtils.BUTTONS_OK);
+        PhgDialogUtils.showMessageDialog("Maybe data connection is not active", "Error", PhgDialogUtils.BUTTONS_OK);
       } else {
-        PhgDialogUtils.showMessageDialog(caught.getMessage(), "Errore", PhgDialogUtils.BUTTONS_OK);
+        PhgDialogUtils.showMessageDialog(caught.getMessage(), "Error", PhgDialogUtils.BUTTONS_OK);
       }
     }
     if (message != null) {
-      PhgDialogUtils.showMessageDialog(message, "Attenzione", PhgDialogUtils.BUTTONS_OK);
+      PhgDialogUtils.showMessageDialog(message, "Alert", PhgDialogUtils.BUTTONS_OK);
     }
   }
   

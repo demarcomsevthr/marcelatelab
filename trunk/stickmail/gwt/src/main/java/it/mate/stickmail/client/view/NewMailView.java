@@ -131,37 +131,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       }
     });
 
-    /*
-    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
-      public void onFailure(Throwable caught) {
-        PhonegapUtils.log("FAILURE");
-        caught.printStackTrace();
-      }
-      public void onSuccess(Date serverTime) {
-        Date clientTime = new Date();
-        long deltaTime = 0;
-        Date serverScheduled = new Date(scheduledTime.setToDate(scheduledDate).getTime() - deltaTime);
-        Date serverCreated = new Date(clientTime.getTime() - deltaTime);
-        StickMail stickMail = new StickMailTx();
-        stickMail.setSubject(subjectBox.getValue());
-        stickMail.setBody(bodyArea.getValue());
-        stickMail.setUser(signPanel.getRemoteUser());
-        stickMail.setScheduled(serverScheduled);
-        stickMail.setCreated(serverCreated);
-        stickMail.setState(StickMail.STATE_NEW);
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
-          public void onSuccess(StickMail result) {
-            PhonegapUtils.log("SUCCESS - created " + result);
-            getPresenter().goToHome();
-          }
-          public void onFailure(Throwable caught) {
-            PhonegapUtils.log("FAILURE");
-          }
-        });
-      }
-    });
-    */
-    
   }
   
 }

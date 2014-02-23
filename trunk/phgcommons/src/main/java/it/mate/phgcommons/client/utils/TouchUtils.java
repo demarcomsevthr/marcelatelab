@@ -63,20 +63,16 @@ public class TouchUtils {
    * see http://stackoverflow.com/questions/8335834/how-can-i-hide-the-android-keyboard-using-javascript
    */
   public static void applyQuickFixFocusPatch() {
-    PhonegapUtils.log("applying focus patch with readonly - start");
     applyQuickFixFocusPatchImpl(JQuery.select("input"));
     applyQuickFixFocusPatchImpl(JQuery.select("textarea"));
-    PhonegapUtils.log("applying focus patch with readonly - end");
   }
   
   
   private static FocusPanel focusPatch1$focusWidget;
   private static void executePatch20131211(int delay) {
     if (focusPatch1$focusWidget != null) {
-      //PhonegapUtils.log("hiding focus patch widget");
       focusPatch1$focusWidget.setVisible(false);
     }
-    //PhonegapUtils.log("creating focus patch widget");
     focusPatch1$focusWidget = new FocusPanel();
     focusPatch1$focusWidget.addStyleName("phg-InvisibleTouch");
     RootPanel.get().add(focusPatch1$focusWidget);

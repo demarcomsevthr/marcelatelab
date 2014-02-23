@@ -31,6 +31,7 @@ public class TimePickerDialog {
     private int height = 374;
     private Delegate<Time> onCloseDelegate;
     private boolean modal = true;
+    private boolean glassEnabled = true;
     public Options setTitle(String title) {
       this.title = title;
       return this;
@@ -59,6 +60,10 @@ public class TimePickerDialog {
       this.modal = modal;
       return this;
     }
+    public Options setGlassEnabled(boolean glassEnabled) {
+      this.glassEnabled = glassEnabled;
+      return this;
+    }
   }
   
   private PopupPanel popup;
@@ -84,7 +89,7 @@ public class TimePickerDialog {
   
   public void setTime(Time time) {
     this.currentTime = time;
-    renderCurrentTime();
+    renderTime();
   }
   
   private void initUI() {
@@ -93,6 +98,11 @@ public class TimePickerDialog {
     popup.addStyleName("phg-TimePickerDialog");
     popup.setWidth(options.width+"px");
     popup.setHeight(options.height+"px");
+    
+    if (options.glassEnabled) {
+      popup.setGlassStyleName("phg-PopupPanelGlass");
+      popup.setGlassEnabled(true);
+    }
     
     if (options.modal) {
       makePopupModal();
@@ -126,51 +136,34 @@ public class TimePickerDialog {
           if (newDigit <= 2) {
             int hours = currentTime.getHours();
             currentTime.setHours(setPositionalDigit(hours, 0, newDigit));
-            renderCurrentTime();
           }
-          /*
-          int d1 = getWidgetValue(digits[1]);
-          if (d1 <= 3) {
-            if (newDigit <= 2) {
-              int hours = currentTime.getHour();
-              currentTime.setHour(setPositionalDigit(hours, 0, newDigit));
-              renderCurrentTime();
-            }
-          } else {
-            if (newDigit <= 1) {
-              int hours = currentTime.getHour();
-              currentTime.setHour(setPositionalDigit(hours, 0, newDigit));
-              renderCurrentTime();
-            }
-          }
-          */
           currentDigit ++;
+          renderTime();
         } else if (currentDigit == 1) {
           int d0 = getWidgetValue(digits[0]);
           if (d0 == 0 || d0 == 1) {
             int hours = currentTime.getHours();
             currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
-            renderCurrentTime();
           } else if (d0 == 2) {
             if (newDigit <= 4) {
               int hours = currentTime.getHours();
               currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
-              renderCurrentTime();
             }
           }
           currentDigit ++;
+          renderTime();
         } else if (currentDigit == 2) {
           if (newDigit <= 5) {
             int minutes = currentTime.getMinutes();
             currentTime.setMinutes(setPositionalDigit(minutes, 0, newDigit));
-            renderCurrentTime();
           }
           currentDigit ++;
+          renderTime();
         } else if (currentDigit == 3) {
           int minutes = currentTime.getMinutes();
           currentTime.setMinutes(setPositionalDigit(minutes, 1, newDigit));
-          renderCurrentTime();
           currentDigit = 0;
+          renderTime();
         }
       }
     };
@@ -180,7 +173,7 @@ public class TimePickerDialog {
         Widget source = (Widget)event.getSource();
         int minutes = getWidgetValue(source);
         currentTime.setMinutes(minutes);
-        renderCurrentTime();
+        renderTime();
       }
     };
     
@@ -203,26 +196,26 @@ public class TimePickerDialog {
           }
         }
         currentTime.setHours(hours);
-        renderCurrentTime();
+        renderTime();
       }
     };
     
-    keypad.setWidget(0, 0, createKeypadCell("1", 1, digitHandler));
-    keypad.setWidget(0, 1, createKeypadCell("2", 2, digitHandler));
-    keypad.setWidget(0, 2, createKeypadCell("3", 3, digitHandler));
-    keypad.setWidget(0, 3, createKeypadCell("15", 15, minutesHandler));
-    keypad.setWidget(1, 0, createKeypadCell("4", 4, digitHandler));
-    keypad.setWidget(1, 1, createKeypadCell("5", 5, digitHandler));
-    keypad.setWidget(1, 2, createKeypadCell("6", 6, digitHandler));
-    keypad.setWidget(1, 3, createKeypadCell("30", 30, minutesHandler));
-    keypad.setWidget(2, 0, createKeypadCell("7", 7, digitHandler));
-    keypad.setWidget(2, 1, createKeypadCell("8", 8, digitHandler));
-    keypad.setWidget(2, 2, createKeypadCell("9", 9, digitHandler));
-    keypad.setWidget(2, 3, createKeypadCell("45", 45, minutesHandler));
-    keypad.setWidget(3, 0, createKeypadCell("-1h", -1, hoursHandler));
-    keypad.setWidget(3, 1, createKeypadCell("0", 0, digitHandler));
-    keypad.setWidget(3, 2, createKeypadCell("+1h", +1, hoursHandler));
-    keypad.setWidget(3, 3, createKeypadCell("00", 00, minutesHandler));
+    keypad.setWidget(0, 0, createKeypadCell("1", 1, digitHandler, null));
+    keypad.setWidget(0, 1, createKeypadCell("2", 2, digitHandler, null));
+    keypad.setWidget(0, 2, createKeypadCell("3", 3, digitHandler, null));
+    keypad.setWidget(0, 3, createKeypadCell("15", 15, minutesHandler, "minutes"));
+    keypad.setWidget(1, 0, createKeypadCell("4", 4, digitHandler, null));
+    keypad.setWidget(1, 1, createKeypadCell("5", 5, digitHandler, null));
+    keypad.setWidget(1, 2, createKeypadCell("6", 6, digitHandler, null));
+    keypad.setWidget(1, 3, createKeypadCell("30", 30, minutesHandler, "minutes"));
+    keypad.setWidget(2, 0, createKeypadCell("7", 7, digitHandler, null));
+    keypad.setWidget(2, 1, createKeypadCell("8", 8, digitHandler, null));
+    keypad.setWidget(2, 2, createKeypadCell("9", 9, digitHandler, null));
+    keypad.setWidget(2, 3, createKeypadCell("45", 45, minutesHandler, "minutes"));
+    keypad.setWidget(3, 0, createKeypadCell("-1h", -1, hoursHandler, "hours"));
+    keypad.setWidget(3, 1, createKeypadCell("0", 0, digitHandler, null));
+    keypad.setWidget(3, 2, createKeypadCell("+1h", +1, hoursHandler, "hours"));
+    keypad.setWidget(3, 3, createKeypadCell("00", 00, minutesHandler, "minutes"));
     
     
     HorizontalPanel bottom = new HorizontalPanel();
@@ -248,7 +241,6 @@ public class TimePickerDialog {
     TouchHTML cancelBtn = new TouchHTML("Cancel");
     cancelBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-//      popup.hide();
         hide();
       }
     });
@@ -278,7 +270,7 @@ public class TimePickerDialog {
     
   }
   
-  private void renderCurrentTime() {
+  private void renderTime() {
     int hours = currentTime.getHours();
     int d0 = hours / 10;
     int d1 = hours % 10;
@@ -289,6 +281,13 @@ public class TimePickerDialog {
     setDigitHtmlValue(digits[1], d1);
     setDigitHtmlValue(digits[2], d2);
     setDigitHtmlValue(digits[3], d3);
+    for (int it = 0; it < 4; it++) {
+      if (currentDigit == it) {
+        digits[it].addStyleName("phg-TimePickerDialog-TimeDigit-selected");
+      } else {
+        digits[it].removeStyleName("phg-TimePickerDialog-TimeDigit-selected");
+      }
+    }
   }
   
   private void setDigitHtmlValue(TouchHTML digit, int d) {
@@ -302,6 +301,7 @@ public class TimePickerDialog {
     digit.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         currentDigit = index;
+        renderTime();
       }
     });
     setWidgetValue(digit, value);
@@ -309,9 +309,12 @@ public class TimePickerDialog {
     return digit;
   }
   
-  private TouchHTML createKeypadCell(String text, int value, TouchEndHandler handler) {
+  private TouchHTML createKeypadCell(String text, int value, TouchEndHandler handler, String additionalStyleName) {
     TouchHTML keypadCell = new TouchHTML(text);
     keypadCell.addStyleName("phg-TimePickerDialog-KeypadCell");
+    if (additionalStyleName != null) {
+      keypadCell.addStyleName("phg-TimePickerDialog-KeypadCell-" + additionalStyleName);
+    }
     keypadCell.addTouchEndHandler(handler);
     setWidgetValue(keypadCell, value);
     return keypadCell;

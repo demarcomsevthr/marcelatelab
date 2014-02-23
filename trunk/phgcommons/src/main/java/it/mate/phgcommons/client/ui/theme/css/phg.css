@@ -24,6 +24,12 @@
   margin: -10px -13px;
 }
 
+.phg-PopupPanelGlass {
+  background-color: #000;
+  opacity: 0.3;
+  -webkit-opacity: 0.3;
+}
+
 .phg-TouchAnchor {
   text-decoration: none;
 }
@@ -105,6 +111,10 @@
   background-color: rgb(215,217,219);
 }
 
+.phg-CalendarDialog-Month-Day-selected {
+  background-color: rgba(13, 13, 255, 0.75);
+}
+
 .phg-TimePickerDialog {
   color: black;
   background-color: rgb(239, 239, 239);
@@ -132,6 +142,10 @@
   padding-top: 4px;
 }
 
+.phg-TimePickerDialog-TimeDigit-selected {
+  background-color: rgba(197, 197, 219, 0.8);
+}
+
 .phg-TimePickerDialog-Keypad {
   padding-left: 11.5%;
 }
@@ -148,6 +162,16 @@
   vertical-align: middle;
   font-size: 26px;
   padding-top: 10px;
+}
+
+.phg-TimePickerDialog-KeypadCell-minutes {
+  background: rgba(15, 112, 118, 0.8);
+  color: white;
+}
+
+.phg-TimePickerDialog-KeypadCell-hours {
+  background: rgba(33, 33, 134, 0.94);
+  color: white;
 }
 
 .phg-TimePickerDialog-Bottom {
@@ -179,7 +203,7 @@
   border-top: 3px solid #bcc2cd;
   border-left: 3px solid #bcc2cd;
   border-right: 3px solid #bcc2cd;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 10px;
@@ -193,10 +217,6 @@
   border-bottom: 3px solid #bcc2cd;
   border-left: 3px solid #bcc2cd;
   border-right: 3px solid #bcc2cd;
-  padding-left: 50px;
-  padding-right: 40px;
-  padding-bottom: 30px;
-  padding-top: 5px;
 }
 
 .phg-PopinDialog-Wrapper, .phg-PopinDialog-Wrapper a {
@@ -211,6 +231,32 @@
 
 .phg-PopinDialog-MessageRow {
   font-size: 0.7em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+.phg-PopinDialog-Separator {
+  border-top: 1px solid rgba(128, 128, 128, 0.98);
+  margin-top: 1em;
+}
+
+.phg-PopinDialog-ButtonsRow {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+/* DIV VERSION
+
+.phg-PopinDialog-BodyWrapper {
+  padding-left: 50px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  padding-top: 5px;
+}
+
+
+.phg-PopinDialog-MessageRow {
+  font-size: 0.7em;
   margin-left: -1.8em;
   margin-top: -1.2em;
   margin-right: -1.0em;
@@ -222,9 +268,18 @@
   margin-bottom: -0.5em;
 }
 
+*/
+
 .phg-PopinDialog-ButtonsRow td {
-  width: 2em;
-  padding: 0.6em;
+  width: 3em;
+  padding-top: 0;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 0.3em;  
+}
+
+.phg-PopinDialog-ButtonsRow-2ndBtn {
+  border-left: 1px solid rgba(128, 128, 128, 0.98);
 }
 
 .phg-PopinDialog-Wrapper {

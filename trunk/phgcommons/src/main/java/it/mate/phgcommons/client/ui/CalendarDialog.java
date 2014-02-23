@@ -10,7 +10,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
@@ -120,6 +128,12 @@ public class CalendarDialog {
   
   private boolean modal = true;
   
+  private boolean glassEnabled = false;
+  
+  private Element glass;
+  
+  private HandlerRegistration resizeRegistration;
+  
   private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
   
   public CalendarDialog() {
@@ -143,6 +157,11 @@ public class CalendarDialog {
   }
   
   public void hide() {
+    if (glass != null) {
+      Document.get().getBody().removeChild(glass);
+      resizeRegistration.removeHandler();
+      resizeRegistration = null;
+    }
     popup.hide();
     EventUtils.removeModalHandler(modalHandlerRegistration);
     PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
@@ -178,6 +197,14 @@ public class CalendarDialog {
     
     if (modal) {
       makePopupModal();
+    }
+    
+    if (glassEnabled) {
+      /*
+      popup.setGlassStyleName("phg-PopupPanelGlass");
+      popup.setGlassEnabled(true);
+      */
+      createGlass("phg-PopupPanelGlass");
     }
     
     SimpleContainer container = new SimpleContainer();
@@ -245,6 +272,13 @@ public class CalendarDialog {
     popup.setPopupPosition(popupLeft, popupTop);
     popup.show();
     
+    if (glass != null) {
+      Document.get().getBody().appendChild(glass);
+//    impl.onShow(curPanel.glass);
+      resizeRegistration = Window.addResizeHandler(glassResizer);
+      glassResizer.onResize(null);
+    }
+    
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
         internalScrollTo(popupWidth, 0);
@@ -298,6 +332,17 @@ public class CalendarDialog {
       }
     });
     
+  }
+
+  private void createGlass(String glassStyleName) {
+    if (glass == null) {
+      glass = Document.get().createDivElement();
+      glass.setClassName(glassStyleName);
+
+      glass.getStyle().setPosition(Position.ABSOLUTE);
+      glass.getStyle().setLeft(0, Unit.PX);
+      glass.getStyle().setTop(0, Unit.PX);
+    }
   }
   
   private void setVisible(Widget w) {
@@ -414,6 +459,9 @@ public class CalendarDialog {
     if (outsideCurrentMonth) {
       html.addStyleName("phg-outsideMonth");
     }
+    if (CalendarUtil.isSameDate(date, selectedDate)) {
+      html.addStyleName("phg-CalendarDialog-Month-Day-selected");
+    }
     /*
     html.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
@@ -479,6 +527,10 @@ public class CalendarDialog {
     this.modal = modal;
   }
   
+  public void setGlassEnabled(boolean glassEnabled) {
+    this.glassEnabled = glassEnabled;
+  }
+  
   public boolean isVisible() {
     return popup.isVisible();
   }
@@ -490,5 +542,31 @@ public class CalendarDialog {
       CalendarDialog.language = "en";
     }
   }
+  
+  private ResizeHandler glassResizer = new ResizeHandler() {
+    public void onResize(ResizeEvent event) {
+      Style style = glass.getStyle();
+
+      int winWidth = Window.getClientWidth();
+      int winHeight = Window.getClientHeight();
+
+      // Hide the glass while checking the document size. Otherwise it would
+      // interfere with the measurement.
+      style.setDisplay(Display.NONE);
+      style.setWidth(0, Unit.PX);
+      style.setHeight(0, Unit.PX);
+
+      int width = Document.get().getScrollWidth();
+      int height = Document.get().getScrollHeight();
+
+      // Set the glass size to the larger of the window's client size or the
+      // document's scroll size.
+      style.setWidth(Math.max(width, winWidth), Unit.PX);
+      style.setHeight(Math.max(height, winHeight), Unit.PX);
+
+      // The size is set. Show the glass again.
+      style.setDisplay(Display.BLOCK);
+    }
+  };
   
 }
