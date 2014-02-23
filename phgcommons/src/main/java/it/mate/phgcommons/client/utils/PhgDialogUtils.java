@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.UIObject;
@@ -99,6 +100,10 @@ public class PhgDialogUtils {
     showMessageDialog(message, "Alert");
   }
   
+  public static void showMessageDialog(String message, int buttonsType) {
+    showMessageDialog(message, "Alert", buttonsType, null);
+  }
+  
   public static void showMessageDialog(String message, String title) {
     showMessageDialog(message, title, BUTTONS_OK, null);
   }
@@ -109,7 +114,97 @@ public class PhgDialogUtils {
   
   public static void showMessageDialog(final String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
     
+    VerticalPanel dialogContainer = new VerticalPanel();
+    dialogContainer.setSpacing(0);
+    dialogContainer.setWidth("100%");
+    dialogContainer.addStyleName("phg-PopinDialog-Container");
+    
+    SimplePanel row;
+    
+    row = new SimplePanel();
+    row.addStyleName("phg-PopinDialog-MessageRow");
+    dialogContainer.add(row);
+    HTML messageHtml = new HTML(SafeHtmlUtils.fromTrustedString(message));
+    row.add(messageHtml);
+    
+    row = new SimplePanel();
+    row.addStyleName("phg-PopinDialog-Separator");
+    dialogContainer.add(row);
+    
+    row = new SimplePanel();
+    row.addStyleName("phg-PopinDialog-ButtonsRow");
+    dialogContainer.add(row);
+    HorizontalPanel buttonsPanel = new HorizontalPanel();
+    row.add(buttonsPanel);
+    
+    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, delegate);
+    
+  }
+  
+  private static void createButtonsAndShow(final Widget dialogContainer, Panel buttonsPanel, String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
+    String buttonMsg = null;
+    
+    if (buttonsPanel != null) {
+      if (buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
+        buttonMsg = "Yes";
+      } else {
+        buttonMsg = "OK";
+      }
+      TouchAnchor btn = new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
+        public void onTap(TapEvent event) {
+          hideMessageDialog();
+          if (delegate != null)
+            delegate.execute(1);
+        }
+      });
+      buttonsPanel.add(btn);
+    }
+    
+    if (buttonsType == BUTTONS_OKCANCEL || buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
+      if (buttonsType == BUTTONS_OKCANCEL) {
+        buttonMsg = "Cancel";
+      } else {
+        buttonMsg = "No";
+      }
+      TouchAnchor btn = new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
+        public void onTap(TapEvent event) {
+          hideMessageDialog();
+          if (delegate != null)
+            delegate.execute(2);
+        }
+      });
+      buttonsPanel.add(btn);
+      btn.getElement().getParentElement().addClassName("phg-PopinDialog-ButtonsRow-2ndBtn");
+    }
+    
+    if (buttonsType == BUTTONS_YESNOCANCEL) {
+      buttonMsg = "Cancel";
+      TouchAnchor btn = new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
+        public void onTap(TapEvent event) {
+          hideMessageDialog();
+          if (delegate != null)
+            delegate.execute(3);
+        }
+      });
+      buttonsPanel.add(btn);
+      btn.getElement().getParentElement().addClassName("phg-PopinDialog-ButtonsRow-2ndBtn");
+    }
+
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        if (messageDialog != null) {
+          PhonegapUtils.log("message dialog is just opened!");
+          return;
+        }
+        messageDialog = MgwtDialogs.popin(title, dialogContainer);
+      }
+    });
+  }
+  
+  public static void showMessageDialog_Div(final String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
+    
     final SimpleContainer dialogContainer = new SimpleContainer();
+    
     SimplePanel row;
     
     row = new SimplePanel();
@@ -124,6 +219,9 @@ public class PhgDialogUtils {
     HorizontalPanel buttonsPanel = new HorizontalPanel();
     row.add(buttonsPanel);
     
+    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, delegate);
+
+    /*
     String buttonMsg = null;
     if (buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
       buttonMsg = "Yes";
@@ -173,6 +271,7 @@ public class PhgDialogUtils {
         messageDialog = MgwtDialogs.popin(title, dialogContainer);
       }
     });
+    */
     
   }
   

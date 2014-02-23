@@ -14,19 +14,13 @@ public class PhCalendarBox extends PhDateBox {
   
   @Override
   protected void onPluginTapEvent(TapEvent event) {
-    /*
-    DatePickerPluginUtil.showCalendarView(getValue(), new Delegate<Date>() {
-      public void execute(Date value) {
-        setValue(value, true);
-      }
-    });
-    */
     CalendarDialog calendar = new CalendarDialog();
     calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
       public void onSelectedDateChange(Date date) {
         setValue(date, true);
       }
     });
+    calendar.setGlassEnabled(true);
     calendar.show();
   }
 

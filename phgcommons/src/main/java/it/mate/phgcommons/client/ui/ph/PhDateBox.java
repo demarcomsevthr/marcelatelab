@@ -77,6 +77,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
           setValue(date, true);
         }
       });
+      calendar.setGlassEnabled(true);
       calendar.show();
     }
   }
