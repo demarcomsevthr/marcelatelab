@@ -152,12 +152,10 @@ body {
 }
 
 .ui-optionsBtn {
-  background: url('main/images/options-32-1.png') no-repeat 18px;
-  width: 32px;
+  background: url(main/images/options-28.png) no-repeat;
   height: 32px;
-  padding-left: 15px;
-  padding-top: 4px;
-  padding-right: 8px;
+  padding-right: 24px;
+  margin-top: 4px;  
 }
 
 .ui-changeUserBtn {
@@ -353,3 +351,8 @@ body {
   font-size: 1.2em;
 }
 
+.ui-nomails {
+  font-size: 13px;
+  text-align: center;
+  padding-top: 2em;
+}

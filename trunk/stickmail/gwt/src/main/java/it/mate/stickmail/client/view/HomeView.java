@@ -4,7 +4,6 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
@@ -67,7 +66,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
     if (isFirstRun()) {
-      doFirstRunTransition("Hello!", 210, "<p>This is the first time you run this app. </p><br/><p>You have to log in with your <br/>Google account and accept the permission to use your gmail address.</p>");
+      doFirstRunTransition("Hello!", 210, "<p>This is the first time you run this app. </p><br/><p>To use this app, you have to log in with your <span style='color:yellow;'>Google account</span> and accept the <br/> permission to use your gmail address.</p>");
     }
   }
 
@@ -88,9 +87,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("helloBtn")
   public void onHelloBtn (TouchEndEvent event) {
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        firstRunPanel.setVisible(false);
+      }
+    });
     getPresenter().setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser element) {
-        PhonegapUtils.log("hello");
         firstRunPanel.setVisible(false);
       }
     });

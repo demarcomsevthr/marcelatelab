@@ -204,19 +204,25 @@ public class MainActivity extends MGWTAbstractActivity implements
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
     if (!home) {
-      setVisibleChangeUserBtn(true);
+//    setVisibleChangeUserBtn(true);
+      setVisibleOptionsBtn(true);
     }
   }
   
-  public void addOptionsBtn() {
-    TouchImage optionsBtn = new TouchImage();
-    optionsBtn.addStyleName("ui-optionsBtn");
-    view.getHeaderPanel().setRightWidget(optionsBtn);
-    optionsBtn.addTouchEndHandler(new TouchEndHandler() {
-      public void onTouchEnd(TouchEndEvent event) {
-        PhonegapUtils.log("optons tapped");
-      }
-    });
+  private void setVisibleOptionsBtn(boolean visible) {
+    if (visible) {
+      TouchImage optionsBtn = new TouchImage();
+      optionsBtn.addStyleName("ui-optionsBtn");
+      optionsBtn.addTouchEndHandler(new TouchEndHandler() {
+        public void onTouchEnd(TouchEndEvent event) {
+          PhonegapUtils.log("optons tapped");
+          AppClientFactory.IMPL.authenticate();
+        }
+      });
+      view.getHeaderPanel().setRightWidget(optionsBtn);
+    } else {
+      view.getHeaderPanel().setRightWidget(new Label());
+    }
   }
   
   private void setVisibleChangeUserBtn(boolean visible) {
@@ -241,7 +247,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
         setHeaderWaiting(false);
-//      setVisibleChangeUserBtn(remoteUser != null);
         delegate.execute(remoteUser);
       }
     });

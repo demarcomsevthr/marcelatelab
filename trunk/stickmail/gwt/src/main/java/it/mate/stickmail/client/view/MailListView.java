@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
@@ -22,11 +23,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -54,6 +57,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField SignPanel signPanel;
   @UiField ScrollPanel resultsPanel;
+  @UiField TouchButton deleteBtn;
   
   private boolean scrollInProgress = false;
   
@@ -70,7 +74,14 @@ public class MailListView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
+    /*
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
+      public void execute(TapEvent element) {
+        getPresenter().goToHome();
+      }
+    });
+    */
+    initHeaderBackButton(SafeHtmlUtils.fromTrustedString("<img src='main/images/home-back.png'/>"), new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToHome();
       }
@@ -131,16 +142,18 @@ public class MailListView extends BaseMgwtView <Presenter> {
   
   private void showMailList(List<StickMail> mails) {
     resultsPanel.clear();
-    if (mails == null || mails.size() == 0)
+    if (mails == null || mails.size() == 0) {
+      Label noMailsLbl = new Label("You have no scheduled mails.");
+      noMailsLbl.addStyleName("ui-nomails");
+      resultsPanel.add(noMailsLbl);
       return;
+    }
+    deleteBtn.setVisible(true);
     SimpleContainer list = new SimpleContainer();
-    
     for (final StickMail mail : mails) {
-      
       HorizontalPanel row = new HorizontalPanel();
       row.addStyleName("ui-row");
       list.add(row);
-      
       PhCheckBox check = new PhCheckBox();
       check.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -154,10 +167,8 @@ public class MailListView extends BaseMgwtView <Presenter> {
         }
       });
       row.add(check);
-      
       TouchHTML mailHtml = new TouchHTML("<p class='ui-row-subject'>" + mail.getSubject() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
       row.add(mailHtml);
-      
       mailHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
@@ -167,16 +178,13 @@ public class MailListView extends BaseMgwtView <Presenter> {
       });
       
     }
-    
     resultsPanel.add(list);
     TouchUtils.applyFocusPatch();
-    
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
         resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
       }
     });
-    
   }
   
   @UiHandler ("deleteBtn")
