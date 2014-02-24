@@ -1,5 +1,6 @@
 package it.mate.phgcommons.client.utils;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Element;
 import com.googlecode.mgwt.ui.client.MGWT;
 
@@ -37,4 +38,9 @@ public class WebkitCssUtil {
     return ('WebKitCSSMatrix' in $wnd && 'm11' in new WebKitCSSMatrix())
   }-*/;
 
+  
+  public static native void setStyleProperty(Style style, String name, String value)/*-{
+    style[name] = value;
+  }-*/;
+  
 }
