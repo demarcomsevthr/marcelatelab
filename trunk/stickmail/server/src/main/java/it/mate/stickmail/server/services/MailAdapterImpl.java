@@ -38,7 +38,7 @@ public class MailAdapterImpl implements MailAdapter {
   public void sendStickMail(StickMail mail) throws MessagingException {
     StringBuffer text = new StringBuffer(mail.getBody());
     addFixedMailFooter(text);
-    doSendMail(new MailRecipient(mail.getUser().getEmail()), "Stick Mail Reminder", text, null, null);
+    doSendMail(new MailRecipient(mail.getUser().getEmail()), "Mail Sticker Reminder: " + mail.getSubject(), text, null, null);
   }
 
   protected void doSendMail (MailRecipient recipient, String subject, StringBuffer text, String attachName, byte[] attachBuffer) throws MessagingException {
@@ -82,8 +82,9 @@ public class MailAdapterImpl implements MailAdapter {
   }
 
   private void addFixedMailFooter(StringBuffer text) {
-    text.append("\n\n\n\n");
-    text.append("This email was sent to you by Stick Mail Service. This is an automatically generated message: please do not reply. If you want to see all your scheduled reminders use the Stick Mail App. Thanks.\n");
+    text.append("\n\n\n\n\n\n\n\n\n\n");
+    text.append("<hr/>");
+    text.append("<span style='font-size:10px;font-style:italic;'>This email was sent to you by the Mail Sticker Service. This is an automatically generated message: please do not reply. If you want to see all your scheduled reminders use the Mail Sticker App. Thanks.</span>");
   }
 
   private String escapeMailText(String text) {
