@@ -11,7 +11,7 @@
   
     <s:SignPanel ui:field="signPanel"/>
     
-    <p:TouchButton text="Delete selected mails" ui:field="deleteBtn" addStyleNames="ui-delete-btn"/>
+    <p:TouchButton text="Delete selected mails" ui:field="deleteBtn" addStyleNames="ui-delete-btn" visible="false"/>
     
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     

@@ -19,6 +19,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -60,16 +61,23 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
+    /*
     initHeaderBackButton("Back", new Delegate<TapEvent>() {
+      public void execute(TapEvent element) {
+        getPresenter().goToHome();
+      }
+    });
+    */
+    initHeaderBackButton(SafeHtmlUtils.fromTrustedString("<img src='main/images/home-back.png'/>"), new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
         getPresenter().goToHome();
       }
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-//  onNowBtn(null);
     calBox.setValue(new Date());
     timeBox.setValue(Time.fromDate(new Date()).incHours(1).setMinutes(0));
+    signPanel.setSignLblText("Send to");
   }
   
   @Override
