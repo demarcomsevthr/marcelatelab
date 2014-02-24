@@ -2,8 +2,12 @@ package it.mate.phgcommons.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.WebkitCssUtil;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -124,6 +128,37 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     });
   }
 
+  protected void initHeaderBackButton(SafeHtml html, final Delegate<TapEvent> delegate) {
+    headerBackButton = new HtmlHeaderButton();
+//  headerBackButton.setBackButton(true);
+    HtmlHeaderButton htmlHeaderButton = (HtmlHeaderButton)headerBackButton;
+    htmlHeaderButton.setHtml(html);
+    getHeaderBackButton().addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        delegate.execute(event);
+      }
+    });
+    headerPanel.setLeftWidget(headerBackButton);
+  }
+
   public abstract void setModel(Object model, String tag);  
+  
+  public static class HtmlHeaderButton extends HeaderButton {
+    
+    public void setHtml(SafeHtml html) {
+      removeStyles();
+      Element borderContainerElem = getElement().getFirstChildElement();
+      borderContainerElem.setInnerSafeHtml(html);
+      borderContainerElem.getStyle().setMarginTop(-3, Unit.PX);
+      borderContainerElem.getStyle().setMarginLeft(-6, Unit.PX);
+      try {
+        Element pElem = getElement().getElementsByTagName("p").getItem(0);
+        WebkitCssUtil.setStyleProperty(pElem.getStyle(), "border", "none");
+        WebkitCssUtil.setStyleProperty(pElem.getStyle(), "background", "transparent");
+      } catch (Throwable th) { }
+    }
+    
+    
+  }
   
 }
