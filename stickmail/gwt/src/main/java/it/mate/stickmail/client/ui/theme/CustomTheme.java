@@ -75,12 +75,12 @@ public class CustomTheme {
   }
   
   public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/apad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/apad.css"})
     public CustomMainCss css();
   }
   

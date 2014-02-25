@@ -274,37 +274,20 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }
   }
   
-  /*
-  // TODO --> delete
-  public void initEndpointProxy(final Delegate<StickMailEPProxy> initDelegate, Delegate<Boolean> authDelegate) {
-    if (stickMailEPProxy != null) {
-      if (initDelegate != null)
-        initDelegate.execute(stickMailEPProxy);
-      if (authDelegate != null)
-        authDelegate.execute(stickMailEPProxy.isSignedIn());
-    } else {
-      stickMailEPProxy = new StickMailEPProxy(new Delegate<Void>() {
-        public void execute(Void element) {
-          GwtUtils.deferredExecution(new Delegate<Void>() {
-            public void execute(Void element) {
-              if (initDelegate != null)
-                initDelegate.execute(stickMailEPProxy);
-            }
-          });
-        }
-      }, authDelegate);
-    }
-  }
-  */
-  
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
+    
+    PhonegapUtils.log("setRemoteUserDelegate - ver. 746.6");
+    
+    PhonegapUtils.log("remoteUser = " + remoteUser);
+    
     this.remoteUserDelegate = remoteUserDelegate;
     if (remoteUser != null) {
       remoteUserDelegate.execute(remoteUser);
     } else {
       
       String remoteUserJson = getRemoteUserFromLocalStorage();
-      if (remoteUserJson != null) {
+      PhonegapUtils.log("remoteUserJson = " + remoteUserJson);
+      if (remoteUserJson != null && remoteUserJson.contains("{") ) {
         RemoteUserJS remoteUserJS = JSONUtils.parse(remoteUserJson).cast();
         PhonegapUtils.log("discovered remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
         remoteUser = remoteUserJS.asRemoteUser();
@@ -312,30 +295,18 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       } else {
         
         if (stickMailEPProxy == null) {
+          StickMailEPProxy.resetAll();
           createStickMailEPProxy(null);
-          /*
-          authDelegate = new Delegate<Boolean>() {
-            public void execute(Boolean isSigned) {
-              if (isSigned) {
-                stickMailEPProxy.getRemoteUser(new Delegate<RemoteUser>() {
-                  public void execute(RemoteUser remoteUser) {
-                    AppClientFactoryImpl.this.remoteUser = remoteUser;
-                    setRemoteUserInLocalStorage(JSONUtils.stringify(RemoteUserJS.cast(remoteUser)));
-                    remoteUserDelegate.execute(remoteUser);
-                  }
-                });
-              } else {
-                remoteUser = null;
-                setRemoteUserInLocalStorage(null);
-                remoteUserDelegate.execute(null);
-              }
-            }
-          };
-          stickMailEPProxy = new StickMailEPProxy(null, authDelegate);
-          */
         } else {
           boolean isSigned = stickMailEPProxy.isSignedIn();
           authDelegate.execute(isSigned);
+          
+          
+          if (!isSigned) {
+            //TODO: forzare la riautenticazione!
+            stickMailEPProxy.reAuthorize();
+          }
+          
         }
         
       }
