@@ -428,13 +428,19 @@ public abstract class AbstractEndpointProxy {
     });
   }-*/;
   
-  private native void signOutImpl() /*-{
-    $wnd.gapi.auth.setToken(null);
+  public static void resetAll() {
+    signOutImpl();
+  }
+  
+  private static native void signOutImpl() /*-{
     localStorage.access_token = null;
     localStorage.refresh_token = null;
     localStorage.expires_at = 0;
     localStorage.token = null;
-    $wnd.gapi.auth.signOut();
+    if (typeof $wnd.gapi != "undefined") {
+      $wnd.gapi.auth.setToken(null);
+      $wnd.gapi.auth.signOut();
+    }
   }-*/;
   
   protected static interface Callback {
