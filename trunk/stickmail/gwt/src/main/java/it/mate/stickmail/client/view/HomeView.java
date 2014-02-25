@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.stickmail.client.constants.AppProperties;
@@ -17,6 +18,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
@@ -67,6 +69,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     if (isFirstRun()) {
       doFirstRunTransition("Hello!", 210, "<p>This is the first time you run this app. </p><br/><p>To use this app, you have to log in with your <span style='color:yellow;'>Google account</span> and accept the <br/> permission to use your gmail address.</p>");
+      doCheckFirstRunComplete();
     }
   }
 
@@ -77,24 +80,38 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("mailListBtn2")
   public void onMailListBtn (TouchEndEvent event) {
-    getPresenter().goToMailList();
+    if (isFirstRun()) {
+      onHelloBtn(event);
+    } else {
+      getPresenter().goToMailList();
+    }
   }
   
   @UiHandler ("newMailBtn2")
   public void onNewMailBtn (TouchEndEvent event) {
-    getPresenter().goToNewMail();
+    if (isFirstRun()) {
+      onHelloBtn(event);
+    } else {
+      getPresenter().goToNewMail();
+    }
   }
   
   @UiHandler ("helloBtn")
   public void onHelloBtn (TouchEndEvent event) {
+    /*
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
         firstRunPanel.setVisible(false);
       }
     });
+    */
     getPresenter().setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser element) {
-        firstRunPanel.setVisible(false);
+      public void execute(RemoteUser result) {
+        /*
+        if (result != null) {
+          firstRunPanel.setVisible(false);
+        }
+        */
       }
     });
   }
@@ -116,26 +133,24 @@ public class HomeView extends BaseMgwtView <Presenter> {
     return startLeft + "px";
   }
   
-  private native boolean isFirstRun() /*-{
-    var res = (localStorage.remoteUser == null);
-    return res;
+  private boolean isFirstRun() {
+    String remoteUserJson = getRemoteUserImpl();
+    PhonegapUtils.log("localStorage.remoteUser = " + remoteUserJson);
+    return (remoteUserJson == null || !remoteUserJson.contains("{"));
+  }
+  
+  private native String getRemoteUserImpl() /*-{
+    return localStorage.remoteUser;
   }-*/;
   
   private void doFirstRunTransition(String title, final int endHeight, String text) {
-    
     firstRunTitleLbl.setText(title);
-    
     firstRunLbl.setHTML(SafeHtmlUtils.fromTrustedString(text));
-    
     final long startTime = System.currentTimeMillis();
-
     final int startTop = firstRunPanel.getAbsoluteTop();
-
     final AnimationCallback animationCallback = new AnimationCallback() {
       public void execute(double now) {
         if (now >= startTime + ANIMATION_DURATION) {
-//        WebkitCssUtil.resetTransform(firstRunPanel.getElement());
-//        firstRunPanel.getElement().getStyle().clearTop();
           return;
         }
         double currDeltaTm = (now - startTime) / ANIMATION_DURATION;
@@ -144,9 +159,22 @@ public class HomeView extends BaseMgwtView <Presenter> {
         AnimationScheduler.get().requestAnimationFrame(this, firstRunPanel.getElement());
       }
     };
-
     animationCallback.execute(startTime);
+  }
+  
+  Timer checkFirstRunCompleteTimer = null;
+  private void doCheckFirstRunComplete() {
     
+    checkFirstRunCompleteTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        if (!isFirstRun()) {
+          firstRunPanel.setVisible(false);
+          if (checkFirstRunCompleteTimer != null) {
+            checkFirstRunCompleteTimer.cancel();
+          }
+        }
+      }
+    });
   }
   
 }
