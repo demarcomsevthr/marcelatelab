@@ -69,7 +69,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     if (isFirstRun()) {
       doFirstRunTransition("Hello!", 210, "<p>This is the first time you run this app. </p><br/><p>To use this app, you have to log in with your <span style='color:yellow;'>Google account</span> and accept the <br/> permission to use your gmail address.</p>");
-      doCheckFirstRunComplete();
+      doFirstRunCompleteCheck();
     }
   }
 
@@ -163,7 +163,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   }
   
   Timer checkFirstRunCompleteTimer = null;
-  private void doCheckFirstRunComplete() {
+  private void doFirstRunCompleteCheck() {
     
     checkFirstRunCompleteTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
       public void execute(Void element) {
