@@ -1,0 +1,15 @@
+
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+
+body {
+  margin-top: 18px !important;
+}
+
+.mgwt-HeaderPanel {
+  background-image: initial;
+  background-color: #3b5998;
+}
+
+.ui-HeaderPanel-home {
+  background: #3b5998 url(main/images/home.png) no-repeat 5%;
+}

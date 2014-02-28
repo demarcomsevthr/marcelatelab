@@ -3,6 +3,7 @@ package it.mate.postscriptum.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
@@ -20,11 +21,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 
 public class HomeView extends BaseMgwtView <Presenter> {
 
@@ -43,7 +44,10 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiField Panel firstRunPanel;
   @UiField Label firstRunTitleLbl;
-  @UiField HTML firstRunLbl;
+  /*
+  @UiField HTML firstRunHtml;
+  */
+  @UiField TouchHTML firstRunHtml;
   
   private static final int ANIMATION_DURATION = 1000;
   
@@ -145,7 +149,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   private void doFirstRunTransition(String title, final int endHeight, String text) {
     firstRunTitleLbl.setText(title);
-    firstRunLbl.setHTML(SafeHtmlUtils.fromTrustedString(text));
+    firstRunHtml.setHTML(SafeHtmlUtils.fromTrustedString(text));
     final long startTime = System.currentTimeMillis();
     final int startTop = firstRunPanel.getAbsoluteTop();
     final AnimationCallback animationCallback = new AnimationCallback() {
@@ -160,6 +164,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
       }
     };
     animationCallback.execute(startTime);
+    
+    firstRunHtml.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        onHelloBtn(event);
+      }
+    });
+    
   }
   
   Timer checkFirstRunCompleteTimer = null;

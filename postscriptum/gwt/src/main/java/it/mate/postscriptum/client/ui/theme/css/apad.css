@@ -1,4 +1,6 @@
 
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+
 .ui-bodyArea .mgwt-InputBox-box {
   height: 35em;
 }

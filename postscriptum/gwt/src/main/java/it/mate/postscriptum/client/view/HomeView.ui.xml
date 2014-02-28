@@ -23,7 +23,10 @@
       </gc:SimpleContainer>
       <gc:SimpleContainer addStyleNames="ui-firstRunPanel-content">
         <gc:Spacer height="1px" addStyleNames="ui-firstRunPanel-content-spacer"/>
-        <g:HTML ui:field="firstRunLbl" addStyleNames="ui-firstRunLbl"/>
+        <!-- 
+        <g:HTML ui:field="firstRunHtml" addStyleNames="ui-firstRunLbl"/>
+         -->
+        <p:TouchHTML ui:field="firstRunHtml" addStyleNames="ui-firstRunLbl"/>
         <p:TouchHTML text="login" addStyleNames="ui-firstRunLink" ui:field="helloBtn"/>
         <gc:Spacer height="1.2em"/>
       </gc:SimpleContainer>

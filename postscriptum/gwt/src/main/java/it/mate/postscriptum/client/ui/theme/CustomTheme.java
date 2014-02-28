@@ -70,32 +70,32 @@ public class CustomTheme {
   }
   
   public interface CustomBundleAndroid extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/android.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/apad.css"})
+    @Source({"css/main.css", "css/android.css", "css/apad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/apad.css"})
+    @Source({"css/main.css", "css/android.css", "css/apad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIOs extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/ios.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/ios.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css"})
+    @Source({"css/main.css", "css/ios.css"})
     public CustomMainCss css();
   }
   
