@@ -44,6 +44,18 @@ call %MVN2CMD% %DEP_CLEAN% install
 cd %BASEAPPDIR%\%MODULE%
 call %MVN2CMD% %*
 
+:COPY_DEPLOY
+
+if "%DEPLOY_TARGET%"=="" GOTO NO_COPY_DEPLOY
+set DEPLOY_SOURCE="%BASEAPPDIR%\android\assets\www"
+del /Q /S "%DEPLOY_TARGET%\*" >NUL
+rmdir /Q /S "%DEPLOY_TARGET%\main"
+echo COPYING DEPLOY TO %DEPLOY_TARGET%
+xcopy /E /Y %DEPLOY_SOURCE%\main "%DEPLOY_TARGET%\main\"
+::del /Q /S "%DEPLOY_TARGET%\cordova-*.js" >NUL
+
+:NO_COPY_DEPLOY
+
 if "%SKIP_PAUSE%"=="true" GOTO NO_PAUSE
 pause
 GOTO END
