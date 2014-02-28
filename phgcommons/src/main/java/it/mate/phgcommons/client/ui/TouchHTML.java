@@ -41,6 +41,10 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
 
   }
   
+  public void setHTML(SafeHtml html) {
+    setHtml(html);
+  }
+  
   public void setHtml(SafeHtml html) {
     Element elem = getElement();
     elem.setInnerSafeHtml(html);
