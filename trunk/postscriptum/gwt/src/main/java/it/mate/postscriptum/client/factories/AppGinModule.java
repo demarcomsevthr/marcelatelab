@@ -15,7 +15,7 @@ import com.googlecode.gwtphonegap.client.util.PhonegapUtil;
 public class AppGinModule extends AbstractGinModule {
 
   private final static String NAT_PROP_FACADE_MODULE_URL = "stickFacadeModuleUrl";
-  private final static String DEFAULT_FACADE_MODULE_URL = "http://127.0.0.1:8080/main/";
+  private final static String DEFAULT_FACADE_MODULE_URL = "https://postscriptumsrv.appspot.com/main/";
   private final static String NAT_PROP_FACADE_RELATIVE_PATH = "stickFacadeRelativePath";
   private final static String DEFAULT_FACADE_RELATIVE_PATH = ".stickFacade";
   
