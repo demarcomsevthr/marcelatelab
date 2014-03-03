@@ -1,11 +1,9 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.RemoteUser;
-import it.mate.therapyreminder.shared.model.StickMail;
 import it.mate.therapyreminder.shared.service.StickFacade;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -39,6 +37,7 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
     return new Date();
   }
 
+  /*
   @Override
   public StickMail create(StickMail stickMail) {
     logger.debug("received " + stickMail);
@@ -59,5 +58,6 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   public void delete(List<StickMail> mails) {
     adapter.delete(mails);
   }
+  */
   
 }

@@ -1,7 +1,6 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.server.model.MailRecipient;
-import it.mate.therapyreminder.shared.model.StickMail;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -34,12 +33,14 @@ public class MailAdapterImpl implements MailAdapter {
     this.mailTemplate = mailTemplate;
   }
 
+  /*
   @Override
   public void sendStickMail(StickMail mail) throws MessagingException {
     StringBuffer text = new StringBuffer(mail.getBody());
     addFixedMailFooter(text);
     doSendMail(new MailRecipient(mail.getUser().getEmail()), "Therapy Reminder: " + mail.getSubject(), text, null, null);
   }
+  */
 
   protected void doSendMail (MailRecipient recipient, String subject, StringBuffer text, String attachName, byte[] attachBuffer) throws MessagingException {
 
