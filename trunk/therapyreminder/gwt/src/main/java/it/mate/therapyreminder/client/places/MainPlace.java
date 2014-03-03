@@ -7,9 +7,7 @@ public class MainPlace extends Place {
   
   public static final String HOME = "home";
   
-  public static final String NEW_MAIL = "newMail";
-  
-  public static final String MAIL_LIST = "mailList";
+  public static final String NEW_THERAPY = "newTherapy";
   
   private String token;
 

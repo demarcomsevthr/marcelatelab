@@ -13,15 +13,9 @@ import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.HomeView;
-import it.mate.therapyreminder.client.view.MailListView;
-import it.mate.therapyreminder.client.view.NewMailView;
+import it.mate.therapyreminder.client.view.NewTherapyView;
 import it.mate.therapyreminder.shared.model.RemoteUser;
-import it.mate.therapyreminder.shared.model.StickMail;
 
-import java.util.Date;
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -32,7 +26,7 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, NewMailView.Presenter, MailListView.Presenter {
+  HomeView.Presenter, NewTherapyView.Presenter {
   
   private MainPlace place;
   
@@ -56,23 +50,12 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-    if (place.getToken().equals(MainPlace.NEW_MAIL)) {
-      NewMailView view = AppClientFactory.IMPL.getGinjector().getNewMailView();
+    if (place.getToken().equals(MainPlace.NEW_THERAPY)) {
+      
+      NewTherapyView view = AppClientFactory.IMPL.getGinjector().getNewTherapyView();
       this.view = view;
       initBaseMgwtView(false);
-      view.setPresenter(this);
-      panel.setWidget(view.asWidget());
-      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
-        public void execute(String element) {
-          goToHome();
-        }
-      });
-    }
-    if (place.getToken().equals(MainPlace.MAIL_LIST)) {
-      MailListView view = AppClientFactory.IMPL.getGinjector().getMailListView();
-      this.view = view;
-      initBaseMgwtView(false);
-      view.setPresenter(this);
+//    view.setPresenter(this);
       panel.setWidget(view.asWidget());
       AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
         public void execute(String element) {
@@ -82,44 +65,19 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
-  public void findMailsByUser(RemoteUser remoteUser) {
+  @Override
+  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
     setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().findMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
-      public void onSuccess(List<StickMail> results) {
+    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
         setHeaderWaiting(false);
-        view.setModel(results, MailListView.TAG_MAILS);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
+        delegate.execute(remoteUser);
       }
     });
   }
   
-  public void findScheduledMailsByUser(RemoteUser remoteUser) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().findScheduledMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
-      public void onSuccess(List<StickMail> results) {
-        setHeaderWaiting(false);
-        view.setModel(results, MailListView.TAG_MAILS);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-  }
   
-  public void deleteMails(final RemoteUser remoteUser, List<StickMail> mails) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().delete(mails, new AsyncCallback<Void>() {
-      public void onSuccess(Void result) {
-        findScheduledMailsByUser(remoteUser);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-  }
-  
+  /*
   public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
     setHeaderWaiting(true);
     AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
@@ -127,14 +85,8 @@ public class MainActivity extends MGWTAbstractActivity implements
         processFailure(null, caught);
       }
       public void onSuccess(Date serverTime) {
-        Date clientTime = new Date();
-        long deltaTime = 0;
-//      long deltaTime = clientTime.getTime() - serverTime.getTime();
-        PhonegapUtils.log("serverTime = " + serverTime);
-        PhonegapUtils.log("clientTime = " + clientTime);
-        PhonegapUtils.log("delta time = " + deltaTime);
-        stickMail.setCreated(new Date(stickMail.getCreated().getTime() - deltaTime));
-        stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
+        stickMail.setCreated(stickMail.getCreated());
+        stickMail.setScheduled(stickMail.getScheduled());
         AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
           public void onSuccess(StickMail result) {
             setHeaderWaiting(false);
@@ -147,17 +99,14 @@ public class MainActivity extends MGWTAbstractActivity implements
       }
     });
   }
+  */
   
   public void goToHome() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }
 
-  public void goToNewMail() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_MAIL));
-  }
-
-  public void goToMailList() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.MAIL_LIST));
+  public void goToNewTherapy() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_THERAPY));
   }
 
   @Override
@@ -204,7 +153,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
     if (!home) {
-//    setVisibleChangeUserBtn(true);
       setVisibleOptionsBtn(true);
     }
   }
@@ -223,33 +171,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     } else {
       view.getHeaderPanel().setRightWidget(new Label());
     }
-  }
-  
-  private void setVisibleChangeUserBtn(boolean visible) {
-    if (visible) {
-      TouchImage optionsBtn = new TouchImage();
-      optionsBtn.addStyleName("ui-changeUserBtn");
-      optionsBtn.addTouchEndHandler(new TouchEndHandler() {
-        public void onTouchEnd(TouchEndEvent event) {
-          PhonegapUtils.log("optons tapped");
-          AppClientFactory.IMPL.authenticate();
-        }
-      });
-      view.getHeaderPanel().setRightWidget(optionsBtn);
-    } else {
-      view.getHeaderPanel().setRightWidget(new Label());
-    }
-  }
-
-  @Override
-  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
-        setHeaderWaiting(false);
-        delegate.execute(remoteUser);
-      }
-    });
   }
   
 }
