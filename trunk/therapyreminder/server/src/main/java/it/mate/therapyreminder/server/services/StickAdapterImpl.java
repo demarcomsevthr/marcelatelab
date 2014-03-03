@@ -1,19 +1,8 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.commons.server.dao.Dao;
-import it.mate.commons.server.dao.ParameterDefinition;
-import it.mate.commons.server.utils.CloneUtils;
-import it.mate.commons.server.utils.LoggingUtils;
-import it.mate.therapyreminder.server.model.StickMailDs;
-import it.mate.therapyreminder.shared.model.RemoteUser;
-import it.mate.therapyreminder.shared.model.StickMail;
-import it.mate.therapyreminder.shared.model.impl.StickMailTx;
-
-import java.util.Date;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +30,8 @@ public class StickAdapterImpl implements StickAdapter {
    * "In the free version you can have up to 10 scheduled emails per account"
    * 
    */
+  
+  /*
   
   @Override
   public StickMail create(StickMail entity) {
@@ -107,5 +98,7 @@ public class StickAdapterImpl implements StickAdapter {
       dao.delete(mail);
     }
   }
+  
+  */
   
 }
