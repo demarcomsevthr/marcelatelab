@@ -304,53 +304,6 @@ body {
   font-size: 12px;
 }
 
-.ui-firstRunPanel {
-  position: absolute;	
-  top: homePanelHeight;
-  left: firstRunPanelLeft;
-  width: firstRunPanelWidth;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  text-align: center;
-  border: solid 5px #bcc2cd;
-  background-color: #bcc2cd;
-}
-
-.ui-firstRunPanel .ui-firstRunPanel-top div {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  background-color: rgba(95, 110, 139, 0.92);
-  padding-top: 0.8em;
-  padding-bottom: 1.2em;
-  font-family: verdana;
-  font-weight: bold;
-  font-size: 0.88em;
-}
-
-.ui-firstRunPanel-content {
-  background-color: rgb(36, 56, 93);
-  color: white;
-  width: 100%;
-  height: 100%;
-}
-
-.ui-firstRunPanel .ui-firstRunPanel-content div {
-  background-color: rgb(36, 56, 93);
-  color: white;
-  padding-top: 0.6em;
-  font-size: 0.72em;
-  font-weight: 600;
-}
-
-.ui-firstRunLbl {
-  margin: 10px;
-  padding-bottom: 0;
-}
-
-.ui-firstRunPanel div.ui-firstRunLink {
-  font-size: 1.2em;
-}
-
 .ui-nomails {
   font-size: 13px;
   text-align: center;

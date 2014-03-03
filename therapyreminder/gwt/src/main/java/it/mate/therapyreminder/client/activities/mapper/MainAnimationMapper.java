@@ -19,10 +19,7 @@ public class MainAnimationMapper implements AnimationMapper {
       if (oldPlace == null) {
         return Animation.DISSOLVE_REVERSE;
       } else {
-        if (oldPlace.getToken().equals(MainPlace.NEW_MAIL) && newPlace.getToken().equals(MainPlace.HOME)) {
-          return Animation.SWAP_REVERSE;
-        }
-        if (oldPlace.getToken().equals(MainPlace.MAIL_LIST) && newPlace.getToken().equals(MainPlace.HOME)) {
+        if (oldPlace.getToken().equals(MainPlace.NEW_THERAPY) && newPlace.getToken().equals(MainPlace.HOME)) {
           return Animation.SWAP_REVERSE;
         }
       }

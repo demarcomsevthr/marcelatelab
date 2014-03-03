@@ -4,16 +4,11 @@
        xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
-       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" 
-       xmlns:s="urn:import:it.mate.therapyreminder.client.ui" >
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.therapyreminder.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
-  
-    <s:SignPanel ui:field="signPanel"/>
-    
-    <p:TouchButton text="Delete selected mails" ui:field="deleteBtn" addStyleNames="ui-delete-btn" visible="false"/>
-    
-    <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
+      
+      <p>New therapy view</p>
     
   </g:HTMLPanel>
   
