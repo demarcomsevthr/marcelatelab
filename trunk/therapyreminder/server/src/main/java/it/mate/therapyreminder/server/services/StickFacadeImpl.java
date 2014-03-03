@@ -1,0 +1,63 @@
+package it.mate.therapyreminder.server.services;
+
+import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.StickMail;
+import it.mate.therapyreminder.shared.service.StickFacade;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
+import org.apache.log4j.Logger;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+@SuppressWarnings("serial")
+public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade {
+
+  private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
+  
+  private StickAdapter adapter = null;
+
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+    AdapterUtil.initContext(config.getServletContext());
+    adapter = AdapterUtil.getStickAdapter();
+    logger.debug("initialized " + this);
+  }
+  
+  @Override
+  public RemoteUser getRemoteUser() {
+    return null;
+  }
+
+  @Override
+  public Date getServerTime() {
+    return new Date();
+  }
+
+  @Override
+  public StickMail create(StickMail stickMail) {
+    logger.debug("received " + stickMail);
+    stickMail.setState(StickMail.STATE_SCHEDULED);
+    return adapter.create(stickMail);
+  }
+
+  @Override
+  public List<StickMail> findMailsByUser(RemoteUser user) {
+    return adapter.findMailsByUser(user);
+  }
+
+  @Override
+  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
+    return adapter.findScheduledMailsByUser(user);
+  }
+  
+  public void delete(List<StickMail> mails) {
+    adapter.delete(mails);
+  }
+  
+}
