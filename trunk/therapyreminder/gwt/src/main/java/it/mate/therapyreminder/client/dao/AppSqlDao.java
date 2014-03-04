@@ -3,6 +3,8 @@ package it.mate.therapyreminder.client.dao;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 
+import java.util.Date;
+
 public class AppSqlDao extends WebSQLDao {
   
   public AppSqlDao() {
@@ -45,8 +47,18 @@ public class AppSqlDao extends WebSQLDao {
     }
   };
   
+  private final static MigratorCallback MIGRATION_CALLBACK_4 = new MigratorCallback() {
+    public void doMigration(int number, SQLTransaction transaction) {
+      PhonegapUtils.log("updating db therapies to version " + number);
+      transaction.doExecuteSql("ALTER TABLE therapies ADD COLUMN createdTm");
+      Date NOW = new Date();
+      transaction.doExecuteSql("INSERT INTO therapies (name, created, createdTm) VALUES (?, ?, ?)", 
+          new Object[] {"prova4", 2014, NOW.getTime()});
+    }
+  };
+  
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 
+    MIGRATION_CALLBACK_0 ,MIGRATION_CALLBACK_1 ,MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 ,MIGRATION_CALLBACK_4 
   };
 
 }

@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
 
@@ -57,5 +58,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate);
   
   public void authenticate();
+  
+  public AppSqlDao getAppSqlDao();
   
 }
