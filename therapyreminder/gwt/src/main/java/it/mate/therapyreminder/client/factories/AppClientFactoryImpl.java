@@ -16,6 +16,7 @@ import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.api.RemoteUserJS;
 import it.mate.therapyreminder.client.api.StickMailEPProxy;
 import it.mate.therapyreminder.client.constants.AppProperties;
+import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
@@ -74,6 +75,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private RemoteUser remoteUser;
   
   private Delegate<RemoteUser> remoteUserDelegate;
+  
+  private AppSqlDao appSqlDao;
   
   
   @Override
@@ -141,6 +144,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     } else {
       createPhoneDisplay(clientFactory);
     }
+    
+    appSqlDao = new AppSqlDao();
 
     AppHistoryObserver historyObserver = new AppHistoryObserver();
 
