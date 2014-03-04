@@ -46,11 +46,7 @@ public abstract class WebSQLDao {
   }
   
   private void doMigrations(final MigratorCallback migrationCallbacks[]) {
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        new Migrator(WebSQLDao.this, migrationCallbacks);
-      }
-    });
+    new Migrator(WebSQLDao.this, migrationCallbacks);
   }
 
   protected static class Migrator {
@@ -250,11 +246,14 @@ public abstract class WebSQLDao {
             jsArguments.push((String)sNULL);
           } else if (arg instanceof String) {
             jsArguments.push((String)arg);
-          } else if (arg instanceof Double) {
+          } else if (arg instanceof Double || arg.getClass() == Double.TYPE) {
             Double value = (Double)arg;
             jsArguments.push((double)value);
-          } else if (arg instanceof Integer) {
+          } else if (arg instanceof Integer || arg.getClass() == Integer.TYPE) {
             int value = (Integer)arg;
+            jsArguments.push((double)value);
+          } else if (arg instanceof Long || arg.getClass() == Long.TYPE) {
+            long value = (Long)arg;
             jsArguments.push((double)value);
           } else {
             throw new RuntimeException("SQLTransaction::doExecuteSql: cannot pass arg of type " + arg.getClass());
