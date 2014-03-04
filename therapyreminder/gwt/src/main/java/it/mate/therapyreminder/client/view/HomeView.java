@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
+import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.view.HomeView.Presenter;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 
@@ -58,6 +59,11 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("newTherapyBtn")
   public void onNewMailBtn (TouchEndEvent event) {
     getPresenter().goToNewTherapy();
+  }
+  
+  @UiHandler ("testBtn")
+  public void onTestBtn (TouchEndEvent event) {
+    new AppSqlDao();
   }
   
   private native String getRemoteUserImpl() /*-{
