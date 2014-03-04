@@ -16,6 +16,8 @@
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
+    <p:TouchButton text="DB TEST" ui:field="testBtn" addStyleNames="ui-sendBtn"/>
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>

@@ -144,8 +144,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     } else {
       createPhoneDisplay(clientFactory);
     }
-    
-    appSqlDao = new AppSqlDao();
+  
+    //TODO: da ripristinare
+//  appSqlDao = new AppSqlDao();
 
     AppHistoryObserver historyObserver = new AppHistoryObserver();
 
