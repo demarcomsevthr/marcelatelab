@@ -79,6 +79,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private AppSqlDao appSqlDao;
   
   
+  
   @Override
   public void initModule(final Panel modulePanel) {
     
@@ -145,8 +146,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       createPhoneDisplay(clientFactory);
     }
   
-    //TODO: da ripristinare
-//  appSqlDao = new AppSqlDao();
+    appSqlDao = new AppSqlDao();
 
     AppHistoryObserver historyObserver = new AppHistoryObserver();
 
@@ -309,7 +309,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           
           
           if (!isSigned) {
-            //TODO: forzare la riautenticazione!
             stickMailEPProxy.reAuthorize();
           }
           
@@ -390,6 +389,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       facade = getGinjector().getStickFacade();
     }
     return facade;
+  }
+  
+  @Override
+  public AppSqlDao getAppSqlDao() {
+    return appSqlDao;
   }
   
 }
