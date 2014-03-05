@@ -57,7 +57,7 @@ public abstract class WebSQLDao {
       this.callbacks = callbacks;
       db.getVersionAsync(0, new Delegate<Integer>() {
         public void execute(Integer currentVersion) {
-          PhonegapUtils.log(">>> CURRENT VERSION = " + currentVersion);
+          PhonegapUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
           doMigration(currentVersion);
         }
       });
