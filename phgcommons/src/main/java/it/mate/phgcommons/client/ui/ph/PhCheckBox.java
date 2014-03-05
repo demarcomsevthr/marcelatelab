@@ -29,6 +29,8 @@ public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>
   
   private boolean value;
   
+  private boolean circle;
+  
   private List<ValueChangeHandler<Boolean>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Boolean>>();
   
   public PhCheckBox() {
@@ -42,6 +44,13 @@ public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>
       }
     });
     
+  }
+  
+  public void setCircle(boolean circle) {
+    this.circle = circle;
+    if (circle) {
+      elem.addClassName("phg-CheckBox-Circle");
+    }
   }
 
   public String getTag() {
@@ -86,9 +95,9 @@ public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>
   public void setValue(Boolean value, boolean fireEvents) {
     this.value = value != null ? value : false;
     if (this.value) {
-      elem.addClassName("phg-CheckBox-selected");
+      elem.addClassName(circle ? "phg-CheckBox-Circle-selected" : "phg-CheckBox-selected");
     } else {
-      elem.removeClassName("phg-CheckBox-selected");
+      elem.removeClassName(circle ? "phg-CheckBox-Circle-selected" : "phg-CheckBox-selected");
     }
     if (fireEvents) {
       SelectedChangeEvent.fire(this, value);

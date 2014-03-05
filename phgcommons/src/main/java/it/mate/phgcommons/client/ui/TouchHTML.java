@@ -17,6 +17,8 @@ import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 public class TouchHTML extends TouchWidget implements HasClickHandlers {
   
+  private String tooltip;
+  
   public TouchHTML() {
     this("");
   }
@@ -27,6 +29,11 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
   
   public TouchHTML(SafeHtml html) {
     this(new HTML(html));
+  }
+  
+  public TouchHTML(String html, TouchEndHandler handler) {
+    this(SafeHtmlUtils.fromTrustedString(html));
+    addTouchEndHandler(handler);
   }
   
   protected TouchHTML(HTML html) {
@@ -41,19 +48,28 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
 
   }
   
-  public void setHTML(SafeHtml html) {
-    setHtml(html);
+  public void setTooltip(String tooltip) {
+    this.tooltip = "<span class='phg-tooltip'>"+tooltip+"</span>";
+    setHtml(this.tooltip);
   }
   
-  public void setHtml(SafeHtml html) {
-    Element elem = getElement();
-    elem.setInnerSafeHtml(html);
+  public void setHtml(String html) {
+    setHtml(SafeHtmlUtils.fromTrustedString(html));
+  }
+  
+  public void setHTML(SafeHtml html) {
+    setHtml(html);
   }
   
   public void setText(String text) {
     setHtml(SafeHtmlUtils.fromTrustedString(text));
   }
 
+  public void setHtml(SafeHtml html) {
+    Element elem = getElement();
+    elem.setInnerSafeHtml(html);
+  }
+  
   public HandlerRegistration addClickHandler(ClickHandler handler) {
     return addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
@@ -62,12 +78,4 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
     });
   }
 
-  /*
-  @Override
-  public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
-    PhonegapUtils.log("ATTENZIONE: CON LA FOCUS PATCH (27/01/2014) NON FUNZIONA PIU' IL TOUCH START HANDLER!");
-    return super.addTouchStartHandler(handler);
-  }
-  */
-  
 }

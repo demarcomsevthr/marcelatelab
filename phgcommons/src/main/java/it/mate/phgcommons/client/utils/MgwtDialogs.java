@@ -53,12 +53,14 @@ public class MgwtDialogs {
 
     SimpleContainer dialogWrapper = new SimpleContainer();
     dialogWrapper.addStyleName("phg-PopinDialog-Wrapper");
-    Label titleWrapper = new Label(title);
-    titleWrapper.addStyleName("phg-PopinDialog-TitleWrapper");
+    if (title != null) {
+      Label titleWrapper = new Label(title);
+      titleWrapper.addStyleName("phg-PopinDialog-TitleWrapper");
+      dialogWrapper.add(titleWrapper);
+    }
     SimplePanel bodyWrapper = new SimplePanel();
     bodyWrapper.addStyleName("phg-PopinDialog-BodyWrapper");
     bodyWrapper.add(body);
-    dialogWrapper.add(titleWrapper);
     dialogWrapper.add(bodyWrapper);
     
     popinDialog.add(dialogWrapper);
