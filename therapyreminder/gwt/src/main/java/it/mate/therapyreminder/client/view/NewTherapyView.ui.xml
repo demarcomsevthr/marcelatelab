@@ -8,7 +8,27 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
       
-      <p>New therapy view</p>
+    <g:HTML HTML="Nuova prescrizione" addStyleNames="ui-view-header"/>
+    
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+      <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Cancel" ui:field="cancelBtn" addStyleNames="ui-top-action-btn"/>
+    </g:HorizontalPanel>
+    
+    <hr class="ui-view-separator-1"/>
+    
+    <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label"/>
+    <p:MTextBoxPatched ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    
+    <hr class="ui-view-separator"/>
+    
+    <g:Label text="Tipo di terapia:" addStyleNames="ui-field-label"/>
+    <p:TouchCombo ui:field="tipoTerapiaCombo" addStyleNames="ui-app-combobox"/>
+    
+    <hr class="ui-view-separator"/>
+    
+    <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label"/>
+    <p:TouchCombo ui:field="tipoRicorrenzaCombo" addStyleNames="ui-app-combobox"/>
     
   </g:HTMLPanel>
   

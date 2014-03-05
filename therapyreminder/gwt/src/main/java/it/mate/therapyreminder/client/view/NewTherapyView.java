@@ -2,11 +2,15 @@ package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.ui.TouchCombo;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.NewTherapyView.Presenter;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -25,6 +29,8 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
+  @UiField TouchCombo tipoTerapiaCombo;
+  @UiField TouchCombo tipoRicorrenzaCombo;
   
   public NewTherapyView() {
     initUI();
@@ -42,6 +48,23 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
+    
+    tipoTerapiaCombo.addItem("1", "Orale", false);
+    tipoTerapiaCombo.addItem("2", "Intramuscolare", false);
+    tipoTerapiaCombo.addItem("3", "Endovenosa", false);
+    tipoTerapiaCombo.addItem("4", "Infusionale", false);
+    tipoTerapiaCombo.addItem("5", "Insulinica", false);
+    tipoTerapiaCombo.addItem("6", "Antibiotica", false);
+    tipoTerapiaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
+        PhonegapUtils.log("selected value is " + event.getValue());
+      }
+    });
+    
+    tipoRicorrenzaCombo.addItem("1", "Tutti i giorni", false);
+    tipoRicorrenzaCombo.addItem("2", "Giornaliera", false);
+    tipoRicorrenzaCombo.addItem("3", "Settimanale", false);
+    
   }
   
   @Override

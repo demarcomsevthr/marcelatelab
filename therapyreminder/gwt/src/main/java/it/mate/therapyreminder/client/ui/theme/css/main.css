@@ -80,15 +80,31 @@ body {
   color: black;
   text-align: left;
   -webkit-user-modify: initial;
-  margin: -10px -13px;
-  padding-top: 5px;
+  /* margin: -10px -13px; */
+  padding-top: 3px;
   padding-left: 3px;
 }
 
+/* 
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:visited {
+  padding-top: 12px;
+}
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:active {
+  padding-top: 10px;
+}
 .ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:focus {
-  padding-top: 5px;
   padding-left: 3px;
 }
+ */
+
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:visited {
+  padding-top: 12px;
+}
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
+  margin-top:  -10px;
+  padding-top: 12px;
+}
+
 
 .phg-CalendarDialog-Header .phg-TouchHTML {
   padding-top: 0.5em;
@@ -183,46 +199,6 @@ body {
   font-size: 12px;
 }
 
-.ui-subjectBox {
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  display: block;
-  position: relative;
-  padding: 9px 13px;
-  margin: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  -webkit-appearance: none;
-  height: 0.8em;
-  background-color: white;
-  font-size: 19px;
-}
-
-.ui-bodyArea {
-  border-radius: 6px;
-  border-top: 2px solid rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-}
-
-.ui-bodyArea .mgwt-InputBox-box {
-  height: 11em;
-}
-
-.ui-homePanel .ui-calBox {
-  margin-left: 0.5em;
-  width: 6em;
-  padding-right: 1em;
-  padding-left: 0.4em;
-}
-
-.ui-homePanel .ui-timeBox {
-  width: 3em;
-  padding-right: 1em;
-  padding-left: 0.4em;
-}
-
 .ui-signBtn {
   padding-top: 4px;
 }
@@ -238,48 +214,12 @@ body {
   font-size: 16.8px;
 }
 
-.ui-nowBtn {
-  padding-top: 13px;
-}
-
-.ui-nowBtn a {
-  font-size: 18px;
-}
-
-.ui-sendBtn {
-  position: absolute;
-  width: 86%;
-  bottom: 1em;
-  left: 2%;
-}
-
 .ui-homeSpacer1 {
   height: 3em;
 }
 
 .ui-homeSpacer2 {
   height: 2em;
-}
-
-.ui-scheduled-mails-btn, .ui-new-mail-btn {
-  width: 128px;
-  height: 52px;
-  padding-top: 130px;
-  padding-left: 10px;
-  border: 4px solid rgba(0, 0, 255, 0.1);
-  border-radius: 6px;
-}
-
-.ui-scheduled-mails-btn a, .ui-new-mail-btn a {
-  padding: 0;
-}
-
-.ui-scheduled-mails-btn {
-  background: url('main/images/scheduled-128.png') no-repeat 4px 2px;
-}
-
-.ui-new-mail-btn {
-  background: url('main/images/newmail-128.png') no-repeat 4px 2px;
 }
 
 .ui-results-panel {
@@ -300,12 +240,69 @@ body {
   width: 3em;
 }
 
-.ui-row-scheduled {
-  font-size: 12px;
+/********************************************************************/
+/**    NUOVI CSS
+***/
+
+.ui-view-header {
+  width: 100%;
+  text-align: center;
+  background-color: #3b5998;
+  color: white;
+  height: 1.5em;
+  padding-top: 0.2em;
+  font-family: arial, sans-serif;
+  border-bottom: 1px solid #52a3c4;
 }
 
-.ui-nomails {
-  font-size: 13px;
+.ui-top-button-bar {
+  width: 100%;
+  padding-top: 0.1em;
+  padding-bottom: 0.2em;
+}
+
+.ui-top-button-bar td {
+  width: 50%;
+  padding: 0;
+}
+
+.ui-top-action-btn {
+  font-size: 14px;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+}
+
+.ui-app-textbox {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
-  padding-top: 2em;
+  -webkit-appearance: none;
+  height: 1.2em;
+  background-color: white;
+  font-size: 19px;
+}
+
+.ui-app-combobox {
+  height: 1.2em;
+}
+
+.ui-homePanel .mgwt-TextBox.ui-app-textbox {
+  margin-top: 0;
+}
+
+.ui-field-label {
+  font-size: 12px;
+  padding-left: 0.6em;
+  color: blue;
+  font-weight: bold;
+}
+
+.ui-view-separator {
+  margin-top: 0.5em;
 }
