@@ -149,7 +149,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   private void doFirstRunTransition(String title, final int endHeight, String text) {
     firstRunTitleLbl.setText(title);
-    firstRunHtml.setHTML(SafeHtmlUtils.fromTrustedString(text));
+    firstRunHtml.setHtml(SafeHtmlUtils.fromTrustedString(text));
     final long startTime = System.currentTimeMillis();
     final int startTop = firstRunPanel.getAbsoluteTop();
     final AnimationCallback animationCallback = new AnimationCallback() {
