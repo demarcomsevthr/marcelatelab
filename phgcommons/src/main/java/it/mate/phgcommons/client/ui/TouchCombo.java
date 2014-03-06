@@ -41,6 +41,9 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   
   private List<ValueChangeHandler<String>> valueChangeHandlers = new ArrayList<ValueChangeHandler<String>>();
   
+  private static final String ARROW_HTML = "<span class='phg-TouchCombo-arrow'><img src='main/images/arrowdown-32-2.png'/></span>";
+//private static final String ARROW_HTML = "<span class='phg-TouchCombo-arrow'></span>";
+  
   public TouchCombo() {
     this("");
   }
@@ -120,7 +123,7 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   
   private void addArrowElem() {
     Element parentElem = getElement();
-    parentElem.setInnerHTML(parentElem.getInnerHTML() + "<span class='phg-TouchCombo-arrow'></span>");
+    parentElem.setInnerHTML(parentElem.getInnerHTML() + ARROW_HTML);
   }
   
   public static class Item {
