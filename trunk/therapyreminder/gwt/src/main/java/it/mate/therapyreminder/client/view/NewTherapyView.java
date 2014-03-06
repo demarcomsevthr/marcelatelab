@@ -31,8 +31,11 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField TouchCombo tipoTerapiaCombo;
   @UiField TouchCombo tipoRicorrenzaCombo;
-  
   @UiField Panel ricorrenzaGiornalieraPanel;
+  @UiField Panel ricorrenzaSettimanalePanel;
+  @UiField TouchCombo tipoOrariCombo;
+  @UiField Panel orariRegolariPanel;
+  @UiField Panel orariFissiPanel;
   
   public NewTherapyView() {
     initUI();
@@ -70,13 +73,31 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
       public void onValueChange(ValueChangeEvent<String> event) {
         if ("1".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(false);
+          ricorrenzaSettimanalePanel.setVisible(false);
         } else if ("2".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(true);
+          ricorrenzaSettimanalePanel.setVisible(false);
         } else if ("3".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(false);
+          ricorrenzaSettimanalePanel.setVisible(true);
         }
       }
     });
+    
+    tipoOrariCombo.addItem("1", "A intervalli regolari", false);
+    tipoOrariCombo.addItem("2", "A orari fissi", false);
+    tipoOrariCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
+        if ("1".equals(event.getValue())) {
+          orariRegolariPanel.setVisible(true);
+          orariFissiPanel.setVisible(false);
+        } else if ("2".equals(event.getValue())) {
+          orariRegolariPanel.setVisible(false);
+          orariFissiPanel.setVisible(true);
+        }
+      }
+    });
+    
     
   }
   

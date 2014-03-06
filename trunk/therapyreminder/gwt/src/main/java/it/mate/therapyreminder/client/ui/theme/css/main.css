@@ -327,3 +327,8 @@ body {
   padding-right: 18px;
 }
 
+.ui-day-label {
+  padding-left: 0.36em;
+  font-size: 0.8em;
+}
+
