@@ -17,7 +17,7 @@
     
     <hr class="ui-view-separator-1"/>
     
-    <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label"/>
+    <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
     <p:MTextBoxPatched ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
     
     <hr class="ui-view-separator"/>
@@ -27,8 +27,22 @@
     
     <hr class="ui-view-separator"/>
     
+    <g:Label text="Data inizio:" addStyleNames="ui-field-label"/>
+    <ph:PhCalendarBox ui:field="inizioBox" addStyleNames="ui-app-calbox"/>
+    
+    <hr class="ui-view-separator"/>
+    
     <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label"/>
     <p:TouchCombo ui:field="tipoRicorrenzaCombo" addStyleNames="ui-app-combobox"/>
+    
+    <g:VerticalPanel ui:field="ricorrenzaGiornalieraPanel" spacing="0" visible="false">
+      <g:HorizontalPanel>
+        <g:Label text="Ogni" addStyleNames="ui-inline-label"/>
+        <p:MTextBoxPatched ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box"/>
+        <g:Label text="giorni" addStyleNames="ui-inline-label"/>
+      </g:HorizontalPanel>    
+    </g:VerticalPanel>
+    
     
   </g:HTMLPanel>
   
