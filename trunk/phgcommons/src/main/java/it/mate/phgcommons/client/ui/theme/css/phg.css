@@ -343,13 +343,28 @@
 }
 
 .phg-TouchCombo-arrow {
-  border-left: 1px solid rgba(125, 125, 125, 0.8);
   position: absolute;
   right: 0px;
   top: 0;
   height: 100%;
   width: 48px;
-  background: rgba(200, 200, 200, 0.8) url(main/images/arrowdown-32.png) no-repeat 7px 4px;
+}
+
+/*
+.phg-TouchCombo-arrow {
+  border-left: 1px solid rgba(125, 125, 125, 0.8);
+  background: rgba(200, 200, 200, 0.8) url(main/images/arrowdown-32-2.png) no-repeat 9px 10px;
+}
+*/
+
+.phg-TouchCombo-arrow {
+  border-left: 2px rgba(125, 125, 125, 0.8) outset;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#929292), color-stop(100%,#cedce7));
+}
+
+.phg-TouchCombo-arrow img {
+  padding-left: 8px;
+  padding-top: 10px;
 }
 
 .phg-tooltip {
