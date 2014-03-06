@@ -44,6 +44,8 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   private static final String ARROW_HTML = "<span class='phg-TouchCombo-arrow'><img src='main/images/arrowdown-32-2.png'/></span>";
 //private static final String ARROW_HTML = "<span class='phg-TouchCombo-arrow'></span>";
   
+  private String itemWidth = "8em";
+  
   public TouchCombo() {
     this("");
   }
@@ -64,6 +66,10 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
       }
     });
     
+  }
+  
+  public void setItemWidth(String itemWidth) {
+    this.itemWidth = itemWidth;
   }
   
   public void addItem(String value, String description, boolean selected) {
@@ -102,6 +108,7 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
       row.add(itemCheck);
       itemsContainer.add(row);
       itemHtml.addStyleName("phg-TouchCombo-ItemsDialog-item");
+      itemHtml.setWidth(itemWidth);
       if (it < (items.size() - 1)) {
         row.addStyleName("phg-TouchCombo-ItemsDialog-item-middle");
       }
