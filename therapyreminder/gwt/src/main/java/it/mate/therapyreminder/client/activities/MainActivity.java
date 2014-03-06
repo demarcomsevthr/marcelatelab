@@ -13,7 +13,7 @@ import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.HomeView;
-import it.mate.therapyreminder.client.view.NewTherapyView;
+import it.mate.therapyreminder.client.view.EditTherapyView;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 
 import com.google.gwt.user.client.rpc.InvocationException;
@@ -26,7 +26,7 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, NewTherapyView.Presenter {
+  HomeView.Presenter, EditTherapyView.Presenter {
   
   private MainPlace place;
   
@@ -52,7 +52,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.NEW_THERAPY)) {
       
-      NewTherapyView view = AppClientFactory.IMPL.getGinjector().getNewTherapyView();
+      EditTherapyView view = AppClientFactory.IMPL.getGinjector().getEditTherapyView();
       this.view = view;
       initBaseMgwtView(false);
 //    view.setPresenter(this);
