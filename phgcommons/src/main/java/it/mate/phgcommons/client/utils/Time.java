@@ -5,7 +5,9 @@ import java.util.Date;
 public class Time {
   private int hours;
   private int minutes;
-  public Time() { }
+  public Time() { 
+    this(new Date());
+  }
   public Time(int hours, int minutes) {
     this.hours = hours;
     this.minutes = minutes;
