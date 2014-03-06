@@ -48,7 +48,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     if (OsDetectionUtils.isDesktop() && USE_TIME_PICKER_PLUGIN) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
-          Time value = stringToTime(element.getValue());
+          Time value = stringToTime(element.getValue(), new Time());
           setValue(value, true);
         }
       });
@@ -69,6 +69,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
                 setValue(value, true);
               }
             }));
+            Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
             dialog.setTime(value);
           }
         }
@@ -111,8 +112,12 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     return fmt.format(time.asDate());
   }
   
-  private Time stringToTime(String text) {
-    return new Time(fmt.parse(text));
+  private Time stringToTime(String text, Time defTime) {
+    try {
+      return new Time(fmt.parse(text));
+    } catch (Exception ex) {
+      return defTime;
+    }
   }
   
   @Override
