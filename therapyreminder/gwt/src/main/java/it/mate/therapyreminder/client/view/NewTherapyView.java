@@ -32,6 +32,8 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
   @UiField TouchCombo tipoTerapiaCombo;
   @UiField TouchCombo tipoRicorrenzaCombo;
   
+  @UiField Panel ricorrenzaGiornalieraPanel;
+  
   public NewTherapyView() {
     initUI();
   }
@@ -64,6 +66,17 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
     tipoRicorrenzaCombo.addItem("1", "Tutti i giorni", false);
     tipoRicorrenzaCombo.addItem("2", "Giornaliera", false);
     tipoRicorrenzaCombo.addItem("3", "Settimanale", false);
+    tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
+        if ("1".equals(event.getValue())) {
+          ricorrenzaGiornalieraPanel.setVisible(false);
+        } else if ("2".equals(event.getValue())) {
+          ricorrenzaGiornalieraPanel.setVisible(true);
+        } else if ("3".equals(event.getValue())) {
+          ricorrenzaGiornalieraPanel.setVisible(false);
+        }
+      }
+    });
     
   }
   
