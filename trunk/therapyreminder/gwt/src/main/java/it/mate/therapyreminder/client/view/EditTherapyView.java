@@ -1,12 +1,18 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TouchCombo;
+import it.mate.phgcommons.client.ui.TouchHTML;
+import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
-import it.mate.therapyreminder.client.view.NewTherapyView.Presenter;
+import it.mate.therapyreminder.client.view.EditTherapyView.Presenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -14,17 +20,21 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 
-public class NewTherapyView extends BaseMgwtView <Presenter> {
+public class EditTherapyView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, NewTherapyView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, EditTherapyView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -36,8 +46,11 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
   @UiField TouchCombo tipoOrariCombo;
   @UiField Panel orariRegolariPanel;
   @UiField Panel orariFissiPanel;
+  @UiField ComplexPanel orariListPanel;
   
-  public NewTherapyView() {
+  List<PhTimeBox> orariBox = new ArrayList<PhTimeBox>();
+  
+  public EditTherapyView() {
     initUI();
   }
 
@@ -94,11 +107,49 @@ public class NewTherapyView extends BaseMgwtView <Presenter> {
         } else if ("2".equals(event.getValue())) {
           orariRegolariPanel.setVisible(false);
           orariFissiPanel.setVisible(true);
+          showOrariListPanel();
         }
       }
     });
     
     
+  }
+  
+  private void showOrariListPanel() {
+    if (orariBox.size() == 0) {
+      orariBox.add(createOrarioBox());
+    }
+    orariListPanel.clear();
+    for (final PhTimeBox orarioBox : orariBox) {
+      HorizontalPanel row = new HorizontalPanel();
+      row.add(orarioBox);
+      TouchHTML removeBtn = new TouchHTML("[--]");
+      row.add(removeBtn);
+      removeBtn.addTouchEndHandler(new TouchEndHandler() {
+        public void onTouchEnd(TouchEndEvent event) {
+          orariBox.remove(orarioBox);
+          showOrariListPanel();
+        }
+      });
+      orariListPanel.add(row);
+    }
+    HorizontalPanel row = new HorizontalPanel();
+    row.add(new Spacer("3em"));
+    TouchHTML addBtn = new TouchHTML("[++]");
+    row.add(addBtn);
+    addBtn.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        orariBox.add(createOrarioBox());
+        showOrariListPanel();
+      }
+    });
+    orariListPanel.add(row);
+  }
+  
+  private PhTimeBox createOrarioBox() {
+    PhTimeBox orarioBox = new PhTimeBox();
+    orarioBox.addStyleName("ui-app-timebox");
+    return orarioBox;
   }
   
   @Override

@@ -332,3 +332,16 @@ body {
   font-size: 0.8em;
 }
 
+.ui-hours-label {
+  padding-left: 0.36em;
+}
+
+.phg-TimeBox.ui-app-timebox {
+  height: 1em;
+  width: 3.6em;
+}
+
+.ui-hourrange-box {
+  width: 3.6em;
+}
+
