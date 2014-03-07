@@ -6,7 +6,7 @@
        ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
        xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.therapyreminder.client.ui">
        
-  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-therapy-panel">
       
     <g:HTML HTML="Nuova prescrizione" addStyleNames="ui-view-header"/>
     
@@ -106,6 +106,8 @@
         </g:VerticalPanel>
       </g:HorizontalPanel>
     </g:VerticalPanel>
+    
+    <gc:Spacer ui:field="filler" height="2em"/>
     
   </g:HTMLPanel>
   
