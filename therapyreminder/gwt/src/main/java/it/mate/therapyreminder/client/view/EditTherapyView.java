@@ -3,6 +3,7 @@ package it.mate.therapyreminder.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -48,6 +50,8 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   @UiField Panel orariFissiPanel;
   @UiField ComplexPanel orariListPanel;
   
+  @UiField Spacer filler;
+  
   List<PhTimeBox> orariBox = new ArrayList<PhTimeBox>();
   
   public EditTherapyView() {
@@ -66,6 +70,8 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
     });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
+    
+    wrapperPanel.getElement().getStyle().clearHeight();
     
     tipoTerapiaCombo.addItem("1", "Orale", false);
     tipoTerapiaCombo.addItem("2", "Intramuscolare", false);
@@ -94,6 +100,7 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
           ricorrenzaGiornalieraPanel.setVisible(false);
           ricorrenzaSettimanalePanel.setVisible(true);
         }
+        refreshScrollPanel();
       }
     });
     
@@ -109,6 +116,7 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
           orariFissiPanel.setVisible(true);
           showOrariListPanel();
         }
+        refreshScrollPanel();
       }
     });
     
@@ -120,10 +128,12 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       orariBox.add(createOrarioBox());
     }
     orariListPanel.clear();
+    HorizontalPanel row = null;
     for (final PhTimeBox orarioBox : orariBox) {
-      HorizontalPanel row = new HorizontalPanel();
+      row = new HorizontalPanel();
       row.add(orarioBox);
-      TouchHTML removeBtn = new TouchHTML("[--]");
+      TouchHTML removeBtn = new TouchHTML();
+      removeBtn.addStyleName("ui-remove-btn");
       row.add(removeBtn);
       removeBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
@@ -133,9 +143,8 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       });
       orariListPanel.add(row);
     }
-    HorizontalPanel row = new HorizontalPanel();
-    row.add(new Spacer("3em"));
-    TouchHTML addBtn = new TouchHTML("[++]");
+    TouchHTML addBtn = new TouchHTML();
+    addBtn.addStyleName("ui-add-btn");
     row.add(addBtn);
     addBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
@@ -144,6 +153,8 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       }
     });
     orariListPanel.add(row);
+    refreshScrollPanel();
+    addScrollY(50);
   }
   
   private PhTimeBox createOrarioBox() {
@@ -162,4 +173,22 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
     
   }
   
+  private void refreshScrollPanel() {
+    getScrollPanel().refresh();
+  }
+  
+  private void addScrollY(final int deltaY) {
+    GwtUtils.deferredExecution(100, new Delegate<Void>() {
+      public void execute(Void element) {
+        PhonegapUtils.log("scrollPanelImpl.y = " + getScrollPanelImpl().getY());
+        int newY = getScrollPanelImpl().getY() - deltaY;
+        setTransform(wrapperPanel.getElement().getStyle(), "translate3d(0px, "+ newY +"px, 0px)");
+      }
+    });
+  }
+  
+  private native void setTransform(Style style, String transform) /*-{
+    style['-webkit-transform'] = transform;
+  }-*/;
+
 }

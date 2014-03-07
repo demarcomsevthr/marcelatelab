@@ -118,6 +118,10 @@ body {
   height: homePanelHeight;
 }
 
+.ui-homePanel-clearHeight {
+  height: auto;
+}
+
 .ui-homePanel * {
   vertical-align: middle;
 }
@@ -343,5 +347,20 @@ body {
 
 .ui-hourrange-box {
   width: 3.6em;
+}
+
+.ui-remove-btn {
+  background: url(main/images/remove-28.png) no-repeat;
+  width: 28px;
+  height: 28px;
+  margin-top: 10px;
+}
+
+.ui-add-btn {
+  background: url(main/images/add-34.png) no-repeat;
+  width: 36px;
+  height: 36px;
+  margin-top: 5px;
+  margin-left: 3px;
 }
 
