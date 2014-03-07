@@ -17,6 +17,7 @@ import com.googlecode.mgwt.ui.client.widget.HeaderButton;
 import com.googlecode.mgwt.ui.client.widget.HeaderPanel;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
+import com.googlecode.mgwt.ui.client.widget.impl.ScrollPanelImpl;
 
 public abstract class BaseMgwtView <P extends BasePresenter> {
   
@@ -41,7 +42,8 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
         super.onUnload();
       }
     };
-    scrollPanel = new ScrollPanel();
+//  scrollPanel = new ScrollPanel();
+    scrollPanel = new MyScrollPanel();
     headerPanel = new HeaderPanel();
     title = new HTML();
     headerPanel.setCenterWidget(title);
@@ -103,6 +105,13 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     return scrollPanel;
   }
   
+  protected ScrollPanelImpl getScrollPanelImpl() {
+    if (scrollPanel instanceof BaseMgwtView.MyScrollPanel) {
+      return ((MyScrollPanel)scrollPanel).getImpl();
+    }
+    return null;
+  }
+  
   public HeaderPanel getHeaderPanel() {
     return headerPanel;
   }
@@ -159,6 +168,12 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     }
     
     
+  }
+  
+  public class MyScrollPanel extends ScrollPanel {
+    protected ScrollPanelImpl getImpl() {
+      return impl;
+    }
   }
   
 }
