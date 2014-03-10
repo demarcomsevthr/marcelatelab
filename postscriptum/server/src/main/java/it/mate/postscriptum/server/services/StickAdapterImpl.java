@@ -136,6 +136,7 @@ public class StickAdapterImpl implements StickAdapter {
       ds.setPlatform(platform);
       ds.setDevUuid(devUuid);
       ds.setDevVersion(devVersion);
+      ds.setCreated(new Date());
       ds = dao.create(ds);
     }
     if (ds != null) {
