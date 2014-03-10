@@ -3,6 +3,7 @@ package it.mate.postscriptum.server.model;
 import it.mate.commons.server.model.HasKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -41,6 +42,9 @@ public class DevInfoDs implements HasKey, Serializable {
   
   @Persistent
   String devVersion;
+  
+  @Persistent
+  Date created;
 
   public Key getKey() {
     return id;
@@ -108,6 +112,14 @@ public class DevInfoDs implements HasKey, Serializable {
 
   public void setDevVersion(String devVersion) {
     this.devVersion = devVersion;
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
 
 }
