@@ -82,6 +82,12 @@ public class StickAdapterImpl implements StickAdapter {
 
   public StickMail update(StickMail entity) {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    try {
+      StickMailDs origDs = dao.findById(StickMailDs.class, entity.getId());
+      if (origDs.getDevInfoId() != null) {
+        ds.setDevInfoId(origDs.getDevInfoId());
+      }
+    } catch (Exception ex) { }
     ds = dao.update(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
   }
