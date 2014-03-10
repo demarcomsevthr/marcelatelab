@@ -54,6 +54,14 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     return remoteFacade.create(stickMail);
   }
   
+  
+  
+  @Override
+  public StickMail createV101(StickMail stickMail, String devInfoId) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.createV101(stickMail, devInfoId);
+  }
+
   @Override
   public List<StickMail> findMailsByUser(RemoteUser user) {
     logger.debug("calling " + moduleBaseUrl);
@@ -71,5 +79,13 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.delete(mails);
   }
+
+  @Override
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
+  }
+  
+  
   
 }

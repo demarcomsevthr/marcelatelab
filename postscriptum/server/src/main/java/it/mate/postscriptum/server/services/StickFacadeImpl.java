@@ -41,9 +41,14 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
 
   @Override
   public StickMail create(StickMail stickMail) {
+    return createV101(stickMail, null);
+  }
+  
+  @Override
+  public StickMail createV101(StickMail stickMail, String devInfoId) {
     logger.debug("received " + stickMail);
     stickMail.setState(StickMail.STATE_SCHEDULED);
-    return adapter.create(stickMail);
+    return adapter.create(stickMail, devInfoId);
   }
 
   @Override
@@ -58,6 +63,11 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   
   public void delete(List<StickMail> mails) {
     adapter.delete(mails);
+  }
+
+  @Override
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+    return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
   }
   
 }

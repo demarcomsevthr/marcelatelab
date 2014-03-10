@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StickAdapter {
 
-  public StickMail create(StickMail entity);
+  public StickMail create(StickMail entity, String devInfoId);
   
   public void checkScheduledMails();
   
@@ -16,5 +16,7 @@ public interface StickAdapter {
   public List<StickMail> findScheduledMailsByUser(RemoteUser user);
   
   public void delete(List<StickMail> entities);
+  
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
   
 }

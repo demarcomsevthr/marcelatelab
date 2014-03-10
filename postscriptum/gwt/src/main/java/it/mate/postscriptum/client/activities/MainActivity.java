@@ -29,6 +29,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
+import com.googlecode.mgwt.ui.client.MGWT;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
@@ -44,6 +45,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    ensureDevInfoId();
     if (place.getToken().equals(MainPlace.HOME)) {
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
@@ -80,6 +82,30 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+  }
+  
+  private void ensureDevInfoId() {
+    String devInfoId = getDevInfoIdFromLocalStorage();
+    if (devInfoId != null)
+      return;
+    String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
+    String layout = PhonegapUtils.getLayoutInfo();
+    String devName = PhonegapUtils.getDeviceName();
+    String phgVersion = PhonegapUtils.getDevicePhonegap();
+    String platform = PhonegapUtils.getDevicePlatform();
+    String devUuid = PhonegapUtils.getDeviceUuid();
+    String devVersion = PhonegapUtils.getDeviceVersion();
+    AppClientFactory.IMPL.getStickFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
+      new AsyncCallback<String>() {
+        public void onFailure(Throwable caught) {
+          //nothing
+        }
+        public void onSuccess(String devInfoId) {
+          if (devInfoId != null) {
+            setDevInfoIdInLocalStorage(devInfoId);
+          }
+        }
+    });
   }
   
   public void findMailsByUser(RemoteUser remoteUser) {
@@ -135,7 +161,8 @@ public class MainActivity extends MGWTAbstractActivity implements
         PhonegapUtils.log("delta time = " + deltaTime);
         stickMail.setCreated(new Date(stickMail.getCreated().getTime() - deltaTime));
         stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+//      AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+        AppClientFactory.IMPL.getStickFacade().createV101(stickMail, getDevInfoIdFromLocalStorage(), new AsyncCallback<StickMail>() {
           public void onSuccess(StickMail result) {
             setHeaderWaiting(false);
             delegate.execute(result);
@@ -252,4 +279,12 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  private native void setDevInfoIdInLocalStorage(String devInfoId) /*-{
+    localStorage.devInfoId = devInfoId;
+  }-*/;
+  
+  private native String getDevInfoIdFromLocalStorage() /*-{
+    return localStorage.devInfoId;
+  }-*/;
+
 }
