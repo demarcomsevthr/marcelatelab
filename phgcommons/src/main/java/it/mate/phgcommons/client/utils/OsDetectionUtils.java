@@ -12,10 +12,10 @@ public class OsDetectionUtils {
   public final static int IPAD_PORT_WIDTH = 768;
   public final static int IPAD_PORT_HEIGHT = 1004;
   
-  public final static int APAD_LAND_WIDTH = 1024;
-  public final static int APAD_LAND_HEIGHT = 600;
-  public final static int APAD_PORT_WIDTH = 600;
-  public final static int APAD_PORT_HEIGHT = 1024;
+  public final static int APAD_PORT_WIDTH = 526;
+  public final static int APAD_PORT_HEIGHT = 951;
+  public final static int APAD_LAND_WIDTH = APAD_PORT_HEIGHT;
+  public final static int APAD_LAND_HEIGHT = APAD_PORT_WIDTH;
   
   private static int getDisplayHeight() {
     return Window.getClientHeight();
