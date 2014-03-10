@@ -43,7 +43,7 @@ public class StickMailDs implements StickMail, HasKey {
   @Persistent
   private String subject;
   
-  @Persistent
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
   private Key devInfoId;
 
   @Override
