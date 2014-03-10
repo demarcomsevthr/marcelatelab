@@ -42,6 +42,19 @@ p {
 
 .ui-body {
   background-color: white;
-  margin-left: 20%;
+  margin-left: 14%;
   margin-right: 10%;
+}
+
+.ui-app-logo {
+  float: left;
+  padding: 60px 30px 20px 40px;	
+}
+
+.ui-app-links {
+  padding-left: 50px;
+}
+
+.ui-store-img {
+  height: 60px;
 }

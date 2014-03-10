@@ -22,4 +22,9 @@ public interface StickFacadeAsync {
 
   void delete(List<StickMail> mails, AsyncCallback<Void> callback);
 
+  void sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion,
+      AsyncCallback<String> callback);
+
+  void createV101(StickMail stickMail, String devInfoId, AsyncCallback<StickMail> callback);
+
 }

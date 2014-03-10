@@ -42,6 +42,9 @@ public class StickMailDs implements StickMail, HasKey {
   
   @Persistent
   private String subject;
+  
+  @Persistent
+  private Key devInfoId;
 
   @Override
   public String toString() {
@@ -116,6 +119,14 @@ public class StickMailDs implements StickMail, HasKey {
 
   public void setSubject(String subject) {
     this.subject = subject;
+  }
+
+  public String getDevInfoId() {
+    return devInfoId != null ? KeyFactory.keyToString(devInfoId) : null;
+  }
+
+  public void setDevInfoId(String devInfoId) {
+    this.devInfoId = devInfoId != null ? KeyFactory.stringToKey(devInfoId) : null;
   }
   
 }

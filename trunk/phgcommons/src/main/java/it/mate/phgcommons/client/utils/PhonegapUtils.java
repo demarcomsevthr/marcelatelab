@@ -21,16 +21,7 @@ public class PhonegapUtils {
 
   public static void logEnvironment() {
     log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
-    String layoutInfo = "Width " + Window.getClientWidth();
-    layoutInfo += " Height " + Window.getClientHeight();
-    if (OsDetectionUtils.isTabletLandscape()) {
-      layoutInfo += " isTabletLandscape";
-    } else if (OsDetectionUtils.isTabletPortrait()) {
-      layoutInfo += " isTabletPortrait";
-    } else {
-      layoutInfo += " isPhone";
-    }
-    log("CURRENT LAYOUT = " + layoutInfo);
+    log("CURRENT LAYOUT = " + getLayoutInfo());
     if (OsDetectionUtils.isIOs()) {
       log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
       log("IOs landscape layout is " + OsDetectionUtils.IPAD_LAND_WIDTH + " x " + OsDetectionUtils.IPAD_LAND_HEIGHT);
@@ -46,6 +37,19 @@ public class PhonegapUtils {
     log("Device.platform " + getDevicePlatform());
     log("Device.uuid " + getDeviceUuid());
     log("Device.version " + getDeviceVersion());
+  }
+  
+  public static String getLayoutInfo() {
+    String layoutInfo = "Width " + Window.getClientWidth();
+    layoutInfo += " Height " + Window.getClientHeight();
+    if (OsDetectionUtils.isTabletLandscape()) {
+      layoutInfo += " isTabletLandscape";
+    } else if (OsDetectionUtils.isTabletPortrait()) {
+      layoutInfo += " isTabletPortrait";
+    } else {
+      layoutInfo += " isPhone";
+    }
+    return layoutInfo;
   }
   
   public static void openInAppBrowser(String url) {

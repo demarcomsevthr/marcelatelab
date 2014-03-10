@@ -4,6 +4,7 @@ import it.mate.commons.server.dao.Dao;
 import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
+import it.mate.postscriptum.server.model.DevInfoDs;
 import it.mate.postscriptum.server.model.StickMailDs;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
@@ -43,8 +44,11 @@ public class StickAdapterImpl implements StickAdapter {
    */
   
   @Override
-  public StickMail create(StickMail entity) {
+  public StickMail create(StickMail entity, String devInfoId) {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    if (devInfoId != null) {
+      ds.setDevInfoId(devInfoId);
+    }
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
   }
@@ -105,6 +109,33 @@ public class StickAdapterImpl implements StickAdapter {
     for (StickMail entity : entities) {
       StickMailDs mail = dao.findById(StickMailDs.class, entity.getId());
       dao.delete(mail);
+    }
+  }
+
+  @Override
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+    DevInfoDs ds = null;
+    if (devUuid != null) {
+      ds = dao.findSingle(DevInfoDs.class, "devUuid == devUuidParam" ,
+          Dao.Utils.buildParameters(new ParameterDefinition[] {
+              new ParameterDefinition(String.class, "devUuidParam")
+          }) , null, devUuid);
+    }
+    if (ds == null) {
+      ds = new DevInfoDs();
+      ds.setOs(os);
+      ds.setLayout(layout);
+      ds.setDevName(devName);
+      ds.setPhgVersion(phgVersion);
+      ds.setPlatform(platform);
+      ds.setDevUuid(devUuid);
+      ds.setDevVersion(devVersion);
+      ds = dao.create(ds);
+    }
+    if (ds != null) {
+      return ds.getId();
+    } else {
+      return null;
     }
   }
   

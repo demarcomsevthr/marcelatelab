@@ -19,10 +19,14 @@ public interface StickFacade extends RemoteService {
   
   StickMail create(StickMail stickMail);
   
+  StickMail createV101(StickMail stickMail, String devInfoId);
+  
   List<StickMail> findMailsByUser(RemoteUser user);
 
   List<StickMail> findScheduledMailsByUser(RemoteUser user);
   
   void delete(List<StickMail> mails);
+  
+  String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
 
 }
