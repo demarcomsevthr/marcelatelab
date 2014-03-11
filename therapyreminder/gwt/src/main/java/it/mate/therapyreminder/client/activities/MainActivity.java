@@ -12,8 +12,9 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
-import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.EditTherapyView;
+import it.mate.therapyreminder.client.view.HomeView;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 
 import com.google.gwt.user.client.rpc.InvocationException;
@@ -26,7 +27,7 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, EditTherapyView.Presenter {
+  HomeView.Presenter, EditTherapyView.Presenter, CalendarEventTestView.Presenter {
   
   private MainPlace place;
   
@@ -51,11 +52,22 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.NEW_THERAPY)) {
-      
       EditTherapyView view = AppClientFactory.IMPL.getGinjector().getEditTherapyView();
       this.view = view;
       initBaseMgwtView(false);
-//    view.setPresenter(this);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.TEST)) {
+      CalendarEventTestView view = AppClientFactory.IMPL.getGinjector().getCalendarEventTestView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
       panel.setWidget(view.asWidget());
       AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
         public void execute(String element) {

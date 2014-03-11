@@ -9,11 +9,13 @@ public class MainPlace extends Place {
   
   public static final String NEW_THERAPY = "newTherapy";
   
+  public static final String TEST = "test";
+  
   private String token;
 
   public MainPlace() {
 //  this.token = HOME;
-    this.token = NEW_THERAPY;
+    this.token = TEST;
   }
   
   public MainPlace(String token) {

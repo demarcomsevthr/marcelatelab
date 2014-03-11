@@ -1,0 +1,24 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
+  
+    <!-- .............................................................................. -->
+    <hr class="ui-view-separator-1"/>
+    
+    <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <p:MTextBoxPatched ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    
+    <g:Label text="A partire dalle:" addStyleNames="ui-inline-label" width="7em"/>
+    <ph:PhTimeBox ui:field="orarioInizioBox" addStyleNames="ui-app-timebox"/>
+    
+    <p:TouchButton text="DO TEST" ui:field="testBtn" addStyleNames="ui-top-action-btn"/>
+        
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
