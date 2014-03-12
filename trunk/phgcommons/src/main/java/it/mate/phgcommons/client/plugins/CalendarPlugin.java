@@ -20,8 +20,8 @@ public class CalendarPlugin {
   
   public static class Event {
     private String title;
-    private String location;
-    private String notes;
+    private String location = "";
+    private String notes = "";
     private Date startDate;
     private Date endDate;
     @Override
@@ -62,9 +62,13 @@ public class CalendarPlugin {
   
   
   public static void createEvent(Event event) {
+    
+    double startTime = event.getStartDate().getTime();
+    double endTime = event.getEndDate().getTime();
+    
     JSONUtils.ensureStringify();
     PhonegapUtils.log("creating event " + event);
-    createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate(), event.getEndDate(), new JSOCallback() {
+    createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), startTime, endTime, new JSOCallback() {
       public void handleEvent(JavaScriptObject jso) {
         PhonegapUtils.log("Success - jso = " + JSONUtils.stringify(jso));
       }
@@ -73,21 +77,28 @@ public class CalendarPlugin {
         PhonegapUtils.log("Failure - jso = " + JSONUtils.stringify(jso));
       }
     });
+    
   }
   
   
   protected static interface JSOCallback {
     public void handleEvent(JavaScriptObject jso);
   }
-  
-  private static native void createEventImpl (String title, String location, String notes, Date startDate, Date endDate, JSOCallback success, JSOCallback failure) /*-{
+
+  private static native void createEventImpl (String title, String location, String notes, double startTime, double endTime, JSOCallback success, JSOCallback failure) /*-{
     var jsSuccess = $entry(function(message) {
       success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOCallback::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
     });
     var jsFailure = $entry(function(message) {
       failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOCallback::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
     });
-    $wnd.plugins.calendar.createEvent( title, location, notes, startDate, endDate, jsSuccess, jsFailure);
+    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", "createEvent", [{
+      "title": title,
+      "location": location,
+      "notes": notes,
+      "startTime": startTime,
+      "endTime": endTime
+    }])
   }-*/;
 
 }

@@ -15,6 +15,10 @@ public class Time {
   public Time(Date date) { 
     this(date.getHours(), date.getMinutes());
   }
+  public Time(Time that) {
+    this.hours = that.hours;
+    this.minutes = that.minutes;
+  }
   public int getHours() {
     return hours;
   }
@@ -32,6 +36,9 @@ public class Time {
   public Date asDate() {
     return new Date(1971, 1, 1, getHours(), getMinutes());
   }
+  public String asString() {
+    return "" + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+  }
   @Override
   public String toString() {
     return "Time [" + hours + ":" + minutes + "]";
@@ -39,8 +46,10 @@ public class Time {
   public static Time fromDate(Date date) {
     return new Time(date);
   }
-  public Date setToDate(Date date) {
-    return new Date(date.getYear(), date.getMonth(), date.getDate(), hours, minutes);
+  public Date setInDate(Date date) {
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    return date;
   }
   public boolean isValidTime() {
     return (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59);
@@ -50,7 +59,11 @@ public class Time {
     return this;
   }
   public Time incMinutes(int amount) {
+    int hoursAmount = (minutes + amount) / 60;
     minutes = (minutes + amount) % 60;
+    if (hoursAmount > 0) {
+      incHours(hoursAmount);
+    }
     return this;
   }
 }
