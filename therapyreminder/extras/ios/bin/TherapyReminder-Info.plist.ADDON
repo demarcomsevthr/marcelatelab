@@ -1,0 +1,10 @@
+
+    <!-- DA AGGIUNGERE DENTRO dict IN FONDO -->
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>therapy</string>
+            </array>
+        </dict>
+    </array>
