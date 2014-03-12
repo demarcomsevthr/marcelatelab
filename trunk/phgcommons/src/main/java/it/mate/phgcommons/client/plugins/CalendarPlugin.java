@@ -60,26 +60,19 @@ public class CalendarPlugin {
     }
   }
   
-  
   public static void createEvent(Event event) {
-    
-    double startTime = event.getStartDate().getTime();
-    double endTime = event.getEndDate().getTime();
-    
     JSONUtils.ensureStringify();
     PhonegapUtils.log("creating event " + event);
-    createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), startTime, endTime, new JSOCallback() {
-      public void handleEvent(JavaScriptObject jso) {
-        PhonegapUtils.log("Success - jso = " + JSONUtils.stringify(jso));
+    createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOCallback() {
+      public void handleEvent(JavaScriptObject results) {
+        PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
       }
     }, new JSOCallback() {
-      public void handleEvent(JavaScriptObject jso) {
-        PhonegapUtils.log("Failure - jso = " + JSONUtils.stringify(jso));
+      public void handleEvent(JavaScriptObject results) {
+        PhonegapUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
-    
   }
-  
   
   protected static interface JSOCallback {
     public void handleEvent(JavaScriptObject jso);
