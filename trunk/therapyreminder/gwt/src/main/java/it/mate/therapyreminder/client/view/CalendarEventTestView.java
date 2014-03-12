@@ -3,6 +3,7 @@ package it.mate.therapyreminder.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
+import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView.Presenter;
 
@@ -15,6 +16,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
+import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class CalendarEventTestView extends BaseMgwtView <Presenter> {
@@ -54,15 +56,20 @@ public class CalendarEventTestView extends BaseMgwtView <Presenter> {
   public void testBtn(TouchEndEvent event) {
     
     Date startDate = new Date();
-    orarioInizioBox.getValue().setToDate(startDate);
+    Time startTime = new Time(orarioInizioBox.getValue()); 
+    startTime.setInDate(startDate);
     
     Date endDate = new Date();
-    orarioInizioBox.getValue().setToDate(endDate);
+    Time endTime = new Time(orarioInizioBox.getValue());
+    endTime.incMinutes(5).setInDate(endDate);
     
     CalendarPlugin.Event calEvent = new CalendarPlugin.Event();
-    calEvent.setTitle(titleBox.getValue());
-    calEvent.setLocation("Home");
-    calEvent.setNotes("Keep the pill!");
+    calEvent.setTitle(titleBox.getValue() + " at " + startTime.asString());
+    if (MGWT.getOsDetection().isIOs()) {
+      calEvent.setNotes("Tap here: therapy://open");
+    } else {
+      calEvent.setNotes("Keep the pill!");
+    }
     calEvent.setStartDate(startDate);
     calEvent.setEndDate(endDate);
     
