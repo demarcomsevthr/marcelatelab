@@ -129,7 +129,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     stickMail.setSubject(subjectBox.getValue());
     stickMail.setBody(bodyArea.getValue());
     stickMail.setUser(signPanel.getRemoteUser());
-    stickMail.setScheduled(scheduledTime.setToDate(scheduledDate));
+    stickMail.setScheduled(scheduledTime.setInDate(scheduledDate));
     stickMail.setCreated(new Date());
     stickMail.setState(StickMail.STATE_NEW);
     
