@@ -175,6 +175,18 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  public void sendSmsTest(final RemoteUser remoteUser, String to, String msg) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().sendSmsTest(to, msg, new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+      public void onSuccess(Void result) {
+        setHeaderWaiting(false);
+      }
+    });
+  }
+  
   public void goToHome() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }

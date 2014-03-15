@@ -70,4 +70,9 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
     return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
   }
   
+  @Override
+  public void sendSmsTest(String to, String msg) {
+    adapter.sendSmsTest(to, msg);
+  }
+  
 }

@@ -22,7 +22,7 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   
   private StickFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = false;
+  private final boolean LOCALTEST = true;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".stickFacade";
   
@@ -85,7 +85,11 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
   }
-  
-  
+
+  @Override
+  public void sendSmsTest(String to, String msg) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.sendSmsTest(to, msg);
+  }
   
 }

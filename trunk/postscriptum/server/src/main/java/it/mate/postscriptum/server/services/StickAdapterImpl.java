@@ -11,7 +11,9 @@ import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.impl.StickMailTx;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -20,12 +22,23 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
+
 @Service
 public class StickAdapterImpl implements StickAdapter {
   
   private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
   
   @Autowired private Dao dao;
+  
+  private static final String TWILIO_ACCOUNT_SID = "ACcf0a6793d764c92b5be2260293a282bb";
+  
+  private static final String TWILIO_AUTH_TOKEN = "fdc676c52e47bc27ee31d4a91a2094c9";
+  
+  private static final String TWILIO_FROM_NUMBER = "+390909100305";
+  
   
   @PostConstruct
   public void postConstruct() {
@@ -143,6 +156,31 @@ public class StickAdapterImpl implements StickAdapter {
       return ds.getId();
     } else {
       return null;
+    }
+  }
+  
+  
+  public void sendSmsTest(String to, String msg) {
+    
+    try {
+      LoggingUtils.debug(getClass(), "starting twilio rest client - to = " + to);
+      TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+      
+      // Build a filter for the SmsList
+      Map<String, String> params = new HashMap<String, String>();
+      params.put("Body", "From Twilio: " + msg);
+      params.put("To", to);
+      params.put("From", TWILIO_FROM_NUMBER);
+   
+      LoggingUtils.debug(getClass(), "getting sms factory");
+      SmsFactory messageFactory = client.getAccount().getSmsFactory();
+      LoggingUtils.debug(getClass(), "creating message");
+      Sms message = messageFactory.create(params);
+      LoggingUtils.debug(getClass(), "message created - sid = " + message.getSid());
+      
+    } catch (Exception ex) {
+      LoggingUtils.error(getClass(), "error", ex);
+      logger.error("error", ex);
     }
   }
   
