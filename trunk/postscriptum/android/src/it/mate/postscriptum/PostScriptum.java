@@ -22,23 +22,25 @@ package it.mate.postscriptum;
 import org.apache.cordova.Config;
 import org.apache.cordova.CordovaActivity;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
+import android.webkit.WebView;
 
-public class PostScriptum extends CordovaActivity 
-{
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        super.init();
-        super.loadUrl(Config.getStartUrl());
+public class PostScriptum extends CordovaActivity {
+  
+  @Override
+  @SuppressLint("NewApi")
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    super.init();
+    super.loadUrl(Config.getStartUrl());
 
-        /* SE SERVE IL REMOTE DEBUGGING NELL'EMULATORE OCCORRE SCOMMENTARE QUI:
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-          WebView.setWebContentsDebuggingEnabled(true);
-        }  
-        */  
-        
+    /* SE SERVE IL REMOTE DEBUGGING NELL'EMULATORE OCCORRE SCOMMENTARE QUI: */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      WebView.setWebContentsDebuggingEnabled(true);
     }
-}
 
+  }
+  
+}
