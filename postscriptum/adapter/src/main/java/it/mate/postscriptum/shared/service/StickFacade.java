@@ -28,5 +28,7 @@ public interface StickFacade extends RemoteService {
   void delete(List<StickMail> mails);
   
   String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
+  
+  public void sendSmsTest(String to, String msg);
 
 }

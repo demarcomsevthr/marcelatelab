@@ -27,4 +27,6 @@ public interface StickFacadeAsync {
 
   void createV101(StickMail stickMail, String devInfoId, AsyncCallback<StickMail> callback);
 
+  void sendSmsTest(String to, String msg, AsyncCallback<Void> callback);
+
 }
