@@ -37,7 +37,7 @@ public class StickAdapterImpl implements StickAdapter {
   
   private static final String TWILIO_AUTH_TOKEN = "fdc676c52e47bc27ee31d4a91a2094c9";
   
-  private static final String TWILIO_FROM_NUMBER = "+390909100305";
+  private static final String TWILIO_FROM_NUMBER = "+16469821337";
   
   
   @PostConstruct
