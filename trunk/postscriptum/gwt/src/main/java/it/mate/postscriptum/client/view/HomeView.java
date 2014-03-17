@@ -33,7 +33,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     public void goToNewMail();
     public void goToMailList();
     public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
-    public void sendSmsTest(RemoteUser remoteUser, String to, String msg);
+    public void goToNewSms();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -108,9 +108,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
     });
   }
   
-  @UiHandler ("smsTestBtn")
+  @UiHandler ("newSmsBtn")
   public void onSmsTestBtn (TouchEndEvent event) {
-    getPresenter().sendSmsTest(null, "+393924565268", "ciao marce");
+    if (isFirstRun()) {
+      onHelloBtn(event);
+    } else {
+      getPresenter().goToNewSms();
+    }
   }
   
   private static int getFirstRunPanelWidthPct() {

@@ -2,6 +2,8 @@ package it.mate.postscriptum.server.service;
 
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
 
 import java.util.Date;
@@ -22,7 +24,7 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   
   private StickFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = true;
+  private final boolean LOCALTEST = false;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".stickFacade";
   
@@ -91,5 +93,32 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.sendSmsTest(to, msg);
   }
+
+  @Override
+  public StickSMS createSMS(StickSMS entity) throws AdapterException {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.createSMS(entity);
+  }
+
+  @Override
+  public void checkScheduledSMSs() {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.checkScheduledSMSs();
+  }
+
+  @Override
+  public List<StickSMS> findScheduledSMSsByUser(RemoteUser user) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.findScheduledSMSsByUser(user);
+  }
+
+  @Override
+  public void deleteSMS(List<StickSMS> entities) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.deleteSMS(entities);
+  }
+
+  
+  
   
 }

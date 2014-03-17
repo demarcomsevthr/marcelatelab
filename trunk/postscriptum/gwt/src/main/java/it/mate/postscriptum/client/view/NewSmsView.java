@@ -11,9 +11,8 @@ import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
-import it.mate.postscriptum.client.view.NewMailView.Presenter;
+import it.mate.postscriptum.client.view.NewSmsView.Presenter;
 import it.mate.postscriptum.shared.model.StickMail;
-import it.mate.postscriptum.shared.model.impl.StickMailTx;
 
 import java.util.Date;
 
@@ -26,18 +25,17 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class NewMailView extends BaseMgwtView <Presenter> {
+public class NewSmsView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void postNewMail(StickMail stickMail, Delegate<StickMail> delegate);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, NewMailView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, NewSmsView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -46,13 +44,13 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   @UiField PhCalendarBox calBox;
   @UiField PhTimeBox timeBox;
   @UiField TouchButton sendBtn;
-  @UiField MTextBox subjectBox;
+  @UiField MTextBox receiverBox;
   @UiField SignPanel signPanel;
   
   private Date scheduledDate;
   private Time scheduledTime;
   
-  public NewMailView() {
+  public NewSmsView() {
     initUI();
   }
 
@@ -70,7 +68,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     calBox.setValue(new Date());
     timeBox.setValue(Time.fromDate(new Date()).incHours(1).setMinutes(0));
-    signPanel.setSignLblText("Send to:");
+//  signPanel.setSignLblText("Send to");
   }
   
   @Override
@@ -96,13 +94,6 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     this.scheduledTime = event.getValue();
   }
 
-  @UiHandler ("nowBtn")
-  public void onNowBtn (TouchEndEvent event) {
-    Date now = new Date();
-    calBox.setValue(now);
-    timeBox.setValue(Time.fromDate(now));
-  }
-  
   @UiHandler ("sendBtn")
   public void onTouchBtn (TapEvent event) {
     
@@ -113,11 +104,31 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       return;
     }
     
-    if (subjectBox.getValue().trim().length() == 0) {
-      PhgDialogUtils.showMessageDialog("Subject is empty");
+    if (receiverBox.getValue().trim().length() == 0) {
+      PhgDialogUtils.showMessageDialog("Receiver is empty");
       return;
     }
     
+    if (!receiverBox.getValue().trim().startsWith("+")) {
+      PhgDialogUtils.showMessageDialog("The receiver phone number must include the international prefix");
+      return;
+    }
+    
+    Date scheduledDateTime = scheduledTime.setInDate(scheduledDate);
+    
+    Date NOW = new Date();
+    
+    if (scheduledDateTime.before(NOW)) {
+      PhgDialogUtils.showMessageDialog("You cannot send a SMS in the past");
+      return;
+    }
+    
+    if (bodyArea.getValue() == null || bodyArea.getValue().length() == 0) {
+      PhgDialogUtils.showMessageDialog("You cannot send a message with empty body");
+      return;
+    }
+
+    /*
     StickMail stickMail = new StickMailTx();
     stickMail.setSubject(subjectBox.getValue());
     stickMail.setBody(bodyArea.getValue());
@@ -125,12 +136,12 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     stickMail.setScheduled(scheduledTime.setInDate(scheduledDate));
     stickMail.setCreated(new Date());
     stickMail.setState(StickMail.STATE_NEW);
-    
     getPresenter().postNewMail(stickMail, new Delegate<StickMail>() {
       public void execute(StickMail element) {
         getPresenter().goToHome();
       }
     });
+    */
 
   }
   
