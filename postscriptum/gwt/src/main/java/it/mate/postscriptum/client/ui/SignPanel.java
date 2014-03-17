@@ -30,7 +30,7 @@ public class SignPanel extends Composite {
   
   private RemoteUser remoteUser;
   
-  private String signLblText = "Signed as";
+  private String signLblText = "Signed as:";
   
   public SignPanel() {
     initUI();

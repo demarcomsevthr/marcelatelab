@@ -11,6 +11,8 @@ public class MainPlace extends Place {
   
   public static final String MAIL_LIST = "mailList";
   
+  public static final String NEW_SMS = "newSms";
+  
   private String token;
 
   public MainPlace() {

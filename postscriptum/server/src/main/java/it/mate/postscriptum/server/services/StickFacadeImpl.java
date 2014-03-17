@@ -2,6 +2,8 @@ package it.mate.postscriptum.server.services;
 
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
 
 import java.util.Date;
@@ -73,6 +75,26 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   @Override
   public void sendSmsTest(String to, String msg) {
     adapter.sendSmsTest(to, msg);
+  }
+
+  @Override
+  public StickSMS createSMS(StickSMS stickSMS) throws AdapterException {
+    return adapter.createSMS(stickSMS);
+  }
+
+  @Override
+  public void checkScheduledSMSs() {
+    adapter.checkScheduledSMSs();
+  }
+
+  @Override
+  public List<StickSMS> findScheduledSMSsByUser(RemoteUser user) {
+    return adapter.findScheduledSMSsByUser(user);
+  }
+
+  @Override
+  public void deleteSMS(List<StickSMS> entities) {
+    adapter.deleteSMS(entities);
   }
   
 }

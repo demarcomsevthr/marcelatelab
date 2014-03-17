@@ -10,19 +10,22 @@
   
     <s:SignPanel ui:field="signPanel"/>
     
-    <g:Label text="Subject:" addStyleNames="ui-promptLbl"/>
-    <p:MTextBoxPatched ui:field="subjectBox" addStyleNames="ui-subjectBox"/>
+    <g:Label text="Receiver phone number:" addStyleNames="ui-promptLbl"/>
+    <ph:PhTextBox ui:field="receiverBox" type="tel" addStyleNames="ui-subjectBox"/>
+    <g:Label text="(including international prefix)" addStyleNames="ui-promptLbl ui-postfixLbl"/>
     
-    <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodyArea"/>
+    <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodySmsArea"/>
     
     <g:Label text="Schedule on:" addStyleNames="ui-promptLbl"/>
     <g:HorizontalPanel>
       <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
       <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
-      <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
     </g:HorizontalPanel>
     
-    <p:TouchButton text="SUBMIT EMAIL" ui:field="sendBtn" addStyleNames="ui-sendBtn"/>
+    <g:Label text="Remember: your email address will be added at the end of the message so the receiver will know who you are." 
+      addStyleNames="ui-promptLbl ui-rememberLbl"/>
+    
+    <p:TouchButton text="SUBMIT SMS" ui:field="sendBtn" addStyleNames="ui-sendBtn"/>
     
   </g:HTMLPanel>
   

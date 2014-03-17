@@ -6,9 +6,13 @@ import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.postscriptum.server.model.DevInfoDs;
 import it.mate.postscriptum.server.model.StickMailDs;
+import it.mate.postscriptum.server.model.StickSMSDs;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSMS;
 import it.mate.postscriptum.shared.model.impl.StickMailTx;
+import it.mate.postscriptum.shared.model.impl.StickSMSTx;
+import it.mate.postscriptum.shared.service.AdapterException;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -38,6 +42,8 @@ public class StickAdapterImpl implements StickAdapter {
   private static final String TWILIO_AUTH_TOKEN = "fdc676c52e47bc27ee31d4a91a2094c9";
   
   private static final String TWILIO_FROM_NUMBER = "+16469821337";
+  
+  private static final int MAX_SCHEDULED_SMS_FREE_QUOTA = 5;
   
   
   @PostConstruct
@@ -184,4 +190,93 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
   
+  @Override
+  public StickSMS createSMS(StickSMS entity) throws AdapterException {
+    List<StickSMS> scheduledSMSs = findScheduledSMSsByUser(entity.getUser());
+    if (scheduledSMSs != null && scheduledSMSs.size() > MAX_SCHEDULED_SMS_FREE_QUOTA) {
+      throw new AdapterException(String.format("You cannot have more than %s scheduled SMS in this version", MAX_SCHEDULED_SMS_FREE_QUOTA));
+    }
+    StickSMSDs ds = CloneUtils.clone(entity, StickSMSDs.class);
+    ds = dao.create(ds);
+    return CloneUtils.clone (ds, StickSMSTx.class);
+  }
+
+  @Override
+  public List<StickSMS> findScheduledSMSsByUser(RemoteUser user) {
+    List<StickSMSDs> results = dao.findList(StickSMSDs.class, "userId == userIdParam && state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "userIdParam"),
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, user.getUserId(), StickSMS.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickSMSTx.class, StickSMS.class);
+  }
+  
+  @Override
+  public void checkScheduledSMSs() {
+    Date NOW = new Date();
+    LoggingUtils.debug(getClass(), "NOW IS " + NOW);
+    List<StickSMS> smss = findAllSMSs();
+    for (StickSMS sms : smss) {
+      if (StickSMS.Utils.isScheduled(sms)) {
+        LoggingUtils.debug(getClass(), "found sms scheduled on " + sms.getScheduled());
+        if (sms.getScheduled().before(NOW)) {
+          LoggingUtils.debug(getClass(), "SENDING SMS " + sms);
+          try {
+            sendSms(sms);
+            sms.setState(StickSMS.STATE_NOTIFIED);
+            update(sms);
+          } catch (Exception ex) {
+            LoggingUtils.error(getClass(), "error", ex);
+          }
+        }
+      }
+    }
+  }
+  
+  public List<StickSMS> findAllSMSs() {
+    List<StickSMSDs> smss = dao.findAll(StickSMSDs.class);
+    return CloneUtils.clone(smss, StickSMSTx.class, StickSMS.class);
+  }
+
+  public StickSMS update(StickSMS entity) {
+    StickSMSDs ds = CloneUtils.clone(entity, StickSMSDs.class);
+    ds = dao.update(ds);
+    return CloneUtils.clone (ds, StickSMSTx.class);
+  }
+  
+  private void sendSms(StickSMS sms) {
+    
+    try {
+      LoggingUtils.debug(getClass(), "starting twilio rest client - sms = " + sms);
+      TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+      
+      // Build a filter for the SmsList
+      Map<String, String> params = new HashMap<String, String>();
+      params.put("Body", "From Post Scriptum: " + sms.getBody() + " >> Sent by user " + sms.getUser().getEmail());
+      params.put("To", sms.getReceiverNumber());
+      params.put("From", TWILIO_FROM_NUMBER);
+   
+      LoggingUtils.debug(getClass(), "getting sms factory");
+      SmsFactory messageFactory = client.getAccount().getSmsFactory();
+      LoggingUtils.debug(getClass(), "creating message");
+      Sms message = messageFactory.create(params);
+      LoggingUtils.debug(getClass(), "message created - sid = " + message.getSid());
+      
+    } catch (Exception ex) {
+      LoggingUtils.error(getClass(), "error", ex);
+      logger.error("error", ex);
+    }
+  }
+  
+  @Override
+  public void deleteSMS(List<StickSMS> entities) {
+    if (entities == null)
+      return;
+    for (StickSMS entity : entities) {
+      StickSMSDs sms = dao.findById(StickSMSDs.class, entity.getId());
+      dao.delete(sms);
+    }
+  }
+
 }

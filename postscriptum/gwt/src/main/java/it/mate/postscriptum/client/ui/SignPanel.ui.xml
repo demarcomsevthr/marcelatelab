@@ -7,7 +7,7 @@
        xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
        
   <g:HorizontalPanel>
-    <g:Label text="Signed as" ui:field="signPromptLbl" addStyleNames="ui-signLbl"/>
+    <g:Label text="Signed as:" ui:field="signPromptLbl" addStyleNames="ui-promptLbl"/>
     <g:Label text="" ui:field="signLbl" addStyleNames="ui-signedLbl"/>
   </g:HorizontalPanel>
   

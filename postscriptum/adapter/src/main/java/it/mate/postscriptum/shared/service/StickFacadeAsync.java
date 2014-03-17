@@ -2,6 +2,7 @@ package it.mate.postscriptum.shared.service;
 
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSMS;
 
 import java.util.Date;
 import java.util.List;
@@ -28,5 +29,13 @@ public interface StickFacadeAsync {
   void createV101(StickMail stickMail, String devInfoId, AsyncCallback<StickMail> callback);
 
   void sendSmsTest(String to, String msg, AsyncCallback<Void> callback);
+
+  void createSMS(StickSMS stickSMS, AsyncCallback<StickSMS> callback);
+
+  void checkScheduledSMSs(AsyncCallback<Void> callback);
+
+  void findScheduledSMSsByUser(RemoteUser user, AsyncCallback<List<StickSMS>> callback);
+
+  void deleteSMS(List<StickSMS> entities, AsyncCallback<Void> callback);
 
 }

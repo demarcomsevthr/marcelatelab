@@ -15,6 +15,7 @@ import it.mate.postscriptum.client.places.MainPlace;
 import it.mate.postscriptum.client.view.HomeView;
 import it.mate.postscriptum.client.view.MailListView;
 import it.mate.postscriptum.client.view.NewMailView;
+import it.mate.postscriptum.client.view.NewSmsView;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 
@@ -33,7 +34,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, NewMailView.Presenter, MailListView.Presenter {
+  HomeView.Presenter, NewMailView.Presenter, MailListView.Presenter, NewSmsView.Presenter {
   
   private MainPlace place;
   
@@ -72,6 +73,18 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.MAIL_LIST)) {
       MailListView view = AppClientFactory.IMPL.getGinjector().getMailListView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.NEW_SMS)) {
+      NewSmsView view = AppClientFactory.IMPL.getGinjector().getNewSmsView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
@@ -197,6 +210,10 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToMailList() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.MAIL_LIST));
+  }
+
+  public void goToNewSms() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_SMS));
   }
 
   @Override

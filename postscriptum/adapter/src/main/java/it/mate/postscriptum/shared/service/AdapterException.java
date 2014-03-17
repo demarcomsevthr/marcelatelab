@@ -1,4 +1,4 @@
-package it.mate.postscriptum.server.services;
+package it.mate.postscriptum.shared.service;
 
 @SuppressWarnings("serial")
 public class AdapterException extends Exception {
@@ -13,10 +13,6 @@ public class AdapterException extends Exception {
 
   public AdapterException(String message) {
     super(message);
-  }
-
-  public AdapterException(Throwable cause) {
-    super(cause);
   }
 
 }

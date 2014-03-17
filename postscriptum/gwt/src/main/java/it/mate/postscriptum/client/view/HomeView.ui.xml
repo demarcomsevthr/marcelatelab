@@ -15,7 +15,7 @@
       <p:TouchAnchor addStyleNames="ui-new-mail-btn" text="New Mail" ui:field="newMailBtn2"/>
     </g:HorizontalPanel>
     
-    <p:TouchButton text="Sms test" ui:field="smsTestBtn"/>
+    <p:TouchButton text="New SMS" ui:field="newSmsBtn"/>
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
