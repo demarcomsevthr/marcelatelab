@@ -12,9 +12,9 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
-import it.mate.postscriptum.client.view.MailListView.Presenter;
+import it.mate.postscriptum.client.view.SMSListView.Presenter;
 import it.mate.postscriptum.shared.model.RemoteUser;
-import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSms;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,18 +41,17 @@ import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
 
-public class MailListView extends BaseMgwtView <Presenter> {
+public class SMSListView extends BaseMgwtView <Presenter> {
   
-  public static final String TAG_MAILS = "mails";
+  public static final String TAG_SMSS = "smss";
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
-    public void findMailsByUser(RemoteUser remoteUser);
-    public void findScheduledMailsByUser(RemoteUser remoteUser);
-    public void deleteMails(RemoteUser remoteUser, List<StickMail> mails);
+    public void findScheduledSMSsByUser(RemoteUser remoteUser);
+    public void deleteSMSs(final RemoteUser remoteUser, List<StickSms> smss);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, MailListView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, SMSListView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -63,11 +62,11 @@ public class MailListView extends BaseMgwtView <Presenter> {
   
   private boolean scrollInProgress = false;
   
-  List<StickMail> checkedMails = new ArrayList<StickMail>();
+  List<StickSms> checkedSMSs = new ArrayList<StickSms>();
   
   private RemoteUser remoteUser;
   
-  public MailListView() {
+  public SMSListView() {
     initUI();
   }
 
@@ -113,12 +112,11 @@ public class MailListView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     signPanel.setRemoteUserDelegate(presenter, new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
-        MailListView.this.remoteUser = remoteUser;
+        SMSListView.this.remoteUser = remoteUser;
         if (remoteUser == null) {
-          showMailList(null);
+          showSMSList(null);
         } else {
-//        getPresenter().findMailsByUser(remoteUser);
-          getPresenter().findScheduledMailsByUser(remoteUser);
+          getPresenter().findScheduledSMSsByUser(remoteUser);
         }
       }
     });
@@ -126,31 +124,31 @@ public class MailListView extends BaseMgwtView <Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    if (TAG_MAILS.equals(tag)) {
+    if (TAG_SMSS.equals(tag)) {
       if (model != null && model instanceof List) {
         @SuppressWarnings("unchecked")
-        List<StickMail> mails = (List<StickMail>)model;
-        showMailList(mails);
+        List<StickSms> smss = (List<StickSms>)model;
+        showSMSList(smss);
       }
     }
   }
   
-  private void showMailList(List<StickMail> mails) {
+  private void showSMSList(List<StickSms> smss) {
     resultsPanel.clear();
-    if (mails == null || mails.size() == 0) {
-      Label noMailsLbl = new Label("You have no scheduled mails.");
-      noMailsLbl.addStyleName("ui-nomails");
-      resultsPanel.add(noMailsLbl);
+    if (smss == null || smss.size() == 0) {
+      Label noSMSsLbl = new Label("You have no scheduled sms.");
+      noSMSsLbl.addStyleName("ui-nomails");
+      resultsPanel.add(noSMSsLbl);
       return;
     }
-    Collections.sort(mails, new Comparator<StickMail>() {
-      public int compare(StickMail s1, StickMail s2) {
+    Collections.sort(smss, new Comparator<StickSms>() {
+      public int compare(StickSms s1, StickSms s2) {
         return s1.getScheduled().compareTo(s2.getScheduled());
       }
     });
     deleteBtn.setVisible(true);
     SimpleContainer list = new SimpleContainer();
-    for (final StickMail mail : mails) {
+    for (final StickSms sms : smss) {
       HorizontalPanel row = new HorizontalPanel();
       row.addStyleName("ui-row");
       list.add(row);
@@ -159,17 +157,19 @@ public class MailListView extends BaseMgwtView <Presenter> {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
           if (!scrollInProgress) {
             if (event.getValue()) {
-              checkedMails.add(mail);
+              checkedSMSs.add(sms);
             } else {
-              checkedMails.remove(mail);
+              checkedSMSs.remove(sms);
             }
           }
         }
       });
       row.add(check);
-      TouchHTML mailHtml = new TouchHTML("<p class='ui-row-subject'>" + mail.getSubject() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(mail.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
-      row.add(mailHtml);
-      mailHtml.addTouchEndHandler(new TouchEndHandler() {
+      String shortBody = sms.getBody() != null ? sms.getBody() : "";
+      shortBody = shortBody.length() > 20 ? (shortBody.substring(0, 20) + "...") : shortBody;
+      TouchHTML smsHtml = new TouchHTML("<p class='ui-row-subject'><b>" + sms.getReceiverNumber() + "</b> " + shortBody + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(sms.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
+      row.add(smsHtml);
+      smsHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
 
@@ -189,15 +189,15 @@ public class MailListView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("deleteBtn")
   public void onDeleteBtn(TouchEndEvent event) {
-    if (checkedMails == null || checkedMails.size() == 0)
+    if (checkedSMSs == null || checkedSMSs.size() == 0)
       return;
-    for (StickMail mail : checkedMails) {
-      PhonegapUtils.log("deleting " + mail);
+    for (StickSms sms : checkedSMSs) {
+      PhonegapUtils.log("deleting " + sms);
     }
-    PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected mail?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+    PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected sms?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
       public void execute(Integer selectedButton) {
         if (selectedButton == 1) {
-          getPresenter().deleteMails(remoteUser, checkedMails);
+          getPresenter().deleteSMSs(remoteUser, checkedSMSs);
         }
       }
     });

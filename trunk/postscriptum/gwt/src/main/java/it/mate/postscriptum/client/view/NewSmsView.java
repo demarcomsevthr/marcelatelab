@@ -12,7 +12,8 @@ import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
 import it.mate.postscriptum.client.view.NewSmsView.Presenter;
-import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.impl.StickSmsTx;
 
 import java.util.Date;
 
@@ -32,7 +33,9 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
-    public void postNewMail(StickMail stickMail, Delegate<StickMail> delegate);
+    public void postNewSMS(StickSms stickSMS, Delegate<StickSms> delegate);
+    public String getLastReceiverNumber();
+    public void setLastReceiverNumber(String receiverNumber);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, NewSmsView> { }
@@ -68,13 +71,16 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     calBox.setValue(new Date());
     timeBox.setValue(Time.fromDate(new Date()).incHours(1).setMinutes(0));
-//  signPanel.setSignLblText("Send to");
   }
   
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
     signPanel.setRemoteUserDelegate(presenter, null);
+    String receiverNumber = getPresenter().getLastReceiverNumber();
+    if (receiverNumber != null) {
+      receiverBox.setValue(receiverNumber);
+    }
   }
   
   @Override
@@ -104,12 +110,14 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
       return;
     }
     
-    if (receiverBox.getValue().trim().length() == 0) {
+    final String receiverNumber = receiverBox.getValue().trim();
+    
+    if (receiverNumber.length() == 0) {
       PhgDialogUtils.showMessageDialog("Receiver is empty");
       return;
     }
     
-    if (!receiverBox.getValue().trim().startsWith("+")) {
+    if (!receiverNumber.startsWith("+")) {
       PhgDialogUtils.showMessageDialog("The receiver phone number must include the international prefix");
       return;
     }
@@ -127,21 +135,21 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
       PhgDialogUtils.showMessageDialog("You cannot send a message with empty body");
       return;
     }
-
-    /*
-    StickMail stickMail = new StickMailTx();
-    stickMail.setSubject(subjectBox.getValue());
-    stickMail.setBody(bodyArea.getValue());
-    stickMail.setUser(signPanel.getRemoteUser());
-    stickMail.setScheduled(scheduledTime.setInDate(scheduledDate));
-    stickMail.setCreated(new Date());
-    stickMail.setState(StickMail.STATE_NEW);
-    getPresenter().postNewMail(stickMail, new Delegate<StickMail>() {
-      public void execute(StickMail element) {
+    
+    StickSms stickSMS = new StickSmsTx();
+    stickSMS.setReceiverNumber(receiverNumber);
+    stickSMS.setBody(bodyArea.getValue());
+    stickSMS.setUser(signPanel.getRemoteUser());
+    stickSMS.setCreated(NOW);
+    stickSMS.setScheduled(scheduledDateTime);
+    stickSMS.setState(StickSms.STATE_NEW);
+    
+    getPresenter().postNewSMS(stickSMS, new Delegate<StickSms>() {
+      public void execute(StickSms sms) {
+        getPresenter().setLastReceiverNumber(receiverNumber);
         getPresenter().goToHome();
       }
     });
-    */
 
   }
   

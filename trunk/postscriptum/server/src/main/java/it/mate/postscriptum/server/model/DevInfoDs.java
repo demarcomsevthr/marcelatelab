@@ -45,6 +45,12 @@ public class DevInfoDs implements HasKey, Serializable {
   
   @Persistent
   Date created;
+  
+  @Override
+  public String toString() {
+    return "DevInfoDs [id=" + id + ", os=" + os + ", layout=" + layout + ", devName=" + devName + ", phgVersion=" + phgVersion + ", platform=" + platform
+        + ", devUuid=" + devUuid + ", devVersion=" + devVersion + ", created=" + created + "]";
+  }
 
   public Key getKey() {
     return id;

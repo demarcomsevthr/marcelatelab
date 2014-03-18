@@ -6,12 +6,12 @@ import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.postscriptum.server.model.DevInfoDs;
 import it.mate.postscriptum.server.model.StickMailDs;
-import it.mate.postscriptum.server.model.StickSMSDs;
+import it.mate.postscriptum.server.model.StickSmsDs;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
-import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.model.StickSms;
 import it.mate.postscriptum.shared.model.impl.StickMailTx;
-import it.mate.postscriptum.shared.model.impl.StickSMSTx;
+import it.mate.postscriptum.shared.model.impl.StickSmsTx;
 import it.mate.postscriptum.shared.service.AdapterException;
 
 import java.util.Date;
@@ -45,6 +45,8 @@ public class StickAdapterImpl implements StickAdapter {
   
   private static final int MAX_SCHEDULED_SMS_FREE_QUOTA = 5;
   
+  private static final boolean SKIP_SEND_SMS = true;
+  
   
   @PostConstruct
   public void postConstruct() {
@@ -68,6 +70,7 @@ public class StickAdapterImpl implements StickAdapter {
     if (devInfoId != null) {
       ds.setDevInfoId(devInfoId);
     }
+    LoggingUtils.debug(getClass(), "creating " + entity);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
   }
@@ -132,6 +135,7 @@ public class StickAdapterImpl implements StickAdapter {
     if (entities == null)
       return;
     for (StickMail entity : entities) {
+      LoggingUtils.debug(getClass(), "deleting " + entity);
       StickMailDs mail = dao.findById(StickMailDs.class, entity.getId());
       dao.delete(mail);
     }
@@ -156,6 +160,7 @@ public class StickAdapterImpl implements StickAdapter {
       ds.setDevUuid(devUuid);
       ds.setDevVersion(devVersion);
       ds.setCreated(new Date());
+      LoggingUtils.debug(getClass(), "creating " + ds);
       ds = dao.create(ds);
     }
     if (ds != null) {
@@ -165,6 +170,7 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public void sendSmsTest(String to, String msg) {
     
@@ -190,41 +196,45 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   @Override
-  public StickSMS createSMS(StickSMS entity) throws AdapterException {
-    List<StickSMS> scheduledSMSs = findScheduledSMSsByUser(entity.getUser());
-    if (scheduledSMSs != null && scheduledSMSs.size() > MAX_SCHEDULED_SMS_FREE_QUOTA) {
+  public StickSms createSMS(StickSms entity) throws AdapterException {
+    List<StickSms> scheduledSMSs = findScheduledSMSsByUser(entity.getUser());
+    LoggingUtils.debug(getClass(), "scheduledSMSs.size " + (scheduledSMSs != null ? scheduledSMSs.size() : "null"));
+    if (scheduledSMSs != null && scheduledSMSs.size() >= MAX_SCHEDULED_SMS_FREE_QUOTA) {
       throw new AdapterException(String.format("You cannot have more than %s scheduled SMS in this version", MAX_SCHEDULED_SMS_FREE_QUOTA));
     }
-    StickSMSDs ds = CloneUtils.clone(entity, StickSMSDs.class);
+    StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
+    LoggingUtils.debug(getClass(), "creating " + ds);
     ds = dao.create(ds);
-    return CloneUtils.clone (ds, StickSMSTx.class);
+    return CloneUtils.clone (ds, StickSmsTx.class);
   }
 
   @Override
-  public List<StickSMS> findScheduledSMSsByUser(RemoteUser user) {
-    List<StickSMSDs> results = dao.findList(StickSMSDs.class, "userId == userIdParam && state == stateParam", 
+  public List<StickSms> findScheduledSMSsByUser(RemoteUser user) {
+    List<StickSmsDs> results = dao.findList(StickSmsDs.class, "userId == userIdParam && state == stateParam", 
         Dao.Utils.buildParameters(new ParameterDefinition[] {
             new ParameterDefinition(String.class, "userIdParam"),
             new ParameterDefinition(String.class, "stateParam")
         }), 
-        null, user.getUserId(), StickSMS.STATE_SCHEDULED );
-    return CloneUtils.clone(results, StickSMSTx.class, StickSMS.class);
+        null, user.getUserId(), StickSms.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickSmsTx.class, StickSms.class);
   }
   
   @Override
   public void checkScheduledSMSs() {
     Date NOW = new Date();
     LoggingUtils.debug(getClass(), "NOW IS " + NOW);
-    List<StickSMS> smss = findAllSMSs();
-    for (StickSMS sms : smss) {
-      if (StickSMS.Utils.isScheduled(sms)) {
+    List<StickSms> smss = findAllSMSs();
+    for (StickSms sms : smss) {
+      if (StickSms.Utils.isScheduled(sms)) {
         LoggingUtils.debug(getClass(), "found sms scheduled on " + sms.getScheduled());
         if (sms.getScheduled().before(NOW)) {
           LoggingUtils.debug(getClass(), "SENDING SMS " + sms);
           try {
             sendSms(sms);
-            sms.setState(StickSMS.STATE_NOTIFIED);
+            sms.setState(StickSms.STATE_NOTIFIED);
             update(sms);
           } catch (Exception ex) {
             LoggingUtils.error(getClass(), "error", ex);
@@ -234,21 +244,27 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
   
-  public List<StickSMS> findAllSMSs() {
-    List<StickSMSDs> smss = dao.findAll(StickSMSDs.class);
-    return CloneUtils.clone(smss, StickSMSTx.class, StickSMS.class);
+  public List<StickSms> findAllSMSs() {
+    List<StickSmsDs> smss = dao.findAll(StickSmsDs.class);
+    return CloneUtils.clone(smss, StickSmsTx.class, StickSms.class);
   }
 
-  public StickSMS update(StickSMS entity) {
-    StickSMSDs ds = CloneUtils.clone(entity, StickSMSDs.class);
+  public StickSms update(StickSms entity) {
+    StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
     ds = dao.update(ds);
-    return CloneUtils.clone (ds, StickSMSTx.class);
+    return CloneUtils.clone (ds, StickSmsTx.class);
   }
   
-  private void sendSms(StickSMS sms) {
+  private void sendSms(StickSms sms) {
     
     try {
-      LoggingUtils.debug(getClass(), "starting twilio rest client - sms = " + sms);
+      LoggingUtils.debug(getClass(), "starting twilio rest client - with sms " + sms);
+      
+      if (SKIP_SEND_SMS) {
+        LoggingUtils.debug(getClass(), ">>> SEND SMS COMMENTATA <<<");
+        return;
+      }
+      
       TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
       
       // Build a filter for the SmsList
@@ -270,11 +286,12 @@ public class StickAdapterImpl implements StickAdapter {
   }
   
   @Override
-  public void deleteSMS(List<StickSMS> entities) {
+  public void deleteSMS(List<StickSms> entities) {
     if (entities == null)
       return;
-    for (StickSMS entity : entities) {
-      StickSMSDs sms = dao.findById(StickSMSDs.class, entity.getId());
+    for (StickSms entity : entities) {
+      LoggingUtils.debug(getClass(), "deleting " + entity);
+      StickSmsDs sms = dao.findById(StickSmsDs.class, entity.getId());
       dao.delete(sms);
     }
   }

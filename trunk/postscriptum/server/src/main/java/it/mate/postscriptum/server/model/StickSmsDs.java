@@ -2,7 +2,7 @@ package it.mate.postscriptum.server.model;
 
 import it.mate.commons.server.model.HasKey;
 import it.mate.postscriptum.shared.model.RemoteUser;
-import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.model.StickSms;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
-public class StickSMSDs implements StickSMS, HasKey {
+public class StickSmsDs implements StickSms, HasKey {
   
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
