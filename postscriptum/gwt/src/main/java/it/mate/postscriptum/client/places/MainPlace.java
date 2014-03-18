@@ -13,6 +13,8 @@ public class MainPlace extends Place {
   
   public static final String NEW_SMS = "newSms";
   
+  public static final String SMS_LIST = "smsList";
+  
   private String token;
 
   public MainPlace() {

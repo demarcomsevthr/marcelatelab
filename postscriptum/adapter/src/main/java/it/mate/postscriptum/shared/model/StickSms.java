@@ -3,7 +3,7 @@ package it.mate.postscriptum.shared.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface StickSMS extends Serializable {
+public interface StickSms extends Serializable {
   
   public static final String STATE_NEW = "NW";
 
@@ -47,11 +47,11 @@ public interface StickSMS extends Serializable {
   
   public static class Utils {
     
-    public static String asString(StickSMS sms) {
+    public static String asString(StickSms sms) {
       return "StickSMS [receiver=" + sms.getReceiverNumber() + ", state=" + sms.getState() + ", scheduled=" + sms.getScheduled() + "]";
     }
     
-    public static boolean isScheduled(StickSMS sms) {
+    public static boolean isScheduled(StickSms sms) {
       return STATE_SCHEDULED.equals(sms.getState());
     }
     

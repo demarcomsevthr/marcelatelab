@@ -16,8 +16,10 @@ import it.mate.postscriptum.client.view.HomeView;
 import it.mate.postscriptum.client.view.MailListView;
 import it.mate.postscriptum.client.view.NewMailView;
 import it.mate.postscriptum.client.view.NewSmsView;
+import it.mate.postscriptum.client.view.SMSListView;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickSms;
 
 import java.util.Date;
 import java.util.List;
@@ -34,7 +36,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, NewMailView.Presenter, MailListView.Presenter, NewSmsView.Presenter {
+  HomeView.Presenter, NewMailView.Presenter, MailListView.Presenter, NewSmsView.Presenter, SMSListView.Presenter {
   
   private MainPlace place;
   
@@ -85,6 +87,18 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.NEW_SMS)) {
       NewSmsView view = AppClientFactory.IMPL.getGinjector().getNewSmsView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.SMS_LIST)) {
+      SMSListView view = AppClientFactory.IMPL.getGinjector().getSMSListView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
@@ -159,6 +173,31 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  public void findScheduledSMSsByUser(RemoteUser remoteUser) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().findScheduledSMSsByUser(remoteUser, new AsyncCallback<List<StickSms>>() {
+      public void onSuccess(List<StickSms> results) {
+        setHeaderWaiting(false);
+        view.setModel(results, SMSListView.TAG_SMSS);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+    });
+  }
+  
+  public void deleteSMSs(final RemoteUser remoteUser, List<StickSms> smss) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().deleteSMS(smss, new AsyncCallback<Void>() {
+      public void onSuccess(Void result) {
+        findScheduledSMSsByUser(remoteUser);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+    });
+  }
+  
   public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
     setHeaderWaiting(true);
     AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
@@ -184,6 +223,20 @@ public class MainActivity extends MGWTAbstractActivity implements
             processFailure(null, caught);
           }
         });
+      }
+    });
+  }
+  
+  public void postNewSMS(final StickSms stickSMS, final Delegate<StickSms> delegate) {
+    setHeaderWaiting(true);
+    stickSMS.setDevInfoId(getDevInfoIdFromLocalStorage());
+    AppClientFactory.IMPL.getStickFacade().createSMS(stickSMS, new AsyncCallback<StickSms>() {
+      public void onSuccess(StickSms result) {
+        setHeaderWaiting(false);
+        delegate.execute(result);
+      }
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
       }
     });
   }
@@ -214,6 +267,10 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToNewSms() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_SMS));
+  }
+
+  public void goToSMSList() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.SMS_LIST));
   }
 
   @Override
@@ -316,4 +373,12 @@ public class MainActivity extends MGWTAbstractActivity implements
     return localStorage.devInfoId;
   }-*/;
 
+  public native final String getLastReceiverNumber() /*-{
+    return localStorage.lastReceiverNumber;
+  }-*/;
+
+  public native final void setLastReceiverNumber(String receiverNumber) /*-{
+    localStorage.lastReceiverNumber = receiverNumber;
+  }-*/;
+  
 }

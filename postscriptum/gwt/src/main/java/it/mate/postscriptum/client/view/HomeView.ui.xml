@@ -8,14 +8,23 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel">
   
-    <gc:Spacer addStyleNames="ui-homeSpacer1"/>
+    <gc:Spacer addStyleNames="ui-homeSpacer3"/>
     
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-scheduled-mails-btn" text="Scheduled Mails" ui:field="mailListBtn2"/>
-      <p:TouchAnchor addStyleNames="ui-new-mail-btn" text="New Mail" ui:field="newMailBtn2"/>
+      <p:TouchAnchor addStyleNames="ui-scheduled-mails-btn" text="Scheduled Mails" ui:field="mailListBtn"/>
+      <p:TouchAnchor addStyleNames="ui-new-mail-btn" text="New Mail" ui:field="newMailBtn"/>
     </g:HorizontalPanel>
     
+    <gc:Spacer addStyleNames="ui-homeSpacer3"/>
+    
+    <g:HorizontalPanel width="100%" horizontalAlignment="center">
+      <p:TouchAnchor addStyleNames="ui-scheduled-sms-btn" text="Scheduled SMS" ui:field="smsListBtn"/>
+      <p:TouchAnchor addStyleNames="ui-new-sms-btn" text="New SMS" ui:field="newSMSBtn"/>
+    </g:HorizontalPanel>
+
+    <!--     
     <p:TouchButton text="New SMS" ui:field="newSmsBtn"/>
+     -->
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     

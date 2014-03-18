@@ -2,7 +2,7 @@ package it.mate.postscriptum.server.services;
 
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
-import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.model.StickSms;
 import it.mate.postscriptum.shared.service.AdapterException;
 
 import java.util.List;
@@ -25,12 +25,12 @@ public interface StickAdapter {
   
   /////////////////////
   
-  public StickSMS createSMS(StickSMS entity) throws AdapterException;
+  public StickSms createSMS(StickSms entity) throws AdapterException;
   
   public void checkScheduledSMSs();
   
-  public List<StickSMS> findScheduledSMSsByUser(RemoteUser user);
+  public List<StickSms> findScheduledSMSsByUser(RemoteUser user);
 
-  public void deleteSMS(List<StickSMS> entities);
+  public void deleteSMS(List<StickSms> entities);
   
 }

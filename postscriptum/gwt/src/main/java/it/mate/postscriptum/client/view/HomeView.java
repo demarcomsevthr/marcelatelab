@@ -30,10 +30,11 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 public class HomeView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
+    public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
     public void goToNewMail();
     public void goToMailList();
-    public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
     public void goToNewSms();
+    public void goToSMSList();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -45,14 +46,13 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiField Panel firstRunPanel;
   @UiField Label firstRunTitleLbl;
-  /*
-  @UiField HTML firstRunHtml;
-  */
   @UiField TouchHTML firstRunHtml;
   
   private static final int ANIMATION_DURATION = 1000;
   
   private boolean firstRunPanelVisible = false;
+  
+  private Timer checkFirstRunCompleteTimer = null;
   
   public HomeView() {
     initUI();
@@ -83,7 +83,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
   
-  @UiHandler ("mailListBtn2")
+  @UiHandler ("mailListBtn")
   public void onMailListBtn (TouchEndEvent event) {
     if (isFirstRun()) {
       onHelloBtn(event);
@@ -92,7 +92,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     }
   }
   
-  @UiHandler ("newMailBtn2")
+  @UiHandler ("newMailBtn")
   public void onNewMailBtn (TouchEndEvent event) {
     if (isFirstRun()) {
       onHelloBtn(event);
@@ -101,20 +101,29 @@ public class HomeView extends BaseMgwtView <Presenter> {
     }
   }
   
-  @UiHandler ("helloBtn")
-  public void onHelloBtn (TouchEndEvent event) {
-    getPresenter().setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser result) { }
-    });
+  @UiHandler ("smsListBtn")
+  public void onSmsListBtn (TouchEndEvent event) {
+    if (isFirstRun()) {
+      onHelloBtn(event);
+    } else {
+      getPresenter().goToSMSList();
+    }
   }
   
-  @UiHandler ("newSmsBtn")
+  @UiHandler ("newSMSBtn")
   public void onSmsTestBtn (TouchEndEvent event) {
     if (isFirstRun()) {
       onHelloBtn(event);
     } else {
       getPresenter().goToNewSms();
     }
+  }
+  
+  @UiHandler ("helloBtn")
+  public void onHelloBtn (TouchEndEvent event) {
+    getPresenter().setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser result) { }
+    });
   }
   
   private static int getFirstRunPanelWidthPct() {
@@ -161,18 +170,14 @@ public class HomeView extends BaseMgwtView <Presenter> {
       }
     };
     animationCallback.execute(startTime);
-    
     firstRunHtml.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         onHelloBtn(event);
       }
     });
-    
   }
   
-  Timer checkFirstRunCompleteTimer = null;
   private void doFirstRunCompleteCheck() {
-    
     checkFirstRunCompleteTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
       public void execute(Void element) {
         if (!isFirstRun()) {

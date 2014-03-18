@@ -21,10 +21,11 @@ public class RestController {
     logger.debug("adapter = " + adapter);
   }
 
-  @RequestMapping ("/checkMails")
-  public void checkMails(HttpServletResponse response) throws Exception {
+  @RequestMapping ("/checkMessages")
+  public void checkMessages(HttpServletResponse response) throws Exception {
     logger.debug("here");
     adapter.checkScheduledMails();
+    adapter.checkScheduledSMSs();
     response.getOutputStream().print("Success");
   }
   

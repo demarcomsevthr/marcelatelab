@@ -60,10 +60,12 @@ body {
 }
 
 .ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
-  margin: -10px -13px;
+  margin: -9px -13px;
   color: black;
   background-color: white;
+  /*
   margin: -5px -13px -9px -13px;
+  */
   border-radius: 8px;
   -webkit-user-modify: initial;
 }
@@ -86,8 +88,8 @@ body {
 }
 
 .ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:focus {
-  padding-top: 5px;
-  padding-left: 3px;
+  padding-top: 10px;
+  padding-left: 6px;
 }
 
 .phg-CalendarDialog-Header .phg-TouchHTML {
@@ -281,7 +283,11 @@ body {
   height: 2em;
 }
 
-.ui-scheduled-mails-btn, .ui-new-mail-btn {
+.ui-homeSpacer3 {
+  height: 0.2em;
+}
+
+.ui-scheduled-mails-btn, .ui-new-mail-btn, .ui-scheduled-sms-btn, .ui-new-sms-btn {
   width: 128px;
   height: 52px;
   padding-top: 130px;
@@ -294,12 +300,25 @@ body {
   padding: 0;
 }
 
+/* .ui-scheduled-mails-btn a, */
+.ui-scheduled-sms-btn a {
+  margin-left: -1em;
+}
+
 .ui-scheduled-mails-btn {
   background: url('main/images/scheduled-128.png') no-repeat 4px 2px;
 }
 
 .ui-new-mail-btn {
   background: url('main/images/newmail-128.png') no-repeat 4px 2px;
+}
+
+.ui-scheduled-sms-btn {
+  background: url('main/images/scheduled-sms-128.png') no-repeat 4px 2px;
+}
+
+.ui-new-sms-btn {
+  background: url('main/images/newsms-128.png') no-repeat 4px 2px;
 }
 
 .ui-results-panel {

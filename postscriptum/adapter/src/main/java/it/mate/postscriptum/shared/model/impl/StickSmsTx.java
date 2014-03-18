@@ -1,12 +1,12 @@
 package it.mate.postscriptum.shared.model.impl;
 
 import it.mate.postscriptum.shared.model.RemoteUser;
-import it.mate.postscriptum.shared.model.StickSMS;
+import it.mate.postscriptum.shared.model.StickSms;
 
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class StickSMSTx implements StickSMS {
+public class StickSmsTx implements StickSms {
 
   private String id;
   
