@@ -5,6 +5,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
+import it.mate.phgcommons.client.ui.ph.PhTimeBox.AfterDialogCloseEvent;
+import it.mate.phgcommons.client.ui.ph.PhTimeBox.BeforeDialogOpenEvent;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
@@ -71,6 +73,19 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     calBox.setValue(new Date());
     timeBox.setValue(Time.fromDate(new Date()).incHours(1).setMinutes(0));
+    
+    timeBox.addBeforeDialogOpenHandler(new PhTimeBox.BeforeDialogOpenEvent.Handler() {
+      public void onBeforeDialogOpen(BeforeDialogOpenEvent event) {
+        bodyArea.setVisible(false);
+      }
+    });
+    
+    timeBox.addAfterDialogCloseHandler(new PhTimeBox.AfterDialogCloseEvent.Handler() {
+      public void onAfterDialogClose(AfterDialogCloseEvent event) {
+        bodyArea.setVisible(true);
+      }
+    });
+    
   }
   
   @Override

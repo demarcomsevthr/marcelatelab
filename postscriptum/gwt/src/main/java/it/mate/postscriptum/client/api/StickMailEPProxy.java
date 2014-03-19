@@ -24,10 +24,16 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
   private static final String API_NAME = "stickmailEP";
   
   private static final String CLIENT_ID_DESKTOP = "834127897640.apps.googleusercontent.com";
+  
 
+  /* 19/03/2014
   private static final String CLIENT_ID_MOBILE = "834127897640-pqkmabsf4d4ichgs0cvuqq0fnhf36rjh.apps.googleusercontent.com";
-
   private static final String CLIENT_SECRET_MOBILE = "eb2zvLaTy1KnwNoCkYJ8Thvt";
+  */
+  private static final String CLIENT_ID_MOBILE = "350125466623.apps.googleusercontent.com";
+  private static final String CLIENT_SECRET_MOBILE = "ZLxYwHjJHrpxKLSetHF5c0rI";
+  
+  
   
   public StickMailEPProxy(Delegate<Void> initDelegate, Delegate<Boolean> authDelegate) {
     super(API_ROOT, API_NAME, USE_AUTHENTICATION, initDelegate, authDelegate);

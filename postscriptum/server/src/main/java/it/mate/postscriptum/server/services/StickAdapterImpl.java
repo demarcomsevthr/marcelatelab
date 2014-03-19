@@ -45,8 +45,6 @@ public class StickAdapterImpl implements StickAdapter {
   
   private static final int MAX_SCHEDULED_SMS_FREE_QUOTA = 5;
   
-  private static final boolean SKIP_SEND_SMS = true;
-  
   
   @PostConstruct
   public void postConstruct() {
@@ -260,16 +258,15 @@ public class StickAdapterImpl implements StickAdapter {
     try {
       LoggingUtils.debug(getClass(), "starting twilio rest client - with sms " + sms);
       
-      if (SKIP_SEND_SMS) {
-        LoggingUtils.debug(getClass(), ">>> SEND SMS COMMENTATA <<<");
-        return;
-      }
-      
       TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+      
+      String body = "From Post Scriptum App: " + sms.getBody();
+      body += " >> Sent by user " + sms.getUser().getEmail();
+      body += " >> This is an automatically generated message: please do not reply.";
       
       // Build a filter for the SmsList
       Map<String, String> params = new HashMap<String, String>();
-      params.put("Body", "From Post Scriptum: " + sms.getBody() + " >> Sent by user " + sms.getUser().getEmail());
+      params.put("Body", body);
       params.put("To", sms.getReceiverNumber());
       params.put("From", TWILIO_FROM_NUMBER);
    
