@@ -15,7 +15,8 @@ public class MainPlace extends Place {
 
   public MainPlace() {
 //  this.token = HOME;
-    this.token = TEST;
+//  this.token = TEST;
+    this.token = NEW_THERAPY;
   }
   
   public MainPlace(String token) {

@@ -296,6 +296,15 @@ body {
   height: 1.2em;
 }
 
+.ui-qta-box {
+  width: 5em;
+}
+
+.ui-um-combobox {
+  width: 9em;
+  margin-top: 0;
+}
+
 .ui-homePanel .mgwt-TextBox.ui-app-textbox {
   margin-top: 0;
 }
