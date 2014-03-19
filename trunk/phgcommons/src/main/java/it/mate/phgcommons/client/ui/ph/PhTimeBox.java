@@ -2,8 +2,6 @@ package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TimePickerDialog;
-import it.mate.phgcommons.client.utils.DatePickerPluginUtil;
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
 
@@ -17,6 +15,7 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
@@ -35,16 +34,20 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   
   private List<ValueChangeHandler<Time>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Time>>();
   
+  private List<BeforeDialogOpenEvent.Handler> beforeDialogOpenHandlers = new ArrayList<BeforeDialogOpenEvent.Handler>();
+  
+  private List<AfterDialogCloseEvent.Handler> afterDialogCloseHandlers = new ArrayList<AfterDialogCloseEvent.Handler>();
+  
   private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
   
-  private final static boolean USE_TIME_PICKER_PLUGIN = false;
+//private final static boolean USE_TIME_PICKER_PLUGIN = false;
   
-  @SuppressWarnings("unused")
   public PhTimeBox() {
     element = DOM.createInputText().cast();
     setElement(element);
     addStyleName("phg-TimeBox");
-    
+
+    /*
     if (OsDetectionUtils.isDesktop() && USE_TIME_PICKER_PLUGIN) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
@@ -53,10 +56,13 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
         }
       });
     } else {
+    */
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
+          BeforeDialogOpenEvent.fire(PhTimeBox.this, event);
           TouchUtils.applyQuickFixFocusPatch();
+          /*
           if (USE_TIME_PICKER_PLUGIN) {
             DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
               public void execute(Time value) {
@@ -64,17 +70,22 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
               }
             });
           } else {
+          */
             TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
               public void execute(Time value) {
                 setValue(value, true);
               }
-            }));
+            })) {
+              protected void onHide() {
+                AfterDialogCloseEvent.fire(PhTimeBox.this);
+              };
+            };
             Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
             dialog.setTime(value);
-          }
+//        }
         }
       });
-    }
+//  }
     
   }
 
@@ -83,6 +94,26 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     HandlerRegistration registration = new HandlerRegistration() {
       public void removeHandler() {
         valueChangeHandlers.remove(handler);
+      }
+    };
+    return registration;
+  }
+  
+  public HandlerRegistration addBeforeDialogOpenHandler(final BeforeDialogOpenEvent.Handler handler) {
+    this.beforeDialogOpenHandlers.add(handler);
+    HandlerRegistration registration = new HandlerRegistration() {
+      public void removeHandler() {
+        beforeDialogOpenHandlers.remove(handler);
+      }
+    };
+    return registration;
+  }
+  
+  public HandlerRegistration addAfterDialogCloseHandler(final AfterDialogCloseEvent.Handler handler) {
+    this.afterDialogCloseHandlers.add(handler);
+    HandlerRegistration registration = new HandlerRegistration() {
+      public void removeHandler() {
+        afterDialogCloseHandlers.remove(handler);
       }
     };
     return registration;
@@ -112,6 +143,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     return fmt.format(time.asDate());
   }
   
+  /*
   private Time stringToTime(String text, Time defTime) {
     try {
       return new Time(fmt.parse(text));
@@ -119,13 +151,24 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
       return defTime;
     }
   }
+  */
   
   @Override
   public void fireEvent(GwtEvent<?> event) {
     if (event instanceof TimeChangeEvent) {
-      TimeChangeEvent dateChangeEvent = (TimeChangeEvent)event;
+      TimeChangeEvent timeChangeEvent = (TimeChangeEvent)event;
       for (ValueChangeHandler<Time> handler : valueChangeHandlers) {
-        handler.onValueChange(dateChangeEvent);
+        handler.onValueChange(timeChangeEvent);
+      }
+    } else if (event instanceof BeforeDialogOpenEvent) {
+      BeforeDialogOpenEvent beforeDialogOpenEvent = (BeforeDialogOpenEvent)event;
+      for (BeforeDialogOpenEvent.Handler handler : beforeDialogOpenHandlers) {
+        handler.onBeforeDialogOpen(beforeDialogOpenEvent);
+      }
+    } else if (event instanceof AfterDialogCloseEvent) {
+      AfterDialogCloseEvent afterDialogCloseEvent = (AfterDialogCloseEvent)event;
+      for (AfterDialogCloseEvent.Handler handler : afterDialogCloseHandlers) {
+        handler.onAfterDialogClose(afterDialogCloseEvent);
       }
     } else {
       super.fireEvent(event);
@@ -157,5 +200,81 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     
   }
   
+  public static class BeforeDialogOpenEvent extends GwtEvent<BeforeDialogOpenEvent.Handler> {
+
+    public interface Handler extends EventHandler {
+      public void onBeforeDialogOpen(BeforeDialogOpenEvent event);
+    }
+
+    private static GwtEvent.Type<BeforeDialogOpenEvent.Handler> TYPE = new Type<BeforeDialogOpenEvent.Handler>();
+    
+    private final TapEvent event;
+
+    protected BeforeDialogOpenEvent(TapEvent event) {
+      this.event = event;
+    }
+
+    public static GwtEvent.Type<BeforeDialogOpenEvent.Handler> getTYPE() {
+      return TYPE;
+    }
+
+    @Override
+    public com.google.gwt.event.shared.GwtEvent.Type<Handler> getAssociatedType() {
+      return TYPE;
+    }
+
+    @Override
+    protected void dispatch(Handler handler) {
+      handler.onBeforeDialogOpen(this);
+
+    }
+
+    public TapEvent getTapEvent() {
+      return event;
+    }
+
+    public static void fire(HasHandlers source, TapEvent tapEvent) {
+      if (TYPE != null) {
+        BeforeDialogOpenEvent event = new BeforeDialogOpenEvent(tapEvent);
+        source.fireEvent(event);
+      }
+    }
+    
+  }
+
+  public static class AfterDialogCloseEvent extends GwtEvent<AfterDialogCloseEvent.Handler> {
+
+    public interface Handler extends EventHandler {
+      public void onAfterDialogClose(AfterDialogCloseEvent event);
+    }
+
+    private static GwtEvent.Type<AfterDialogCloseEvent.Handler> TYPE = new Type<AfterDialogCloseEvent.Handler>();
+    
+    protected AfterDialogCloseEvent() {
+    }
+
+    public static GwtEvent.Type<AfterDialogCloseEvent.Handler> getTYPE() {
+      return TYPE;
+    }
+
+    @Override
+    public com.google.gwt.event.shared.GwtEvent.Type<Handler> getAssociatedType() {
+      return TYPE;
+    }
+
+    @Override
+    protected void dispatch(Handler handler) {
+      handler.onAfterDialogClose(this);
+
+    }
+
+    public static void fire(HasHandlers source) {
+      if (TYPE != null) {
+        AfterDialogCloseEvent event = new AfterDialogCloseEvent();
+        source.fireEvent(event);
+      }
+    }
+    
+  }
 
 }
