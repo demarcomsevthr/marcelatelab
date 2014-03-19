@@ -52,7 +52,8 @@ import com.google.appengine.api.users.User;
 @Api (name="stickmailEP", version="v1", description="Stick Mail API", clientIds={
     com.google.api.server.spi.Constant.API_EXPLORER_CLIENT_ID,
     "834127897640.apps.googleusercontent.com",
-    "834127897640-pqkmabsf4d4ichgs0cvuqq0fnhf36rjh.apps.googleusercontent.com"
+    "834127897640-pqkmabsf4d4ichgs0cvuqq0fnhf36rjh.apps.googleusercontent.com",
+    "350125466623.apps.googleusercontent.com"
 })
 public class StickMailEndpoint {
 
