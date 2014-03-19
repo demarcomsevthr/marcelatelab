@@ -77,6 +77,7 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     items.add(item);
     if (selected) {
       selectedItem = items.indexOf(item);
+      setValue(value, false);
     }
   }
   
