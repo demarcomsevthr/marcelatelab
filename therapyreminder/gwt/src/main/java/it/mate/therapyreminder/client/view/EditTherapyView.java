@@ -17,6 +17,10 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -29,6 +33,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
+import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class EditTherapyView extends BaseMgwtView <Presenter> {
 
@@ -45,14 +52,20 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   @UiField TouchCombo tipoRicorrenzaCombo;
   @UiField Panel ricorrenzaGiornalieraPanel;
   @UiField Panel ricorrenzaSettimanalePanel;
+  @UiField Panel ricorrenzaMensilePanel;
   @UiField TouchCombo tipoOrariCombo;
   @UiField Panel orariRegolariPanel;
   @UiField Panel orariFissiPanel;
   @UiField ComplexPanel orariListPanel;
+  @UiField TouchCombo umCombo;
+  
+  @UiField MTextBox qtaBox;
   
   @UiField Spacer filler;
   
   List<PhTimeBox> orariBox = new ArrayList<PhTimeBox>();
+  
+  int initialFillerHeight;
   
   public EditTherapyView() {
     initUI();
@@ -71,6 +84,8 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
+    initialFillerHeight = filler.getOffsetHeight();
+    
     wrapperPanel.getElement().getStyle().clearHeight();
     
     tipoTerapiaCombo.addItem("1", "Orale", false);
@@ -85,20 +100,28 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       }
     });
     
-    tipoRicorrenzaCombo.addItem("1", "Tutti i giorni", false);
+//  tipoRicorrenzaCombo.addItem("1", "Tutti i giorni", false);
     tipoRicorrenzaCombo.addItem("2", "Giornaliera", false);
     tipoRicorrenzaCombo.addItem("3", "Settimanale", false);
+    tipoRicorrenzaCombo.addItem("4", "Mensile", false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         if ("1".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(false);
           ricorrenzaSettimanalePanel.setVisible(false);
+          ricorrenzaMensilePanel.setVisible(false);
         } else if ("2".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(true);
           ricorrenzaSettimanalePanel.setVisible(false);
+          ricorrenzaMensilePanel.setVisible(false);
         } else if ("3".equals(event.getValue())) {
           ricorrenzaGiornalieraPanel.setVisible(false);
           ricorrenzaSettimanalePanel.setVisible(true);
+          ricorrenzaMensilePanel.setVisible(false);
+        } else if ("4".equals(event.getValue())) {
+          ricorrenzaGiornalieraPanel.setVisible(false);
+          ricorrenzaSettimanalePanel.setVisible(false);
+          ricorrenzaMensilePanel.setVisible(true);
         }
         refreshScrollPanel();
       }
@@ -120,6 +143,35 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       }
     });
     
+    umCombo.addItem("1", "Capsule", true);
+    umCombo.addItem("2", "Fiale", false);
+
+    qtaBox.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+        PhonegapUtils.log("touchstart event on qtaBox");
+        /*
+        filler.setHeight("12em");
+        refreshScrollPanel();
+        */
+      }
+    });
+    qtaBox.addFocusHandler(new FocusHandler() {
+      public void onFocus(FocusEvent event) {
+        PhonegapUtils.log("focus event on qtaBox");
+        /*
+        filler.setHeight("12em");
+        refreshScrollPanel();
+        */
+      }
+    });
+    qtaBox.addBlurHandler(new BlurHandler() {
+      public void onBlur(BlurEvent event) {
+        PhonegapUtils.log("blur event on qtaBox");
+        /*
+        filler.setHeight(initialFillerHeight+"px");
+        */
+      }
+    });
     
   }
   
