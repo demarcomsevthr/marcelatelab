@@ -8,7 +8,7 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-therapy-panel">
       
-    <g:HTML HTML="Nuova prescrizione / b2" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Nuova prescrizione" addStyleNames="ui-view-header"/>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
@@ -36,10 +36,10 @@
     <!-- .............................................................................. -->
     <hr class="ui-view-separator"/>
     
-    <g:Label text="Quantita:" addStyleNames="ui-field-label"/>
+    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
     <gc:Spacer height="0.3em"/>
     <g:HorizontalPanel>
-      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" value="1"/>
+      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" value="1" type="number"/>
       <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
     </g:HorizontalPanel>
     
