@@ -97,12 +97,10 @@ body {
 }
  */
 
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:visited {
-  padding-top: 12px;
-}
+/* padding spostato in ios/android css
+ */
 .ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
   margin-top:  -10px;
-  padding-top: 12px;
 }
 
 
@@ -301,7 +299,6 @@ body {
 }
 
 .ui-um-combobox {
-  width: 9em;
   margin-top: 0;
 }
 

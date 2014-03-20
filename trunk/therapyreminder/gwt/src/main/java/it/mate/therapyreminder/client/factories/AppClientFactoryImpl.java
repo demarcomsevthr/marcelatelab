@@ -109,6 +109,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     ViewPort viewPort = new MGWTSettings.ViewPort();
     viewPort.setTargetDensity(DENSITY.MEDIUM);
     viewPort.setUserScaleAble(false).setMinimumScale(1.0).setMinimumScale(1.0).setMaximumScale(1.0);
+    
+    // 20/03/2014
+    // iOS webview focus issue (http://stackoverflow.com/questions/19110144/ios7-issues-with-webview-focus-when-using-keyboard-html)
+    if (OsDetectionUtils.isIOs()) {
+      viewPort.setHeightToDeviceHeight();
+    }
 
     MGWTSettings settings = new MGWTSettings();
     settings.setViewPort(viewPort);
