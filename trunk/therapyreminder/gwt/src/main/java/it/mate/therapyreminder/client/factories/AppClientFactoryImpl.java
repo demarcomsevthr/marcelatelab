@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -111,10 +112,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     viewPort.setUserScaleAble(false).setMinimumScale(1.0).setMinimumScale(1.0).setMaximumScale(1.0);
     
     // 20/03/2014
-    // iOS webview focus issue (http://stackoverflow.com/questions/19110144/ios7-issues-with-webview-focus-when-using-keyboard-html)
-    if (OsDetectionUtils.isIOs()) {
-      viewPort.setHeightToDeviceHeight();
-    }
+    IOSPatches.applyViewPortPatch(viewPort);
 
     MGWTSettings settings = new MGWTSettings();
     settings.setViewPort(viewPort);
@@ -124,6 +122,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     settings.setPreventScrolling(true);
 
     MGWT.applySettings(settings);
+    
+    // 20/03/2014
+    IOSPatches.applyStatusBarStylePatch();
     
     MGWTStyle.getTheme().getMGWTClientBundle().getHeaderCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();

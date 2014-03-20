@@ -19,8 +19,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -33,8 +31,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class EditTherapyView extends BaseMgwtView <Presenter> {
@@ -67,6 +63,20 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   
   int initialFillerHeight;
   
+  private String[] umDescriptions = new String[] {
+      "Compress/a/e",
+      "Fial/a/e",
+      "Ovul/o/i",
+      "Suppost/a/e",
+      "Gocc/ia/e",
+      "Bustin/a/e",
+      "Garz/a/e",
+      "Flacon/e/i",
+      "Capsul/a/e",
+      "Confett/o/i",
+      "Flacon/e/i"
+    };
+  
   public EditTherapyView() {
     initUI();
   }
@@ -88,12 +98,20 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
-    tipoTerapiaCombo.addItem("1", "Orale", false);
-    tipoTerapiaCombo.addItem("2", "Intramuscolare", false);
-    tipoTerapiaCombo.addItem("3", "Endovenosa", false);
+    tipoTerapiaCombo.addItem("O", "Orale", false);
+    tipoTerapiaCombo.addItem("I", "Intramuscolare", false);
+    tipoTerapiaCombo.addItem("E", "Endovenosa", false);
+    tipoTerapiaCombo.addItem("S", "Sottocute", false);
+    tipoTerapiaCombo.addItem("T", "Transcutanea", false);
+    tipoTerapiaCombo.addItem("R", "Rettale", false);
+    tipoTerapiaCombo.addItem("C", "Oculare", false);
+    tipoTerapiaCombo.addItem("L", "Sublinguale", false);
+    tipoTerapiaCombo.addItem("A", "Altro", false);
+    /*
     tipoTerapiaCombo.addItem("4", "Infusionale", false);
     tipoTerapiaCombo.addItem("5", "Insulinica", false);
     tipoTerapiaCombo.addItem("6", "Antibiotica", false);
+    */
     tipoTerapiaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         PhonegapUtils.log("selected value is " + event.getValue());
@@ -142,37 +160,24 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
         refreshScrollPanel();
       }
     });
-    
-    umCombo.addItem("1", "Capsule", true);
-    umCombo.addItem("2", "Fiale", false);
 
-    qtaBox.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-        PhonegapUtils.log("touchstart event on qtaBox");
-        /*
-        filler.setHeight("12em");
-        refreshScrollPanel();
-        */
-      }
-    });
-    qtaBox.addFocusHandler(new FocusHandler() {
-      public void onFocus(FocusEvent event) {
-        PhonegapUtils.log("focus event on qtaBox");
-        /*
-        filler.setHeight("12em");
-        refreshScrollPanel();
-        */
-      }
-    });
     qtaBox.addBlurHandler(new BlurHandler() {
       public void onBlur(BlurEvent event) {
-        PhonegapUtils.log("blur event on qtaBox");
-        /*
-        filler.setHeight(initialFillerHeight+"px");
-        */
+        adaptUmDescription(qtaBox.getValue());
       }
     });
     
+    adaptUmDescription(qtaBox.getValue());
+
+  }
+  
+  private void adaptUmDescription(String value) {
+    boolean singular = "1".equals(value.trim());
+    for (int it = 0; it < umDescriptions.length; it++) {
+      String[] tokens = umDescriptions[it].split("/");
+      String desc = tokens[0] + (singular ? tokens[1] : tokens[2]);
+      umCombo.addItem(""+it, desc, it == 0 ? true : false);
+    }
   }
   
   private void showOrariListPanel() {
