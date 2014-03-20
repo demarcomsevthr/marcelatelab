@@ -40,52 +40,29 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   
   private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
   
-//private final static boolean USE_TIME_PICKER_PLUGIN = false;
-  
   public PhTimeBox() {
     element = DOM.createInputText().cast();
     setElement(element);
     addStyleName("phg-TimeBox");
 
-    /*
-    if (OsDetectionUtils.isDesktop() && USE_TIME_PICKER_PLUGIN) {
-      addChangeHandler(new ChangeHandler() {
-        public void onChange(ChangeEvent event) {
-          Time value = stringToTime(element.getValue(), new Time());
-          setValue(value, true);
-        }
-      });
-    } else {
-    */
-      element.setReadOnly(true);
-      addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          BeforeDialogOpenEvent.fire(PhTimeBox.this, event);
-          TouchUtils.applyQuickFixFocusPatch();
-          /*
-          if (USE_TIME_PICKER_PLUGIN) {
-            DatePickerPluginUtil.showTimeDialog(new Delegate<Time>() {
-              public void execute(Time value) {
-                setValue(value, true);
-              }
-            });
-          } else {
-          */
-            TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
-              public void execute(Time value) {
-                setValue(value, true);
-              }
-            })) {
-              protected void onHide() {
-                AfterDialogCloseEvent.fire(PhTimeBox.this);
-              };
-            };
-            Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
-            dialog.setTime(value);
-//        }
-        }
-      });
-//  }
+    element.setReadOnly(true);
+    addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        BeforeDialogOpenEvent.fire(PhTimeBox.this, event);
+        TouchUtils.applyQuickFixFocusPatch();
+        TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
+          public void execute(Time value) {
+            setValue(value, true);
+          }
+        })) {
+          protected void onHide() {
+            AfterDialogCloseEvent.fire(PhTimeBox.this);
+          };
+        };
+        Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
+        dialog.setTime(value);
+      }
+    });
     
   }
 
@@ -142,16 +119,6 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   private String timeToString(Time time) {
     return fmt.format(time.asDate());
   }
-  
-  /*
-  private Time stringToTime(String text, Time defTime) {
-    try {
-      return new Time(fmt.parse(text));
-    } catch (Exception ex) {
-      return defTime;
-    }
-  }
-  */
   
   @Override
   public void fireEvent(GwtEvent<?> event) {

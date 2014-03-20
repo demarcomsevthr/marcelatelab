@@ -81,6 +81,10 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     }
   }
   
+  public List<Item> getItems() {
+    return items;
+  }
+  
   private void showItemsDialog() {
     
     VerticalPanel itemsContainer = new VerticalPanel();
@@ -139,6 +143,12 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     String description;
     public Item(String value, String description) {
       this.value = value;
+      this.description = description;
+    }
+    public String getDescription() {
+      return description;
+    }
+    public void setDescription(String description) {
       this.description = description;
     }
   }

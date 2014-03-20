@@ -63,6 +63,13 @@ public class TouchUtils {
    * see http://stackoverflow.com/questions/8335834/how-can-i-hide-the-android-keyboard-using-javascript
    */
   public static void applyQuickFixFocusPatch() {
+
+    // 20/03/2014
+    // la patch e' solo per android
+    if (!OsDetectionUtils.isAndroid()) {
+      return;
+    }
+    
     applyQuickFixFocusPatchImpl(JQuery.select("input"));
     applyQuickFixFocusPatchImpl(JQuery.select("textarea"));
   }
