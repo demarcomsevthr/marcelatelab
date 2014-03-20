@@ -8,7 +8,7 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-therapy-panel">
       
-    <g:HTML HTML="Nuova prescrizione" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Nuova prescrizione / b2" addStyleNames="ui-view-header"/>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
@@ -99,7 +99,7 @@
       </g:HorizontalPanel>
     </g:VerticalPanel>
     
-    <gc:Spacer ui:field="filler" height="12em"/>
+    <gc:Spacer ui:field="filler" height="2em"/>
     
   </g:HTMLPanel>
   

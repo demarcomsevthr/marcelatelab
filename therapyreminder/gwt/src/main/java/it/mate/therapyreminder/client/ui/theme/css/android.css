@@ -1,3 +1,16 @@
 
 @external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
 
+
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:visited {
+  padding-top: 12px;
+}
+
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
+  padding-top: 12px;
+}
+
+.ui-um-combobox {
+  width: 9em;
+}
+
