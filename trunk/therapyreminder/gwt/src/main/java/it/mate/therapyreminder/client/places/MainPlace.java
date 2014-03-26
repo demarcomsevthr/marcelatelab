@@ -7,16 +7,17 @@ public class MainPlace extends Place {
   
   public static final String HOME = "home";
   
-  public static final String NEW_THERAPY = "newTherapy";
+  public static final String THERAPY_LIST = "listTherapy";
+  
+  public static final String THERAPY_EDIT = "editTherapy";
   
   public static final String TEST = "test";
   
   private String token;
 
   public MainPlace() {
-//  this.token = HOME;
+    this.token = HOME;
 //  this.token = TEST;
-    this.token = NEW_THERAPY;
   }
   
   public MainPlace(String token) {

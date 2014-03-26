@@ -19,7 +19,7 @@
     <hr class="ui-view-separator-1"/>
     
     <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
-    <p:MTextBoxPatched ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
     
     <!-- .............................................................................. -->
     <hr class="ui-view-separator"/>
@@ -36,13 +36,23 @@
     <!-- .............................................................................. -->
     <hr class="ui-view-separator"/>
     
+    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
+    <gc:Spacer height="0.3em"/>
+    <g:HorizontalPanel>
+      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" value="1" type="number"/>
+      <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
+    </g:HorizontalPanel>
+    
+    <!-- .............................................................................. -->
+    <hr class="ui-view-separator"/>
+    
     <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label"/>
     <p:TouchCombo ui:field="tipoRicorrenzaCombo" addStyleNames="ui-app-combobox"/>
     
     <g:VerticalPanel ui:field="ricorrenzaGiornalieraPanel" spacing="0" visible="false">
       <g:HorizontalPanel>
         <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
-        <p:MTextBoxPatched ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box"/>
+        <p:MTextBoxPatched ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
         <g:Label text="giorni" addStyleNames="ui-inline-label, ui-day-label"/>
       </g:HorizontalPanel>    
     </g:VerticalPanel>
@@ -50,35 +60,17 @@
     <g:VerticalPanel ui:field="ricorrenzaSettimanalePanel" spacing="0" visible="false">
       <g:HorizontalPanel>
         <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
-        <g:VerticalPanel>
-          <g:Label text="Lun" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Mar" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Mer" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Gio" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Ven" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Sab" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-        <g:VerticalPanel>
-          <g:Label text="Dom" addStyleNames="ui-inline-label, ui-day-label"/>
-          <ph:PhCheckBox/>
-        </g:VerticalPanel>
-      </g:HorizontalPanel>
+        <p:MTextBoxPatched ui:field="rangeWeekBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
+        <g:Label text="settimane" addStyleNames="ui-inline-label, ui-day-label"/>
+      </g:HorizontalPanel>    
+    </g:VerticalPanel>
+    
+    <g:VerticalPanel ui:field="ricorrenzaMensilePanel" spacing="0" visible="false">
+      <g:HorizontalPanel>
+        <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
+        <p:MTextBoxPatched ui:field="rangeMonthBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
+        <g:Label text="mesi" addStyleNames="ui-inline-label, ui-day-label"/>
+      </g:HorizontalPanel>    
     </g:VerticalPanel>
     
     <!-- .............................................................................. -->

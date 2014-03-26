@@ -6,11 +6,15 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.TouchHTML;
+import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
+import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
-import it.mate.therapyreminder.client.view.EditTherapyView.Presenter;
+import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
+import it.mate.therapyreminder.shared.model.Prescrizione;
+import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,29 +25,33 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class EditTherapyView extends BaseMgwtView <Presenter> {
+public class TherapyEditView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
+    public void savePrescrizione(Prescrizione prescrizione);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, EditTherapyView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
+  
+  @UiField MTextBox titleBox;
+  @UiField PhCalendarBox inizioBox;
+  
   @UiField TouchCombo tipoTerapiaCombo;
   @UiField TouchCombo tipoRicorrenzaCombo;
   @UiField Panel ricorrenzaGiornalieraPanel;
@@ -55,7 +63,7 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   @UiField ComplexPanel orariListPanel;
   @UiField TouchCombo umCombo;
   
-  @UiField MTextBox qtaBox;
+  @UiField PhTextBox qtaBox;
   
   @UiField Spacer filler;
   
@@ -77,7 +85,7 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
       "Flacon/e/i"
     };
   
-  public EditTherapyView() {
+  public TherapyEditView() {
     initUI();
   }
 
@@ -86,11 +94,6 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
-    initHeaderBackButton(SafeHtmlUtils.fromTrustedString("<img src='main/images/home-back.png'/>"), new Delegate<TapEvent>() {
-      public void execute(TapEvent element) {
-        getPresenter().goToHome();
-      }
-    });
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
@@ -247,5 +250,14 @@ public class EditTherapyView extends BaseMgwtView <Presenter> {
   private native void setTransform(Style style, String transform) /*-{
     style['-webkit-transform'] = transform;
   }-*/;
+  
+  @UiHandler ("saveBtn")
+  public void onSaveBtn (TouchEndEvent event) {
+    Prescrizione prescrizione = new PrescrizioneTx();
+    prescrizione.setNome(titleBox.getValue());
+    prescrizione.setDataInizio(inizioBox.getValue());
+    prescrizione.setQuantita(qtaBox.getValueAsDouble());
+    getPresenter().savePrescrizione(prescrizione);
+  }
 
 }
