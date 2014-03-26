@@ -3,6 +3,8 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayMixed;
 
@@ -114,13 +116,13 @@ public abstract class WebSQLDao {
       }
       return $wnd.openDatabase(name, version, name, estimatedSize, jsCreationCallback);
     }-*/;
-    public final native int getVersionInt() /*-{
+    protected final native int getVersionInt() /*-{
       return parseInt(this.version) || 0;
     }-*/;
-    public final native String getVersion() /*-{
+    protected final native String getVersion() /*-{
       return this.version;
     }-*/;
-    public final void getVersionAsync(final int retry, final Delegate<Integer> delegate) {
+    protected final void getVersionAsync(final int retry, final Delegate<Integer> delegate) {
       if (retry > 10)
         return;
       GwtUtils.deferredExecution(250, new Delegate<Void>() {
@@ -141,7 +143,7 @@ public abstract class WebSQLDao {
         }
       });
     }
-    public final void updateVersion(final Integer newVersion, final SQLVoidCallback callback) {
+    protected final void updateVersion(final Integer newVersion, final SQLVoidCallback callback) {
       transactionImpl(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
           transaction.doExecuteSql("UPDATE version SET number = ?", new Object[]{newVersion});
@@ -170,7 +172,7 @@ public abstract class WebSQLDao {
       this.changeVersion(oldVersion, newVersion, jsCallback, jsSuccessCallback);
     }-*/;
     
-    protected final native void transactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
+    public final native void transactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
       var jsCallback = null;
       if (callback != null) {
         jsCallback = $entry(function(tr) {
@@ -197,7 +199,7 @@ public abstract class WebSQLDao {
       this.transaction(jsCallback, jsErrorCallback, jsSuccessCallback);
     }-*/;
     
-    protected final native void readTransactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
+    public final native void readTransactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
       var jsCallback = null;
       if (callback != null) {
         jsCallback = $entry(function(tr) {
@@ -332,7 +334,7 @@ public abstract class WebSQLDao {
   }
   
   protected static interface SQLTransactionCallback {
-    public void handleEvent(SQLTransaction transaction);
+    public void handleEvent(SQLTransaction tr);
   }
   
   protected static interface SQLTransactionErrorCallback {
@@ -340,15 +342,22 @@ public abstract class WebSQLDao {
   }
   
   protected static interface SQLStatementCallback {
-    public void handleEvent(SQLTransaction transaction, SQLResultSet resultSet);
+    public void handleEvent(SQLTransaction tr, SQLResultSet rs);
   }
   
   protected static interface SQLStatementErrorCallback {
-    public void handleEvent(SQLTransaction transaction, SQLError error);
+    public void handleEvent(SQLTransaction tr, SQLError error);
   }
   
   protected interface MigratorCallback {
-    public void doMigration(int number, SQLTransaction transaction);
+    public void doMigration(int number, SQLTransaction tr);
+  }
+  
+  protected Long dateAsLong(Date date) {
+    if (date == null) {
+      return null;
+    }
+    return date.getTime();
   }
   
 }
