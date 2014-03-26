@@ -137,7 +137,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     });
   }
 
-  protected void initHeaderBackButton(SafeHtml html, final Delegate<TapEvent> delegate) {
+  public void initHeaderBackButton(SafeHtml html, final Delegate<TapEvent> delegate) {
     headerBackButton = new HtmlHeaderButton();
 //  headerBackButton.setBackButton(true);
     HtmlHeaderButton htmlHeaderButton = (HtmlHeaderButton)headerBackButton;

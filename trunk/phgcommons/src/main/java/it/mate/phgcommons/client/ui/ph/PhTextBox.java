@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.ui.ph;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.TextBox;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
@@ -55,6 +56,10 @@ public class PhTextBox extends MTextBox {
       return;
     }
     box.getElement().setAttribute("type", type.toLowerCase());
+  }
+  
+  public Double getValueAsDouble() {
+    return NumberFormat.getDecimalFormat().parse(getValue());
   }
 
 }
