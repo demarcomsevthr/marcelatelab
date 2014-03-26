@@ -217,7 +217,7 @@ body {
 }
 
 .ui-homeSpacer1 {
-  height: 3em;
+  height: 1em;
 }
 
 .ui-homeSpacer2 {
@@ -368,5 +368,30 @@ body {
   height: 36px;
   margin-top: 5px;
   margin-left: 3px;
+}
+
+.ui-home-terapies-btn, .ui-home-reminders-btn, .ui-home-doctors-btn, .ui-home-preferences-btn {
+  width: 128px;
+  height: 52px;
+  padding-top: 130px;
+  padding-left: 10px;
+  border: 3px solid rgba(0, 0, 255, 0.1);
+  border-radius: 6px;
+}
+
+.ui-home-terapies-btn {
+  background: url('main/images/terapies-128.png') no-repeat 8px 4px;
+}
+
+.ui-home-reminders-btn {
+  background: url('main/images/reminders-128.png') no-repeat 4px 2px;
+}
+
+.ui-home-doctors-btn {
+  background: url('main/images/doctors-128.png') no-repeat 4px 2px;
+}
+
+.ui-home-preferences-btn {
+  background: url('main/images/preferences-128.png') no-repeat 4px 2px;
 }
 

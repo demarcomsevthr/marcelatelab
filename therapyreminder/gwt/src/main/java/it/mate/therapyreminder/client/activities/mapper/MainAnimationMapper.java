@@ -18,10 +18,10 @@ public class MainAnimationMapper implements AnimationMapper {
       }
       if (oldPlace == null) {
         return Animation.DISSOLVE_REVERSE;
-      } else {
-        if (oldPlace.getToken().equals(MainPlace.NEW_THERAPY) && newPlace.getToken().equals(MainPlace.HOME)) {
-          return Animation.SWAP_REVERSE;
-        }
+      } else if (newPlace.getToken().equals(MainPlace.HOME)) {
+        return Animation.SWAP_REVERSE;
+      } else if (oldPlace.getToken().equals(MainPlace.THERAPY_EDIT) && newPlace.getToken().equals(MainPlace.THERAPY_LIST)) {
+        return Animation.SWAP_REVERSE;
       }
       return Animation.SWAP;
     }

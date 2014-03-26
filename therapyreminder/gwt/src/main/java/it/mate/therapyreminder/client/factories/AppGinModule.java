@@ -3,6 +3,7 @@ package it.mate.therapyreminder.client.factories;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
+import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.shared.service.StickFacade;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
 
@@ -18,6 +19,8 @@ public class AppGinModule extends AbstractGinModule {
   private final static String DEFAULT_FACADE_MODULE_URL = "https://therapyremindersrv.appspot.com/main/";
   private final static String NAT_PROP_FACADE_RELATIVE_PATH = "stickFacadeRelativePath";
   private final static String DEFAULT_FACADE_RELATIVE_PATH = ".stickFacade";
+  
+  private static AppSqlDao appSqlDao;
   
   @Override
   protected void configure() {
@@ -43,6 +46,14 @@ public class AppGinModule extends AbstractGinModule {
     }
     PhonegapUtils.log("set on " + service.getServiceEntryPoint());
     return facade;
+  }
+  
+  @Provides
+  public AppSqlDao getAppSqlDao() {
+    if (appSqlDao == null) {
+      appSqlDao = new AppSqlDao();
+    }
+    return appSqlDao;
   }
   
 }

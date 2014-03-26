@@ -10,28 +10,36 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
+import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
-import it.mate.therapyreminder.client.view.EditTherapyView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.TherapyEditView;
+import it.mate.therapyreminder.client.view.TherapyListView;
+import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.event.shared.EventBus;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, EditTherapyView.Presenter, CalendarEventTestView.Presenter {
+  HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter, 
+  CalendarEventTestView.Presenter {
   
   private MainPlace place;
   
   private BaseMgwtView view;
+  
+  private AppSqlDao appSqlDao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -51,15 +59,27 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-    if (place.getToken().equals(MainPlace.NEW_THERAPY)) {
-      EditTherapyView view = AppClientFactory.IMPL.getGinjector().getEditTherapyView();
+    if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
+      TherapyListView view = AppClientFactory.IMPL.getGinjector().getTherapyListView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
-      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
-        public void execute(String element) {
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
           goToHome();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
+      TherapyEditView view = AppClientFactory.IMPL.getGinjector().getTherapyEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToTherapyListView();
         }
       });
     }
@@ -75,60 +95,6 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-  }
-  
-  @Override
-  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
-        setHeaderWaiting(false);
-        delegate.execute(remoteUser);
-      }
-    });
-  }
-  
-  
-  /*
-  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-      public void onSuccess(Date serverTime) {
-        stickMail.setCreated(stickMail.getCreated());
-        stickMail.setScheduled(stickMail.getScheduled());
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
-          public void onSuccess(StickMail result) {
-            setHeaderWaiting(false);
-            delegate.execute(result);
-          }
-          public void onFailure(Throwable caught) {
-            processFailure(null, caught);
-          }
-        });
-      }
-    });
-  }
-  */
-  
-  public void goToHome() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
-  }
-
-  public void goToNewTherapy() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.NEW_THERAPY));
-  }
-
-  @Override
-  public BaseView getView() {
-    return null;
-  }
-
-  @Override
-  public void goToPrevious() {
-    
   }
   
   private void processFailure(String message, Throwable caught) {
@@ -185,4 +151,85 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
+  @SuppressWarnings("unchecked")
+  private void setBackButtonDelegate(final Delegate<Void> delegate) {
+    AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+      public void execute(String element) {
+        delegate.execute(null);
+      }
+    });
+    view.initHeaderBackButton(SafeHtmlUtils.fromTrustedString("<img src='main/images/home-back.png'/>"), new Delegate<TapEvent>() {
+      public void execute(TapEvent element) {
+        delegate.execute(null);
+      }
+    });
+  }
+  
+  @Override
+  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
+        setHeaderWaiting(false);
+        delegate.execute(remoteUser);
+      }
+    });
+  }
+  
+  
+  /*
+  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+      public void onSuccess(Date serverTime) {
+        stickMail.setCreated(stickMail.getCreated());
+        stickMail.setScheduled(stickMail.getScheduled());
+        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+          public void onSuccess(StickMail result) {
+            setHeaderWaiting(false);
+            delegate.execute(result);
+          }
+          public void onFailure(Throwable caught) {
+            processFailure(null, caught);
+          }
+        });
+      }
+    });
+  }
+  */
+  
+  @Override
+  public BaseView getView() {
+    return null;
+  }
+
+  @Override
+  public void goToPrevious() {
+    
+  }
+  
+  public void goToHome() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
+  }
+
+  public void goToTherapyListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_LIST));
+  }
+
+  public void goToTherapyEditView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT));
+  }
+
+  @Override
+  public void savePrescrizione(Prescrizione prescrizione) {
+    appSqlDao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+      public void execute(Prescrizione prescrizione) {
+        PhonegapUtils.log("Inserted " + prescrizione);
+      }
+    });
+  }
+
 }
