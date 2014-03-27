@@ -106,7 +106,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
 
   public void setValue(Date value, boolean fireEvents) {
     this.value = value;
-    element.setValue(GwtUtils.dateToString(value, "dd/MM/yyyy"));
+    element.setValue(value != null ? GwtUtils.dateToString(value, "dd/MM/yyyy") : null);
     if (fireEvents) {
       DateChangeEvent.fire(this, value);
     }

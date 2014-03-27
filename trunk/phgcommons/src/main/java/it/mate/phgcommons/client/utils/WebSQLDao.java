@@ -10,6 +10,12 @@ import com.google.gwt.core.client.JsArrayMixed;
 
 
 /**
+ * 
+ * SPECIFICATION REFERENCE:
+ * 
+ *   http://www.w3.org/TR/webdatabase/
+ * 
+ * 
  * [04/03/2014]
  *  L'UTILIZZO DI db.changeVersion HA DATO PROBLEMI QUINDI DECIDO DI GESTIRE LA VERSION SU UNA TABLE USER-DEFINED
  *
@@ -17,7 +23,7 @@ import com.google.gwt.core.client.JsArrayMixed;
 
 public abstract class WebSQLDao {
   
-  protected WindowDatabase db;
+  protected static WindowDatabase db;
   
   private String name;
   
@@ -33,59 +39,20 @@ public abstract class WebSQLDao {
     this.name = name;
     this.estimatedSize = estimatedSize;
     this.creationCallback = creationCallback;
-    openDatabase();
-    doMigrations(migrationCallbacks);
+    if (db == null) {
+      openDatabase();
+      doMigrations(migrationCallbacks);
+    }
   }
   
   protected void openDatabase() {
-    this.db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
+    db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
         PhonegapUtils.log("creation callback");
         if (creationCallback != null)
           creationCallback.handleEvent(db);
       }
     });
-  }
-  
-  private void doMigrations(final MigratorCallback migrationCallbacks[]) {
-    new Migrator(WebSQLDao.this, migrationCallbacks);
-  }
-
-  protected static class Migrator {
-    MigratorCallback callbacks[];
-    WindowDatabase db;
-    public Migrator(WebSQLDao dao, MigratorCallback callbacks[]) {
-      this.db = dao.db;
-      this.callbacks = callbacks;
-      db.getVersionAsync(0, new Delegate<Integer>() {
-        public void execute(Integer currentVersion) {
-          PhonegapUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
-          doMigration(currentVersion);
-        }
-      });
-    }
-    private void doMigration(final int number) {
-      final Integer newVersion = number + 1;
-      if (newVersion < callbacks.length) {
-        GwtUtils.deferredExecution(500, new Delegate<Void>() {
-          public void execute(Void element) {
-            db.transactionImpl(new SQLTransactionCallback() {
-              public void handleEvent(SQLTransaction transaction) {
-                callbacks[newVersion].doMigration(newVersion, transaction);
-              }
-            }, null, new SQLVoidCallback() {
-              public void handleEvent() {
-                db.updateVersion(newVersion, new SQLVoidCallback() {
-                  public void handleEvent() {
-                    doMigration(newVersion);
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    }
   }
   
   public static class WindowDatabase extends JavaScriptObject {
@@ -155,6 +122,7 @@ public abstract class WebSQLDao {
       $wnd.glbDebugHook(jso);
     }-*/;
     
+    /* 
     @Deprecated
     protected final native void changeVersionImpl(String oldVersion, String newVersion, SQLTransactionCallback callback, SQLVoidCallback successCallback) /*-{
       var jsCallback = null;
@@ -171,8 +139,20 @@ public abstract class WebSQLDao {
       }
       this.changeVersion(oldVersion, newVersion, jsCallback, jsSuccessCallback);
     }-*/;
+
+    public final void doTransaction(SQLTransactionCallback callback) {
+      transactionImpl(callback, null, null);
+    }
     
-    public final native void transactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
+    public final void doTransaction(SQLTransactionCallback callback, SQLVoidCallback successCallback) {
+      transactionImpl(callback, null, successCallback);
+    }
+    
+    public final void doTransaction(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) {
+      transactionImpl(callback, errorCallback, successCallback);
+    }
+    
+    protected final native void transactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
       var jsCallback = null;
       if (callback != null) {
         jsCallback = $entry(function(tr) {
@@ -199,7 +179,19 @@ public abstract class WebSQLDao {
       this.transaction(jsCallback, jsErrorCallback, jsSuccessCallback);
     }-*/;
     
-    public final native void readTransactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
+    public final void doReadTransaction(SQLTransactionCallback callback) {
+      readTransactionImpl(callback, null, null);
+    }
+    
+    public final void doReadTransaction(SQLTransactionCallback callback, SQLVoidCallback successCallback) {
+      readTransactionImpl(callback, null, successCallback);
+    }
+    
+    public final void doReadTransaction(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) {
+      readTransactionImpl(callback, errorCallback, successCallback);
+    }
+    
+    protected final native void readTransactionImpl(SQLTransactionCallback callback, SQLTransactionErrorCallback errorCallback, SQLVoidCallback successCallback) /*-{
       var jsCallback = null;
       if (callback != null) {
         jsCallback = $entry(function(tr) {
@@ -264,7 +256,7 @@ public abstract class WebSQLDao {
       }
       executeSqlImpl(sqlStatement, jsArguments, callback, errorCallback);
     }
-    public final native void executeSqlImpl (String sqlStatement, JsArrayMixed arguments, SQLStatementCallback callback, SQLStatementErrorCallback errorCallback) /*-{
+    protected final native void executeSqlImpl (String sqlStatement, JsArrayMixed arguments, SQLStatementCallback callback, SQLStatementErrorCallback errorCallback) /*-{
       var jsCallback = null;
       if (callback != null) {
         jsCallback = $entry(function(tr, rs) {
@@ -314,14 +306,33 @@ public abstract class WebSQLDao {
     public final native int getLength() /*-{
       return Math.floor(this.length);
     }-*/;
-    public final native JavaScriptObject getRow(int index) /*-{
-      return this.item(index);
+    public final native JavaScriptObject getRowAsJSO(int row) /*-{
+      return this.item(row);
     }-*/;
-    public final native Object getValue(int index, String name) /*-{
-      return this.item(index)[name];
+    public final native Object getValue(int row, String name) /*-{
+      return this.item(row)[name];
     }-*/;
-    public final native int getValueInt(int index, String name) /*-{
-      return Math.floor(this.item(index)[name]);
+    public final native int getValueInt(int row, String name) /*-{
+      return Math.floor(this.item(row)[name]);
+    }-*/;
+    public final Long getValueLong(int row, String name) {
+      Double doubleValue = getValueDouble(row, name);
+      return doubleValue != null ? doubleValue.longValue() : null;
+    }
+    public final Double getValueDouble(int row, String name) {
+      if (isNull(row, name)) {
+        return null;
+      }
+      return getValueDoubleImpl(row, name);
+    }
+    public final native double getValueDoubleImpl(int row, String name) /*-{
+      return this.item(row)[name];
+    }-*/;
+    public final native String getValueString(int row, String name) /*-{
+      return this.item(row)[name];
+    }-*/;
+    public final native boolean isNull(int row, String name) /*-{
+      return (this.item(row)[name] == null);
     }-*/;
   }
   
@@ -358,6 +369,47 @@ public abstract class WebSQLDao {
       return null;
     }
     return date.getTime();
+  }
+  
+  private void doMigrations(final MigratorCallback migrationCallbacks[]) {
+    new Migrator(WebSQLDao.this, migrationCallbacks);
+  }
+
+  protected static class Migrator {
+    MigratorCallback callbacks[];
+    WindowDatabase db;
+    public Migrator(WebSQLDao dao, MigratorCallback callbacks[]) {
+      this.db = dao.db;
+      this.callbacks = callbacks;
+      db.getVersionAsync(0, new Delegate<Integer>() {
+        public void execute(Integer currentVersion) {
+          PhonegapUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
+          doMigration(currentVersion);
+        }
+      });
+    }
+    private void doMigration(final int number) {
+      final Integer newVersion = number + 1;
+      if (newVersion < callbacks.length) {
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            db.transactionImpl(new SQLTransactionCallback() {
+              public void handleEvent(SQLTransaction transaction) {
+                callbacks[newVersion].doMigration(newVersion, transaction);
+              }
+            }, null, new SQLVoidCallback() {
+              public void handleEvent() {
+                db.updateVersion(newVersion, new SQLVoidCallback() {
+                  public void handleEvent() {
+                    doMigration(newVersion);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    }
   }
   
 }
