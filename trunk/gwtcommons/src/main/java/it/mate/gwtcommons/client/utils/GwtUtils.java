@@ -177,6 +177,19 @@ public class GwtUtils {
     return text.replaceAll(regex, replacement);
   }
   
+  public static String replaceEx(String text, String what, String replacement) {
+    int pos = -1;
+    while ((pos = text.indexOf(what)) > -1) {
+      String t1 = text.substring(0, pos);
+      String t2 = "";
+      if (pos + what.length() < text.length()) {
+        t2 = text.substring(pos + what.length());
+      }
+      text = t1 + replacement + t2;
+    }
+    return text;
+  }
+  
   public static Double parseDecimal (String text) {
     return decimalFMT.parse(text);
   }
