@@ -1,5 +1,6 @@
 package it.mate.phgcommons.client.ui.ph;
 
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
@@ -59,7 +60,21 @@ public class PhTextBox extends MTextBox {
   }
   
   public Double getValueAsDouble() {
-    return NumberFormat.getDecimalFormat().parse(getValue());
+    String textValue = getText();
+    PhonegapUtils.log("before replace " + textValue);
+    textValue = GwtUtils.replaceEx(textValue, ",", ".");
+    PhonegapUtils.log("after replace " + textValue);
+    try {
+      return NumberFormat.getDecimalFormat().parse(textValue);
+    } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
+  
+  public void setValue(Double value) {
+    if (value != null) {
+      setValue(NumberFormat.getDecimalFormat().format(value), true);
+    }
   }
 
 }
