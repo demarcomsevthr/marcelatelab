@@ -11,11 +11,11 @@ public class PrescrizioneTx implements Prescrizione {
   
   private String nome;
   
-  private Date dataInizio;
+  private Date dataInizio = new Date();
   
   private Date dataFine;
   
-  private Double quantita;
+  private Double quantita = 1d;
   
   private Long idComposizione;
   
