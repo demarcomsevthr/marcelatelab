@@ -39,7 +39,7 @@
     <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
     <gc:Spacer height="0.3em"/>
     <g:HorizontalPanel>
-      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" value="1" type="number"/>
+      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
       <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
     </g:HorizontalPanel>
     

@@ -14,18 +14,28 @@ public class MainPlace extends Place {
   public static final String TEST = "test";
   
   private String token;
-
+  
+  private Object model;
+  
   public MainPlace() {
     this.token = HOME;
-//  this.token = TEST;
   }
   
   public MainPlace(String token) {
+    this(token, null);
+  }
+  
+  public MainPlace(String token, Object model) {
     this.token = token;
+    this.model = model;
   }
   
   public String getToken() {
     return token;
+  }
+  
+  public Object getModel() {
+    return model;
   }
   
   public static class Tokenizer implements PlaceTokenizer<MainPlace> {

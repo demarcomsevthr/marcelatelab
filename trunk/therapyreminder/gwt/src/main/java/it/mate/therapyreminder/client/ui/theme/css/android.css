@@ -8,6 +8,7 @@
 
 .ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
   padding-top: 12px;
+  margin-top:  -10px;
 }
 
 .ui-um-combobox {
