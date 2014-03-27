@@ -10,7 +10,10 @@
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="New" ui:field="newBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
+    
+    <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>
   

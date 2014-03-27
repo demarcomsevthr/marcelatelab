@@ -14,15 +14,12 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Prescrizione;
-import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -37,6 +34,8 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class TherapyEditView extends BaseMgwtView <Presenter> {
+  
+  public static final String TAG_PRESCRIZIONE = "prescrizione";
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
@@ -70,6 +69,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   List<PhTimeBox> orariBox = new ArrayList<PhTimeBox>();
   
   int initialFillerHeight;
+  
+  private Prescrizione prescrizione;
   
   private String[] umDescriptions = new String[] {
       "Compress/a/e",
@@ -110,11 +111,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     tipoTerapiaCombo.addItem("C", "Oculare", false);
     tipoTerapiaCombo.addItem("L", "Sublinguale", false);
     tipoTerapiaCombo.addItem("A", "Altro", false);
-    /*
-    tipoTerapiaCombo.addItem("4", "Infusionale", false);
-    tipoTerapiaCombo.addItem("5", "Insulinica", false);
-    tipoTerapiaCombo.addItem("6", "Antibiotica", false);
-    */
     tipoTerapiaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         PhonegapUtils.log("selected value is " + event.getValue());
@@ -164,14 +160,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       }
     });
 
-    qtaBox.addBlurHandler(new BlurHandler() {
-      public void onBlur(BlurEvent event) {
+    qtaBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
         adaptUmDescription(qtaBox.getValue());
       }
     });
     
-    adaptUmDescription(qtaBox.getValue());
-
   }
   
   private void adaptUmDescription(String value) {
@@ -230,7 +224,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    
+    if (TAG_PRESCRIZIONE.equals(tag)) {
+      this.prescrizione = (Prescrizione)model;
+      titleBox.setValue(prescrizione.getNome());
+      inizioBox.setValue(prescrizione.getDataInizio());
+      qtaBox.setValue(prescrizione.getQuantita());
+    }
   }
   
   private void refreshScrollPanel() {
@@ -253,10 +252,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
-    Prescrizione prescrizione = new PrescrizioneTx();
     prescrizione.setNome(titleBox.getValue());
     prescrizione.setDataInizio(inizioBox.getValue());
-    prescrizione.setQuantita(qtaBox.getValueAsDouble());
+    Double qta = qtaBox.getValueAsDouble();
+    if (qta != null) {
+      prescrizione.setQuantita(qta);
+    }
     getPresenter().savePrescrizione(prescrizione);
   }
 

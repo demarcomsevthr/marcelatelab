@@ -77,8 +77,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private Delegate<RemoteUser> remoteUserDelegate;
   
-  private AppSqlDao appSqlDao;
-  
   
   
   @Override
@@ -153,8 +151,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       createPhoneDisplay(clientFactory);
     }
   
-    appSqlDao = new AppSqlDao();
-
     AppHistoryObserver historyObserver = new AppHistoryObserver();
 
     final MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
@@ -400,7 +396,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public AppSqlDao getAppSqlDao() {
-    return appSqlDao;
+    return ginjector.getAppSqlDao();
   }
   
 }

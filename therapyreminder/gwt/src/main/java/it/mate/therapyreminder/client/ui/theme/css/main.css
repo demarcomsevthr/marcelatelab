@@ -60,7 +60,6 @@ body {
 }
 
 .ui-homePanel .mgwt-TextArea .mgwt-InputBox-box {
-  margin: -10px -13px;
   color: black;
   background-color: white;
   margin: -5px -13px -9px -13px;
@@ -80,29 +79,9 @@ body {
   color: black;
   text-align: left;
   -webkit-user-modify: initial;
-  /* margin: -10px -13px; */
   padding-top: 3px;
   padding-left: 3px;
 }
-
-/* 
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:visited {
-  padding-top: 12px;
-}
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:active {
-  padding-top: 10px;
-}
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:focus {
-  padding-left: 3px;
-}
- */
-
-/* padding spostato in ios/android css
- */
-.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
-  margin-top:  -10px;
-}
-
 
 .phg-CalendarDialog-Header .phg-TouchHTML {
   padding-top: 0.5em;

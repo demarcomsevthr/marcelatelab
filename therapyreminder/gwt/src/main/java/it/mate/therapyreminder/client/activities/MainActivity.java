@@ -19,6 +19,9 @@ import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
+
+import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.InvocationException;
@@ -95,8 +98,25 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    retrieveModel();
   }
   
+  private void retrieveModel() {
+    if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
+      appSqlDao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
+        public void execute(List<Prescrizione> results) {
+          view.setModel(results, TherapyListView.TAG_PRESCRIZIONI);
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
+      if (place.getModel() != null) {
+        view.setModel(place.getModel(), TherapyEditView.TAG_PRESCRIZIONE);
+      }
+    }
+  }
+  
+  @SuppressWarnings("unused")
   private void processFailure(String message, Throwable caught) {
     setHeaderWaiting(false);
     if (caught != null) {
@@ -219,15 +239,27 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_LIST));
   }
 
-  public void goToTherapyEditView() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT));
+  public void goToTherapyEditView(Prescrizione prescrizione) {
+    if (prescrizione == null) {
+      prescrizione = new PrescrizioneTx();
+    }
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
   }
 
   @Override
   public void savePrescrizione(Prescrizione prescrizione) {
     appSqlDao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
-        PhonegapUtils.log("Inserted " + prescrizione);
+        goToTherapyListView();
+      }
+    });
+  }
+  
+  @Override
+  public void deletePrescrizioni(List<Prescrizione> prescrizioni) {
+    appSqlDao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
+      public void execute(Void element) {
+        goToTherapyListView();
       }
     });
   }

@@ -4,14 +4,16 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.therapyreminder.shared.model.Prescrizione;
+import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class AppSqlDao extends WebSQLDao {
   
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
-  
-  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, quantita, idComposizione, tipoRicorrenza"; 
   
   public AppSqlDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
@@ -71,37 +73,92 @@ public class AppSqlDao extends WebSQLDao {
     MIGRATION_CALLBACK_0 ,MIGRATION_CALLBACK_1 ,MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 ,MIGRATION_CALLBACK_4 
   };
   
-  public void savePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
-    
-    PhonegapUtils.log("before transaction");
-    db.transactionImpl(new SQLTransactionCallback() {
+  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, quantita, idComposizione, tipoRicorrenza"; 
+  
+  public void savePrescrizione(final Prescrizione pr, final Delegate<Prescrizione> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        if (prescrizione.getId() == null) {
-          
-          PhonegapUtils.log("before insert");
+        if (pr.getId() == null) {
           tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
               new Object[] {
-                prescrizione.getNome(), dateAsLong(prescrizione.getDataInizio()),
-                dateAsLong(prescrizione.getDataFine()), prescrizione.getQuantita(),
-                prescrizione.getIdComposizione(), prescrizione.getTipoRicorrenza()
+                pr.getNome(), dateAsLong(pr.getDataInizio()),
+                dateAsLong(pr.getDataFine()), pr.getQuantita(),
+                pr.getIdComposizione(), pr.getTipoRicorrenza()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-                  PhonegapUtils.log("Inserted id = " + rs.getInsertId());
-                  prescrizione.setId(rs.getInsertId());
-                  
-                  delegate.execute(prescrizione);
-                  
+                  pr.setId(rs.getInsertId());
+                  delegate.execute(pr);
                 }
               });
-          
         } else {
-          
-          //TODO: update
-          
+          String sql = "UPDATE prescrizioni SET ";
+          sql += " nome = ? , ";
+          sql += " dataInizio = ? , ";
+          sql += " dataFine = ? , ";
+          sql += " quantita = ? , ";
+          sql += " idComposizione = ? , ";
+          sql += " tipoRicorrenza = ? ";
+          sql += " WHERE id = ?";
+          tr.doExecuteSql(sql, new Object[] {
+              pr.getNome(), dateAsLong(pr.getDataInizio()),
+              dateAsLong(pr.getDataFine()), pr.getQuantita(),
+              pr.getIdComposizione(), pr.getTipoRicorrenza()
+              , pr.getId()
+            }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              delegate.execute(pr);
+            }
+          });
         }
       }
-    }, null, null);
-    
+    });
+  }
+  
+  public void findAllPrescrizioni(final Delegate<List<Prescrizione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni", null, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Prescrizione> results = new ArrayList<Prescrizione>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                Prescrizione prescrizione = new PrescrizioneTx();
+                prescrizione.setId(rs.getRows().getValueInt(it, "id"));
+                prescrizione.setNome(rs.getRows().getValueString(it, "nome"));
+                prescrizione.setDataInizio(new Date(rs.getRows().getValueLong(it, "dataInizio")));
+                prescrizione.setQuantita(rs.getRows().getValueDouble(it, "quantita"));
+                results.add(prescrizione);
+              }
+            }
+            delegate.execute(results);
+          }
+        });
+      }
+    });
+  }
+  
+  public void deletePrescrizioni(final List<Prescrizione> prescrizioni, final Delegate<Void> delegate) {
+    if (prescrizioni == null || prescrizioni.size() == 0) {
+      delegate.execute(null);
+    }
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(final SQLTransaction tr) {
+        deletePrescrizioneWithIterator(prescrizioni.iterator(), tr, delegate);
+      }
+    });
+  }
+  
+  private void deletePrescrizioneWithIterator(final Iterator<Prescrizione> it, SQLTransaction tr, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      Prescrizione prescrizione = it.next();
+      tr.doExecuteSql("DELETE FROM prescrizioni WHERE id = ?", new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          deletePrescrizioneWithIterator(it, tr, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
   }
 
 }
