@@ -259,10 +259,19 @@ public class StickAdapterImpl implements StickAdapter {
       LoggingUtils.debug(getClass(), "starting twilio rest client - with sms " + sms);
       
       TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+      int maxLenght = 160 - 25 - sms.getUser().getEmail().length();
       
-      String body = "From Post Scriptum App: " + sms.getBody();
-      body += " >> Sent by user " + sms.getUser().getEmail();
-      body += " >> This is an automatically generated message: please do not reply.";
+      String smsBody = sms.getBody();
+      if (smsBody == null) {
+        smsBody = "";
+      }
+      smsBody = smsBody.length() < maxLenght ? smsBody : smsBody.substring(0, maxLenght);
+      
+      String body = "Post Scriptum: ";
+      body += smsBody;
+      body += " >> By " + sms.getUser().getEmail();
+//    body += " >> This is an automatically generated message: please do not reply.";
       
       // Build a filter for the SmsList
       Map<String, String> params = new HashMap<String, String>();
