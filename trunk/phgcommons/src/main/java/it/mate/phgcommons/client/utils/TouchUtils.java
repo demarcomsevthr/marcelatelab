@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -144,4 +145,23 @@ public class TouchUtils {
     }, 100);
   }-*/;
 
+  
+  public static void modalDialogFocusPatchStart() {
+    JQuery allInputs = JQuery.select(":input");
+    for (Element elem : allInputs.toElements()) {
+      setElementDisabled(elem);
+    }
+  }
+  
+  public static void modalDialogFocusPatchEnd() {
+    JQuery allInputs = JQuery.select(":input");
+    for (Element elem : allInputs.toElements()) {
+      elem.removeAttribute("disabled");
+    }
+  }
+  
+  private static native void setElementDisabled(Element elem) /*-{
+    elem.disabled = "true";
+  }-*/;
+  
 }
