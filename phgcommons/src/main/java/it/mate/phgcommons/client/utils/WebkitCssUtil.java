@@ -1,8 +1,13 @@
 package it.mate.phgcommons.client.utils;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.widget.impl.ScrollPanelImpl;
 
 public class WebkitCssUtil {
 
@@ -41,6 +46,21 @@ public class WebkitCssUtil {
   
   public static native void setStyleProperty(Style style, String name, String value)/*-{
     style[name] = value;
+  }-*/;
+
+  public static void moveScrollPanelY(final ScrollPanelImpl scrollPanel, final int deltaY) {
+    GwtUtils.deferredExecution(100, new Delegate<Void>() {
+      public void execute(Void element) {
+        PhonegapUtils.log("scrollPanelImpl.y = " + scrollPanel.getY());
+        int newY = scrollPanel.getY() - deltaY;
+        Widget wrappedPanel = scrollPanel.iterator().next();
+        setTransform(wrappedPanel.getElement().getStyle(), "translate3d(0px, "+ newY +"px, 0px)");
+      }
+    });
+  }
+  
+  private native static void setTransform(Style style, String transform) /*-{
+    style['-webkit-transform'] = transform;
   }-*/;
   
 }

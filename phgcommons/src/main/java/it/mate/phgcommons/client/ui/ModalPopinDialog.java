@@ -1,7 +1,9 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.EventUtils;
+import it.mate.phgcommons.client.utils.TouchUtils;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Panel;
@@ -27,13 +29,23 @@ public class ModalPopinDialog extends PopinDialog {
     super.show();
     this.visible = true;
     makeModal();
+    TouchUtils.modalDialogFocusPatchStart();
   }
   
   @Override
   public void hide() {
     super.hide();
     this.visible = false;
+
     EventUtils.removeModalHandler(modalHandlerRegistration);
+    
+    // 01/04/2014: rimuovo il modal handler in differita
+    GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+      public void execute(Void element) {
+        TouchUtils.modalDialogFocusPatchEnd();
+      }
+    });
+    
   }
   
   public boolean isVisible() {
