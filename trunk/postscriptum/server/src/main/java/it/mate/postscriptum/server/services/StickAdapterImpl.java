@@ -77,7 +77,8 @@ public class StickAdapterImpl implements StickAdapter {
   public void checkScheduledMails() {
     Date NOW = new Date();
     LoggingUtils.debug(getClass(), "NOW IS " + NOW);
-    List<StickMail> mails = findAllMails();
+//  List<StickMail> mails = findAllMails();
+    List<StickMail> mails = findAllScheduledMails();
     for (StickMail mail : mails) {
       if (StickMail.Utils.isScheduled(mail)) {
         LoggingUtils.debug(getClass(), "found mail scheduled on " + mail.getScheduled());
@@ -98,6 +99,15 @@ public class StickAdapterImpl implements StickAdapter {
   public List<StickMail> findAllMails() {
     List<StickMailDs> mails = dao.findAll(StickMailDs.class);
     return CloneUtils.clone(mails, StickMailTx.class, StickMail.class);
+  }
+  
+  public List<StickMail> findAllScheduledMails() {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, StickMail.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
   }
 
   public StickMail update(StickMail entity) {
@@ -224,7 +234,8 @@ public class StickAdapterImpl implements StickAdapter {
   public void checkScheduledSMSs() {
     Date NOW = new Date();
     LoggingUtils.debug(getClass(), "NOW IS " + NOW);
-    List<StickSms> smss = findAllSMSs();
+//  List<StickSms> smss = findAllSMSs();
+    List<StickSms> smss = findAllScheduledSMSs();
     for (StickSms sms : smss) {
       if (StickSms.Utils.isScheduled(sms)) {
         LoggingUtils.debug(getClass(), "found sms scheduled on " + sms.getScheduled());
@@ -247,6 +258,15 @@ public class StickAdapterImpl implements StickAdapter {
     return CloneUtils.clone(smss, StickSmsTx.class, StickSms.class);
   }
 
+  public List<StickSms> findAllScheduledSMSs() {
+    List<StickSmsDs> results = dao.findList(StickSmsDs.class, "state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, StickSms.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickSmsTx.class, StickSms.class);
+  }
+  
   public StickSms update(StickSms entity) {
     StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
     ds = dao.update(ds);
