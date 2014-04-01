@@ -13,6 +13,10 @@
 
 @eval firstRunPanelLeft it.mate.therapyreminder.client.view.HomeView.getFirstRunPanelLeft();
 
+@eval bottomBarHeight it.mate.therapyreminder.client.view.TherapyEditView.getBottomBarHeight();
+
+@eval bottomBarTop it.mate.therapyreminder.client.view.TherapyEditView.getBottomBarTop();
+
 body {
   background-image: none;
   background-color: rgba(238, 238, 238, 0.8);
@@ -374,3 +378,39 @@ body {
   background: url('main/images/preferences-128.png') no-repeat 4px 2px;
 }
 
+.ui-bottom-button-bar {
+  position: absolute;
+  top: bottomBarTop;
+  height: bottomBarHeight;
+  width: 100%;
+  background: rgb(128, 128, 128);
+  padding-left: 16px;
+}
+
+.ui-bottom-action-btn {
+  font-size: 11px;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+  width: 50px;
+  height: 52px;
+  padding-top: 16px;
+  padding-left: 40px;
+  border-right: 1px solid;
+}
+
+.ui-bottom-action-btn a {
+  color: rgb(246, 246, 0);
+}
+
+.ui-bottom-action-what-btn {
+  background: url('main/images/what-32.png') no-repeat 0px 0px;
+}
+
+.ui-bottom-action-when-btn {
+  background: url('main/images/when-32.png') no-repeat 0px 0px;
+}
+
+.ui-bottom-action-hours-btn {
+  background: url('main/images/hours-32.png') no-repeat 0px 0px;
+}
