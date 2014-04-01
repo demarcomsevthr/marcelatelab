@@ -1,15 +1,17 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.ui.Spacer;
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.ui.StatePanel;
+import it.mate.gwtcommons.client.utils.StatePanelUtil;
+import it.mate.phgcommons.client.ui.HasTag;
+import it.mate.phgcommons.client.ui.TouchAnchor;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
@@ -19,15 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
@@ -64,11 +67,19 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   @UiField PhTextBox qtaBox;
   
-  @UiField Spacer filler;
+//@UiField Spacer filler;
+  
+  @UiField StatePanel estremiPrescrizionePanel;
+  @UiField StatePanel ricorrenzaPrescrizionePanel;
+  @UiField StatePanel orariPrescrizionePanel;
+  
+  StatePanelUtil statePanelUtil = new StatePanelUtil();
   
   List<PhTimeBox> orariBox = new ArrayList<PhTimeBox>();
   
-  int initialFillerHeight;
+//int initialFillerHeight;
+  
+  private Widget bottomBar = null;
   
   private Prescrizione prescrizione;
   
@@ -98,7 +109,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    initialFillerHeight = filler.getOffsetHeight();
+//  initialFillerHeight = filler.getOffsetHeight();
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
@@ -123,24 +134,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     tipoRicorrenzaCombo.addItem("4", "Mensile", false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
-        if ("1".equals(event.getValue())) {
-          ricorrenzaGiornalieraPanel.setVisible(false);
-          ricorrenzaSettimanalePanel.setVisible(false);
-          ricorrenzaMensilePanel.setVisible(false);
-        } else if ("2".equals(event.getValue())) {
-          ricorrenzaGiornalieraPanel.setVisible(true);
-          ricorrenzaSettimanalePanel.setVisible(false);
-          ricorrenzaMensilePanel.setVisible(false);
-        } else if ("3".equals(event.getValue())) {
-          ricorrenzaGiornalieraPanel.setVisible(false);
-          ricorrenzaSettimanalePanel.setVisible(true);
-          ricorrenzaMensilePanel.setVisible(false);
-        } else if ("4".equals(event.getValue())) {
-          ricorrenzaGiornalieraPanel.setVisible(false);
-          ricorrenzaSettimanalePanel.setVisible(false);
-          ricorrenzaMensilePanel.setVisible(true);
-        }
-        refreshScrollPanel();
+        checkTipoRicorrenzaValue();
       }
     });
     
@@ -148,15 +142,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     tipoOrariCombo.addItem("2", "A orari fissi", false);
     tipoOrariCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
-        if ("1".equals(event.getValue())) {
-          orariRegolariPanel.setVisible(true);
-          orariFissiPanel.setVisible(false);
-        } else if ("2".equals(event.getValue())) {
-          orariRegolariPanel.setVisible(false);
-          orariFissiPanel.setVisible(true);
-          showOrariListPanel();
-        }
-        refreshScrollPanel();
+        checkTipoOrarioValue();
       }
     });
 
@@ -166,6 +152,64 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       }
     });
     
+    statePanelUtil.add(estremiPrescrizionePanel);
+    statePanelUtil.add(ricorrenzaPrescrizionePanel);
+    statePanelUtil.add(orariPrescrizionePanel);
+    statePanelUtil.setCurrentState(estremiPrescrizionePanel.getStateId());
+    
+    initBottomBar();
+    
+  }
+  
+  private void checkTipoRicorrenzaValue() {
+    String value = tipoRicorrenzaCombo.getValue();
+    if ("1".equals(value)) {
+      ricorrenzaGiornalieraPanel.setVisible(false);
+      ricorrenzaSettimanalePanel.setVisible(false);
+      ricorrenzaMensilePanel.setVisible(false);
+    } else if ("2".equals(value)) {
+      ricorrenzaGiornalieraPanel.setVisible(true);
+      ricorrenzaSettimanalePanel.setVisible(false);
+      ricorrenzaMensilePanel.setVisible(false);
+    } else if ("3".equals(value)) {
+      ricorrenzaGiornalieraPanel.setVisible(false);
+      ricorrenzaSettimanalePanel.setVisible(true);
+      ricorrenzaMensilePanel.setVisible(false);
+    } else if ("4".equals(value)) {
+      ricorrenzaGiornalieraPanel.setVisible(false);
+      ricorrenzaSettimanalePanel.setVisible(false);
+      ricorrenzaMensilePanel.setVisible(true);
+    } else {
+      ricorrenzaGiornalieraPanel.setVisible(false);
+      ricorrenzaSettimanalePanel.setVisible(false);
+      ricorrenzaMensilePanel.setVisible(false);
+    }
+    refreshScrollPanel();
+  }
+  
+  private void checkTipoOrarioValue() {
+    String value = tipoOrariCombo.getValue();
+    if ("1".equals(value)) {
+      orariRegolariPanel.setVisible(true);
+      orariFissiPanel.setVisible(false);
+    } else if ("2".equals(value)) {
+      orariRegolariPanel.setVisible(false);
+      orariFissiPanel.setVisible(true);
+      showOrariListPanel();
+      refreshScrollPanel();
+    } else {
+      orariRegolariPanel.setVisible(false);
+      orariFissiPanel.setVisible(false);
+    }
+  }
+  
+  @Override
+  public void onUnload() {
+    if (bottomBar != null) {
+      bottomBar.setVisible(false);
+      bottomBar = null;
+    }
+    super.onUnload();
   }
   
   private void adaptUmDescription(String value) {
@@ -208,7 +252,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     });
     orariListPanel.add(row);
     refreshScrollPanel();
-    addScrollY(50);
+//  WebkitCssUtil.moveScrollPanelY(getScrollPanelImpl(), 50);
   }
   
   private PhTimeBox createOrarioBox() {
@@ -235,21 +279,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   private void refreshScrollPanel() {
     getScrollPanel().refresh();
   }
-  
-  private void addScrollY(final int deltaY) {
-    GwtUtils.deferredExecution(100, new Delegate<Void>() {
-      public void execute(Void element) {
-        PhonegapUtils.log("scrollPanelImpl.y = " + getScrollPanelImpl().getY());
-        int newY = getScrollPanelImpl().getY() - deltaY;
-        setTransform(wrapperPanel.getElement().getStyle(), "translate3d(0px, "+ newY +"px, 0px)");
-      }
-    });
-  }
-  
-  private native void setTransform(Style style, String transform) /*-{
-    style['-webkit-transform'] = transform;
-  }-*/;
-  
+
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
     prescrizione.setNome(titleBox.getValue());
@@ -259,6 +289,47 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       prescrizione.setQuantita(qta);
     }
     getPresenter().savePrescrizione(prescrizione);
+  }
+
+  private void initBottomBar() {
+    HorizontalPanel bottomBar = new HorizontalPanel();
+    bottomBar.addStyleName("ui-bottom-button-bar");
+    bottomBar.setSpacing(0);
+    initBottomBarItem(bottomBar, "What", "what", "estremiPrescrizionePanel");
+    initBottomBarItem(bottomBar, "When", "when", "ricorrenzaPrescrizionePanel");
+    initBottomBarItem(bottomBar, "Hours", "hours", "orariPrescrizionePanel");
+    RootPanel.get().add(bottomBar);
+    this.bottomBar = bottomBar;
+  }
+  
+  private void initBottomBarItem(Panel bottomBar, String text, String css, String tag) {
+    TouchAnchor button = new TouchAnchor();
+    button.setText(text);
+    button.addStyleName("ui-bottom-action-btn");
+    button.addStyleName("ui-bottom-action-"+css+"-btn");
+    button.setTag(tag);
+    button.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        HasTag taggable = (HasTag)event.getSource();
+        statePanelUtil.setCurrentState(taggable.getTag());
+        checkTipoOrarioValue();
+        checkTipoRicorrenzaValue();
+      }
+    });
+    bottomBar.add(button);
+  }
+  
+  public static int getBottomBarHeightPx() {
+    return (Window.getClientHeight() / 8);
+  }
+  public static String getBottomBarHeight() {
+    return getBottomBarHeightPx()+"px";
+  }
+  public static int getBottomBarTopPx() {
+    return (Window.getClientHeight() - getBottomBarHeightPx());
+  }
+  public static String getBottomBarTop() {
+    return getBottomBarTopPx()+"px";
   }
 
 }

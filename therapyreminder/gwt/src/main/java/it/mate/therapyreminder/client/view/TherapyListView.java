@@ -151,7 +151,7 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
       rowHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
-
+            getPresenter().goToTherapyEditView(prescrizione);
           }
         }
       });
@@ -159,7 +159,7 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
       rowHtml.addLongTapHandler(new LongTapHandler() {
         public void onLongTap(LongTapEvent event) {
           PhonegapUtils.log("long tapped " + prescrizione);
-          getPresenter().goToTherapyEditView(prescrizione);
+//        getPresenter().goToTherapyEditView(prescrizione);
         }
       });
       

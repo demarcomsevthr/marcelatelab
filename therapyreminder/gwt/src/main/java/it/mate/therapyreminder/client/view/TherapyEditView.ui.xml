@@ -15,91 +15,103 @@
       <p:TouchButton text="Cancel" ui:field="cancelBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
-    <!-- .............................................................................. -->
     <hr class="ui-view-separator-1"/>
     
-    <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
-    <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    <gc:StatePanel stateId="estremiPrescrizionePanel" ui:field="estremiPrescrizionePanel">
+      <g:HTMLPanel>
+      
+        <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
+        <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+        
+        <hr class="ui-view-separator"/>
+        
+        <g:Label text="Tipo di terapia:" addStyleNames="ui-field-label"/>
+        <p:TouchCombo ui:field="tipoTerapiaCombo" addStyleNames="ui-app-combobox"/>
+        
+        <hr class="ui-view-separator"/>
+        
+        <g:Label text="Data inizio:" addStyleNames="ui-field-label"/>
+        <ph:PhCalendarBox ui:field="inizioBox" addStyleNames="ui-app-calbox"/>
+        
+        <hr class="ui-view-separator"/>
+        
+        <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
+        <gc:Spacer height="0.3em"/>
+        <g:HorizontalPanel>
+          <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+          <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
+        </g:HorizontalPanel>
+        
+        <gc:Spacer height="2em"/>
+        
+      </g:HTMLPanel>
+    </gc:StatePanel>
     
-    <!-- .............................................................................. -->
-    <hr class="ui-view-separator"/>
-    
-    <g:Label text="Tipo di terapia:" addStyleNames="ui-field-label"/>
-    <p:TouchCombo ui:field="tipoTerapiaCombo" addStyleNames="ui-app-combobox"/>
-    
-    <!-- .............................................................................. -->
-    <hr class="ui-view-separator"/>
-    
-    <g:Label text="Data inizio:" addStyleNames="ui-field-label"/>
-    <ph:PhCalendarBox ui:field="inizioBox" addStyleNames="ui-app-calbox"/>
-    
-    <!-- .............................................................................. -->
-    <hr class="ui-view-separator"/>
-    
-    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
-    <gc:Spacer height="0.3em"/>
-    <g:HorizontalPanel>
-      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-      <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
-    </g:HorizontalPanel>
-    
-    <!-- .............................................................................. -->
-    <hr class="ui-view-separator"/>
-    
-    <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label"/>
-    <p:TouchCombo ui:field="tipoRicorrenzaCombo" addStyleNames="ui-app-combobox"/>
-    
-    <g:VerticalPanel ui:field="ricorrenzaGiornalieraPanel" spacing="0" visible="false">
-      <g:HorizontalPanel>
-        <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
-        <p:MTextBoxPatched ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
-        <g:Label text="giorni" addStyleNames="ui-inline-label, ui-day-label"/>
-      </g:HorizontalPanel>    
-    </g:VerticalPanel>
-    
-    <g:VerticalPanel ui:field="ricorrenzaSettimanalePanel" spacing="0" visible="false">
-      <g:HorizontalPanel>
-        <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
-        <p:MTextBoxPatched ui:field="rangeWeekBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
-        <g:Label text="settimane" addStyleNames="ui-inline-label, ui-day-label"/>
-      </g:HorizontalPanel>    
-    </g:VerticalPanel>
-    
-    <g:VerticalPanel ui:field="ricorrenzaMensilePanel" spacing="0" visible="false">
-      <g:HorizontalPanel>
-        <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
-        <p:MTextBoxPatched ui:field="rangeMonthBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
-        <g:Label text="mesi" addStyleNames="ui-inline-label, ui-day-label"/>
-      </g:HorizontalPanel>    
-    </g:VerticalPanel>
-    
-    <!-- .............................................................................. -->
-    <hr class="ui-view-separator"/>
-    
-    <g:Label text="Orari di assunzione:" addStyleNames="ui-field-label"/>
-    <p:TouchCombo ui:field="tipoOrariCombo" addStyleNames="ui-app-combobox" itemWidth="10em"/>
-    
-    <g:VerticalPanel ui:field="orariRegolariPanel" spacing="0" visible="false">
-      <g:HorizontalPanel>
-        <g:Label text="Ogni:" addStyleNames="ui-inline-label" width="7em"/>
-        <p:MTextBoxPatched ui:field="rangeOrariBox" addStyleNames="ui-app-textbox, ui-hourrange-box"/>
-        <g:Label text="ore" addStyleNames="ui-inline-label, ui-hours-label"/>
-      </g:HorizontalPanel>    
-      <g:HorizontalPanel>
-        <g:Label text="A partire dalle:" addStyleNames="ui-inline-label" width="7em"/>
-        <ph:PhTimeBox ui:field="orarioInizioBox" addStyleNames="ui-app-timebox"/>
-      </g:HorizontalPanel>    
-    </g:VerticalPanel>
-    
-    <g:VerticalPanel ui:field="orariFissiPanel" spacing="0" visible="false">
-      <g:HorizontalPanel>
-        <g:Label text="Alle:" addStyleNames="ui-inline-label"/>
-        <g:VerticalPanel ui:field="orariListPanel">
+    <gc:StatePanel stateId="ricorrenzaPrescrizionePanel" ui:field="ricorrenzaPrescrizionePanel">
+      <g:HTMLPanel>
+      
+        <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label"/>
+        <p:TouchCombo ui:field="tipoRicorrenzaCombo" addStyleNames="ui-app-combobox"/>
+        
+        <g:VerticalPanel ui:field="ricorrenzaGiornalieraPanel" spacing="0" visible="false">
+          <g:HorizontalPanel>
+            <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
+            <p:MTextBoxPatched ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
+            <g:Label text="giorni" addStyleNames="ui-inline-label, ui-day-label"/>
+          </g:HorizontalPanel>    
         </g:VerticalPanel>
-      </g:HorizontalPanel>
-    </g:VerticalPanel>
+        
+        <g:VerticalPanel ui:field="ricorrenzaSettimanalePanel" spacing="0" visible="false">
+          <g:HorizontalPanel>
+            <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
+            <p:MTextBoxPatched ui:field="rangeWeekBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
+            <g:Label text="settimane" addStyleNames="ui-inline-label, ui-day-label"/>
+          </g:HorizontalPanel>    
+        </g:VerticalPanel>
+        
+        <g:VerticalPanel ui:field="ricorrenzaMensilePanel" spacing="0" visible="false">
+          <g:HorizontalPanel>
+            <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
+            <p:MTextBoxPatched ui:field="rangeMonthBox" addStyleNames="ui-app-textbox, ui-range-box" value="1"/>
+            <g:Label text="mesi" addStyleNames="ui-inline-label, ui-day-label"/>
+          </g:HorizontalPanel>    
+        </g:VerticalPanel>
+      
+        <gc:Spacer height="2em"/>
     
-    <gc:Spacer ui:field="filler" height="2em"/>
+      </g:HTMLPanel>
+    </gc:StatePanel>
+    
+    <gc:StatePanel stateId="orariPrescrizionePanel" ui:field="orariPrescrizionePanel">
+      <g:HTMLPanel>
+      
+        <g:Label text="Orari di assunzione:" addStyleNames="ui-field-label"/>
+        <p:TouchCombo ui:field="tipoOrariCombo" addStyleNames="ui-app-combobox" itemWidth="10em"/>
+        
+        <g:VerticalPanel ui:field="orariRegolariPanel" spacing="0" visible="false">
+          <g:HorizontalPanel>
+            <g:Label text="Ogni:" addStyleNames="ui-inline-label" width="7em"/>
+            <p:MTextBoxPatched ui:field="rangeOrariBox" addStyleNames="ui-app-textbox, ui-hourrange-box"/>
+            <g:Label text="ore" addStyleNames="ui-inline-label, ui-hours-label"/>
+          </g:HorizontalPanel>    
+          <g:HorizontalPanel>
+            <g:Label text="A partire dalle:" addStyleNames="ui-inline-label" width="7em"/>
+            <ph:PhTimeBox ui:field="orarioInizioBox" addStyleNames="ui-app-timebox"/>
+          </g:HorizontalPanel>    
+        </g:VerticalPanel>
+        
+        <g:VerticalPanel ui:field="orariFissiPanel" spacing="0" visible="false">
+          <g:HorizontalPanel>
+            <g:Label text="Alle:" addStyleNames="ui-inline-label"/>
+            <g:VerticalPanel ui:field="orariListPanel">
+            </g:VerticalPanel>
+          </g:HorizontalPanel>
+        </g:VerticalPanel>
+      
+        <gc:Spacer height="4em"/>
+    
+      </g:HTMLPanel>
+    </gc:StatePanel>
     
   </g:HTMLPanel>
   

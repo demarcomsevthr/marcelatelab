@@ -90,12 +90,12 @@ public class CustomTheme {
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios.css"})
+    @Source({"css/main.css", "css/ios.css", "css/ipad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios.css"})
+    @Source({"css/main.css", "css/ios.css", "css/ipad.css"})
     public CustomMainCss css();
   }
   
