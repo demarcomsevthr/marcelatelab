@@ -581,6 +581,7 @@ public class GwtUtils {
     return getDictionary().get(name);
   }
   
+  @Deprecated
   public static void setClientAttribute(Object value) {
     setClientAttribute(value.getClass().getName(), value);
   }
@@ -597,6 +598,7 @@ public class GwtUtils {
     getDictionary().remove(name);
   }
   
+  @Deprecated
   @SuppressWarnings("unchecked")
   public static <T> T getClientAttribute(Class<T> type) {
     return (T)getClientAttribute(type.getName());
