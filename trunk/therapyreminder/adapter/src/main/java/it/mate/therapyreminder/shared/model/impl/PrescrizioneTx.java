@@ -21,6 +21,10 @@ public class PrescrizioneTx implements Prescrizione {
   
   private String tipoRicorrenza;
   
+  private Integer valoreRicorrenza = 1;
+  
+  private String codUdM;
+  
   @Override
   public String toString() {
     return "PrescrizioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", quantita=" + quantita
@@ -64,7 +68,9 @@ public class PrescrizioneTx implements Prescrizione {
   }
 
   public void setQuantita(Double quantita) {
-    this.quantita = quantita;
+    if (quantita != null) {
+      this.quantita = quantita;
+    }
   }
 
   public Long getIdComposizione() {
@@ -82,7 +88,23 @@ public class PrescrizioneTx implements Prescrizione {
   public void setTipoRicorrenza(String tipoRicorrenza) {
     this.tipoRicorrenza = tipoRicorrenza;
   }
-  
-  
+
+  public String getCodUdM() {
+    return codUdM;
+  }
+
+  public void setCodUdM(String codUdM) {
+    this.codUdM = codUdM;
+  }
+
+  public Integer getValoreRicorrenza() {
+    return valoreRicorrenza;
+  }
+
+  public void setValoreRicorrenza(Integer valoreRicorrenza) {
+    if (valoreRicorrenza != null) {
+      this.valoreRicorrenza = valoreRicorrenza;
+    }
+  }
 
 }
