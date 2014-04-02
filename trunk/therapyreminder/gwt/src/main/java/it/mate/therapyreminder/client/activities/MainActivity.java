@@ -3,6 +3,7 @@ package it.mate.therapyreminder.client.activities;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -19,6 +20,7 @@ import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
 import java.util.List;
@@ -44,6 +46,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private AppSqlDao appSqlDao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
   
+  private final static String ALL_UDM_KEY = "AllUdM";
+
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
   }
@@ -248,7 +252,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void savePrescrizione(Prescrizione prescrizione) {
-    appSqlDao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+    appSqlDao.updatePrescrizione(prescrizione, new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
         goToTherapyListView();
       }
@@ -264,4 +268,19 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
 
+  @SuppressWarnings("unchecked")
+  public void findAllUdM(final Delegate<List<UdM>> delegate) {
+    List<UdM> results = (List<UdM>)GwtUtils.getClientAttribute(ALL_UDM_KEY);
+    if (results == null) {
+      appSqlDao.findAllUdM(new Delegate<List<UdM>>() {
+        public void execute(List<UdM> results) {
+          GwtUtils.setClientAttribute(ALL_UDM_KEY, results);
+          delegate.execute(results);
+        }
+      });
+    } else {
+      delegate.execute(results);
+    }
+  }
+  
 }

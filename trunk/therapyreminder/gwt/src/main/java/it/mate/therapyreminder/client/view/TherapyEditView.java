@@ -2,6 +2,7 @@ package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.StatePanel;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.StatePanelUtil;
 import it.mate.phgcommons.client.ui.HasTag;
 import it.mate.phgcommons.client.ui.TouchAnchor;
@@ -10,12 +11,11 @@ import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
-import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Prescrizione;
+import it.mate.therapyreminder.shared.model.UdM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,6 +44,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void savePrescrizione(Prescrizione prescrizione);
+    public void findAllUdM(Delegate<List<UdM>> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -53,25 +55,21 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   @UiField MTextBox titleBox;
   @UiField PhCalendarBox inizioBox;
-  
-  @UiField TouchCombo tipoTerapiaCombo;
+//@UiField TouchCombo tipoTerapiaCombo;
   @UiField TouchCombo tipoRicorrenzaCombo;
-  @UiField Panel ricorrenzaGiornalieraPanel;
-  @UiField Panel ricorrenzaSettimanalePanel;
-  @UiField Panel ricorrenzaMensilePanel;
   @UiField TouchCombo tipoOrariCombo;
   @UiField Panel orariRegolariPanel;
   @UiField Panel orariFissiPanel;
   @UiField ComplexPanel orariListPanel;
   @UiField TouchCombo umCombo;
-  
+  @UiField Panel ricorrenzaPanel;
+  @UiField Label ricorrenzaLabel;
   @UiField PhTextBox qtaBox;
-  
-//@UiField Spacer filler;
-  
   @UiField StatePanel estremiPrescrizionePanel;
   @UiField StatePanel ricorrenzaPrescrizionePanel;
   @UiField StatePanel orariPrescrizionePanel;
+  @UiField PhTextBox rangeBox;
+//@UiField Spacer filler;
   
   StatePanelUtil statePanelUtil = new StatePanelUtil();
   
@@ -82,7 +80,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   private Widget bottomBar = null;
   
   private Prescrizione prescrizione;
-  
+
+  /*
   private String[] umDescriptions = new String[] {
       "Compress/a/e",
       "Fial/a/e",
@@ -93,9 +92,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       "Garz/a/e",
       "Flacon/e/i",
       "Capsul/a/e",
-      "Confett/o/i",
-      "Flacon/e/i"
+      "Confett/o/i"
     };
+  */
   
   public TherapyEditView() {
     initUI();
@@ -113,6 +112,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
+    /*
     tipoTerapiaCombo.addItem("O", "Orale", false);
     tipoTerapiaCombo.addItem("I", "Intramuscolare", false);
     tipoTerapiaCombo.addItem("E", "Endovenosa", false);
@@ -127,19 +127,19 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
         PhonegapUtils.log("selected value is " + event.getValue());
       }
     });
+    */
     
-//  tipoRicorrenzaCombo.addItem("1", "Tutti i giorni", false);
-    tipoRicorrenzaCombo.addItem("2", "Giornaliera", false);
-    tipoRicorrenzaCombo.addItem("3", "Settimanale", false);
-    tipoRicorrenzaCombo.addItem("4", "Mensile", false);
+    tipoRicorrenzaCombo.addItem("G", "Giornaliera", false);
+    tipoRicorrenzaCombo.addItem("S", "Settimanale", false);
+    tipoRicorrenzaCombo.addItem("M", "Mensile", false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoRicorrenzaValue();
       }
     });
     
-    tipoOrariCombo.addItem("1", "A intervalli regolari", false);
-    tipoOrariCombo.addItem("2", "A orari fissi", false);
+    tipoOrariCombo.addItem("I", "A intervalli regolari", false);
+    tipoOrariCombo.addItem("O", "A orari fissi", false);
     tipoOrariCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoOrarioValue();
@@ -163,36 +163,27 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   private void checkTipoRicorrenzaValue() {
     String value = tipoRicorrenzaCombo.getValue();
-    if ("1".equals(value)) {
-      ricorrenzaGiornalieraPanel.setVisible(false);
-      ricorrenzaSettimanalePanel.setVisible(false);
-      ricorrenzaMensilePanel.setVisible(false);
-    } else if ("2".equals(value)) {
-      ricorrenzaGiornalieraPanel.setVisible(true);
-      ricorrenzaSettimanalePanel.setVisible(false);
-      ricorrenzaMensilePanel.setVisible(false);
-    } else if ("3".equals(value)) {
-      ricorrenzaGiornalieraPanel.setVisible(false);
-      ricorrenzaSettimanalePanel.setVisible(true);
-      ricorrenzaMensilePanel.setVisible(false);
-    } else if ("4".equals(value)) {
-      ricorrenzaGiornalieraPanel.setVisible(false);
-      ricorrenzaSettimanalePanel.setVisible(false);
-      ricorrenzaMensilePanel.setVisible(true);
+    if ("G".equals(value)) {
+      ricorrenzaLabel.setText("giorni");
+      ricorrenzaPanel.setVisible(true);
+    } else if ("S".equals(value)) {
+      ricorrenzaLabel.setText("settimane");
+      ricorrenzaPanel.setVisible(true);
+    } else if ("M".equals(value)) {
+      ricorrenzaLabel.setText("mesi");
+      ricorrenzaPanel.setVisible(true);
     } else {
-      ricorrenzaGiornalieraPanel.setVisible(false);
-      ricorrenzaSettimanalePanel.setVisible(false);
-      ricorrenzaMensilePanel.setVisible(false);
+      ricorrenzaPanel.setVisible(false);
     }
     refreshScrollPanel();
   }
   
   private void checkTipoOrarioValue() {
     String value = tipoOrariCombo.getValue();
-    if ("1".equals(value)) {
+    if ("I".equals(value)) {
       orariRegolariPanel.setVisible(true);
       orariFissiPanel.setVisible(false);
-    } else if ("2".equals(value)) {
+    } else if ("O".equals(value)) {
       orariRegolariPanel.setVisible(false);
       orariFissiPanel.setVisible(true);
       showOrariListPanel();
@@ -213,12 +204,19 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   }
   
   private void adaptUmDescription(String value) {
-    boolean singular = "1".equals(value.trim());
-    for (int it = 0; it < umDescriptions.length; it++) {
-      String[] tokens = umDescriptions[it].split("/");
-      String desc = tokens[0] + (singular ? tokens[1] : tokens[2]);
-      umCombo.addItem(""+it, desc, it == 0 ? true : false);
-    }
+    final boolean singular = "1".equals(value.trim());
+    getPresenter().findAllUdM(new Delegate<List<UdM>>() {
+      public void execute(List<UdM> udms) {
+        if (udms == null)
+          return;
+        for (int it = 0; it < udms.size(); it++) {
+          UdM udm = udms.get(it);
+          String[] tokens = udm.getDescrizione().split("/");
+          String desc = tokens[0] + (singular ? tokens[1] : tokens[2]);
+          umCombo.addItem(udm.getCodice(), desc, it == 0 ? true : false);
+        }
+      }
+    });
   }
   
   private void showOrariListPanel() {
@@ -273,6 +271,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       titleBox.setValue(prescrizione.getNome());
       inizioBox.setValue(prescrizione.getDataInizio());
       qtaBox.setValue(prescrizione.getQuantita());
+      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
+      umCombo.setValue(prescrizione.getCodUdM());
+      rangeBox.setValue(prescrizione.getValoreRicorrenza());
     }
   }
   
@@ -284,10 +285,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   public void onSaveBtn (TouchEndEvent event) {
     prescrizione.setNome(titleBox.getValue());
     prescrizione.setDataInizio(inizioBox.getValue());
-    Double qta = qtaBox.getValueAsDouble();
-    if (qta != null) {
-      prescrizione.setQuantita(qta);
-    }
+    prescrizione.setQuantita(qtaBox.getValueAsDouble());
+    prescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
+    prescrizione.setCodUdM(umCombo.getValue());
+    prescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
     getPresenter().savePrescrizione(prescrizione);
   }
 
