@@ -61,9 +61,7 @@ public class PhTextBox extends MTextBox {
   
   public Double getValueAsDouble() {
     String textValue = getText();
-    PhonegapUtils.log("before replace " + textValue);
     textValue = GwtUtils.replaceEx(textValue, ",", ".");
-    PhonegapUtils.log("after replace " + textValue);
     try {
       return NumberFormat.getDecimalFormat().parse(textValue);
     } catch (NumberFormatException ex) {
@@ -71,7 +69,25 @@ public class PhTextBox extends MTextBox {
     }
   }
   
-  public void setValue(Double value) {
+  public Integer getValueAsInteger() {
+    String textValue = getText();
+    try {
+      return Integer.parseInt(textValue);
+    } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
+  
+  public Long getValueAsLong() {
+    String textValue = getText();
+    try {
+      return Long.parseLong(textValue);
+    } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
+  
+  public void setValue(Number value) {
     if (value != null) {
       setValue(NumberFormat.getDecimalFormat().format(value), true);
     }

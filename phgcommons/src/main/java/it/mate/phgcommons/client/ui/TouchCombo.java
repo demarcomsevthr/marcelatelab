@@ -73,6 +73,12 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   }
   
   public void addItem(String value, String description, boolean selected) {
+    for (Item it : items) {
+      if (it.value.equals(value)) {
+        it.description = description;
+        return;
+      }
+    }
     Item item = new Item(value, description);
     items.add(item);
     if (selected) {
@@ -184,12 +190,12 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   public void setValue(String value, boolean fireEvents) {
     this.value = value;
     for (Item item : items) {
-      if (value.equals(item.value)) {
+      if (item.value.equals(value)) {
         setText(item.description);
+        if (fireEvents) {
+          SelectedChangeEvent.fire(this, value);
+        }
       }
-    }
-    if (fireEvents) {
-      SelectedChangeEvent.fire(this, value);
     }
   }
   
