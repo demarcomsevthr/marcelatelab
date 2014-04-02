@@ -33,4 +33,12 @@ public interface Prescrizione extends Serializable {
 
   public String getNome();
 
+  public String getCodUdM();
+
+  public void setCodUdM(String codUdM);
+
+  public Integer getValoreRicorrenza();
+
+  public void setValoreRicorrenza(Integer valoreRicorrenza);
+  
 }
