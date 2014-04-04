@@ -15,6 +15,8 @@ import java.util.List;
 
 public class AppSqlDao extends WebSQLDao {
   
+  private final static boolean DROP_TABLES_ON_OPEN_DATABASE = false;
+  
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
   private final static String UDM_FIELDS = "codice, descrizione, sequenza"; 
@@ -24,6 +26,15 @@ public class AppSqlDao extends WebSQLDao {
       public void handleEvent(WindowDatabase db) {
         PhonegapUtils.log("created db therapies");
       }
+    }, new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        //TODO: ATTENZIONE QUESTA CALLBACK SERVE SOLO PER IL DEBUG LOCALE, RIMUOVER IN RELEASE
+        if (DROP_TABLES_ON_OPEN_DATABASE) {
+          tr.doExecuteSql("DROP TABLE IF EXISTS version");
+          tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
+          tr.doExecuteSql("DROP TABLE IF EXISTS udm");
+        }
+      }
     });
   }
   
@@ -31,6 +42,7 @@ public class AppSqlDao extends WebSQLDao {
     public void doMigration(int number, SQLTransaction tr) {
       PhonegapUtils.log("updating db therapies to version " + number);
       
+      PhonegapUtils.log("creating table udm");
       tr.doExecuteSql("CREATE TABLE udm (" + UDM_FIELDS + " )");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('C', 'Compress/a/e', 10)");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('F', 'Fial/a/e', 20)");
@@ -43,6 +55,7 @@ public class AppSqlDao extends WebSQLDao {
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('P', 'Capsul/a/e', 90)");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('T', 'Confett/o/i', 100)");
       
+      PhonegapUtils.log("creating table prescrizioni");
       tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS + " )");
 
       /* TEST MIGRATIONS
@@ -116,6 +129,10 @@ public class AppSqlDao extends WebSQLDao {
     });
   }
   
+  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, " + 
+      "quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza," +
+      "tipoRicorrenzaOraria, intervalloOrario, orari";
+  
   public void findAllPrescrizioni(final Delegate<List<Prescrizione>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
@@ -133,6 +150,9 @@ public class AppSqlDao extends WebSQLDao {
                 item.setTipoRicorrenza(rows.getValueString(it, "tipoRicorrenza"));
                 item.setCodUdM(rows.getValueString(it, "codUdM"));
                 item.setValoreRicorrenza(rows.getValueInt(it, "valoreRicorrenza"));
+                item.setTipoRicorrenzaOraria(rows.getValueString(it, "tipoRicorrenzaOraria"));
+                item.setIntervalloOrario(rows.getValueInt(it, "intervalloOrario"));
+                item.setOrari(rows.getValueString(it, "orari"));
                 results.add(item);
               }
             }
@@ -143,19 +163,18 @@ public class AppSqlDao extends WebSQLDao {
     });
   }
   
-  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza";
-  
   public void updatePrescrizione(final Prescrizione pr, final Delegate<Prescrizione> delegate) {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (pr.getId() == null) {
-          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 pr.getNome(), 
                 dateAsLong(pr.getDataInizio()), dateAsLong(pr.getDataFine()), 
                 pr.getQuantita(), pr.getCodUdM(),
                 pr.getIdComposizione(), 
-                pr.getTipoRicorrenza(), pr.getValoreRicorrenza()
+                pr.getTipoRicorrenza(), pr.getValoreRicorrenza(),
+                pr.getTipoRicorrenzaOraria(), pr.getIntervalloOrario(), pr.getOrari()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   pr.setId(rs.getInsertId());
@@ -172,13 +191,17 @@ public class AppSqlDao extends WebSQLDao {
           sql += " ,idComposizione = ?";
           sql += " ,tipoRicorrenza = ?";
           sql += " ,valoreRicorrenza = ?";
+          sql += " ,tipoRicorrenzaOraria = ?";
+          sql += " ,intervalloOrario = ?";
+          sql += " ,orari = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               pr.getNome(), 
               dateAsLong(pr.getDataInizio()), dateAsLong(pr.getDataFine()), 
               pr.getQuantita(), pr.getCodUdM(),
               pr.getIdComposizione(), 
-              pr.getTipoRicorrenza(), pr.getValoreRicorrenza()
+              pr.getTipoRicorrenza(), pr.getValoreRicorrenza(),
+              pr.getTipoRicorrenzaOraria(), pr.getIntervalloOrario(), pr.getOrari()
               , pr.getId()
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

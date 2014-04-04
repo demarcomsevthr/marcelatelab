@@ -11,6 +11,8 @@ import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
+import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
@@ -69,6 +71,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   @UiField StatePanel ricorrenzaPrescrizionePanel;
   @UiField StatePanel orariPrescrizionePanel;
   @UiField PhTextBox rangeBox;
+  @UiField PhTextBox rangeOrariBox;
+  @UiField PhTimeBox orarioInizioBox;
 //@UiField Spacer filler;
   
   StatePanelUtil statePanelUtil = new StatePanelUtil();
@@ -129,17 +133,17 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     });
     */
     
-    tipoRicorrenzaCombo.addItem("G", "Giornaliera", false);
-    tipoRicorrenzaCombo.addItem("S", "Settimanale", false);
-    tipoRicorrenzaCombo.addItem("M", "Mensile", false);
+    tipoRicorrenzaCombo.addItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
+    tipoRicorrenzaCombo.addItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
+    tipoRicorrenzaCombo.addItem(Prescrizione.TIPO_RICORRENZA_MENSILE, "Mensile", false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoRicorrenzaValue();
       }
     });
     
-    tipoOrariCombo.addItem("I", "A intervalli regolari", false);
-    tipoOrariCombo.addItem("O", "A orari fissi", false);
+    tipoOrariCombo.addItem(Prescrizione.TIPO_ORARI_A_INTERVALLI, "A intervalli regolari", false);
+    tipoOrariCombo.addItem(Prescrizione.TIPO_ORARI_FISSI, "A orari fissi", false);
     tipoOrariCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoOrarioValue();
@@ -163,13 +167,13 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   private void checkTipoRicorrenzaValue() {
     String value = tipoRicorrenzaCombo.getValue();
-    if ("G".equals(value)) {
+    if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(value)) {
       ricorrenzaLabel.setText("giorni");
       ricorrenzaPanel.setVisible(true);
-    } else if ("S".equals(value)) {
+    } else if (Prescrizione.TIPO_RICORRENZA_SETTIMANALE.equals(value)) {
       ricorrenzaLabel.setText("settimane");
       ricorrenzaPanel.setVisible(true);
-    } else if ("M".equals(value)) {
+    } else if (Prescrizione.TIPO_RICORRENZA_MENSILE.equals(value)) {
       ricorrenzaLabel.setText("mesi");
       ricorrenzaPanel.setVisible(true);
     } else {
@@ -180,10 +184,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   private void checkTipoOrarioValue() {
     String value = tipoOrariCombo.getValue();
-    if ("I".equals(value)) {
+    if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(value)) {
       orariRegolariPanel.setVisible(true);
       orariFissiPanel.setVisible(false);
-    } else if ("O".equals(value)) {
+    } else if (Prescrizione.TIPO_ORARI_FISSI.equals(value)) {
       orariRegolariPanel.setVisible(false);
       orariFissiPanel.setVisible(true);
       showOrariListPanel();
@@ -225,6 +229,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     }
     orariListPanel.clear();
     HorizontalPanel row = null;
+    PhTimeBox lastOrarioBox = null;
     for (final PhTimeBox orarioBox : orariBox) {
       row = new HorizontalPanel();
       row.add(orarioBox);
@@ -238,8 +243,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
         }
       });
       orariListPanel.add(row);
+      lastOrarioBox = orarioBox;
     }
-    TouchHTML addBtn = new TouchHTML();
+    final TouchHTML addBtn = new TouchHTML();
+    addBtn.setVisible(false);
     addBtn.addStyleName("ui-add-btn");
     row.add(addBtn);
     addBtn.addTouchEndHandler(new TouchEndHandler() {
@@ -248,6 +255,15 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
         showOrariListPanel();
       }
     });
+    if (lastOrarioBox != null) {
+      lastOrarioBox.addValueChangeHandler(new ValueChangeHandler<Time>() {
+        public void onValueChange(ValueChangeEvent<Time> event) {
+          if (event.getValue() != null) {
+            addBtn.setVisible(true);
+          }
+        }
+      });
+    }
     orariListPanel.add(row);
     refreshScrollPanel();
 //  WebkitCssUtil.moveScrollPanelY(getScrollPanelImpl(), 50);
@@ -264,32 +280,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
   }
   
-  @Override
-  public void setModel(Object model, String tag) {
-    if (TAG_PRESCRIZIONE.equals(tag)) {
-      this.prescrizione = (Prescrizione)model;
-      titleBox.setValue(prescrizione.getNome());
-      inizioBox.setValue(prescrizione.getDataInizio());
-      qtaBox.setValue(prescrizione.getQuantita());
-      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
-      umCombo.setValue(prescrizione.getCodUdM());
-      rangeBox.setValue(prescrizione.getValoreRicorrenza());
-    }
-  }
-  
   private void refreshScrollPanel() {
     getScrollPanel().refresh();
-  }
-
-  @UiHandler ("saveBtn")
-  public void onSaveBtn (TouchEndEvent event) {
-    prescrizione.setNome(titleBox.getValue());
-    prescrizione.setDataInizio(inizioBox.getValue());
-    prescrizione.setQuantita(qtaBox.getValueAsDouble());
-    prescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
-    prescrizione.setCodUdM(umCombo.getValue());
-    prescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
-    getPresenter().savePrescrizione(prescrizione);
   }
 
   private void initBottomBar() {
@@ -331,6 +323,64 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   }
   public static String getBottomBarTop() {
     return getBottomBarTopPx()+"px";
+  }
+
+  @Override
+  public void setModel(Object model, String tag) {
+    if (TAG_PRESCRIZIONE.equals(tag)) {
+      this.prescrizione = (Prescrizione)model;
+      titleBox.setValue(prescrizione.getNome());
+      inizioBox.setValue(prescrizione.getDataInizio());
+      qtaBox.setValue(prescrizione.getQuantita());
+      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
+      umCombo.setValue(prescrizione.getCodUdM());
+      rangeBox.setValue(prescrizione.getValoreRicorrenza());
+      tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
+      if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+        rangeOrariBox.setValue(prescrizione.getIntervalloOrario());
+        orarioInizioBox.setValueAsString(prescrizione.getOrari());
+      } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+        String orari = prescrizione.getOrari();
+        if (orari != null) {
+          String[] tokens = orari.split("\\|");
+          orariBox = new ArrayList<PhTimeBox>();
+          for (String token : tokens) {
+            PhTimeBox orarioBox = createOrarioBox();
+            orarioBox.setValueAsString(token);
+            orariBox.add(orarioBox);
+          }
+          showOrariListPanel();
+        }
+      }
+    }
+  }
+  
+  @UiHandler ("saveBtn")
+  public void onSaveBtn (TouchEndEvent event) {
+    prescrizione.setNome(titleBox.getValue());
+    prescrizione.setDataInizio(inizioBox.getValue());
+    prescrizione.setQuantita(qtaBox.getValueAsDouble());
+    prescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
+    prescrizione.setCodUdM(umCombo.getValue());
+    prescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
+    prescrizione.setTipoRicorrenzaOraria(tipoOrariCombo.getValue());
+    if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+      prescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
+      if (orarioInizioBox.getValue() == null) {
+        PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
+        return;
+      }
+      prescrizione.setOrari(orarioInizioBox.getValue().asString());
+    } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+      String orari = "";
+      for (PhTimeBox orarioBox : orariBox) {
+        if (orari.length() > 0)
+          orari += "|";
+        orari += orarioBox.getValue().asString();
+      }
+      prescrizione.setOrari(orari);
+    }
+    getPresenter().savePrescrizione(prescrizione);
   }
 
 }
