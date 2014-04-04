@@ -35,31 +35,31 @@ public abstract class WebSQLDao {
   
   protected final static String SERIAL_ID = "INTEGER PRIMARY KEY AUTOINCREMENT"; 
   
-  protected WebSQLDao(String name, long estimatedSize, MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback) {
+  protected WebSQLDao(String name, long estimatedSize, final MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
     this.name = name;
     this.estimatedSize = estimatedSize;
     this.creationCallback = creationCallback;
     if (db == null) {
-      openDatabase();
+      openDatabase(openCallback);
       doMigrations(migrationCallbacks);
     }
   }
   
-  protected void openDatabase() {
+  protected void openDatabase(SQLTransactionCallback openCallback) {
     db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
         PhonegapUtils.log("creation callback");
         if (creationCallback != null)
           creationCallback.handleEvent(db);
       }
-    });
+    }, openCallback);
   }
   
   public static class WindowDatabase extends JavaScriptObject {
     protected WindowDatabase() { }
-    private static WindowDatabase openDatabase (String name, String version, long estimatedSize, DatabaseCallback creationCallback) {
-      WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, creationCallback).cast();
-      db.transactionImpl(new SQLTransactionCallback() {
+    private static WindowDatabase openDatabase (String name, String version, long estimatedSize, DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
+      final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, creationCallback).cast();
+      final SQLTransactionCallback migrationCallback = new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
           transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
           transaction.doExecuteSql("SELECT COUNT(*) AS c FROM version", null, new SQLStatementCallback() {
@@ -71,7 +71,16 @@ public abstract class WebSQLDao {
             }
           });
         }
-      }, null, null);
+      };
+      if (openCallback != null) {
+        db.transactionImpl(openCallback, null, new SQLVoidCallback() {
+          public void handleEvent() {
+            db.transactionImpl(migrationCallback, null, null);
+          }
+        });
+      } else {
+        db.transactionImpl(migrationCallback, null, null);
+      }
       return db;
     }
     private static native JavaScriptObject openDatabaseImpl (String name, String version, Long estimatedSize, DatabaseCallback creationCallback) /*-{
