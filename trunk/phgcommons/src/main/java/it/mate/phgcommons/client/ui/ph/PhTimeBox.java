@@ -108,11 +108,17 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     setValue(value, true);
   }
 
+  public void setValueAsString(String text) {
+    setValue(text == null ? null : Time.fromString(text), true);
+  }
+
   public void setValue(Time value, boolean fireEvents) {
     this.value = value;
-    element.setValue(timeToString(value));
-    if (fireEvents) {
-      TimeChangeEvent.fire(this, value);
+    if (value != null) {
+      element.setValue(timeToString(value));
+      if (fireEvents) {
+        TimeChangeEvent.fire(this, value);
+      }
     }
   }
   
