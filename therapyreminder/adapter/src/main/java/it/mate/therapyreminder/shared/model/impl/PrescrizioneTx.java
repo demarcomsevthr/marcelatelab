@@ -25,6 +25,12 @@ public class PrescrizioneTx implements Prescrizione {
   
   private String codUdM;
   
+  private String tipoRicorrenzaOraria;
+  
+  private Integer intervalloOrario;
+  
+  private String orari;
+  
   @Override
   public String toString() {
     return "PrescrizioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", quantita=" + quantita
@@ -105,6 +111,30 @@ public class PrescrizioneTx implements Prescrizione {
     if (valoreRicorrenza != null) {
       this.valoreRicorrenza = valoreRicorrenza;
     }
+  }
+
+  public String getTipoRicorrenzaOraria() {
+    return tipoRicorrenzaOraria;
+  }
+
+  public void setTipoRicorrenzaOraria(String tipoRicorrenzaOraria) {
+    this.tipoRicorrenzaOraria = tipoRicorrenzaOraria;
+  }
+
+  public Integer getIntervalloOrario() {
+    return intervalloOrario;
+  }
+
+  public void setIntervalloOrario(Integer intervalloOrario) {
+    this.intervalloOrario = intervalloOrario;
+  }
+
+  public String getOrari() {
+    return orari;
+  }
+
+  public void setOrari(String orari) {
+    this.orari = orari;
   }
 
 }
