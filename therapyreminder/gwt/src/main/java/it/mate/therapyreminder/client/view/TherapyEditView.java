@@ -16,8 +16,10 @@ import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
+import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,13 +258,17 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       }
     });
     if (lastOrarioBox != null) {
-      lastOrarioBox.addValueChangeHandler(new ValueChangeHandler<Time>() {
-        public void onValueChange(ValueChangeEvent<Time> event) {
-          if (event.getValue() != null) {
-            addBtn.setVisible(true);
+      if (lastOrarioBox.getValue() != null) {
+        addBtn.setVisible(true);
+      } else {
+        lastOrarioBox.addValueChangeHandler(new ValueChangeHandler<Time>() {
+          public void onValueChange(ValueChangeEvent<Time> event) {
+            if (event.getValue() != null) {
+              addBtn.setVisible(true);
+            }
           }
-        }
-      });
+        });
+      }
     }
     orariListPanel.add(row);
     refreshScrollPanel();
@@ -338,8 +344,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
       if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
         rangeOrariBox.setValue(prescrizione.getIntervalloOrario());
-        orarioInizioBox.setValueAsString(prescrizione.getOrari());
+        if (prescrizione.getDosaggi() != null && prescrizione.getDosaggi().size() == 1) {
+          orarioInizioBox.setValueAsString(prescrizione.getDosaggi().get(0).getOrario());
+        }
+//      orarioInizioBox.setValueAsString(prescrizione.getOrari());
       } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+        /*
         String orari = prescrizione.getOrari();
         if (orari != null) {
           String[] tokens = orari.split("\\|");
@@ -351,15 +361,28 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
           }
           showOrariListPanel();
         }
+        */
+        if (prescrizione.getDosaggi() != null && prescrizione.getDosaggi().size() > 0) {
+          orariBox = new ArrayList<PhTimeBox>();
+          for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+            PhTimeBox orarioBox = createOrarioBox();
+            orarioBox.setValueAsString(dosaggio.getOrario());
+            orariBox.add(orarioBox);
+          }
+          showOrariListPanel();
+        }
       }
     }
   }
   
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
+    
+    Double qtaPrescrizione = qtaBox.getValueAsDouble();
+    
     prescrizione.setNome(titleBox.getValue());
     prescrizione.setDataInizio(inizioBox.getValue());
-    prescrizione.setQuantita(qtaBox.getValueAsDouble());
+    prescrizione.setQuantita(qtaPrescrizione);
     prescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
     prescrizione.setCodUdM(umCombo.getValue());
     prescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
@@ -370,15 +393,21 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
         PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
         return;
       }
-      prescrizione.setOrari(orarioInizioBox.getValue().asString());
+//    prescrizione.setOrari(orarioInizioBox.getValue().asString());
+      prescrizione.setDosaggi(new ArrayList<Dosaggio>());
+      prescrizione.getDosaggi().add(new DosaggioTx(qtaPrescrizione, orarioInizioBox.getValue().asString()));
     } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
-      String orari = "";
+      prescrizione.setDosaggi(new ArrayList<Dosaggio>());
+//    String orari = "";
       for (PhTimeBox orarioBox : orariBox) {
+        /*
         if (orari.length() > 0)
           orari += "|";
         orari += orarioBox.getValue().asString();
+        */
+        prescrizione.getDosaggi().add(new DosaggioTx(qtaPrescrizione, orarioBox.getValue().asString()));
       }
-      prescrizione.setOrari(orari);
+//    prescrizione.setOrari(orari);
     }
     getPresenter().savePrescrizione(prescrizione);
   }
