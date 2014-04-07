@@ -137,7 +137,16 @@ public class CalendarDialog {
   private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
   
   public CalendarDialog() {
-    curMonth = new Month();
+    this(null);
+  }
+  
+  public CalendarDialog(Date initialDate) {
+    if (initialDate != null) {
+      this.selectedDate = initialDate;
+    } else {
+      this.selectedDate = new Date();
+    }
+    curMonth = new Month(selectedDate);
     initDefaults();
   }
   
