@@ -3,8 +3,10 @@ package it.mate.therapyreminder.client.dao;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebSQLDao;
+import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
@@ -33,6 +35,7 @@ public class AppSqlDao extends WebSQLDao {
           tr.doExecuteSql("DROP TABLE IF EXISTS version");
           tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
           tr.doExecuteSql("DROP TABLE IF EXISTS udm");
+          tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
         }
       }
     });
@@ -57,6 +60,9 @@ public class AppSqlDao extends WebSQLDao {
       
       PhonegapUtils.log("creating table prescrizioni");
       tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS + " )");
+
+      PhonegapUtils.log("creating table dosaggi");
+      tr.doExecuteSql("CREATE TABLE dosaggi (" + DOSAGGI_FIELDS + " )");
 
       /* TEST MIGRATIONS
       tr.doExecuteSql("CREATE TABLE therapies (id "+SERIAL_ID+", name)");
@@ -131,10 +137,16 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, " + 
       "quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza," +
-      "tipoRicorrenzaOraria, intervalloOrario, orari";
+      "tipoRicorrenzaOraria, intervalloOrario";
   
+  private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
+  
+  // TODO: DA TESTARE
   public void findAllPrescrizioni(final Delegate<List<Prescrizione>> delegate) {
+    /*
     db.doReadTransaction(new SQLTransactionCallback() {
+     */
+    db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         tr.doExecuteSql("SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni", null, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -142,43 +154,76 @@ public class AppSqlDao extends WebSQLDao {
             SQLResultSetRowList rows = rs.getRows();
             if (rows.getLength() > 0) {
               for (int it = 0; it < rows.getLength(); it++) {
-                Prescrizione item = new PrescrizioneTx();
-                item.setId(rows.getValueInt(it, "id"));
-                item.setNome(rows.getValueString(it, "nome"));
-                item.setDataInizio(new Date(rows.getValueLong(it, "dataInizio")));
-                item.setQuantita(rows.getValueDouble(it, "quantita"));
-                item.setTipoRicorrenza(rows.getValueString(it, "tipoRicorrenza"));
-                item.setCodUdM(rows.getValueString(it, "codUdM"));
-                item.setValoreRicorrenza(rows.getValueInt(it, "valoreRicorrenza"));
-                item.setTipoRicorrenzaOraria(rows.getValueString(it, "tipoRicorrenzaOraria"));
-                item.setIntervalloOrario(rows.getValueInt(it, "intervalloOrario"));
-                item.setOrari(rows.getValueString(it, "orari"));
-                results.add(item);
+                final Prescrizione prescrizione = new PrescrizioneTx();
+                prescrizione.setId(rows.getValueInt(it, "id"));
+                prescrizione.setNome(rows.getValueString(it, "nome"));
+                prescrizione.setDataInizio(new Date(rows.getValueLong(it, "dataInizio")));
+                prescrizione.setQuantita(rows.getValueDouble(it, "quantita"));
+                prescrizione.setTipoRicorrenza(rows.getValueString(it, "tipoRicorrenza"));
+                prescrizione.setCodUdM(rows.getValueString(it, "codUdM"));
+                prescrizione.setValoreRicorrenza(rows.getValueInt(it, "valoreRicorrenza"));
+                prescrizione.setTipoRicorrenzaOraria(rows.getValueString(it, "tipoRicorrenzaOraria"));
+                prescrizione.setIntervalloOrario(rows.getValueInt(it, "intervalloOrario"));
+//              item.setOrari(rows.getValueString(it, "orari"));
+                results.add(prescrizione);
               }
             }
-            delegate.execute(results);
+//          delegate.execute(results);
+            iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
           }
         });
       }
     });
   }
   
-  public void updatePrescrizione(final Prescrizione pr, final Delegate<Prescrizione> delegate) {
+  private void iteratePrescrizioniForRead(final Iterator<Prescrizione> it, SQLTransaction tr, final Delegate<List<Prescrizione>> delegate, final List<Prescrizione> results) {
+    if (it.hasNext()) {
+      final Prescrizione prescrizione = it.next();
+      tr.doExecuteSql("SELECT " + DOSAGGI_FIELDS + " FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()}, 
+          new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              SQLResultSetRowList rows = rs.getRows();
+              if (rows.getLength() > 0) {
+                for (int it = 0; it < rows.getLength(); it++) {
+                  Dosaggio dosaggio = new DosaggioTx();
+                  dosaggio.setIdPrescrizione(prescrizione.getId());
+                  dosaggio.setQuantita(rows.getValueDouble(it, "quantita"));
+                  dosaggio.setOrario(rows.getValueString(it, "orario"));
+                  prescrizione.getDosaggi().add(dosaggio);
+                }
+              }
+              iteratePrescrizioniForRead(it, tr, delegate, results);
+            }
+          });
+    } else {
+      delegate.execute(results);
+    }
+  }
+  
+  // TODO: DA FINIRE (DOSAGGI)
+  public void updatePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        if (pr.getId() == null) {
-          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        if (prescrizione.getId() == null) {
+          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
-                pr.getNome(), 
-                dateAsLong(pr.getDataInizio()), dateAsLong(pr.getDataFine()), 
-                pr.getQuantita(), pr.getCodUdM(),
-                pr.getIdComposizione(), 
-                pr.getTipoRicorrenza(), pr.getValoreRicorrenza(),
-                pr.getTipoRicorrenzaOraria(), pr.getIntervalloOrario(), pr.getOrari()
+                prescrizione.getNome(), 
+                dateAsLong(prescrizione.getDataInizio()), dateAsLong(prescrizione.getDataFine()), 
+                prescrizione.getQuantita(), prescrizione.getCodUdM(),
+                prescrizione.getIdComposizione(), 
+                prescrizione.getTipoRicorrenza(), prescrizione.getValoreRicorrenza(),
+                prescrizione.getTipoRicorrenzaOraria(), prescrizione.getIntervalloOrario() /* ,pr.getOrari() */
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-                  pr.setId(rs.getInsertId());
-                  delegate.execute(pr);
+                  prescrizione.setId(rs.getInsertId());
+                  if (prescrizione.getDosaggi() != null) {
+                    for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+                      dosaggio.setIdPrescrizione(prescrizione.getId());
+                      tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
+                          new Object[] {dosaggio.getIdPrescrizione(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                    }
+                  }
+                  delegate.execute(prescrizione);
                 }
               });
         } else {
@@ -193,19 +238,35 @@ public class AppSqlDao extends WebSQLDao {
           sql += " ,valoreRicorrenza = ?";
           sql += " ,tipoRicorrenzaOraria = ?";
           sql += " ,intervalloOrario = ?";
-          sql += " ,orari = ?";
+          /* sql += " ,orari = ?"; */
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
-              pr.getNome(), 
-              dateAsLong(pr.getDataInizio()), dateAsLong(pr.getDataFine()), 
-              pr.getQuantita(), pr.getCodUdM(),
-              pr.getIdComposizione(), 
-              pr.getTipoRicorrenza(), pr.getValoreRicorrenza(),
-              pr.getTipoRicorrenzaOraria(), pr.getIntervalloOrario(), pr.getOrari()
-              , pr.getId()
+              prescrizione.getNome(), 
+              dateAsLong(prescrizione.getDataInizio()), dateAsLong(prescrizione.getDataFine()), 
+              prescrizione.getQuantita(), prescrizione.getCodUdM(),
+              prescrizione.getIdComposizione(), 
+              prescrizione.getTipoRicorrenza(), prescrizione.getValoreRicorrenza(),
+              prescrizione.getTipoRicorrenzaOraria(), prescrizione.getIntervalloOrario() /* ,pr.getOrari() */
+              , prescrizione.getId()
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-              delegate.execute(pr);
+              
+              tr.doExecuteSql("DELETE FROM dosaggi WHERE idPrescrizione = ? ", 
+                  new Object[] {prescrizione.getId()},
+                  new SQLStatementCallback() {
+                    public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                      if (prescrizione.getDosaggi() != null) {
+                        for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+                          dosaggio.setIdPrescrizione(prescrizione.getId());
+                          tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
+                              new Object[] {dosaggio.getIdPrescrizione(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                        }
+                      }
+                    }
+                  }
+              );
+              
+              delegate.execute(prescrizione);
             }
           });
         }
@@ -219,17 +280,23 @@ public class AppSqlDao extends WebSQLDao {
     }
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(final SQLTransaction tr) {
-        deletePrescrizioniWithIterator(prescrizioni.iterator(), tr, delegate);
+        iteratePrescrizioniForDelete(prescrizioni.iterator(), tr, delegate);
       }
     });
   }
   
-  private void deletePrescrizioniWithIterator(final Iterator<Prescrizione> it, SQLTransaction tr, final Delegate<Void> delegate) {
+  private void iteratePrescrizioniForDelete(final Iterator<Prescrizione> it, SQLTransaction tr, final Delegate<Void> delegate) {
     if (it.hasNext()) {
-      Prescrizione prescrizione = it.next();
+      final Prescrizione prescrizione = it.next();
       tr.doExecuteSql("DELETE FROM prescrizioni WHERE id = ?", new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
         public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-          deletePrescrizioniWithIterator(it, tr, delegate);
+          tr.doExecuteSql("DELETE FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
+            new SQLStatementCallback() {
+              public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                iteratePrescrizioniForDelete(it, tr, delegate);
+              }
+            }
+          );
         }
       });
     } else {
