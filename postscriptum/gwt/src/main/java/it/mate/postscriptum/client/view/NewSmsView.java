@@ -118,7 +118,7 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
   @UiHandler ("sendBtn")
   public void onTouchBtn (TapEvent event) {
     
-    TouchUtils.applyQuickFixFocusPatch();
+    TouchUtils.applyKeyboardPatch();
     
     if (signPanel.getRemoteUser() == null) {
       PhgDialogUtils.showMessageDialog("You must be signed");
