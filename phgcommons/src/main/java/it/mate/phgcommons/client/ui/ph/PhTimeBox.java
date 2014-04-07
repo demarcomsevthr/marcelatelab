@@ -1,6 +1,7 @@
 package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TimePickerDialog;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
@@ -49,18 +50,22 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
     addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         BeforeDialogOpenEvent.fire(PhTimeBox.this, event);
-        TouchUtils.applyQuickFixFocusPatch();
-        TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
-          public void execute(Time value) {
-            setValue(value, true);
+        TouchUtils.applyKeyboardPatch();
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            TimePickerDialog dialog = new TimePickerDialog(new TimePickerDialog.Options().setOnClose(new Delegate<Time>() {
+              public void execute(Time value) {
+                setValue(value, true);
+              }
+            })) {
+              protected void onHide() {
+                AfterDialogCloseEvent.fire(PhTimeBox.this);
+              };
+            };
+            Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
+            dialog.setTime(value);
           }
-        })) {
-          protected void onHide() {
-            AfterDialogCloseEvent.fire(PhTimeBox.this);
-          };
-        };
-        Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
-        dialog.setTime(value);
+        });
       }
     });
     

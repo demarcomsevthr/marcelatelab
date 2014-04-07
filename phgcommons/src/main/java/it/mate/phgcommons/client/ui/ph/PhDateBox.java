@@ -55,7 +55,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
       element.setReadOnly(true);
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          TouchUtils.applyQuickFixFocusPatch();
+          TouchUtils.applyKeyboardPatch();
           onPluginTapEvent(event);
         }
       });
@@ -71,7 +71,7 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
         }
       });
     } else {
-      CalendarDialog calendar = new CalendarDialog();
+      CalendarDialog calendar = new CalendarDialog(this.value);
       calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
         public void onSelectedDateChange(Date date) {
           setValue(date, true);
