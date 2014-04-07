@@ -2,6 +2,7 @@ package it.mate.therapyreminder.shared.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public interface Prescrizione extends Serializable {
   
@@ -59,8 +60,8 @@ public interface Prescrizione extends Serializable {
 
   public void setIntervalloOrario(Integer intervalloOrario);
 
-  public String getOrari();
+  public List<Dosaggio> getDosaggi();
 
-  public void setOrari(String orari);
+  public void setDosaggi(List<Dosaggio> dosaggi);
   
 }

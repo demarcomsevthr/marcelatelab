@@ -1,8 +1,11 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PrescrizioneTx implements Prescrizione {
@@ -29,7 +32,8 @@ public class PrescrizioneTx implements Prescrizione {
   
   private Integer intervalloOrario;
   
-  private String orari;
+  private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
+  
   
   @Override
   public String toString() {
@@ -129,12 +133,12 @@ public class PrescrizioneTx implements Prescrizione {
     this.intervalloOrario = intervalloOrario;
   }
 
-  public String getOrari() {
-    return orari;
+  public List<Dosaggio> getDosaggi() {
+    return dosaggi;
   }
 
-  public void setOrari(String orari) {
-    this.orari = orari;
+  public void setDosaggi(List<Dosaggio> dosaggi) {
+    this.dosaggi = dosaggi;
   }
 
 }
