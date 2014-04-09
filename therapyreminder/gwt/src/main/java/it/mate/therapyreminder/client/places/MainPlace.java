@@ -11,6 +11,8 @@ public class MainPlace extends Place {
   
   public static final String THERAPY_EDIT = "editTherapy";
   
+  public static final String DOSAGE_EDIT = "editDosage";
+  
   public static final String TEST = "test";
   
   private String token;

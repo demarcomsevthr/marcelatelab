@@ -22,6 +22,10 @@ public class MainAnimationMapper implements AnimationMapper {
         return Animation.SWAP_REVERSE;
       } else if (oldPlace.getToken().equals(MainPlace.THERAPY_EDIT) && newPlace.getToken().equals(MainPlace.THERAPY_LIST)) {
         return Animation.SWAP_REVERSE;
+      } else if (oldPlace.getToken().equals(MainPlace.THERAPY_EDIT) && newPlace.getToken().equals(MainPlace.DOSAGE_EDIT)) {
+        return Animation.SLIDE;
+      } else if (oldPlace.getToken().equals(MainPlace.DOSAGE_EDIT) && newPlace.getToken().equals(MainPlace.THERAPY_EDIT)) {
+        return Animation.SLIDE_REVERSE;
       }
       return Animation.SWAP;
     }
