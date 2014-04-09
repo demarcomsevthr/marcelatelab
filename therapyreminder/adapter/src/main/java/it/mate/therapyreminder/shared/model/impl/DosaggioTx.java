@@ -1,32 +1,32 @@
 package it.mate.therapyreminder.shared.model.impl;
 
 import it.mate.therapyreminder.shared.model.Dosaggio;
+import it.mate.therapyreminder.shared.model.Prescrizione;
 
 @SuppressWarnings("serial")
 public class DosaggioTx implements Dosaggio {
   
-  private Integer idPrescrizione;
+  private Prescrizione prescrizione;
   
   private Double quantita = 1d;
   
   private String orario;
-  
-  public DosaggioTx() {
 
+  //serve solo nella ui
+  private String codUdM;
+  
+  public DosaggioTx(Prescrizione prescrizione) {
+    this.prescrizione = prescrizione;
   }
 
-  public DosaggioTx(Double quantita, String orario) {
-    super();
+  public DosaggioTx(Prescrizione prescrizione, Double quantita, String orario) {
+    this(prescrizione);
     this.quantita = quantita;
     this.orario = orario;
   }
 
-  public Integer getIdPrescrizione() {
-    return idPrescrizione;
-  }
-
-  public void setIdPrescrizione(Integer idPrescrizione) {
-    this.idPrescrizione = idPrescrizione;
+  public Prescrizione getPrescrizione() {
+    return prescrizione;
   }
 
   public Double getQuantita() {
@@ -47,4 +47,12 @@ public class DosaggioTx implements Dosaggio {
     this.orario = orario;
   }
 
+  public String getCodUdM() {
+    return codUdM;
+  }
+
+  public void setCodUdM(String codUdM) {
+    this.codUdM = codUdM;
+  }
+  
 }

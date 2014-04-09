@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 public interface Dosaggio extends Serializable {
   
-  public Integer getIdPrescrizione();
-
-  public void setIdPrescrizione(Integer idPrescrizione);
+  public Prescrizione getPrescrizione();
 
   public void setQuantita(Double quantita);
 
@@ -16,4 +14,8 @@ public interface Dosaggio extends Serializable {
 
   public void setOrario(String orario);
   
+  public String getCodUdM();
+
+  public void setCodUdM(String codUdM);
+    
 }
