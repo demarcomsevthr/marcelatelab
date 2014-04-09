@@ -134,6 +134,8 @@ public class PrescrizioneTx implements Prescrizione {
   }
 
   public List<Dosaggio> getDosaggi() {
+    if (dosaggi == null)
+      dosaggi = new ArrayList<Dosaggio>();
     return dosaggi;
   }
 
