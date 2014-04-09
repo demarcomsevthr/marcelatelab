@@ -21,7 +21,7 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>, HasChangeHandlers {
+public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>, HasChangeHandlers, HasModel {
 
   private String tag;
   
@@ -32,6 +32,8 @@ public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>
   private boolean circle;
   
   private List<ValueChangeHandler<Boolean>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Boolean>>();
+  
+  private Object model;
   
   public PhCheckBox() {
     elem = DOM.createDiv();
@@ -134,4 +136,15 @@ public class PhCheckBox extends TouchWidget implements HasTag, HasValue<Boolean>
 
   }
   
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
+  }
+
 }

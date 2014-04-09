@@ -8,7 +8,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Image;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class PhTouchImage extends TouchWidget implements HasTag {
+public class PhTouchImage extends TouchWidget implements HasTag, HasModel {
   
   private Image image;
   
@@ -16,6 +16,8 @@ public class PhTouchImage extends TouchWidget implements HasTag {
   
   private String tag;
 
+  private Object model;
+  
   public PhTouchImage() {
     elem = DOM.createDiv();
     setElement(elem);
@@ -40,4 +42,15 @@ public class PhTouchImage extends TouchWidget implements HasTag {
     this.tag = tag;
   }
   
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
+  }
+
 }

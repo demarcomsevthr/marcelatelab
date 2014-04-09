@@ -28,7 +28,7 @@ import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class PhButton extends Composite implements HasClickHandlers, HasTouchHandlers,
-      HasText, HasTag {
+      HasText, HasTag, HasModel {
 
   private Widget impl;
   
@@ -43,6 +43,8 @@ public class PhButton extends Composite implements HasClickHandlers, HasTouchHan
   private String tag;
   
   private boolean rounded = true;
+  
+  private Object model;
   
   public PhButton() {
     
@@ -262,5 +264,16 @@ public class PhButton extends Composite implements HasClickHandlers, HasTouchHan
     return evt;
   }-*/;
   
+
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
+  }
 
 }
