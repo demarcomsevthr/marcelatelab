@@ -28,7 +28,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeHandlers {
+public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeHandlers, HasModel {
 
   private InputElement element;
   
@@ -37,6 +37,8 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
   private List<ValueChangeHandler<Date>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Date>>();
   
   private final static boolean USE_DATE_PICKER_PLUGIN = false;
+  
+  private Object model;
   
   @SuppressWarnings("unused")
   public PhDateBox() {
@@ -148,5 +150,16 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     
   }
   
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
+  }
+
 
 }

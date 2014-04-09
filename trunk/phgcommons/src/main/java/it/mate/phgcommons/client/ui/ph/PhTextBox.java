@@ -9,8 +9,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class PhTextBox extends MTextBox {
+public class PhTextBox extends MTextBox implements HasModel {
 
+  private Object model;
+  
   public PhTextBox() {
     super();
     applyPatch();
@@ -91,6 +93,17 @@ public class PhTextBox extends MTextBox {
     if (value != null) {
       setValue(NumberFormat.getDecimalFormat().format(value), true);
     }
+  }
+
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
   }
 
 }

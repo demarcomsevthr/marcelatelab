@@ -2,7 +2,6 @@ package it.mate.phgcommons.client.ui;
 
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.MgwtDialogs;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,6 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     
     addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        PhonegapUtils.log("combo touched");
         showItemsDialog();
       }
     });
@@ -72,18 +70,40 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     this.itemWidth = itemWidth;
   }
   
-  public void addItem(String value, String description, boolean selected) {
-    for (Item it : items) {
-      if (it.value.equals(value)) {
-        it.description = description;
+  public void setItem(String value, String description, boolean selected) {
+    for (Item item : items) {
+      if (item.value.equals(value)) {
+        item.description = description;
+        if (this.value != null && this.value.equals(value)) {
+          setValue(value, false);
+        }
         return;
       }
     }
     Item item = new Item(value, description);
     items.add(item);
-    if (selected) {
-      selectedItem = items.indexOf(item);
-      setValue(value, false);
+    if (this.value != null) {
+      if (this.value.equals(value)) {
+        setValue(value, false);
+      }
+    } else {
+      if (selected) {
+        setValue(value, false);
+      }
+    }
+  }
+  
+  @Override
+  public void setValue(String value, boolean fireEvents) {
+    this.value = value;
+    for (Item item : items) {
+      if (item.value.equals(value)) {
+        selectedItem = items.indexOf(item);
+        setText(item.description);
+        if (fireEvents) {
+          SelectedChangeEvent.fire(this, value);
+        }
+      }
     }
   }
   
@@ -186,19 +206,6 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     setValue(value, true);
   }
 
-  @Override
-  public void setValue(String value, boolean fireEvents) {
-    this.value = value;
-    for (Item item : items) {
-      if (item.value.equals(value)) {
-        setText(item.description);
-        if (fireEvents) {
-          SelectedChangeEvent.fire(this, value);
-        }
-      }
-    }
-  }
-  
   @Override
   public void fireEvent(GwtEvent<?> event) {
     if (event instanceof SelectedChangeEvent) {

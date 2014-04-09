@@ -27,7 +27,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeHandlers {
+public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeHandlers, HasModel {
 
   private InputElement element;
   
@@ -40,6 +40,10 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   private List<AfterDialogCloseEvent.Handler> afterDialogCloseHandlers = new ArrayList<AfterDialogCloseEvent.Handler>();
   
   private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
+  
+  private Object model;
+  
+  private Time defaultTime = new Time();
   
   public PhTimeBox() {
     element = DOM.createInputText().cast();
@@ -62,7 +66,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
                 AfterDialogCloseEvent.fire(PhTimeBox.this);
               };
             };
-            Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : new Time();
+            Time value = PhTimeBox.this.value != null ? PhTimeBox.this.value : defaultTime;
             dialog.setTime(value);
           }
         });
@@ -253,6 +257,21 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
       }
     }
     
+  }
+
+  @Override
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
+  }
+  
+  public void setDefaultTime(Time defaultTime) {
+    this.defaultTime = defaultTime;
   }
 
 }
