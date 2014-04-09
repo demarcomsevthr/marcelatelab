@@ -15,13 +15,16 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
+import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
+import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
+import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.List;
 
@@ -37,7 +40,8 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
-  HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter, 
+  HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter,
+  DosageEditView.Presenter, 
   CalendarEventTestView.Presenter {
   
   private MainPlace place;
@@ -90,6 +94,19 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
+      DosageEditView view = AppClientFactory.IMPL.getGinjector().getDosageEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          Dosaggio dosaggio = (Dosaggio)place.getModel();
+          goToTherapyEditView(dosaggio.getPrescrizione());
+        }
+      });
+    }
     if (place.getToken().equals(MainPlace.TEST)) {
       CalendarEventTestView view = AppClientFactory.IMPL.getGinjector().getCalendarEventTestView();
       this.view = view;
@@ -116,6 +133,11 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
       if (place.getModel() != null) {
         view.setModel(place.getModel(), TherapyEditView.TAG_PRESCRIZIONE);
+      }
+    }
+    if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
+      if (place.getModel() != null) {
+        view.setModel(place.getModel(), DosageEditView.TAG_DOSAGGIO);
       }
     }
   }
@@ -250,11 +272,19 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
   }
 
+  public void goToDosageEditView(Dosaggio dosaggio) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.DOSAGE_EDIT, dosaggio));
+  }
+
   @Override
-  public void savePrescrizione(Prescrizione prescrizione) {
+  public void savePrescrizione(Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
     appSqlDao.updatePrescrizione(prescrizione, new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
-        goToTherapyListView();
+        if (delegate != null) {
+          delegate.execute(prescrizione);
+        } else {
+          goToTherapyListView();
+        }
       }
     });
   }
@@ -269,7 +299,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   @SuppressWarnings("unchecked")
-  public void findAllUdM(final Delegate<List<UdM>> delegate) {
+  private void findAllUdM(final Delegate<List<UdM>> delegate) {
     List<UdM> results = (List<UdM>)GwtUtils.getClientAttribute(ALL_UDM_KEY);
     if (results == null) {
       appSqlDao.findAllUdM(new Delegate<List<UdM>>() {
@@ -281,6 +311,29 @@ public class MainActivity extends MGWTAbstractActivity implements
     } else {
       delegate.execute(results);
     }
+  }
+  
+  public void adaptUmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate) {
+    final boolean singular = qta != null && qta == 1d;
+    findAllUdM(new Delegate<List<UdM>>() {
+      public void execute(List<UdM> udms) {
+        if (udms == null)
+          return;
+        for (int it = 0; it < udms.size(); it++) {
+          UdM udm = udms.get(it);
+          if (currentUdmCode == null || udm.getCodice().equals(currentUdmCode)) {
+            String[] tokens = udm.getDescrizione().split("/");
+            String desc = tokens[0] + (singular ? tokens[1] : tokens[2]);
+            UdM udmToView = new UdMTx();
+            udmToView.setCodice(udm.getCodice());
+            udmToView.setDescrizione(desc);
+            delegate.execute(udmToView);
+          }
+          
+//        umCombo.addItem(udm.getCodice(), desc, it == 0 ? true : false);
+        }
+      }
+    });
   }
   
 }

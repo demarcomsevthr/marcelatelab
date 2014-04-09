@@ -185,8 +185,7 @@ public class AppSqlDao extends WebSQLDao {
               SQLResultSetRowList rows = rs.getRows();
               if (rows.getLength() > 0) {
                 for (int it = 0; it < rows.getLength(); it++) {
-                  Dosaggio dosaggio = new DosaggioTx();
-                  dosaggio.setIdPrescrizione(prescrizione.getId());
+                  Dosaggio dosaggio = new DosaggioTx(prescrizione);
                   dosaggio.setQuantita(rows.getValueDouble(it, "quantita"));
                   dosaggio.setOrario(rows.getValueString(it, "orario"));
                   prescrizione.getDosaggi().add(dosaggio);
@@ -202,6 +201,7 @@ public class AppSqlDao extends WebSQLDao {
   
   // TODO: DA FINIRE (DOSAGGI)
   public void updatePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
+    PhonegapUtils.log("updating " + prescrizione);
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (prescrizione.getId() == null) {
@@ -218,9 +218,8 @@ public class AppSqlDao extends WebSQLDao {
                   prescrizione.setId(rs.getInsertId());
                   if (prescrizione.getDosaggi() != null) {
                     for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
-                      dosaggio.setIdPrescrizione(prescrizione.getId());
                       tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
-                          new Object[] {dosaggio.getIdPrescrizione(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                          new Object[] {dosaggio.getPrescrizione().getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
                     }
                   }
                   delegate.execute(prescrizione);
@@ -257,9 +256,8 @@ public class AppSqlDao extends WebSQLDao {
                     public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                       if (prescrizione.getDosaggi() != null) {
                         for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
-                          dosaggio.setIdPrescrizione(prescrizione.getId());
                           tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
-                              new Object[] {dosaggio.getIdPrescrizione(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                              new Object[] {dosaggio.getPrescrizione().getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
                         }
                       }
                     }
@@ -288,6 +286,7 @@ public class AppSqlDao extends WebSQLDao {
   private void iteratePrescrizioniForDelete(final Iterator<Prescrizione> it, SQLTransaction tr, final Delegate<Void> delegate) {
     if (it.hasNext()) {
       final Prescrizione prescrizione = it.next();
+      PhonegapUtils.log("deleting " + prescrizione);
       tr.doExecuteSql("DELETE FROM prescrizioni WHERE id = ?", new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
         public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
           tr.doExecuteSql("DELETE FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
