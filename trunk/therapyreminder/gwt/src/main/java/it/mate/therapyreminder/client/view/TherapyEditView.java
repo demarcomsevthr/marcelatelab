@@ -369,8 +369,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       titleBox.setValue(prescrizione.getNome());
       inizioBox.setValue(prescrizione.getDataInizio());
       qtaBox.setValue(prescrizione.getQuantita());
-      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
       umCombo.setValue(prescrizione.getCodUdM());
+      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
       rangeBox.setValue(prescrizione.getValoreRicorrenza());
       tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
       if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {

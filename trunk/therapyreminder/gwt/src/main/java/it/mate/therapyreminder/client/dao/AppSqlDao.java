@@ -44,7 +44,11 @@ public class AppSqlDao extends WebSQLDao {
   private final static MigratorCallback MIGRATION_CALLBACK_0 = new MigratorCallback() {
     public void doMigration(int number, SQLTransaction tr) {
       PhonegapUtils.log("updating db therapies to version " + number);
-      
+
+      /*
+       * NOTA BENE: se cambia il default delle udm occorre 
+       * VEDI ANCHE PrescrizioneTx.codUdM
+       */
       PhonegapUtils.log("creating table udm");
       tr.doExecuteSql("CREATE TABLE udm (" + UDM_FIELDS + " )");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('C', 'Compress/a/e', 10)");
