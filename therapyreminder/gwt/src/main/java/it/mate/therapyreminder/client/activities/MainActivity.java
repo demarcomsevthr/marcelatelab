@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.LogUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -314,6 +315,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void adaptUmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate) {
+    LogUtil.log("adaptUmDescription: qta = "+qta+", currentUdmCode = "+currentUdmCode);
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
       public void execute(List<UdM> udms) {
