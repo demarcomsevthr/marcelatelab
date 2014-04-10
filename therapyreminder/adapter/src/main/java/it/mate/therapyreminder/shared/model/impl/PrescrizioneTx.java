@@ -26,7 +26,12 @@ public class PrescrizioneTx implements Prescrizione {
   
   private Integer valoreRicorrenza = 1;
   
-  private String codUdM;
+  // 10/04/2014 ("Confetto issue")
+  // Devo mettere il default literal altrimenti da problemi nel passaggio alla DosageEditView
+  // nel caso di prescrizione appena creata ("Confetto issue"...)
+  // Non trovo una soluzione migliore per mettere il default 
+  // (i valori effettivi stanno su db, se cambiano mi devo ricordare di mantenere allineato questo default)
+  private String codUdM = "C";
   
   private String tipoRicorrenzaOraria;
   
@@ -34,11 +39,12 @@ public class PrescrizioneTx implements Prescrizione {
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
   
-  
+
   @Override
   public String toString() {
     return "PrescrizioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", quantita=" + quantita
-        + ", idComposizione=" + idComposizione + ", tipoRicorrenza=" + tipoRicorrenza + "]";
+        + ", idComposizione=" + idComposizione + ", tipoRicorrenza=" + tipoRicorrenza + ", valoreRicorrenza=" + valoreRicorrenza + ", codUdM=" + codUdM
+        + ", tipoRicorrenzaOraria=" + tipoRicorrenzaOraria + ", intervalloOrario=" + intervalloOrario + "]";
   }
 
   public Integer getId() {
