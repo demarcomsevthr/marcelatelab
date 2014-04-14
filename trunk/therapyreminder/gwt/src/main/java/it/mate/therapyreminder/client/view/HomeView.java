@@ -2,6 +2,7 @@ package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.view.HomeView.Presenter;
@@ -58,6 +59,21 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @UiHandler ("therapiesBtn")
   public void onTherapiesBtn (TouchEndEvent event) {
     getPresenter().goToTherapyListView();
+  }
+  
+  @UiHandler ("remindersBtn")
+  public void onRemindersBtn (TouchEndEvent event) {
+    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+  }
+  
+  @UiHandler ("doctorsBtn")
+  public void onDoctorsBtn (TouchEndEvent event) {
+    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+  }
+  
+  @UiHandler ("preferencesBtn")
+  public void onPreferencesBtn (TouchEndEvent event) {
+    PhgDialogUtils.showMessageDialog("Not implemented yet!");
   }
   
 }
