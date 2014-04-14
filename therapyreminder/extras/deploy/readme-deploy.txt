@@ -1,0 +1,14 @@
+
+	DEPLOY HINTS
+
+	> Save for Enterprise or Ad-Hoc Deploy
+	> Save As THR
+	> Application url =
+	
+		https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.1.ipa
+		
+	> Title = THR 0.1
+	> Download url da mandare al tester:
+	
+		itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.1.plist
+
