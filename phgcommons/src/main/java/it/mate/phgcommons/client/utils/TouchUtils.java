@@ -125,16 +125,23 @@ public class TouchUtils {
 
     // 07/04/2014: adattata anche per iOS
     if (OsDetectionUtils.isAndroid()) {
-      applyQuickFixFocusPatchImpl(JQuery.select("input"));
-      applyQuickFixFocusPatchImpl(JQuery.select("textarea"));
+      applyKeyboardPatchOnInputables(100);
     } else {
-      applyQuickFixFocusPatchImpl(JQuery.select(":focus"));
+      applyKeyboardPatchOnFocusables(100);
     }
     
   }
   
+  public static void applyKeyboardPatchOnInputables(int delay) {
+    applyQuickFixFocusPatchImpl(JQuery.select("input"), delay);
+    applyQuickFixFocusPatchImpl(JQuery.select("textarea"), delay);
+  }
   
-  private static native void applyQuickFixFocusPatchImpl(JQuery element) /*-{
+  public static void applyKeyboardPatchOnFocusables(int delay) {
+    applyQuickFixFocusPatchImpl(JQuery.select(":focus"), delay);
+  }
+  
+  private static native void applyQuickFixFocusPatchImpl(JQuery element, int delay) /*-{
     element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
     element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
     setTimeout(function() {
@@ -142,10 +149,21 @@ public class TouchUtils {
         // Remove readonly attribute after keyboard is hidden.
         element.removeAttr('readonly');
         element.removeAttr('disabled');
-    }, 100);
+    }, delay);
   }-*/;
 
+  public static native void setDisabled(JQuery element) /*-{
+    element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
+    element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
+  }-*/;
   
+  public static native void setEnabled(JQuery element) /*-{
+    element.blur();  //actually close the keyboard
+    // Remove readonly attribute after keyboard is hidden.
+    element.removeAttr('readonly');
+    element.removeAttr('disabled');
+  }-*/;
+
   public static void modalDialogFocusPatchStart() {
     JQuery allInputs = JQuery.select(":input");
     for (Element elem : allInputs.toElements()) {
