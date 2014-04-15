@@ -1,9 +1,11 @@
 
 @external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
 
+/* sostituito con IOSPatches.applyIOS7HeaderBarPatch() 
 body {
   margin-top: 18px !important;
 }
+*/
 
 .mgwt-HeaderPanel {
   background-image: initial;

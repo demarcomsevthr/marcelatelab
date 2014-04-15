@@ -2,7 +2,11 @@ package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
+import it.mate.phgcommons.client.utils.LogUtil;
+import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.DosageEditView.Presenter;
@@ -57,6 +61,8 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (TAG_DOSAGGIO.equals(tag)) {
+      LogUtil.log("disabling qtaBox element");
+      TouchUtils.setDisabled(JQuery.withElement(qtaBox.getElement()));
       this.dosaggio = (Dosaggio)model;
       dsgLbl.setText("Dosaggio delle ore " + dosaggio.getOrario());
       qtaBox.setValue(dosaggio.getQuantita());
@@ -65,6 +71,13 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
           umLabel.setText(udm.getDescrizione());
         }
       });
+      GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+        public void execute(Void element) {
+          LogUtil.log("enabling qtaBox element");
+          TouchUtils.setEnabled(JQuery.withElement(qtaBox.getElement()));
+        }
+      });
+//    TouchUtils.setEnabled(JQuery.withElement(qtaBox.getElement()));
     }
   }
   

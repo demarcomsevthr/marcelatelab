@@ -123,6 +123,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     // 20/03/2014
     IOSPatches.applyStatusBarStylePatch();
+    IOSPatches.applyIOS7HeaderBarPatch();
     
     MGWTStyle.getTheme().getMGWTClientBundle().getHeaderCss().ensureInjected();
     MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
