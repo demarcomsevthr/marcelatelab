@@ -4,11 +4,14 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.EventUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -57,10 +60,6 @@ public class CalendarDialog {
   @SuppressWarnings("deprecation")
   private class Month {
     private Date date;
-    protected Month() {
-      date = new Date();
-      CalendarUtil.setToFirstDayOfMonth(date);
-    }
     private Month(Date date) {
       this.date = date;
     }
@@ -80,11 +79,16 @@ public class CalendarDialog {
     public int getLastDayOfMonth() {
       Date temp = CalendarUtil.copyDate(date);
       CalendarUtil.addMonthsToDate(temp, 1);
+      temp.setDate(1);
       CalendarUtil.addDaysToDate(temp, -1);
       return temp.getDate();
     }
     public String getName() {
       return "it".equals(language) ? MONTH_NAMES_IT[date.getMonth()] : MONTH_NAMES_EN[date.getMonth()];
+    }
+    @Override
+    public String toString() {
+      return "Month [" + (date.getYear()+1900) + "/" + (date.getMonth()+1) + "]";
     }
   }
   
@@ -153,6 +157,9 @@ public class CalendarDialog {
   private void initDefaults() {
     popupLeft = 0;
     popupTop = 52;
+    if (OsDetectionUtils.isIOs()) {
+      popupTop -= 11;
+    }
     popupHeight = 392;
     popupWidth = Window.getClientWidth();
     headerHeight = 36;
@@ -446,10 +453,12 @@ public class CalendarDialog {
       }
     }
     
+    setSelectedDateStyle(selectedDate);
+    
     wrapper.setWidget(table);
     return wrapper;
   }
-  
+
   @SuppressWarnings("deprecation")
   private int createMonthDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
     if (MONDAY_FIRST) {
@@ -457,6 +466,9 @@ public class CalendarDialog {
     }
     int day = date.getDate();
     TouchHTML html = new TouchHTML("" + day);
+
+    putDateCellWidget(date, html);
+    
     html.addStyleName("phg-CalendarDialog-Month-Day");
     html.setHeight(dayHeight+"px");
     if (row == 2) {
@@ -468,9 +480,11 @@ public class CalendarDialog {
     if (outsideCurrentMonth) {
       html.addStyleName("phg-outsideMonth");
     }
+    /*
     if (CalendarUtil.isSameDate(date, selectedDate)) {
       html.addStyleName("phg-CalendarDialog-Month-Day-selected");
     }
+    */
     /*
     html.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
@@ -501,8 +515,28 @@ public class CalendarDialog {
     return weekDay;
   }
   
+  private void setSelectedDateStyle(Date date) {
+    if (date == null)
+      return;
+    Widget cell = getDateCellWidget(date);
+    if (cell != null) {
+      cell.addStyleName("phg-CalendarDialog-Month-Day-selected");
+    }
+  }
+  
+  private void removeSelectedDateStyle(Date date) {
+    if (date == null)
+      return;
+    Widget cell = getDateCellWidget(date);
+    if (cell != null) {
+      cell.removeStyleName("phg-CalendarDialog-Month-Day-selected");
+    }
+  }
+  
   public void setSelectedDate(Date selectedDate) {
+    removeSelectedDateStyle(this.selectedDate);
     this.selectedDate = selectedDate;
+    setSelectedDateStyle(this.selectedDate);
     if (selectedDate != null) {
       selectedDateField.setText(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
     } else {
@@ -577,5 +611,15 @@ public class CalendarDialog {
       style.setDisplay(Display.BLOCK);
     }
   };
+  
+  private Map<Long, Widget> dateCellMap = new HashMap<Long, Widget>();
+  private void putDateCellWidget(Date date, Widget widget) {
+    Long dateCellKey = Long.parseLong(GwtUtils.dateToString(date, "yyyyMMdd"));
+    dateCellMap.put(dateCellKey, widget);
+  }
+  private Widget getDateCellWidget(Date date) {
+    Long dateCellKey = Long.parseLong(GwtUtils.dateToString(date, "yyyyMMdd"));
+    return dateCellMap.get(dateCellKey);
+  }
   
 }
