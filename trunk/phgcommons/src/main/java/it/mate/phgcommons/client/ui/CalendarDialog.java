@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.ui;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.utils.EventUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -277,9 +278,9 @@ public class CalendarDialog {
     horizontalPanel.setHeight(scrollHeight+"px");
     horizontalPanel.setWidth((popupWidth*3)+"px");
     scrolledAreaPanel.setWidget(horizontalPanel);
-    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(-1)));
-    horizontalPanel.add(createMonthPanel(curMonth));
-    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(+1)));
+    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(-1), false));
+    horizontalPanel.add(createMonthPanel(curMonth, true));
+    horizontalPanel.add(createMonthPanel(curMonth.clone().addMonths(+1), false));
 
     container.add(scrollPanel);
     
@@ -381,7 +382,7 @@ public class CalendarDialog {
   }
   
   @SuppressWarnings("deprecation")
-  private Widget createMonthPanel (Month month) {
+  private Widget createMonthPanel (Month month, boolean visibleMonth) {
     
     SimplePanel wrapper = new SimplePanel();
     wrapper.addStyleName("phg-CalendarDialog-MonthWrapper");
@@ -415,7 +416,7 @@ public class CalendarDialog {
         for (int col = 1; col < day1; col++) {
           Date date = CalendarUtil.copyDate(date1);
           CalendarUtil.addDaysToDate(date, -(day1 - col));
-          row = createMonthDayCell(table, row, col, date, true);
+          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     } else {
@@ -423,14 +424,14 @@ public class CalendarDialog {
         for (int col = 0; col < day1; col++) {
           Date date = CalendarUtil.copyDate(date1);
           CalendarUtil.addDaysToDate(date, -(day1 - col));
-          row = createMonthDayCell(table, row, col, date, true);
+          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     }
     
     for (int day = 1; day <= month.getLastDayOfMonth(); day++) {
       Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
-      row = createMonthDayCell(table, row, date.getDay(), date, false);
+      row = createMonthDayCell(table, row, date.getDay(), date, false, visibleMonth);
     }
     
     Date date31 = new Date(month.getYear() - 1900, month.getMonth() - 1, month.getLastDayOfMonth());
@@ -440,7 +441,7 @@ public class CalendarDialog {
         for (int col = day31 + 1; col <= 7; col++) {
           Date date = CalendarUtil.copyDate(date31);
           CalendarUtil.addDaysToDate(date, (col - day31));
-          row = createMonthDayCell(table, row, col, date, true);
+          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     } else {
@@ -448,7 +449,7 @@ public class CalendarDialog {
         for (int col = day31 + 1; col <= 6; col++) {
           Date date = CalendarUtil.copyDate(date31);
           CalendarUtil.addDaysToDate(date, (col - day31));
-          row = createMonthDayCell(table, row, col, date, true);
+          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     }
@@ -460,14 +461,16 @@ public class CalendarDialog {
   }
 
   @SuppressWarnings("deprecation")
-  private int createMonthDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth) {
+  private int createMonthDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth, boolean visibleMonth) {
     if (MONDAY_FIRST) {
       col = col == 0 ? 6 : col - 1;
     }
     int day = date.getDate();
     TouchHTML html = new TouchHTML("" + day);
 
-    putDateCellWidget(date, html);
+    if (visibleMonth) {
+      putDateCellWidget(date, html);
+    }
     
     html.addStyleName("phg-CalendarDialog-Month-Day");
     html.setHeight(dayHeight+"px");
@@ -524,17 +527,23 @@ public class CalendarDialog {
     }
   }
   
-  private void removeSelectedDateStyle(Date date) {
+  private void removeSelectedDateStyle() {
+    List<Element> elements = JQuery.select(".phg-CalendarDialog-Month-Day-selected").toElements();
+    for (Element element : elements) {
+      element.removeClassName("phg-CalendarDialog-Month-Day-selected");
+    }
+    /*
     if (date == null)
       return;
     Widget cell = getDateCellWidget(date);
     if (cell != null) {
       cell.removeStyleName("phg-CalendarDialog-Month-Day-selected");
     }
+    */
   }
   
   public void setSelectedDate(Date selectedDate) {
-    removeSelectedDateStyle(this.selectedDate);
+    removeSelectedDateStyle();
     this.selectedDate = selectedDate;
     setSelectedDateStyle(this.selectedDate);
     if (selectedDate != null) {
