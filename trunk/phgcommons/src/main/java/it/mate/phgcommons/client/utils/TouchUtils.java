@@ -151,11 +151,27 @@ public class TouchUtils {
         element.removeAttr('disabled');
     }, delay);
   }-*/;
+  
+  public static void setDisabled(Element element) {
+    setDisabled(JQuery.withElement(element));
+  }
 
   public static native void setDisabled(JQuery element) /*-{
     element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
     element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
   }-*/;
+  
+  public static void setEnabled(int delay, final Element element) {
+    GwtUtils.deferredExecution(delay, new Delegate<Void>() {
+      public void execute(Void nil) {
+        setEnabled(JQuery.withElement(element));
+      }
+    });
+  }
+  
+  public static void setEnabled(Element element) {
+    setEnabled(JQuery.withElement(element));
+  }
   
   public static native void setEnabled(JQuery element) /*-{
     element.blur();  //actually close the keyboard
