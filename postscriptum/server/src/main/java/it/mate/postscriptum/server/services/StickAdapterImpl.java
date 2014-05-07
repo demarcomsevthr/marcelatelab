@@ -14,7 +14,9 @@ import it.mate.postscriptum.shared.model.impl.StickMailTx;
 import it.mate.postscriptum.shared.model.impl.StickSmsTx;
 import it.mate.postscriptum.shared.service.AdapterException;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,8 @@ public class StickAdapterImpl implements StickAdapter {
   private static final String TWILIO_FROM_NUMBER = "+16469821337";
   
   private static final int MAX_SCHEDULED_SMS_FREE_QUOTA = 5;
+  
+  private static final int MAX_SMS_PER_DAY_FREE_QUOTA = 5;
   
   
   @PostConstruct
@@ -208,11 +212,18 @@ public class StickAdapterImpl implements StickAdapter {
   
   @Override
   public StickSms createSMS(StickSms entity) throws AdapterException {
-    List<StickSms> scheduledSMSs = findScheduledSMSsByUser(entity.getUser());
-    LoggingUtils.debug(getClass(), "scheduledSMSs.size " + (scheduledSMSs != null ? scheduledSMSs.size() : "null"));
-    if (scheduledSMSs != null && scheduledSMSs.size() >= MAX_SCHEDULED_SMS_FREE_QUOTA) {
+    List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(entity.getUser(), getMidnight());
+    LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
+    if (userSMSs != null && userSMSs.size() >= MAX_SMS_PER_DAY_FREE_QUOTA) {
+      throw new AdapterException(String.format("You cannot submit more than %s SMS per day in this version", MAX_SMS_PER_DAY_FREE_QUOTA));
+    }
+    /*
+    List<StickSms> userSMSs = findScheduledSMSsByUser(entity.getUser());
+    LoggingUtils.debug(getClass(), "scheduledSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
+    if (userSMSs != null && userSMSs.size() >= MAX_SCHEDULED_SMS_FREE_QUOTA) {
       throw new AdapterException(String.format("You cannot have more than %s scheduled SMS in this version", MAX_SCHEDULED_SMS_FREE_QUOTA));
     }
+    */
     StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
     LoggingUtils.debug(getClass(), "creating " + ds);
     ds = dao.create(ds);
@@ -227,6 +238,16 @@ public class StickAdapterImpl implements StickAdapter {
             new ParameterDefinition(String.class, "stateParam")
         }), 
         null, user.getUserId(), StickSms.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickSmsTx.class, StickSms.class);
+  }
+  
+  public List<StickSms> findSMSsByUserAndCreatedAfter(RemoteUser user, Date data) {
+    List<StickSmsDs> results = dao.findList(StickSmsDs.class, "userId == userIdParam && created >= createdParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "userIdParam"),
+            new ParameterDefinition(Date.class, "createdParam")
+        }), 
+        null, user.getUserId(), data );
     return CloneUtils.clone(results, StickSmsTx.class, StickSms.class);
   }
   
@@ -320,6 +341,16 @@ public class StickAdapterImpl implements StickAdapter {
       StickSmsDs sms = dao.findById(StickSmsDs.class, entity.getId());
       dao.delete(sms);
     }
+  }
+  
+  private Date getMidnight() {
+    Calendar cal = new GregorianCalendar();
+    cal.setTime(new Date());
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    return cal.getTime();
   }
 
 }
