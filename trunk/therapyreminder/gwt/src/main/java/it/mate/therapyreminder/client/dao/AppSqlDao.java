@@ -5,9 +5,11 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
+import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.ArrayList;
@@ -23,6 +25,14 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String UDM_FIELDS = "codice, descrizione, sequenza"; 
   
+  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, " + 
+      "quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza," +
+      "tipoRicorrenzaOraria, intervalloOrario";
+  
+  private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
+  
+  private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
+  
   public AppSqlDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
@@ -32,10 +42,12 @@ public class AppSqlDao extends WebSQLDao {
       public void handleEvent(SQLTransaction tr) {
         //TODO: ATTENZIONE QUESTA CALLBACK SERVE SOLO PER IL DEBUG LOCALE, RIMUOVER IN RELEASE
         if (DROP_TABLES_ON_OPEN_DATABASE) {
+          PhonegapUtils.log("dropping all tables");
           tr.doExecuteSql("DROP TABLE IF EXISTS version");
-          tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
           tr.doExecuteSql("DROP TABLE IF EXISTS udm");
+          tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
           tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
+          tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
         }
       }
     });
@@ -46,7 +58,7 @@ public class AppSqlDao extends WebSQLDao {
       PhonegapUtils.log("updating db therapies to version " + number);
 
       /*
-       * NOTA BENE: se cambia il default delle udm occorre 
+       * NOTA BENE: se cambia il default delle udm occorre cambiare anche:
        * VEDI ANCHE PrescrizioneTx.codUdM
        */
       PhonegapUtils.log("creating table udm");
@@ -67,6 +79,9 @@ public class AppSqlDao extends WebSQLDao {
 
       PhonegapUtils.log("creating table dosaggi");
       tr.doExecuteSql("CREATE TABLE dosaggi (" + DOSAGGI_FIELDS + " )");
+
+      PhonegapUtils.log("creating table somministrazioni");
+      tr.doExecuteSql("CREATE TABLE somministrazioni (id "+SERIAL_ID+", " + SOMMINISTRAZIONI_FIELDS + " )");
 
       /* TEST MIGRATIONS
       tr.doExecuteSql("CREATE TABLE therapies (id "+SERIAL_ID+", name)");
@@ -139,15 +154,8 @@ public class AppSqlDao extends WebSQLDao {
     });
   }
   
-  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, " + 
-      "quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza," +
-      "tipoRicorrenzaOraria, intervalloOrario";
-  
-  private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
-  
-  // TODO: DA TESTARE
   public void findAllPrescrizioni(final Delegate<List<Prescrizione>> delegate) {
-    /*
+    /* NON FUNZIONA BENE LA READ TRANSACTION
     db.doReadTransaction(new SQLTransactionCallback() {
      */
     db.doTransaction(new SQLTransactionCallback() {
@@ -172,7 +180,6 @@ public class AppSqlDao extends WebSQLDao {
                 results.add(prescrizione);
               }
             }
-//          delegate.execute(results);
             iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
           }
         });
@@ -203,9 +210,8 @@ public class AppSqlDao extends WebSQLDao {
     }
   }
   
-  // TODO: DA FINIRE (DOSAGGI)
-  public void updatePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
-    PhonegapUtils.log("updating " + prescrizione);
+  public void savePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
+    PhonegapUtils.log("saving " + prescrizione);
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (prescrizione.getId() == null) {
@@ -226,6 +232,7 @@ public class AppSqlDao extends WebSQLDao {
                           new Object[] {dosaggio.getPrescrizione().getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
                     }
                   }
+                  PhonegapUtils.log("Inserted " + prescrizione);
                   delegate.execute(prescrizione);
                 }
               });
@@ -307,4 +314,70 @@ public class AppSqlDao extends WebSQLDao {
     }
   }
 
+  public void findLastSomministrazioneByPrescrizione(final Prescrizione prescrizione, final Delegate<Somministrazione> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni WHERE idPrescrizione = ? ORDER BY data DESC", 
+            new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              Somministrazione result = new SomministrazioneTx(prescrizione);
+              result.setId(rs.getRows().getValueInt(0, "id"));
+              result.setData(new Date(rs.getRows().getValueLong(0, "data")));
+              result.setQuantita(rs.getRows().getValueDouble(0, "quantita"));
+              result.setOrario(rs.getRows().getValueString(0, "orario"));
+              result.setStato(rs.getRows().getValueInt(0, "stato"));
+              delegate.execute(result);
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  public void saveSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+    PhonegapUtils.log("saving " + somministrazione);
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        if (somministrazione.getId() == null) {
+          tr.doExecuteSql("INSERT INTO somministrazioni (" + SOMMINISTRAZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+              new Object[] {
+                somministrazione.getPrescrizione().getId(), 
+                dateAsLong(somministrazione.getData()),
+                somministrazione.getQuantita(), 
+                somministrazione.getOrario(),
+                somministrazione.getStato()
+              }, new SQLStatementCallback() {
+                public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                  somministrazione.setId(rs.getInsertId());
+                  delegate.execute(somministrazione);
+                }
+              });
+        } else {
+          String sql = "UPDATE somministrazioni SET ";
+          sql += "  idPrescrizione = ?";
+          sql += " ,data = ?";
+          sql += " ,quantita = ?";
+          sql += " ,orario = ?";
+          sql += " ,stato = ?";
+          sql += " WHERE id = ?";
+          tr.doExecuteSql(sql, new Object[] {
+              somministrazione.getPrescrizione().getId(), 
+              dateAsLong(somministrazione.getData()),
+              somministrazione.getQuantita(), 
+              somministrazione.getOrario(),
+              somministrazione.getStato()
+              , somministrazione.getId()
+            }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              delegate.execute(somministrazione);
+            }
+          });
+        }
+      }
+    });
+  }
+  
 }
