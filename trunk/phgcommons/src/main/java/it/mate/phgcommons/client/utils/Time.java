@@ -72,6 +72,7 @@ public class Time {
   public Date setInDate(Date date) {
     date.setHours(hours);
     date.setMinutes(minutes);
+    date.setSeconds(0);
     return date;
   }
 

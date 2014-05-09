@@ -35,13 +35,18 @@ public abstract class WebSQLDao {
   
   protected final static String SERIAL_ID = "INTEGER PRIMARY KEY AUTOINCREMENT"; 
   
-  protected WebSQLDao(String name, long estimatedSize, final MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
+  protected WebSQLDao(String name, long estimatedSize, final MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, final SQLTransactionCallback openCallback) {
     this.name = name;
     this.estimatedSize = estimatedSize;
     this.creationCallback = creationCallback;
     if (db == null) {
-      openDatabase(openCallback);
-      doMigrations(migrationCallbacks);
+      openDatabase(new SQLTransactionCallback() {
+        public void handleEvent(SQLTransaction tr) {
+          if (openCallback != null)
+            openCallback.handleEvent(tr);
+          doMigrations(migrationCallbacks);
+        }
+      });
     }
   }
   
@@ -61,7 +66,9 @@ public abstract class WebSQLDao {
       final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, creationCallback).cast();
       final SQLTransactionCallback migrationCallback = new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
+          PhonegapUtils.log("creating table version if not exists");
           transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
+          PhonegapUtils.log("select count on table version");
           transaction.doExecuteSql("SELECT COUNT(*) AS c FROM version", null, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction transaction, SQLResultSet resultSet) {
               if (resultSet.getRows().getLength() == 0 || resultSet.getRows().getValueInt(0, "c") == 0) {
