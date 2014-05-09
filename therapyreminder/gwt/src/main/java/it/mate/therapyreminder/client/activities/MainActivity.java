@@ -15,6 +15,7 @@ import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
+import it.mate.therapyreminder.client.service.SomministrazioniService;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
@@ -33,7 +34,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
@@ -280,8 +280,11 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void savePrescrizione(Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
-    appSqlDao.updatePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+    appSqlDao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
+        
+        SomministrazioniService.getInstance().sviluppoSomministrazioni(prescrizione);
+        
         if (delegate != null) {
           delegate.execute(prescrizione);
         } else {
