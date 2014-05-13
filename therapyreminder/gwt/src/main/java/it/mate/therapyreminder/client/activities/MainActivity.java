@@ -19,6 +19,7 @@ import it.mate.therapyreminder.client.service.SomministrazioniService;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.SettingsView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Dosaggio;
@@ -44,7 +45,7 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 public class MainActivity extends MGWTAbstractActivity implements 
   HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter,
   DosageEditView.Presenter, 
-  CalendarEventTestView.Presenter {
+  CalendarEventTestView.Presenter, SettingsView.Presenter {
   
   private MainPlace place;
   
@@ -69,6 +70,18 @@ public class MainActivity extends MGWTAbstractActivity implements
       AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
         public void execute(String element) {
           AppClientFactory.IMPL.getPhoneGap().exitApp();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.SETTINGS)) {
+      SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToHome();
         }
       });
     }
@@ -267,6 +280,10 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_LIST));
   }
 
+  public void goToSettingsView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.SETTINGS));
+  }
+
   public void goToTherapyEditView(Prescrizione prescrizione) {
     if (prescrizione == null) {
       prescrizione = new PrescrizioneTx();
@@ -279,16 +296,32 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   @Override
-  public void savePrescrizione(Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
-    appSqlDao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
-      public void execute(Prescrizione prescrizione) {
-        
-        SomministrazioniService.getInstance().sviluppoSomministrazioni(prescrizione);
-        
-        if (delegate != null) {
-          delegate.execute(prescrizione);
+  public void savePrescrizione(Prescrizione nuovaPrescrizione, final Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate) {
+    appSqlDao.savePrescrizione(nuovaPrescrizione, new Delegate<Prescrizione>() {
+      public void execute(final Prescrizione prescrizioneSalvata) {
+        final Delegate<Prescrizione> saveDelegate = delegate != null ? delegate : new Delegate<Prescrizione>() {
+          public void execute(Prescrizione element) {
+            goToTherapyListView();
+          }
+        };
+        if (oldPrescrizione.hasDifferentSomministrazioneOf(prescrizioneSalvata)) {
+          final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
+            public void execute(Prescrizione prescrizione) {
+              SomministrazioniService.getInstance().sviluppaSomministrazioni(prescrizione);
+              saveDelegate.execute(prescrizione);
+            }
+          };
+          if (oldPrescrizione.isPersistent()) {
+            SomministrazioniService.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
+              public void execute(Void element) {
+                sviluppoDelegate.execute(prescrizioneSalvata);
+              }
+            });
+          } else {
+            sviluppoDelegate.execute(prescrizioneSalvata);
+          }
         } else {
-          goToTherapyListView();
+          saveDelegate.execute(prescrizioneSalvata);
         }
       }
     });
@@ -338,6 +371,18 @@ public class MainActivity extends MGWTAbstractActivity implements
           
 //        umCombo.addItem(udm.getCodice(), desc, it == 0 ? true : false);
         }
+      }
+    });
+  }
+  
+  public void dropDB() {
+    appSqlDao.dropDB(new Delegate<Void>() {
+      public void execute(Void element) {
+        GwtUtils.deferredExecution(2000, new Delegate<Void>() {
+          public void execute(Void element) {
+            AppClientFactory.IMPL.getPhoneGap().exitApp();
+          }
+        });
       }
     });
   }

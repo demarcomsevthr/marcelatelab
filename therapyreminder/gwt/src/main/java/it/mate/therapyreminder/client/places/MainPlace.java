@@ -7,6 +7,8 @@ public class MainPlace extends Place {
   
   public static final String HOME = "home";
   
+  public static final String SETTINGS = "settings";
+  
   public static final String THERAPY_LIST = "listTherapy";
   
   public static final String THERAPY_EDIT = "editTherapy";

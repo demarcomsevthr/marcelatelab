@@ -21,6 +21,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTherapyListView();
+    public void goToSettingsView();
     public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
   }
 
@@ -73,7 +74,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("preferencesBtn")
   public void onPreferencesBtn (TouchEndEvent event) {
-    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+    getPresenter().goToSettingsView();
   }
   
 }

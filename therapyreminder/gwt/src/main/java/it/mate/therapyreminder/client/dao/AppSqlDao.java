@@ -42,13 +42,27 @@ public class AppSqlDao extends WebSQLDao {
       public void handleEvent(SQLTransaction tr) {
         //TODO: ATTENZIONE QUESTA CALLBACK SERVE SOLO PER IL DEBUG LOCALE, RIMUOVER IN RELEASE
         if (DROP_TABLES_ON_OPEN_DATABASE) {
-          PhonegapUtils.log("dropping all tables");
-          tr.doExecuteSql("DROP TABLE IF EXISTS version");
-          tr.doExecuteSql("DROP TABLE IF EXISTS udm");
-          tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
-          tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
-          tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
+          dropDBImpl(tr);
         }
+      }
+    });
+  }
+  
+  private static void dropDBImpl(SQLTransaction tr) {
+    PhonegapUtils.log("dropping all tables");
+    tr.doExecuteSql("DROP TABLE IF EXISTS version");
+    tr.doExecuteSql("DROP TABLE IF EXISTS udm");
+    tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
+    tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
+    tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
+  }
+  
+  public void dropDB(final Delegate<Void> delegate) {
+    PhonegapUtils.log("resetting db");
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        dropDBImpl(tr);
+        delegate.execute(null);
       }
     });
   }
@@ -313,21 +327,74 @@ public class AppSqlDao extends WebSQLDao {
       delegate.execute(null);
     }
   }
+  
+  public void deleteSomministrazioni(final List<Somministrazione> somministrazioni, final Delegate<Void> delegate) {
+    if (somministrazioni == null || somministrazioni.size() == 0) {
+      delegate.execute(null);
+    }
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(final SQLTransaction tr) {
+        iterateSomministrazioniForDelete(somministrazioni.iterator(), tr, delegate);
+      }
+    });
+  }
+  
+  private void iterateSomministrazioniForDelete(final Iterator<Somministrazione> it, SQLTransaction tr, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      final Somministrazione somministrazione = it.next();
+      PhonegapUtils.log("deleting " + somministrazione);
+      tr.doExecuteSql("DELETE FROM somministrazioni WHERE id = ?", new Object[] {somministrazione.getId()}, new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          iterateSomministrazioniForDelete(it, tr, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
+  }
+  
+  private Somministrazione flushSomministrazione(SQLResultSet rs, int it, Prescrizione prescrizione) {
+    Somministrazione result = new SomministrazioneTx(prescrizione);
+    result.setId(rs.getRows().getValueInt(it, "id"));
+    result.setData(new Date(rs.getRows().getValueLong(it, "data")));
+    result.setQuantita(rs.getRows().getValueDouble(it, "quantita"));
+    result.setOrario(rs.getRows().getValueString(it, "orario"));
+    result.setStato(rs.getRows().getValueInt(it, "stato"));
+    return result;
+  }
+  
+  public void findSomministrazioniSchedulateByPrescrizione(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE idPrescrizione = ? AND stato = ?";
+        sql += " ORDER BY data";
+        tr.doExecuteSql(sql, new Object[] {prescrizione.getId(), Somministrazione.STATO_SCHEDULATA}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Somministrazione> results = new ArrayList<Somministrazione>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                results.add(flushSomministrazione(rs, it, prescrizione));
+              }
+            }
+            delegate.execute(results);
+          }
+        });
+      }
+    });
+  }
 
   public void findLastSomministrazioneByPrescrizione(final Prescrizione prescrizione, final Delegate<Somministrazione> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        tr.doExecuteSql("SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni WHERE idPrescrizione = ? ORDER BY data DESC", 
-            new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE idPrescrizione = ?";
+        sql += " ORDER BY data DESC";
+        tr.doExecuteSql(sql, new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             if (rs.getRows().getLength() > 0) {
-              Somministrazione result = new SomministrazioneTx(prescrizione);
-              result.setId(rs.getRows().getValueInt(0, "id"));
-              result.setData(new Date(rs.getRows().getValueLong(0, "data")));
-              result.setQuantita(rs.getRows().getValueDouble(0, "quantita"));
-              result.setOrario(rs.getRows().getValueString(0, "orario"));
-              result.setStato(rs.getRows().getValueInt(0, "stato"));
-              delegate.execute(result);
+              delegate.execute(flushSomministrazione(rs, 0, prescrizione));
             } else {
               delegate.execute(null);
             }
