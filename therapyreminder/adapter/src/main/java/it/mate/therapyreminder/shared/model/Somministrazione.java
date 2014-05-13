@@ -5,34 +5,38 @@ import java.util.Date;
 
 public interface Somministrazione extends Serializable {
 
-  public abstract void setEseguita();
+  public static final int STATO_SCHEDULATA = 1;
 
-  public abstract boolean isEseguita();
+  public static final int STATO_ESEGUITA = 2;
 
-  public abstract void setSchedulata();
+  public void setEseguita();
 
-  public abstract boolean isSchedulata();
+  public boolean isEseguita();
 
-  public abstract void setStato(Integer stato);
+  public void setSchedulata();
 
-  public abstract Integer getStato();
+  public boolean isSchedulata();
 
-  public abstract void setOrario(String orario);
+  public void setStato(Integer stato);
 
-  public abstract String getOrario();
+  public Integer getStato();
 
-  public abstract void setQuantita(Double quantita);
+  public void setOrario(String orario);
 
-  public abstract Double getQuantita();
+  public String getOrario();
 
-  public abstract void setData(Date data);
+  public void setQuantita(Double quantita);
 
-  public abstract Date getData();
+  public Double getQuantita();
 
-  public abstract void setId(Integer id);
+  public void setData(Date data);
 
-  public abstract Integer getId();
+  public Date getData();
 
-  public abstract Prescrizione getPrescrizione();
+  public void setId(Integer id);
+
+  public Integer getId();
+
+  public Prescrizione getPrescrizione();
   
 }

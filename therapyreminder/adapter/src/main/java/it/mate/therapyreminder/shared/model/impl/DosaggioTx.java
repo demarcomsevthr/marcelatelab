@@ -24,6 +24,12 @@ public class DosaggioTx implements Dosaggio {
     this.quantita = quantita;
     this.orario = orario;
   }
+  
+  public DosaggioTx(Dosaggio that) {
+    this.prescrizione = that.getPrescrizione();
+    this.quantita = that.getQuantita();
+    this.orario = that.getOrario();
+  }
 
   public Prescrizione getPrescrizione() {
     return prescrizione;

@@ -64,4 +64,8 @@ public interface Prescrizione extends Serializable {
 
   public void setDosaggi(List<Dosaggio> dosaggi);
   
+  public boolean hasDifferentSomministrazioneOf(Prescrizione that);
+  
+  public boolean isPersistent();
+  
 }

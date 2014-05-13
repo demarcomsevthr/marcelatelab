@@ -8,10 +8,6 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class SomministrazioneTx implements Somministrazione {
 
-  protected static final int STATO_SCHEDULATA = 1;
-
-  protected static final int STATO_ESEGUITA = 2;
-
   private Prescrizione prescrizione;
   
   private Integer id;
