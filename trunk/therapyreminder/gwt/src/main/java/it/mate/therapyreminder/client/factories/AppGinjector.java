@@ -7,6 +7,7 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.SettingsView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
@@ -23,6 +24,8 @@ public interface AppGinjector extends CommonGinjector {
   public AppSqlDao getAppSqlDao();
   
   public HomeView getHomeView();
+  
+  public SettingsView getSettingsView();
   
   public TherapyListView getTherapyListView();
   

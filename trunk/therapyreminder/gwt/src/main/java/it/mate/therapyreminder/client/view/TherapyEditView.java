@@ -21,6 +21,7 @@ import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
+import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +50,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
-    public void savePrescrizione(Prescrizione prescrizione, Delegate<Prescrizione> delegate);
+    public void savePrescrizione(Prescrizione newPrescrizione, Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate);
     public void goToDosageEditView(Dosaggio dosaggio);
     public void adaptUmDescription(Double qta, String currentUdmCode, Delegate<UdM> delegate);
   }
@@ -83,7 +84,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   private Widget bottomBar = null;
   
-  private Prescrizione prescrizione;
+  private Prescrizione oldPrescrizione;
+  private Prescrizione newPrescrizione;
   
   public TherapyEditView() {
     initUI();
@@ -98,23 +100,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     
     wrapperPanel.getElement().getStyle().clearHeight();
-    
-    /*
-    tipoTerapiaCombo.addItem("O", "Orale", false);
-    tipoTerapiaCombo.addItem("I", "Intramuscolare", false);
-    tipoTerapiaCombo.addItem("E", "Endovenosa", false);
-    tipoTerapiaCombo.addItem("S", "Sottocute", false);
-    tipoTerapiaCombo.addItem("T", "Transcutanea", false);
-    tipoTerapiaCombo.addItem("R", "Rettale", false);
-    tipoTerapiaCombo.addItem("C", "Oculare", false);
-    tipoTerapiaCombo.addItem("L", "Sublinguale", false);
-    tipoTerapiaCombo.addItem("A", "Altro", false);
-    tipoTerapiaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
-      public void onValueChange(ValueChangeEvent<String> event) {
-        PhonegapUtils.log("selected value is " + event.getValue());
-      }
-    });
-    */
     
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
@@ -158,6 +143,51 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     
   }
   
+  @Override
+  public void setPresenter(Presenter presenter) {
+    super.setPresenter(presenter);
+  }
+  
+  @Override
+  public void setModel(Object model, String tag) {
+    if (TAG_PRESCRIZIONE.equals(tag)) {
+      this.oldPrescrizione = (Prescrizione)model;
+      
+      this.newPrescrizione = new PrescrizioneTx(oldPrescrizione);
+      
+      titleBox.setValue(newPrescrizione.getNome());
+      inizioBox.setValue(newPrescrizione.getDataInizio());
+      qtaBox.setValue(newPrescrizione.getQuantita());
+      umCombo.setValue(newPrescrizione.getCodUdM());
+      tipoRicorrenzaCombo.setValue(newPrescrizione.getTipoRicorrenza());
+      rangeBox.setValue(newPrescrizione.getValoreRicorrenza());
+      tipoOrariCombo.setValue(newPrescrizione.getTipoRicorrenzaOraria());
+      if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
+        rangeOrariBox.setValue(newPrescrizione.getIntervalloOrario());
+        if (newPrescrizione.getDosaggi() != null && newPrescrizione.getDosaggi().size() == 1) {
+          orarioInizioBox.setValueAsString(newPrescrizione.getDosaggi().get(0).getOrario());
+        }
+      } else if (Prescrizione.TIPO_ORARI_FISSI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
+        showOrariListPanel();
+      }
+      
+      if (oldPrescrizione.isPersistent()) {
+//      SomministrazioniService.getInstance().findCalEvents(prescrizione);
+        titleBox.setReadOnly(true);
+      }
+      
+    }
+  }
+  
+  @Override
+  public void onUnload() {
+    if (bottomBar != null) {
+      bottomBar.setVisible(false);
+      bottomBar = null;
+    }
+    super.onUnload();
+  }
+  
   private String getLastStatePanel() {
     return (String)GwtUtils.getClientAttribute("TherapyEditView.lastStatePanel");
   }
@@ -199,20 +229,11 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     }
   }
   
-  @Override
-  public void onUnload() {
-    if (bottomBar != null) {
-      bottomBar.setVisible(false);
-      bottomBar = null;
-    }
-    super.onUnload();
-  }
-  
   private void showOrariListPanel() {
-    if (prescrizione.getDosaggi().size() == 0) {
-      prescrizione.getDosaggi().add(new DosaggioTx(prescrizione));
+    if (newPrescrizione.getDosaggi().size() == 0) {
+      newPrescrizione.getDosaggi().add(new DosaggioTx(newPrescrizione));
     }
-    Collections.sort(prescrizione.getDosaggi(), new Comparator<Dosaggio>() {
+    Collections.sort(newPrescrizione.getDosaggi(), new Comparator<Dosaggio>() {
       public int compare(Dosaggio d1, Dosaggio d2) {
         if (d1.getOrario() != null && d2.getOrario() != null) {
           return d1.getOrario().compareTo(d2.getOrario());
@@ -223,7 +244,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     orariListPanel.clear();
     HorizontalPanel row = null;
     PhTimeBox lastOrarioBox = null;
-    for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+    for (Dosaggio dosaggio : newPrescrizione.getDosaggi()) {
       final PhTimeBox orarioBox = createOrarioBox(dosaggio);
       orarioBox.setValueAsString(dosaggio.getOrario());
       orarioBox.setDefaultTime(new Time().setMinutes(00));
@@ -243,9 +264,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
           if (orarioBox.getValue() != null) {
             
             flushPrescrizione(new Delegate<Prescrizione>() {
-              public void execute(Prescrizione prescrizione) {
-                getPresenter().savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
-                  public void execute(Prescrizione prescrizione) {
+              public void execute(Prescrizione newPrescrizione) {
+                getPresenter().savePrescrizione(newPrescrizione, oldPrescrizione, new Delegate<Prescrizione>() {
+                  public void execute(Prescrizione newPrescrizione) {
                     
                     Dosaggio dosaggio = (Dosaggio)orarioBox.getModel();
                     if (dosaggio.getQuantita() == null) {
@@ -270,7 +291,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       row.add(removeBtn);
       removeBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
-          prescrizione.getDosaggi().remove(((Dosaggio)orarioBox.getModel()));
+          newPrescrizione.getDosaggi().remove(((Dosaggio)orarioBox.getModel()));
           showOrariListPanel();
         }
       });
@@ -283,7 +304,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     row.add(addBtn);
     addBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        prescrizione.getDosaggi().add(new DosaggioTx(prescrizione));
+        newPrescrizione.getDosaggi().add(new DosaggioTx(newPrescrizione));
         showOrariListPanel();
       }
     });
@@ -310,11 +331,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     orarioBox.addStyleName("ui-app-timebox");
     orarioBox.setModel(dosaggio);
     return orarioBox;
-  }
-  
-  @Override
-  public void setPresenter(Presenter presenter) {
-    super.setPresenter(presenter);
   }
   
   private void refreshScrollPanel() {
@@ -362,62 +378,49 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     return getBottomBarTopPx()+"px";
   }
 
-  @Override
-  public void setModel(Object model, String tag) {
-    if (TAG_PRESCRIZIONE.equals(tag)) {
-      this.prescrizione = (Prescrizione)model;
-      titleBox.setValue(prescrizione.getNome());
-      inizioBox.setValue(prescrizione.getDataInizio());
-      qtaBox.setValue(prescrizione.getQuantita());
-      umCombo.setValue(prescrizione.getCodUdM());
-      tipoRicorrenzaCombo.setValue(prescrizione.getTipoRicorrenza());
-      rangeBox.setValue(prescrizione.getValoreRicorrenza());
-      tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
-      if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
-        rangeOrariBox.setValue(prescrizione.getIntervalloOrario());
-        if (prescrizione.getDosaggi() != null && prescrizione.getDosaggi().size() == 1) {
-          orarioInizioBox.setValueAsString(prescrizione.getDosaggi().get(0).getOrario());
-        }
-      } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
-        showOrariListPanel();
-      }
-    }
-  }
-  
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
     flushPrescrizione(new Delegate<Prescrizione>() {
-      public void execute(Prescrizione prescrizione) {
-        getPresenter().savePrescrizione(prescrizione, null);
+      public void execute(Prescrizione newPrescrizione) {
+        getPresenter().savePrescrizione(newPrescrizione, oldPrescrizione, null);
       }
     });
   }
   
   private void flushPrescrizione(Delegate<Prescrizione> delegate) {
     Double qtaUnica = qtaBox.getValueAsDouble();
-    prescrizione.setNome(titleBox.getValue());
-    prescrizione.setDataInizio(inizioBox.getValue());
-    prescrizione.setQuantita(qtaUnica);
-    prescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
-    prescrizione.setCodUdM(umCombo.getValue());
-    prescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
-    prescrizione.setTipoRicorrenzaOraria(tipoOrariCombo.getValue());
-    if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
-      prescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
+    newPrescrizione.setId(oldPrescrizione.getId());
+    newPrescrizione.setNome(titleBox.getValue());
+    newPrescrizione.setDataInizio(inizioBox.getValue());
+    newPrescrizione.setQuantita(qtaUnica);
+    newPrescrizione.setCodUdM(umCombo.getValue());
+    newPrescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
+    newPrescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
+    newPrescrizione.setTipoRicorrenzaOraria(tipoOrariCombo.getValue());
+    if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
+      newPrescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
       if (orarioInizioBox.getValue() == null) {
         PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
         return;
       }
-      prescrizione.setDosaggi(new ArrayList<Dosaggio>());
-      prescrizione.getDosaggi().add(new DosaggioTx(prescrizione, qtaUnica, orarioInizioBox.getValue().asString()));
-    } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
-      for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+      newPrescrizione.setDosaggi(new ArrayList<Dosaggio>());
+      newPrescrizione.getDosaggi().add(new DosaggioTx(newPrescrizione, qtaUnica, orarioInizioBox.getValue().asString()));
+    } else if (Prescrizione.TIPO_ORARI_FISSI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
+      if (newPrescrizione.getDosaggi() == null) {
+        PhgDialogUtils.showMessageDialog("Devi inserire almeno un orario di assunzione", "Alert", PhgDialogUtils.BUTTONS_OK);
+        return;
+      }
+      for (Dosaggio dosaggio : newPrescrizione.getDosaggi()) {
+        if (dosaggio.getOrario() == null) {
+          PhgDialogUtils.showMessageDialog("Orario di assunzione non impostato", "Alert", PhgDialogUtils.BUTTONS_OK);
+          return;
+        }
         if (dosaggio.getQuantita() == null) {
           dosaggio.setQuantita(qtaUnica);
         }
       }
     }
-    delegate.execute(prescrizione);
+    delegate.execute(newPrescrizione);
   }
 
 }
