@@ -35,7 +35,7 @@ public class PrescrizioneTx implements Prescrizione {
   
   private String tipoRicorrenzaOraria;
   
-  private Integer intervalloOrario;
+  private Integer intervalloOrario = 1;
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
   
@@ -45,6 +45,76 @@ public class PrescrizioneTx implements Prescrizione {
     return "PrescrizioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", quantita=" + quantita
         + ", idComposizione=" + idComposizione + ", tipoRicorrenza=" + tipoRicorrenza + ", valoreRicorrenza=" + valoreRicorrenza + ", codUdM=" + codUdM
         + ", tipoRicorrenzaOraria=" + tipoRicorrenzaOraria + ", intervalloOrario=" + intervalloOrario + "]";
+  }
+  
+  @Override
+  public boolean isPersistent() {
+    return id != null;
+  }
+  
+  public PrescrizioneTx() {
+
+  }
+
+  public PrescrizioneTx(Prescrizione that) {
+    this.id = that.getId();
+    this.nome = that.getNome();
+    this.dataInizio = that.getDataInizio();
+    this.dataFine = that.getDataFine();
+    this.quantita = that.getQuantita();
+    this.idComposizione = that.getIdComposizione();
+    this.tipoRicorrenza = that.getTipoRicorrenza();
+    this.valoreRicorrenza = that.getValoreRicorrenza();
+    this.codUdM = that.getCodUdM();
+    this.tipoRicorrenzaOraria = that.getTipoRicorrenzaOraria();
+    this.intervalloOrario = that.getIntervalloOrario();
+    for (Dosaggio dosaggio : that.getDosaggi()) {
+      this.dosaggi.add(new DosaggioTx(dosaggio));
+    }
+  }
+
+  @Override
+  public boolean hasDifferentSomministrazioneOf(Prescrizione that) {
+    /*
+    if (!isEqualAllowNull(this.getQuantita(), that.getQuantita())) {
+      return true;
+    }
+    */
+    if (!isEqualAllowNull(this.getTipoRicorrenza(), that.getTipoRicorrenza())) {
+      return true;
+    }
+    if (!isEqualAllowNull(this.getValoreRicorrenza(), that.getValoreRicorrenza())) {
+      return true;
+    }
+    if (!isEqualAllowNull(this.getTipoRicorrenzaOraria(), that.getTipoRicorrenzaOraria())) {
+      return true;
+    }
+    if (!isEqualAllowNull(this.getIntervalloOrario(), that.getIntervalloOrario())) {
+      return true;
+    }
+    for (Dosaggio thisDosaggio : this.getDosaggi()) {
+      boolean match = false;
+      for (Dosaggio thatDosaggio : that.getDosaggi()) {
+        if (isEqualAllowNull(thisDosaggio.getOrario(), thatDosaggio.getOrario())) {
+          match = true;
+          break;
+        }
+      }
+      if (!match) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  private boolean isEqualAllowNull(Object v1, Object v2) {
+    if (v1 == null && v2 != null)
+      return false;
+    if (v1 != null && v2 == null)
+      return false;
+    if (v1 == null && v2 == null)
+      return true;
+    return v1.equals(v2);
   }
 
   public Integer getId() {
