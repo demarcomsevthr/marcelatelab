@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsDate;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -1088,6 +1089,13 @@ public class GwtUtils {
     return obj[name];
   }-*/;
 
+  public native static String getPropertyStringImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+
   public native static boolean getPropertyBoolImpl(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return false;
@@ -1097,7 +1105,21 @@ public class GwtUtils {
   
   public native static int getPropertyIntImpl(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
-      return false;
+      return 0;
+    }
+    return obj[name];
+  }-*/;
+
+  public native static double getPropertyDoubleImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return 0;
+    }
+    return obj[name];
+  }-*/;
+
+  public native static JsDate getPropertyDateImpl(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
     }
     return obj[name];
   }-*/;
