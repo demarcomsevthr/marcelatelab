@@ -74,23 +74,18 @@ public class PrescrizioneTx implements Prescrizione {
   }
 
   @Override
-  public boolean hasDifferentSomministrazioneOf(Prescrizione that) {
-    /*
-    if (!isEqualAllowNull(this.getQuantita(), that.getQuantita())) {
-      return true;
-    }
-    */
+  public boolean hasEqualSomministrazioneOf(Prescrizione that) {
     if (!isEqualAllowNull(this.getTipoRicorrenza(), that.getTipoRicorrenza())) {
-      return true;
+      return false;
     }
     if (!isEqualAllowNull(this.getValoreRicorrenza(), that.getValoreRicorrenza())) {
-      return true;
+      return false;
     }
     if (!isEqualAllowNull(this.getTipoRicorrenzaOraria(), that.getTipoRicorrenzaOraria())) {
-      return true;
+      return false;
     }
     if (!isEqualAllowNull(this.getIntervalloOrario(), that.getIntervalloOrario())) {
-      return true;
+      return false;
     }
     for (Dosaggio thisDosaggio : this.getDosaggi()) {
       boolean match = false;
@@ -101,10 +96,10 @@ public class PrescrizioneTx implements Prescrizione {
         }
       }
       if (!match) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
   
   private boolean isEqualAllowNull(Object v1, Object v2) {
