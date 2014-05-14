@@ -79,7 +79,8 @@ public class CalendarPlugin {
   public static void createEvent(Event event) {
     JSONUtils.ensureStringify();
     PhonegapUtils.log("creating event " + event);
-    createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+//  createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+    callPluginImpl("createEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
         PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
       }
@@ -90,6 +91,37 @@ public class CalendarPlugin {
     });
   }
   
+  public static void deleteEvent(Event event) {
+    JSONUtils.ensureStringify();
+    PhonegapUtils.log("deleting event " + event);
+    callPluginImpl("deleteEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+      public void handleEvent(JavaScriptObject results) {
+        PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
+      }
+    }, new JSOFailure() {
+      public void handleEvent(JavaScriptObject results) {
+        PhonegapUtils.log("Failure - " + JSONUtils.stringify(results));
+      }
+    });
+  }
+  
+  private static native void callPluginImpl (String methodName, String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
+    var jsSuccess = $entry(function(message) {
+      success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
+    });
+    var jsFailure = $entry(function(message) {
+      failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOFailure::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
+    });
+    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", methodName, [{
+      "title": title,
+      "location": location,
+      "notes": notes,
+      "startTime": startTime,
+      "endTime": endTime
+    }])
+  }-*/;
+
+  /*
   private static native void createEventImpl (String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
     var jsSuccess = $entry(function(message) {
       success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
@@ -115,7 +147,8 @@ public class CalendarPlugin {
     if (event.getNotes() == null)
       event.setNotes("");
     PhonegapUtils.log("finding event " + event);
-    findEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+//  findEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+    callPluginImpl("findEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
         PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
         JsArray<JavaScriptObject> jsEvents = results.cast();
@@ -138,7 +171,8 @@ public class CalendarPlugin {
       }
     });
   }
-  
+
+  /*
   private static native void findEventImpl (String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
     var jsSuccess = $entry(function(message) {
       success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
@@ -159,12 +193,8 @@ public class CalendarPlugin {
     public void handleEvent(JavaScriptObject jso);
   }
 
-  protected static interface JSOSuccess extends JSOCallback {
+  protected static interface JSOSuccess extends JSOCallback { }
 
-  }
-
-  protected static interface JSOFailure extends JSOCallback {
-
-  }
+  protected static interface JSOFailure extends JSOCallback { }
 
 }
