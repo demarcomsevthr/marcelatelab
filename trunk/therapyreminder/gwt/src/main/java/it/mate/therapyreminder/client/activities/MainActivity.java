@@ -4,9 +4,9 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
-import it.mate.phgcommons.client.utils.LogUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -51,7 +51,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private BaseMgwtView view;
   
-  private AppSqlDao appSqlDao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
+  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
   
   private final static String ALL_UDM_KEY = "AllUdM";
 
@@ -139,7 +139,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private void retrieveModel() {
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
-      appSqlDao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
+      dao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
         public void execute(List<Prescrizione> results) {
           view.setModel(results, TherapyListView.TAG_PRESCRIZIONI);
         }
@@ -296,32 +296,36 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   @Override
-  public void savePrescrizione(Prescrizione nuovaPrescrizione, final Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate) {
-    appSqlDao.savePrescrizione(nuovaPrescrizione, new Delegate<Prescrizione>() {
-      public void execute(final Prescrizione prescrizioneSalvata) {
-        final Delegate<Prescrizione> saveDelegate = delegate != null ? delegate : new Delegate<Prescrizione>() {
-          public void execute(Prescrizione element) {
-            goToTherapyListView();
-          }
-        };
-        if (oldPrescrizione.hasDifferentSomministrazioneOf(prescrizioneSalvata)) {
+  public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, Delegate<Prescrizione> endDelegate) {
+    final Delegate<Prescrizione> fEndDelegate = endDelegate != null ? endDelegate : new Delegate<Prescrizione>() {
+      public void execute(Prescrizione element) {
+        goToTherapyListView();
+      }
+    };
+    dao.savePrescrizione(newPrescrizione, new Delegate<Prescrizione>() {
+      public void execute(final Prescrizione newPrescrizioneSalvata) {
+        if (oldPrescrizione.hasEqualSomministrazioneOf(newPrescrizioneSalvata)) {
+          fEndDelegate.execute(newPrescrizioneSalvata);
+        } else {
           final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
-              SomministrazioniService.getInstance().sviluppaSomministrazioni(prescrizione);
-              saveDelegate.execute(prescrizione);
+              try {
+                SomministrazioniService.getInstance().sviluppaSomministrazioni(prescrizione);
+                fEndDelegate.execute(prescrizione);
+              } catch (ServiceException ex) {
+                processFailure(null, ex);
+              }
             }
           };
           if (oldPrescrizione.isPersistent()) {
             SomministrazioniService.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
-                sviluppoDelegate.execute(prescrizioneSalvata);
+                sviluppoDelegate.execute(newPrescrizioneSalvata);
               }
             });
           } else {
-            sviluppoDelegate.execute(prescrizioneSalvata);
+            sviluppoDelegate.execute(newPrescrizioneSalvata);
           }
-        } else {
-          saveDelegate.execute(prescrizioneSalvata);
         }
       }
     });
@@ -329,7 +333,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void deletePrescrizioni(List<Prescrizione> prescrizioni) {
-    appSqlDao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
+    dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
       public void execute(Void element) {
         goToTherapyListView();
       }
@@ -340,7 +344,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   private void findAllUdM(final Delegate<List<UdM>> delegate) {
     List<UdM> results = (List<UdM>)GwtUtils.getClientAttribute(ALL_UDM_KEY);
     if (results == null) {
-      appSqlDao.findAllUdM(new Delegate<List<UdM>>() {
+      dao.findAllUdM(new Delegate<List<UdM>>() {
         public void execute(List<UdM> results) {
           GwtUtils.setClientAttribute(ALL_UDM_KEY, results);
           delegate.execute(results);
@@ -352,7 +356,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void adaptUmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate) {
-    LogUtil.log("adaptUmDescription: qta = "+qta+", currentUdmCode = "+currentUdmCode);
+//  LogUtil.log("adaptUmDescription: qta = "+qta+", currentUdmCode = "+currentUdmCode);
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
       public void execute(List<UdM> udms) {
@@ -376,7 +380,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void dropDB() {
-    appSqlDao.dropDB(new Delegate<Void>() {
+    dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
         GwtUtils.deferredExecution(2000, new Delegate<Void>() {
           public void execute(Void element) {
