@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
-import it.mate.phgcommons.client.utils.LogUtil;
+import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.MgwtDialogs;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
   }
   
   public void setItem(String value, String description, boolean selected) {
-    LogUtil.log("setItem: value = "+value+", description = "+description+", selected = " + selected);
+//  LogUtil.log("setItem: value = "+value+", description = "+description+", selected = " + selected);
     for (Item item : items) {
       if (item.value.equals(value)) {
         item.description = description;
