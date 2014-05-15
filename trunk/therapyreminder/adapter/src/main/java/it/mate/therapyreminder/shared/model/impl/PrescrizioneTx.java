@@ -39,6 +39,7 @@ public class PrescrizioneTx implements Prescrizione {
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
   
+  private boolean detached = false;
 
   @Override
   public String toString() {
@@ -54,6 +55,11 @@ public class PrescrizioneTx implements Prescrizione {
   
   public PrescrizioneTx() {
 
+  }
+  
+  public PrescrizioneTx(Integer id) {
+    this.id = id;
+    this.detached = true;
   }
 
   public PrescrizioneTx(Prescrizione that) {
@@ -212,6 +218,10 @@ public class PrescrizioneTx implements Prescrizione {
 
   public void setDosaggi(List<Dosaggio> dosaggi) {
     this.dosaggi = dosaggi;
+  }
+  
+  public boolean isDetached() {
+    return detached;
   }
 
 }
