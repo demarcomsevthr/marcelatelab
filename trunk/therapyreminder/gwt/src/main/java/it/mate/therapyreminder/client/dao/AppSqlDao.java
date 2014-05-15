@@ -385,6 +385,29 @@ public class AppSqlDao extends WebSQLDao {
     return result;
   }
   
+  public void findSomministrazioniScadute(final Date dataRiferimento, final Delegate<List<Somministrazione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE stato = ? AND data <= ?";
+        sql += " ORDER BY data";
+        tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA, dataRiferimento}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Somministrazione> results = new ArrayList<Somministrazione>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                Prescrizione detachedPrescrizione = new PrescrizioneTx(rs.getRows().getValueInt(it, "idPrescrizione"));
+                results.add(flushSomministrazioneRS(rs, it, detachedPrescrizione));
+              }
+            }
+            delegate.execute(results);
+          }
+        });
+      }
+    });
+  }
+
   public void findSomministrazioniSchedulateByPrescrizione(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {

@@ -105,6 +105,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     // SuperDevModeUtil.showDevMode();
 
+    GwtUtils.setMobileOptimizations(true);
+    
     ViewPort viewPort = new MGWTSettings.ViewPort();
     viewPort.setTargetDensity(DENSITY.MEDIUM);
     viewPort.setUserScaleAble(false).setMinimumScale(1.0).setMinimumScale(1.0).setMaximumScale(1.0);
@@ -165,6 +167,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         }
         AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
+        
+        //TODO: 15/05/2014
+        initSomministrazioniTimer();
+        
       }
     });
     
@@ -398,6 +404,15 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public AppSqlDao getAppSqlDao() {
     return ginjector.getAppSqlDao();
+  }
+  
+  //TODO: 15/05/2014
+  private void initSomministrazioniTimer() {
+    GwtUtils.createTimer(1000, new Delegate<Void>() {
+      public void execute(Void element) {
+        
+      }
+    });
   }
   
 }
