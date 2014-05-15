@@ -15,6 +15,7 @@ import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -38,12 +39,21 @@ public class SomministrazioniService {
 
   }
   
-  // TODO
+  // TODO: 15/05/2014
   public void findPrimaSomministrazioneScaduta(Delegate<Somministrazione> delegate) {
-    
+    Date dataRiferimento = new Date();
+    dao.findSomministrazioniScadute(dataRiferimento, new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> somministrazioni) {
+        if (somministrazioni == null)
+          return;
+        for (Somministrazione somministrazione : somministrazioni) {
+          PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+        }
+      }
+    });
   }
   
-  // TODO
+  // TODO: 15/05/2014
   public void sviluppaSomministrazioniAsynch() {
     dao.findAllPrescrizioniAttive(new Date(), new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioni) {
@@ -69,53 +79,63 @@ public class SomministrazioniService {
     });
   }
   
-  private void sviluppaSomministrazioniAPartireDa(Prescrizione prescrizione, Date dataUltimaSomministrazione) {
-    
+  private void sviluppaSomministrazioniAPartireDa(final Prescrizione prescrizione, Date dataUltimaSomministrazione) {
+    final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> somministrazioni) {
+        PhonegapLog.log("EXECUTING COMPLETION DELEGATE (TODO: REMOTE SAVE) WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
+      }
+    };
     if (dataUltimaSomministrazione == null) {
-      dataUltimaSomministrazione = prescrizione.getDataInizio();
-      sviluppaSomministrazioniPerGiorno(prescrizione, dataUltimaSomministrazione);
+      iterateDosaggiForInsert(prescrizione, prescrizione.getDataInizio(), prescrizione.getDosaggi().iterator(), 
+          new ArrayList<Somministrazione>(), new Delegate<List<Somministrazione>>() {
+        public void execute(List<Somministrazione> somministrazioni) {
+          sviluppaRicorrenzaSuccessiva(prescrizione, prescrizione.getDataInizio(), somministrazioni, completionDelegate);
+        }
+      });
+    } else {
+      sviluppaRicorrenzaSuccessiva(prescrizione, dataUltimaSomministrazione, new ArrayList<Somministrazione>(), completionDelegate);
     }
-
-    Date dataLimiteSviluppoSomministrazioni = getDataLimiteSviluppoSomministrazioni(prescrizione);
-    
-    while (true) {
-
-      Date dataSomministrazione = CalendarUtil.copyDate(dataUltimaSomministrazione);
-      
-      if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
-        int incremento = prescrizione.getValoreRicorrenza();
-        CalendarUtil.addDaysToDate(dataSomministrazione, incremento);
-      } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_SETTIMANALE)) {
-        int incremento = 7 * prescrizione.getValoreRicorrenza();
-        CalendarUtil.addDaysToDate(dataSomministrazione, incremento);
-      } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_MENSILE)) {
-        int incremento = prescrizione.getValoreRicorrenza();
-        CalendarUtil.addMonthsToDate(dataSomministrazione, incremento);
-      }
-      
-      if (dataSomministrazione.after(dataLimiteSviluppoSomministrazioni)) {
-        return;
-      }
-      
-      if (prescrizione.getDataFine() != null && dataSomministrazione.after(prescrizione.getDataFine())) {
-        return;
-      }
-      
-      sviluppaSomministrazioniPerGiorno(prescrizione, dataSomministrazione);
-      
-      dataUltimaSomministrazione = dataSomministrazione;
-      
-    }
-    
   }
   
-  private void sviluppaSomministrazioniPerGiorno(final Prescrizione prescrizione, Date dataSomministrazione) {
-    Date NOW = new Date();
-    for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+  private void sviluppaRicorrenzaSuccessiva(final Prescrizione prescrizione, Date dataUltimaSomministrazione,
+      List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> completionDelegate) {
+    final Date nextDataSomministrazione = CalendarUtil.copyDate(dataUltimaSomministrazione);
+    if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
+      int incremento = prescrizione.getValoreRicorrenza();
+      CalendarUtil.addDaysToDate(nextDataSomministrazione, incremento);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_SETTIMANALE)) {
+      int incremento = 7 * prescrizione.getValoreRicorrenza();
+      CalendarUtil.addDaysToDate(nextDataSomministrazione, incremento);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_MENSILE)) {
+      int incremento = prescrizione.getValoreRicorrenza();
+      CalendarUtil.addMonthsToDate(nextDataSomministrazione, incremento);
+    }
+    Date dataLimiteSviluppoSomministrazioni = getDataLimiteSviluppoSomministrazioni(prescrizione);
+    if (nextDataSomministrazione.after(dataLimiteSviluppoSomministrazioni)) {
+      completionDelegate.execute(somministrazioni);
+      return;
+    }
+    if (prescrizione.getDataFine() != null && nextDataSomministrazione.after(prescrizione.getDataFine())) {
+      completionDelegate.execute(somministrazioni);
+      return;
+    }
+    iterateDosaggiForInsert(prescrizione, nextDataSomministrazione, prescrizione.getDosaggi().iterator(), 
+        somministrazioni, new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> somministrazioni) {
+        sviluppaRicorrenzaSuccessiva(prescrizione, nextDataSomministrazione, somministrazioni, completionDelegate);
+      }
+    });
+  }
+  
+  private void iterateDosaggiForInsert(final Prescrizione prescrizione, final Date dataSomministrazione, final Iterator<Dosaggio> it, 
+      final List<Somministrazione> results, final Delegate<List<Somministrazione>> completionDelegate) {
+    if (it.hasNext()) {
+      Dosaggio dosaggio = it.next();
       Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
-      if (dataSomministrazione.before(NOW)) {
-        continue;
+      if (dataSomministrazione.before(new Date())) {
+        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, completionDelegate);
+        return;
       }
       somministrazione.setData(dataSomministrazione);
       somministrazione.setOrario(dosaggio.getOrario());
@@ -124,18 +144,15 @@ public class SomministrazioniService {
         qta = prescrizione.getQuantita();
       somministrazione.setQuantita(qta);
       somministrazione.setSchedulata();
-      
       dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           saveCalEvent(somministrazione);
-          saveRemoteSomministrazione(somministrazione, new Delegate<Somministrazione>() {
-            public void execute(Somministrazione somministrazione) {
-
-            }
-          });
+          results.add(somministrazione);
+          iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, completionDelegate);
         }
       });
-      
+    } else {
+      completionDelegate.execute(results);
     }
   }
   
@@ -231,8 +248,8 @@ public class SomministrazioniService {
     return calEvent;
   }
   
-  // TODO
-  private void saveRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+ // TODO: 15/05/2014
+ private void saveRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
     PhonegapLog.log("saving remote " + somministrazione);
     delegate.execute(somministrazione);
   }
@@ -245,7 +262,7 @@ public class SomministrazioniService {
     CalendarPlugin.createEvent(calEvent);
   }
   
-  // TODO
+  // TODO: 15/05/2014
   private void deleteRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
     PhonegapLog.log("deleting remote " + somministrazione);
     delegate.execute(somministrazione);
