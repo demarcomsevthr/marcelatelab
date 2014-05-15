@@ -380,13 +380,52 @@ public class GwtUtils {
       }
     }.scheduleRepeating(10);
   }
+
+  //TODO: 15/05/2014
+  public abstract static class MobileTimer extends Timer {
+    boolean cancelRequested = false;
+    public MobileTimer() {  }
+    @Override
+    public void scheduleRepeating(int periodMillis) {
+      Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+        public boolean execute() {
+          if (!cancelRequested) {
+            MobileTimer.this.run();
+          }
+          return cancelRequested;
+        }
+      }, periodMillis);
+    }
+    @Override
+    public void schedule(int periodMillis) {
+      Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+        public boolean execute() {
+          MobileTimer.this.run();
+          return true;
+        }
+      }, periodMillis);
+    }
+    @Override
+    public void cancel() {
+      this.cancelRequested = true;
+    }
+  }
   
   public static Timer createTimer (int periodMillis, final Delegate<Void> delegate) {
-    Timer timer = new Timer() {
-      public void run() {
-        delegate.execute(null);
-      }
-    };
+    Timer timer = null;
+    if (mobileOptimizations) {
+      timer = new MobileTimer() {
+        public void run() {
+          delegate.execute(null);
+        }
+      };
+    } else {
+      timer = new Timer() {
+        public void run() {
+          delegate.execute(null);
+        }
+      };
+    }
     timer.scheduleRepeating(periodMillis);
     return timer;
   }
