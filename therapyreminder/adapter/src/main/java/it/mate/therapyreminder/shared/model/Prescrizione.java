@@ -67,5 +67,7 @@ public interface Prescrizione extends Serializable {
   public boolean hasEqualSomministrazioneOf(Prescrizione that);
   
   public boolean isPersistent();
+
+  public boolean isDetached();
   
 }
