@@ -40,15 +40,14 @@ public class SomministrazioniService {
   }
   
   // TODO: 15/05/2014
-  public void findPrimaSomministrazioneScaduta(Delegate<Somministrazione> delegate) {
+  public void findPrimaSomministrazioneScaduta(final Delegate<Somministrazione> delegate) {
     Date dataRiferimento = new Date();
     dao.findSomministrazioniScadute(dataRiferimento, new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni == null)
           return;
-        for (Somministrazione somministrazione : somministrazioni) {
-          PhonegapLog.log("found somministrazione scaduta " + somministrazione);
-        }
+        if (somministrazioni.size() > 0)
+          delegate.execute(somministrazioni.get(0));
       }
     });
   }

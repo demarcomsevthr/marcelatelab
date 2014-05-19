@@ -391,7 +391,7 @@ public class AppSqlDao extends WebSQLDao {
         String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
         sql += " WHERE stato = ? AND data <= ?";
         sql += " ORDER BY data";
-        tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA, dataRiferimento}, 
+        tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA, dateAsLong(dataRiferimento)}, 
           new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             List<Somministrazione> results = new ArrayList<Somministrazione>();
