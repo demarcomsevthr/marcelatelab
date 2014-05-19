@@ -392,7 +392,7 @@ public class GwtUtils {
           if (!cancelRequested) {
             MobileTimer.this.run();
           }
-          return cancelRequested;
+          return !cancelRequested;
         }
       }, periodMillis);
     }
@@ -414,6 +414,7 @@ public class GwtUtils {
   public static Timer createTimer (int periodMillis, final Delegate<Void> delegate) {
     Timer timer = null;
     if (mobileOptimizations) {
+      GwtUtils.log("using MobileTimer");
       timer = new MobileTimer() {
         public void run() {
           delegate.execute(null);
