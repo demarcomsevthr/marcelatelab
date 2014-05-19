@@ -10,6 +10,7 @@ import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
@@ -21,8 +22,10 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
+import it.mate.therapyreminder.client.service.SomministrazioniService;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
 import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
 
 import java.util.Map;
@@ -408,11 +411,25 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   //TODO: 15/05/2014
   private void initSomministrazioniTimer() {
-    GwtUtils.createTimer(1000, new Delegate<Void>() {
+    
+    final Delegate<Void> findSomministrazioneScadutaDelegate = new Delegate<Void>() {
+      public void execute(Void arg) {
+        SomministrazioniService.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+          public void execute(Somministrazione somministrazione) {
+            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+          }
+        });
+      }
+    };
+    
+    findSomministrazioneScadutaDelegate.execute(null);
+    
+    GwtUtils.createTimer(30000, new Delegate<Void>() {
       public void execute(Void element) {
-        
+        findSomministrazioneScadutaDelegate.execute(null);
       }
     });
+    
   }
   
 }
