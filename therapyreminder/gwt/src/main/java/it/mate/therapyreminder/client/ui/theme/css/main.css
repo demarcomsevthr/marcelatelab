@@ -432,3 +432,7 @@ body {
 .ui-bottom-action-hours-btn {
   background: url('main/images/hours-32.png') no-repeat 0px 0px;
 }
+
+.ui-form-row-1 {
+  margin-bottom: -0.3em;
+}
