@@ -10,33 +10,35 @@
       
     <g:HTML HTML="Promemoria" addStyleNames="ui-view-header"/>
     
-    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
-      <p:TouchButton text="EXECUTE" ui:field="execBtn" addStyleNames="ui-top-action-btn" visible="false"/>
-    </g:HorizontalPanel>
-
     <hr class="ui-view-separator-1"/>
     
     <g:Label text="Farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
-    <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box" readOnly="true"/>
 
     <hr class="ui-view-separator"/>
     
-    <g:Label text="Data:" addStyleNames="ui-field-label"/>
-    <ph:PhTextBox ui:field="dateBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+    <g:Label text="Data/ora:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:HorizontalPanel addStyleNames="ui-form-row-1">
+      <ph:PhTextBox ui:field="dateBox" addStyleNames="ui-app-textbox, ui-title-box" readOnly="true" width="5em"/>
+      <ph:PhTextBox ui:field="oraBox" addStyleNames="ui-app-textbox, ui-orario-box" readOnly="true" width="4em"/>
+    </g:HorizontalPanel>
     
     <hr class="ui-view-separator"/>
     
-    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
-    <gc:Spacer height="0.3em"/>
-    <g:HorizontalPanel>
-      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-      <ph:PhTextBox ui:field="umBox" addStyleNames="ui-app-textbox, ui-um-box"/>
+    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:HorizontalPanel addStyleNames="ui-form-row-1">
+      <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" readOnly="true" width="5em"/>
+      <ph:PhTextBox ui:field="umBox" addStyleNames="ui-app-textbox, ui-um-box" readOnly="true"/>
     </g:HorizontalPanel>
         
     <hr class="ui-view-separator"/>
     
-    <g:Label text="Ora:" addStyleNames="ui-inline-label" width="7em"/>
-    <ph:PhTextBox ui:field="oraBox" addStyleNames="ui-app-textbox, ui-orario-box"/>
+    <g:HTML ui:field="expiredMessagePanel" visible="false" addStyleNames="ui-app-expired-msg"/>
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" ui:field="buttonsBar">
+      <p:TouchButton text="YES" ui:field="yesBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="NO" ui:field="noBtn" addStyleNames="ui-top-action-btn"/>
+    </g:HorizontalPanel>
+
     
   </g:HTMLPanel>
   

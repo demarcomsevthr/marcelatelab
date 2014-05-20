@@ -1,16 +1,20 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.NumberUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.ui.SignPanel;
+import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
@@ -34,6 +38,8 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   @UiField MTextBox qtaBox;
   @UiField MTextBox umBox;
   @UiField MTextBox oraBox;
+  @UiField HTML expiredMessagePanel;
+  @UiField Panel buttonsBar;
   
   public ReminderEditView() {
     initUI();
@@ -67,8 +73,20 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
       titleBox.setValue(somministrazione.getPrescrizione().getNome());
       dateBox.setValue(PhonegapUtils.dateToString(somministrazione.getData()));
-      qtaBox.setValue(""+somministrazione.getQuantita());
+      if (NumberUtils.isInteger(somministrazione.getQuantita())) {
+        Integer qti = (int)Math.floor(somministrazione.getQuantita());
+        qtaBox.setValue(""+qti);
+      } else {
+        qtaBox.setValue(""+somministrazione.getQuantita());
+      }
       oraBox.setValue(somministrazione.getOrario());
+      
+      if (SomministrazioneUtils.isScaduta(somministrazione)) {
+        expiredMessagePanel.setHTML(SafeHtmlUtils.fromTrustedString("<p>The reminder is expired.</p><p>Did you take the medicine?</p>"));
+        expiredMessagePanel.setVisible(true);
+        buttonsBar.setVisible(true);
+      }
+      
     }
   }
 
