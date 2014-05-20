@@ -68,6 +68,4 @@ public interface Prescrizione extends Serializable {
   
   public boolean isPersistent();
 
-  public boolean isDetached();
-  
 }

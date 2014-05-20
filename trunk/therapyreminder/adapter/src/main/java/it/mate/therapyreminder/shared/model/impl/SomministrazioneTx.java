@@ -29,6 +29,15 @@ public class SomministrazioneTx implements Somministrazione {
   }
   
   @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Somministrazione) {
+      Somministrazione that = (Somministrazione)obj;
+      return this.id.equals(that.getId());
+    }
+    return super.equals(obj);
+  }
+  
+  @Override
   public String toString() {
     return "Somministrazione [prescrizione.id=" + prescrizione.getId() + ", id=" + id + ", data=" + data + ", quantita=" + quantita + ", orario=" + orario + ", stato="
         + stato + "]";
