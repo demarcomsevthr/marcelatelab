@@ -9,6 +9,8 @@ public interface Somministrazione extends Serializable {
 
   public static final int STATO_ESEGUITA = 2;
 
+  public static final int STATO_ANNULLATA = 3;
+
   public void setEseguita();
 
   public boolean isEseguita();
