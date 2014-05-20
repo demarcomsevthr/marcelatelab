@@ -36,6 +36,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -79,6 +80,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private RemoteUser remoteUser;
   
   private Delegate<RemoteUser> remoteUserDelegate;
+  
+  private Somministrazione editingSomministrazione;
+  
+  private Timer startupTimer;
   
   
   
@@ -141,49 +146,36 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     PhonegapUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
-        PhonegapUtils.log("CKD - changing orientation handler");
         PhonegapUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
       }
     });
-
-    AppClientFactory clientFactory = AppClientFactory.IMPL;
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
 
     if (MGWT.getOsDetection().isTablet()) {
       Window.alert("Internal error. MGWT Tablet Display Not Supported!");
     } else {
-      createPhoneDisplay(clientFactory);
+//    AppClientFactory clientFactory = AppClientFactory.IMPL;
+//    createPhoneDisplay(clientFactory);
+      createPhoneDisplay();
     }
   
     AppHistoryObserver historyObserver = new AppHistoryObserver();
 
-    final MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
+    MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), new MainPlace());
-
-    NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
-      public void execute(Map<String, String> properties) {
-        for (String name : properties.keySet()) {
-          PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
-        }
-        AppClientFactoryImpl.this.nativeProperties = properties;
-        historyHandler.handleCurrentHistory();
-        
-        //TODO: 15/05/2014
-        initSomministrazioniTimer();
-        
-      }
-    });
+    // TODO: 20/15/2014
+    initTimersAndStartHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
 
-  private void createPhoneDisplay(AppClientFactory clientFactory) {
+//private void createPhoneDisplay(AppClientFactory clientFactory) {
+  private void createPhoneDisplay() {
     AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
-    MainActivityMapper activityMapper = new MainActivityMapper(clientFactory);
+    MainActivityMapper activityMapper = new MainActivityMapper(this);
     MainAnimationMapper animationMapper = new MainAnimationMapper();
-    AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, clientFactory.getBinderyEventBus());
+    AnimatingActivityManager activityManager = new AnimatingActivityManager(activityMapper, animationMapper, this.getBinderyEventBus());
     activityManager.setDisplay(display);
     RootPanel.get().add(display);
     AndroidBackButtonHandler.start();
@@ -264,7 +256,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       
     } else {
       
-      //09/10/2013
       // Patch per IPhone per far funzionare le animazioni jquery
       wrapperPanel.setHeight((Window.getClientHeight() - HEADER_PANEL_HEIGHT ) + "px");
       wrapperPanel.setWidth(Window.getClientWidth() + "px");
@@ -410,26 +401,71 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   //TODO: 15/05/2014
-  private void initSomministrazioniTimer() {
-    
-    final Delegate<Void> findSomministrazioneScadutaDelegate = new Delegate<Void>() {
-      public void execute(Void arg) {
-        SomministrazioniService.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
-          public void execute(Somministrazione somministrazione) {
-            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
-          }
-        });
-      }
-    };
-    
-    findSomministrazioneScadutaDelegate.execute(null);
-    
-    GwtUtils.createTimer(30000, new Delegate<Void>() {
+  private void initTimersAndStartHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+    startupTimer = GwtUtils.createTimer(1000, new Delegate<Void>() {
       public void execute(Void element) {
-        findSomministrazioneScadutaDelegate.execute(null);
+        if (getAppSqlDao().isReady()) {
+          findSomministrazioneScadutaDelegate.execute(null);
+          startupTimer.cancel();
+          GwtUtils.createTimer(5000, new Delegate<Void>() {
+            public void execute(Void element) {
+              findSomministrazioneScadutaDelegate.execute(null);
+            }
+          });
+        }
       }
     });
+  }
+  
+  protected class FindSomministrazioneScadutaDelegate implements Delegate<Void> {
     
+    private boolean firstRun = true;
+    
+    private MGWTPlaceHistoryHandler historyHandler;
+    
+    private MainPlace defaultPlace = new MainPlace();
+    
+    protected FindSomministrazioneScadutaDelegate(MGWTPlaceHistoryHandler historyHandler) {
+      this.historyHandler = historyHandler;
+    }
+
+    @Override
+    public void execute(Void element) {
+//    PhonegapLog.log("checking somministrazione scaduta...");
+      SomministrazioniService.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+        public void execute(Somministrazione somministrazione) {
+          if (firstRun) {
+            if (somministrazione != null) {
+              PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+              defaultPlace = new MainPlace(MainPlace.REMINDER_EDIT, somministrazione);
+            }
+            AppClientFactory clientFactory = AppClientFactory.IMPL;
+            historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), defaultPlace);
+            NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
+              public void execute(Map<String, String> properties) {
+                for (String name : properties.keySet()) {
+                  PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
+                }
+                AppClientFactoryImpl.this.nativeProperties = properties;
+                historyHandler.handleCurrentHistory();
+              }
+            });
+          } else {
+            if (somministrazione != null) {
+              PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+              if (!somministrazione.equals(editingSomministrazione)) {
+                getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
+              }
+            }
+          }
+          firstRun = false;
+        }
+      });
+    }
+  }
+  
+  public void setEditingSomministrazione(Somministrazione editingSomministrazione) {
+    this.editingSomministrazione = editingSomministrazione;
   }
   
 }

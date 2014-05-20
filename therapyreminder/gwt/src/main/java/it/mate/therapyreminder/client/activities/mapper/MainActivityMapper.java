@@ -25,7 +25,8 @@ public class MainActivityMapper extends BaseActivityMapper {
 
   @Override
   public Place getDefaultPlace() {
-    return new MainPlace();
+//  return new MainPlace();
+    return null;
   }
 
   @Override

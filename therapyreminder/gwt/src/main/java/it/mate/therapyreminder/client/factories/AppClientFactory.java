@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
 
 import com.google.gwt.dom.client.Element;
@@ -60,5 +61,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   public void authenticate();
   
   public AppSqlDao getAppSqlDao();
+  
+  public void setEditingSomministrazione(Somministrazione editingSomministrazione);
   
 }

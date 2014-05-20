@@ -15,6 +15,10 @@ public class MainPlace extends Place {
   
   public static final String DOSAGE_EDIT = "editDosage";
   
+  public static final String REMINDER_LIST = "listReminder";
+  
+  public static final String REMINDER_EDIT = "editReminder";
+  
   public static final String TEST = "test";
   
   private String token;
@@ -29,6 +33,11 @@ public class MainPlace extends Place {
     this(token, null);
   }
   
+  @Override
+  public String toString() {
+    return "MainPlace [token=" + token + "]";
+  }
+
   public MainPlace(String token, Object model) {
     this.token = token;
     this.model = model;

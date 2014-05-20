@@ -14,8 +14,10 @@ import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class AppSqlDao extends WebSQLDao {
   
@@ -178,7 +180,7 @@ public class AppSqlDao extends WebSQLDao {
             List<Prescrizione> results = new ArrayList<Prescrizione>();
             if (rs.getRows().getLength() > 0) {
               for (int it = 0; it < rs.getRows().getLength(); it++) {
-                results.add(flushPrescrizioneRS(rs, it));
+                results.add(flushRSToPrescrizione(rs, it));
               }
             }
             iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
@@ -198,7 +200,7 @@ public class AppSqlDao extends WebSQLDao {
             List<Prescrizione> results = new ArrayList<Prescrizione>();
             if (rs.getRows().getLength() > 0) {
               for (int it = 0; it < rs.getRows().getLength(); it++) {
-                results.add(flushPrescrizioneRS(rs, it));
+                results.add(flushRSToPrescrizione(rs, it));
               }
             }
             iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
@@ -208,7 +210,35 @@ public class AppSqlDao extends WebSQLDao {
     });
   }
   
-  private Prescrizione flushPrescrizioneRS(SQLResultSet rs, int it) {
+  public void findPrescrizioneById(final Integer id, final Delegate<Prescrizione> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni";
+        sql += " WHERE id = ?";
+        tr.doExecuteSql(sql, new Object[]{id}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Prescrizione> results = new ArrayList<Prescrizione>();
+            if (rs.getRows().getLength() == 1) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                results.add(flushRSToPrescrizione(rs, it));
+              }
+            } else if (rs.getRows().getLength() <= 0) {
+              throw new DaoException("Not found");
+            } else {
+              throw new DaoException("Data integrity error");
+            }
+            iteratePrescrizioniForRead(results.iterator(), tr, new Delegate<List<Prescrizione>>() {
+              public void execute(List<Prescrizione> results) {
+                delegate.execute(results.get(0));
+              }
+            }, results);
+          }
+        });
+      }
+    });
+  }
+  
+  private Prescrizione flushRSToPrescrizione(SQLResultSet rs, int it) {
     SQLResultSetRowList rows = rs.getRows();
     Prescrizione prescrizione = new PrescrizioneTx();
     prescrizione.setId(rows.getValueInt(it, "id"));
@@ -375,7 +405,7 @@ public class AppSqlDao extends WebSQLDao {
     }
   }
   
-  private Somministrazione flushSomministrazioneRS(SQLResultSet rs, int it, Prescrizione prescrizione) {
+  private Somministrazione flushRSToSomministrazione(SQLResultSet rs, int it, Prescrizione prescrizione) {
     Somministrazione result = new SomministrazioneTx(prescrizione);
     result.setId(rs.getRows().getValueInt(it, "id"));
     result.setData(new Date(rs.getRows().getValueLong(it, "data")));
@@ -394,18 +424,65 @@ public class AppSqlDao extends WebSQLDao {
         tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA, dateAsLong(dataRiferimento)}, 
           new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            List<Somministrazione> results = new ArrayList<Somministrazione>();
             if (rs.getRows().getLength() > 0) {
-              for (int it = 0; it < rs.getRows().getLength(); it++) {
-                Prescrizione detachedPrescrizione = new PrescrizioneTx(rs.getRows().getValueInt(it, "idPrescrizione"));
-                results.add(flushSomministrazioneRS(rs, it, detachedPrescrizione));
-              }
+              new RSToSomministrazioniIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
             }
-            delegate.execute(results);
           }
         });
       }
     });
+  }
+  
+  public void findSomministrazioniNonEseguite(final Delegate<List<Somministrazione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE stato = ?";
+        sql += " ORDER BY data";
+        tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              new RSToSomministrazioniIterator(rs, delegate);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  protected class RSToSomministrazioniIterator {
+    SQLResultSet rs;
+    List<Somministrazione> results = new ArrayList<Somministrazione>();
+    Delegate<List<Somministrazione>> delegate;
+    Map<Integer, Prescrizione> prescrizioniMap = new HashMap<Integer, Prescrizione>();
+    protected RSToSomministrazioniIterator(SQLResultSet rs, Delegate<List<Somministrazione>> delegate) {
+      this.rs = rs;
+      this.delegate = delegate;
+      iterate(0);
+    }
+    private void iterate(final int it) {
+      if (it < rs.getRows().getLength()) {
+        Integer idPrescrizione = rs.getRows().getValueInt(it, "idPrescrizione");
+        Prescrizione prescrizione = null;
+        if (prescrizioniMap.containsKey(idPrescrizione)) {
+          prescrizione = prescrizioniMap.get(idPrescrizione);
+          results.add(flushRSToSomministrazione(rs, it, prescrizione));
+          iterate(it + 1);
+        } else {
+          findPrescrizioneById(idPrescrizione, new Delegate<Prescrizione>() {
+            public void execute(Prescrizione prescrizione) {
+              results.add(flushRSToSomministrazione(rs, it, prescrizione));
+              iterate(it + 1);
+            }
+          });
+        }
+      } else {
+        delegate.execute(results);
+      }
+    }
   }
 
   public void findSomministrazioniSchedulateByPrescrizione(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> delegate) {
@@ -420,7 +497,7 @@ public class AppSqlDao extends WebSQLDao {
             List<Somministrazione> results = new ArrayList<Somministrazione>();
             if (rs.getRows().getLength() > 0) {
               for (int it = 0; it < rs.getRows().getLength(); it++) {
-                results.add(flushSomministrazioneRS(rs, it, prescrizione));
+                results.add(flushRSToSomministrazione(rs, it, prescrizione));
               }
             }
             delegate.execute(results);
@@ -439,7 +516,7 @@ public class AppSqlDao extends WebSQLDao {
         tr.doExecuteSql(sql, new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             if (rs.getRows().getLength() > 0) {
-              delegate.execute(flushSomministrazioneRS(rs, 0, prescrizione));
+              delegate.execute(flushRSToSomministrazione(rs, 0, prescrizione));
             } else {
               delegate.execute(null);
             }
