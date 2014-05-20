@@ -1,7 +1,7 @@
 package it.mate.therapyreminder.client.activities.mapper;
 
 import it.mate.therapyreminder.client.places.MainPlace;
-import it.mate.therapyreminder.client.service.SomministrazioniService;
+import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import com.google.gwt.place.shared.Place;
@@ -32,7 +32,7 @@ public class MainAnimationMapper implements AnimationMapper {
         Object model = newPlace.getModel();
         if (model != null && model instanceof Somministrazione) {
           Somministrazione somministrazione = (Somministrazione)model;
-          if (SomministrazioniService.isScaduta(somministrazione)) {
+          if (SomministrazioneUtils.isScaduta(somministrazione)) {
             return Animation.DISSOLVE_REVERSE;
           }
         }

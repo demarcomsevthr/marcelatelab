@@ -22,8 +22,8 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
-import it.mate.therapyreminder.client.service.SomministrazioniService;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
+import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
@@ -432,7 +432,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     @Override
     public void execute(Void element) {
 //    PhonegapLog.log("checking somministrazione scaduta...");
-      SomministrazioniService.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+      SomministrazioneUtils.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
             if (somministrazione != null) {

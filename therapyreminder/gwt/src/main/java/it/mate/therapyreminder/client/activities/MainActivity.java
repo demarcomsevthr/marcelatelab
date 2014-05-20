@@ -15,7 +15,7 @@ import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
-import it.mate.therapyreminder.client.service.SomministrazioniService;
+import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
@@ -358,7 +358,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
               try {
-                SomministrazioniService.getInstance().sviluppaSomministrazioni(prescrizione);
+                SomministrazioneUtils.getInstance().sviluppaSomministrazioni(prescrizione);
                 fEndDelegate.execute(prescrizione);
               } catch (ServiceException ex) {
                 processFailure(null, ex);
@@ -366,7 +366,7 @@ public class MainActivity extends MGWTAbstractActivity implements
             }
           };
           if (oldPrescrizione.isPersistent()) {
-            SomministrazioniService.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
+            SomministrazioneUtils.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
                 sviluppoDelegate.execute(newPrescrizioneSalvata);
               }
