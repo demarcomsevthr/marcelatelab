@@ -35,6 +35,8 @@ public abstract class WebSQLDao {
   
   protected final static String SERIAL_ID = "INTEGER PRIMARY KEY AUTOINCREMENT"; 
   
+  private boolean ready = false;
+  
   protected WebSQLDao(String name, long estimatedSize, final MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, final SQLTransactionCallback openCallback) {
     this.name = name;
     this.estimatedSize = estimatedSize;
@@ -48,6 +50,10 @@ public abstract class WebSQLDao {
         }
       });
     }
+  }
+  
+  public boolean isReady() {
+    return ready;
   }
   
   protected void openDatabase(SQLTransactionCallback openCallback) {
@@ -394,9 +400,11 @@ public abstract class WebSQLDao {
   protected static class Migrator {
     MigratorCallback callbacks[];
     WindowDatabase db;
+    WebSQLDao dao;
     public Migrator(WebSQLDao dao, MigratorCallback callbacks[]) {
       this.db = dao.db;
       this.callbacks = callbacks;
+      this.dao = dao;
       db.getVersionAsync(0, new Delegate<Integer>() {
         public void execute(Integer currentVersion) {
           PhonegapUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
@@ -424,6 +432,9 @@ public abstract class WebSQLDao {
             });
           }
         });
+      } else {
+        PhonegapUtils.log("db is ready");
+        dao.ready = true;
       }
     }
   }

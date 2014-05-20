@@ -4,6 +4,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -70,6 +72,14 @@ public class PhonegapUtils {
   
   public static native void setLocalStorageItem(String name, String value) /*-{
     $wnd.setLocalStorageItem(name, value);
+  }-*/;
+
+  public static native String getLocalStorageValue(String name) /*-{
+    return localStorage[name];
+  }-*/;
+  
+  public static native void setLocalStorageValue(String name, String value) /*-{
+    localStorage[name] = value;
   }-*/;
 
   public static class Navigator extends JavaScriptObject {
@@ -204,6 +214,29 @@ public class PhonegapUtils {
 
   public static void setUseLogPlugin(boolean useLogPlugin) {
     PhonegapUtils.useLogPlugin = useLogPlugin;
+  }
+  
+  public static String dateToString(Date date) {
+    String lang = getLocalStorageLanguage();
+    if (lang == null) {
+      lang = getNavigator().getLanguage();
+    }
+    if (lang == null) {
+      lang = "en";
+    }
+    if ("it".equals(lang)) {
+      return GwtUtils.dateToString(date, "dd/MM/yyyy");
+    } else {
+      return GwtUtils.dateToString(date, "MM/dd/yyyy");
+    }
+  }
+  
+  public static String getLocalStorageLanguage() {
+    return getLocalStorageValue("PhonegapUtils.language");
+  }
+  
+  public static void setLocalStorageLanguage(String value) {
+    setLocalStorageValue("PhonegapUtils.language", value);
   }
   
 }
