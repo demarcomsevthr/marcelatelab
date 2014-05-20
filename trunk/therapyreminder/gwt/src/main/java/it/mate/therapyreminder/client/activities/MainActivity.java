@@ -19,12 +19,15 @@ import it.mate.therapyreminder.client.service.SomministrazioniService;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.ReminderEditView;
+import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
@@ -45,7 +48,8 @@ import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 public class MainActivity extends MGWTAbstractActivity implements 
   HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter,
   DosageEditView.Presenter, 
-  CalendarEventTestView.Presenter, SettingsView.Presenter {
+  CalendarEventTestView.Presenter, SettingsView.Presenter,
+  ReminderListView.Presenter, ReminderEditView.Presenter {
   
   private MainPlace place;
   
@@ -122,6 +126,30 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
+      ReminderListView view = AppClientFactory.IMPL.getGinjector().getReminderListView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToHome();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
+      ReminderEditView view = AppClientFactory.IMPL.getGinjector().getReminderEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToHome();
+        }
+      });
+    }
     if (place.getToken().equals(MainPlace.TEST)) {
       CalendarEventTestView view = AppClientFactory.IMPL.getGinjector().getCalendarEventTestView();
       this.view = view;
@@ -153,6 +181,18 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
       if (place.getModel() != null) {
         view.setModel(place.getModel(), DosageEditView.TAG_DOSAGGIO);
+      }
+    }
+    if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
+      dao.findSomministrazioniNonEseguite(new Delegate<List<Somministrazione>>() {
+        public void execute(List<Somministrazione> results) {
+          view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
+      if (place.getModel() != null) {
+        view.setModel(place.getModel(), ReminderEditView.TAG_SOMMINISTRAZIONE);
       }
     }
   }
@@ -293,6 +333,14 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToDosageEditView(Dosaggio dosaggio) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.DOSAGE_EDIT, dosaggio));
+  }
+
+  public void goToReminderListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_LIST));
+  }
+
+  public void goToReminderEditView(Somministrazione somministrazione) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
   }
 
   @Override

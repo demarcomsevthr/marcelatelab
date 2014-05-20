@@ -44,10 +44,11 @@ public class SomministrazioniService {
     Date dataRiferimento = new Date();
     dao.findSomministrazioniScadute(dataRiferimento, new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
-        if (somministrazioni == null)
-          return;
-        if (somministrazioni.size() > 0)
+        if (somministrazioni == null || somministrazioni.size() <= 0) {
+          delegate.execute(null);
+        } else {
           delegate.execute(somministrazioni.get(0));
+        }
       }
     });
   }
@@ -287,6 +288,13 @@ public class SomministrazioniService {
         }
       }
     });
-  }  
+  }
+  
+  public static boolean isScaduta(Somministrazione somministrazione) {
+    Date NOW = new Date();
+    Date datetimeSomministrazione = somministrazione.getData();
+    Time.fromString(somministrazione.getOrario()).setInDate(datetimeSomministrazione);
+    return !somministrazione.isEseguita() && datetimeSomministrazione.before(NOW);
+  }
   
 }

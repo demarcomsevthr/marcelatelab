@@ -23,6 +23,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     public void goToTherapyListView();
     public void goToSettingsView();
     public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
+    public void goToReminderListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -64,7 +65,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("remindersBtn")
   public void onRemindersBtn (TouchEndEvent event) {
-    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+    getPresenter().goToReminderListView();
   }
   
   @UiHandler ("doctorsBtn")
