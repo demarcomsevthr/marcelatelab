@@ -15,7 +15,7 @@ import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
-import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
+import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
@@ -29,7 +29,6 @@ import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
-import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.List;
@@ -176,11 +175,15 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
       if (place.getModel() != null) {
         view.setModel(place.getModel(), TherapyEditView.TAG_PRESCRIZIONE);
+      } else {
+        goToHome();
       }
     }
     if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
       if (place.getModel() != null) {
         view.setModel(place.getModel(), DosageEditView.TAG_DOSAGGIO);
+      } else {
+        goToHome();
       }
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
@@ -193,6 +196,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
       if (place.getModel() != null) {
         view.setModel(place.getModel(), ReminderEditView.TAG_SOMMINISTRAZIONE);
+      } else {
+        goToHome();
       }
     }
   }
@@ -326,9 +331,14 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToTherapyEditView(Prescrizione prescrizione) {
     if (prescrizione == null) {
-      prescrizione = new PrescrizioneTx();
+      PrescrizioniUtils.getInstance().createPrescrizioneWithDefaults(new Delegate<Prescrizione>() {
+        public void execute(Prescrizione prescrizione) {
+          AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
+        }
+      });
+    } else {
+      AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
     }
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
   }
 
   public void goToDosageEditView(Dosaggio dosaggio) {
@@ -358,7 +368,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
               try {
-                SomministrazioneUtils.getInstance().sviluppaSomministrazioni(prescrizione);
+                PrescrizioniUtils.getInstance().sviluppaSomministrazioni(prescrizione);
                 fEndDelegate.execute(prescrizione);
               } catch (ServiceException ex) {
                 processFailure(null, ex);
@@ -366,7 +376,7 @@ public class MainActivity extends MGWTAbstractActivity implements
             }
           };
           if (oldPrescrizione.isPersistent()) {
-            SomministrazioneUtils.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
+            PrescrizioniUtils.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
                 sviluppoDelegate.execute(newPrescrizioneSalvata);
               }
@@ -384,6 +394,15 @@ public class MainActivity extends MGWTAbstractActivity implements
     dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
       public void execute(Void element) {
         goToTherapyListView();
+      }
+    });
+  }
+  
+  @Override
+  public void updateSomministrazione(Somministrazione somministrazione) {
+    PrescrizioniUtils.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+      public void execute(Somministrazione result) {
+        goToHome();
       }
     });
   }

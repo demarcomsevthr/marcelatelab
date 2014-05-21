@@ -13,7 +13,7 @@ public interface AppProperties extends Constants {
   @DefaultStringValue("")
   String phoneAppName();
   
-  @DefaultStringValue("Version 0.1 - Powered by MDM")
+  @DefaultStringValue("Version 0.2 - Powered by MDM")
   String versionCredits();
   
   @DefaultBooleanValue(false)

@@ -1,20 +1,23 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.ui.Spacer;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.NumberUtils;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.Position;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.ui.SignPanel;
-import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
+import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
@@ -24,7 +27,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   public static final String TAG_SOMMINISTRAZIONE = "somministrazione";
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
-
+    void updateSomministrazione(Somministrazione somministrazione);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ReminderEditView> { }
@@ -38,8 +41,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   @UiField MTextBox qtaBox;
   @UiField MTextBox umBox;
   @UiField MTextBox oraBox;
-  @UiField HTML expiredMessagePanel;
-  @UiField Panel buttonsBar;
+  @UiField Spacer popupRuler;
   
   public ReminderEditView() {
     initUI();
@@ -69,7 +71,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (TAG_SOMMINISTRAZIONE.equals(tag)) {
-      Somministrazione somministrazione = (Somministrazione)model;
+      final Somministrazione somministrazione = (Somministrazione)model;
       AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
       titleBox.setValue(somministrazione.getPrescrizione().getNome());
       dateBox.setValue(PhonegapUtils.dateToString(somministrazione.getData()));
@@ -81,10 +83,38 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       }
       oraBox.setValue(somministrazione.getOrario());
       
-      if (SomministrazioneUtils.isScaduta(somministrazione)) {
-        expiredMessagePanel.setHTML(SafeHtmlUtils.fromTrustedString("<p>The reminder is expired.</p><p>Did you take the medicine?</p>"));
-        expiredMessagePanel.setVisible(true);
-        buttonsBar.setVisible(true);
+      if (PrescrizioniUtils.isScaduta(somministrazione)) {
+        
+        int top = popupRuler.getAbsoluteTop();
+        if (top > 0) {
+          PhonegapUtils.setLocalStorageValue("ReminderEditView.popupRuler.top", ""+top);
+        } else {
+          String v = PhonegapUtils.getLocalStorageValue("ReminderEditView.popupRuler.top");
+          if (v != null) {
+            top = Integer.parseInt(v);
+          } else {
+            top = Window.getClientHeight() / 2;
+          }
+        }
+        
+        PhgDialogUtils.showMessageDialog("Did you take this medicine?", "Reminder expired", PhgDialogUtils.BUTTONS_YESNO,
+            new Position(top, null) /* null */,
+            new Delegate<Integer>() {
+              public void execute(Integer btnIndex) {
+                if (btnIndex == 1) {
+                  PhonegapUtils.log("executing " + somministrazione);
+                  somministrazione.setEseguita();
+                  getPresenter().updateSomministrazione(somministrazione);
+                }
+                if (btnIndex == 2) {
+                  PhonegapUtils.log("canceling " + somministrazione);
+                  somministrazione.setAnnullata();
+                  getPresenter().updateSomministrazione(somministrazione);
+                }
+              }
+            }
+          );
+        
       }
       
     }

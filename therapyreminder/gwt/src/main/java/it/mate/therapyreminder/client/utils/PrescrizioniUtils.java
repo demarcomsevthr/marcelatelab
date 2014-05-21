@@ -13,6 +13,7 @@ import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
 import java.util.ArrayList;
@@ -23,20 +24,32 @@ import java.util.List;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.ui.client.MGWT;
 
-public class SomministrazioneUtils {
+public class PrescrizioniUtils {
 
   private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
   
-  private static SomministrazioneUtils instance;
+  private static PrescrizioniUtils instance;
   
-  public static SomministrazioneUtils getInstance() {
+  public static PrescrizioniUtils getInstance() {
     if (instance == null)
-      instance = new SomministrazioneUtils();
+      instance = new PrescrizioniUtils();
     return instance;
   }
   
-  protected SomministrazioneUtils() {
+  protected PrescrizioniUtils() {
 
+  }
+  
+  public void createPrescrizioneWithDefaults(Delegate<Prescrizione> delegate) {
+    Prescrizione prescrizione = new PrescrizioneTx();
+    prescrizione.setDataInizio(new Date());
+    prescrizione.setQuantita(1d);
+    prescrizione.setTipoRicorrenza(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO);
+    prescrizione.setValoreRicorrenza(1);
+    prescrizione.setCodUdM("C");
+    prescrizione.setTipoRicorrenzaOraria(Prescrizione.TIPO_ORARI_FISSI);
+    prescrizione.setIntervalloOrario(1);
+    delegate.execute(prescrizione);
   }
   
   // TODO: 15/05/2014
@@ -54,7 +67,7 @@ public class SomministrazioneUtils {
   }
   
   // TODO: 15/05/2014
-  public void sviluppaSomministrazioniAsynch() {
+  public void sviluppaSomministrazioniInBackground() {
     dao.findAllPrescrizioniAttive(new Date(), new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioni) {
         if (prescrizioni == null || prescrizioni.size() == 0) {
@@ -63,6 +76,14 @@ public class SomministrazioneUtils {
         for (Prescrizione prescrizione : prescrizioni) {
           sviluppaSomministrazioni(prescrizione);
         }
+      }
+    });
+  }
+  
+  public void updateSomministrazione(Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+    dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+      public void execute(Somministrazione res) {
+        delegate.execute(res);
       }
     });
   }
@@ -82,7 +103,9 @@ public class SomministrazioneUtils {
   private void sviluppaSomministrazioniAPartireDa(final Prescrizione prescrizione, Date dataUltimaSomministrazione) {
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
-        PhonegapLog.log("EXECUTING COMPLETION DELEGATE (TODO: REMOTE SAVE) WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
+        if (somministrazioni != null && somministrazioni.size() > 0) {
+          PhonegapLog.log("EXECUTING COMPLETION DELEGATE (TODO: REMOTE SAVE) WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
+        }
       }
     };
     if (dataUltimaSomministrazione == null) {

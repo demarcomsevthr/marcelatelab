@@ -101,6 +101,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO, "Ogni giorno", true);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_MENSILE, "Mensile", false);
@@ -159,8 +160,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       inizioBox.setValue(newPrescrizione.getDataInizio());
       qtaBox.setValue(newPrescrizione.getQuantita());
       umCombo.setValue(newPrescrizione.getCodUdM());
-      tipoRicorrenzaCombo.setValue(newPrescrizione.getTipoRicorrenza());
-      rangeBox.setValue(newPrescrizione.getValoreRicorrenza());
+      
+      String tipoRicorrenza = newPrescrizione.getTipoRicorrenza();
+      Integer valoreRicorrenza = newPrescrizione.getValoreRicorrenza();
+      if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(tipoRicorrenza) && valoreRicorrenza == 1) {
+        tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO;
+      }
+      tipoRicorrenzaCombo.setValue(tipoRicorrenza);
+      rangeBox.setValue(valoreRicorrenza);
       tipoOrariCombo.setValue(newPrescrizione.getTipoRicorrenzaOraria());
       if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
         rangeOrariBox.setValue(newPrescrizione.getIntervalloOrario());
@@ -198,7 +205,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   
   private void checkTipoRicorrenzaValue() {
     String value = tipoRicorrenzaCombo.getValue();
-    if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(value)) {
+    if (Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO.equals(value)) {
+      ricorrenzaPanel.setVisible(false);
+    } else if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(value)) {
       ricorrenzaLabel.setText("giorni");
       ricorrenzaPanel.setVisible(true);
     } else if (Prescrizione.TIPO_RICORRENZA_SETTIMANALE.equals(value)) {
@@ -247,7 +256,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     for (Dosaggio dosaggio : newPrescrizione.getDosaggi()) {
       final PhTimeBox orarioBox = createOrarioBox(dosaggio);
       orarioBox.setValueAsString(dosaggio.getOrario());
-      orarioBox.setDefaultTime(new Time().setMinutes(00));
+      orarioBox.setDefaultTime(new Time().setMinutes(00).incHours(+1));
       orarioBox.addValueChangeHandler(new ValueChangeHandler<Time>() {
         public void onValueChange(ValueChangeEvent<Time> event) {
           if (event.getValue() != null) {
@@ -394,8 +403,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
     newPrescrizione.setDataInizio(inizioBox.getValue());
     newPrescrizione.setQuantita(qtaUnica);
     newPrescrizione.setCodUdM(umCombo.getValue());
-    newPrescrizione.setTipoRicorrenza(tipoRicorrenzaCombo.getValue());
-    newPrescrizione.setValoreRicorrenza(rangeBox.getValueAsInteger());
+    String tipoRicorrenza = tipoRicorrenzaCombo.getValue();
+    Integer valoreRicorrenza = rangeBox.getValueAsInteger();
+    if (Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO.equals(tipoRicorrenza)) {
+      tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_GIORNALIERA;
+      valoreRicorrenza = 1;
+    }
+    newPrescrizione.setTipoRicorrenza(tipoRicorrenza);
+    newPrescrizione.setValoreRicorrenza(valoreRicorrenza);
     newPrescrizione.setTipoRicorrenzaOraria(tipoOrariCombo.getValue());
     if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(newPrescrizione.getTipoRicorrenzaOraria())) {
       newPrescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
