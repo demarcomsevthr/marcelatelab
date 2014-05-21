@@ -118,4 +118,14 @@ public class SomministrazioneTx implements Somministrazione {
     stato = STATO_ESEGUITA;
   }
   
+  @Override
+  public boolean isAnnullata() {
+    return stato == STATO_ANNULLATA;
+  }
+  
+  @Override
+  public void setAnnullata() {
+    stato = STATO_ANNULLATA;
+  }
+  
 }

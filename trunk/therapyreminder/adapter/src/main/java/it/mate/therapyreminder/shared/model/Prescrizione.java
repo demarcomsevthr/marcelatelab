@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface Prescrizione extends Serializable {
   
+  public final static String TIPO_RICORRENZA_OGNI_GIORNO = "G1";
+
   public final static String TIPO_RICORRENZA_GIORNALIERA = "G";
 
   public final static String TIPO_RICORRENZA_SETTIMANALE = "S";
