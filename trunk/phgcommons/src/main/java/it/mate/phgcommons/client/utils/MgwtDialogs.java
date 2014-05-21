@@ -1,10 +1,13 @@
 package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.ui.SimpleContainer;
+import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.ui.ModalPopinDialog;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -46,6 +49,37 @@ public class MgwtDialogs {
   }
   
   public static PopinDialog popin (String title, Widget body) {
+    PopinDialog popinDialog = popinImpl(title, body);
+    popinDialog.center();
+    return popinDialog;
+  }
+  
+  public static PopinDialog popin (String title, Widget body, Integer top, Integer left) {
+    PopinDialog popinDialog = popinImpl(title, body);
+    popinDialog.show();
+    Element animShadowElem = JQuery.selectFirstElement(".mgwt-DialogAnimationContainer-Shadow div");
+    if (animShadowElem != null) {
+      if (top != null) {
+        animShadowElem.getStyle().setTop(top, Unit.PX);
+      } else {
+        Element animContainerElem = JQuery.selectFirstElement(".mgwt-DialogAnimationContainer");
+        if (animContainerElem != null) {
+          WebkitCssUtil.setStyleProperty(animContainerElem.getStyle(), "webkitBoxAlign", "center");
+        }
+      }
+      if (left != null) {
+        animShadowElem.getStyle().setLeft(left, Unit.PX);
+      } else {
+        Element animContainerElem = JQuery.selectFirstElement(".mgwt-DialogAnimationContainer");
+        if (animContainerElem != null) {
+          WebkitCssUtil.setStyleProperty(animContainerElem.getStyle(), "webkitBoxPack", "center");
+        }
+      }
+    }
+    return popinDialog;
+  }
+  
+  private static PopinDialog popinImpl (String title, Widget body) {
     
     // 19/12/2013
 //  PopinDialog popinDialog = new PopinDialog();
@@ -64,7 +98,7 @@ public class MgwtDialogs {
     dialogWrapper.add(bodyWrapper);
     
     popinDialog.add(dialogWrapper);
-    popinDialog.center();
+    
     return popinDialog;
   }
 

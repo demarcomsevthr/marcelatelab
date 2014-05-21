@@ -245,37 +245,19 @@
   padding-right: 0.5em;
 }
 
-/* DIV VERSION
-
-.phg-PopinDialog-BodyWrapper {
-  padding-left: 50px;
-  padding-right: 40px;
-  padding-bottom: 30px;
-  padding-top: 5px;
+.phg-PopinDialog-ButtonsRow table {
+  width: 100%;
 }
-
-
-.phg-PopinDialog-MessageRow {
-  font-size: 0.7em;
-  margin-left: -1.8em;
-  margin-top: -1.2em;
-  margin-right: -1.0em;
-  margin-bottom: -1.2em;
-}
-
-.phg-PopinDialog-ButtonsRow {
-  margin-left: -0.5em;
-  margin-bottom: -0.5em;
-}
-
-*/
 
 .phg-PopinDialog-ButtonsRow td {
-  width: 3em;
+  /* width: 3em; */
   padding-top: 0;
   padding-bottom: 1em;
+  /*
   padding-left: 1em;
-  padding-right: 0.3em;  
+  padding-right: 0.3em;
+  */
+  text-align: center;  
 }
 
 .phg-PopinDialog-ButtonsRow-2ndBtn {
@@ -349,13 +331,6 @@
   height: 100%;
   width: 48px;
 }
-
-/*
-.phg-TouchCombo-arrow {
-  border-left: 1px solid rgba(125, 125, 125, 0.8);
-  background: rgba(200, 200, 200, 0.8) url(main/images/arrowdown-32-2.png) no-repeat 9px 10px;
-}
-*/
 
 .phg-TouchCombo-arrow {
   border-left: 2px rgba(125, 125, 125, 0.8) outset;
