@@ -30,15 +30,9 @@
       <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" readOnly="true" width="5em"/>
       <ph:PhTextBox ui:field="umBox" addStyleNames="ui-app-textbox, ui-um-box" readOnly="true"/>
     </g:HorizontalPanel>
-        
-    <hr class="ui-view-separator"/>
-    
-    <g:HTML ui:field="expiredMessagePanel" visible="false" addStyleNames="ui-app-expired-msg"/>
-    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" ui:field="buttonsBar">
-      <p:TouchButton text="YES" ui:field="yesBtn" addStyleNames="ui-top-action-btn"/>
-      <p:TouchButton text="NO" ui:field="noBtn" addStyleNames="ui-top-action-btn"/>
-    </g:HorizontalPanel>
 
+    <gc:Spacer height="0.4em"/>    
+    <gc:Spacer width="1px" ui:field="popupRuler"/>
     
   </g:HTMLPanel>
   

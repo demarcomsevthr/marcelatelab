@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
@@ -23,7 +24,7 @@ import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
-import it.mate.therapyreminder.client.utils.SomministrazioneUtils;
+import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.StickFacadeAsync;
@@ -83,7 +84,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private Somministrazione editingSomministrazione;
   
-  private Timer startupTimer;
   
   
   
@@ -402,19 +402,26 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   //TODO: 15/05/2014
   private void initTimersAndStartHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
-    startupTimer = GwtUtils.createTimer(1000, new Delegate<Void>() {
+    final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
+    timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {
       public void execute(Void element) {
         if (getAppSqlDao().isReady()) {
           findSomministrazioneScadutaDelegate.execute(null);
-          startupTimer.cancel();
+          timer.get().cancel();
           GwtUtils.createTimer(5000, new Delegate<Void>() {
             public void execute(Void element) {
               findSomministrazioneScadutaDelegate.execute(null);
             }
           });
+          GwtUtils.createTimer(60000, true, new Delegate<Void>() {
+            public void execute(Void element) {
+              PhonegapLog.log("sviluppo somministrazioni in background...");
+              PrescrizioniUtils.getInstance().sviluppaSomministrazioniInBackground();
+            }
+          });
         }
       }
-    });
+    }));
   }
   
   protected class FindSomministrazioneScadutaDelegate implements Delegate<Void> {
@@ -431,8 +438,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     @Override
     public void execute(Void element) {
-//    PhonegapLog.log("checking somministrazione scaduta...");
-      SomministrazioneUtils.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+      PhonegapLog.log("checking somministrazione scaduta...");
+      PrescrizioniUtils.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
             if (somministrazione != null) {

@@ -195,7 +195,7 @@ public class AppSqlDao extends WebSQLDao {
       public void handleEvent(SQLTransaction tr) {
         String sql = "SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni";
         sql += " WHERE dataFine IS NULL OR dataFine >= ?";
-        tr.doExecuteSql(sql, new Object[]{dataRiferimento}, new SQLStatementCallback() {
+        tr.doExecuteSql(sql, new Object[]{dateAsLong(dataRiferimento)}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             List<Prescrizione> results = new ArrayList<Prescrizione>();
             if (rs.getRows().getLength() > 0) {
