@@ -412,9 +412,12 @@ public class GwtUtils {
   }
   
   public static Timer createTimer (int periodMillis, final Delegate<Void> delegate) {
+    return createTimer(periodMillis, false, delegate);
+  }
+  
+  public static Timer createTimer (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
     Timer timer = null;
     if (mobileOptimizations) {
-      GwtUtils.log("using MobileTimer");
       timer = new MobileTimer() {
         public void run() {
           delegate.execute(null);
@@ -426,6 +429,9 @@ public class GwtUtils {
           delegate.execute(null);
         }
       };
+    }
+    if (runAndWait) {
+      delegate.execute(null);
     }
     timer.scheduleRepeating(periodMillis);
     return timer;
