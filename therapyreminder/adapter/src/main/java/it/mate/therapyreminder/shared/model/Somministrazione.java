@@ -41,4 +41,8 @@ public interface Somministrazione extends Serializable {
 
   public Prescrizione getPrescrizione();
   
+  public boolean isAnnullata();
+  
+  public void setAnnullata();
+  
 }

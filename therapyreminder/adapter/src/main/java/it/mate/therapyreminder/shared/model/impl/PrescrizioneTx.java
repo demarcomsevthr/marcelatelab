@@ -14,28 +14,23 @@ public class PrescrizioneTx implements Prescrizione {
   
   private String nome;
   
-  private Date dataInizio = new Date();
+  private Date dataInizio;
   
   private Date dataFine;
   
-  private Double quantita = 1d;
+  private Double quantita;
   
   private Long idComposizione;
   
   private String tipoRicorrenza;
   
-  private Integer valoreRicorrenza = 1;
+  private Integer valoreRicorrenza;
   
-  // 10/04/2014 ("Confetto issue")
-  // Devo mettere il default literal altrimenti da problemi nel passaggio alla DosageEditView
-  // nel caso di prescrizione appena creata ("Confetto issue"...)
-  // Non trovo una soluzione migliore per mettere il default 
-  // (i valori effettivi stanno su db, se cambiano mi devo ricordare di mantenere allineato questo default)
-  private String codUdM = "C";
+  private String codUdM;
   
   private String tipoRicorrenzaOraria;
   
-  private Integer intervalloOrario = 1;
+  private Integer intervalloOrario;
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
 
