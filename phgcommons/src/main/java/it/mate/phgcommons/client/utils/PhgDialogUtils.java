@@ -3,8 +3,11 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
+import it.mate.gwtcommons.client.utils.JQuery.StyleProperties;
 import it.mate.phgcommons.client.ui.TouchAnchor;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -30,72 +33,6 @@ public class PhgDialogUtils {
   
   private static PopinDialog messageDialog;
   
-  public static class Configuration {
-    private String captionText = "Attenzione";
-    private String bodyText = null;
-    private SafeHtml bodyHtml = null;
-    private Widget bodyWidget = null;
-    private PositionCallback positionCallback;
-    private UIObject objectRelativeTo;
-    public Configuration setCaptionText(String captionText) {
-      this.captionText = captionText;
-      return this;
-    }
-    public Configuration setBodyText(String bodyText) {
-      this.bodyText = bodyText;
-      return this;
-    }
-    public Configuration setBodyHtml(SafeHtml bodyHtml) {
-      this.bodyHtml = bodyHtml;
-      return this;
-    }
-    public Configuration setBodyWidget(Widget bodyWidget) {
-      this.bodyWidget = bodyWidget;
-      return this;
-    }
-    public Configuration setPositionCallback(PositionCallback positionCallback) {
-      this.positionCallback = positionCallback;
-      return this;
-    }
-    public Configuration setObjectRelativeTo(UIObject objectRelativeTo) {
-      this.objectRelativeTo = objectRelativeTo;
-      return this;
-    }
-  }
-  
-  public static DialogBox create(Configuration config) {
-    
-    DialogBox dialog = new DialogBox();
-    dialog.addStyleName("pgc-Dialog");
-    
-    dialog.setText(config.captionText);
-    dialog.setAnimationEnabled(true);
-    dialog.setGlassEnabled(true);
-    
-    VerticalPanel dialogPanel = new VerticalPanel();
-    dialogPanel.addStyleName("pgc-DialogPanel");
-    
-    if (config.bodyText != null) {
-      dialogPanel.add(new Label(config.bodyText));
-    } else if (config.bodyHtml != null) {
-      dialogPanel.add(new HTML(config.bodyHtml));
-    } else if (config.bodyWidget != null) {
-      dialogPanel.add(config.bodyWidget);
-    }
-    
-    dialog.setWidget(dialogPanel);
-
-    if (config.positionCallback != null) {
-      dialog.setPopupPositionAndShow(config.positionCallback);
-    } else if (config.objectRelativeTo != null) {
-      dialog.showRelativeTo(config.objectRelativeTo);
-    } else {
-      dialog.show();
-    }
-    
-    return dialog;
-  }
-  
   public static void showMessageDialog(String message) {
     showMessageDialog(message, "Alert");
   }
@@ -113,6 +50,10 @@ public class PhgDialogUtils {
   }
   
   public static void showMessageDialog(final String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
+    showMessageDialog(message, title, buttonsType, null, delegate);
+  }
+  
+  public static void showMessageDialog(final String message, final String title, int buttonsType, Position position, final Delegate<Integer> delegate) {
     
     VerticalPanel dialogContainer = new VerticalPanel();
     dialogContainer.setSpacing(0);
@@ -137,11 +78,11 @@ public class PhgDialogUtils {
     HorizontalPanel buttonsPanel = new HorizontalPanel();
     row.add(buttonsPanel);
     
-    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, delegate);
+    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, position, delegate);
     
   }
   
-  private static void createButtonsAndShow(final Widget dialogContainer, Panel buttonsPanel, String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
+  private static void createButtonsAndShow(final Widget dialogContainer, Panel buttonsPanel, String message, final String title, final int buttonsType, final Position position, final Delegate<Integer> delegate) {
     String buttonMsg = null;
     
     if (buttonsPanel != null) {
@@ -196,7 +137,22 @@ public class PhgDialogUtils {
           PhonegapUtils.log("message dialog is just opened!");
           return;
         }
-        messageDialog = MgwtDialogs.popin(title, dialogContainer);
+        if (position != null) {
+          messageDialog = MgwtDialogs.popin(title, dialogContainer, position.top, position.left);
+        } else {
+          messageDialog = MgwtDialogs.popin(title, dialogContainer);
+        }
+        
+        StyleProperties prop = JQuery.createStyleProperties();
+        if (buttonsType == BUTTONS_YESNOCANCEL) {
+          prop.setWidth(33, Unit.PCT);
+        } else if (buttonsType == BUTTONS_OK) {
+          prop.setWidth(100, Unit.PCT);
+        } else {
+          prop.setWidth(50, Unit.PCT);
+        }
+        JQuery.select(".phg-PopinDialog-ButtonsRow td").css(prop);
+        
       }
     });
   }
@@ -219,7 +175,7 @@ public class PhgDialogUtils {
     HorizontalPanel buttonsPanel = new HorizontalPanel();
     row.add(buttonsPanel);
     
-    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, delegate);
+    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, null, delegate);
 
     /*
     String buttonMsg = null;
@@ -282,4 +238,70 @@ public class PhgDialogUtils {
     }
   }
 
+  public static DialogBox create(Configuration config) {
+    
+    DialogBox dialog = new DialogBox();
+    dialog.addStyleName("pgc-Dialog");
+    
+    dialog.setText(config.captionText);
+    dialog.setAnimationEnabled(true);
+    dialog.setGlassEnabled(true);
+    
+    VerticalPanel dialogPanel = new VerticalPanel();
+    dialogPanel.addStyleName("pgc-DialogPanel");
+    
+    if (config.bodyText != null) {
+      dialogPanel.add(new Label(config.bodyText));
+    } else if (config.bodyHtml != null) {
+      dialogPanel.add(new HTML(config.bodyHtml));
+    } else if (config.bodyWidget != null) {
+      dialogPanel.add(config.bodyWidget);
+    }
+    
+    dialog.setWidget(dialogPanel);
+
+    if (config.positionCallback != null) {
+      dialog.setPopupPositionAndShow(config.positionCallback);
+    } else if (config.objectRelativeTo != null) {
+      dialog.showRelativeTo(config.objectRelativeTo);
+    } else {
+      dialog.show();
+    }
+    
+    return dialog;
+  }
+  
+  public static class Configuration {
+    private String captionText = "Attenzione";
+    private String bodyText = null;
+    private SafeHtml bodyHtml = null;
+    private Widget bodyWidget = null;
+    private PositionCallback positionCallback;
+    private UIObject objectRelativeTo;
+    public Configuration setCaptionText(String captionText) {
+      this.captionText = captionText;
+      return this;
+    }
+    public Configuration setBodyText(String bodyText) {
+      this.bodyText = bodyText;
+      return this;
+    }
+    public Configuration setBodyHtml(SafeHtml bodyHtml) {
+      this.bodyHtml = bodyHtml;
+      return this;
+    }
+    public Configuration setBodyWidget(Widget bodyWidget) {
+      this.bodyWidget = bodyWidget;
+      return this;
+    }
+    public Configuration setPositionCallback(PositionCallback positionCallback) {
+      this.positionCallback = positionCallback;
+      return this;
+    }
+    public Configuration setObjectRelativeTo(UIObject objectRelativeTo) {
+      this.objectRelativeTo = objectRelativeTo;
+      return this;
+    }
+  }
+  
 }
