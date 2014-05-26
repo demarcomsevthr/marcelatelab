@@ -70,4 +70,26 @@ public interface Prescrizione extends Serializable {
   
   public boolean isPersistent();
 
+  public void setUltimoAvvisoRiordino(Date ultimoAvvisoRiordino);
+
+  public Date getUltimoAvvisoRiordino();
+
+  public void setQtaRimanente(Double qtaRimanente);
+
+  public Double getQtaRimanente();
+
+  public void setQtaPerAvviso(Double qtaPerAvviso);
+
+  public Double getQtaPerAvviso();
+
+  public void setQtaPerConfez(Double qtaPerConfez);
+
+  public Double getQtaPerConfez();
+
+  public boolean isGstAvvisoRiordino();
+
+  public void setFlgGstAvvisoRiordino(Integer flgGstAvvisoRiordino);
+
+  public Integer getFlgGstAvvisoRiordino();
+
 }

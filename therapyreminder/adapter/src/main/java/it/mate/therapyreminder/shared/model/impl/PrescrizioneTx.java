@@ -31,8 +31,21 @@ public class PrescrizioneTx implements Prescrizione {
   private String tipoRicorrenzaOraria;
   
   private Integer intervalloOrario;
+
+  // START MIGRATION #1
+  private Integer flgGstAvvisoRiordino;
+  
+  private Double qtaPerConfez;
+  
+  private Double qtaPerAvviso;
+  
+  private Double qtaRimanente;
+  
+  private Date ultimoAvvisoRiordino;
+  // END MIGRATION #1
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
+  
 
   @Override
   public String toString() {
@@ -206,6 +219,50 @@ public class PrescrizioneTx implements Prescrizione {
 
   public void setDosaggi(List<Dosaggio> dosaggi) {
     this.dosaggi = dosaggi;
+  }
+
+  public Integer getFlgGstAvvisoRiordino() {
+    return flgGstAvvisoRiordino != null ? flgGstAvvisoRiordino : 0;
+  }
+
+  public void setFlgGstAvvisoRiordino(Integer flgGstAvvisoRiordino) {
+    this.flgGstAvvisoRiordino = flgGstAvvisoRiordino;
+  }
+  
+  public boolean isGstAvvisoRiordino() {
+    return getFlgGstAvvisoRiordino() == 1;
+  }
+
+  public Double getQtaPerConfez() {
+    return qtaPerConfez;
+  }
+
+  public void setQtaPerConfez(Double qtaPerConfez) {
+    this.qtaPerConfez = qtaPerConfez;
+  }
+
+  public Double getQtaPerAvviso() {
+    return qtaPerAvviso;
+  }
+
+  public void setQtaPerAvviso(Double qtaPerAvviso) {
+    this.qtaPerAvviso = qtaPerAvviso;
+  }
+
+  public Double getQtaRimanente() {
+    return qtaRimanente;
+  }
+
+  public void setQtaRimanente(Double qtaRimanente) {
+    this.qtaRimanente = qtaRimanente;
+  }
+
+  public Date getUltimoAvvisoRiordino() {
+    return ultimoAvvisoRiordino;
+  }
+
+  public void setUltimoAvvisoRiordino(Date ultimoAvvisoRiordino) {
+    this.ultimoAvvisoRiordino = ultimoAvvisoRiordino;
   }
   
 }
