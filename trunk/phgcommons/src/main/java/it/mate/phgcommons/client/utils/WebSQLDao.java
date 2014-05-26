@@ -393,6 +393,12 @@ public abstract class WebSQLDao {
     return date.getTime();
   }
   
+  protected Date longAsDate(Long value) {
+    if (value == null)
+      return null;
+    return new Date(value);
+  }
+  
   private void doMigrations(final MigratorCallback migrationCallbacks[]) {
     new Migrator(WebSQLDao.this, migrationCallbacks);
   }
