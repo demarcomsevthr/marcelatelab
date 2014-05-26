@@ -27,10 +27,17 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String UDM_FIELDS = "codice, descrizione, sequenza"; 
   
-  private final static String PRESCRIZIONI_FIELDS = "nome, dataInizio, dataFine, " + 
-      "quantita, codUdM, idComposizione, tipoRicorrenza, valoreRicorrenza," +
+  private final static String PRESCRIZIONI_FIELDS_0 = 
+      "nome, dataInizio, dataFine, " + 
+      "quantita, codUdM, idComposizione, " +
+      "tipoRicorrenza, valoreRicorrenza," +
       "tipoRicorrenzaOraria, intervalloOrario";
+
+  private final static String PRESCRIZIONI_FIELDS_1 = 
+      "flgGstAvvisoRiordino, qtaPerConfez, qtaPerAvviso, qtaRimanente, ultimoAvvisoRiordino ";
   
+  private final static String PRESCRIZIONI_FIELDS = PRESCRIZIONI_FIELDS_0 + ", " + PRESCRIZIONI_FIELDS_1;
+      
   private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
   
   private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
@@ -106,15 +113,21 @@ public class AppSqlDao extends WebSQLDao {
     }
   };
   
-  /** PROVA MIGRATION >> NON CANCELLARE, MI SERVIRA' QUANDO AVRO' INIZIATO A FARE RELEASE!
-  
   private final static MigratorCallback MIGRATION_CALLBACK_1 = new MigratorCallback() {
     public void doMigration(int number, SQLTransaction tr) {
       PhonegapLog.log("updating db therapies to version " + number);
-      tr.doExecuteSql("CREATE TABLE drugs (id "+SERIAL_ID+", name, created)");
-      tr.doExecuteSql("INSERT INTO drugs (name, created) VALUES ('prova', 2014)");
+      
+      PhonegapLog.log("altering table prescrizioni");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN flgGstAvvisoRiordino");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN qtaPerConfez");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN qtaPerAvviso");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN qtaRimanente");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN ultimoAvvisoRiordino");
+      
     }
   };
+  
+  /** PROVA MIGRATION >> NON CANCELLARE, MI SERVIRA' QUANDO AVRO' INIZIATO A FARE RELEASE!
   
   private final static MigratorCallback MIGRATION_CALLBACK_2 = new MigratorCallback() {
     public void doMigration(int number, SQLTransaction tr) {
@@ -144,7 +157,7 @@ public class AppSqlDao extends WebSQLDao {
   */
   
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0 /* ,MIGRATION_CALLBACK_1 ,MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 ,MIGRATION_CALLBACK_4 */ 
+    MIGRATION_CALLBACK_0 ,MIGRATION_CALLBACK_1 /* ,MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 ,MIGRATION_CALLBACK_4 */ 
   };
   
   public void findAllUdM(final Delegate<List<UdM>> delegate) {
@@ -243,13 +256,19 @@ public class AppSqlDao extends WebSQLDao {
     Prescrizione prescrizione = new PrescrizioneTx();
     prescrizione.setId(rows.getValueInt(it, "id"));
     prescrizione.setNome(rows.getValueString(it, "nome"));
-    prescrizione.setDataInizio(new Date(rows.getValueLong(it, "dataInizio")));
+    prescrizione.setDataInizio(longAsDate(rows.getValueLong(it, "dataInizio")));
+    prescrizione.setDataFine(longAsDate(rows.getValueLong(it, "dataFine")));
     prescrizione.setQuantita(rows.getValueDouble(it, "quantita"));
     prescrizione.setTipoRicorrenza(rows.getValueString(it, "tipoRicorrenza"));
     prescrizione.setCodUdM(rows.getValueString(it, "codUdM"));
     prescrizione.setValoreRicorrenza(rows.getValueInt(it, "valoreRicorrenza"));
     prescrizione.setTipoRicorrenzaOraria(rows.getValueString(it, "tipoRicorrenzaOraria"));
     prescrizione.setIntervalloOrario(rows.getValueInt(it, "intervalloOrario"));
+    prescrizione.setFlgGstAvvisoRiordino(rows.getValueInt(it, "flgGstAvvisoRiordino"));
+    prescrizione.setQtaPerConfez(rows.getValueDouble(it, "qtaPerConfez"));
+    prescrizione.setQtaPerAvviso(rows.getValueDouble(it, "qtaPerAvviso"));
+    prescrizione.setQtaRimanente(rows.getValueDouble(it, "qtaRimanente"));
+    prescrizione.setUltimoAvvisoRiordino(longAsDate(rows.getValueLong(it, "ultimoAvvisoRiordino")));
     return prescrizione;
   }
   
@@ -281,14 +300,25 @@ public class AppSqlDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (prescrizione.getId() == null) {
-          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 prescrizione.getNome(), 
-                dateAsLong(prescrizione.getDataInizio()), dateAsLong(prescrizione.getDataFine()), 
-                prescrizione.getQuantita(), prescrizione.getCodUdM(),
+                dateAsLong(prescrizione.getDataInizio()), 
+                dateAsLong(prescrizione.getDataFine()), 
+                prescrizione.getQuantita(), 
+                prescrizione.getCodUdM(),
                 prescrizione.getIdComposizione(), 
-                prescrizione.getTipoRicorrenza(), prescrizione.getValoreRicorrenza(),
-                prescrizione.getTipoRicorrenzaOraria(), prescrizione.getIntervalloOrario() /* ,pr.getOrari() */
+                prescrizione.getTipoRicorrenza(), 
+                prescrizione.getValoreRicorrenza(),
+                prescrizione.getTipoRicorrenzaOraria(), 
+                prescrizione.getIntervalloOrario(),
+                //////////////////////////////////////
+                prescrizione.getFlgGstAvvisoRiordino(),
+                prescrizione.getQtaPerConfez(),
+                prescrizione.getQtaPerAvviso(),
+                prescrizione.getQtaRimanente(),
+                dateAsLong(prescrizione.getUltimoAvvisoRiordino())
+                //////////////////////////////////////
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   prescrizione.setId(rs.getInsertId());
@@ -314,16 +344,35 @@ public class AppSqlDao extends WebSQLDao {
           sql += " ,valoreRicorrenza = ?";
           sql += " ,tipoRicorrenzaOraria = ?";
           sql += " ,intervalloOrario = ?";
-          /* sql += " ,orari = ?"; */
+          
+          sql += " ,flgGstAvvisoRiordino = ?";
+          sql += " ,qtaPerConfez = ?";
+          sql += " ,qtaPerAvviso = ?";
+          sql += " ,qtaRimanente = ?";
+          sql += " ,ultimoAvvisoRiordino = ?";
+          
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
+
               prescrizione.getNome(), 
-              dateAsLong(prescrizione.getDataInizio()), dateAsLong(prescrizione.getDataFine()), 
-              prescrizione.getQuantita(), prescrizione.getCodUdM(),
+              dateAsLong(prescrizione.getDataInizio()), 
+              dateAsLong(prescrizione.getDataFine()), 
+              prescrizione.getQuantita(), 
+              prescrizione.getCodUdM(),
               prescrizione.getIdComposizione(), 
-              prescrizione.getTipoRicorrenza(), prescrizione.getValoreRicorrenza(),
-              prescrizione.getTipoRicorrenzaOraria(), prescrizione.getIntervalloOrario() /* ,pr.getOrari() */
+              prescrizione.getTipoRicorrenza(), 
+              prescrizione.getValoreRicorrenza(),
+              prescrizione.getTipoRicorrenzaOraria(), 
+              prescrizione.getIntervalloOrario(), 
+
+              prescrizione.getFlgGstAvvisoRiordino(),
+              prescrizione.getQtaPerConfez(),
+              prescrizione.getQtaPerAvviso(),
+              prescrizione.getQtaRimanente(),
+              dateAsLong(prescrizione.getUltimoAvvisoRiordino())
+              
               , prescrizione.getId()
+              
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               PhonegapLog.log("Updated " + prescrizione);
@@ -408,7 +457,7 @@ public class AppSqlDao extends WebSQLDao {
   private Somministrazione flushRSToSomministrazione(SQLResultSet rs, int it, Prescrizione prescrizione) {
     Somministrazione result = new SomministrazioneTx(prescrizione);
     result.setId(rs.getRows().getValueInt(it, "id"));
-    result.setData(new Date(rs.getRows().getValueLong(it, "data")));
+    result.setData(longAsDate(rs.getRows().getValueLong(it, "data")));
     result.setQuantita(rs.getRows().getValueDouble(it, "quantita"));
     result.setOrario(rs.getRows().getValueString(it, "orario"));
     result.setStato(rs.getRows().getValueInt(it, "stato"));
