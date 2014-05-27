@@ -36,12 +36,36 @@
         
         <hr class="ui-view-separator"/>
         
-        <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
+        <g:HTML HTML="Quantità da assumere:" addStyleNames="ui-field-label"/>
         <gc:Spacer height="0.3em"/>
         <g:HorizontalPanel>
           <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
           <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
         </g:HorizontalPanel>
+        
+        <hr class="ui-view-separator"/>
+        <g:HorizontalPanel>
+          <ph:PhCheckBox addStyleNames="ui-app-alert-riordino" ui:field="ckbAlertRiordino"/>
+          <g:HTML HTML="Alert per il riordino" addStyleNames="ui-field-label ui-app-alert-riordino-label"/>
+        </g:HorizontalPanel>
+        <g:VerticalPanel ui:field="alertRiordinoPanel" visible="false">
+          <g:HTML HTML="Quantità per confezione:" addStyleNames="ui-field-label"/>
+          <gc:Spacer height="0.3em"/>
+          <g:HorizontalPanel>
+            <ph:PhTextBox ui:field="qtaConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+          </g:HorizontalPanel>
+          <g:HTML HTML="Quantità per il riordino:" addStyleNames="ui-field-label"/>
+          <gc:Spacer height="0.3em"/>
+          <g:HorizontalPanel>
+            <ph:PhTextBox ui:field="qtaRiordinoBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+          </g:HorizontalPanel>
+          <g:HTML HTML="Confezioni acquistate:" addStyleNames="ui-field-label"/>
+          <gc:Spacer height="0.3em"/>
+          <g:HorizontalPanel>
+            <ph:PhTextBox ui:field="numConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+          </g:HorizontalPanel>
+          <gc:Spacer height="2em"/>
+        </g:VerticalPanel>
         
         <gc:Spacer height="2em"/>
         
