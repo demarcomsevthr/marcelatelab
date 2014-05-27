@@ -294,6 +294,7 @@
 
 .phg-CheckBox-selected {
   background: url('main/images/check-28.png') no-repeat rgb(255, 255, 255);
+  background-size: cover;
 }
 
 .phg-CheckBox-Circle {
