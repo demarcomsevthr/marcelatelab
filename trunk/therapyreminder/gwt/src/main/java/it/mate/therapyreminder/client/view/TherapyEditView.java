@@ -10,6 +10,7 @@ import it.mate.phgcommons.client.ui.TouchAnchor;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
+import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
@@ -79,6 +80,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
   @UiField PhTextBox rangeBox;
   @UiField PhTextBox rangeOrariBox;
   @UiField PhTimeBox orarioInizioBox;
+  @UiField PhCheckBox ckbAlertRiordino;
+  @UiField Panel alertRiordinoPanel;
   
   StatePanelUtil statePanelUtil = new StatePanelUtil();
   
@@ -178,8 +181,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
         showOrariListPanel();
       }
       
+      ckbAlertRiordino.setValue(oldPrescrizione.isGstAvvisoRiordino());
+      
       if (oldPrescrizione.isPersistent()) {
-//      SomministrazioniService.getInstance().findCalEvents(prescrizione);
         titleBox.setReadOnly(true);
       }
       
@@ -436,6 +440,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> {
       }
     }
     delegate.execute(newPrescrizione);
+  }
+
+  @UiHandler ("ckbAlertRiordino")
+  public void onCkbAlertRiordino(ValueChangeEvent<Boolean> event) {
+    alertRiordinoPanel.setVisible(event.getValue());
+    if (event.getValue()) {
+      refreshScrollPanel();
+    }
   }
 
 }
