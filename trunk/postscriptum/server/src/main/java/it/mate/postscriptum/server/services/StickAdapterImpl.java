@@ -211,20 +211,19 @@ public class StickAdapterImpl implements StickAdapter {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   @Override
-  public StickSms createSMS(StickSms entity) throws AdapterException {
-    List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(entity.getUser(), getMidnight());
+  public StickSms createSMS(StickSms sms) throws AdapterException {
+    List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(sms.getUser(), getMidnight());
     LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
     if (userSMSs != null && userSMSs.size() >= MAX_SMS_PER_DAY_FREE_QUOTA) {
       throw new AdapterException(String.format("You cannot submit more than %s SMS per day in this version", MAX_SMS_PER_DAY_FREE_QUOTA));
     }
-    /*
-    List<StickSms> userSMSs = findScheduledSMSsByUser(entity.getUser());
-    LoggingUtils.debug(getClass(), "scheduledSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
-    if (userSMSs != null && userSMSs.size() >= MAX_SCHEDULED_SMS_FREE_QUOTA) {
-      throw new AdapterException(String.format("You cannot have more than %s scheduled SMS in this version", MAX_SCHEDULED_SMS_FREE_QUOTA));
+    if (sms.getBody() == null || sms.getBody().length() <= 0) {
+      throw new AdapterException("The text of the message cannot be empty");
     }
-    */
-    StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
+    if (sms.getBody().length() > 120) {
+      throw new AdapterException("The lenght of the message cannot be more than 120 characters");
+    }
+    StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
     LoggingUtils.debug(getClass(), "creating " + ds);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickSmsTx.class);
@@ -309,7 +308,8 @@ public class StickAdapterImpl implements StickAdapter {
       }
       smsBody = smsBody.length() < maxLenght ? smsBody : smsBody.substring(0, maxLenght);
       
-      String body = "Post Scriptum: ";
+//    String body = "Post Scriptum: ";
+      String body = "";
       body += smsBody;
       body += " >> By " + sms.getUser().getEmail();
 //    body += " >> This is an automatically generated message: please do not reply.";
