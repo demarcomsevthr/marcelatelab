@@ -9,5 +9,17 @@ public class NumberUtils {
       return true;
     return false;
   }
+  
+  public static int doubleAsInt(Double value) {
+    if (value == null)
+      return 0;
+    return (int)Math.floor(value);
+  }
 
+  public static Integer doubleAsInteger(Double value) {
+    if (value == null)
+      return null;
+    return (int)Math.floor(value);
+  }
+  
 }

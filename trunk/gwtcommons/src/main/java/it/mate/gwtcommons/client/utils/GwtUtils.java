@@ -97,10 +97,12 @@ public class GwtUtils {
   
   private static String[] itaMMMM = new String[] {"gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"};
 
-  
   private static boolean devModeActive = Window.Location.getQueryString().contains("gwt.codesvr");
   
   private static boolean mobileOptimizations = false;
+  
+  private static boolean enableLogInProductionMode = false;
+
   
   
   public static String getPortletContextPath() {
@@ -381,7 +383,6 @@ public class GwtUtils {
     }.scheduleRepeating(10);
   }
 
-  //TODO: 15/05/2014
   public abstract static class MobileTimer extends Timer {
     boolean cancelRequested = false;
     public MobileTimer() {  }
@@ -858,51 +859,39 @@ public class GwtUtils {
     }
   }
 
-  public static void log (String message) {
-    log(null, -1, null, message, null);
+  public static String log (String message) {
+    return log(null, -1, null, message, null);
   }
   
-  public static void log (Class<?> type, String methodName, String message) {
-    log(type, -1, methodName, message, null);
+  public static String log (Class<?> type, String methodName, String message) {
+    return log(type, -1, methodName, message, null);
   }
   
-  public static void log (Class<?> type, int hashcode, String methodName, String message) {
-    log(type, hashcode, methodName, message, null);
+  public static String log (Class<?> type, int hashcode, String methodName, String message) {
+    return log(type, hashcode, methodName, message, null);
   }
   
-  public static void log (Class<?> type, String methodName, String message, Exception ex) {
-    log(type, -1, methodName, message, ex);
+  public static String log (Class<?> type, String methodName, String message, Exception ex) {
+    return log(type, -1, methodName, message, ex);
   }
   
-  public static void log (Class<?> callingClass, int hashcode, String methodName, String message, Exception ex) {
-    
-    if (!isDevMode()) {
-      return;
+  public static String log (Class<?> callingClass, int hashcode, String methodName, String message, Exception ex) {
+    if (!isDevMode() && !enableLogInProductionMode) {
+      return null;
     }
-
-    // 27/01/2013 - forzo il detecting del calling method tramite stack trace
-    callingClass = null;
-    
-    if (callingClass == null) {
-      methodName = getCallingMethodName("log");
-    }
-
-    /*
-    if (methodName.contains("showWaitPanel") || methodName.contains("hideWaitPanel")) {
-      if (methodName.contains("showWaitPanelIfRequired")) {
-        return;
-      }
-    } else {
-      return;
-    }
-    */
-    
+    methodName = getCallingMethodName("log");
     String dts = GwtUtils.dateToString(new Date(), formatFromCache(logPattern)); 
     if (ex != null) {
       message = message + " - " + ex.getClass().getName() + " - " + ex.getMessage();
     }
     String cls = callingClass != null ? (callingClass.getName()+".") : "";
-    System.out.println(dts + " DEBUG " + "["+cls+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message);
+    String logMsg = dts + " DEBUG " + "["+cls+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message;
+    System.out.println(logMsg);
+    return logMsg;
+  }
+  
+  public static void setEnableLogInProductionMode(boolean enableLogInProductionMode) {
+    GwtUtils.enableLogInProductionMode = enableLogInProductionMode;
   }
   
   private static String getCallingMethodName(String excludeMethodName) {
