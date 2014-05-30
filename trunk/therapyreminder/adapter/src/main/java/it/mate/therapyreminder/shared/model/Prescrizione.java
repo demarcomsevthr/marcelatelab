@@ -92,4 +92,8 @@ public interface Prescrizione extends Serializable {
 
   public Integer getFlgGstAvvisoRiordino();
 
+  public Double getNumConfezioni();
+  
+  public void setGstAvvisoRiordino(Boolean flgGstAvvisoRiordino);
+
 }
