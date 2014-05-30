@@ -8,7 +8,6 @@ import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
-import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
@@ -16,8 +15,6 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
-import it.mate.therapyreminder.client.api.RemoteUserJS;
-import it.mate.therapyreminder.client.api.StickMailEPProxy;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
@@ -74,15 +71,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
   private StickFacadeAsync facade = null;
   
-  private StickMailEPProxy stickMailEPProxy;
-
-  private Delegate<Boolean> authDelegate;
-  
-  private RemoteUser remoteUser;
-  
-  private Delegate<RemoteUser> remoteUserDelegate;
   
   private Somministrazione editingSomministrazione;
+  
+  private boolean enableAlertSomministrazione = false;
   
   
   
@@ -286,87 +278,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
     
-    PhonegapUtils.log("setRemoteUserDelegate - ver. 746.6");
-    
-    PhonegapUtils.log("remoteUser = " + remoteUser);
-    
-    this.remoteUserDelegate = remoteUserDelegate;
-    if (remoteUser != null) {
-      remoteUserDelegate.execute(remoteUser);
-    } else {
-      
-      String remoteUserJson = getRemoteUserFromLocalStorage();
-      PhonegapUtils.log("remoteUserJson = " + remoteUserJson);
-      if (remoteUserJson != null && remoteUserJson.contains("{") ) {
-        RemoteUserJS remoteUserJS = JSONUtils.parse(remoteUserJson).cast();
-        PhonegapUtils.log("discovered remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
-        remoteUser = remoteUserJS.asRemoteUser();
-        remoteUserDelegate.execute(remoteUser);
-      } else {
-        
-        if (stickMailEPProxy == null) {
-          StickMailEPProxy.resetAll();
-          createStickMailEPProxy(null);
-        } else {
-          boolean isSigned = stickMailEPProxy.isSignedIn();
-          authDelegate.execute(isSigned);
-          
-          
-          if (!isSigned) {
-            stickMailEPProxy.reAuthorize();
-          }
-          
-        }
-        
-      }
-      
-    }
   }
-  
-  private void createStickMailEPProxy(Delegate<Void> initDelegate) {
-    authDelegate = new Delegate<Boolean>() {
-      public void execute(Boolean isSigned) {
-        if (isSigned) {
-          stickMailEPProxy.getRemoteUser(new Delegate<RemoteUser>() {
-            public void execute(RemoteUser remoteUser) {
-              AppClientFactoryImpl.this.remoteUser = remoteUser;
-              setRemoteUserInLocalStorage(JSONUtils.stringify(RemoteUserJS.cast(remoteUser)));
-              if (remoteUserDelegate != null)
-                remoteUserDelegate.execute(remoteUser);
-            }
-          });
-        } else {
-          remoteUser = null;
-          setRemoteUserInLocalStorage(null);
-          if (remoteUserDelegate != null)
-            remoteUserDelegate.execute(null);
-        }
-      }
-    };
-    stickMailEPProxy = new StickMailEPProxy(null, authDelegate);
-  }
-  
-  private native void setRemoteUserInLocalStorage(String remoteUserJson) /*-{
-    localStorage.remoteUser = remoteUserJson;
-  }-*/;
-
-  private native String getRemoteUserFromLocalStorage() /*-{
-    return localStorage.remoteUser;
-  }-*/;
 
   @Override
   public void authenticate() {
-    if (stickMailEPProxy == null) {
-      createStickMailEPProxy(new Delegate<Void>() {
-        public void execute(Void element) {
-          PhonegapUtils.log("AppClientFactoryImpl: calling proxy::auth");
-          stickMailEPProxy.reAuthorize();
-        }
-      });
-    } else {
-      PhonegapUtils.log("AppClientFactoryImpl: calling proxy::auth");
-      stickMailEPProxy.reAuthorize();
-    }
+
   }
   
   @Override
@@ -424,6 +340,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }));
   }
   
+  public void setEnableAlertSomministrazione(boolean value) {
+    this.enableAlertSomministrazione = value;
+  }
+  
   protected class FindSomministrazioneScadutaDelegate implements Delegate<Void> {
     
     private boolean firstRun = true;
@@ -460,7 +380,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           } else {
             if (somministrazione != null) {
               PhonegapLog.log("found somministrazione scaduta " + somministrazione);
-              if (!somministrazione.equals(editingSomministrazione)) {
+              if (enableAlertSomministrazione && !somministrazione.equals(editingSomministrazione)) {
                 getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
               }
             }

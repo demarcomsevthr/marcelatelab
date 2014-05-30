@@ -80,12 +80,38 @@ public class PrescrizioniUtils {
     });
   }
   
-  public void updateSomministrazione(Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
-    dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
-      public void execute(Somministrazione res) {
-        delegate.execute(res);
+  public void updateSomministrazione(final Somministrazione newSomministrazione, final Delegate<Somministrazione> somministrazioneAggiornataDelegate, 
+      final Delegate<Somministrazione> farmacoDaRiordinareDelegate) {
+    dao.findSomministrazioneById(newSomministrazione.getId(), new Delegate<Somministrazione>() {
+      public void execute(final Somministrazione oldSomministrazione) {
+        dao.saveSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
+          public void execute(Somministrazione somministrazioneAggiornata) {
+            if (!oldSomministrazione.isEseguita() && newSomministrazione.isEseguita()) {
+              double qtaSomministrata = newSomministrazione.getQuantita();
+              Prescrizione prescrizione = somministrazioneAggiornata.getPrescrizione();
+              double qtaRimanente = prescrizione.getQtaRimanente();
+              double qtaPerRiordino = prescrizione.getQtaPerAvviso();
+              if (qtaRimanente - qtaSomministrata > 0) {
+                qtaRimanente -= qtaSomministrata;
+                prescrizione.setQtaRimanente(qtaRimanente);
+                dao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+                  public void execute(Prescrizione result) {
+                    
+                  }
+                });
+              }
+              if (qtaRimanente < qtaPerRiordino) {
+                farmacoDaRiordinareDelegate.execute(somministrazioneAggiornata);
+                return;
+              }
+            }
+            somministrazioneAggiornataDelegate.execute(somministrazioneAggiornata);
+          }
+        });
       }
     });
+    
+    
   }
   
   public void sviluppaSomministrazioni(final Prescrizione prescrizione) {
@@ -184,8 +210,16 @@ public class PrescrizioniUtils {
     if (prescrizione.getValoreRicorrenza() == null || prescrizione.getValoreRicorrenza() <= 0) {
       throw new ServiceException("Date range not set");
     }
-    int limite = 5 * prescrizione.getValoreRicorrenza();
-    CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, limite);
+    if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
+      int limite = 5 * prescrizione.getValoreRicorrenza();
+      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, limite);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_SETTIMANALE)) {
+      int limite = 7 * 5 * prescrizione.getValoreRicorrenza();
+      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, limite);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_MENSILE)) {
+      int limite = 5 * prescrizione.getValoreRicorrenza();
+      CalendarUtil.addMonthsToDate(dataLimiteSviluppoSomministrazioni, limite);
+    }
     
     /*
     final int DEFAULT_SVILUPPO_GIORNALIERO = 5;
@@ -318,6 +352,26 @@ public class PrescrizioniUtils {
     Date datetimeSomministrazione = somministrazione.getData();
     Time.fromString(somministrazione.getOrario()).setInDate(datetimeSomministrazione);
     return somministrazione.isSchedulata() && datetimeSomministrazione.before(NOW);
+  }
+  
+  public static String validatePrescrizione(Prescrizione prescrizione) {
+    if (prescrizione.getNome() == null || prescrizione.getNome().trim().length() == 0) {
+      return "Manca il nome del farmaco";
+    }
+    if (prescrizione.getDosaggi() == null) {
+      return "Manca l'orario di assunzione";
+    }
+    for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
+      if (dosaggio.getOrario() == null) {
+        return "Orario di assunzione non impostato";
+      }
+    }
+    if (prescrizione.isGstAvvisoRiordino()) {
+      if (prescrizione.getQtaPerConfez() <= 0) {
+        return "Quantità per confezione errata";
+      }
+    }
+    return null;
   }
   
 }

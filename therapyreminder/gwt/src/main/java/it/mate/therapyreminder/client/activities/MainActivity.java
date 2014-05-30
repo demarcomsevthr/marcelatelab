@@ -11,6 +11,7 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
@@ -65,6 +66,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
     if (place.getToken().equals(MainPlace.HOME)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(true);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
       initBaseMgwtView(true);
@@ -77,6 +79,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
       SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
       this.view = view;
       initBaseMgwtView(false);
@@ -89,6 +92,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
       TherapyListView view = AppClientFactory.IMPL.getGinjector().getTherapyListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -101,6 +105,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
       TherapyEditView view = AppClientFactory.IMPL.getGinjector().getTherapyEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -113,6 +118,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
       DosageEditView view = AppClientFactory.IMPL.getGinjector().getDosageEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -126,6 +132,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(true);
       ReminderListView view = AppClientFactory.IMPL.getGinjector().getReminderListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -138,6 +145,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
+      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
       ReminderEditView view = AppClientFactory.IMPL.getGinjector().getReminderEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -258,15 +266,25 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   @SuppressWarnings("unchecked")
-  private void setBackButtonDelegate(final Delegate<Void> delegate) {
+  private void setBackButtonDelegate(final Delegate<Void> goToBackDelegate) {
+    final Delegate<Void> wrappedGoToBackDelegate = new Delegate<Void>() {
+      public void execute(Void element) {
+        if (view instanceof HasClosingViewHandler) {
+          HasClosingViewHandler handler = (HasClosingViewHandler)view;
+          handler.onClosingView(goToBackDelegate);
+        } else {
+          goToBackDelegate.execute(null);
+        }
+      }
+    };
     AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
       public void execute(String element) {
-        delegate.execute(null);
+        wrappedGoToBackDelegate.execute(null);
       }
     });
     view.initHeaderBackButton(SafeHtmlUtils.fromTrustedString("<img src='main/images/home-back.png'/>"), new Delegate<TapEvent>() {
       public void execute(TapEvent element) {
-        delegate.execute(null);
+        wrappedGoToBackDelegate.execute(null);
       }
     });
   }
@@ -402,8 +420,17 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void updateSomministrazione(Somministrazione somministrazione) {
     PrescrizioniUtils.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
+        // somministrazione aggiornata
         goToHome();
       }
+    }, new Delegate<Somministrazione>() {
+      public void execute(Somministrazione result) {
+
+        // farmaco da riordinare
+        view.setModel(result, ReminderEditView.TAG_FARMACO_DA_RIORDINARE);
+        
+      }
+      
     });
   }
 

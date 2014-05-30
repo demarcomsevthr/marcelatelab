@@ -64,4 +64,6 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public void setEditingSomministrazione(Somministrazione editingSomministrazione);
   
+  public void setEnableAlertSomministrazione(boolean value);
+  
 }

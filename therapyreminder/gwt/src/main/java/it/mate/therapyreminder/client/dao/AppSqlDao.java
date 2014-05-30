@@ -224,6 +224,10 @@ public class AppSqlDao extends WebSQLDao {
   }
   
   public void findPrescrizioneById(final Integer id, final Delegate<Prescrizione> delegate) {
+    findPrescrizioneById(id, delegate, null);
+  }
+  
+  public void findPrescrizioneById(final Integer id, final Delegate<Prescrizione> delegate, final Delegate<DaoException> exceptionDelegate) {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String sql = "SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni";
@@ -231,14 +235,23 @@ public class AppSqlDao extends WebSQLDao {
         tr.doExecuteSql(sql, new Object[]{id}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             List<Prescrizione> results = new ArrayList<Prescrizione>();
+            DaoException ex = null;
             if (rs.getRows().getLength() == 1) {
               for (int it = 0; it < rs.getRows().getLength(); it++) {
                 results.add(flushRSToPrescrizione(rs, it));
               }
             } else if (rs.getRows().getLength() <= 0) {
-              throw new DaoException("Not found");
+              ex = new DaoException("Not found");
             } else {
-              throw new DaoException("Data integrity error");
+              ex = new DaoException("Data integrity error");
+            }
+            if (ex != null) {
+              if (exceptionDelegate != null) {
+                exceptionDelegate.execute(ex);
+                return;
+              } else {
+                throw ex;
+              }
             }
             iteratePrescrizioniForRead(results.iterator(), tr, new Delegate<List<Prescrizione>>() {
               public void execute(List<Prescrizione> results) {
@@ -418,7 +431,15 @@ public class AppSqlDao extends WebSQLDao {
           tr.doExecuteSql("DELETE FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
             new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-                iteratePrescrizioniForDelete(it, tr, delegate);
+                
+                tr.doExecuteSql("DELETE FROM somministrazioni WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
+                    new SQLStatementCallback() {
+                      public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                        iteratePrescrizioniForDelete(it, tr, delegate);
+                      }
+                    }
+                  );
+                
               }
             }
           );
@@ -526,6 +547,10 @@ public class AppSqlDao extends WebSQLDao {
               results.add(flushRSToSomministrazione(rs, it, prescrizione));
               iterate(it + 1);
             }
+          }, new Delegate<DaoException>() {
+            public void execute(DaoException ex) {
+              iterate(it + 1);
+            }
           });
         }
       } else {
@@ -566,6 +591,31 @@ public class AppSqlDao extends WebSQLDao {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             if (rs.getRows().getLength() > 0) {
               delegate.execute(flushRSToSomministrazione(rs, 0, prescrizione));
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  public void findSomministrazioneById(final Integer id, final Delegate<Somministrazione> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE id = ?";
+        sql += " ORDER BY data DESC";
+        tr.doExecuteSql(sql, new Object[] {id}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, final SQLResultSet rs) {
+            if (rs.getRows().getLength() == 1) {
+              
+              findPrescrizioneById(rs.getRows().getValueInt(0, "idPrescrizione"), new Delegate<Prescrizione>() {
+                public void execute(Prescrizione prescrizione) {
+                  delegate.execute(flushRSToSomministrazione(rs, 0, prescrizione));
+                }
+              });
+              
             } else {
               delegate.execute(null);
             }
