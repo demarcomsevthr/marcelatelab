@@ -71,6 +71,15 @@ public class PhTextBox extends MTextBox implements HasModel {
     }
   }
   
+  public int getValueAsInt() {
+    String textValue = getText();
+    try {
+      return Integer.parseInt(textValue);
+    } catch (NumberFormatException ex) {
+      return 0;
+    }
+  }
+  
   public Integer getValueAsInteger() {
     String textValue = getText();
     try {

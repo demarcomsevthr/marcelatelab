@@ -91,8 +91,10 @@ public class PhonegapUtils {
     }-*/;
   }
   
+  //TODO: 30/05/2014
+  // scrittura su file di log
   public static void log(String text) {
-    GwtUtils.log(text);
+    String logMsg = GwtUtils.log(text);
     if (useLogPlugin && !OsDetectionUtils.isDesktop() && !OsDetectionUtils.isIOs()) {
       LogPlugin.debug(text);
     } else {
