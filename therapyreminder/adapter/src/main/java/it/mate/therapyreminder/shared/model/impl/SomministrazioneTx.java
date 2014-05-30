@@ -70,7 +70,7 @@ public class SomministrazioneTx implements Somministrazione {
   
   @Override
   public Double getQuantita() {
-    return quantita;
+    return quantita != null ? quantita : 0d;
   }
 
   @Override

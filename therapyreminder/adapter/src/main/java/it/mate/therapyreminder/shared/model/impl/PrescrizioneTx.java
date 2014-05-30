@@ -2,6 +2,7 @@ package it.mate.therapyreminder.shared.model.impl;
 
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
+import it.mate.therapyreminder.shared.model.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,53 @@ public class PrescrizioneTx implements Prescrizione {
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
   
+  
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null)
+      return false;
+    if (obj instanceof PrescrizioneTx) {
+      PrescrizioneTx that = (PrescrizioneTx)obj;
+      if (!ModelUtils.equals(this.id, that.id))
+        return false;
+      if (!ModelUtils.equals(this.nome, that.nome))
+        return false;
+      if (!ModelUtils.equals(this.dataInizio, that.dataInizio))
+        return false;
+      if (!ModelUtils.equals(this.dataFine, that.dataFine))
+        return false;
+      if (!ModelUtils.equals(this.quantita, that.quantita))
+        return false;
+      if (!ModelUtils.equals(this.idComposizione, that.idComposizione))
+        return false;
+      if (!ModelUtils.equals(this.tipoRicorrenza, that.tipoRicorrenza))
+        return false;
+      if (!ModelUtils.equals(this.valoreRicorrenza, that.valoreRicorrenza))
+        return false;
+      if (!ModelUtils.equals(this.codUdM, that.codUdM))
+        return false;
+      if (!ModelUtils.equals(this.tipoRicorrenzaOraria, that.tipoRicorrenzaOraria))
+        return false;
+      if (!ModelUtils.equals(this.intervalloOrario, that.intervalloOrario))
+        return false;
+      if (!ModelUtils.equals(this.flgGstAvvisoRiordino, that.flgGstAvvisoRiordino))
+        return false;
+      if (!ModelUtils.equals(this.qtaPerConfez, that.qtaPerConfez))
+        return false;
+      if (!ModelUtils.equals(this.qtaPerAvviso, that.qtaPerAvviso))
+        return false;
+      if (!ModelUtils.equals(this.qtaRimanente, that.qtaRimanente))
+        return false;
+      if (!ModelUtils.equals(this.ultimoAvvisoRiordino, that.ultimoAvvisoRiordino))
+        return false;
+      if (!ModelUtils.equals(this.dosaggi, that.dosaggi))
+        return false;
+      return true;
+    }
+    return super.equals(obj);
+  }
+  
 
   @Override
   public String toString() {
@@ -78,6 +126,10 @@ public class PrescrizioneTx implements Prescrizione {
     for (Dosaggio dosaggio : that.getDosaggi()) {
       this.dosaggi.add(new DosaggioTx(dosaggio));
     }
+    this.flgGstAvvisoRiordino = that.getFlgGstAvvisoRiordino();
+    this.qtaPerConfez = that.getQtaPerConfez();
+    this.qtaPerAvviso = that.getQtaPerAvviso();
+    this.qtaRimanente = that.getQtaRimanente();
   }
 
   @Override
@@ -229,12 +281,16 @@ public class PrescrizioneTx implements Prescrizione {
     this.flgGstAvvisoRiordino = flgGstAvvisoRiordino;
   }
   
+  public void setGstAvvisoRiordino(Boolean flgGstAvvisoRiordino) {
+    this.flgGstAvvisoRiordino = flgGstAvvisoRiordino ? 1 : 0;
+  }
+  
   public boolean isGstAvvisoRiordino() {
     return getFlgGstAvvisoRiordino() == 1;
   }
 
   public Double getQtaPerConfez() {
-    return qtaPerConfez;
+    return qtaPerConfez != null ? qtaPerConfez : 0d;
   }
 
   public void setQtaPerConfez(Double qtaPerConfez) {
@@ -242,7 +298,7 @@ public class PrescrizioneTx implements Prescrizione {
   }
 
   public Double getQtaPerAvviso() {
-    return qtaPerAvviso;
+    return qtaPerAvviso != null ? qtaPerAvviso : 0d;
   }
 
   public void setQtaPerAvviso(Double qtaPerAvviso) {
@@ -250,7 +306,7 @@ public class PrescrizioneTx implements Prescrizione {
   }
 
   public Double getQtaRimanente() {
-    return qtaRimanente;
+    return qtaRimanente != null ? qtaRimanente : 0d;
   }
 
   public void setQtaRimanente(Double qtaRimanente) {
@@ -263,6 +319,10 @@ public class PrescrizioneTx implements Prescrizione {
 
   public void setUltimoAvvisoRiordino(Date ultimoAvvisoRiordino) {
     this.ultimoAvvisoRiordino = ultimoAvvisoRiordino;
+  }
+  
+  public Double getNumConfezioni() {
+    return getQtaPerConfez() > 0 ? getQtaRimanente() / getQtaPerConfez() : 0d;
   }
   
 }
