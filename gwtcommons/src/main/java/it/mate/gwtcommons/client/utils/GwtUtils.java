@@ -879,14 +879,16 @@ public class GwtUtils {
     if (!isDevMode() && !enableLogInProductionMode) {
       return null;
     }
-    methodName = getCallingMethodName("log");
     String dts = GwtUtils.dateToString(new Date(), formatFromCache(logPattern)); 
     if (ex != null) {
       message = message + " - " + ex.getClass().getName() + " - " + ex.getMessage();
     }
     String cls = callingClass != null ? (callingClass.getName()+".") : "";
-    String logMsg = dts + " DEBUG " + "["+cls+methodName+  (hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message;
-    System.out.println(logMsg);
+    methodName = getCallingMethodName("log");
+    String logMsg = dts + " DEBUG " + "["+cls+methodName+(hashcode > -1 ? ("@"+ Integer.toHexString(hashcode)) : "") + "] " + message;
+    if (isDevMode()) {
+      System.out.println(logMsg);
+    }
     return logMsg;
   }
   
@@ -905,7 +907,7 @@ public class GwtUtils {
         }
       }
     }
-    return null;
+    return "";
   }
   
   public static void setDefaultWaitPanel(PopupPanel popup) {
