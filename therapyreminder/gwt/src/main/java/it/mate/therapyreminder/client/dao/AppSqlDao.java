@@ -42,6 +42,8 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
   
+  private Delegate<String> errorDelegate = null;
+  
   public AppSqlDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
@@ -97,7 +99,7 @@ public class AppSqlDao extends WebSQLDao {
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('T', 'Confett/o/i', 100)");
       
       PhonegapLog.log("creating table prescrizioni");
-      tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS + " )");
+      tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS_0 + " )");
 
       PhonegapLog.log("creating table dosaggi");
       tr.doExecuteSql("CREATE TABLE dosaggi (" + DOSAGGI_FIELDS + " )");
@@ -197,6 +199,12 @@ public class AppSqlDao extends WebSQLDao {
               }
             }
             iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
+          }
+        }, new SQLStatementErrorCallback() {
+          public void handleEvent(SQLTransaction tr, SQLError error) {
+            if (errorDelegate != null) {
+              errorDelegate.execute(error.getMessage());
+            }
           }
         });
       }
@@ -301,6 +309,11 @@ public class AppSqlDao extends WebSQLDao {
                 }
               }
               iteratePrescrizioniForRead(it, tr, delegate, results);
+            }
+          }, new SQLStatementErrorCallback() {
+            public void handleEvent(SQLTransaction tr, SQLError error) {
+              if (errorDelegate != null)
+                errorDelegate.execute(error.getMessage());
             }
           });
     } else {
@@ -669,5 +682,11 @@ public class AppSqlDao extends WebSQLDao {
       }
     });
   }
+
+  
+  public void setErrorDelegate(Delegate<String> errorDelegate) {
+    this.errorDelegate = errorDelegate;
+  }
+  
   
 }
