@@ -5,10 +5,10 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
-import it.mate.phgcommons.client.utils.NativePropertiesPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -106,6 +106,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     // SuperDevModeUtil.showDevMode();
 
     GwtUtils.setMobileOptimizations(true);
+    GwtUtils.setEnableLogInProductionMode(true);
     
     ViewPort viewPort = new MGWTSettings.ViewPort();
     viewPort.setTargetDensity(DENSITY.MEDIUM);
@@ -158,7 +159,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
     // TODO: 20/15/2014
-    initTimersAndStartHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
+    startTimersAndHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
 
@@ -317,7 +318,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   //TODO: 15/05/2014
-  private void initTimersAndStartHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+  private void startTimersAndHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
     final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
     timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {
       public void execute(Void element) {
