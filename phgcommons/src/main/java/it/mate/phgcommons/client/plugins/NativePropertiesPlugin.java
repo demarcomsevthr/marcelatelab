@@ -1,7 +1,9 @@
-package it.mate.phgcommons.client.utils;
+package it.mate.phgcommons.client.plugins;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.AbstractPluginWrapper;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
 import java.util.HashMap;
 import java.util.Map;

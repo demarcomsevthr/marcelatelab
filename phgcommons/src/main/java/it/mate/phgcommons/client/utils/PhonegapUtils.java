@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.server.Base64Utils;
 import com.googlecode.mgwt.ui.client.MGWT;
 
 public class PhonegapUtils {
@@ -91,10 +92,22 @@ public class PhonegapUtils {
     }-*/;
   }
   
-  //TODO: 30/05/2014
-  // scrittura su file di log
+  public static native String getWindowSettingProperty(String name) /*-{
+    if ($wnd.Settings) {
+      return $wnd.Settings[name];
+    }
+    return null;
+  }-*/;
+  
   public static void log(String text) {
     String logMsg = GwtUtils.log(text);
+    
+    if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSettingProperty("TraceLogToFile"))) {
+//    logImpl("Ready to write to trace.log > " + logMsg);
+      //TODO: 30/05/2014
+      // scrittura su file di log
+    }
+    
     if (useLogPlugin && !OsDetectionUtils.isDesktop() && !OsDetectionUtils.isIOs()) {
       LogPlugin.debug(text);
     } else {
