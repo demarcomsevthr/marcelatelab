@@ -4,14 +4,15 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.server.Base64Utils;
 import com.googlecode.mgwt.ui.client.MGWT;
 
 public class PhonegapUtils {
@@ -21,6 +22,9 @@ public class PhonegapUtils {
   private static int HEADER_PANEL_HEIGHT = 40;
   
   private static boolean useLogPlugin = false;
+  
+  private static List<String> trace = null;
+  
 
   public static void logEnvironment() {
     log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
@@ -99,6 +103,7 @@ public class PhonegapUtils {
     return null;
   }-*/;
   
+  
   public static void log(String text) {
     String logMsg = GwtUtils.log(text);
     
@@ -106,6 +111,11 @@ public class PhonegapUtils {
 //    logImpl("Ready to write to trace.log > " + logMsg);
       //TODO: 30/05/2014
       // scrittura su file di log
+      
+      if (trace != null) {
+        trace.add(logMsg);
+      }
+      
     }
     
     if (useLogPlugin && !OsDetectionUtils.isDesktop() && !OsDetectionUtils.isIOs()) {
@@ -252,6 +262,18 @@ public class PhonegapUtils {
   
   public static void setLocalStorageLanguage(String value) {
     setLocalStorageValue("PhonegapUtils.language", value);
+  }
+  
+  public static void startTrace() {
+    PhonegapUtils.trace = new ArrayList<String>();
+  }
+  
+  public static List<String> getTrace() {
+    return trace;
+  }
+  
+  public static void clearTrace() {
+    PhonegapUtils.trace = null;
   }
   
 }
