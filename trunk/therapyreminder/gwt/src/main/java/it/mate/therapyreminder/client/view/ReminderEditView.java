@@ -8,7 +8,6 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Position;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
@@ -64,16 +63,10 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   }
   
   @Override
-  public void onUnload() {
-    AppClientFactory.IMPL.setEditingSomministrazione(null);
-    super.onUnload();
-  }
-  
-  @Override
   public void setModel(Object model, String tag) {
     if (TAG_SOMMINISTRAZIONE.equals(tag)) {
       final Somministrazione somministrazione = (Somministrazione)model;
-      AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
+//    AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
       titleBox.setValue(somministrazione.getPrescrizione().getNome());
       dateBox.setValue(PhonegapUtils.dateToString(somministrazione.getData()));
       if (NumberUtils.isInteger(somministrazione.getQuantita())) {

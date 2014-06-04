@@ -42,8 +42,6 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
   
-  private Delegate<String> errorDelegate = null;
-  
   public AppSqlDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
@@ -72,6 +70,8 @@ public class AppSqlDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         dropDBImpl(tr);
+        db = null;
+        initDB();
         delegate.execute(null);
       }
     });
@@ -87,16 +87,15 @@ public class AppSqlDao extends WebSQLDao {
        */
       PhonegapLog.log("creating table udm");
       tr.doExecuteSql("CREATE TABLE udm (" + UDM_FIELDS + " )");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('C', 'Compress/a/e', 10)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('F', 'Fial/a/e', 20)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('S', 'Suppost/a/e', 30)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('O', 'Ovul/o/i', 40)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('G', 'Gocc/ia/e', 50)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('B', 'Bustin/a/e', 60)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('G', 'Garz/a/e', 70)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('L', 'Flacon/e/i', 80)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('P', 'Capsul/a/e', 90)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('T', 'Confett/o/i', 100)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('C', 'default=Tablet//s,it=Compress/a/e', 10)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('F', 'default=Vial//s,it=Fial/a/e', 20)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('S', 'default=Suppositor/y/ies,it=Suppost/a/e', 30)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('G', 'default=Drop//s,it=Gocc/ia/e', 50)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('B', 'default=Sachet//s,it=Bustin/a/e', 60)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('Z', 'default=Lint//s,it=Garz/a/e', 70)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('L', 'default=Bottle//s,it=Flacon/e/i', 80)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('P', 'default=Cap//s,it=Capsul/a/e', 90)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('T', 'default=Comfit//s,it=Confett/o/i', 100)");
       
       PhonegapLog.log("creating table prescrizioni");
       tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS_0 + " )");
@@ -199,12 +198,6 @@ public class AppSqlDao extends WebSQLDao {
               }
             }
             iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
-          }
-        }, new SQLStatementErrorCallback() {
-          public void handleEvent(SQLTransaction tr, SQLError error) {
-            if (errorDelegate != null) {
-              errorDelegate.execute(error.getMessage());
-            }
           }
         });
       }
@@ -309,11 +302,6 @@ public class AppSqlDao extends WebSQLDao {
                 }
               }
               iteratePrescrizioniForRead(it, tr, delegate, results);
-            }
-          }, new SQLStatementErrorCallback() {
-            public void handleEvent(SQLTransaction tr, SQLError error) {
-              if (errorDelegate != null)
-                errorDelegate.execute(error.getMessage());
             }
           });
     } else {
@@ -529,6 +517,8 @@ public class AppSqlDao extends WebSQLDao {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             if (rs.getRows().getLength() > 0) {
               new RSToSomministrazioniIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
             }
           }
         });
@@ -682,11 +672,5 @@ public class AppSqlDao extends WebSQLDao {
       }
     });
   }
-
-  
-  public void setErrorDelegate(Delegate<String> errorDelegate) {
-    this.errorDelegate = errorDelegate;
-  }
-  
   
 }

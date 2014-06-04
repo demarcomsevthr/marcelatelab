@@ -11,11 +11,15 @@
     <g:HTML HTML="Settings" addStyleNames="ui-view-header"/>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
-      <p:TouchButton text="Reset DB" ui:field="resetBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Clear DB" ui:field="resetBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="Dump DB" ui:field="dumpBtn" addStyleNames="ui-top-action-btn"/>
+    </g:HorizontalPanel>
+
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+      <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
   </g:HTMLPanel>
