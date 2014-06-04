@@ -11,13 +11,13 @@
 	
 	> Application url =
 	
-		https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.2.ipa
+		https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.3.ipa
 		
-	> Title = THR 0.2
+	> Title = THR 0.3
 	
 	> Download url da mandare al tester:
 	
-	itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.2.plist
+	itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.3.plist
 	
 	
 
