@@ -4,19 +4,22 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.ui.TouchHTML;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.view.ReminderListView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.therapyreminder.shared.model.UdM;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -36,11 +39,16 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToReminderEditView(Somministrazione somministrazione);
+    public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ReminderListView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
+  
+  DateTimeFormat dayNameFmt = DateTimeFormat.getFormat("EEEE");
+  
+  DateTimeFormat dateFmt = DateTimeFormat.getFormat("MMM dd");
   
   @UiField Panel wrapperPanel;
   @UiField ScrollPanel resultsPanel;
@@ -112,21 +120,12 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         return p1.getData().compareTo(p2.getData());
       }
     });
-    SimpleContainer list = new SimpleContainer();
+    final SimpleContainer list = new SimpleContainer();
+    final ObjectWrapper<Date> prevDate = new ObjectWrapper<Date>();
     for (final Somministrazione somministrazione : somministrazioni) {
-      HorizontalPanel row = new HorizontalPanel();
-      row.addStyleName("ui-row");
-      list.add(row);
-      String html = "<p class='ui-row-subject'>" + somministrazione.getPrescrizione().getNome() + "</p>";
-      html += "<p class='ui-row-scheduled'>" + PhonegapUtils.dateToString(somministrazione.getData());
-      html += " at " + somministrazione.getOrario() + "</p>";
-      TouchHTML rowHtml = new TouchHTML(html);
-      row.add(rowHtml);
-      rowHtml.addTouchEndHandler(new TouchEndHandler() {
-        public void onTouchEnd(TouchEndEvent event) {
-          if (!scrollInProgress) {
-            getPresenter().goToReminderEditView(somministrazione);
-          }
+      getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
+        public void execute(UdM udm) {
+          showRow(somministrazione, list, prevDate, udm);
         }
       });
       
@@ -138,6 +137,37 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
       }
     });
+  }
+  
+  private void showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<Date> prevDate, UdM udm) {
+    Date somDate = somministrazione.getData();
+    HorizontalPanel row = new HorizontalPanel();
+    row.addStyleName("ui-row-reminder");
+    list.add(row);
+    String html = "";
+    if (prevDate.get() == null || !GwtUtils.dateToString(prevDate.get(), "yyyyMMdd").equals(GwtUtils.dateToString(somDate, "yyyyMMdd"))) {
+      html += "<p class='ui-row-date'>";
+      html += "<span class='ui-row-date-name'>";
+      html += dayNameFmt.format(somDate);
+      html += "</span>";
+      html += "<span class='ui-row-date-date'>";
+      html += dateFmt.format(somDate);
+      html += "</span>";
+      html += "</p>";
+    }
+    html += "<p class='ui-row-reminder-subject'>" + somministrazione.getPrescrizione().getNome() + "</p>";
+    html += "<p class='ui-row-reminder-note'>" + somministrazione.getQuantita().intValue() + " " + udm.getDescrizione().toLowerCase();
+    html += " at " + somministrazione.getOrario() + "</p>";
+    TouchHTML rowHtml = new TouchHTML(html);
+    row.add(rowHtml);
+    rowHtml.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        if (!scrollInProgress) {
+          getPresenter().goToReminderEditView(somministrazione);
+        }
+      }
+    });
+    prevDate.set(somDate);
   }
   
 }

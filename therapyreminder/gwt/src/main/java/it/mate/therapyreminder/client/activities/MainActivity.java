@@ -5,8 +5,12 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
+import it.mate.phgcommons.client.place.PlaceControllerWithLastPlace;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.IterationUtil;
+import it.mate.phgcommons.client.utils.IterationUtil.FinishDelegate;
+import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -34,6 +38,8 @@ import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.List;
 
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -66,7 +72,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
     if (place.getToken().equals(MainPlace.HOME)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(true);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(false);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
       initBaseMgwtView(true);
@@ -79,7 +85,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
       this.view = view;
       initBaseMgwtView(false);
@@ -92,7 +98,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       TherapyListView view = AppClientFactory.IMPL.getGinjector().getTherapyListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -105,7 +111,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       TherapyEditView view = AppClientFactory.IMPL.getGinjector().getTherapyEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -118,7 +124,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       DosageEditView view = AppClientFactory.IMPL.getGinjector().getDosageEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -132,7 +138,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(true);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       ReminderListView view = AppClientFactory.IMPL.getGinjector().getReminderListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -145,7 +151,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
-      AppClientFactory.IMPL.setEnableAlertSomministrazione(false);
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       ReminderEditView view = AppClientFactory.IMPL.getGinjector().getReminderEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -153,7 +159,8 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-          goToHome();
+          //goToHome();
+          goToLastPlace();
         }
       });
     }
@@ -408,10 +415,22 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   @Override
-  public void deletePrescrizioni(List<Prescrizione> prescrizioni) {
-    dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
-      public void execute(Void element) {
-        goToTherapyListView();
+  public void deletePrescrizioni(final List<Prescrizione> prescrizioni) {
+    new IterationUtil<Prescrizione>(prescrizioni, new ItemDelegate<Prescrizione>() {
+      public void handleItem(Prescrizione prescrizione, final IterationUtil<Prescrizione> iteration) {
+        PrescrizioniUtils.getInstance().cancellaSomministrazioni(prescrizione, new Delegate<Void>() {
+          public void execute(Void element) {
+            iteration.next();
+          }
+        });
+      }
+    }, new FinishDelegate() {
+      public void doFinish() {
+        dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
+          public void execute(Void element) {
+            goToTherapyListView();
+          }
+        });
       }
     });
   }
@@ -421,7 +440,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     PrescrizioniUtils.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
         // somministrazione aggiornata
-        goToHome();
+//      goToHome();
+        goToLastPlace();
       }
     }, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
@@ -449,8 +469,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
-  public void adaptUmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate) {
-//  LogUtil.log("adaptUmDescription: qta = "+qta+", currentUdmCode = "+currentUdmCode);
+  private String getLanguageDescription(String multiLanguageText, String currentLocaleName) {
+    String result = null;
+    String[] languages = multiLanguageText.split(",");
+    for (String lang : languages) {
+      String[] langTokens = lang.split("=");
+      if (langTokens[0].equals(currentLocaleName)) {
+        result = langTokens[1];
+      }
+    }
+    return result;
+  }
+  
+  public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate) {
+    final String currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
       public void execute(List<UdM> udms) {
@@ -458,16 +490,17 @@ public class MainActivity extends MGWTAbstractActivity implements
           return;
         for (int it = 0; it < udms.size(); it++) {
           UdM udm = udms.get(it);
-          if (currentUdmCode == null || udm.getCodice().equals(currentUdmCode)) {
-            String[] tokens = udm.getDescrizione().split("/");
-            String desc = tokens[0] + (singular ? tokens[1] : tokens[2]);
+          if (udmCode == null || udm.getCodice().equals(udmCode)) {
+            String udmDescription = getLanguageDescription(udm.getDescrizione(), currentLocaleName);
+            if (udmDescription == null)
+              udmDescription = getLanguageDescription(udm.getDescrizione(), "default");
+            String[] numerTokens = udmDescription.split("/");
+            String desc = numerTokens[0] + (singular ? numerTokens[1] : numerTokens[2]);
             UdM udmToView = new UdMTx();
             udmToView.setCodice(udm.getCodice());
             udmToView.setDescrizione(desc);
             delegate.execute(udmToView);
           }
-          
-//        umCombo.addItem(udm.getCodice(), desc, it == 0 ? true : false);
         }
       }
     });
@@ -478,11 +511,27 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void execute(Void element) {
         GwtUtils.deferredExecution(2000, new Delegate<Void>() {
           public void execute(Void element) {
-            AppClientFactory.IMPL.getPhoneGap().exitApp();
+            if (OsDetectionUtils.isAndroid()) {
+              AppClientFactory.IMPL.getPhoneGap().exitApp();
+            } else {
+              goToHome();
+            }
           }
         });
       }
     });
+  }
+  
+  public void goToLastPlace() {
+    if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithLastPlace) {
+      PlaceControllerWithLastPlace placeController = (PlaceControllerWithLastPlace)AppClientFactory.IMPL.getPlaceController();
+      Place lastPlace = placeController.getLastPlace();
+      if (lastPlace != null) {
+        placeController.goTo(lastPlace);
+        return;
+      }
+    }
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
   }
   
 }

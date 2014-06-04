@@ -26,7 +26,7 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToTherapyEditView(Prescrizione prescrizione);
-    public void adaptUmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate);
+    public void getUdmDescription(Double qta, final String currentUdmCode, final Delegate<UdM> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, DosageEditView> { }
@@ -62,7 +62,7 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
       this.dosaggio = (Dosaggio)model;
       dsgLbl.setText("Dosaggio delle ore " + dosaggio.getOrario());
       qtaBox.setValue(dosaggio.getQuantita());
-      getPresenter().adaptUmDescription(qtaBox.getValueAsDouble(), dosaggio.getCodUdM(), new Delegate<UdM>() {
+      getPresenter().getUdmDescription(qtaBox.getValueAsDouble(), dosaggio.getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
           umLabel.setText(udm.getDescrizione());
         }

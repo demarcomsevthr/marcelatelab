@@ -57,7 +57,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     public void goToHome();
     public void savePrescrizione(Prescrizione newPrescrizione, Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate);
     public void goToDosageEditView(Dosaggio dosaggio);
-    public void adaptUmDescription(Double qta, String currentUdmCode, Delegate<UdM> delegate);
+    public void getUdmDescription(Double qta, String currentUdmCode, Delegate<UdM> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -133,7 +133,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
 
     qtaBox.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
-        getPresenter().adaptUmDescription(qtaBox.getValueAsDouble(), null, new Delegate<UdM>() {
+        getPresenter().getUdmDescription(qtaBox.getValueAsDouble(), null, new Delegate<UdM>() {
           public void execute(UdM udm) {
             umCombo.setItem(udm.getCodice(), udm.getDescrizione(), umCombo.getItems().size() == 0 ? true : false);
           }

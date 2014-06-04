@@ -20,6 +20,12 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
+    String traceActive = PhonegapUtils.getLocalStorageValue(AppClientFactory.KEY_TRACE_ACTIVE);
+    if ("true".equals(traceActive)) {
+      PhonegapUtils.log("***********    TRACE ENABLED   *************");
+      PhonegapUtils.startTrace();
+    }
+    
     PhonegapUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
     PhonegapUtils.logEnvironment();

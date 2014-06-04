@@ -3,6 +3,8 @@ package it.mate.therapyreminder.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.plugins.EmailComposerPlugin;
+import it.mate.phgcommons.client.ui.TouchButton;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
@@ -19,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
@@ -36,6 +39,8 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   
   @UiField Panel wrapperPanel;
   
+  @UiField TouchButton traceBtn;
+  
   public SettingsView() {
     initUI();
   }
@@ -50,6 +55,10 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
+    if (PhonegapUtils.getTrace() != null) {
+      traceBtn.setText("Dump trace");
+    }
+    
   }
   
 
@@ -60,17 +69,27 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("resetBtn")
   public void onResetBtn (TouchEndEvent event) {
-    getPresenter().dropDB();
+    PhgDialogUtils.showMessageDialog("Are you sure you want to clear all data?", "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
+      public void execute(Integer btnIndex) {
+        if (btnIndex == 1) {
+          getPresenter().dropDB();
+        }
+      }
+    });
   }
   
   private class EmailWrapper {
+    private String subject;
     private String body = "";
     private String[] toRecipients = new String[] {"dev.medup@gmail.com"};
+    public EmailWrapper(String subject) {
+      this.subject = subject;
+    }
     protected void println(String row) {
       body += row + "<br/>";
     }
     protected void showMailComposer() {
-      EmailComposerPlugin.showEmailComposer("THR db dump", body, toRecipients, null, null, true, null, null);
+      EmailComposerPlugin.showEmailComposer(subject, body, toRecipients, null, null, true, null, null);
     }
   }
 
@@ -79,12 +98,14 @@ public class SettingsView extends BaseMgwtView <Presenter> {
 
     final AppSqlDao dao = AppClientFactory.IMPL.getAppSqlDao();
     
-    final EmailWrapper email = new EmailWrapper();
+    final EmailWrapper email = new EmailWrapper("THR db dump");
+    
+    final Delegate<String> previousErrorDelegate = dao.getErrorDelegate();
     
     dao.setErrorDelegate(new Delegate<String>() {
       public void execute(String error) {
         PhonegapUtils.log(">>> intercettato errore db " + error);
-        dao.setErrorDelegate(null);
+        dao.setErrorDelegate(previousErrorDelegate);
         email.println(error);
         email.showMailComposer();
       }
@@ -111,7 +132,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
               }
               
               email.println(">>> END DUMP <<<");
-              dao.setErrorDelegate(null);
+              dao.setErrorDelegate(previousErrorDelegate);
               email.showMailComposer();
               
             }
@@ -121,6 +142,25 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       }
     });
 
+  }
+
+  @UiHandler ("traceBtn")
+  public void onTraceBtn (TouchEndEvent event) {
+    if (PhonegapUtils.getTrace() == null) {
+      PhonegapUtils.setLocalStorageValue(AppClientFactory.KEY_TRACE_ACTIVE, "true");
+      String initialUrl = Window.Location.createUrlBuilder().setHash("").buildString();
+//    Window.Location.assign(initialUrl);
+      Window.Location.assign("index.html");
+    } else {
+      EmailWrapper email = new EmailWrapper("THR trace dump");
+      for (String line : PhonegapUtils.getTrace()) {
+        email.println(line);
+      }
+      email.showMailComposer();
+      PhonegapUtils.clearTrace();
+      PhonegapUtils.setLocalStorageValue(AppClientFactory.KEY_TRACE_ACTIVE, "false");
+    }
+    getPresenter().goToHome();
   }
 
 }
