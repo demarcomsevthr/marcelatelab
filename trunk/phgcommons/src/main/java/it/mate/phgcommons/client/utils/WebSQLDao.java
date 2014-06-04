@@ -37,10 +37,22 @@ public abstract class WebSQLDao {
   
   private boolean ready = false;
   
-  protected WebSQLDao(String name, long estimatedSize, final MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, final SQLTransactionCallback openCallback) {
+  private static Delegate<String> errorDelegate = null;
+  
+  private MigratorCallback[] migrationCallbacks;
+  
+  private SQLTransactionCallback openCallback;
+  
+  protected WebSQLDao(String name, long estimatedSize, MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
     this.name = name;
     this.estimatedSize = estimatedSize;
     this.creationCallback = creationCallback;
+    this.migrationCallbacks = migrationCallbacks;
+    this.openCallback = openCallback;
+    initDB();
+  }
+  
+  protected void initDB() {
     if (db == null) {
       openDatabase(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction tr) {
@@ -254,6 +266,7 @@ public abstract class WebSQLDao {
     public final void doExecuteSql(String sqlStatement, Object[] arguments, SQLStatementCallback callback) {
       doExecuteSql(sqlStatement, arguments, callback, null);
     }
+    //TODO
     public final void doExecuteSql(String sqlStatement, Object[] arguments, SQLStatementCallback callback, SQLStatementErrorCallback errorCallback) {
       JsArrayMixed jsArguments = JavaScriptObject.createArray().cast();
       if (arguments != null) {
@@ -275,6 +288,13 @@ public abstract class WebSQLDao {
             throw new RuntimeException("SQLTransaction::doExecuteSql: cannot pass arg of type " + arg.getClass());
           }
         }
+      }
+      if (errorCallback == null && WebSQLDao.errorDelegate != null) {
+        errorCallback = new SQLStatementErrorCallback() {
+          public void handleEvent(SQLTransaction tr, SQLError error) {
+            WebSQLDao.errorDelegate.execute(error.getMessage());
+          }
+        };
       }
       executeSqlImpl(sqlStatement, jsArguments, callback, errorCallback);
     }
@@ -445,4 +465,12 @@ public abstract class WebSQLDao {
     }
   }
   
+  public void setErrorDelegate(Delegate<String> errorDelegate) {
+    WebSQLDao.errorDelegate = errorDelegate;
+  }
+  
+  public Delegate<String> getErrorDelegate() {
+    return WebSQLDao.errorDelegate;
+  }
+
 }
