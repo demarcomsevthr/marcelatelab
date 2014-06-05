@@ -147,7 +147,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("traceBtn")
   public void onTraceBtn (TouchEndEvent event) {
     if (PhonegapUtils.getTrace() == null) {
-      PhonegapUtils.setLocalStorageValue(AppClientFactory.KEY_TRACE_ACTIVE, "true");
+      PhonegapUtils.setLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE, "true");
       String initialUrl = Window.Location.createUrlBuilder().setHash("").buildString();
 //    Window.Location.assign(initialUrl);
       Window.Location.assign("index.html");
@@ -158,7 +158,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       }
       email.showMailComposer();
       PhonegapUtils.clearTrace();
-      PhonegapUtils.setLocalStorageValue(AppClientFactory.KEY_TRACE_ACTIVE, "false");
+      PhonegapUtils.setLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE, "false");
     }
     getPresenter().goToHome();
   }

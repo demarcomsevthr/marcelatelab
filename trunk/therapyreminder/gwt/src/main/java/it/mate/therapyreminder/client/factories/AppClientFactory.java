@@ -6,7 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.shared.model.RemoteUser;
-import it.mate.therapyreminder.shared.service.StickFacadeAsync;
+import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Panel;
@@ -47,16 +47,8 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public boolean getNativeProperty(String name, boolean defValue);
   
-  public StickFacadeAsync getStickFacade();
+  public RemoteFacadeAsync getRemoteFacade();
 
-  /*
-  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);
-  
-  public StickMailEPProxy getStickMailEPProxy();
-  
-  public void getRemoteUser(final Delegate<RemoteUser> delegate);
-  */
-  
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate);
   
   public void authenticate();
