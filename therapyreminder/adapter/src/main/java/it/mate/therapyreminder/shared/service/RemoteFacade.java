@@ -8,12 +8,14 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 
-@RemoteServiceRelativePath(".stickFacade")
-public interface StickFacade extends RemoteService {
+@RemoteServiceRelativePath(".remoteFacade")
+public interface RemoteFacade extends RemoteService {
   
   RemoteUser getRemoteUser();
   
   Date getServerTime();
   
-
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
+  
+  
 }
