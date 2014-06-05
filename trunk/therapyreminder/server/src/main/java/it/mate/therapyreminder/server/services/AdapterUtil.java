@@ -22,9 +22,9 @@ public class AdapterUtil {
     }
   }
   
-  public static StickAdapter getStickAdapter() {
+  public static RemoteAdapter getRemoteAdapter() {
     assertContext();
-    return context.getBean(StickAdapter.class);
+    return context.getBean(RemoteAdapter.class);
   }
   
   public static MailAdapter getMailAdapter() {

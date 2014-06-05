@@ -1,8 +1,12 @@
 package it.mate.therapyreminder.server.services;
 
 
-public interface StickAdapter {
+public interface RemoteAdapter {
+  
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);  
 
+  public void refresh();
+  
   /* 
 
   public StickMail create(StickMail entity);

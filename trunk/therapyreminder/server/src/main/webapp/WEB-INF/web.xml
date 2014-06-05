@@ -33,13 +33,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </welcome-file-list>
 
   <servlet>
-    <servlet-name>stickFacade</servlet-name>
-    <servlet-class>it.mate.therapyreminder.server.services.StickFacadeImpl</servlet-class>
+    <servlet-name>remoteFacade</servlet-name>
+    <servlet-class>it.mate.therapyreminder.server.services.RemoteFacadeImpl</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>stickFacade</servlet-name>
-    <url-pattern>*.stickFacade</url-pattern>
+    <servlet-name>remoteFacade</servlet-name>
+    <url-pattern>*.remoteFacade</url-pattern>
   </servlet-mapping>
   
   <!-- 

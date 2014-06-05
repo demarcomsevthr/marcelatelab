@@ -1,7 +1,7 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.RemoteUser;
-import it.mate.therapyreminder.shared.service.StickFacade;
+import it.mate.therapyreminder.shared.service.RemoteFacade;
 
 import java.util.Date;
 
@@ -13,17 +13,17 @@ import org.apache.log4j.Logger;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade {
+public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFacade {
 
-  private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
+  private static Logger logger = Logger.getLogger(RemoteFacadeImpl.class);
   
-  private StickAdapter adapter = null;
+  private RemoteAdapter adapter = null;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdapterUtil.initContext(config.getServletContext());
-    adapter = AdapterUtil.getStickAdapter();
+    adapter = AdapterUtil.getRemoteAdapter();
     logger.debug("initialized " + this);
   }
   
@@ -36,6 +36,13 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   public Date getServerTime() {
     return new Date();
   }
+  
+  @Override
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+    return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
+  }
+  
+  
 
   /*
   @Override
