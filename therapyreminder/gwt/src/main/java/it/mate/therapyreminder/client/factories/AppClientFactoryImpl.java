@@ -10,6 +10,7 @@ import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
+import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
@@ -19,6 +20,7 @@ import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
+import it.mate.therapyreminder.client.model.RemoteUserJS;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
@@ -26,7 +28,7 @@ import it.mate.therapyreminder.client.ui.theme.CustomTheme;
 import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
-import it.mate.therapyreminder.shared.service.StickFacadeAsync;
+import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
 
@@ -71,9 +73,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private Map<String, String> nativeProperties;
 
-  private StickFacadeAsync facade = null;
+  private RemoteFacadeAsync facade = null;
   
   private boolean disableAlertSomministrazione = false;
+  
+  private RemoteUser remoteUser;
+  
+  private Delegate<RemoteUser> remoteUserDelegate;
   
   
   
@@ -147,8 +153,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (MGWT.getOsDetection().isTablet()) {
       Window.alert("Internal error. MGWT Tablet Display Not Supported!");
     } else {
-//    AppClientFactory clientFactory = AppClientFactory.IMPL;
-//    createPhoneDisplay(clientFactory);
       createPhoneDisplay();
     }
   
@@ -156,12 +160,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    // TODO: 20/15/2014
+    // 20/15/2014
     startTimersAndHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
 
-//private void createPhoneDisplay(AppClientFactory clientFactory) {
   private void createPhoneDisplay() {
     AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
     MainActivityMapper activityMapper = new MainActivityMapper(this);
@@ -200,6 +203,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public PlaceController getPlaceController() {
     if (placeController == null)
+      // 04/06/2014
 //    placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
       placeController = new PlaceControllerWithLastPlace(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
     return placeController;
@@ -276,20 +280,15 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }
   }
   
-  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
-    
-  }
-
-  @Override
-  public void authenticate() {
-
-  }
-  
   @Override
   public String getNativeProperty(String name, String defValue) {
-    if (nativeProperties == null)
-      return defValue;
-    String value = nativeProperties.get(name);
+    String value = null;
+    if (nativeProperties != null) {
+      value = nativeProperties.get(name);
+    }
+    if (value == null) {
+      value = PhonegapUtils.getWindowSetting(name);
+    }
     if (value == null)
       value = defValue;
     return value;
@@ -304,9 +303,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public StickFacadeAsync getStickFacade() {
+  public RemoteFacadeAsync getRemoteFacade() {
     if (facade == null) {
-      facade = getGinjector().getStickFacade();
+      facade = getGinjector().getRemoteFacade();
     }
     return facade;
   }
@@ -316,7 +315,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return ginjector.getAppSqlDao();
   }
   
-  //TODO: 15/05/2014
+  // 15/05/2014
   private void startTimersAndHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
     getAppSqlDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
@@ -396,5 +395,49 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       });
     }
   }
+
+  //TODO: 05/06/2014 - ONLINE MODE
   
+  @Override
+  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
+    
+    this.remoteUserDelegate = remoteUserDelegate;
+    
+    if (remoteUser != null) {
+      
+      remoteUserDelegate.execute(remoteUser);
+      
+    } else {
+      
+      String remoteUserJson = getRemoteUserFromLocalStorage();
+      PhonegapUtils.log("remoteUserJson = " + remoteUserJson);
+      if (remoteUserJson != null && remoteUserJson.contains("{") ) {
+        RemoteUserJS remoteUserJS = JSONUtils.parse(remoteUserJson).cast();
+        PhonegapUtils.log("found remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
+        remoteUser = remoteUserJS.asRemoteUser();
+        remoteUserDelegate.execute(remoteUser);
+        
+      } else {
+
+        //TODO: creazione di remote user
+        
+      }
+      
+    }
+    
+  }
+
+  @Override
+  public void authenticate() {
+
+  }
+  
+  private native void setRemoteUserInLocalStorage(String remoteUserJson) /*-{
+    localStorage.remoteUser = remoteUserJson;
+  }-*/;
+  
+  private native String getRemoteUserFromLocalStorage() /*-{
+    return localStorage.remoteUser;
+  }-*/;
+
 }

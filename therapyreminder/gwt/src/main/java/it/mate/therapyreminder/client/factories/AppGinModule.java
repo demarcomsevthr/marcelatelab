@@ -4,8 +4,8 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
-import it.mate.therapyreminder.shared.service.StickFacade;
-import it.mate.therapyreminder.shared.service.StickFacadeAsync;
+import it.mate.therapyreminder.shared.service.RemoteFacade;
+import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.AbstractGinModule;
@@ -15,10 +15,10 @@ import com.googlecode.gwtphonegap.client.util.PhonegapUtil;
 
 public class AppGinModule extends AbstractGinModule {
 
-  private final static String NAT_PROP_FACADE_MODULE_URL = "stickFacadeModuleUrl";
+  private final static String NAT_PROP_FACADE_MODULE_URL = "remoteFacadeModuleUrl";
   private final static String DEFAULT_FACADE_MODULE_URL = "https://therapyremindersrv.appspot.com/main/";
-  private final static String NAT_PROP_FACADE_RELATIVE_PATH = "stickFacadeRelativePath";
-  private final static String DEFAULT_FACADE_RELATIVE_PATH = ".stickFacade";
+  private final static String NAT_PROP_FACADE_RELATIVE_PATH = "remoteFacadeRelativePath";
+  private final static String DEFAULT_FACADE_RELATIVE_PATH = ".remoteFacade";
   
   private static AppSqlDao appSqlDao;
   
@@ -33,9 +33,9 @@ public class AppGinModule extends AbstractGinModule {
   }
   
   @Provides
-  public StickFacadeAsync getStickFacade() {
-    PhonegapUtils.log("preparing stick facade...");
-    StickFacadeAsync facade = GWT.create(StickFacade.class);
+  public RemoteFacadeAsync getRemoteFacade() {
+    PhonegapUtils.log("preparing remote facade...");
+    RemoteFacadeAsync facade = GWT.create(RemoteFacade.class);
     ServiceDefTarget service = (ServiceDefTarget)facade;
     if (OsDetectionUtils.isDesktop()) {
       // do nothing
@@ -44,7 +44,7 @@ public class AppGinModule extends AbstractGinModule {
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_MODULE_URL, DEFAULT_FACADE_MODULE_URL), 
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_PATH, DEFAULT_FACADE_RELATIVE_PATH));
     }
-    PhonegapUtils.log("set on " + service.getServiceEntryPoint());
+    PhonegapUtils.log("remote facade set on " + service.getServiceEntryPoint());
     return facade;
   }
   

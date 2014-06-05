@@ -121,9 +121,9 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   private int getPopupTop() {
     int top = popupRuler.getAbsoluteTop();
     if (top > 0) {
-      PhonegapUtils.setLocalStorageValue("ReminderEditView.popupRuler.top", ""+top);
+      PhonegapUtils.setLocalStorageProperty("ReminderEditView.popupRuler.top", ""+top);
     } else {
-      String v = PhonegapUtils.getLocalStorageValue("ReminderEditView.popupRuler.top");
+      String v = PhonegapUtils.getLocalStorageProperty("ReminderEditView.popupRuler.top");
       if (v != null) {
         top = Integer.parseInt(v);
       } else {

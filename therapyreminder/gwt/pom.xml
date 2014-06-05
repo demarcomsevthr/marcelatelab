@@ -111,12 +111,14 @@
                 <include>*.gwt.rpc</include>
               </includes>
             </fileset>
+            <!-- LE VECCHIE INTERFACCIE VANNO MANTENUTE SUL SERVER
             <fileset>
               <directory>../server/src/main/webapp/main</directory>
               <includes>
                 <include>*.gwt.rpc</include>
               </includes>
             </fileset>
+            -->
           </filesets>
         </configuration>
       </plugin>      

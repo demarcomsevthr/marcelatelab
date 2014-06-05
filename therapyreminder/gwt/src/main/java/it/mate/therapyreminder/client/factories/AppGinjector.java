@@ -12,7 +12,7 @@ import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
-import it.mate.therapyreminder.shared.service.StickFacadeAsync;
+import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.inject.client.GinModules;
 
@@ -21,7 +21,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public MainActivityMapper getMainActivityMapper();
   
-  public StickFacadeAsync getStickFacade();
+  public RemoteFacadeAsync getRemoteFacade();
   
   public AppSqlDao getAppSqlDao();
   

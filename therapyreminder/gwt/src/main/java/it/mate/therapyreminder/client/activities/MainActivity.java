@@ -41,6 +41,7 @@ import java.util.List;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -49,6 +50,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
+import com.googlecode.mgwt.ui.client.MGWT;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
@@ -71,6 +73,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    ensureDevInfoId();
     if (place.getToken().equals(MainPlace.HOME)) {
       AppClientFactory.IMPL.setDisableAlertSomministrazione(false);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
@@ -297,42 +300,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   @Override
-  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
-        setHeaderWaiting(false);
-        delegate.execute(remoteUser);
-      }
-    });
-  }
-  
-  
-  /*
-  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-      public void onSuccess(Date serverTime) {
-        stickMail.setCreated(stickMail.getCreated());
-        stickMail.setScheduled(stickMail.getScheduled());
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
-          public void onSuccess(StickMail result) {
-            setHeaderWaiting(false);
-            delegate.execute(result);
-          }
-          public void onFailure(Throwable caught) {
-            processFailure(null, caught);
-          }
-        });
-      }
-    });
-  }
-  */
-  
-  @Override
   public BaseView getView() {
     return null;
   }
@@ -533,5 +500,85 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
   }
+
+  
+  
+  
+  
+  //TODO: 05/06/2014 - ONLINE MODE
+  
+  private void ensureDevInfoId() {
+    String devInfoId = getDevInfoIdFromLocalStorage();
+    if (devInfoId != null)
+      return;
+    String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
+    String layout = PhonegapUtils.getLayoutInfo();
+    String devName = PhonegapUtils.getDeviceName();
+    String phgVersion = PhonegapUtils.getDevicePhonegap();
+    String platform = PhonegapUtils.getDevicePlatform();
+    String devUuid = PhonegapUtils.getDeviceUuid();
+    String devVersion = PhonegapUtils.getDeviceVersion();
+    PhonegapUtils.log("calling remote send dev info...");
+    AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
+      new AsyncCallback<String>() {
+        public void onFailure(Throwable caught) {
+          //do nothing: permitted data connection turned off
+        }
+        public void onSuccess(String devInfoId) {
+          if (devInfoId != null) {
+            setDevInfoIdInLocalStorage(devInfoId);
+          }
+        }
+    });
+  }
+  
+  private native void setDevInfoIdInLocalStorage(String devInfoId) /*-{
+    localStorage.devInfoId = devInfoId;
+  }-*/;
+
+  private native String getDevInfoIdFromLocalStorage() /*-{
+    return localStorage.devInfoId;
+  }-*/;
+
+  
+  
+  /**
+   * chiamato dalla ui per mostrare il remote user
+   */
+  @Override
+  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
+      public void execute(RemoteUser remoteUser) {
+        setHeaderWaiting(false);
+        delegate.execute(remoteUser);
+      }
+    });
+  }
+  
+  /*
+  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
+    setHeaderWaiting(true);
+    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
+      public void onFailure(Throwable caught) {
+        processFailure(null, caught);
+      }
+      public void onSuccess(Date serverTime) {
+        stickMail.setCreated(stickMail.getCreated());
+        stickMail.setScheduled(stickMail.getScheduled());
+        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
+          public void onSuccess(StickMail result) {
+            setHeaderWaiting(false);
+            delegate.execute(result);
+          }
+          public void onFailure(Throwable caught) {
+            processFailure(null, caught);
+          }
+        });
+      }
+    });
+  }
+  */
+  
   
 }

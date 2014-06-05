@@ -1,4 +1,4 @@
-package it.mate.therapyreminder.client.api;
+package it.mate.therapyreminder.client.model;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.therapyreminder.shared.model.RemoteUser;
