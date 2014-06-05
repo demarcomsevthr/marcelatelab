@@ -1,7 +1,0 @@
-
-set JAVA_HOME=P:\OPT\java\jdk1.7.0_17
-
-SET M2_HOME=P:\OPT\apache-maven\apache-maven-2.2.1
-
-set GAE_HOME=P:\opt\gwt\appengine\appengine-java-sdk-1.7.7.1
-
