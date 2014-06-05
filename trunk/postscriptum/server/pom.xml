@@ -9,7 +9,7 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <appengine.target.version>1.8.7</appengine.target.version>
+    <appengine.target.version>1.9.6</appengine.target.version>
     <spring.version>3.2.4.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
   </properties>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>it.mate</groupId>
       <artifactId>gaecommons</artifactId>
-      <version>1.8</version>
+      <version>1.9</version>
     </dependency>
     
     <dependency>
