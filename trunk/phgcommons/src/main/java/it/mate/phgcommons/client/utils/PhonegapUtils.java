@@ -71,20 +71,37 @@ public class PhonegapUtils {
     return $wnd.navigator;
   }-*/;
   
+  /**
+   * @see 
+   * USE getLocalStorageProperty
+   */
+  @Deprecated
   public static native String getLocalStorageItem(String name) /*-{
     return $wnd.getLocalStorageItem(name);
   }-*/;
   
+  /**
+   * @see 
+   * USE setLocalStorageProperty
+   */
+  @Deprecated
   public static native void setLocalStorageItem(String name, String value) /*-{
     $wnd.setLocalStorageItem(name, value);
   }-*/;
 
-  public static native String getLocalStorageValue(String name) /*-{
+  public static native String getLocalStorageProperty(String name) /*-{
     return localStorage[name];
   }-*/;
   
-  public static native void setLocalStorageValue(String name, String value) /*-{
+  public static native void setLocalStorageProperty(String name, String value) /*-{
     localStorage[name] = value;
+  }-*/;
+
+  public static native String getWindowSetting(String name) /*-{
+    if ($wnd.Settings) {
+      return $wnd.Settings[name];
+    }
+    return null;
   }-*/;
 
   public static class Navigator extends JavaScriptObject {
@@ -96,18 +113,11 @@ public class PhonegapUtils {
     }-*/;
   }
   
-  public static native String getWindowSettingProperty(String name) /*-{
-    if ($wnd.Settings) {
-      return $wnd.Settings[name];
-    }
-    return null;
-  }-*/;
-  
   
   public static void log(String text) {
     String logMsg = GwtUtils.log(text);
     
-    if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSettingProperty("TraceLogToFile"))) {
+    if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSetting("TraceLogToFile"))) {
 //    logImpl("Ready to write to trace.log > " + logMsg);
       //TODO: 30/05/2014
       // scrittura su file di log
@@ -257,11 +267,11 @@ public class PhonegapUtils {
   }
   
   public static String getLocalStorageLanguage() {
-    return getLocalStorageValue("PhonegapUtils.language");
+    return getLocalStorageProperty("PhonegapUtils.language");
   }
   
   public static void setLocalStorageLanguage(String value) {
-    setLocalStorageValue("PhonegapUtils.language", value);
+    setLocalStorageProperty("PhonegapUtils.language", value);
   }
   
   public static void startTrace() {
