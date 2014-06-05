@@ -1,6 +1,11 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.ParameterDefinition;
+import it.mate.commons.server.utils.LoggingUtils;
+import it.mate.therapyreminder.server.model.DevInfoDs;
+
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
@@ -9,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StickAdapterImpl implements StickAdapter {
+public class RemoteAdapterImpl implements RemoteAdapter {
   
-  private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
+  private static Logger logger = Logger.getLogger(RemoteFacadeImpl.class);
   
   @Autowired private Dao dao;
   
@@ -23,6 +28,41 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
 
+  @Override
+  public void refresh() {
+    
+  }
+  
+  
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+    DevInfoDs ds = null;
+    if (devUuid != null) {
+      ds = dao.findSingle(DevInfoDs.class, "devUuid == devUuidParam" ,
+          Dao.Utils.buildParameters(new ParameterDefinition[] {
+              new ParameterDefinition(String.class, "devUuidParam")
+          }) , null, devUuid);
+    }
+    if (ds == null) {
+      ds = new DevInfoDs();
+      ds.setOs(os);
+      ds.setLayout(layout);
+      ds.setDevName(devName);
+      ds.setPhgVersion(phgVersion);
+      ds.setPlatform(platform);
+      ds.setDevUuid(devUuid);
+      ds.setDevVersion(devVersion);
+      ds.setCreated(new Date());
+      LoggingUtils.debug(getClass(), "creating " + ds);
+      ds = dao.create(ds);
+    }
+    if (ds != null) {
+      return ds.getId();
+    } else {
+      return null;
+    }
+  }
+  
+  
   /** 
    * 
    * TO DO: check max number scheduled email per account
