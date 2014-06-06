@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsDate;
@@ -382,16 +384,71 @@ public class GwtUtils {
       }
     }.scheduleRepeating(10);
   }
-
-  public abstract static class MobileTimer extends Timer {
+  
+  protected abstract static class MobileTimerAnimationSchedulerImpl extends Timer {
+    
     boolean cancelRequested = false;
-    public MobileTimer() {  }
+    
+    long lastShotTime;
+    
+    AnimationCallback animationCallback;
+    
+    boolean repeating = false;
+    
+    public MobileTimerAnimationSchedulerImpl() {
+      GwtUtils.log("creating new mobile timer");
+    }
+
+    @Override
+    public void scheduleRepeating(int periodMillis) {
+      repeating = true;
+      startLoop(periodMillis);
+    }
+    
+    @Override
+    public void schedule(int delayMillis) {
+      repeating = false;
+      startLoop(delayMillis);
+    }
+    
+    private void startLoop(final int periodMillis) {
+      lastShotTime = System.currentTimeMillis();
+      animationCallback = new AnimationCallback() {
+        public void execute(double shotTime) {
+          GwtUtils.log("shot");
+          if (cancelRequested)
+            return;
+          if (shotTime > lastShotTime + periodMillis) {
+            lastShotTime = (long)shotTime;
+            run();
+            if (!repeating)
+              cancelRequested = true;
+          }
+          AnimationScheduler.get().requestAnimationFrame(this);
+        }
+      };
+      animationCallback.execute(lastShotTime);
+    }
+
+    @Override
+    public void cancel() {
+      GwtUtils.log("cancel mobile timer");
+      this.cancelRequested = true;
+    }
+    
+  }
+  
+  protected abstract static class MobileTimerSchedulerImpl extends Timer {
+    boolean cancelRequested = false;
+    public MobileTimerSchedulerImpl() { 
+      GwtUtils.log("creating new mobile timer");
+    }
     @Override
     public void scheduleRepeating(int periodMillis) {
       Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
         public boolean execute() {
           if (!cancelRequested) {
-            MobileTimer.this.run();
+            MobileTimerSchedulerImpl.this.run();
           }
           return !cancelRequested;
         }
@@ -401,25 +458,27 @@ public class GwtUtils {
     public void schedule(int periodMillis) {
       Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
         public boolean execute() {
-          MobileTimer.this.run();
+          GwtUtils.log("run mobile timer");
+          MobileTimerSchedulerImpl.this.run();
           return true;
         }
       }, periodMillis);
     }
     @Override
     public void cancel() {
+      GwtUtils.log("cancel request for mobile timer");
       this.cancelRequested = true;
     }
   }
   
-  public static Timer createTimer (int periodMillis, final Delegate<Void> delegate) {
-    return createTimer(periodMillis, false, delegate);
-  }
-  
-  public static Timer createTimer (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
+  private static Timer createTimerImpl (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
     Timer timer = null;
     if (mobileOptimizations) {
-      timer = new MobileTimer() {
+//    timer = new MobileTimerSchedulerImpl() {
+//    timer = new MobileTimerAnimationSchedulerImpl() {
+//    timer = new Timer() {
+//    timer = new MobileTimer() {
+      timer = new MobileTimerSchedulerImpl() {
         public void run() {
           delegate.execute(null);
         }
@@ -434,8 +493,39 @@ public class GwtUtils {
     if (runAndWait) {
       delegate.execute(null);
     }
+    return timer;
+  }
+  
+  public static Timer createTimer (int periodMillis, final Delegate<Void> delegate) {
+    return createTimer(periodMillis, false, delegate);
+  }
+  
+  public static Timer createTimer (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
+    Timer timer = createTimerImpl(periodMillis, runAndWait, delegate);
     timer.scheduleRepeating(periodMillis);
     return timer;
+  }
+  
+  protected static class TimerWrapper {
+    Timer timer = new Timer() {
+      public void run() {
+        //fake timer to avoid NPE
+      }
+    };
+    Delegate<Void> voidDelegate = null;
+    protected TimerWrapper(int periodMillis, boolean runAndWait, final Delegate<Timer> timerDelegate) {
+      voidDelegate = new Delegate<Void>() {
+        public void execute(Void element) {
+          timerDelegate.execute(timer);
+        }
+      };
+      timer = createTimerImpl(periodMillis, runAndWait, voidDelegate);
+      timer.scheduleRepeating(periodMillis);
+    }
+  }
+  
+  public static void createTimerDelegate (int periodMillis, boolean runAndWait, final Delegate<Timer> delegate) {
+    new TimerWrapper(periodMillis, runAndWait, delegate);
   }
   
   public static void deferredExecution (Delegate<Void> callback) {
