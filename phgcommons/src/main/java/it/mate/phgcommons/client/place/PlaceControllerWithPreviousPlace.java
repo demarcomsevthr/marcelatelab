@@ -6,12 +6,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class PlaceControllerWithLastPlace extends PlaceController {
+public class PlaceControllerWithPreviousPlace extends PlaceController {
   
   Place lastPlace = null;
   Place currentPlace = null;
   
-  public PlaceControllerWithLastPlace(EventBus eventBus, Delegate delegate) {
+  public PlaceControllerWithPreviousPlace(EventBus eventBus, Delegate delegate) {
     super(eventBus, delegate);
   }
   
@@ -23,7 +23,7 @@ public class PlaceControllerWithLastPlace extends PlaceController {
     PhonegapUtils.log("currentPlace = " + currentPlace + " lastPlace = " + lastPlace);
   }
   
-  public Place getLastPlace() {
+  public Place getPreviousPlace() {
     return lastPlace;
   }
 
