@@ -20,7 +20,6 @@ public class DevInfoDs implements HasKey, Serializable {
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   Key id;
-  
 
   @Persistent
   String os;
@@ -46,10 +45,13 @@ public class DevInfoDs implements HasKey, Serializable {
   @Persistent
   Date created;
   
+  @Persistent
+  String devIp;
+
   @Override
   public String toString() {
     return "DevInfoDs [id=" + id + ", os=" + os + ", layout=" + layout + ", devName=" + devName + ", phgVersion=" + phgVersion + ", platform=" + platform
-        + ", devUuid=" + devUuid + ", devVersion=" + devVersion + ", created=" + created + "]";
+        + ", devUuid=" + devUuid + ", devVersion=" + devVersion + ", created=" + created + ", devIp=" + devIp + "]";
   }
 
   public Key getKey() {
@@ -126,6 +128,14 @@ public class DevInfoDs implements HasKey, Serializable {
 
   public void setCreated(Date created) {
     this.created = created;
+  }
+
+  public String getDevIp() {
+    return devIp;
+  }
+
+  public void setDevIp(String devIp) {
+    this.devIp = devIp;
   }
 
 }
