@@ -2,8 +2,7 @@ package it.mate.therapyreminder.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
-import it.mate.therapyreminder.client.factories.AppClientFactory;
-import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Account;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -17,7 +16,7 @@ public class SignPanel extends Composite {
 
   public interface Presenter {
     
-    void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
+    void getAccount(Delegate<Account> delegate);
 
   }
   
@@ -28,7 +27,7 @@ public class SignPanel extends Composite {
   @UiField Label signLbl;
   @UiField Label signPromptLbl;
   
-  private RemoteUser remoteUser;
+  private Account remoteUser;
   
   private String signLblText = "Signed as";
   
@@ -49,9 +48,9 @@ public class SignPanel extends Composite {
     this.signLblText = signLblText;
   }
   
-  public void setRemoteUserDelegate(Presenter presenter, final Delegate<RemoteUser> remoteUserDelegate) {
-    presenter.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
+  public void setRemoteUserDelegate(Presenter presenter, final Delegate<Account> remoteUserDelegate) {
+    presenter.getAccount(new Delegate<Account>() {
+      public void execute(Account remoteUser) {
         SignPanel.this.remoteUser = remoteUser;
         if (remoteUser != null) {
           PhonegapUtils.log("SignPanel::authDelegate: signed in");
@@ -73,10 +72,10 @@ public class SignPanel extends Composite {
   
   public void onSignInBtn (TouchEndEvent event) {
     PhonegapUtils.log("SignPanel: signIn Btn pressed");
-    AppClientFactory.IMPL.authenticate();
+//  AppClientFactory.IMPL.authenticate();
   }
   
-  public RemoteUser getRemoteUser() {
+  public Account getRemoteUser() {
     return remoteUser;
   }
   

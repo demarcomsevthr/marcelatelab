@@ -15,7 +15,6 @@ import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;

@@ -22,6 +22,17 @@
       <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
+    <hr class="ui-view-separator-1"/>
+    
+    <g:HorizontalPanel>
+      <g:HTML HTML="Online mode:" addStyleNames="ui-field-label ui-app-online-mode-label"/>
+      <ph:PhCheckBox addStyleNames="ui-app-online-mode" ui:field="ckbOnlineMode"/>
+    </g:HorizontalPanel>
+        
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" ui:field="accountPanel" visible="false">
+      <p:TouchButton text="Account" ui:field="accountBtn" addStyleNames="ui-top-action-btn"/>
+    </g:HorizontalPanel>
+
   </g:HTMLPanel>
   
 </ui:UiBinder>

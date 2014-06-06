@@ -19,6 +19,8 @@ public class MainPlace extends Place {
   
   public static final String REMINDER_EDIT = "editReminder";
   
+  public static final String ACCOUNT_EDIT = "editAccount";
+  
   public static final String TEST = "test";
   
   private String token;

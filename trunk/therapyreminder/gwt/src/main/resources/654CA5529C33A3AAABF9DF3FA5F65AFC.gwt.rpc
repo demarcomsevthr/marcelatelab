@@ -2,7 +2,7 @@ com.google.gwt.i18n.shared.impl.DateRecord, true, true, false, false, com.google
 com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
 com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
 com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
-it.mate.therapyreminder.shared.model.RemoteUser, true, true, false, false, it.mate.therapyreminder.shared.model.RemoteUser/4116618695, 4116618695
+it.mate.therapyreminder.shared.model.impl.AccountTx, true, true, true, true, it.mate.therapyreminder.shared.model.impl.AccountTx/2739304036, 2739304036
 it.mate.therapyreminder.shared.service.RemoteFacade, false, false, false, false, _, 3819063648
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
 java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647

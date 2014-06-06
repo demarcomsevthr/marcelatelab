@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.plugins.EmailComposerPlugin;
 import it.mate.phgcommons.client.ui.TouchButton;
+import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -11,6 +12,7 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.SettingsView.Presenter;
+import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -31,6 +34,9 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void dropDB();
+    public void setOnlineMode(boolean onlineMode);
+    public boolean isOnlineMode();
+    public void goToAccountEditView(Account account);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -40,6 +46,10 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   
   @UiField TouchButton traceBtn;
+  
+  @UiField PhCheckBox ckbOnlineMode;
+  
+  @UiField Panel accountPanel;
   
   public SettingsView() {
     initUI();
@@ -61,6 +71,16 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     
   }
   
+  @Override
+  public void setPresenter(Presenter presenter) {
+    super.setPresenter(presenter);
+    
+    if (getPresenter().isOnlineMode()) {
+      ckbOnlineMode.setValue(true);
+      accountPanel.setVisible(true);
+    }
+    
+  }
 
   @Override
   public void setModel(Object model, String tag) {
@@ -148,8 +168,6 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   public void onTraceBtn (TouchEndEvent event) {
     if (PhonegapUtils.getTrace() == null) {
       PhonegapUtils.setLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE, "true");
-      String initialUrl = Window.Location.createUrlBuilder().setHash("").buildString();
-//    Window.Location.assign(initialUrl);
       Window.Location.assign("index.html");
     } else {
       EmailWrapper email = new EmailWrapper("THR trace dump");
@@ -163,4 +181,29 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     getPresenter().goToHome();
   }
 
+  @UiHandler ("ckbOnlineMode")
+  public void onCkbOnlineMode(ValueChangeEvent<Boolean> event) {
+    boolean onlineMode = event.getValue();
+    getPresenter().setOnlineMode(onlineMode);
+    accountPanel.setVisible(onlineMode);
+    if (onlineMode) {
+      getPresenter().getAccount(new Delegate<Account>() {
+        public void execute(Account account) {
+          if (account == null) {
+            getPresenter().goToAccountEditView(null);
+          }
+        }
+      });
+    }
+  }
+  
+  @UiHandler ("accountBtn")
+  public void onAccountBtn (TouchEndEvent event) {
+    getPresenter().getAccount(new Delegate<Account>() {
+      public void execute(Account account) {
+        getPresenter().goToAccountEditView(account);
+      }
+    });
+  }
+  
 }
