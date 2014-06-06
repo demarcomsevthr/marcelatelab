@@ -1,11 +1,17 @@
 package it.mate.therapyreminder.server.services;
 
+import it.mate.therapyreminder.shared.model.Account;
+
 
 public interface RemoteAdapter {
   
-  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);  
+  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion, String devIp);  
 
   public void refresh();
+  
+  public Account createAccount(Account entity);
+  
+  public Account updateAccount(Account entity);
   
   /* 
 

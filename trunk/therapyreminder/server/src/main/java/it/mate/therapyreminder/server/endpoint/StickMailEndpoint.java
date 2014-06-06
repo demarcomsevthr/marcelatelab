@@ -1,7 +1,7 @@
 package it.mate.therapyreminder.server.endpoint;
 
 import it.mate.therapyreminder.shared.model.EndpointResponse;
-import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.impl.AccountTx;
 
 import java.util.logging.Logger;
 
@@ -68,16 +68,16 @@ public class StickMailEndpoint {
   }
 
   @ApiMethod (name="getRemoteUser", httpMethod=HttpMethod.POST)
-  public RemoteUser getRemoteUser(@Named("token") String token, User googleUser) {
+  public AccountTx getRemoteUser(@Named("token") String token, User googleUser) {
     logger.info("request authUser");
     if (googleUser == null) {
       logger.info("USER NULL!");
-      return RemoteUser.NULL_USER;
+      return AccountTx.NULL_USER;
     }
-    RemoteUser remoteUser = new RemoteUser();
+    AccountTx remoteUser = new AccountTx();
     remoteUser.setEmail(googleUser.getEmail());
-    remoteUser.setUserId(googleUser.getUserId());
-    remoteUser.setNickname(googleUser.getNickname());
+    remoteUser.setId(googleUser.getUserId());
+    remoteUser.setName(googleUser.getNickname());
     remoteUser.setAuthDomain(googleUser.getAuthDomain());
     remoteUser.setFederatedIdentity(googleUser.getFederatedIdentity());
     return remoteUser;

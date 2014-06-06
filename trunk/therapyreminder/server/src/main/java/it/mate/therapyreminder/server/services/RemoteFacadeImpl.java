@@ -1,6 +1,6 @@
 package it.mate.therapyreminder.server.services;
 
-import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
 import java.util.Date;
@@ -28,21 +28,25 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   }
   
   @Override
-  public RemoteUser getRemoteUser() {
-    return null;
-  }
-
-  @Override
   public Date getServerTime() {
     return new Date();
   }
   
   @Override
   public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
-    return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
+    String devIp = getThreadLocalRequest().getRemoteAddr();
+    return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, devIp);
+  }
+
+  @Override
+  public Account createAccount(Account entity) {
+    return adapter.createAccount(entity);
   }
   
-  
+  @Override
+  public Account updateAccount(Account entity) {
+    return adapter.updateAccount(entity);
+  }
 
   /*
   @Override
