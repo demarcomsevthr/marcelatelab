@@ -5,12 +5,11 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
-import it.mate.phgcommons.client.place.PlaceControllerWithLastPlace;
+import it.mate.phgcommons.client.place.PlaceControllerWithPreviousPlace;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
-import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
@@ -20,14 +19,13 @@ import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.dao.AppSqlDao;
-import it.mate.therapyreminder.client.model.RemoteUserJS;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
 import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
-import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
@@ -77,9 +75,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private boolean disableAlertSomministrazione = false;
   
-  private RemoteUser remoteUser;
+  private AccountTx remoteUser;
   
-  private Delegate<RemoteUser> remoteUserDelegate;
+  private Delegate<AccountTx> remoteUserDelegate;
   
   
   
@@ -161,10 +159,25 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
     // 20/15/2014
-    startTimersAndHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
+    startTimersAndInitHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
 
+  private void initHistoryHandler(final MGWTPlaceHistoryHandler historyHandler, MainPlace defaultPlace) {
+//  AppClientFactory clientFactory = this;
+//  historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), defaultPlace);
+    historyHandler.register(this.getPlaceController(), this.getBinderyEventBus(), defaultPlace);
+    NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
+      public void execute(Map<String, String> properties) {
+        for (String name : properties.keySet()) {
+          PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
+        }
+        AppClientFactoryImpl.this.nativeProperties = properties;
+        historyHandler.handleCurrentHistory();
+      }
+    });
+  }
+  
   private void createPhoneDisplay() {
     AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
     MainActivityMapper activityMapper = new MainActivityMapper(this);
@@ -205,7 +218,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (placeController == null)
       // 04/06/2014
 //    placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
-      placeController = new PlaceControllerWithLastPlace(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+      placeController = new PlaceControllerWithPreviousPlace(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
     return placeController;
   }
   
@@ -316,7 +329,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   // 15/05/2014
-  private void startTimersAndHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+  private void startTimersAndInitHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
     getAppSqlDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
         PhonegapUtils.log(errorMessage);
@@ -329,14 +342,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         if (getAppSqlDao().isReady()) {
           findSomministrazioneScadutaDelegate.execute(null);
           timer.get().cancel();
-          GwtUtils.createTimer(5000, new Delegate<Void>() {
+          GwtUtils.createTimer(10000, new Delegate<Void>() {
             public void execute(Void element) {
               findSomministrazioneScadutaDelegate.execute(null);
             }
           });
           GwtUtils.createTimer(60000, true, new Delegate<Void>() {
             public void execute(Void element) {
-//            PhonegapLog.log("sviluppo somministrazioni in background...");
+              PhonegapLog.log("sviluppo somministrazioni in background...");
               PrescrizioniUtils.getInstance().sviluppaSomministrazioniInBackground();
             }
           });
@@ -365,7 +378,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     public void execute(Void element) {
       if (disableAlertSomministrazione)
         return;
-//    PhonegapLog.log("checking somministrazione scaduta...");
+      PhonegapLog.log("checking somministrazione scaduta...");
       PrescrizioniUtils.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
@@ -373,17 +386,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
               PhonegapLog.log("found somministrazione scaduta " + somministrazione);
               defaultPlace = new MainPlace(MainPlace.REMINDER_EDIT, somministrazione);
             }
-            AppClientFactory clientFactory = AppClientFactory.IMPL;
-            historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), defaultPlace);
-            NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
-              public void execute(Map<String, String> properties) {
-                for (String name : properties.keySet()) {
-                  PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
-                }
-                AppClientFactoryImpl.this.nativeProperties = properties;
-                historyHandler.handleCurrentHistory();
-              }
-            });
+            initHistoryHandler(historyHandler, defaultPlace);
           } else {
             if (somministrazione != null) {
               PhonegapLog.log("found somministrazione scaduta " + somministrazione);
@@ -395,49 +398,5 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       });
     }
   }
-
-  //TODO: 05/06/2014 - ONLINE MODE
-  
-  @Override
-  public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
-    
-    this.remoteUserDelegate = remoteUserDelegate;
-    
-    if (remoteUser != null) {
-      
-      remoteUserDelegate.execute(remoteUser);
-      
-    } else {
-      
-      String remoteUserJson = getRemoteUserFromLocalStorage();
-      PhonegapUtils.log("remoteUserJson = " + remoteUserJson);
-      if (remoteUserJson != null && remoteUserJson.contains("{") ) {
-        RemoteUserJS remoteUserJS = JSONUtils.parse(remoteUserJson).cast();
-        PhonegapUtils.log("found remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
-        remoteUser = remoteUserJS.asRemoteUser();
-        remoteUserDelegate.execute(remoteUser);
-        
-      } else {
-
-        //TODO: creazione di remote user
-        
-      }
-      
-    }
-    
-  }
-
-  @Override
-  public void authenticate() {
-
-  }
-  
-  private native void setRemoteUserInLocalStorage(String remoteUserJson) /*-{
-    localStorage.remoteUser = remoteUserJson;
-  }-*/;
-  
-  private native String getRemoteUserFromLocalStorage() /*-{
-    return localStorage.remoteUser;
-  }-*/;
 
 }

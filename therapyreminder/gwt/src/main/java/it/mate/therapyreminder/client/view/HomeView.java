@@ -1,12 +1,10 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.view.HomeView.Presenter;
-import it.mate.therapyreminder.shared.model.RemoteUser;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -22,7 +20,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToTherapyListView();
     public void goToSettingsView();
-    public void setRemoteUserDelegate(Delegate<RemoteUser> delegate);
     public void goToReminderListView();
   }
 

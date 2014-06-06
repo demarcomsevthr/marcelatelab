@@ -4,13 +4,15 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.gwtcommons.shared.services.ServiceException;
-import it.mate.phgcommons.client.place.PlaceControllerWithLastPlace;
+import it.mate.phgcommons.client.place.PlaceControllerWithPreviousPlace;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IterationUtil;
 import it.mate.phgcommons.client.utils.IterationUtil.FinishDelegate;
 import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
+import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -21,6 +23,7 @@ import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
+import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
@@ -29,11 +32,12 @@ import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
+import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
-import it.mate.therapyreminder.shared.model.RemoteUser;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.List;
@@ -41,6 +45,7 @@ import java.util.List;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -57,7 +62,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter,
   DosageEditView.Presenter, 
   CalendarEventTestView.Presenter, SettingsView.Presenter,
-  ReminderListView.Presenter, ReminderEditView.Presenter {
+  ReminderListView.Presenter, ReminderEditView.Presenter,
+  AccountEditView.Presenter {
   
   private MainPlace place;
   
@@ -73,8 +79,14 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    ensureDevInfoId();
     if (place.getToken().equals(MainPlace.HOME)) {
+      
+      getDevInfoId(new Delegate<String>() {
+        public void execute(String devInfoId) {
+          PhonegapUtils.log("received devInfoId in activity is " + devInfoId);
+        }
+      });
+      
       AppClientFactory.IMPL.setDisableAlertSomministrazione(false);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
@@ -163,7 +175,20 @@ public class MainActivity extends MGWTAbstractActivity implements
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
           //goToHome();
-          goToLastPlace();
+          goToPrevious();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      AccountEditView view = AppClientFactory.IMPL.getGinjector().getAccountEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
         }
       });
     }
@@ -218,9 +243,17 @@ public class MainActivity extends MGWTAbstractActivity implements
         goToHome();
       }
     }
+    if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
+      Account account = null;
+      if (place.getModel() != null) {
+        account = (Account)place.getModel();
+      } else {
+        account = new AccountTx();
+      }
+      view.setModel(account, AccountEditView.TAG_ACCOUNT);
+    }
   }
   
-  @SuppressWarnings("unused")
   private void processFailure(String message, Throwable caught) {
     setHeaderWaiting(false);
     if (caught != null) {
@@ -266,7 +299,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       optionsBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           PhonegapUtils.log("optons tapped");
-          AppClientFactory.IMPL.authenticate();
         }
       });
       view.getHeaderPanel().setRightWidget(optionsBtn);
@@ -306,9 +338,17 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    
+    if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithPreviousPlace) {
+      PlaceControllerWithPreviousPlace placeController = (PlaceControllerWithPreviousPlace)AppClientFactory.IMPL.getPlaceController();
+      Place lastPlace = placeController.getPreviousPlace();
+      if (lastPlace != null) {
+        placeController.goTo(lastPlace);
+        return;
+      }
+    }
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
   }
-  
+
   public void goToHome() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }
@@ -343,6 +383,10 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToReminderEditView(Somministrazione somministrazione) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
+  }
+
+  public void goToAccountEditView(Account account) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ACCOUNT_EDIT, account));
   }
 
   @Override
@@ -408,7 +452,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void execute(Somministrazione result) {
         // somministrazione aggiornata
 //      goToHome();
-        goToLastPlace();
+        goToPrevious();
       }
     }, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
@@ -489,28 +533,34 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
-  public void goToLastPlace() {
-    if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithLastPlace) {
-      PlaceControllerWithLastPlace placeController = (PlaceControllerWithLastPlace)AppClientFactory.IMPL.getPlaceController();
-      Place lastPlace = placeController.getLastPlace();
-      if (lastPlace != null) {
-        placeController.goTo(lastPlace);
-        return;
-      }
-    }
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
-  }
-
   
   
   
   
   //TODO: 05/06/2014 - ONLINE MODE
   
+  public void setOnlineMode(boolean onlineMode) {
+    PhonegapUtils.setLocalStorageProperty("onlineMode", ""+onlineMode);
+  }
+  
+  public boolean isOnlineMode() {
+    String txt = PhonegapUtils.getLocalStorageProperty("onlineMode");
+    return ("true".equalsIgnoreCase(txt));
+  }
+  
   private void ensureDevInfoId() {
     String devInfoId = getDevInfoIdFromLocalStorage();
     if (devInfoId != null)
       return;
+    
+    final String duringGenerateDevInfoSemaphore = "duringGenerateDevInfo";
+    
+    String duringGenerateDevInfo = (String)GwtUtils.getClientAttribute(duringGenerateDevInfoSemaphore);
+    if (duringGenerateDevInfo != null)
+      return;
+    
+    GwtUtils.setClientAttribute(duringGenerateDevInfoSemaphore, "true");
+    
     String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
     String layout = PhonegapUtils.getLayoutInfo();
     String devName = PhonegapUtils.getDeviceName();
@@ -518,42 +568,112 @@ public class MainActivity extends MGWTAbstractActivity implements
     String platform = PhonegapUtils.getDevicePlatform();
     String devUuid = PhonegapUtils.getDeviceUuid();
     String devVersion = PhonegapUtils.getDeviceVersion();
-    PhonegapUtils.log("calling remote send dev info...");
+    PhonegapUtils.log("calling sendDevInfo on remote facade...");
     AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
       new AsyncCallback<String>() {
         public void onFailure(Throwable caught) {
-          //do nothing: permitted data connection turned off
+          if (isOnlineMode()) {
+            PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+          }
+          GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
         }
         public void onSuccess(String devInfoId) {
           if (devInfoId != null) {
+            PhonegapUtils.log("received devInfoId "+ devInfoId +" from remote facade");
             setDevInfoIdInLocalStorage(devInfoId);
+            GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
           }
         }
     });
   }
   
-  private native void setDevInfoIdInLocalStorage(String devInfoId) /*-{
-    localStorage.devInfoId = devInfoId;
-  }-*/;
+  private void setDevInfoIdInLocalStorage(String devInfoId) {
+    PhonegapUtils.setLocalStorageProperty("devInfoId", devInfoId);
+  }
 
-  private native String getDevInfoIdFromLocalStorage() /*-{
-    return localStorage.devInfoId;
-  }-*/;
+  private String getDevInfoIdFromLocalStorage() {
+    return PhonegapUtils.getLocalStorageProperty("devInfoId");
+  }
 
-  
+  public void getDevInfoId(final Delegate<String> delegate) {
+    final ObjectWrapper<Boolean> delegateFired = new ObjectWrapper<Boolean>(false);
+    GwtUtils.createTimerDelegate(500, true, new Delegate<Timer>() {
+      public void execute(Timer timer) {
+        ensureDevInfoId();
+        String devInfoId = getDevInfoIdFromLocalStorage();
+        if (devInfoId != null) {
+          timer.cancel();
+          if (!delegateFired.get()) {
+            delegateFired.set(true);
+            delegate.execute(devInfoId);
+          }
+        }
+      }
+    });
+  }
   
   /**
    * chiamato dalla ui per mostrare il remote user
    */
-  @Override
-  public void setRemoteUserDelegate(final Delegate<RemoteUser> delegate) {
+  public void getAccount(final Delegate<Account> delegate) {
+    String accountJson = getAccountFromLocalStorage();
+    if (accountJson != null && accountJson.contains("{")) {
+      Account account = AccountTx.fromJS(JSONUtils.parse(accountJson));
+      delegate.execute(account);
+    } else {
+      delegate.execute(null);
+    }
+  }
+  
+  public void saveAccount(final Account account, final Delegate<Account> successDelegate) {
     setHeaderWaiting(true);
-    AppClientFactory.IMPL.setRemoteUserDelegate(new Delegate<RemoteUser>() {
-      public void execute(RemoteUser remoteUser) {
-        setHeaderWaiting(false);
-        delegate.execute(remoteUser);
-      }
-    });
+    if (account.getId() == null) {
+      getDevInfoId(new Delegate<String>() {
+        public void execute(String devInfoId) {
+          account.setDevInfoId(devInfoId);
+          PhonegapUtils.log("creating account " + account);
+          AppClientFactory.IMPL.getRemoteFacade().createAccount(account, new AsyncCallback<Account>() {
+            public void onFailure(Throwable caught) {
+              setHeaderWaiting(false);
+              PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+            }
+            public void onSuccess(final Account account) {
+              setHeaderWaiting(false);
+              PhgDialogUtils.showMessageDialog("Account created", "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
+                public void execute(Integer element) {
+                  AccountTx tx = (AccountTx)account;
+                  setAccountInLocalStorage(JSONUtils.stringify(tx.asJS()));
+                  successDelegate.execute(account);
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      PhonegapUtils.log("updating account " + account);
+      AppClientFactory.IMPL.getRemoteFacade().updateAccount(account, new AsyncCallback<Account>() {
+        public void onFailure(Throwable caught) {
+          setHeaderWaiting(false);
+          PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+        }
+        public void onSuccess(Account account) {
+          setHeaderWaiting(false);
+          PhgDialogUtils.showMessageDialog("Account saved");
+          AccountTx tx = (AccountTx)account;
+          setAccountInLocalStorage(JSONUtils.stringify(tx.asJS()));
+          successDelegate.execute(account);
+        }
+      });
+    }
+  }
+  
+  private void setAccountInLocalStorage(String accountJson) {
+    PhonegapUtils.setLocalStorageProperty("account", accountJson);
+  }
+  
+  private String getAccountFromLocalStorage() {
+    return PhonegapUtils.getLocalStorageProperty("account");
   }
   
   /*
@@ -579,6 +699,5 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   */
-  
   
 }

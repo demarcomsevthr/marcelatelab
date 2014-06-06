@@ -1,6 +1,6 @@
 package it.mate.therapyreminder.server.service;
 
-import it.mate.therapyreminder.shared.model.RemoteUser;
+import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
 import java.util.Date;
@@ -20,7 +20,7 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   
   private RemoteFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = true;
+  private final boolean LOCALTEST = false;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".remoteFacade";
   
@@ -36,11 +36,6 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   }
   
   @Override
-  public RemoteUser getRemoteUser() {
-    return null;
-  }
-
-  @Override
   public Date getServerTime() {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.getServerTime();
@@ -52,4 +47,16 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
     return remoteFacade.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
   }
 
+  @Override
+  public Account createAccount(Account entity) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.createAccount(entity);
+  }
+  
+  @Override
+  public Account updateAccount(Account entity) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.updateAccount(entity);
+  }
+  
 }
