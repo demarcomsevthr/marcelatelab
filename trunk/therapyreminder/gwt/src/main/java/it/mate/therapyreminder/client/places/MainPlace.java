@@ -23,7 +23,15 @@ public class MainPlace extends Place {
   
   public static final String LEGAL_NOTES = "legalNotes";
   
-  public static final String CONTACTS = "contacts";
+  public static final String CONTACT_MENU = "contactsMenu";
+  
+  public static final String CONTACT_DOCTOR_LIST = "listDoctors";
+  
+  public static final String CONTACT_TUTOR_LIST = "listTutors";
+  
+  public static final String CONTACT_DOCTOR_EDIT = "editDoctor";
+  
+  public static final String CONTACT_TUTOR_EDIT = "editTutor";
   
   public static final String TEST = "test";
   
@@ -55,6 +63,15 @@ public class MainPlace extends Place {
   
   public Object getModel() {
     return model;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj != null && obj instanceof MainPlace) {
+      MainPlace that = (MainPlace)obj;
+      return this.token.equals(that.token);
+    }
+    return super.equals(obj);
   }
   
   public static class Tokenizer implements PlaceTokenizer<MainPlace> {

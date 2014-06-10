@@ -3,10 +3,12 @@ package it.mate.therapyreminder.client.logic;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.ContattoTx;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
@@ -19,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class AppSqlDao extends WebSQLDao {
+public class PrescrizioniDao extends WebSQLDao {
   
   private final static boolean DROP_TABLES_ON_OPEN_DATABASE = false;
   
@@ -42,7 +44,9 @@ public class AppSqlDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
   
-  public AppSqlDao() {
+  private final static String CONTATTI_FIELDS = "tipo, nome, email, telefono";
+  
+  public PrescrizioniDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
         PhonegapLog.log("created db therapies");
@@ -63,6 +67,7 @@ public class AppSqlDao extends WebSQLDao {
     tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
     tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
     tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
+    tr.doExecuteSql("DROP TABLE IF EXISTS contatti");
   }
   
   public void dropDB(final Delegate<Void> delegate) {
@@ -107,11 +112,6 @@ public class AppSqlDao extends WebSQLDao {
       PhonegapLog.log("creating table somministrazioni");
       tr.doExecuteSql("CREATE TABLE somministrazioni (id "+SERIAL_ID+", " + SOMMINISTRAZIONI_FIELDS + " )");
 
-      /* TEST MIGRATIONS
-      tr.doExecuteSql("CREATE TABLE therapies (id "+SERIAL_ID+", name)");
-      tr.doExecuteSql("INSERT INTO therapies (name) VALUES ('prova1')");
-      */
-      
     }
   };
   
@@ -129,37 +129,18 @@ public class AppSqlDao extends WebSQLDao {
     }
   };
   
-  /** PROVA MIGRATION >> NON CANCELLARE, MI SERVIRA' QUANDO AVRO' INIZIATO A FARE RELEASE!
-  
   private final static MigratorCallback MIGRATION_CALLBACK_2 = new MigratorCallback() {
     public void doMigration(int number, SQLTransaction tr) {
       PhonegapLog.log("updating db therapies to version " + number);
-      tr.doExecuteSql("ALTER TABLE therapies ADD COLUMN created");
-      tr.doExecuteSql("INSERT INTO therapies (name, created) VALUES ('prova2', 2014)");
+      
+      PhonegapLog.log("creating table contatti");
+      tr.doExecuteSql("CREATE TABLE contatti (id "+SERIAL_ID+", " + CONTATTI_FIELDS + " )");
+      
     }
   };
-  
-  private final static MigratorCallback MIGRATION_CALLBACK_3 = new MigratorCallback() {
-    public void doMigration(int number, SQLTransaction tr) {
-      PhonegapLog.log("updating db therapies to version " + number);
-      tr.doExecuteSql("DELETE FROM therapies WHERE id = 2");
-      tr.doExecuteSql("INSERT INTO therapies (name, created) VALUES ('prova3', 2014)");
-    }
-  };
-  
-  private final static MigratorCallback MIGRATION_CALLBACK_4 = new MigratorCallback() {
-    public void doMigration(int number, SQLTransaction tr) {
-      PhonegapLog.log("updating db therapies to version " + number);
-      tr.doExecuteSql("ALTER TABLE therapies ADD COLUMN createdTm");
-      Date NOW = new Date();
-      tr.doExecuteSql("INSERT INTO therapies (name, created, createdTm) VALUES (?, ?, ?)", 
-          new Object[] {"prova4", 2014, NOW.getTime()});
-    }
-  };
-  */
   
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0 ,MIGRATION_CALLBACK_1 /* ,MIGRATION_CALLBACK_2 ,MIGRATION_CALLBACK_3 ,MIGRATION_CALLBACK_4 */ 
+    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2 
   };
   
   public void findAllUdM(final Delegate<List<UdM>> delegate) {
@@ -185,7 +166,7 @@ public class AppSqlDao extends WebSQLDao {
   }
   
   public void findAllPrescrizioni(final Delegate<List<Prescrizione>> delegate) {
-    /* NON FUNZIONA CON LA READ TRANSACTION!
+    /* ATTENZIONE: NON FUNZIONA CON LA READ TRANSACTION!
     db.doReadTransaction(new SQLTransactionCallback() {
      */
     db.doTransaction(new SQLTransactionCallback() {
@@ -673,5 +654,112 @@ public class AppSqlDao extends WebSQLDao {
       }
     });
   }
+  
+  public void findContattiByTipo(final String tipo, final Delegate<List<Contatto>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
+        sql += " WHERE tipo = ? ";
+        tr.doExecuteSql(sql, new Object[] {tipo}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              new RSToContattiIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  public void findContattoById(final Integer id, final Delegate<Contatto> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
+        sql += " WHERE id = ? ";
+        tr.doExecuteSql(sql, new Object[] {id}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              delegate.execute(flushRSToContatto(rs, 0));
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  protected class RSToContattiIterator {
+    SQLResultSet rs;
+    List<Contatto> results = new ArrayList<Contatto>();
+    Delegate<List<Contatto>> delegate;
+    protected RSToContattiIterator(SQLResultSet rs, Delegate<List<Contatto>> delegate) {
+      this.rs = rs;
+      this.delegate = delegate;
+      iterate(0);
+    }
+    private void iterate(final int it) {
+      if (it < rs.getRows().getLength()) {
+        results.add(flushRSToContatto(rs, it));
+        iterate(it + 1);
+      } else {
+        delegate.execute(results);
+      }
+    }
+  }
+
+  private Contatto flushRSToContatto(SQLResultSet rs, int it) {
+    Contatto result = new ContattoTx();
+    result.setId(rs.getRows().getValueInt(it, "id"));
+    result.setTipo(rs.getRows().getValueString(it, "tipo"));
+    result.setNome(rs.getRows().getValueString(it, "nome"));
+    result.setEmail(rs.getRows().getValueString(it, "email"));
+    result.setTelefono(rs.getRows().getValueString(it, "telefono"));
+    return result;
+  }
+  
+  public void saveContatto(final Contatto contatto, final Delegate<Contatto> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        if (contatto.getId() == null) {
+          tr.doExecuteSql("INSERT INTO contatti (" + CONTATTI_FIELDS + ") VALUES (?, ?, ?, ?)", 
+              new Object[] {
+              contatto.getTipo(),
+              contatto.getNome(),
+              contatto.getEmail(),
+              contatto.getTelefono()
+              }, new SQLStatementCallback() {
+                public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                  contatto.setId(rs.getInsertId());
+                  delegate.execute(contatto);
+                }
+              });
+        } else {
+          String sql = "UPDATE contatti SET ";
+          sql += "  tipo = ?";
+          sql += " ,nome = ?";
+          sql += " ,email = ?";
+          sql += " ,telefono = ?";
+          sql += " WHERE id = ?";
+          tr.doExecuteSql(sql, new Object[] {
+              contatto.getTipo(),
+              contatto.getNome(),
+              contatto.getEmail(),
+              contatto.getTelefono()
+              , contatto.getId()
+            }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              delegate.execute(contatto);
+            }
+          });
+        }
+      }
+    });
+  }
+  
   
 }

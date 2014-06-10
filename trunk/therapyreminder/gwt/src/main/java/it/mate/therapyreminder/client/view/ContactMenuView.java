@@ -1,9 +1,8 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.view.ContactsView.Presenter;
+import it.mate.therapyreminder.client.view.ContactMenuView.Presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -13,19 +12,20 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 
-public class ContactsView extends BaseMgwtView <Presenter> {
+public class ContactMenuView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
-
+    public void goToContactDoctorListView();
+    public void goToContactTutorListView();
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, ContactsView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, ContactMenuView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
   
-  public ContactsView() {
+  public ContactMenuView() {
     initUI();
   }
 
@@ -51,12 +51,12 @@ public class ContactsView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("doctorsBtn")
   public void onDoctorsBtn (TouchEndEvent event) {
-    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+    getPresenter().goToContactDoctorListView();
   }
   
   @UiHandler ("tutorsBtn")
   public void onTutorsBtn (TouchEndEvent event) {
-    PhgDialogUtils.showMessageDialog("Not implemented yet!");
+    getPresenter().goToContactTutorListView();
   }
   
 }

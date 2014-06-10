@@ -1,0 +1,30 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.therapyreminder.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-account-panel">
+      
+    <g:HTML HTML="Editing contact" addStyleNames="ui-view-header"/>
+    
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+      <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
+    </g:HorizontalPanel>
+
+    <hr class="ui-view-separator-1"/>
+    
+    <g:Label text="Name:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <ph:PhTextBox ui:field="nameBox" addStyleNames="ui-app-textbox, ui-name-box"/>
+
+    <g:Label text="Email:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <ph:PhTextBox ui:field="emailBox" addStyleNames="ui-app-textbox, ui-email-box"/>
+
+    <g:Label text="Phone number:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <ph:PhTextBox ui:field="phoneBox" addStyleNames="ui-app-textbox, ui-phone-box"/>
+  
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

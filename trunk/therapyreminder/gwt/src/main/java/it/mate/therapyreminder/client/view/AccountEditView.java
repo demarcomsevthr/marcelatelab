@@ -79,11 +79,11 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   @Override
-  public void onClosingView(final Delegate<Void> closeDelegate) {
+  public void onClosingView(final ClosingHandler handler) {
     PhonegapUtils.log("close delegate");
     flushAndSaveAccount(new Delegate<Account>() {
       public void execute(Account account) {
-        closeDelegate.execute(null);
+        handler.doClose();
       }
     });
   }
