@@ -4,8 +4,6 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ClientBundle.Source;
-import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.user.client.Window;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.theme.base.MainCss;
@@ -63,9 +61,6 @@ public class CustomTheme {
   public interface CustomBundle {
     
     public CustomMainCss css();
-    
-    @Source("resources/bgr_iphone_a.jpg")
-    DataResource bgrImage();
     
   }
   
