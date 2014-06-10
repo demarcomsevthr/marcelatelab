@@ -1,4 +1,4 @@
-package it.mate.therapyreminder.client.dao;
+package it.mate.therapyreminder.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapLog;
@@ -87,15 +87,16 @@ public class AppSqlDao extends WebSQLDao {
        */
       PhonegapLog.log("creating table udm");
       tr.doExecuteSql("CREATE TABLE udm (" + UDM_FIELDS + " )");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('C', 'default=Tablet//s,it=Compress/a/e', 10)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('F', 'default=Vial//s,it=Fial/a/e', 20)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('S', 'default=Suppositor/y/ies,it=Suppost/a/e', 30)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('G', 'default=Drop//s,it=Gocc/ia/e', 50)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('B', 'default=Sachet//s,it=Bustin/a/e', 60)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('Z', 'default=Lint//s,it=Garz/a/e', 70)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('L', 'default=Bottle//s,it=Flacon/e/i', 80)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('P', 'default=Cap//s,it=Capsul/a/e', 90)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('T', 'default=Comfit//s,it=Confett/o/i', 100)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('01', 'default=Pill//s,it=Pillol/a/e', 10)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('02', 'default=Tablet//s,it=Compress/a/e', 20)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('03', 'default=Vial//s,it=Fial/a/e', 30)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('04', 'default=Suppositor/y/ies,it=Suppost/a/e', 40)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('05', 'default=Drop//s,it=Gocc/ia/e', 50)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('06', 'default=Sachet//s,it=Bustin/a/e', 60)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('07', 'default=Lint//s,it=Garz/a/e', 70)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('08', 'default=Bottle//s,it=Flacon/e/i', 80)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('09', 'default=Cap//s,it=Capsul/a/e', 90)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('10', 'default=Comfit//s,it=Confett/o/i', 100)");
       
       PhonegapLog.log("creating table prescrizioni");
       tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS_0 + " )");
