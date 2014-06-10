@@ -1,4 +1,4 @@
-package it.mate.therapyreminder.client.dao;
+package it.mate.therapyreminder.client.logic;
 
 @SuppressWarnings("serial")
 public class DaoException extends RuntimeException {

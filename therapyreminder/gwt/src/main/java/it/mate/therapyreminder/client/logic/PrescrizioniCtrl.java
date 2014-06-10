@@ -1,4 +1,4 @@
-package it.mate.therapyreminder.client.utils;
+package it.mate.therapyreminder.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -8,7 +8,6 @@ import it.mate.phgcommons.client.plugins.CalendarPlugin.Event;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.Time;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
@@ -24,19 +23,19 @@ import java.util.List;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.ui.client.MGWT;
 
-public class PrescrizioniUtils {
+public class PrescrizioniCtrl {
 
-  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
+  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getDao();
   
-  private static PrescrizioniUtils instance;
+  private static PrescrizioniCtrl instance;
   
-  public static PrescrizioniUtils getInstance() {
+  public static PrescrizioniCtrl getInstance() {
     if (instance == null)
-      instance = new PrescrizioniUtils();
+      instance = new PrescrizioniCtrl();
     return instance;
   }
   
-  protected PrescrizioniUtils() {
+  protected PrescrizioniCtrl() {
 
   }
   
@@ -46,7 +45,7 @@ public class PrescrizioniUtils {
     prescrizione.setQuantita(1d);
     prescrizione.setTipoRicorrenza(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO);
     prescrizione.setValoreRicorrenza(1);
-    prescrizione.setCodUdM("C");
+    prescrizione.setCodUdM("01");
     prescrizione.setTipoRicorrenzaOraria(Prescrizione.TIPO_ORARI_FISSI);
     prescrizione.setIntervalloOrario(1);
     delegate.execute(prescrizione);
