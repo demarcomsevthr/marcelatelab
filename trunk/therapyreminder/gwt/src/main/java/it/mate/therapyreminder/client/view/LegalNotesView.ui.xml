@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.therapyreminder.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-legal-notes-panel">
+
+    <p style="width:100%">
+      <h1>Legal notes</h1>
+    </p>      
+
+    <p>
+      This app includes some images created by <a href="http://www.aha-soft.com/">Aha-Soft</a>
+    </p>      
+
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

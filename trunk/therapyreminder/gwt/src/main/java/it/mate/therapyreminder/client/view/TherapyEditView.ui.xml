@@ -86,7 +86,10 @@
         <g:VerticalPanel ui:field="ricorrenzaPanel" spacing="0">
           <g:HorizontalPanel>
             <g:Label text="Ogni:" addStyleNames="ui-inline-label"/>
+            <!-- 
             <ph:PhTextBox ui:field="rangeBox" addStyleNames="ui-app-textbox, ui-range-box" value="1" type="number"/>
+             -->
+            <p:TouchCombo ui:field="rangeCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
             <g:Label text="giorni" addStyleNames="ui-inline-label, ui-day-label" ui:field="ricorrenzaLabel"/>
           </g:HorizontalPanel>    
         </g:VerticalPanel>
