@@ -5,7 +5,7 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
-import it.mate.phgcommons.client.place.PlaceControllerWithPreviousPlace;
+import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
@@ -18,14 +18,13 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
-import it.mate.therapyreminder.client.logic.AppSqlDao;
 import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
+import it.mate.therapyreminder.client.logic.PrescrizioniDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
 import it.mate.therapyreminder.shared.model.Somministrazione;
-import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
@@ -71,13 +70,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private Map<String, String> nativeProperties;
 
-  private RemoteFacadeAsync facade = null;
+  private RemoteFacadeAsync remoteFacade = null;
   
   private boolean disableAlertSomministrazione = false;
-  
-  private AccountTx remoteUser;
-  
-  private Delegate<AccountTx> remoteUserDelegate;
   
   
   
@@ -218,7 +213,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (placeController == null)
       // 04/06/2014
 //    placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
-      placeController = new PlaceControllerWithPreviousPlace(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+      placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
     return placeController;
   }
   
@@ -317,20 +312,20 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public RemoteFacadeAsync getRemoteFacade() {
-    if (facade == null) {
-      facade = getGinjector().getRemoteFacade();
+    if (remoteFacade == null) {
+      remoteFacade = getGinjector().getRemoteFacade();
     }
-    return facade;
+    return remoteFacade;
   }
   
   @Override
-  public AppSqlDao getAppSqlDao() {
-    return ginjector.getDao();
+  public PrescrizioniDao getPrescrizioniDao() {
+    return ginjector.getPrescrizioniDao();
   }
   
   // 15/05/2014
   private void startTimersAndInitHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
-    getAppSqlDao().setErrorDelegate(new Delegate<String>() {
+    getPrescrizioniDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
         PhonegapUtils.log(errorMessage);
         PhgDialogUtils.showMessageDialog(errorMessage);
@@ -339,7 +334,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
     timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {
       public void execute(Void element) {
-        if (getAppSqlDao().isReady()) {
+        if (getPrescrizioniDao().isReady()) {
           findSomministrazioneScadutaDelegate.execute(null);
           timer.get().cancel();
           GwtUtils.createTimer(10000, new Delegate<Void>() {

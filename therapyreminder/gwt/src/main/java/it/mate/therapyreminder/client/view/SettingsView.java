@@ -9,7 +9,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
-import it.mate.therapyreminder.client.logic.AppSqlDao;
+import it.mate.therapyreminder.client.logic.PrescrizioniDao;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.SettingsView.Presenter;
 import it.mate.therapyreminder.shared.model.Account;
@@ -117,7 +117,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("dumpBtn")
   public void onDumpBtn (TouchEndEvent event) {
 
-    final AppSqlDao dao = AppClientFactory.IMPL.getAppSqlDao();
+    final PrescrizioniDao dao = AppClientFactory.IMPL.getPrescrizioniDao();
     
     final EmailWrapper email = new EmailWrapper("THR db dump");
     
@@ -191,7 +191,20 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       getPresenter().getAccount(new Delegate<Account>() {
         public void execute(Account account) {
           if (account == null) {
-            getPresenter().goToAccountEditView(null);
+            
+            String msg = "In online mode you can send notifications to the tutors: in order to use this feature you must have network connection ON and you have to create a personal account.";
+            PhgDialogUtils.showMessageDialog(msg, "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
+              public void execute(Integer btn) {
+                if (btn == 1) {
+                  getPresenter().goToAccountEditView(null);
+                } else {
+                  getPresenter().setOnlineMode(false);
+                  ckbOnlineMode.setValue(false);
+                  accountPanel.setVisible(false);
+                }
+              }
+            });
+            
           }
         }
       });

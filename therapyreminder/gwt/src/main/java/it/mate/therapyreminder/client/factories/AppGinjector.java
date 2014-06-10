@@ -3,10 +3,12 @@ package it.mate.therapyreminder.client.factories;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
-import it.mate.therapyreminder.client.logic.AppSqlDao;
+import it.mate.therapyreminder.client.logic.PrescrizioniDao;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
-import it.mate.therapyreminder.client.view.ContactsView;
+import it.mate.therapyreminder.client.view.ContactEditView;
+import it.mate.therapyreminder.client.view.ContactListView;
+import it.mate.therapyreminder.client.view.ContactMenuView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
 import it.mate.therapyreminder.client.view.LegalNotesView;
@@ -26,7 +28,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public RemoteFacadeAsync getRemoteFacade();
   
-  public AppSqlDao getDao();
+  public PrescrizioniDao getPrescrizioniDao();
   
   public HomeView getHomeView();
   
@@ -46,8 +48,12 @@ public interface AppGinjector extends CommonGinjector {
   
   public LegalNotesView getLegalNotesView();
   
-  public ContactsView getContactsView();
+  public ContactMenuView getContactMenuView();
   
   public CalendarEventTestView getCalendarEventTestView();
+  
+  public ContactListView getContactListView();
+  
+  public ContactEditView getContactEditView();
   
 }

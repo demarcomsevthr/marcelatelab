@@ -432,14 +432,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   @Override
-  public void onClosingView(final Delegate<Void> closingDelegate) {
+  public void onClosingView(final ClosingHandler handler) {
     Prescrizione prescrizione = flushPrescrizione(false);
     if (prescrizione == null || prescrizione.equals(oldPrescrizione)) {
-      closingDelegate.execute(null);
+      handler.doClose();
     } else {
       savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
         public void execute(Prescrizione prescrizioneSalvata) {
-          closingDelegate.execute(null);
+          handler.doClose();
         }
       });
     }

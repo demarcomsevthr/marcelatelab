@@ -14,7 +14,6 @@ import it.mate.therapyreminder.shared.model.UdM;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -121,7 +120,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       }
     });
     final SimpleContainer list = new SimpleContainer();
-    final ObjectWrapper<Date> prevDate = new ObjectWrapper<Date>();
+    final ObjectWrapper<String> prevDate = new ObjectWrapper<String>();
     for (final Somministrazione somministrazione : somministrazioni) {
       getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
@@ -139,19 +138,19 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     });
   }
   
-  private void showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<Date> prevDate, UdM udm) {
-    Date somDate = somministrazione.getData();
+  private void showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<String> prevDate, UdM udm) {
+    String curDate = GwtUtils.dateToString(somministrazione.getData(), "yyyyMMdd");
     HorizontalPanel row = new HorizontalPanel();
     row.addStyleName("ui-row-reminder");
     list.add(row);
     String html = "";
-    if (prevDate.get() == null || !GwtUtils.dateToString(prevDate.get(), "yyyyMMdd").equals(GwtUtils.dateToString(somDate, "yyyyMMdd"))) {
+    if (prevDate.get() == null || !prevDate.equals(curDate)) {
       html += "<p class='ui-row-date'>";
       html += "<span class='ui-row-date-name'>";
-      html += dayNameFmt.format(somDate);
+      html += dayNameFmt.format(somministrazione.getData());
       html += "</span>";
       html += "<span class='ui-row-date-date'>";
-      html += dateFmt.format(somDate);
+      html += dateFmt.format(somministrazione.getData());
       html += "</span>";
       html += "</p>";
     }
@@ -167,7 +166,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         }
       }
     });
-    prevDate.set(somDate);
+    prevDate.set(curDate);
   }
   
 }

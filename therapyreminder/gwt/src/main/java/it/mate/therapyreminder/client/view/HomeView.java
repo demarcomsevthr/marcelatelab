@@ -20,7 +20,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     public void goToTherapyListView();
     public void goToSettingsView();
     public void goToReminderListView();
-    public void goTocontacts();
+    public void goToContactMenu();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -67,7 +67,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("doctorsBtn")
   public void onDoctorsBtn (TouchEndEvent event) {
-    getPresenter().goTocontacts();
+    getPresenter().goToContactMenu();
   }
   
   @UiHandler ("preferencesBtn")

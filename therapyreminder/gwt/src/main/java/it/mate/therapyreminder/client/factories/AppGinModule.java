@@ -3,7 +3,7 @@ package it.mate.therapyreminder.client.factories;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
-import it.mate.therapyreminder.client.logic.AppSqlDao;
+import it.mate.therapyreminder.client.logic.PrescrizioniDao;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
@@ -20,7 +20,7 @@ public class AppGinModule extends AbstractGinModule {
   private final static String NAT_PROP_FACADE_RELATIVE_PATH = "remoteFacadeRelativePath";
   private final static String DEFAULT_FACADE_RELATIVE_PATH = ".remoteFacade";
   
-  private static AppSqlDao appSqlDao;
+  private static PrescrizioniDao appSqlDao;
   
   @Override
   protected void configure() {
@@ -49,9 +49,9 @@ public class AppGinModule extends AbstractGinModule {
   }
   
   @Provides
-  public AppSqlDao getAppSqlDao() {
+  public PrescrizioniDao getAppSqlDao() {
     if (appSqlDao == null) {
-      appSqlDao = new AppSqlDao();
+      appSqlDao = new PrescrizioniDao();
     }
     return appSqlDao;
   }

@@ -25,7 +25,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 
 public class PrescrizioniCtrl {
 
-  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getDao();
+  private PrescrizioniDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
   
   private static PrescrizioniCtrl instance;
   
