@@ -18,12 +18,12 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
+import it.mate.therapyreminder.client.logic.AppSqlDao;
+import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
 import it.mate.therapyreminder.client.ui.theme.CustomTheme;
-import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
@@ -325,7 +325,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public AppSqlDao getAppSqlDao() {
-    return ginjector.getAppSqlDao();
+    return ginjector.getDao();
   }
   
   // 15/05/2014
@@ -350,7 +350,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           GwtUtils.createTimer(60000, true, new Delegate<Void>() {
             public void execute(Void element) {
               PhonegapLog.log("sviluppo somministrazioni in background...");
-              PrescrizioniUtils.getInstance().sviluppaSomministrazioniInBackground();
+              PrescrizioniCtrl.getInstance().sviluppaSomministrazioniInBackground();
             }
           });
         }
@@ -379,7 +379,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       if (disableAlertSomministrazione)
         return;
       PhonegapLog.log("checking somministrazione scaduta...");
-      PrescrizioniUtils.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+      PrescrizioniCtrl.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
             if (somministrazione != null) {

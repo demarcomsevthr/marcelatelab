@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
+import it.mate.therapyreminder.client.logic.AppSqlDao;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.dom.client.Element;
