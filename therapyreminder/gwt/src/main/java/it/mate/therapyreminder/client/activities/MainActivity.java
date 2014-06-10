@@ -19,14 +19,16 @@ import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.constants.AppProperties;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
+import it.mate.therapyreminder.client.logic.AppSqlDao;
+import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
 import it.mate.therapyreminder.client.places.MainPlace;
-import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
+import it.mate.therapyreminder.client.view.ContactsView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.LegalNotesView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
@@ -63,13 +65,14 @@ public class MainActivity extends MGWTAbstractActivity implements
   DosageEditView.Presenter, 
   CalendarEventTestView.Presenter, SettingsView.Presenter,
   ReminderListView.Presenter, ReminderEditView.Presenter,
-  AccountEditView.Presenter {
+  AccountEditView.Presenter, LegalNotesView.Presenter,
+  ContactsView.Presenter  {
   
   private MainPlace place;
   
   private BaseMgwtView view;
   
-  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getAppSqlDao();
+  private AppSqlDao dao = AppClientFactory.IMPL.getGinjector().getDao();
   
   private final static String ALL_UDM_KEY = "AllUdM";
 
@@ -182,6 +185,32 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
       AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
       AccountEditView view = AppClientFactory.IMPL.getGinjector().getAccountEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.LEGAL_NOTES)) {
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      LegalNotesView view = AppClientFactory.IMPL.getGinjector().getLegalNotesView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.CONTACTS)) {
+      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      ContactsView view = AppClientFactory.IMPL.getGinjector().getContactsView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
@@ -363,7 +392,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToTherapyEditView(Prescrizione prescrizione) {
     if (prescrizione == null) {
-      PrescrizioniUtils.getInstance().createPrescrizioneWithDefaults(new Delegate<Prescrizione>() {
+      PrescrizioniCtrl.getInstance().createPrescrizioneWithDefaults(new Delegate<Prescrizione>() {
         public void execute(Prescrizione prescrizione) {
           AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
         }
@@ -389,6 +418,14 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ACCOUNT_EDIT, account));
   }
 
+  public void goToLegalNotes() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.LEGAL_NOTES));
+  }
+
+  public void goTocontacts() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CONTACTS));
+  }
+
   @Override
   public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, Delegate<Prescrizione> endDelegate) {
     final Delegate<Prescrizione> fEndDelegate = endDelegate != null ? endDelegate : new Delegate<Prescrizione>() {
@@ -404,7 +441,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
               try {
-                PrescrizioniUtils.getInstance().sviluppaSomministrazioni(prescrizione);
+                PrescrizioniCtrl.getInstance().sviluppaSomministrazioni(prescrizione);
                 fEndDelegate.execute(prescrizione);
               } catch (ServiceException ex) {
                 processFailure(null, ex);
@@ -412,7 +449,7 @@ public class MainActivity extends MGWTAbstractActivity implements
             }
           };
           if (oldPrescrizione.isPersistent()) {
-            PrescrizioniUtils.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
+            PrescrizioniCtrl.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
                 sviluppoDelegate.execute(newPrescrizioneSalvata);
               }
@@ -429,7 +466,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void deletePrescrizioni(final List<Prescrizione> prescrizioni) {
     new IterationUtil<Prescrizione>(prescrizioni, new ItemDelegate<Prescrizione>() {
       public void handleItem(Prescrizione prescrizione, final IterationUtil<Prescrizione> iteration) {
-        PrescrizioniUtils.getInstance().cancellaSomministrazioni(prescrizione, new Delegate<Void>() {
+        PrescrizioniCtrl.getInstance().cancellaSomministrazioni(prescrizione, new Delegate<Void>() {
           public void execute(Void element) {
             iteration.next();
           }
@@ -448,7 +485,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void updateSomministrazione(Somministrazione somministrazione) {
-    PrescrizioniUtils.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+    PrescrizioniCtrl.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
         // somministrazione aggiornata
 //      goToHome();
