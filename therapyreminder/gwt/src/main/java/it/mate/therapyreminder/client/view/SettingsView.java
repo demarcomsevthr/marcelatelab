@@ -8,8 +8,8 @@ import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
+import it.mate.therapyreminder.client.logic.AppSqlDao;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.SettingsView.Presenter;
 import it.mate.therapyreminder.shared.model.Account;
@@ -37,6 +37,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     public void setOnlineMode(boolean onlineMode);
     public boolean isOnlineMode();
     public void goToAccountEditView(Account account);
+    public void goToLegalNotes();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -204,6 +205,11 @@ public class SettingsView extends BaseMgwtView <Presenter> {
         getPresenter().goToAccountEditView(account);
       }
     });
+  }
+  
+  @UiHandler ("legalNotesBtn")
+  public void onLegalNotesBtn (TouchEndEvent event) {
+    getPresenter().goToLegalNotes();
   }
   
 }

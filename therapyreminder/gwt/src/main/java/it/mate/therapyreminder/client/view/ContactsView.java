@@ -1,36 +1,31 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.constants.AppProperties;
-import it.mate.therapyreminder.client.view.HomeView.Presenter;
+import it.mate.therapyreminder.client.view.ContactsView.Presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 
-public class HomeView extends BaseMgwtView <Presenter> {
+public class ContactsView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void goToTherapyListView();
-    public void goToSettingsView();
-    public void goToReminderListView();
-    public void goTocontacts();
+
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, ContactsView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField Label homeLbl;
   
-  public HomeView() {
+  public ContactsView() {
     initUI();
   }
 
@@ -42,7 +37,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
     getHeaderBackButton().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    homeLbl.setText(AppProperties.IMPL.versionCredits());
   }
   
   @Override
@@ -55,24 +49,14 @@ public class HomeView extends BaseMgwtView <Presenter> {
     
   }
   
-  @UiHandler ("therapiesBtn")
-  public void onTherapiesBtn (TouchEndEvent event) {
-    getPresenter().goToTherapyListView();
-  }
-  
-  @UiHandler ("remindersBtn")
-  public void onRemindersBtn (TouchEndEvent event) {
-    getPresenter().goToReminderListView();
-  }
-  
   @UiHandler ("doctorsBtn")
   public void onDoctorsBtn (TouchEndEvent event) {
-    getPresenter().goTocontacts();
+    PhgDialogUtils.showMessageDialog("Not implemented yet!");
   }
   
-  @UiHandler ("preferencesBtn")
-  public void onPreferencesBtn (TouchEndEvent event) {
-    getPresenter().goToSettingsView();
+  @UiHandler ("tutorsBtn")
+  public void onTutorsBtn (TouchEndEvent event) {
+    PhgDialogUtils.showMessageDialog("Not implemented yet!");
   }
   
 }

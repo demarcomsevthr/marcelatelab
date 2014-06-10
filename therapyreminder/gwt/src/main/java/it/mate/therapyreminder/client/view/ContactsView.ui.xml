@@ -11,16 +11,9 @@
     <gc:Spacer addStyleNames="ui-homeSpacer1"/>
     
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-home-terapies-btn" text="Therapies" ui:field="therapiesBtn"/>
-      <p:TouchAnchor addStyleNames="ui-home-reminders-btn" text="Reminders" ui:field="remindersBtn"/>
+      <p:TouchAnchor addStyleNames="ui-contacts-doctor-btn" text="Doctors" ui:field="doctorsBtn"/>
+      <p:TouchAnchor addStyleNames="ui-contacts-tutor-btn" text="Tutors" ui:field="tutorsBtn"/>
     </g:HorizontalPanel>
-    
-    <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-home-doctors-btn" text="Doctors and Tutors" ui:field="doctorsBtn"/>
-      <p:TouchAnchor addStyleNames="ui-home-preferences-btn" text="Settings" ui:field="preferencesBtn"/>
-    </g:HorizontalPanel>
-    
-    <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     
   </g:HTMLPanel>
   

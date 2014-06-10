@@ -18,8 +18,8 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
+import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
 import it.mate.therapyreminder.client.ui.SignPanel;
-import it.mate.therapyreminder.client.utils.PrescrizioniUtils;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
@@ -80,7 +80,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField StatePanel estremiPrescrizionePanel;
   @UiField StatePanel ricorrenzaPrescrizionePanel;
   @UiField StatePanel orariPrescrizionePanel;
+  /*
   @UiField PhTextBox rangeBox;
+  */
+  @UiField TouchCombo rangeCombo;
   @UiField PhTextBox rangeOrariBox;
   @UiField PhTimeBox orarioInizioBox;
   @UiField PhCheckBox ckbAlertRiordino;
@@ -113,9 +116,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     wrapperPanel.getElement().getStyle().clearHeight();
     
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO, "Ogni giorno", true);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI, "A giorni alterni", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_MENSILE, "Mensile", false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_TRIMESTRALE, "Trimestrale", false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SEMESTRALE, "Semestrale", false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoRicorrenzaValue();
@@ -151,6 +157,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     statePanelUtil.setCurrentState(initialStatePanel);
     setLastStatePanel(null);
     
+    for (int it = 1; it <= 10; it++) {
+      rangeCombo.setItem(""+it, ""+it, it == 1 ? true : false);
+    }
+    
     initBottomBar();
     
   }
@@ -177,8 +187,20 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(tipoRicorrenza) && valoreRicorrenza == 1) {
         tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO;
       }
+      if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(tipoRicorrenza) && valoreRicorrenza == 2) {
+        tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI;
+      }
+      if (Prescrizione.TIPO_RICORRENZA_MENSILE.equals(tipoRicorrenza) && valoreRicorrenza == 3) {
+        tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_TRIMESTRALE;
+      }
+      if (Prescrizione.TIPO_RICORRENZA_MENSILE.equals(tipoRicorrenza) && valoreRicorrenza == 6) {
+        tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_SEMESTRALE;
+      }
       tipoRicorrenzaCombo.setValue(tipoRicorrenza);
+      /*
       rangeBox.setValue(valoreRicorrenza);
+      */
+      rangeCombo.setValue(valoreRicorrenza.toString());
       tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
       if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
         rangeOrariBox.setValue(prescrizione.getIntervalloOrario());
@@ -223,6 +245,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     String value = tipoRicorrenzaCombo.getValue();
     if (Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO.equals(value)) {
       ricorrenzaPanel.setVisible(false);
+    } else if (Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI.equals(value)) {
+        ricorrenzaPanel.setVisible(false);
     } else if (Prescrizione.TIPO_RICORRENZA_GIORNALIERA.equals(value)) {
       ricorrenzaLabel.setText("giorni");
       ricorrenzaPanel.setVisible(true);
@@ -232,6 +256,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     } else if (Prescrizione.TIPO_RICORRENZA_MENSILE.equals(value)) {
       ricorrenzaLabel.setText("mesi");
       ricorrenzaPanel.setVisible(true);
+    } else if (Prescrizione.TIPO_RICORRENZA_TRIMESTRALE.equals(value)) {
+      ricorrenzaPanel.setVisible(false);
+    } else if (Prescrizione.TIPO_RICORRENZA_SEMESTRALE.equals(value)) {
+      ricorrenzaPanel.setVisible(false);
     } else {
       ricorrenzaPanel.setVisible(false);
     }
@@ -288,7 +316,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         public void onTouchEnd(TouchEndEvent event) {
           if (orarioBox.getValue() != null) {
             
-            flushAndSavePrescrizione(new Delegate<Prescrizione>() {
+            savePrescrizione(flushPrescrizione(true), new Delegate<Prescrizione>() {
               public void execute(Prescrizione prescrizioneSalvata) {
                 
                 Dosaggio dosaggio = (Dosaggio)orarioBox.getModel();
@@ -400,19 +428,24 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
 
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
-    flushAndSavePrescrizione(null);
+    savePrescrizione(flushPrescrizione(true), null);
   }
   
   @Override
   public void onClosingView(final Delegate<Void> closingDelegate) {
-    flushAndSavePrescrizione(new Delegate<Prescrizione>() {
-      public void execute(Prescrizione prescrizioneSalvata) {
-        closingDelegate.execute(null);
-      }
-    });
+    Prescrizione prescrizione = flushPrescrizione(false);
+    if (prescrizione == null || prescrizione.equals(oldPrescrizione)) {
+      closingDelegate.execute(null);
+    } else {
+      savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+        public void execute(Prescrizione prescrizioneSalvata) {
+          closingDelegate.execute(null);
+        }
+      });
+    }
   }
 
-  private void flushAndSavePrescrizione(Delegate<Prescrizione> continueDelegate) {
+  private Prescrizione flushPrescrizione(boolean verbose) {
     Double qtaUnica = qtaBox.getValueAsDouble();
     prescrizione.setId(oldPrescrizione.getId());
     prescrizione.setNome(titleBox.getValue());
@@ -420,10 +453,24 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     prescrizione.setQuantita(qtaUnica);
     prescrizione.setCodUdM(umCombo.getValue());
     String tipoRicorrenza = tipoRicorrenzaCombo.getValue();
+    Integer valoreRicorrenza = null;
+    /*
     Integer valoreRicorrenza = rangeBox.getValueAsInteger();
+    */
     if (Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO.equals(tipoRicorrenza)) {
       tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_GIORNALIERA;
       valoreRicorrenza = 1;
+    } else if (Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI.equals(tipoRicorrenza)) { 
+      tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_GIORNALIERA;
+      valoreRicorrenza = 2;
+    } else if (Prescrizione.TIPO_RICORRENZA_TRIMESTRALE.equals(tipoRicorrenza)) { 
+      tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_MENSILE;
+      valoreRicorrenza = 3;
+    } else if (Prescrizione.TIPO_RICORRENZA_SEMESTRALE.equals(tipoRicorrenza)) { 
+      tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_MENSILE;
+      valoreRicorrenza = 6;
+    } else {
+      valoreRicorrenza = Integer.parseInt(rangeCombo.getValue());
     }
     prescrizione.setTipoRicorrenza(tipoRicorrenza);
     prescrizione.setValoreRicorrenza(valoreRicorrenza);
@@ -431,20 +478,26 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       prescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
       if (orarioInizioBox.getValue() == null) {
-        PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
-        return;
+        if (verbose) {
+          PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
+        }
+        return null;
       }
       prescrizione.setDosaggi(new ArrayList<Dosaggio>());
       prescrizione.getDosaggi().add(new DosaggioTx(prescrizione, qtaUnica, orarioInizioBox.getValue().asString()));
     } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       if (prescrizione.getDosaggi() == null) {
-        PhgDialogUtils.showMessageDialog("Devi inserire almeno un orario di assunzione", "Alert", PhgDialogUtils.BUTTONS_OK);
-        return;
+        if (verbose) {
+          PhgDialogUtils.showMessageDialog("Devi inserire almeno un orario di assunzione", "Alert", PhgDialogUtils.BUTTONS_OK);
+        }
+        return null;
       }
       for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
         if (dosaggio.getOrario() == null) {
-          PhgDialogUtils.showMessageDialog("Orario di assunzione non impostato", "Alert", PhgDialogUtils.BUTTONS_OK);
-          return;
+          if (verbose) {
+            PhgDialogUtils.showMessageDialog("Orario di assunzione non impostato", "Alert", PhgDialogUtils.BUTTONS_OK);
+          }
+          return null;
         }
         if (dosaggio.getQuantita() == null) {
           dosaggio.setQuantita(qtaUnica);
@@ -456,25 +509,33 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     prescrizione.setQtaPerAvviso(qtaRiordinoBox.getValueAsDouble());
     prescrizione.setQtaPerConfez(qtaConfezBox.getValueAsDouble());
     prescrizione.setQtaRimanente(qtaRimanenteBox.getValueAsDouble());
+
+    return prescrizione;
     
-    if (prescrizione.equals(oldPrescrizione)) {
-      if (continueDelegate != null)
-        continueDelegate.execute(prescrizione);
+  }
+
+  private void savePrescrizione(Prescrizione prescrizione, Delegate<Prescrizione> successDelegate) {
+    if (prescrizione == null) {
       return;
     }
     
-    String validateError = PrescrizioniUtils.validatePrescrizione(prescrizione);
+    if (prescrizione.equals(oldPrescrizione)) {
+      if (successDelegate != null)
+        successDelegate.execute(prescrizione);
+      return;
+    }
+    
+    String validateError = PrescrizioniCtrl.validatePrescrizione(prescrizione);
     if (validateError != null) {
       PhgDialogUtils.showMessageDialog(validateError, "Alert", PhgDialogUtils.BUTTONS_OK);
     } else {
       
 //    delegate.execute(prescrizione);
-      getPresenter().savePrescrizione(prescrizione, oldPrescrizione, continueDelegate);
+      getPresenter().savePrescrizione(prescrizione, oldPrescrizione, successDelegate);
       
     }
-    
   }
-
+  
   @UiHandler ("ckbAlertRiordino")
   public void onCkbAlertRiordino(ValueChangeEvent<Boolean> event) {
     alertRiordinoPanel.setVisible(event.getValue());
