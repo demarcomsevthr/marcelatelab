@@ -3,7 +3,7 @@ package it.mate.therapyreminder.client.factories;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
-import it.mate.therapyreminder.client.dao.AppSqlDao;
+import it.mate.therapyreminder.client.logic.AppSqlDao;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
