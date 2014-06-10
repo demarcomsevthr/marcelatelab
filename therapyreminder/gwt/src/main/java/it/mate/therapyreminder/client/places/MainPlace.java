@@ -21,6 +21,10 @@ public class MainPlace extends Place {
   
   public static final String ACCOUNT_EDIT = "editAccount";
   
+  public static final String LEGAL_NOTES = "legalNotes";
+  
+  public static final String CONTACTS = "contacts";
+  
   public static final String TEST = "test";
   
   private String token;
