@@ -101,5 +101,9 @@ public interface Prescrizione extends Serializable {
   public Double getNumConfezioni();
   
   public void setGstAvvisoRiordino(Boolean flgGstAvvisoRiordino);
+  
+  public Contatto getTutor();
+  
+  public void setTutor(Contatto tutor);
 
 }
