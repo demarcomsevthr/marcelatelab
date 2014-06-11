@@ -23,12 +23,6 @@
         <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
         <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
 
-        <!--         
-        <hr class="ui-view-separator"/>
-        <g:Label text="Tipo di terapia:" addStyleNames="ui-field-label"/>
-        <p:TouchCombo ui:field="tipoTerapiaCombo" addStyleNames="ui-app-combobox"/>
-         -->
-        
         <hr class="ui-view-separator"/>
         
         <g:Label text="Data inizio:" addStyleNames="ui-field-label"/>
@@ -43,11 +37,29 @@
           <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
         </g:HorizontalPanel>
         
+        <g:HTMLPanel ui:field="notificheTutorPanel" visible="false">
+        
+          <hr class="ui-view-separator"/>
+          
+          <g:HorizontalPanel>
+            <ph:PhCheckBox addStyleNames="ui-app-notifiche-tutor" ui:field="cbxNotificheTutor"/>
+            <g:HTML HTML="Notifiche al tutor" addStyleNames="ui-field-label ui-app-notifiche-tutor-label"/>
+          </g:HorizontalPanel>
+
+          <g:VerticalPanel ui:field="tutorPanel" visible="false">
+            <!-- <g:Label text="Tutor:" addStyleNames="ui-field-label"/>  -->
+            <p:TouchCombo ui:field="tutorCombo" addStyleNames="ui-app-combobox ui-app-tutor-combobox"/>
+          </g:VerticalPanel>
+        
+        </g:HTMLPanel>
+        
         <hr class="ui-view-separator"/>
+        
         <g:HorizontalPanel>
-          <ph:PhCheckBox addStyleNames="ui-app-alert-riordino" ui:field="ckbAlertRiordino"/>
+          <ph:PhCheckBox addStyleNames="ui-app-alert-riordino" ui:field="cbxAlertRiordino"/>
           <g:HTML HTML="Alert per il riordino" addStyleNames="ui-field-label ui-app-alert-riordino-label"/>
         </g:HorizontalPanel>
+        
         <g:VerticalPanel ui:field="alertRiordinoPanel" visible="false">
           <g:HTML HTML="Quantità per il riordino:" addStyleNames="ui-field-label"/>
           <gc:Spacer height="0.3em"/>

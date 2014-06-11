@@ -21,15 +21,18 @@ import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.ContattoTx;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -57,6 +60,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     public void savePrescrizione(Prescrizione newPrescrizione, Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate);
     public void goToDosageEditView(Dosaggio dosaggio);
     public void getUdmDescription(Double qta, String currentUdmCode, Delegate<UdM> delegate);
+    public boolean isOnlineMode();
+    public void findAllTutors(Delegate<List<Contatto>> delegate);
+    public void goToContactTutorListView();
+    public void goToContactEditView(Contatto contatto);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -80,25 +87,26 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField StatePanel estremiPrescrizionePanel;
   @UiField StatePanel ricorrenzaPrescrizionePanel;
   @UiField StatePanel orariPrescrizionePanel;
-  /*
-  @UiField PhTextBox rangeBox;
-  */
+//@UiField PhTextBox rangeBox;
   @UiField TouchCombo rangeCombo;
   @UiField PhTextBox rangeOrariBox;
   @UiField PhTimeBox orarioInizioBox;
-  @UiField PhCheckBox ckbAlertRiordino;
+  @UiField PhCheckBox cbxAlertRiordino;
   @UiField Panel alertRiordinoPanel;
   @UiField PhTextBox qtaConfezBox;
   @UiField PhTextBox qtaRiordinoBox;
   @UiField PhTextBox qtaRimanenteBox;
   @UiField PhTextBox numConfezBox;
+  @UiField Panel notificheTutorPanel;
+  @UiField PhCheckBox cbxNotificheTutor;
+  @UiField Panel tutorPanel;
+  @UiField TouchCombo tutorCombo;
   
   StatePanelUtil statePanelUtil = new StatePanelUtil();
-  
   private Widget bottomBar = null;
-  
   private Prescrizione oldPrescrizione;
   private Prescrizione prescrizione;
+  private List<Contatto> tutors;
   
   
   public TherapyEditView() {
@@ -168,6 +176,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
+    notificheTutorPanel.setVisible(getPresenter().isOnlineMode());
   }
   
   @Override
@@ -211,11 +220,15 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         showOrariListPanel();
       }
       
-      ckbAlertRiordino.setValue(prescrizione.isGstAvvisoRiordino());
+      cbxAlertRiordino.setValue(prescrizione.isGstAvvisoRiordino());
       qtaConfezBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerConfez()));
       qtaRiordinoBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerAvviso()));
       qtaRimanenteBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente()));
       numConfezBox.setValue(0);
+      
+      if (prescrizione.getTutor() != null) {
+        cbxNotificheTutor.setValue(true);
+      }
       
       if (prescrizione.isPersistent()) {
         titleBox.setReadOnly(true);
@@ -505,10 +518,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       }
     }
     
-    prescrizione.setGstAvvisoRiordino(ckbAlertRiordino.getValue());
+    prescrizione.setGstAvvisoRiordino(cbxAlertRiordino.getValue());
     prescrizione.setQtaPerAvviso(qtaRiordinoBox.getValueAsDouble());
     prescrizione.setQtaPerConfez(qtaConfezBox.getValueAsDouble());
     prescrizione.setQtaRimanente(qtaRimanenteBox.getValueAsDouble());
+    
+    prescrizione.setTutor(getSelectedTutor());
 
     return prescrizione;
     
@@ -536,7 +551,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     }
   }
   
-  @UiHandler ("ckbAlertRiordino")
+  @UiHandler ("cbxAlertRiordino")
   public void onCkbAlertRiordino(ValueChangeEvent<Boolean> event) {
     alertRiordinoPanel.setVisible(event.getValue());
     if (event.getValue()) {
@@ -563,5 +578,57 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     }
   }
   
+  @UiHandler ("cbxNotificheTutor")
+  public void onCbxNotificheTutor(ValueChangeEvent<Boolean> event) {
+    tutorPanel.setVisible(event.getValue());
+    fillTutorCombo();
+    refreshScrollPanel();
+  }
+  
+  private void fillTutorCombo() {
+    if (tutorCombo.isVisible() && tutorCombo.getItems().size() == 0) {
+      getPresenter().findAllTutors(new Delegate<List<Contatto>>() {
+        public void execute(List<Contatto> results) {
+          tutors = results;
+          if (results != null && results.size() > 0) {
+            boolean onlyonerow = (results.size() == 1);
+            for (Contatto tutor : results) {
+              boolean selected = onlyonerow;
+              if (prescrizione != null && prescrizione.getTutor() != null) {
+                if (prescrizione.getTutor().getId().equals(tutor.getId())) {
+                  selected = true;
+                }
+              }
+              tutorCombo.setItem(tutor.getId().toString(), tutor.getNome(), selected);
+            }
+          } else {
+            PhgDialogUtils.showMessageDialog("To use this feature you have to enter at least a tutor. Do you want to do it now? ", 
+                "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+                  public void execute(Integer btn) {
+                    if (btn == 1) {
+                      //getPresenter().goToContactTutorListView();
+                      getPresenter().goToContactEditView(new ContattoTx(Contatto.TIPO_TUTOR));
+                    } else {
+                      cbxNotificheTutor.setValue(false);
+                    }
+                  }
+                });
+          }
+        }
+      });
+    }
+  }
+  
+  private Contatto getSelectedTutor() {
+    String selectedTutorId = tutorCombo.getValue();
+    if (tutors != null && selectedTutorId != null) {
+      for (Contatto tutor : tutors) {
+        if (tutor.getId().toString().equals(selectedTutorId)) {
+          return tutor;
+        }
+      }
+    }
+    return null;
+  }
 
 }

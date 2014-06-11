@@ -29,7 +29,7 @@
     
     <g:HorizontalPanel addStyleNames="ui-setting-row">
       <g:HTML HTML="Online mode:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
-      <ph:PhCheckBox addStyleNames="ui-app-online-mode-ckb" ui:field="ckbOnlineMode"/>
+      <ph:PhCheckBox addStyleNames="ui-app-online-mode-ckb" ui:field="cbxOnlineMode"/>
     </g:HorizontalPanel>
         
     <g:HorizontalPanel addStyleNames="ui-setting-row" spacing="0" ui:field="accountPanel" visible="false">

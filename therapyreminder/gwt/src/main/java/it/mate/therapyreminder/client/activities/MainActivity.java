@@ -665,7 +665,9 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   
-  
+  public void findAllTutors(final Delegate<List<Contatto>> delegate) {
+    dao.findContattiByTipo(Contatto.TIPO_TUTOR, delegate);
+  }
   
   
   //TODO: 05/06/2014 - ONLINE MODE
@@ -676,6 +678,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   public boolean isOnlineMode() {
     String value = PhonegapUtils.getLocalStorageProperty("onlineMode");
+    PhonegapUtils.log("onlineMode = " + value);
     return ("true".equalsIgnoreCase(value));
   }
   

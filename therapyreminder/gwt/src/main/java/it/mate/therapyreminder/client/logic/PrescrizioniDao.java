@@ -38,7 +38,10 @@ public class PrescrizioniDao extends WebSQLDao {
   private final static String PRESCRIZIONI_FIELDS_1 = 
       "flgGstAvvisoRiordino, qtaPerConfez, qtaPerAvviso, qtaRimanente, ultimoAvvisoRiordino ";
   
-  private final static String PRESCRIZIONI_FIELDS = PRESCRIZIONI_FIELDS_0 + ", " + PRESCRIZIONI_FIELDS_1;
+  private final static String PRESCRIZIONI_FIELDS_2 = 
+      "idTutor ";
+  
+  private final static String PRESCRIZIONI_FIELDS = PRESCRIZIONI_FIELDS_0 + ", " + PRESCRIZIONI_FIELDS_1 + ", " + PRESCRIZIONI_FIELDS_2;
       
   private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
   
@@ -135,6 +138,9 @@ public class PrescrizioniDao extends WebSQLDao {
       
       PhonegapLog.log("creating table contatti");
       tr.doExecuteSql("CREATE TABLE contatti (id "+SERIAL_ID+", " + CONTATTI_FIELDS + " )");
+      
+      PhonegapLog.log("altering table prescrizioni");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN idTutor");
       
     }
   };
@@ -265,6 +271,7 @@ public class PrescrizioniDao extends WebSQLDao {
     prescrizione.setQtaPerAvviso(rows.getValueDouble(it, "qtaPerAvviso"));
     prescrizione.setQtaRimanente(rows.getValueDouble(it, "qtaRimanente"));
     prescrizione.setUltimoAvvisoRiordino(longAsDate(rows.getValueLong(it, "ultimoAvvisoRiordino")));
+    ((PrescrizioneTx)prescrizione).setIdTutor(rows.getValueInt(it, "idTutor"));
     return prescrizione;
   }
   
@@ -273,7 +280,7 @@ public class PrescrizioniDao extends WebSQLDao {
       final Prescrizione prescrizione = it.next();
       tr.doExecuteSql("SELECT " + DOSAGGI_FIELDS + " FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()}, 
           new SQLStatementCallback() {
-            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               SQLResultSetRowList rows = rs.getRows();
               if (rows.getLength() > 0) {
                 for (int it = 0; it < rows.getLength(); it++) {
@@ -283,7 +290,15 @@ public class PrescrizioniDao extends WebSQLDao {
                   prescrizione.getDosaggi().add(dosaggio);
                 }
               }
-              iteratePrescrizioniForRead(it, tr, delegate, results);
+              
+              Integer idTutor = ((PrescrizioneTx)prescrizione).getIdTutor();
+              findContattoById(idTutor, new Delegate<Contatto>() {
+                public void execute(Contatto contatto) {
+                  prescrizione.setTutor(contatto);
+                  iteratePrescrizioniForRead(it, tr, delegate, results);
+                }
+              });
+              
             }
           });
     } else {
@@ -296,7 +311,7 @@ public class PrescrizioniDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (prescrizione.getId() == null) {
-          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 prescrizione.getNome(), 
                 dateAsLong(prescrizione.getDataInizio()), 
@@ -308,13 +323,12 @@ public class PrescrizioniDao extends WebSQLDao {
                 prescrizione.getValoreRicorrenza(),
                 prescrizione.getTipoRicorrenzaOraria(), 
                 prescrizione.getIntervalloOrario(),
-                //////////////////////////////////////
                 prescrizione.getFlgGstAvvisoRiordino(),
                 prescrizione.getQtaPerConfez(),
                 prescrizione.getQtaPerAvviso(),
                 prescrizione.getQtaRimanente(),
-                dateAsLong(prescrizione.getUltimoAvvisoRiordino())
-                //////////////////////////////////////
+                dateAsLong(prescrizione.getUltimoAvvisoRiordino()),
+                ((PrescrizioneTx)prescrizione).getIdTutor()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   prescrizione.setId(rs.getInsertId());
@@ -347,6 +361,8 @@ public class PrescrizioniDao extends WebSQLDao {
           sql += " ,qtaRimanente = ?";
           sql += " ,ultimoAvvisoRiordino = ?";
           
+          sql += " ,idTutor = ?";
+          
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
 
@@ -365,7 +381,8 @@ public class PrescrizioniDao extends WebSQLDao {
               prescrizione.getQtaPerConfez(),
               prescrizione.getQtaPerAvviso(),
               prescrizione.getQtaRimanente(),
-              dateAsLong(prescrizione.getUltimoAvvisoRiordino())
+              dateAsLong(prescrizione.getUltimoAvvisoRiordino()),
+              ((PrescrizioneTx)prescrizione).getIdTutor()
               
               , prescrizione.getId()
               
@@ -675,20 +692,27 @@ public class PrescrizioniDao extends WebSQLDao {
   }
   
   public void findContattoById(final Integer id, final Delegate<Contatto> delegate) {
+    if (id == null)
+      delegate.execute(null);
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
         sql += " WHERE id = ? ";
         tr.doExecuteSql(sql, new Object[] {id}, 
           new SQLStatementCallback() {
-          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            if (rs.getRows().getLength() > 0) {
-              delegate.execute(flushRSToContatto(rs, 0));
-            } else {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              if (rs.getRows().getLength() > 0) {
+                delegate.execute(flushRSToContatto(rs, 0));
+              } else {
+                delegate.execute(null);
+              }
+            }
+          }, new SQLStatementErrorCallback() {
+            public void handleEvent(SQLTransaction tr, SQLError error) {
               delegate.execute(null);
             }
           }
-        });
+        );
       }
     });
   }
