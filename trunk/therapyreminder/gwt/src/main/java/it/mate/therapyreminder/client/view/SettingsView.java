@@ -48,7 +48,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   
   @UiField TouchButton traceBtn;
   
-  @UiField PhCheckBox ckbOnlineMode;
+  @UiField PhCheckBox cbxOnlineMode;
   
   @UiField Panel accountPanel;
   
@@ -77,7 +77,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     super.setPresenter(presenter);
     
     if (getPresenter().isOnlineMode()) {
-      ckbOnlineMode.setValue(true);
+      cbxOnlineMode.setValue(true);
       accountPanel.setVisible(true);
     }
     
@@ -182,7 +182,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     getPresenter().goToHome();
   }
 
-  @UiHandler ("ckbOnlineMode")
+  @UiHandler ("cbxOnlineMode")
   public void onCkbOnlineMode(ValueChangeEvent<Boolean> event) {
     boolean onlineMode = event.getValue();
     getPresenter().setOnlineMode(onlineMode);
@@ -192,14 +192,14 @@ public class SettingsView extends BaseMgwtView <Presenter> {
         public void execute(Account account) {
           if (account == null) {
             
-            String msg = "In online mode you can send notifications to the tutors: in order to use this feature you must have network connection ON and you have to create a personal account.";
+            String msg = "In online mode you can send notifications to the tutors: in order to use this feature you must have mobile data connection TURNED ON and you have to create a personal account.";
             PhgDialogUtils.showMessageDialog(msg, "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
               public void execute(Integer btn) {
                 if (btn == 1) {
                   getPresenter().goToAccountEditView(null);
                 } else {
                   getPresenter().setOnlineMode(false);
-                  ckbOnlineMode.setValue(false);
+                  cbxOnlineMode.setValue(false);
                   accountPanel.setVisible(false);
                 }
               }

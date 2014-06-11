@@ -279,6 +279,10 @@ body {
   margin-top: 0;
 }
 
+.ui-app-tutor-combobox {
+  width: 10em;
+}
+
 .ui-homePanel .mgwt-TextBox.ui-app-textbox {
   margin-top: 0;
 }
@@ -427,18 +431,16 @@ body {
   margin-bottom: -0.3em;
 }
 
-.ui-app-alert-riordino {
+.ui-app-alert-riordino, .ui-app-notifiche-tutor {
   height: 1em;
   width: 1em;
   margin-left: 0.5em;
   margin-right: -0.1em;
 }
 
-.ui-app-alert-riordino-label {
+.ui-app-alert-riordino-label, .ui-app-notifiche-tutor-label {
   padding-top: 0.3em;
 }
-
-
 
 .ui-row {
   width: 100%;
