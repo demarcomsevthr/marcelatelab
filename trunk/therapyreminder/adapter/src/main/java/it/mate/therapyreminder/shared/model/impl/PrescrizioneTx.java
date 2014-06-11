@@ -1,5 +1,6 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.utils.ModelUtils;
@@ -33,7 +34,6 @@ public class PrescrizioneTx implements Prescrizione {
   
   private Integer intervalloOrario;
 
-  // START MIGRATION #1
   private Integer flgGstAvvisoRiordino;
   
   private Double qtaPerConfez;
@@ -43,9 +43,13 @@ public class PrescrizioneTx implements Prescrizione {
   private Double qtaRimanente;
   
   private Date ultimoAvvisoRiordino;
-  // END MIGRATION #1
   
   private List<Dosaggio> dosaggi = new ArrayList<Dosaggio>();
+  
+  private Contatto tutor;
+
+  // serve solo nel dao
+  private Integer idTutor;
   
   
   
@@ -89,6 +93,8 @@ public class PrescrizioneTx implements Prescrizione {
         return false;
       if (!ModelUtils.equals(this.dosaggi, that.dosaggi))
         return false;
+      if (!ModelUtils.equals(this.idTutor, that.idTutor))
+        return false;
       return true;
     }
     return super.equals(obj);
@@ -130,6 +136,9 @@ public class PrescrizioneTx implements Prescrizione {
     this.qtaPerConfez = that.getQtaPerConfez();
     this.qtaPerAvviso = that.getQtaPerAvviso();
     this.qtaRimanente = that.getQtaRimanente();
+    if (that instanceof PrescrizioneTx) {
+      this.idTutor = ((PrescrizioneTx)that).idTutor;
+    }
   }
 
   @Override
@@ -323,6 +332,23 @@ public class PrescrizioneTx implements Prescrizione {
   
   public Double getNumConfezioni() {
     return getQtaPerConfez() > 0 ? getQtaRimanente() / getQtaPerConfez() : 0d;
+  }
+
+  public Contatto getTutor() {
+    return tutor;
+  }
+
+  public void setTutor(Contatto tutor) {
+    this.tutor = tutor;
+    setIdTutor(tutor != null ? tutor.getId() : null);
+  }
+  
+  public void setIdTutor(Integer idTutor) {
+    this.idTutor = idTutor;
+  }
+  
+  public Integer getIdTutor() {
+    return idTutor;
   }
   
 }
