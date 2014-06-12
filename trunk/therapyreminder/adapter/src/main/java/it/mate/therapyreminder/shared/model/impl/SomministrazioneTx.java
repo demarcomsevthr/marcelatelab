@@ -20,6 +20,8 @@ public class SomministrazioneTx implements Somministrazione {
 
   private Integer stato;
   
+  private String remoteId;
+  
   public SomministrazioneTx() {
 
   }
@@ -36,16 +38,21 @@ public class SomministrazioneTx implements Somministrazione {
     }
     return super.equals(obj);
   }
-  
+
   @Override
   public String toString() {
-    return "Somministrazione [prescrizione.id=" + prescrizione.getId() + ", id=" + id + ", data=" + data + ", quantita=" + quantita + ", orario=" + orario + ", stato="
-        + stato + "]";
+    return "SomministrazioneTx [prescrizione=" + prescrizione + ", id=" + id + ", data=" + data + ", quantita=" + quantita + ", orario=" + orario + ", stato="
+        + stato + ", remoteId=" + remoteId + "]";
   }
 
   @Override
   public Prescrizione getPrescrizione() {
     return prescrizione;
+  }
+  
+  @Override
+  public void setPrescrizione(Prescrizione prescrizione) {
+    this.prescrizione = prescrizione;
   }
   
   @Override
@@ -126,6 +133,14 @@ public class SomministrazioneTx implements Somministrazione {
   @Override
   public void setAnnullata() {
     stato = STATO_ANNULLATA;
+  }
+
+  public String getRemoteId() {
+    return remoteId;
+  }
+
+  public void setRemoteId(String remoteId) {
+    this.remoteId = remoteId;
   }
   
 }

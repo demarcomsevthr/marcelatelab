@@ -1,13 +1,10 @@
 package it.mate.therapyreminder.shared.model.impl;
 
 import it.mate.therapyreminder.shared.model.Dosaggio;
-import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.utils.ModelUtils;
 
 @SuppressWarnings("serial")
 public class DosaggioTx implements Dosaggio {
-  
-  private Prescrizione prescrizione;
   
   private Double quantita = 1d;
   
@@ -22,16 +19,6 @@ public class DosaggioTx implements Dosaggio {
       return false;
     if (obj instanceof DosaggioTx) {
       DosaggioTx that = (DosaggioTx)obj;
-      if (this.prescrizione != null && that.prescrizione == null) {
-        return false;
-      } else if (this.prescrizione == null && that.prescrizione != null) {
-        return false;
-      } else if (this.prescrizione == null && that.prescrizione == null) {
-        //
-      } else if (this.prescrizione != null && that.prescrizione != null) {
-        if (!ModelUtils.equals(this.prescrizione.getId(), that.prescrizione.getId()))
-          return false;
-      }
       if (!ModelUtils.equals(this.quantita, that.quantita))
         return false;
       if (!ModelUtils.equals(this.orario, that.orario))
@@ -43,24 +30,18 @@ public class DosaggioTx implements Dosaggio {
     return super.equals(obj);
   }
   
-  public DosaggioTx(Prescrizione prescrizione) {
-    this.prescrizione = prescrizione;
+  public DosaggioTx() {
+    
   }
-
-  public DosaggioTx(Prescrizione prescrizione, Double quantita, String orario) {
-    this(prescrizione);
+  
+  public DosaggioTx(Double quantita, String orario) {
     this.quantita = quantita;
     this.orario = orario;
   }
   
   public DosaggioTx(Dosaggio that) {
-    this.prescrizione = that.getPrescrizione();
     this.quantita = that.getQuantita();
     this.orario = that.getOrario();
-  }
-
-  public Prescrizione getPrescrizione() {
-    return prescrizione;
   }
 
   public Double getQuantita() {
