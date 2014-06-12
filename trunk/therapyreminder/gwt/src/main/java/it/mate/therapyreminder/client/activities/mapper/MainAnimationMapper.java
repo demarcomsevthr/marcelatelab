@@ -1,6 +1,6 @@
 package it.mate.therapyreminder.client.activities.mapper;
 
-import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
+import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
@@ -32,7 +32,7 @@ public class MainAnimationMapper implements AnimationMapper {
         Object model = newPlace.getModel();
         if (model != null && model instanceof Somministrazione) {
           Somministrazione somministrazione = (Somministrazione)model;
-          if (PrescrizioniCtrl.isScaduta(somministrazione)) {
+          if (MainController.isScaduta(somministrazione)) {
             return Animation.DISSOLVE_REVERSE;
           }
         }

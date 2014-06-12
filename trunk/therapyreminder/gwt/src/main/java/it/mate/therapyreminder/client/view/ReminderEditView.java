@@ -8,7 +8,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Position;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
+import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
@@ -77,7 +77,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       }
       oraBox.setValue(somministrazione.getOrario());
       
-      if (PrescrizioniCtrl.isScaduta(somministrazione)) {
+      if (MainController.isScaduta(somministrazione)) {
         
         PhgDialogUtils.showMessageDialog("Did you take this medicine?", "Reminder expired", PhgDialogUtils.BUTTONS_YESNO,
             new Position(getPopupTop(), null) /* null */,

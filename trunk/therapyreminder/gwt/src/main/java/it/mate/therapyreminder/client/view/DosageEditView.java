@@ -7,9 +7,9 @@ import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.DosageEditView.Presenter;
-import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
+import it.mate.therapyreminder.shared.model.impl.DosaggioEditModel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -39,7 +39,7 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
   @UiField Label umLabel;
   
 
-  private Dosaggio dosaggio;
+  private DosaggioEditModel model;
   
   public DosageEditView() {
     initUI();
@@ -59,10 +59,10 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
   public void setModel(Object model, String tag) {
     if (TAG_DOSAGGIO.equals(tag)) {
       TouchUtils.setDisabled(qtaBox.getElement());
-      this.dosaggio = (Dosaggio)model;
-      dsgLbl.setText("Dosaggio delle ore " + dosaggio.getOrario());
-      qtaBox.setValue(dosaggio.getQuantita());
-      getPresenter().getUdmDescription(qtaBox.getValueAsDouble(), dosaggio.getCodUdM(), new Delegate<UdM>() {
+      this.model = (DosaggioEditModel)model;
+      dsgLbl.setText("Dosaggio delle ore " + this.model.getDosaggio().getOrario());
+      qtaBox.setValue(this.model.getDosaggio().getQuantita());
+      getPresenter().getUdmDescription(qtaBox.getValueAsDouble(), this.model.getDosaggio().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
           umLabel.setText(udm.getDescrizione());
         }
@@ -73,8 +73,8 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("okBtn")
   public void onOkBtn (TouchEndEvent event) {
-    dosaggio.setQuantita(qtaBox.getValueAsDouble());
-    getPresenter().goToTherapyEditView(dosaggio.getPrescrizione());
+    model.getDosaggio().setQuantita(qtaBox.getValueAsDouble());
+    getPresenter().goToTherapyEditView(model.getPrescrizione());
   }
   
 }

@@ -1,9 +1,11 @@
 package it.mate.therapyreminder.client.places;
 
+import it.mate.gwtcommons.client.places.HasToken;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
-public class MainPlace extends Place {
+public class MainPlace extends Place implements HasToken {
   
   public static final String HOME = "home";
   
@@ -65,14 +67,6 @@ public class MainPlace extends Place {
     return model;
   }
   
-  @Override
-  public boolean equals(Object obj) {
-    if (obj != null && obj instanceof MainPlace) {
-      MainPlace that = (MainPlace)obj;
-      return this.token.equals(that.token);
-    }
-    return super.equals(obj);
-  }
   
   public static class Tokenizer implements PlaceTokenizer<MainPlace> {
 

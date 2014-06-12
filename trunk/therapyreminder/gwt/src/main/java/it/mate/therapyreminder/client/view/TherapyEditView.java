@@ -18,7 +18,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
-import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
+import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Contatto;
@@ -26,6 +26,7 @@ import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.ContattoTx;
+import it.mate.therapyreminder.shared.model.impl.DosaggioEditModel;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 
@@ -58,7 +59,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void savePrescrizione(Prescrizione newPrescrizione, Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate);
-    public void goToDosageEditView(Dosaggio dosaggio);
+    public void goToDosageEditView(DosaggioEditModel model);
     public void getUdmDescription(Double qta, String currentUdmCode, Delegate<UdM> delegate);
     public boolean isOnlineMode();
     public void findAllTutors(Delegate<List<Contatto>> delegate);
@@ -297,7 +298,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   
   private void showOrariListPanel() {
     if (prescrizione.getDosaggi().size() == 0) {
-      prescrizione.getDosaggi().add(new DosaggioTx(prescrizione));
+      prescrizione.getDosaggi().add(new DosaggioTx());
     }
     Collections.sort(prescrizione.getDosaggi(), new Comparator<Dosaggio>() {
       public int compare(Dosaggio d1, Dosaggio d2) {
@@ -338,7 +339,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
                 }
                 dosaggio.setCodUdM(umCombo.getValue());
                 setLastStatePanel(orariPrescrizionePanel.getStateId());
-                getPresenter().goToDosageEditView(dosaggio);
+                
+                getPresenter().goToDosageEditView(new DosaggioEditModel(prescrizione, dosaggio));
                 
               }
             });
@@ -365,7 +367,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     row.add(addBtn);
     addBtn.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
-        prescrizione.getDosaggi().add(new DosaggioTx(prescrizione));
+        prescrizione.getDosaggi().add(new DosaggioTx());
         showOrariListPanel();
       }
     });
@@ -497,7 +499,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         return null;
       }
       prescrizione.setDosaggi(new ArrayList<Dosaggio>());
-      prescrizione.getDosaggi().add(new DosaggioTx(prescrizione, qtaUnica, orarioInizioBox.getValue().asString()));
+      prescrizione.getDosaggi().add(new DosaggioTx(qtaUnica, orarioInizioBox.getValue().asString()));
     } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       if (prescrizione.getDosaggi() == null) {
         if (verbose) {
@@ -540,7 +542,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       return;
     }
     
-    String validateError = PrescrizioniCtrl.validatePrescrizione(prescrizione);
+    String validateError = MainController.validatePrescrizione(prescrizione);
     if (validateError != null) {
       PhgDialogUtils.showMessageDialog(validateError, "Alert", PhgDialogUtils.BUTTONS_OK);
     } else {

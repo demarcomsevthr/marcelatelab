@@ -12,7 +12,6 @@ import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IterationUtil;
 import it.mate.phgcommons.client.utils.IterationUtil.FinishDelegate;
 import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
-import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -20,8 +19,8 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
-import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
-import it.mate.therapyreminder.client.logic.PrescrizioniDao;
+import it.mate.therapyreminder.client.logic.MainController;
+import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
@@ -38,11 +37,11 @@ import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Contatto;
-import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
+import it.mate.therapyreminder.shared.model.impl.DosaggioEditModel;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.List;
@@ -75,25 +74,24 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private BaseMgwtView view;
   
-  private PrescrizioniDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
+  private MainDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
   
   private final static String ALL_UDM_KEY = "AllUdM";
 
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
   }
-
+  
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    
     if (place.getToken().equals(MainPlace.HOME)) {
-      
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
-          PhonegapUtils.log("received devInfoId in activity is " + devInfoId);
+          PhonegapUtils.log("devInfoId in activity is " + devInfoId);
         }
       });
-      
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(false);
+      setBackgroundAlertsEnabled(true);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
       this.view = view;
       initBaseMgwtView(true);
@@ -106,7 +104,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
       this.view = view;
       initBaseMgwtView(false);
@@ -114,13 +112,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-//        goToHome();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       TherapyListView view = AppClientFactory.IMPL.getGinjector().getTherapyListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -128,13 +125,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-//        goToHome();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       TherapyEditView view = AppClientFactory.IMPL.getGinjector().getTherapyEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -142,13 +138,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-//        goToTherapyListView();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.DOSAGE_EDIT)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       DosageEditView view = AppClientFactory.IMPL.getGinjector().getDosageEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -156,13 +151,13 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-          Dosaggio dosaggio = (Dosaggio)place.getModel();
+          DosaggioEditModel dosaggio = (DosaggioEditModel)place.getModel();
           goToTherapyEditView(dosaggio.getPrescrizione());
         }
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       ReminderListView view = AppClientFactory.IMPL.getGinjector().getReminderListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -170,13 +165,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-//        goToHome();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       ReminderEditView view = AppClientFactory.IMPL.getGinjector().getReminderEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -184,13 +178,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-          //goToHome();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       AccountEditView view = AppClientFactory.IMPL.getGinjector().getAccountEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -203,7 +196,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.LEGAL_NOTES)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       LegalNotesView view = AppClientFactory.IMPL.getGinjector().getLegalNotesView();
       this.view = view;
       initBaseMgwtView(false);
@@ -215,20 +208,8 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-    if (place.getToken().equals(MainPlace.TEST)) {
-      CalendarEventTestView view = AppClientFactory.IMPL.getGinjector().getCalendarEventTestView();
-      this.view = view;
-      initBaseMgwtView(false);
-      view.setPresenter(this);
-      panel.setWidget(view.asWidget());
-      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
-        public void execute(String element) {
-          goToHome();
-        }
-      });
-    }
     if (place.getToken().equals(MainPlace.CONTACT_MENU)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       ContactMenuView view = AppClientFactory.IMPL.getGinjector().getContactMenuView();
       this.view = view;
       initBaseMgwtView(false);
@@ -236,13 +217,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       panel.setWidget(view.asWidget());
       setBackButtonDelegate(new Delegate<Void>() {
         public void execute(Void element) {
-//        goToHome();
           goToPrevious();
         }
       });
     }
     if (place.getToken().equals(MainPlace.CONTACT_DOCTOR_LIST) || place.getToken().equals(MainPlace.CONTACT_TUTOR_LIST)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       ContactListView view = AppClientFactory.IMPL.getGinjector().getContactListView();
       this.view = view;
       initBaseMgwtView(false);
@@ -255,7 +235,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.CONTACT_DOCTOR_EDIT) || place.getToken().equals(MainPlace.CONTACT_TUTOR_EDIT)) {
-      AppClientFactory.IMPL.setDisableAlertSomministrazione(true);
+      setBackgroundAlertsEnabled(false);
       ContactEditView view = AppClientFactory.IMPL.getGinjector().getContactEditView();
       this.view = view;
       initBaseMgwtView(false);
@@ -272,6 +252,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private void retrieveModel() {
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
+      PhonegapUtils.log("retrieving therapy list from db");
       dao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
         public void execute(List<Prescrizione> results) {
           view.setModel(results, TherapyListView.TAG_PRESCRIZIONI);
@@ -338,17 +319,23 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private void processFailure(String message, Throwable caught) {
     setHeaderWaiting(false);
-    if (caught != null) {
-      PhonegapUtils.log(caught.getClass().getName()+" - "+caught.getMessage());
-      if (caught instanceof InvocationException) {
-        PhgDialogUtils.showMessageDialog("Maybe data connection is not active", "Error", PhgDialogUtils.BUTTONS_OK);
-      } else {
-        PhgDialogUtils.showMessageDialog(caught.getMessage(), "Error", PhgDialogUtils.BUTTONS_OK);
-      }
-    }
+    String popupTitle = "Alert";
+    String popupMsg = "Failure";
+    String logMsg = null;
     if (message != null) {
-      PhgDialogUtils.showMessageDialog(message, "Alert", PhgDialogUtils.BUTTONS_OK);
+      popupMsg = message;
+    } else if (caught != null) {
+      logMsg = caught.getClass().getName()+" - "+caught.getMessage();
+      if (caught instanceof InvocationException) {
+        popupMsg = "Maybe data connection is not active";
+      } else {
+        popupMsg = caught.getMessage();
+      }
+      popupTitle = "Error";
     }
+    if (logMsg != null)
+      PhonegapUtils.log(logMsg);
+    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
   }
   
   private void setHeaderWaiting(boolean flag) {
@@ -426,14 +413,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void goToPrevious() {
     if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
       PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
-      /*
-      Place lastPlace = placeController.getPreviousPlace();
-      if (lastPlace != null) {
-        placeController.goTo(lastPlace);
-        return;
-      }
-      */
-      placeController.goBack();
+      placeController.goBack(new MainPlace());
       return;
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
@@ -453,7 +433,7 @@ public class MainActivity extends MGWTAbstractActivity implements
 
   public void goToTherapyEditView(Prescrizione prescrizione) {
     if (prescrizione == null) {
-      PrescrizioniCtrl.getInstance().createPrescrizioneWithDefaults(new Delegate<Prescrizione>() {
+      MainController.getInstance().createPrescrizioneWithDefaults(new Delegate<Prescrizione>() {
         public void execute(Prescrizione prescrizione) {
           AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT, prescrizione));
         }
@@ -463,8 +443,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
 
-  public void goToDosageEditView(Dosaggio dosaggio) {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.DOSAGE_EDIT, dosaggio));
+  public void goToDosageEditView(DosaggioEditModel model) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.DOSAGE_EDIT, model));
   }
 
   public void goToReminderListView() {
@@ -514,7 +494,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(token, contatto));
   }
 
-  //TODO
   @Override
   public void deleteContatto(Contatto contatto) {
     
@@ -535,7 +514,7 @@ public class MainActivity extends MGWTAbstractActivity implements
           final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
               try {
-                PrescrizioniCtrl.getInstance().sviluppaSomministrazioni(prescrizione);
+                MainController.getInstance().sviluppaSomministrazioni(prescrizione);
                 fEndDelegate.execute(prescrizione);
               } catch (ServiceException ex) {
                 processFailure(null, ex);
@@ -543,7 +522,7 @@ public class MainActivity extends MGWTAbstractActivity implements
             }
           };
           if (oldPrescrizione.isPersistent()) {
-            PrescrizioniCtrl.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
+            MainController.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
                 sviluppoDelegate.execute(newPrescrizioneSalvata);
               }
@@ -560,7 +539,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void deletePrescrizioni(final List<Prescrizione> prescrizioni) {
     new IterationUtil<Prescrizione>(prescrizioni, new ItemDelegate<Prescrizione>() {
       public void handleItem(Prescrizione prescrizione, final IterationUtil<Prescrizione> iteration) {
-        PrescrizioniCtrl.getInstance().cancellaSomministrazioni(prescrizione, new Delegate<Void>() {
+        MainController.getInstance().cancellaSomministrazioni(prescrizione, new Delegate<Void>() {
           public void execute(Void element) {
             iteration.next();
           }
@@ -570,6 +549,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void doFinish() {
         dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
           public void execute(Void element) {
+            PhonegapUtils.log("going to therapy list view");
             goToTherapyListView();
           }
         });
@@ -579,20 +559,15 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void updateSomministrazione(Somministrazione somministrazione) {
-    PrescrizioniCtrl.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+    MainController.getInstance().updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
-        // somministrazione aggiornata
-//      goToHome();
         goToPrevious();
       }
     }, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
-
         // farmaco da riordinare
         view.setModel(result, ReminderEditView.TAG_FARMACO_DA_RIORDINARE);
-        
       }
-      
     });
   }
 
@@ -669,21 +644,30 @@ public class MainActivity extends MGWTAbstractActivity implements
     dao.findContattiByTipo(Contatto.TIPO_TUTOR, delegate);
   }
   
+  private void setBackgroundAlertsEnabled(final boolean enabled) {
+    MainController.getInstance().checkConnectionIfOnlineMode(new Delegate<Boolean>() {
+      public void execute(Boolean ok) {
+        if (ok) {
+          AppClientFactory.IMPL.setBackgroundAlertsEnabled(enabled);
+        } else {
+          AppClientFactory.IMPL.setBackgroundAlertsEnabled(false);
+        }
+      }
+    });
+  }
   
   //TODO: 05/06/2014 - ONLINE MODE
   
   public void setOnlineMode(boolean onlineMode) {
-    PhonegapUtils.setLocalStorageProperty("onlineMode", ""+onlineMode);
+    MainController.getInstance().setOnlineMode(onlineMode);
   }
   
   public boolean isOnlineMode() {
-    String value = PhonegapUtils.getLocalStorageProperty("onlineMode");
-    PhonegapUtils.log("onlineMode = " + value);
-    return ("true".equalsIgnoreCase(value));
+    return MainController.getInstance().isOnlineMode();
   }
   
   private void ensureDevInfoId() {
-    String devInfoId = getDevInfoIdFromLocalStorage();
+    String devInfoId = MainController.getInstance().getDevInfoIdFromLocalStorage();
     if (devInfoId != null)
       return;
     
@@ -714,27 +698,25 @@ public class MainActivity extends MGWTAbstractActivity implements
         public void onSuccess(String devInfoId) {
           if (devInfoId != null) {
             PhonegapUtils.log("received devInfoId "+ devInfoId +" from remote facade");
-            setDevInfoIdInLocalStorage(devInfoId);
+            MainController.getInstance().setDevInfoIdInLocalStorage(devInfoId);
             GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
           }
         }
     });
   }
-  
-  private void setDevInfoIdInLocalStorage(String devInfoId) {
-    PhonegapUtils.setLocalStorageProperty("devInfoId", devInfoId);
-  }
 
+  /*
   private String getDevInfoIdFromLocalStorage() {
-    return PhonegapUtils.getLocalStorageProperty("devInfoId");
+    return MainController.getInstance().getDevInfoIdFromLocalStorage();
   }
+  */
 
   public void getDevInfoId(final Delegate<String> delegate) {
     final ObjectWrapper<Boolean> delegateFired = new ObjectWrapper<Boolean>(false);
     GwtUtils.createTimerDelegate(500, true, new Delegate<Timer>() {
       public void execute(Timer timer) {
         ensureDevInfoId();
-        String devInfoId = getDevInfoIdFromLocalStorage();
+        String devInfoId = MainController.getInstance().getDevInfoIdFromLocalStorage();
         if (devInfoId != null) {
           timer.cancel();
           if (!delegateFired.get()) {
@@ -750,13 +732,7 @@ public class MainActivity extends MGWTAbstractActivity implements
    * chiamato dalla ui per mostrare il remote user
    */
   public void getAccount(final Delegate<Account> delegate) {
-    String accountJson = getAccountFromLocalStorage();
-    if (accountJson != null && accountJson.contains("{")) {
-      Account account = AccountTx.fromJS(JSONUtils.parse(accountJson));
-      delegate.execute(account);
-    } else {
-      delegate.execute(null);
-    }
+    delegate.execute(MainController.getInstance().getAccountFromLocalStorage());
   }
   
   @Override
@@ -789,8 +765,7 @@ public class MainActivity extends MGWTAbstractActivity implements
               setHeaderWaiting(false);
               PhgDialogUtils.showMessageDialog("Account created", "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
                 public void execute(Integer element) {
-                  AccountTx tx = (AccountTx)account;
-                  setAccountInLocalStorage(JSONUtils.stringify(tx.asJS()));
+                  MainController.getInstance().setAccountInLocalStorage(account);
                   successDelegate.execute(account);
                 }
               });
@@ -808,44 +783,11 @@ public class MainActivity extends MGWTAbstractActivity implements
         public void onSuccess(Account account) {
           setHeaderWaiting(false);
           PhgDialogUtils.showMessageDialog("Account saved");
-          AccountTx tx = (AccountTx)account;
-          setAccountInLocalStorage(JSONUtils.stringify(tx.asJS()));
+          MainController.getInstance().setAccountInLocalStorage(account);
           successDelegate.execute(account);
         }
       });
     }
   }
-  
-  private void setAccountInLocalStorage(String accountJson) {
-    PhonegapUtils.setLocalStorageProperty("account", accountJson);
-  }
-  
-  private String getAccountFromLocalStorage() {
-    return PhonegapUtils.getLocalStorageProperty("account");
-  }
-  
-  /*
-  public void postNewMail(final StickMail stickMail, final Delegate<StickMail> delegate) {
-    setHeaderWaiting(true);
-    AppClientFactory.IMPL.getStickFacade().getServerTime(new AsyncCallback<Date>() {
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-      public void onSuccess(Date serverTime) {
-        stickMail.setCreated(stickMail.getCreated());
-        stickMail.setScheduled(stickMail.getScheduled());
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
-          public void onSuccess(StickMail result) {
-            setHeaderWaiting(false);
-            delegate.execute(result);
-          }
-          public void onFailure(Throwable caught) {
-            processFailure(null, caught);
-          }
-        });
-      }
-    });
-  }
-  */
   
 }
