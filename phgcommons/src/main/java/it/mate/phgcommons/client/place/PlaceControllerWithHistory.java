@@ -1,5 +1,6 @@
 package it.mate.phgcommons.client.place;
 
+import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 
 import java.util.LinkedList;
@@ -12,8 +13,6 @@ public class PlaceControllerWithHistory extends PlaceController {
   
   LinkedList<Place> history = new LinkedList<Place>();
   
-//Place lastVisitedPlace = null;
-  
   public PlaceControllerWithHistory(EventBus eventBus, Delegate delegate) {
     super(eventBus, delegate);
   }
@@ -21,12 +20,16 @@ public class PlaceControllerWithHistory extends PlaceController {
   @Override
   public void goTo(final Place newPlace) {
     super.goTo(newPlace);
-//  historyPlace = lastVisitedPlace;
+    
+    if (!(newPlace instanceof HasToken)) {
+      PhonegapUtils.log("ERROR: " + getClass() + " can be used only with place implementing HasToken interface!");
+    }
+    
     if (history.size() > 0) {
-      
       for (int it = 0; it < history.size(); it++) {
-        Place placeInHistory = history.get(it);
-        if (placeInHistory.equals(newPlace)) {
+        HasToken placeInHistory = (HasToken)history.get(it);
+        HasToken newPlaceWithToken = (HasToken)newPlace;
+        if (placeInHistory.getToken().equals(newPlaceWithToken.getToken())) {
           history = truncate(it);
         }
       }
@@ -34,7 +37,6 @@ public class PlaceControllerWithHistory extends PlaceController {
     }
     history.add(newPlace);
     
-//  String logMsg = "lastVisitedPlace = " + lastVisitedPlace;
     String logMsg = " history = {";
     for (int it = 0; it < history.size(); it++) {
       Place placeInHistory = history.get(it);
@@ -55,10 +57,12 @@ public class PlaceControllerWithHistory extends PlaceController {
     return newHistory;
   }
   
-  public void goBack() {
+  public void goBack(Place home) {
     if (history.size() > 1) {
       Place place = history.get(history.size() - 2);
       goTo(place);
+    } else {
+      goTo(home);
     }
   }
   
