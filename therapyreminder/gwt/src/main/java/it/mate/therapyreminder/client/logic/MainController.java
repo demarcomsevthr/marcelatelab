@@ -5,13 +5,18 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
 import it.mate.phgcommons.client.plugins.CalendarPlugin.Event;
+import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
+import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
@@ -20,22 +25,24 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.ui.client.MGWT;
 
-public class PrescrizioniCtrl {
+public class MainController {
 
-  private PrescrizioniDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
+  private MainDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
   
-  private static PrescrizioniCtrl instance;
+  private static MainController instance;
   
-  public static PrescrizioniCtrl getInstance() {
+  public static MainController getInstance() {
     if (instance == null)
-      instance = new PrescrizioniCtrl();
+      instance = new MainController();
     return instance;
   }
   
-  protected PrescrizioniCtrl() {
+  protected MainController() {
 
   }
   
@@ -51,7 +58,6 @@ public class PrescrizioniCtrl {
     delegate.execute(prescrizione);
   }
   
-  // TODO: 15/05/2014
   public void findPrimaSomministrazioneScaduta(final Delegate<Somministrazione> delegate) {
     Date dataRiferimento = new Date();
     dao.findSomministrazioniScadute(dataRiferimento, new Delegate<List<Somministrazione>>() {
@@ -65,7 +71,6 @@ public class PrescrizioniCtrl {
     });
   }
   
-  // TODO: 15/05/2014
   public void sviluppaSomministrazioniInBackground() {
     dao.findAllPrescrizioniAttive(new Date(), new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioni) {
@@ -129,7 +134,13 @@ public class PrescrizioniCtrl {
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
-          PhonegapLog.log("EXECUTING COMPLETION DELEGATE (TODO: REMOTE SAVE) WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
+          //TODO
+          PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
+          saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
+            public void execute(List<Somministrazione> somministrazioni) {
+              
+            }
+          });
         }
       }
     };
@@ -248,7 +259,15 @@ public class PrescrizioniCtrl {
         }
         iterateSomministrazioniForDelete(somministrazioni.iterator(), new Delegate<Void>() {
           public void execute(Void element) {
-            dao.deleteSomministrazioni(somministrazioni, endDelegate);
+            
+            //TODO
+            PhonegapLog.log("EXECUTING REMOTE DELETE WITH " + somministrazioni.size() + " SOMMINISTRAZIONI");
+            deleteRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
+              public void execute(List<Somministrazione> somministrazioni) {
+                dao.deleteSomministrazioni(somministrazioni, endDelegate);
+              }
+            });
+            
           }
         });
       }
@@ -258,11 +277,7 @@ public class PrescrizioniCtrl {
   private void iterateSomministrazioniForDelete(Iterator<Somministrazione> it, Delegate<Void> endDelegate) {
     if (it.hasNext()) {
       Somministrazione somministrazione = it.next();
-      deleteRemoteSomministrazione(somministrazione, new Delegate<Somministrazione>() {
-        public void execute(Somministrazione somministrazione) {
-          deleteCalEvent(somministrazione);
-        }
-      });
+      deleteCalEvent(somministrazione);
       iterateSomministrazioniForDelete(it, endDelegate);
     } else {
       endDelegate.execute(null);
@@ -304,24 +319,12 @@ public class PrescrizioniCtrl {
     return calEvent;
   }
   
- // TODO: 15/05/2014
- private void saveRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
-    PhonegapLog.log("saving remote " + somministrazione);
-    delegate.execute(somministrazione);
-  }
-  
   private void saveCalEvent (Somministrazione somministrazione) {
     CalendarPlugin.Event calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
     PhonegapLog.log("creating " + calEvent);
     if (OsDetectionUtils.isDesktop())
       return;
     CalendarPlugin.createEvent(calEvent);
-  }
-  
-  // TODO: 15/05/2014
-  private void deleteRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
-    PhonegapLog.log("deleting remote " + somministrazione);
-    delegate.execute(somministrazione);
   }
   
   private void deleteCalEvent (Somministrazione somministrazione) {
@@ -372,5 +375,119 @@ public class PrescrizioniCtrl {
     }
     return null;
   }
+  
+  public void checkConnectionIfOnlineMode(final Delegate<Boolean> delegate) {
+    if (isOnlineMode()) {
+      AppClientFactory.IMPL.getRemoteFacade().checkConnection(new AsyncCallback<Boolean>() {
+        public void onSuccess(Boolean result) {
+          delegate.execute(true);
+        }
+        public void onFailure(Throwable caught) {
+          PhgDialogUtils.showMessageDialog("In online mode you need to turn on the mobile data connection");
+          delegate.execute(false);
+        }
+      });
+    } else {
+      delegate.execute(true);
+    }
+  }
+  
+  public void setOnlineMode(boolean onlineMode) {
+    PhonegapUtils.setLocalStorageProperty("onlineMode", ""+onlineMode);
+  }
+  
+  public boolean isOnlineMode() {
+    String value = PhonegapUtils.getLocalStorageProperty("onlineMode");
+    PhonegapUtils.log("onlineMode = " + value);
+    return ("true".equalsIgnoreCase(value));
+  }
+  
+  public void setDevInfoIdInLocalStorage(String devInfoId) {
+    PhonegapUtils.setLocalStorageProperty("devInfoId", devInfoId);
+  }
+
+  public String getDevInfoIdFromLocalStorage() {
+    return PhonegapUtils.getLocalStorageProperty("devInfoId");
+  }
+
+  public void setAccountInLocalStorage(Account account) {
+    AccountTx tx = (AccountTx)account;
+    PhonegapUtils.setLocalStorageProperty("account", JSONUtils.stringify(tx.asJS()));
+  }
+  
+  public Account getAccountFromLocalStorage() {
+    String accountJson = PhonegapUtils.getLocalStorageProperty("account");
+    if (accountJson != null && accountJson.contains("{")) {
+      Account account = AccountTx.fromJS(JSONUtils.parse(accountJson));
+      return account;
+    }
+    return null;
+  }
+  
+  
+  // TODO
+  private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
+    if (isOnlineMode()) {
+      List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
+      for (Somministrazione somministrazione : somministrazioni) {
+        if (somministrazione.getPrescrizione().getTutor() != null) {
+          somministrazioniDaSalvare.add(somministrazione);
+        }
+      }
+      if (somministrazioniDaSalvare.size() > 0) {
+        Account account = getAccountFromLocalStorage();
+        String devInfoId = getDevInfoIdFromLocalStorage();
+        PhonegapUtils.log("calling save remote somministrazioni");
+        AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
+          public void onSuccess(List<Somministrazione> somministrazioni) {
+            PhonegapUtils.log("success");
+            delegate.execute(somministrazioni);
+          }
+          public void onFailure(Throwable caught) {
+            processFailure(null, caught);
+            delegate.execute(null);
+          }
+        });
+      } else {
+        delegate.execute(somministrazioni);
+      }
+    } else {
+      delegate.execute(somministrazioni);
+    }
+  }
+   
+  // TODO
+  private void deleteRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
+//  PhonegapLog.log("deleting remote " + somministrazione);
+    delegate.execute(somministrazioni);
+  }
+  
+  private void processFailure(String message, Throwable caught) {
+    String popupTitle = "Alert";
+    String popupMsg = "Failure";
+    String logMsg = null;
+    if (message != null) {
+      popupMsg = message;
+    } else if (caught != null) {
+      logMsg = caught.getClass().getName()+" - "+caught.getMessage();
+      if (caught instanceof InvocationException) {
+        popupMsg = "Maybe data connection is not active";
+      } else {
+        if (caught.getMessage() != null) {
+          popupMsg = caught.getMessage();
+        } else {
+          String cls = caught.getClass().getName();
+          cls = cls.substring(cls.lastIndexOf(".") + 1); 
+          popupMsg = cls;
+        }
+      }
+      popupTitle = "Error";
+      caught.printStackTrace();
+    }
+    if (logMsg != null)
+      PhonegapUtils.log(logMsg);
+    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+  }
+  
   
 }

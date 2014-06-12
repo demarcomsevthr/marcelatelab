@@ -3,7 +3,7 @@ package it.mate.therapyreminder.client.factories;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
-import it.mate.therapyreminder.client.logic.PrescrizioniDao;
+import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
@@ -28,7 +28,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public RemoteFacadeAsync getRemoteFacade();
   
-  public PrescrizioniDao getPrescrizioniDao();
+  public MainDao getPrescrizioniDao();
   
   public HomeView getHomeView();
   

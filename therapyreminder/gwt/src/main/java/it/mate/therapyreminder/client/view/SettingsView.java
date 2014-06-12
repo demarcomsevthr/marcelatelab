@@ -9,7 +9,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
-import it.mate.therapyreminder.client.logic.PrescrizioniDao;
+import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.SettingsView.Presenter;
 import it.mate.therapyreminder.shared.model.Account;
@@ -117,7 +117,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("dumpBtn")
   public void onDumpBtn (TouchEndEvent event) {
 
-    final PrescrizioniDao dao = AppClientFactory.IMPL.getPrescrizioniDao();
+    final MainDao dao = AppClientFactory.IMPL.getPrescrizioniDao();
     
     final EmailWrapper email = new EmailWrapper("THR db dump");
     

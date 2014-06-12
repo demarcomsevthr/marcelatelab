@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class PrescrizioniDao extends WebSQLDao {
+public class MainDao extends WebSQLDao {
   
   private final static boolean DROP_TABLES_ON_OPEN_DATABASE = false;
   
@@ -49,7 +49,7 @@ public class PrescrizioniDao extends WebSQLDao {
   
   private final static String CONTATTI_FIELDS = "tipo, nome, email, telefono";
   
-  public PrescrizioniDao() {
+  public MainDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
         PhonegapLog.log("created db therapies");
@@ -284,7 +284,7 @@ public class PrescrizioniDao extends WebSQLDao {
               SQLResultSetRowList rows = rs.getRows();
               if (rows.getLength() > 0) {
                 for (int it = 0; it < rows.getLength(); it++) {
-                  Dosaggio dosaggio = new DosaggioTx(prescrizione);
+                  Dosaggio dosaggio = new DosaggioTx();
                   dosaggio.setQuantita(rows.getValueDouble(it, "quantita"));
                   dosaggio.setOrario(rows.getValueString(it, "orario"));
                   prescrizione.getDosaggi().add(dosaggio);
@@ -335,7 +335,7 @@ public class PrescrizioniDao extends WebSQLDao {
                   if (prescrizione.getDosaggi() != null) {
                     for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
                       tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
-                          new Object[] {dosaggio.getPrescrizione().getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                          new Object[] {prescrizione.getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
                     }
                   }
                   PhonegapLog.log("Inserted " + prescrizione);
@@ -396,7 +396,7 @@ public class PrescrizioniDao extends WebSQLDao {
                       if (prescrizione.getDosaggi() != null) {
                         for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
                           tr.doExecuteSql("INSERT INTO dosaggi (" + DOSAGGI_FIELDS + ") VALUES (?, ?, ?) ", 
-                              new Object[] {dosaggio.getPrescrizione().getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
+                              new Object[] {prescrizione.getId(), dosaggio.getQuantita(), dosaggio.getOrario()});
                         }
                       }
                     }
@@ -428,13 +428,16 @@ public class PrescrizioniDao extends WebSQLDao {
       PhonegapLog.log("deleting " + prescrizione);
       tr.doExecuteSql("DELETE FROM prescrizioni WHERE id = ?", new Object[] {prescrizione.getId()}, new SQLStatementCallback() {
         public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          PhonegapLog.log("deleting dosaggi");
           tr.doExecuteSql("DELETE FROM dosaggi WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
             new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                 
+                PhonegapLog.log("deleting somministrazioni");
                 tr.doExecuteSql("DELETE FROM somministrazioni WHERE idPrescrizione = ?", new Object[] {prescrizione.getId()},
                     new SQLStatementCallback() {
                       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                        PhonegapLog.log("finish delete");
                         iteratePrescrizioniForDelete(it, tr, delegate);
                       }
                     }
@@ -446,6 +449,7 @@ public class PrescrizioniDao extends WebSQLDao {
         }
       });
     } else {
+      PhonegapLog.log("calling finish delegate");
       delegate.execute(null);
     }
   }

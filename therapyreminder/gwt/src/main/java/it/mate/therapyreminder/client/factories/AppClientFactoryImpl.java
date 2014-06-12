@@ -18,8 +18,8 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
-import it.mate.therapyreminder.client.logic.PrescrizioniCtrl;
-import it.mate.therapyreminder.client.logic.PrescrizioniDao;
+import it.mate.therapyreminder.client.logic.MainController;
+import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.places.AppHistoryObserver;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.places.MainPlaceHistoryMapper;
@@ -72,7 +72,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
   private RemoteFacadeAsync remoteFacade = null;
   
-  private boolean disableAlertSomministrazione = false;
+  private boolean alertsEnabled = true;
   
   
   
@@ -319,7 +319,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public PrescrizioniDao getPrescrizioniDao() {
+  public MainDao getPrescrizioniDao() {
     return ginjector.getPrescrizioniDao();
   }
   
@@ -345,7 +345,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           GwtUtils.createTimer(60000, true, new Delegate<Void>() {
             public void execute(Void element) {
               PhonegapLog.log("sviluppo somministrazioni in background...");
-              PrescrizioniCtrl.getInstance().sviluppaSomministrazioniInBackground();
+              MainController.getInstance().sviluppaSomministrazioniInBackground();
             }
           });
         }
@@ -353,8 +353,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }));
   }
   
-  public void setDisableAlertSomministrazione(boolean value) {
-    this.disableAlertSomministrazione = value;
+  public void setBackgroundAlertsEnabled(boolean enabled) {
+    this.alertsEnabled = enabled;
   }
   
   protected class FindSomministrazioneScadutaDelegate implements Delegate<Void> {
@@ -371,10 +371,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     @Override
     public void execute(Void element) {
-      if (disableAlertSomministrazione)
+      if (!alertsEnabled)
         return;
       PhonegapLog.log("checking somministrazione scaduta...");
-      PrescrizioniCtrl.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
+      MainController.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
             if (somministrazione != null) {
