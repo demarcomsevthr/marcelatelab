@@ -36,6 +36,12 @@ public class AccountDs implements HasKey, Account {
   
   @Persistent
   private String federatedIdentity;
+  
+  @Override
+  public String toString() {
+    return "AccountDs [id=" + id + ", email=" + email + ", name=" + name + ", password=" + password + ", devInfoId=" + devInfoId + ", authDomain=" + authDomain
+        + ", federatedIdentity=" + federatedIdentity + "]";
+  }
 
   public Key getKey() {
     return id;

@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 
 
 public interface RemoteAdapter {
@@ -13,18 +14,6 @@ public interface RemoteAdapter {
   
   public Account updateAccount(Account entity);
   
-  /* 
-
-  public StickMail create(StickMail entity);
-  
-  public void checkScheduledMails();
-  
-  public List<StickMail> findMailsByUser(RemoteUser user);
-  
-  public List<StickMail> findScheduledMailsByUser(RemoteUser user);
-  
-  public void delete(List<StickMail> entities);
-  
-  */
+  public Somministrazione saveSomministrazione(Somministrazione somministrazioneTx, Account accountTx, String devInfoId);
   
 }

@@ -6,8 +6,11 @@ import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.DevInfoDs;
+import it.mate.therapyreminder.server.model.SomministrazioneDs;
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
+import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
 import java.util.Date;
 
@@ -72,7 +75,6 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   
   public Account createAccount(Account entity) {
     AccountDs ds = null;
-
     // controllo se per errore arrivano due create dallo stesso device
     if (entity.getDevInfoId() != null) {
       Key devInfoKey = KeyFactory.stringToKey(entity.getDevInfoId());
@@ -87,7 +89,6 @@ public class RemoteAdapterImpl implements RemoteAdapter {
         ds = dao.update(ds);
       }
     }
-    
     if (ds == null) {
       ds = CloneUtils.clone(entity, AccountDs.class);
       ds = dao.create(ds);
@@ -101,82 +102,35 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     return CloneUtils.clone (ds, AccountTx.class);
   }
   
-  /** 
-   * 
-   * TO DO: check max number scheduled email per account
-   * 
-   * "In the free version you can have up to 10 scheduled emails per account"
-   * 
-   */
-  
-  /*
-  
-  @Override
-  public StickMail create(StickMail entity) {
-    StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
-    ds = dao.create(ds);
-    return CloneUtils.clone (ds, StickMailTx.class);
-  }
-
-  @Override
-  public void checkScheduledMails() {
-    Date NOW = new Date();
-    LoggingUtils.debug(getClass(), "NOW IS " + NOW);
-    List<StickMail> mails = findAllMails();
-    for (StickMail mail : mails) {
-      if (StickMail.Utils.isScheduled(mail)) {
-        LoggingUtils.debug(getClass(), "found mail scheduled on " + mail.getScheduled());
-        if (mail.getScheduled().before(NOW)) {
-          LoggingUtils.debug(getClass(), "SENDING MAIL " + mail);
-          try {
-            AdapterUtil.getMailAdapter().sendStickMail(mail);
-            mail.setState(StickMail.STATE_NOTIFIED);
-            update(mail);
-          } catch (MessagingException ex) {
-            LoggingUtils.error(getClass(), "error", ex);
-          }
-        }
-      }
+  public Somministrazione saveSomministrazione(Somministrazione txSomministrazione, Account txAccount, String devInfoId) {
+    SomministrazioneDs dsSomministrazione = CloneUtils.clone(txSomministrazione, SomministrazioneDs.class);
+    AccountDs dsAccount = CloneUtils.clone(txAccount, AccountDs.class);
+    dsSomministrazione.setAccountId(dsAccount.getKey());
+    dsSomministrazione.setDevInfoId(devInfoId);
+    logger.debug("received devInfoId = " + devInfoId + " " + dsSomministrazione + " " + dsAccount);
+    
+    SomministrazioneDs exSomministrazione = null;
+    if (dsSomministrazione.getKey() != null) {
+      exSomministrazione = dao.findById(SomministrazioneDs.class, dsSomministrazione.getKey());
     }
-  }
-  
-  public List<StickMail> findAllMails() {
-    List<StickMailDs> mails = dao.findAll(StickMailDs.class);
-    return CloneUtils.clone(mails, StickMailTx.class, StickMail.class);
-  }
-
-  public StickMail update(StickMail entity) {
-    StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
-    ds = dao.update(ds);
-    return CloneUtils.clone (ds, StickMailTx.class);
-  }
-  
-  @Override
-  public List<StickMail> findMailsByUser(RemoteUser user) {
-    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam", String.class.getName() + " userIdParam", null, user.getUserId() );
-    return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
-  }
-
-  @Override
-  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
-    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam && state == stateParam", 
-        Dao.Utils.buildParameters(new ParameterDefinition[] {
-            new ParameterDefinition(String.class, "userIdParam"),
-            new ParameterDefinition(String.class, "stateParam")
-        }), 
-        null, user.getUserId(), StickMail.STATE_SCHEDULED );
-    return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
-  }
-  
-  public void delete(List<StickMail> entities) {
-    if (entities == null)
-      return;
-    for (StickMail entity : entities) {
-      StickMailDs mail = dao.findById(StickMailDs.class, entity.getId());
-      dao.delete(mail);
+    if (exSomministrazione != null) {
+      exSomministrazione.setLocalId(dsSomministrazione.getLocalId());
+      exSomministrazione.setData(dsSomministrazione.getData());
+      exSomministrazione.setQuantita(dsSomministrazione.getQuantita());
+      exSomministrazione.setOrario(dsSomministrazione.getOrario());
+      exSomministrazione.setStato(dsSomministrazione.getStato());
+      exSomministrazione.setDevInfoId(dsSomministrazione.getDevInfoId());
+      exSomministrazione.setAccountId(dsSomministrazione.getAccountId());
+      exSomministrazione.setPrescrizione(txSomministrazione.getPrescrizione());
+      dsSomministrazione = dao.update(exSomministrazione);
+      LoggingUtils.debug(getClass(), "updated " + dsSomministrazione);
+    } else {
+      dsSomministrazione = dao.create(dsSomministrazione);
+      LoggingUtils.debug(getClass(), "created " + dsSomministrazione);
     }
+    
+    txSomministrazione = CloneUtils.clone(dsSomministrazione, SomministrazioneTx.class);
+    return txSomministrazione;
   }
-  
-  */
   
 }

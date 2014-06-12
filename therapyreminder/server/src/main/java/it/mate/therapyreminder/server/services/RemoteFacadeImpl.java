@@ -1,9 +1,11 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -47,28 +49,22 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   public Account updateAccount(Account entity) {
     return adapter.updateAccount(entity);
   }
-
-  /*
-  @Override
-  public StickMail create(StickMail stickMail) {
-    logger.debug("received " + stickMail);
-    stickMail.setState(StickMail.STATE_SCHEDULED);
-    return adapter.create(stickMail);
-  }
-
-  @Override
-  public List<StickMail> findMailsByUser(RemoteUser user) {
-    return adapter.findMailsByUser(user);
-  }
-
-  @Override
-  public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
-    return adapter.findScheduledMailsByUser(user);
-  }
   
-  public void delete(List<StickMail> mails) {
-    adapter.delete(mails);
+  @Override
+  public Boolean checkConnection() {
+    return true;
   }
-  */
+
+  @Override
+  public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId) {
+    if (somministrazioni == null)
+      return null;
+    for (int it = 0; it < somministrazioni.size(); it++) {
+      Somministrazione somministrazione = somministrazioni.get(it);
+      somministrazione = adapter.saveSomministrazione(somministrazione, account, devInfoId);
+      somministrazioni.set(it, somministrazione);
+    }
+    return somministrazioni;
+  }
   
 }
