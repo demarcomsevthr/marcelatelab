@@ -26,6 +26,13 @@ public class AccountTx implements Account {
   
   public static AccountTx NULL_USER = new AccountTx(true);
   
+  
+  @Override
+  public String toString() {
+    return "AccountTx [id=" + id + ", email=" + email + ", name=" + name + ", password=" + password + ", devInfoId=" + devInfoId + ", authDomain=" + authDomain
+        + ", federatedIdentity=" + federatedIdentity + ", isNullUser=" + isNullUser + "]";
+  }
+
   public AccountTx() {
 
   }
@@ -102,12 +109,6 @@ public class AccountTx implements Account {
     obj[name] = value;
   }-*/;
   
-  @Override
-  public String toString() {
-    return "Account [userId=" + id + ", email=" + email + ", nickname=" + name + ", authDomain=" + authDomain + ", federatedIdentity="
-        + federatedIdentity + "]";
-  }
-
   public String getId() {
     return id;
   }

@@ -99,15 +99,16 @@ public class PrescrizioneTx implements Prescrizione {
     }
     return super.equals(obj);
   }
-  
 
   @Override
   public String toString() {
     return "PrescrizioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", quantita=" + quantita
         + ", idComposizione=" + idComposizione + ", tipoRicorrenza=" + tipoRicorrenza + ", valoreRicorrenza=" + valoreRicorrenza + ", codUdM=" + codUdM
-        + ", tipoRicorrenzaOraria=" + tipoRicorrenzaOraria + ", intervalloOrario=" + intervalloOrario + "]";
+        + ", tipoRicorrenzaOraria=" + tipoRicorrenzaOraria + ", intervalloOrario=" + intervalloOrario + ", flgGstAvvisoRiordino=" + flgGstAvvisoRiordino
+        + ", qtaPerConfez=" + qtaPerConfez + ", qtaPerAvviso=" + qtaPerAvviso + ", qtaRimanente=" + qtaRimanente + ", ultimoAvvisoRiordino="
+        + ultimoAvvisoRiordino + ", tutor=" + tutor + ", idTutor=" + idTutor + "]";
   }
-  
+
   @Override
   public boolean isPersistent() {
     return id != null;

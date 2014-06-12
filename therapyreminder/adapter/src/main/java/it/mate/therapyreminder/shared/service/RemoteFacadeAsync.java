@@ -1,8 +1,10 @@
 package it.mate.therapyreminder.shared.service;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -16,6 +18,10 @@ public interface RemoteFacadeAsync {
   void createAccount(Account entity, AsyncCallback<Account> callback);
 
   void updateAccount(Account entity, AsyncCallback<Account> callback);
+
+  void checkConnection(AsyncCallback<Boolean> callback);
+
+  void saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId, AsyncCallback<List<Somministrazione>> callback);
 
 
 }

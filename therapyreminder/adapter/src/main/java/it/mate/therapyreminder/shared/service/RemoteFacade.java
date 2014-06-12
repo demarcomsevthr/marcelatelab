@@ -1,8 +1,10 @@
 package it.mate.therapyreminder.shared.service;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -18,5 +20,9 @@ public interface RemoteFacade extends RemoteService {
   public Account createAccount(Account entity);
   
   public Account updateAccount(Account entity);
+  
+  public Boolean checkConnection();
+
+  public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId);
   
 }

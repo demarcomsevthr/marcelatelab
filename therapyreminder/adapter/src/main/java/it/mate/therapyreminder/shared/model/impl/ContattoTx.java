@@ -16,6 +16,12 @@ public class ContattoTx implements Contatto {
   
   private String telefono;
   
+  
+  @Override
+  public String toString() {
+    return "ContattoTx [id=" + id + ", tipo=" + tipo + ", nome=" + nome + ", email=" + email + ", telefono=" + telefono + "]";
+  }
+
   public ContattoTx() {
 
   }
