@@ -18,7 +18,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
 public class SomministrazioneDs implements HasKey, Somministrazione {
-
+  
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   Key id;
@@ -55,6 +55,9 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   @Persistent
   private String telefonoTutor;
   
+  @Persistent
+  private String nomeFarmaco;
+  
   
   //////////////////////////////////////////////////////////////////////
 
@@ -68,6 +71,7 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   @Override
   public void setPrescrizione(Prescrizione prescrizione) {
     if (prescrizione != null) {
+      this.nomeFarmaco = prescrizione.getNome();
       if (prescrizione.getTutor() != null) {
         Contatto tutor = prescrizione.getTutor();
         this.nomeTutor = tutor.getNome();
@@ -157,6 +161,15 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   public void setTelefonoTutor(String telefonoTutor) {
     this.telefonoTutor = telefonoTutor;
   }
+  
+  public String getNomeFarmaco() {
+    return nomeFarmaco;
+  }
+
+  public void setNomeFarmaco(String nomeFarmaco) {
+    this.nomeFarmaco = nomeFarmaco;
+  }
+
 
   ///////////////////////////////////////////////////////////////////////
 

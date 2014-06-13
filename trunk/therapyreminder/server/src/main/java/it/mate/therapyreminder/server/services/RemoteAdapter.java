@@ -8,12 +8,14 @@ public interface RemoteAdapter {
   
   public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion, String devIp);  
 
-  public void refresh();
+  public void scheduledChecks();
   
   public Account createAccount(Account entity);
   
   public Account updateAccount(Account entity);
   
   public Somministrazione saveSomministrazione(Somministrazione somministrazioneTx, Account accountTx, String devInfoId);
+  
+  public void debugAnticipaDataSomministrazioni();
   
 }

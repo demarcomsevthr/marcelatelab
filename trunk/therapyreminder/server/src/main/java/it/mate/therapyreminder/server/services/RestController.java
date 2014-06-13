@@ -21,11 +21,18 @@ public class RestController {
     logger.debug("adapter = " + adapter);
   }
 
-  @RequestMapping ("/adapterRefresh")
-  public void adapterRefresh(HttpServletResponse response) throws Exception {
-    logger.debug("adapter refresh start");
-    adapter.refresh();
-    response.getOutputStream().print("Adapter refresh success");
+  @RequestMapping ("/scheduledChecks")
+  public void scheduledChecks(HttpServletResponse response) throws Exception {
+    logger.debug("adapter scheduled checks start");
+    adapter.scheduledChecks();
+    response.getOutputStream().print("Adapter scheduled checks started");
+  }
+  
+  @RequestMapping ("/debugAnticipaDataSomministrazioni")
+  public void debugAnticipaDataSomministrazioni(HttpServletResponse response) throws Exception {
+    logger.debug("anticipa data somministrazioni starting");
+    adapter.debugAnticipaDataSomministrazioni();
+    response.getOutputStream().print("Anticipa data somministrazioni started");
   }
   
 }
