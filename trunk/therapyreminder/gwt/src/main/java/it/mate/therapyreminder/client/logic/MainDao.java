@@ -45,7 +45,11 @@ public class MainDao extends WebSQLDao {
       
   private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
   
-  private final static String SOMMINISTRAZIONI_FIELDS = "idPrescrizione, data, quantita, orario, stato";
+  private final static String SOMMINISTRAZIONI_FIELDS_0 = "idPrescrizione, data, quantita, orario, stato";
+  
+  private final static String SOMMINISTRAZIONI_FIELDS_2 = "remoteId";
+  
+  private final static String SOMMINISTRAZIONI_FIELDS = SOMMINISTRAZIONI_FIELDS_0 + ", " + SOMMINISTRAZIONI_FIELDS_2;
   
   private final static String CONTATTI_FIELDS = "tipo, nome, email, telefono";
   
@@ -113,7 +117,7 @@ public class MainDao extends WebSQLDao {
       tr.doExecuteSql("CREATE TABLE dosaggi (" + DOSAGGI_FIELDS + " )");
 
       PhonegapLog.log("creating table somministrazioni");
-      tr.doExecuteSql("CREATE TABLE somministrazioni (id "+SERIAL_ID+", " + SOMMINISTRAZIONI_FIELDS + " )");
+      tr.doExecuteSql("CREATE TABLE somministrazioni (id "+SERIAL_ID+", " + SOMMINISTRAZIONI_FIELDS_0 + " )");
 
     }
   };
@@ -141,6 +145,9 @@ public class MainDao extends WebSQLDao {
       
       PhonegapLog.log("altering table prescrizioni");
       tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN idTutor");
+      
+      PhonegapLog.log("altering table somministrazioni");
+      tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN remoteId");
       
     }
   };
@@ -486,6 +493,7 @@ public class MainDao extends WebSQLDao {
     result.setQuantita(rs.getRows().getValueDouble(it, "quantita"));
     result.setOrario(rs.getRows().getValueString(it, "orario"));
     result.setStato(rs.getRows().getValueInt(it, "stato"));
+    result.setRemoteId(rs.getRows().getValueString(it, "remoteId"));
     return result;
   }
   
@@ -636,13 +644,14 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (somministrazione.getId() == null) {
-          tr.doExecuteSql("INSERT INTO somministrazioni (" + SOMMINISTRAZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO somministrazioni (" + SOMMINISTRAZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 somministrazione.getPrescrizione().getId(), 
                 dateAsLong(somministrazione.getData()),
                 somministrazione.getQuantita(), 
                 somministrazione.getOrario(),
-                somministrazione.getStato()
+                somministrazione.getStato(),
+                somministrazione.getRemoteId()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   somministrazione.setId(rs.getInsertId());
@@ -657,13 +666,15 @@ public class MainDao extends WebSQLDao {
           sql += " ,quantita = ?";
           sql += " ,orario = ?";
           sql += " ,stato = ?";
+          sql += " ,remoteId = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               somministrazione.getPrescrizione().getId(), 
               dateAsLong(somministrazione.getData()),
               somministrazione.getQuantita(), 
               somministrazione.getOrario(),
-              somministrazione.getStato()
+              somministrazione.getStato(),
+              somministrazione.getRemoteId()
               , somministrazione.getId()
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -676,6 +687,25 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void saveRemoteSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "UPDATE somministrazioni SET ";
+        sql += " remoteId = ?";
+        sql += " WHERE id = ?";
+        tr.doExecuteSql(sql, new Object[] {
+            somministrazione.getRemoteId()
+            , somministrazione.getId()
+          }, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            PhonegapLog.log("Updated remote somministrazione " + somministrazione);
+            delegate.execute(somministrazione);
+          }
+        });
+      }
+    });
+  }
+
   public void findContattiByTipo(final String tipo, final Delegate<List<Contatto>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
