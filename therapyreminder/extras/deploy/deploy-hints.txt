@@ -5,7 +5,7 @@
 
 	> Save for Enterprise or Ad-Hoc Deploy
 	
-	> Provisioning profile = THR ADHoc
+	> Provisioning profile = THR ADHoc 2014
 	
 	> Save As THR-0.4
 	
