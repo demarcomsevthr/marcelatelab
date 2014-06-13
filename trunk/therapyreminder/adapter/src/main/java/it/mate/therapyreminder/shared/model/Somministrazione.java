@@ -11,6 +11,10 @@ public interface Somministrazione extends Serializable {
 
   public static final int STATO_ANNULLATA = 3;
 
+  public static final int STATO_NOTIFICATA_AL_TUTOR = 4;
+
+  public static final int STATO_NOTIFICATION_FAILURE = 5;
+
   public void setEseguita();
 
   public boolean isEseguita();
