@@ -90,6 +90,16 @@ public class MainController {
       public void execute(final Somministrazione oldSomministrazione) {
         dao.saveSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
           public void execute(Somministrazione somministrazioneAggiornata) {
+            
+            //TODO: update remote somministrazione
+            if (isRemoteSomministrazione(newSomministrazione)) {
+              updateRemoteSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
+                public void execute(Somministrazione result) {
+                  PhonegapUtils.log("updated remote somministrazione " + result);
+                }
+              });
+            }
+            
             if (!oldSomministrazione.isEseguita() && newSomministrazione.isEseguita()) {
               double qtaSomministrata = newSomministrazione.getQuantita();
               Prescrizione prescrizione = somministrazioneAggiornata.getPrescrizione();
@@ -131,13 +141,37 @@ public class MainController {
   }
   
   private void sviluppaSomministrazioniAPartireDa(final Prescrizione prescrizione, Date dataUltimaSomministrazione) {
+    
+    
+    
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
-          //TODO
+
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
-            public void execute(List<Somministrazione> somministrazioni) {
+            public void execute(List<Somministrazione> remoteSomministrazioni) {
+
+              if (remoteSomministrazioni != null) {
+                
+                for (Somministrazione remoteSomministrazione : remoteSomministrazioni) {
+                  
+                  if (remoteSomministrazione.getRemoteId() != null) {
+                    
+                    //TODO
+                    dao.saveRemoteSomministrazione(remoteSomministrazione, new Delegate<Somministrazione>() {
+                      public void execute(Somministrazione updateRemoteSomministrazione) {
+                        PhonegapUtils.log("updated remote somministrazione");
+                      }
+                    });
+                    
+                  }
+                  
+                }
+                
+              }
+              
+              
               
             }
           });
@@ -424,36 +458,51 @@ public class MainController {
     return null;
   }
   
-  
-  // TODO
-  private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
+  private boolean isRemoteSomministrazione(Somministrazione somministrazione) {
     if (isOnlineMode()) {
-      List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
-      for (Somministrazione somministrazione : somministrazioni) {
-        if (somministrazione.getPrescrizione().getTutor() != null) {
-          somministrazioniDaSalvare.add(somministrazione);
+      if (somministrazione.getPrescrizione().getTutor() != null) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
+    List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
+    for (Somministrazione somministrazione : somministrazioni) {
+      if (isRemoteSomministrazione(somministrazione)) {
+        somministrazioniDaSalvare.add(somministrazione);
+      }
+    }
+    if (somministrazioniDaSalvare.size() > 0) {
+      Account account = getAccountFromLocalStorage();
+      String devInfoId = getDevInfoIdFromLocalStorage();
+      PhonegapUtils.log("before save remote somministrazioni");
+      AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
+        public void onSuccess(List<Somministrazione> somministrazioni) {
+          PhonegapUtils.log("saved remote somministrazioni");
+          delegate.execute(somministrazioni);
         }
-      }
-      if (somministrazioniDaSalvare.size() > 0) {
-        Account account = getAccountFromLocalStorage();
-        String devInfoId = getDevInfoIdFromLocalStorage();
-        PhonegapUtils.log("calling save remote somministrazioni");
-        AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
-          public void onSuccess(List<Somministrazione> somministrazioni) {
-            PhonegapUtils.log("success");
-            delegate.execute(somministrazioni);
-          }
-          public void onFailure(Throwable caught) {
-            processFailure(null, caught);
-            delegate.execute(null);
-          }
-        });
-      } else {
-        delegate.execute(somministrazioni);
-      }
+        public void onFailure(Throwable caught) {
+          processFailure(null, caught);
+          delegate.execute(null);
+        }
+      });
     } else {
       delegate.execute(somministrazioni);
     }
+  }
+  
+  // TODO
+  private void updateRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+    List<Somministrazione> somministrazioni = new ArrayList<Somministrazione>();
+    somministrazioni.add(somministrazione);
+    saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> results) {
+        Somministrazione result = (results != null && results.size() > 0) ? results.get(0) : null;
+        delegate.execute(result);
+      }
+    });
   }
    
   // TODO
