@@ -1,6 +1,8 @@
 package it.mate.therapyreminder.server.services;
 
+import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.MailRecipient;
+import it.mate.therapyreminder.server.model.SomministrazioneDs;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -33,14 +35,17 @@ public class MailAdapterImpl implements MailAdapter {
     this.mailTemplate = mailTemplate;
   }
 
-  /*
-  @Override
-  public void sendStickMail(StickMail mail) throws MessagingException {
-    StringBuffer text = new StringBuffer(mail.getBody());
+  public void sendNotificationMail(SomministrazioneDs somministrazione, AccountDs account) throws MessagingException {
+    StringBuffer text = new StringBuffer();
+    text.append("La somministrazione del farmaco " + somministrazione.getNomeFarmaco());
+    text.append(" schedulata dall'utente " + account.getName());
+    text.append(" per le ore " + somministrazione.getOrario());
+    text.append(" non e' stata eseguita.");
+    text.append("\n");
+    text.append("Si prega di avvisare il paziente.");
     addFixedMailFooter(text);
-    doSendMail(new MailRecipient(mail.getUser().getEmail()), "Therapy Reminder: " + mail.getSubject(), text, null, null);
+    doSendMail(new MailRecipient(somministrazione.getEmailTutor()), "Therapy Reminder", text, null, null);
   }
-  */
 
   protected void doSendMail (MailRecipient recipient, String subject, StringBuffer text, String attachName, byte[] attachBuffer) throws MessagingException {
 
@@ -85,7 +90,7 @@ public class MailAdapterImpl implements MailAdapter {
   private void addFixedMailFooter(StringBuffer text) {
     text.append("\n\n\n\n\n\n\n\n\n\n");
     text.append("<hr/>");
-    text.append("<span style='font-size:10px;font-style:italic;'>This email was sent to you by the Therapy Reminder Service. This is an automatically generated message: please do not reply. If you want to see all your scheduled reminders use the Therapy Reminder App. Thanks.</span>");
+    text.append("<span style='font-size:10px;font-style:italic;'>This email was sent to you by the Therapy Reminder Service. This is an automatically generated message: please do not reply. Thanks.</span>");
   }
 
   private String escapeMailText(String text) {

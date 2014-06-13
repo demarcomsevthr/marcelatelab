@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.FindContext;
 import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
@@ -13,8 +14,11 @@ import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,8 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   
   @Autowired private Dao dao;
   
+  private static final int MINUTI_CONTROLLO_SOMMINISTRAZIONI_SCADUTE = 30;
+  
   @PostConstruct
   public void postConstruct() {
     logger.debug("initialized " + this);
@@ -39,10 +45,58 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   }
 
   @Override
-  public void refresh() {
-    
+  public void scheduledChecks() {
+    Date somministrazioniScaduteCheckTime = addMinutesToDate(new Date(), (-1) * MINUTI_CONTROLLO_SOMMINISTRAZIONI_SCADUTE) ;
+    List<SomministrazioneDs> somministrazioniScadute = dao.findList(new FindContext<SomministrazioneDs>(SomministrazioneDs.class)
+          .setResultAsList(true)
+          .setFilter("data < dataParam && stato == statoParam")
+          .setParameters(Dao.Utils.buildParameters(new ParameterDefinition[] {
+              new ParameterDefinition(Date.class, "dataParam"),
+              new ParameterDefinition(Integer.class, "statoParam")
+          }))
+          .setParamValues(new Object[] {
+              somministrazioniScaduteCheckTime,
+              Somministrazione.STATO_SCHEDULATA
+          })
+        );
+    if (somministrazioniScadute != null) {
+      for (SomministrazioneDs somministrazione : somministrazioniScadute) {
+        LoggingUtils.debug(getClass(), "FOUND SOMMINISTRAZIONE SCADUTA " + somministrazione);
+        if (somministrazione.getEmailTutor() != null) {
+          AccountDs account = dao.findById(AccountDs.class, somministrazione.getAccountId());
+          MailAdapter mailAdapter = AdapterUtil.getMailAdapter();
+          try {
+            mailAdapter.sendNotificationMail(somministrazione, account);
+            somministrazione.setStato(Somministrazione.STATO_NOTIFICATA_AL_TUTOR);
+            dao.update(somministrazione);
+          } catch (MessagingException ex) {
+            LoggingUtils.error(getClass(), "error", ex);
+            somministrazione.setStato(Somministrazione.STATO_NOTIFICATION_FAILURE);
+            dao.update(somministrazione);
+          }
+        }
+      }
+    }
   }
   
+  public void debugAnticipaDataSomministrazioni() {
+    List<SomministrazioneDs> allSomministrazioni = dao.findAll(SomministrazioneDs.class);
+    if (allSomministrazioni != null) {
+      for (SomministrazioneDs somministrazione : allSomministrazioni) {
+        somministrazione.setData(addMinutesToDate(somministrazione.getData(), -60));
+        somministrazione = dao.update(somministrazione);
+        LoggingUtils.debug(getClass(), "ANTICIPATA DATA SOMMINISTRAZIONE " + somministrazione);
+      }
+    }
+  }
+  
+  private Date addMinutesToDate(Date date, int amount) {
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTime(date);
+    cal.add(GregorianCalendar.MINUTE, amount);
+    date = cal.getTime();
+    return date;
+  }
   
   public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion, String devIp) {
     DevInfoDs ds = null;
@@ -92,6 +146,7 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     if (ds == null) {
       ds = CloneUtils.clone(entity, AccountDs.class);
       ds = dao.create(ds);
+      LoggingUtils.debug(getClass(), "created account " + ds);
     }
     return CloneUtils.clone (ds, AccountTx.class);
   }
@@ -107,7 +162,8 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     AccountDs dsAccount = CloneUtils.clone(txAccount, AccountDs.class);
     dsSomministrazione.setAccountId(dsAccount.getKey());
     dsSomministrazione.setDevInfoId(devInfoId);
-    logger.debug("received devInfoId = " + devInfoId + " " + dsSomministrazione + " " + dsAccount);
+    
+    LoggingUtils.debug(getClass(), "received devInfoId = " + devInfoId + " somministrazione = " + dsSomministrazione + " account = " + dsAccount);
     
     SomministrazioneDs exSomministrazione = null;
     if (dsSomministrazione.getKey() != null) {
