@@ -141,15 +141,27 @@ public class CalendarDialog {
   
   private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
   
+  private String closeLabel = "it".equals(language) ? "FINITO" : "DONE";
+  
+  private String cancelLabel = "it".equals(language) ? "cancel" : "cancel";
+  
   public CalendarDialog() {
     this(null);
   }
   
   public CalendarDialog(Date initialDate) {
+    this(initialDate, null);
+  }
+  
+  public CalendarDialog(Date initialDate, String[] labels) {
     if (initialDate != null) {
       this.selectedDate = initialDate;
     } else {
       this.selectedDate = new Date();
+    }
+    if (labels != null && labels.length == 2) {
+      closeLabel = labels[0];
+      cancelLabel = labels[1];
     }
     curMonth = new Month(selectedDate);
     initDefaults();
@@ -243,7 +255,7 @@ public class CalendarDialog {
     header.setWidth(popupWidth+"px");
     header.setHeight(headerHeight+"px");
 
-    TouchHTML doneBox = new TouchHTML("DONE");
+    TouchHTML doneBox = new TouchHTML(closeLabel);
     doneBox.setWidth((popupWidth * 20 / 100) + "px");
     doneBox.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
@@ -258,7 +270,7 @@ public class CalendarDialog {
         CalendarDialog.this.hide();
       }
     });
-    TouchHTML cancelBox = new TouchHTML("cancel");
+    TouchHTML cancelBox = new TouchHTML(cancelLabel);
     cancelBox.setWidth((popupWidth * 20 / 100) + "px");
     cancelBox.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
