@@ -1,5 +1,6 @@
 package it.mate.phgcommons.client.ui;
 
+import it.mate.phgcommons.client.ui.ph.HasModel;
 import it.mate.phgcommons.client.utils.TouchUtils;
 
 import com.google.gwt.dom.client.Element;
@@ -15,9 +16,11 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class TouchHTML extends TouchWidget implements HasClickHandlers {
+public class TouchHTML extends TouchWidget implements HasClickHandlers, HasModel {
   
   private String tooltip;
+  
+  private Object model;
   
   public TouchHTML() {
     this("");
@@ -76,6 +79,15 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers {
         TouchUtils.fireClickEventFromTapEvent(TouchHTML.this, event);
       }
     });
+  }
+
+  public Object getModel() {
+    return model;
+  }
+
+  public HasModel setModel(Object model) {
+    this.model = model;
+    return this;
   }
 
 }

@@ -125,7 +125,7 @@ public class CalendarDialog {
   
   private int scrollHeight;
   
-  private TouchHTML selectedDateField;
+  private TouchHTML selectedDateCell;
   
   private Date selectedDate = new Date();
   
@@ -189,6 +189,18 @@ public class CalendarDialog {
     
   }
   
+  protected void onDone() {
+    
+  }
+  
+  protected void onCancel() {
+    
+  }
+  
+  protected void onDateCellTouched(TouchHTML dateCell) {
+    
+  }
+  
   public HandlerRegistration addSelectedDateChangeHandler(final SelectedDateChangeHandler handler) {
     selectedDateChangeHandlers.add(handler);
     return new HandlerRegistration() {
@@ -242,6 +254,7 @@ public class CalendarDialog {
     doneBox.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         fireSelectedDateChange(selectedDate);
+        CalendarDialog.this.onDone();
         CalendarDialog.this.hide();
       }
     });
@@ -249,15 +262,16 @@ public class CalendarDialog {
     cancelBox.setWidth((popupWidth * 20 / 100) + "px");
     cancelBox.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
+        CalendarDialog.this.onCancel();
         CalendarDialog.this.hide();
       }
     });
     
-    selectedDateField = new TouchHTML();
-    selectedDateField.setWidth((popupWidth * 60 / 100) + "px");
+    selectedDateCell = new TouchHTML();
+    selectedDateCell.setWidth((popupWidth * 60 / 100) + "px");
     setSelectedDate(selectedDate);
     header.add(doneBox);
-    header.add(selectedDateField);
+    header.add(selectedDateCell);
     header.add(cancelBox);
     
     container.add(header);
@@ -416,7 +430,7 @@ public class CalendarDialog {
         for (int col = 1; col < day1; col++) {
           Date date = CalendarUtil.copyDate(date1);
           CalendarUtil.addDaysToDate(date, -(day1 - col));
-          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
+          row = createDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     } else {
@@ -424,14 +438,14 @@ public class CalendarDialog {
         for (int col = 0; col < day1; col++) {
           Date date = CalendarUtil.copyDate(date1);
           CalendarUtil.addDaysToDate(date, -(day1 - col));
-          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
+          row = createDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     }
     
     for (int day = 1; day <= month.getLastDayOfMonth(); day++) {
       Date date = new Date(month.getYear() - 1900, month.getMonth() - 1, day);
-      row = createMonthDayCell(table, row, date.getDay(), date, false, visibleMonth);
+      row = createDayCell(table, row, date.getDay(), date, false, visibleMonth);
     }
     
     Date date31 = new Date(month.getYear() - 1900, month.getMonth() - 1, month.getLastDayOfMonth());
@@ -441,7 +455,7 @@ public class CalendarDialog {
         for (int col = day31 + 1; col <= 7; col++) {
           Date date = CalendarUtil.copyDate(date31);
           CalendarUtil.addDaysToDate(date, (col - day31));
-          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
+          row = createDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     } else {
@@ -449,7 +463,7 @@ public class CalendarDialog {
         for (int col = day31 + 1; col <= 6; col++) {
           Date date = CalendarUtil.copyDate(date31);
           CalendarUtil.addDaysToDate(date, (col - day31));
-          row = createMonthDayCell(table, row, col, date, true, visibleMonth);
+          row = createDayCell(table, row, col, date, true, visibleMonth);
         }
       }
     }
@@ -461,28 +475,29 @@ public class CalendarDialog {
   }
 
   @SuppressWarnings("deprecation")
-  private int createMonthDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth, boolean visibleMonth) {
+  private int createDayCell(FlexTable table, int row, int col, final Date date, boolean outsideCurrentMonth, boolean visibleMonth) {
     if (MONDAY_FIRST) {
       col = col == 0 ? 6 : col - 1;
     }
     int day = date.getDate();
-    TouchHTML html = new TouchHTML("" + day);
+    final TouchHTML dayCell = new TouchHTML("" + day);
 
     if (visibleMonth) {
-      putDateCellWidget(date, html);
+      putDateCellWidget(date, dayCell);
     }
     
-    html.addStyleName("phg-CalendarDialog-Month-Day");
-    html.setHeight(dayHeight+"px");
+    dayCell.addStyleName("phg-CalendarDialog-Month-Day");
+    dayCell.setHeight(dayHeight+"px");
     if (row == 2) {
-      html.addStyleName("phg-firstRow");
+      dayCell.addStyleName("phg-firstRow");
     }
     if (col == 0) {
-      html.addStyleName("phg-firstCol");
+      dayCell.addStyleName("phg-firstCol");
     }
     if (outsideCurrentMonth) {
-      html.addStyleName("phg-outsideMonth");
+      dayCell.addStyleName("phg-outsideMonth");
     }
+
     /*
     if (CalendarUtil.isSameDate(date, selectedDate)) {
       html.addStyleName("phg-CalendarDialog-Month-Day-selected");
@@ -494,17 +509,27 @@ public class CalendarDialog {
       }
     });
     */
-    html.addTouchEndHandler(new TouchEndHandler() {
+    dayCell.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         if (scrollPending) {
           PhonegapUtils.log("scrollPending!");
         } else {
+          onDateCellTouched(dayCell);
           setSelectedDate(date);
         }
       }
     });
-    customizeDayCell(html, table, row, col, date, outsideCurrentMonth);
-    table.setWidget(row, col, html);
+    customizeDayCell(dayCell, table, row, col, date, outsideCurrentMonth);
+    
+    if (date != null && selectedDate != null) {
+      String dateTxt = GwtUtils.dateToString(date, "yyyyMMdd");
+      String selectedDateTxt = GwtUtils.dateToString(selectedDate, "yyyyMMdd");
+      if (dateTxt.equals(selectedDateTxt)) {
+        onDateCellTouched(dayCell);
+      }
+    }
+    
+    table.setWidget(row, col, dayCell);
     if (col == 6) {
       row++;
     }
@@ -546,10 +571,13 @@ public class CalendarDialog {
     removeSelectedDateStyle();
     this.selectedDate = selectedDate;
     setSelectedDateStyle(this.selectedDate);
-    if (selectedDate != null) {
-      selectedDateField.setText(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
-    } else {
-      selectedDateField.setHtml(SafeHtmlUtils.fromTrustedString(" "));
+    if (selectedDateCell != null) {
+      if (selectedDate != null) {
+        selectedDateCell.setText(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
+      } else {
+        selectedDateCell.setHtml(SafeHtmlUtils.fromTrustedString(" "));
+      }
+      onDateCellTouched(selectedDateCell);
     }
   }
   
