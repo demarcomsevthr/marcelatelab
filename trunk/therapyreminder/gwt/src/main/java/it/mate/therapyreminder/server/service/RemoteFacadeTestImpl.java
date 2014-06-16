@@ -22,7 +22,7 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   
   private RemoteFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = true;
+  private final boolean LOCALTEST = false;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".remoteFacade";
   
