@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.shared.service;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import java.util.Date;
@@ -24,5 +25,7 @@ public interface RemoteFacade extends RemoteService {
   public Boolean checkConnection();
 
   public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId);
+  
+  public void updateDatiContatto(Contatto tutor, Account account);
   
 }
