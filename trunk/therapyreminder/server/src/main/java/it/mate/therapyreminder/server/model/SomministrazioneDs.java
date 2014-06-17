@@ -72,13 +72,14 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   public void setPrescrizione(Prescrizione prescrizione) {
     if (prescrizione != null) {
       this.nomeFarmaco = prescrizione.getNome();
-      if (prescrizione.getTutor() != null) {
-        Contatto tutor = prescrizione.getTutor();
-        this.nomeTutor = tutor.getNome();
-        this.emailTutor = tutor.getEmail();
-        this.telefonoTutor = tutor.getTelefono();
-      }
+      setTutor(prescrizione.getTutor());
     }
+  }
+  
+  public void setTutor(Contatto tutor) {
+    this.nomeTutor = tutor != null ? tutor.getNome() : null;
+    this.emailTutor = tutor != null ? tutor.getEmail() : null;
+    this.telefonoTutor = tutor != null ? tutor.getTelefono() : null;
   }
 
   //////////////////////////////////////////////////////////////////////

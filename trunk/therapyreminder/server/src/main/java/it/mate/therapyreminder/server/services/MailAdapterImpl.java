@@ -88,7 +88,7 @@ public class MailAdapterImpl implements MailAdapter {
   }
 
   private void addFixedMailFooter(StringBuffer text) {
-    text.append("\n\n\n\n\n\n\n\n\n\n");
+    text.append("\n\n\n\n");
     text.append("<hr/>");
     text.append("<span style='font-size:10px;font-style:italic;'>This email was sent to you by the Therapy Reminder Service. This is an automatically generated message: please do not reply. Thanks.</span>");
   }

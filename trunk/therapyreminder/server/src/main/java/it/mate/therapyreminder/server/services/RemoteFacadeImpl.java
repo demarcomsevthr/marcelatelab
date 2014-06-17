@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
@@ -65,6 +66,11 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
       somministrazioni.set(it, somministrazione);
     }
     return somministrazioni;
+  }
+  
+  @Override
+  public void updateDatiContatto(Contatto tutor, Account account) {
+    adapter.updateDatiContatto(tutor, account);
   }
   
 }

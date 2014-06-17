@@ -6,4 +6,9 @@
     <property name="data" direction="asc" />
   </datastore-index>
 
+  <datastore-index kind="SomministrazioneDs" ancestor="false" source="manual">
+    <property name="accountId" direction="asc" />
+    <property name="data" direction="asc" />
+  </datastore-index>
+
 </datastore-indexes>
