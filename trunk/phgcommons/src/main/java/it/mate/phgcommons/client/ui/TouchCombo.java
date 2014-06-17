@@ -1,7 +1,6 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
-import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.MgwtDialogs;
 
 import java.util.ArrayList;
@@ -147,8 +146,10 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
       }
       itemHtml.addTouchEndHandler(closeHandler);
     }
-    
-    TouchCombo.this.itemsDialog = MgwtDialogs.popin(null, itemsContainer);
+  
+    // 17/06/2014
+//  TouchCombo.this.itemsDialog = MgwtDialogs.popin(null, itemsContainer);
+    TouchCombo.this.itemsDialog = MgwtDialogs.popin(null, itemsContainer, true);
     
     itemsContainer.getParent().getElement().getStyle().setBackgroundColor("transparent");
     itemsContainer.getParent().getElement().getStyle().setBorderWidth(0, Unit.PX);
