@@ -8,7 +8,7 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-therapy-panel">
       
-    <g:HTML HTML="Promemoria" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Reminder" addStyleNames="ui-view-header"/>
     
     <hr class="ui-view-separator-1"/>
     

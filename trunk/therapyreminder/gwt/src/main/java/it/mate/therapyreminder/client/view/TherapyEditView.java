@@ -126,7 +126,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO, "Ogni giorno", true);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI, "A giorni alterni", false);
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
+
+// Gorini 16/06/2014: chiede di togliere questa opzione    
+//  tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
+    
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_MENSILE, "Mensile", false);
     tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_TRIMESTRALE, "Trimestrale", false);
@@ -588,7 +591,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   private void fillTutorCombo() {
-    if (tutorCombo.isVisible() && tutorCombo.getItems().size() == 0) {
+    if (cbxNotificheTutor.getValue() && tutorCombo.getItems().size() == 0) {
       getPresenter().findAllTutors(new Delegate<List<Contatto>>() {
         public void execute(List<Contatto> results) {
           tutors = results;

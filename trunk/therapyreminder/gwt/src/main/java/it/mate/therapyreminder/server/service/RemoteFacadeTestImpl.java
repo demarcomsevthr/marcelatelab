@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.server.service;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
@@ -71,6 +72,12 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId) {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.saveSomministrazioni(somministrazioni, account, devInfoId);
+  }
+
+  @Override
+  public void updateDatiContatto(Contatto tutor, Account account) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.updateDatiContatto(tutor, account);
   }
   
 }
