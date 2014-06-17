@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.server.services;
 
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 
@@ -17,5 +18,7 @@ public interface RemoteAdapter {
   public Somministrazione saveSomministrazione(Somministrazione somministrazioneTx, Account accountTx, String devInfoId);
   
   public void debugAnticipaDataSomministrazioni();
+  
+  public void updateDatiContatto(Contatto tutor, Account account);
   
 }

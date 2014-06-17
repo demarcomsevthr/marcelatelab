@@ -9,6 +9,7 @@ import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.DevInfoDs;
 import it.mate.therapyreminder.server.model.SomministrazioneDs;
 import it.mate.therapyreminder.shared.model.Account;
+import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
@@ -187,6 +188,30 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     
     txSomministrazione = CloneUtils.clone(dsSomministrazione, SomministrazioneTx.class);
     return txSomministrazione;
+  }
+
+  @Override
+  public void updateDatiContatto(Contatto txTutor, Account txAccount) {
+    Date now = new Date();
+    AccountDs dsAccount = CloneUtils.clone(txAccount, AccountDs.class);
+    List<SomministrazioneDs> somministrazioniDaAggiornare = dao.findList(new FindContext<SomministrazioneDs>(SomministrazioneDs.class)
+        .setResultAsList(true)
+        .setFilter("data > dataParam && accountId == accountIdParam")
+        .setParameters(Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(Date.class, "dataParam"),
+            new ParameterDefinition(Key.class, "accountIdParam")
+        }))
+        .setParamValues(new Object[] {
+            now,
+            dsAccount.getKey()
+        })
+      );
+    if (somministrazioniDaAggiornare != null) {
+      for (SomministrazioneDs dsSomministrazione : somministrazioniDaAggiornare) {
+        dsSomministrazione.setTutor(txTutor);
+        dao.update(dsSomministrazione);
+      }
+    }
   }
   
 }
