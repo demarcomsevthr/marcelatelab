@@ -49,14 +49,19 @@ public class MgwtDialogs {
   }
   
   public static PopinDialog popin (String title, Widget body) {
-    PopinDialog popinDialog = popinImpl(title, body);
-    popinDialog.center();
-    return popinDialog;
+    return popin(title, body, false);
+  }
+  
+  public static PopinDialog popin (String title, Widget body, boolean hideOnBackgroundClick) {
+    PopinDialog dialog = createPopin(title, body);
+    dialog.setHideOnBackgroundClick(hideOnBackgroundClick);
+    dialog.center();
+    return dialog;
   }
   
   public static PopinDialog popin (String title, Widget body, Integer top, Integer left) {
-    PopinDialog popinDialog = popinImpl(title, body);
-    popinDialog.show();
+    PopinDialog dialog = createPopin(title, body);
+    dialog.show();
     Element animShadowElem = JQuery.selectFirstElement(".mgwt-DialogAnimationContainer-Shadow div");
     if (animShadowElem != null) {
       if (top != null) {
@@ -76,10 +81,10 @@ public class MgwtDialogs {
         }
       }
     }
-    return popinDialog;
+    return dialog;
   }
   
-  private static PopinDialog popinImpl (String title, Widget body) {
+  private static PopinDialog createPopin (String title, Widget body) {
     
     // 19/12/2013
 //  PopinDialog popinDialog = new PopinDialog();

@@ -2,6 +2,7 @@ package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.StringUtils;
 
 import java.util.Date;
 
@@ -266,8 +267,7 @@ public abstract class WebSQLDao {
     public final void doExecuteSql(String sqlStatement, Object[] arguments, SQLStatementCallback callback) {
       doExecuteSql(sqlStatement, arguments, callback, null);
     }
-    //TODO
-    public final void doExecuteSql(String sqlStatement, Object[] arguments, SQLStatementCallback callback, SQLStatementErrorCallback errorCallback) {
+    public final void doExecuteSql(final String sqlStatement, Object[] arguments, SQLStatementCallback callback, SQLStatementErrorCallback errorCallback) {
       JsArrayMixed jsArguments = JavaScriptObject.createArray().cast();
       if (arguments != null) {
         for (Object arg : arguments) {
@@ -289,10 +289,13 @@ public abstract class WebSQLDao {
           }
         }
       }
-      if (errorCallback == null && WebSQLDao.errorDelegate != null) {
+      if (errorCallback == null) {
         errorCallback = new SQLStatementErrorCallback() {
           public void handleEvent(SQLTransaction tr, SQLError error) {
-            WebSQLDao.errorDelegate.execute(error.getMessage());
+            if (WebSQLDao.errorDelegate != null) {
+              WebSQLDao.errorDelegate.execute(error.getMessage());
+            }
+            PhgDialogUtils.showMessageDialog("Internal error executing query " + StringUtils.truncate(sqlStatement, 80) );
           }
         };
       }
