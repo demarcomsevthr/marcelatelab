@@ -219,6 +219,30 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void findPrescrizioniAttiveByContatto(final Date dataRiferimento, final Contatto contatto, final Delegate<List<Prescrizione>> delegate) {
+    if (!Contatto.TIPO_TUTOR.equals(contatto.getTipo())) {
+      delegate.execute(null);
+      return;
+    }
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni";
+        sql += " WHERE (dataFine IS NULL OR dataFine >= ?) AND idTutor = ?";
+        tr.doExecuteSql(sql, new Object[]{dateAsLong(dataRiferimento), contatto.getId()}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Prescrizione> results = new ArrayList<Prescrizione>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                results.add(flushRSToPrescrizione(rs, it));
+              }
+            }
+            iteratePrescrizioniForRead(results.iterator(), tr, delegate, results);
+          }
+        });
+      }
+    });
+  }
+  
   public void findPrescrizioneById(final Integer id, final Delegate<Prescrizione> delegate) {
     findPrescrizioneById(id, delegate, null);
   }
@@ -525,13 +549,13 @@ public class MainDao extends WebSQLDao {
         sql += " ORDER BY data";
         tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA}, 
           new SQLStatementCallback() {
-          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            if (rs.getRows().getLength() > 0) {
-              new RSToSomministrazioniIterator(rs, delegate);
-            } else {
-              delegate.execute(null);
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              if (rs.getRows().getLength() > 0) {
+                new RSToSomministrazioniIterator(rs, delegate);
+              } else {
+                delegate.execute(null);
+              }
             }
-          }
         });
       }
     });
@@ -706,6 +730,24 @@ public class MainDao extends WebSQLDao {
     });
   }
 
+  public void findAllContatti(final Delegate<List<Contatto>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
+        tr.doExecuteSql(sql, new Object[] {}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              new RSToContattiIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
   public void findContattiByTipo(final String tipo, final Delegate<List<Contatto>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
@@ -815,6 +857,18 @@ public class MainDao extends WebSQLDao {
             }
           });
         }
+      }
+    });
+  }
+  
+  public void deleteContatto(final Contatto contatto, final Delegate<Void> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(final SQLTransaction tr) {
+        tr.doExecuteSql("DELETE FROM contatti WHERE id = ?", new Object[] {contatto.getId()}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            delegate.execute(null);
+          }
+        });
       }
     });
   }

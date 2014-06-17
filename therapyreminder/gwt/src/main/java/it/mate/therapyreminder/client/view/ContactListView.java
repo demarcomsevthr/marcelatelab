@@ -121,7 +121,7 @@ public class ContactListView extends BaseMgwtView <Presenter> {
   private void showListaContatti(List<Contatto> contatti) {
     resultsPanel.clear();
     if (contatti == null || contatti.size() == 0) {
-      Label noResultsLbl = new Label("You have no contacts.");
+      Label noResultsLbl = new Label("You have no contacts of this type.");
       noResultsLbl.addStyleName("ui-no-results");
       resultsPanel.add(noResultsLbl);
       return;

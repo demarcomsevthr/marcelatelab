@@ -8,6 +8,8 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel ui-ExecutionListView">
     
+    <g:HTML HTML="Reminders" addStyleNames="ui-view-header"/>
+    
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>

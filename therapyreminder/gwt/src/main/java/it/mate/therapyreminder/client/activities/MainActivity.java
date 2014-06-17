@@ -44,6 +44,7 @@ import it.mate.therapyreminder.shared.model.impl.AccountTx;
 import it.mate.therapyreminder.shared.model.impl.DosaggioEditModel;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -495,11 +496,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   @Override
-  public void deleteContatto(Contatto contatto) {
-    
-  }
-
-  @Override
   public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, Delegate<Prescrizione> endDelegate) {
     final Delegate<Prescrizione> fEndDelegate = endDelegate != null ? endDelegate : new Delegate<Prescrizione>() {
       public void execute(Prescrizione element) {
@@ -737,12 +733,65 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void saveContatto(final Contatto contatto, final Delegate<Contatto> successDelegate) {
-    dao.saveContatto(contatto, new Delegate<Contatto>() {
-      public void execute(Contatto savedModel) {
-        if (successDelegate != null) {
-          successDelegate.execute(savedModel);
-        } else {
-          goToPrevious();
+    
+    getAccount(new Delegate<Account>() {
+      public void execute(final Account account) {
+        boolean procedi = true;
+        if (account != null) {
+          if (account.getName().trim().equals(contatto.getNome().trim())) {
+            PhgDialogUtils.showMessageDialog("Cannot insert contact with the same name as the account name");
+            procedi = false;
+          }
+        }
+        if (procedi) {
+          dao.findAllContatti(new Delegate<List<Contatto>>() {
+            public void execute(List<Contatto> contatti) {
+              boolean procedi = true;
+              if (contatti != null) {
+                for (Contatto contattoInDb : contatti) {
+                  if (contattoInDb.getId().equals(contatto.getId())) {
+                    continue;
+                  }
+                  if (contattoInDb.getNome().trim().equalsIgnoreCase(contatto.getNome().trim())) {
+                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same name");
+                    procedi = false;
+                    break;
+                  }
+                  if (contattoInDb.getEmail().trim().equalsIgnoreCase(contatto.getEmail().trim())) {
+                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same email");
+                    procedi = false;
+                    break;
+                  }
+                  if (contattoInDb.getTelefono() != null && contattoInDb.getTelefono().trim().equalsIgnoreCase(contatto.getTelefono().trim())) {
+                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same phone number");
+                    procedi = false;
+                    break;
+                  }
+                }
+              }
+              if (procedi) {
+                dao.saveContatto(contatto, new Delegate<Contatto>() {
+                  public void execute(Contatto savedContatto) {
+                    if (account != null && Contatto.TIPO_TUTOR.equals(savedContatto.getTipo())) {
+                      AppClientFactory.IMPL.getRemoteFacade().updateDatiContatto(savedContatto, account, new AsyncCallback<Void>() {
+                        public void onSuccess(Void result) {
+                          PhonegapUtils.log("tutor data remotely saved");
+                        }
+                        public void onFailure(Throwable caught) {
+                          processFailure(null, caught);
+                        }
+                      });
+                    }
+                    if (successDelegate != null) {
+                      successDelegate.execute(savedContatto);
+                    } else {
+                      goToPrevious();
+                    }
+                  }
+                });
+              }
+            }
+          });
         }
       }
     });
@@ -788,6 +837,25 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+  }
+
+  @Override
+  public void deleteContatto(final Contatto contatto) {
+    dao.findPrescrizioniAttiveByContatto(new Date(), contatto, new Delegate<List<Prescrizione>>() {
+      public void execute(List<Prescrizione> prescrizioni) {
+        if (prescrizioni != null && prescrizioni.size() > 0) {
+          PhgDialogUtils.showMessageDialog("This contact cannot be deleted: you have some therapies associated to it");
+          goToPrevious();
+          return;
+        } else {
+          dao.deleteContatto(contatto, new Delegate<Void>() {
+            public void execute(Void element) {
+              goToPrevious();
+            }
+          });
+        }
+      }
+    });
   }
   
 }

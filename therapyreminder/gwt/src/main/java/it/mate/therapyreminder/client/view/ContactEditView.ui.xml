@@ -8,10 +8,11 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-account-panel">
       
-    <g:HTML HTML="Editing contact" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Edit contact" addStyleNames="ui-view-header"/>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
     <hr class="ui-view-separator-1"/>
