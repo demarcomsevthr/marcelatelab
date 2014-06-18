@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
+import it.mate.phgcommons.client.utils.callbacks.StringCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.googlecode.mgwt.ui.client.MGWT;
@@ -286,4 +288,38 @@ public class PhonegapUtils {
     PhonegapUtils.trace = null;
   }
   
+  public static void getCurrentLanguage(final Delegate<String> delegate) {
+    getGlobalizationLanguage(new StringCallback() {
+      public void handle(String language) {
+        if (language != null) {
+          delegate.execute(language);
+        } else {
+          language = LocaleInfo.getCurrentLocale().getLocaleName();
+          if ("default".equals(language)) {
+            language = getNavigatorLanguage();
+          }
+          delegate.execute(language);
+        }
+      }
+    });
+  }
+  
+  private static native String getNavigatorLanguage() /*-{
+    return navigator.language;
+  }-*/;
+
+  private static native void getGlobalizationLanguage(StringCallback callback) /*-{
+    if (typeof(navigator.globalization) == 'undefined') {
+      callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
+    } else {
+      var jsSuccessCallback = $entry(function(locale) {
+        callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(locale.value);
+      });
+      var jsErrorCallback = $entry(function(locale) {
+        callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
+      });
+      navigator.globalization.getLocaleName(jsSuccessCallback,jsErrorCallback);    
+    }
+  }-*/;
+
 }
