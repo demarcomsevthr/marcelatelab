@@ -79,5 +79,11 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.updateDatiContatto(tutor, account);
   }
+
+  @Override
+  public void deleteSomministrazioni(List<Somministrazione> somministrazioni) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.deleteSomministrazioni(somministrazioni);
+  }
   
 }

@@ -73,4 +73,13 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     adapter.updateDatiContatto(tutor, account);
   }
   
+  @Override
+  public void deleteSomministrazioni(List<Somministrazione> somministrazioni) {
+    if (somministrazioni != null) {
+      for (Somministrazione somministrazione : somministrazioni) {
+        adapter.deleteSomministrazione(somministrazione);
+      }
+    }
+  }
+  
 }

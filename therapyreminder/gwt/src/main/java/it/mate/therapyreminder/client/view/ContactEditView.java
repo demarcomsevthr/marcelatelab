@@ -85,13 +85,21 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
   
   @Override
   public void onClosingView(final ClosingHandler handler) {
-    Contatto modifiedModel = flushModel(false);
+    final Contatto modifiedModel = flushModel(false);
     if (modifiedModel == null || originalModel.equals(modifiedModel)) {
       handler.doClose();
     } else {
-      getPresenter().saveContatto(modifiedModel, new Delegate<Contatto>() {
-        public void execute(Contatto savedModel) {
-          handler.doClose();
+      PhgDialogUtils.showMessageDialog("There are some changes. Do you want to save it?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+        public void execute(Integer selectedButton) {
+          if (selectedButton == 1) {
+            getPresenter().saveContatto(modifiedModel, new Delegate<Contatto>() {
+              public void execute(Contatto savedModel) {
+                handler.doClose();
+              }
+            });
+          } else {
+            handler.doClose();
+          }
         }
       });
     }

@@ -65,6 +65,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     public void findAllTutors(Delegate<List<Contatto>> delegate);
     public void goToContactTutorListView();
     public void goToContactEditView(Contatto contatto);
+    public void deletePrescrizioni(List<Prescrizione> prescrizioni);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -449,15 +450,38 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     savePrescrizione(flushPrescrizione(true), null);
   }
   
+  @UiHandler ("deleteBtn")
+  public void onDeleteBtn (TouchEndEvent event) {
+    if (oldPrescrizione.getId() != null) {
+      PhgDialogUtils.showMessageDialog("Are you sure you want to delete this therapy?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+        public void execute(Integer selectedButton) {
+          if (selectedButton == 1) {
+            List<Prescrizione> prescrizioni = new ArrayList<Prescrizione>();
+            prescrizioni.add(oldPrescrizione);
+            getPresenter().deletePrescrizioni(prescrizioni);
+          }
+        }
+      });
+    }
+  }
+  
   @Override
   public void onClosingView(final ClosingHandler handler) {
-    Prescrizione prescrizione = flushPrescrizione(false);
+    final Prescrizione prescrizione = flushPrescrizione(false);
     if (prescrizione == null || prescrizione.equals(oldPrescrizione)) {
       handler.doClose();
     } else {
-      savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
-        public void execute(Prescrizione prescrizioneSalvata) {
-          handler.doClose();
+      PhgDialogUtils.showMessageDialog("There are some changes. Do you want to save it?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+        public void execute(Integer selectedButton) {
+          if (selectedButton == 1) {
+            savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+              public void execute(Prescrizione prescrizioneSalvata) {
+                handler.doClose();
+              }
+            });
+          } else {
+            handler.doClose();
+          }
         }
       });
     }

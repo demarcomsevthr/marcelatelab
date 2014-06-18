@@ -28,4 +28,6 @@ public interface RemoteFacade extends RemoteService {
   
   public void updateDatiContatto(Contatto tutor, Account account);
   
+  public void deleteSomministrazioni(List<Somministrazione> somministrazioni);
+  
 }

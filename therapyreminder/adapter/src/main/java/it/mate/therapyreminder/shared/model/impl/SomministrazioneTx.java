@@ -22,6 +22,9 @@ public class SomministrazioneTx implements Somministrazione {
   
   private String remoteId;
   
+  // salvato solo in remoto
+  private String language;
+  
   public SomministrazioneTx() {
 
   }
@@ -141,6 +144,14 @@ public class SomministrazioneTx implements Somministrazione {
 
   public void setRemoteId(String remoteId) {
     this.remoteId = remoteId;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
   }
   
 }

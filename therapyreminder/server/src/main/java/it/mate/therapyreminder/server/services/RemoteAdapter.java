@@ -21,4 +21,6 @@ public interface RemoteAdapter {
   
   public void updateDatiContatto(Contatto tutor, Account account);
   
+  public void deleteSomministrazione(Somministrazione somministrazione);
+  
 }
