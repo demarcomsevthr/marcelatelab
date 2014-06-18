@@ -138,6 +138,8 @@
           <log4jConfiguration>${basedir}/src/main/enhancer/log4j-enhancer.properties</log4jConfiguration>
           <verbose>true</verbose>
           <mappingIncludes>**/server/model/impl/*.class</mappingIncludes>
+          <!-- workaround per correggere bug 'command line is too long' -->
+          <fork>false</fork>
         </configuration>
         <dependencies>
           <dependency>
