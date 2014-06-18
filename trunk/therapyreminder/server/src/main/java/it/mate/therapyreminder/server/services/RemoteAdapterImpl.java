@@ -8,6 +8,7 @@ import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.DevInfoDs;
 import it.mate.therapyreminder.server.model.SomministrazioneDs;
+import it.mate.therapyreminder.server.utils.Country;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Somministrazione;
@@ -16,7 +17,9 @@ import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -27,6 +30,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
 
 @Service
 public class RemoteAdapterImpl implements RemoteAdapter {
@@ -36,6 +42,12 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   @Autowired private Dao dao;
   
   private static final int MINUTI_CONTROLLO_SOMMINISTRAZIONI_SCADUTE = 30;
+  
+  private static final String TWILIO_ACCOUNT_SID = "ACcf0a6793d764c92b5be2260293a282bb";
+  
+  private static final String TWILIO_AUTH_TOKEN = "fdc676c52e47bc27ee31d4a91a2094c9";
+  
+  private static final String TWILIO_FROM_NUMBER = "+16469821337";
   
   @PostConstruct
   public void postConstruct() {
@@ -63,21 +75,58 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     if (somministrazioniScadute != null) {
       for (SomministrazioneDs somministrazione : somministrazioniScadute) {
         LoggingUtils.debug(getClass(), "FOUND SOMMINISTRAZIONE SCADUTA " + somministrazione);
+        Integer statoSomministrazione = somministrazione.getStato();
+        AccountDs account = dao.findById(AccountDs.class, somministrazione.getAccountId());
         if (somministrazione.getEmailTutor() != null) {
-          AccountDs account = dao.findById(AccountDs.class, somministrazione.getAccountId());
           MailAdapter mailAdapter = AdapterUtil.getMailAdapter();
           try {
-            mailAdapter.sendNotificationMail(somministrazione, account);
-            somministrazione.setStato(Somministrazione.STATO_NOTIFICATA_AL_TUTOR);
-            dao.update(somministrazione);
+            LoggingUtils.debug(getClass(), "sending mail notification for somministrazione " + somministrazione);
+            mailAdapter.sendMailNotification(composeNotificationMessage(somministrazione, account), somministrazione.getEmailTutor());
+            statoSomministrazione = Somministrazione.STATO_NOTIFICATA_AL_TUTOR;
           } catch (MessagingException ex) {
             LoggingUtils.error(getClass(), "error", ex);
-            somministrazione.setStato(Somministrazione.STATO_NOTIFICATION_FAILURE);
-            dao.update(somministrazione);
+            statoSomministrazione = Somministrazione.STATO_NOTIFICATION_FAILURE;
           }
+        }
+        if (somministrazione.getTelefonoTutor() != null) {
+          try {
+            LoggingUtils.debug(getClass(), "sending sms notification for somministrazione " + somministrazione);
+            sendSmsNotification(composeNotificationMessage(somministrazione, account), somministrazione.getTelefonoTutor());
+          } catch (Exception ex) {
+            LoggingUtils.error(getClass(), "error", ex);
+            statoSomministrazione = Somministrazione.STATO_NOTIFICATION_FAILURE;
+          }
+        }
+        if (statoSomministrazione != null) {
+          somministrazione.setStato(statoSomministrazione);
+          dao.update(somministrazione);
         }
       }
     }
+  }
+  
+  private String composeNotificationMessage(SomministrazioneDs somministrazione, AccountDs account) {
+    StringBuffer text = new StringBuffer();
+    text.append("La somministrazione del farmaco " + somministrazione.getNomeFarmaco());
+    text.append(" schedulata dall'utente " + account.getName());
+    text.append(" per le ore " + somministrazione.getOrario());
+    text.append(" non e' stata eseguita.");
+    text.append("\n");
+    text.append("Si prega di avvisare il paziente.");
+    return text.toString();
+  }
+  
+  private void sendSmsNotification(String messageBody, String phoneNumber) throws Exception {
+    TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("Body", messageBody);
+    params.put("To", phoneNumber);
+    params.put("From", TWILIO_FROM_NUMBER);
+    LoggingUtils.debug(getClass(), "getting sms factory");
+    SmsFactory messageFactory = client.getAccount().getSmsFactory();
+    LoggingUtils.debug(getClass(), "creating message");
+    Sms message = messageFactory.create(params);
+    LoggingUtils.debug(getClass(), "message created - sid = " + message.getSid());
   }
   
   public void debugAnticipaDataSomministrazioni() {
@@ -179,15 +228,44 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       exSomministrazione.setDevInfoId(dsSomministrazione.getDevInfoId());
       exSomministrazione.setAccountId(dsSomministrazione.getAccountId());
       exSomministrazione.setPrescrizione(txSomministrazione.getPrescrizione());
+      correggiPrefissoInternazionale(exSomministrazione);
       dsSomministrazione = dao.update(exSomministrazione);
       LoggingUtils.debug(getClass(), "updated " + dsSomministrazione);
     } else {
+      correggiPrefissoInternazionale(dsSomministrazione);
       dsSomministrazione = dao.create(dsSomministrazione);
       LoggingUtils.debug(getClass(), "created " + dsSomministrazione);
     }
     
     txSomministrazione = CloneUtils.clone(dsSomministrazione, SomministrazioneTx.class);
     return txSomministrazione;
+  }
+  
+  private void correggiPrefissoInternazionale(SomministrazioneDs somministrazione) {
+    if (somministrazione.getTelefonoTutor() != null) {
+      if (!somministrazione.getTelefonoTutor().trim().startsWith("+")) {
+        //manca il prefisso
+        if (somministrazione.getLanguage() != null) {
+          List<Country> countries = Country.getList();
+          for (Country country : countries) {
+            if (somministrazione.getLanguage().toLowerCase().contains(country.getCode().toLowerCase())) {
+              String prefix = country.getInternationalPrefix();
+              if (prefix != null) {
+                somministrazione.setTelefonoTutor("+" + prefix + somministrazione.getTelefonoTutor());
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @Override
+  public void deleteSomministrazione(Somministrazione txSomministrazione) {
+    SomministrazioneDs dsSomministrazione = CloneUtils.clone(txSomministrazione, SomministrazioneDs.class);
+    LoggingUtils.debug(getClass(), "deleting somministrazione = " + dsSomministrazione);
+    dao.delete(dsSomministrazione);
   }
 
   @Override

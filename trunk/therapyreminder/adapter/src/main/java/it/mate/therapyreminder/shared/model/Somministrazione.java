@@ -54,5 +54,9 @@ public interface Somministrazione extends Serializable {
   public String getRemoteId();
   
   public void setRemoteId(String remoteId);
+
+  public void setLanguage(String language);
+
+  public String getLanguage();
   
 }

@@ -1,8 +1,6 @@
 package it.mate.therapyreminder.server.services;
 
-import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.MailRecipient;
-import it.mate.therapyreminder.server.model.SomministrazioneDs;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -35,16 +33,10 @@ public class MailAdapterImpl implements MailAdapter {
     this.mailTemplate = mailTemplate;
   }
 
-  public void sendNotificationMail(SomministrazioneDs somministrazione, AccountDs account) throws MessagingException {
-    StringBuffer text = new StringBuffer();
-    text.append("La somministrazione del farmaco " + somministrazione.getNomeFarmaco());
-    text.append(" schedulata dall'utente " + account.getName());
-    text.append(" per le ore " + somministrazione.getOrario());
-    text.append(" non e' stata eseguita.");
-    text.append("\n");
-    text.append("Si prega di avvisare il paziente.");
+  public void sendMailNotification(String messageBody, String emailAddr) throws MessagingException {
+    StringBuffer text = new StringBuffer(messageBody);
     addFixedMailFooter(text);
-    doSendMail(new MailRecipient(somministrazione.getEmailTutor()), "Therapy Reminder", text, null, null);
+    doSendMail(new MailRecipient(emailAddr), "Therapy Reminder", text, null, null);
   }
 
   protected void doSendMail (MailRecipient recipient, String subject, StringBuffer text, String attachName, byte[] attachBuffer) throws MessagingException {

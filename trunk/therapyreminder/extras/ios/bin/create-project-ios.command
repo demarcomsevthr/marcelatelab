@@ -22,5 +22,7 @@ cordova plugin add org.apache.cordova.inappbrowser
 
 cordova plugin add https://github.com/jcjee/email-composer.git
 
+cordova plugin add org.apache.cordova.globalization
+
 cordova build ios
 

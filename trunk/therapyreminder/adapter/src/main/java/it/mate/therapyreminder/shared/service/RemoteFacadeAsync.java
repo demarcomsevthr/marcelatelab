@@ -26,5 +26,7 @@ public interface RemoteFacadeAsync {
 
   void updateDatiContatto(Contatto tutor, Account account, AsyncCallback<Void> callback);
 
+  void deleteSomministrazioni(List<Somministrazione> somministrazioni, AsyncCallback<Void> callback);
+
 
 }

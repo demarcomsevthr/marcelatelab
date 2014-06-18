@@ -38,7 +38,12 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   @Persistent
   private Integer stato;
   
+  @Persistent
+  private String language;
+
+  
   //////////////////////////////////////////////////////////////////////
+  // INFORMAZIONI SOLO LATO SERVER
 
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   private Key devInfoId;
@@ -57,7 +62,6 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   
   @Persistent
   private String nomeFarmaco;
-  
   
   //////////////////////////////////////////////////////////////////////
 
@@ -205,6 +209,15 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   public void setStato(Integer stato) {
     this.stato = stato;
   }
+  
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
 
   /////////////////////////////////////////////////////////////////////////////////
   

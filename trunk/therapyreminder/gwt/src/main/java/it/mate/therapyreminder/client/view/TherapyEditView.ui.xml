@@ -12,7 +12,7 @@
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
-      <p:TouchButton text="Cancel" ui:field="cancelBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn"/>
     </g:HorizontalPanel>
 
     <hr class="ui-view-separator-1"/>

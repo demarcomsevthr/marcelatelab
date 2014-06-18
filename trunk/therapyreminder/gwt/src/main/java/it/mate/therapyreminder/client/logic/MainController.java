@@ -2,6 +2,7 @@ package it.mate.therapyreminder.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
 import it.mate.phgcommons.client.plugins.CalendarPlugin.Event;
@@ -90,16 +91,15 @@ public class MainController {
       public void execute(final Somministrazione oldSomministrazione) {
         dao.saveSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
           public void execute(Somministrazione somministrazioneAggiornata) {
-            
-            //TODO: update remote somministrazione
             if (isRemoteSomministrazione(newSomministrazione)) {
-              updateRemoteSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
+              saveRemoteSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
                 public void execute(Somministrazione result) {
                   PhonegapUtils.log("updated remote somministrazione " + result);
                 }
               });
             }
             
+            // CHECK: FARMACO DA RIORDINARE
             if (!oldSomministrazione.isEseguita() && newSomministrazione.isEseguita()) {
               double qtaSomministrata = newSomministrazione.getQuantita();
               Prescrizione prescrizione = somministrazioneAggiornata.getPrescrizione();
@@ -119,13 +119,12 @@ public class MainController {
                 return;
               }
             }
+            
             somministrazioneAggiornataDelegate.execute(somministrazioneAggiornata);
           }
         });
       }
     });
-    
-    
   }
   
   public void sviluppaSomministrazioni(final Prescrizione prescrizione) {
@@ -141,38 +140,23 @@ public class MainController {
   }
   
   private void sviluppaSomministrazioniAPartireDa(final Prescrizione prescrizione, Date dataUltimaSomministrazione) {
-    
-    
-    
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
-
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
             public void execute(List<Somministrazione> remoteSomministrazioni) {
-
               if (remoteSomministrazioni != null) {
-                
                 for (Somministrazione remoteSomministrazione : remoteSomministrazioni) {
-                  
                   if (remoteSomministrazione.getRemoteId() != null) {
-                    
-                    //TODO
                     dao.saveRemoteSomministrazione(remoteSomministrazione, new Delegate<Somministrazione>() {
                       public void execute(Somministrazione updateRemoteSomministrazione) {
                         PhonegapUtils.log("updated remote somministrazione");
                       }
                     });
-                    
                   }
-                  
                 }
-                
               }
-              
-              
-              
             }
           });
         }
@@ -224,13 +208,14 @@ public class MainController {
       final List<Somministrazione> results, final Delegate<List<Somministrazione>> completionDelegate) {
     if (it.hasNext()) {
       Dosaggio dosaggio = it.next();
+      //TODO
       Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
       if (dataSomministrazione.before(new Date())) {
         iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, completionDelegate);
         return;
       }
-      somministrazione.setData(dataSomministrazione);
+      somministrazione.setData(CalendarUtil.copyDate(dataSomministrazione));
       somministrazione.setOrario(dosaggio.getOrario());
       Double qta = dosaggio.getQuantita();
       if (qta == null)
@@ -293,15 +278,12 @@ public class MainController {
         }
         iterateSomministrazioniForDelete(somministrazioni.iterator(), new Delegate<Void>() {
           public void execute(Void element) {
-            
-            //TODO
             PhonegapLog.log("EXECUTING REMOTE DELETE WITH " + somministrazioni.size() + " SOMMINISTRAZIONI");
             deleteRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
               public void execute(List<Somministrazione> somministrazioni) {
                 dao.deleteSomministrazioni(somministrazioni, endDelegate);
               }
             });
-            
           }
         });
       }
@@ -467,13 +449,63 @@ public class MainController {
     return false;
   }
   
+  private void saveRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+    List<Somministrazione> somministrazioni = new ArrayList<Somministrazione>();
+    somministrazioni.add(somministrazione);
+    saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> results) {
+        Somministrazione result = (results != null && results.size() > 0) ? results.get(0) : null;
+        delegate.execute(result);
+      }
+    });
+  }
+   
   private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
-    List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
+    final List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
     for (Somministrazione somministrazione : somministrazioni) {
       if (isRemoteSomministrazione(somministrazione)) {
+//      somministrazione.setLanguage(PhonegapUtils.getCurrentLanguage());
         somministrazioniDaSalvare.add(somministrazione);
       }
     }
+    
+    if (somministrazioniDaSalvare.size() > 0) {
+      // 18/06/2014 introdotto il wrapped iterator per recuperare il language dal globalization plugin (che è asincrono!)
+      final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
+      innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
+          public void execute(final Iterator<Somministrazione> it) {
+            if (it.hasNext()) {
+              PhonegapUtils.getCurrentLanguage(new Delegate<String>() {
+                public void execute(String language) {
+                  it.next().setLanguage(language);
+                  innerDelegate.get().execute(it);
+                }
+              });
+            } else {
+              // finish processing
+              Account account = getAccountFromLocalStorage();
+              String devInfoId = getDevInfoIdFromLocalStorage();
+              PhonegapUtils.log("before save remote somministrazioni");
+              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
+                public void onSuccess(List<Somministrazione> somministrazioni) {
+                  PhonegapUtils.log("saved remote somministrazioni");
+                  delegate.execute(somministrazioni);
+                }
+                public void onFailure(Throwable caught) {
+                  processFailure(null, caught);
+                  delegate.execute(null);
+                }
+              });
+            }
+          }
+        }
+      );
+      innerDelegate.get().execute(somministrazioniDaSalvare.iterator());
+    } else {
+      delegate.execute(somministrazioni);
+    }
+
+    /********   OLD VERSION       
     if (somministrazioniDaSalvare.size() > 0) {
       Account account = getAccountFromLocalStorage();
       String devInfoId = getDevInfoIdFromLocalStorage();
@@ -491,24 +523,33 @@ public class MainController {
     } else {
       delegate.execute(somministrazioni);
     }
+    ***********************************************/
+    
   }
   
-  // TODO
-  private void updateRemoteSomministrazione (Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
-    List<Somministrazione> somministrazioni = new ArrayList<Somministrazione>();
-    somministrazioni.add(somministrazione);
-    saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
-      public void execute(List<Somministrazione> results) {
-        Somministrazione result = (results != null && results.size() > 0) ? results.get(0) : null;
-        delegate.execute(result);
+  private void deleteRemoteSomministrazioni (final List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
+    if (somministrazioni == null) {
+      delegate.execute(somministrazioni);
+    } else {
+      List<Somministrazione> somministrazioiniDaCancellare = new ArrayList<Somministrazione>();
+      for (Somministrazione somministrazione : somministrazioni) {
+        if (somministrazione.getRemoteId() != null) {
+          somministrazioiniDaCancellare.add(somministrazione);
+        }
       }
-    });
-  }
-   
-  // TODO
-  private void deleteRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
-//  PhonegapLog.log("deleting remote " + somministrazione);
-    delegate.execute(somministrazioni);
+      if (somministrazioiniDaCancellare.size() > 0) {
+        AppClientFactory.IMPL.getRemoteFacade().deleteSomministrazioni(somministrazioiniDaCancellare, new AsyncCallback<Void>() {
+          public void onSuccess(Void result) {
+            delegate.execute(somministrazioni);
+          }
+          public void onFailure(Throwable caught) {
+            delegate.execute(somministrazioni);
+          }
+        });
+      } else {
+        delegate.execute(somministrazioni);
+      }
+    }
   }
   
   private void processFailure(String message, Throwable caught) {
@@ -537,6 +578,5 @@ public class MainController {
       PhonegapUtils.log(logMsg);
     PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
   }
-  
   
 }

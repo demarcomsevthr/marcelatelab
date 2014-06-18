@@ -10,8 +10,8 @@ it.mate.therapyreminder.shared.model.impl.ContattoTx, true, true, true, true, it
 it.mate.therapyreminder.shared.model.impl.DosaggioTx, true, true, true, true, it.mate.therapyreminder.shared.model.impl.DosaggioTx/2987461074, 2987461074
 [Lit.mate.therapyreminder.shared.model.impl.DosaggioTx;, true, true, true, true, [Lit.mate.therapyreminder.shared.model.impl.DosaggioTx;/4167281474, 4167281474
 it.mate.therapyreminder.shared.model.impl.PrescrizioneTx, true, true, true, true, it.mate.therapyreminder.shared.model.impl.PrescrizioneTx/1148860215, 1148860215
-it.mate.therapyreminder.shared.model.impl.SomministrazioneTx, true, true, true, true, it.mate.therapyreminder.shared.model.impl.SomministrazioneTx/2497141733, 2497141733
-[Lit.mate.therapyreminder.shared.model.impl.SomministrazioneTx;, true, true, true, true, [Lit.mate.therapyreminder.shared.model.impl.SomministrazioneTx;/3110241046, 3110241046
+it.mate.therapyreminder.shared.model.impl.SomministrazioneTx, true, true, true, true, it.mate.therapyreminder.shared.model.impl.SomministrazioneTx/2141110149, 2141110149
+[Lit.mate.therapyreminder.shared.model.impl.SomministrazioneTx;, true, true, true, true, [Lit.mate.therapyreminder.shared.model.impl.SomministrazioneTx;/3638080265, 3638080265
 it.mate.therapyreminder.shared.service.RemoteFacade, false, false, false, false, _, 3819063648
 java.lang.Boolean, true, true, false, false, java.lang.Boolean/476441737, 476441737
 java.lang.Double, true, true, true, true, java.lang.Double/858496421, 858496421
