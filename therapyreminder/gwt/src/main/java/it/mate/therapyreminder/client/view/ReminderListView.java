@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.ui.TouchHTML;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.view.ReminderListView.Presenter;
@@ -121,30 +122,47 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     });
     final SimpleContainer list = new SimpleContainer();
     final ObjectWrapper<String> prevDate = new ObjectWrapper<String>();
+    final ObjectWrapper<Integer> actualHeight = new ObjectWrapper<Integer>(0);
+    final int lastId = somministrazioni.get(somministrazioni.size() - 1).getId();
     for (final Somministrazione somministrazione : somministrazioni) {
       getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
-          showRow(somministrazione, list, prevDate, udm);
+          actualHeight.set(actualHeight.get() + showRow(somministrazione, list, prevDate, udm));
+          if (somministrazione.getId() == lastId) {
+            // su ios funziona
+//          int panelHeight = Math.max(actualHeight.get(), (Window.getClientHeight() - resultsPanel.getAbsoluteTop()));
+            int panelHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
+            PhonegapUtils.log("panelHeight = " + panelHeight);
+            resultsPanel.setHeight(panelHeight + "px");
+            /*
+            getScrollPanel().setHeight(panelHeight + "px");
+            getScrollPanel().setMaxScrollY(panelHeight);
+            */
+            refreshScrollPanel();
+          }
         }
       });
-      
     }
     resultsPanel.add(list);
     TouchUtils.applyFocusPatch();
+    /*
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
-        resultsPanel.setHeight("" + (Window.getClientHeight() - resultsPanel.getAbsoluteTop()) + "px");
+        int panelHeight = Math.max(actualHeight.get(), (Window.getClientHeight() - resultsPanel.getAbsoluteTop()));
+        resultsPanel.setHeight("" + panelHeight + "px");
+        refreshScrollPanel();
       }
     });
+    */
   }
   
-  private void showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<String> prevDate, UdM udm) {
+  private int showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<String> prevDate, UdM udm) {
     String curDate = GwtUtils.dateToString(somministrazione.getData(), "yyyyMMdd");
     HorizontalPanel row = new HorizontalPanel();
     row.addStyleName("ui-row-reminder");
     list.add(row);
     String html = "";
-    if (prevDate.get() == null || !prevDate.equals(curDate)) {
+    if (prevDate.get() == null || !prevDate.get().equals(curDate)) {
       html += "<p class='ui-row-date'>";
       html += "<span class='ui-row-date-name'>";
       html += dayNameFmt.format(somministrazione.getData());
@@ -166,7 +184,9 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         }
       }
     });
+    PhonegapUtils.log("row.height = " + row.getElement().getClientHeight());
     prevDate.set(curDate);
+    return row.getElement().getClientHeight();
   }
   
 }

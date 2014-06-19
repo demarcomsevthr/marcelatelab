@@ -337,12 +337,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         if (getPrescrizioniDao().isReady()) {
           findSomministrazioneScadutaDelegate.execute(null);
           timer.get().cancel();
-          GwtUtils.createTimer(10000, new Delegate<Void>() {
+          GwtUtils.createTimer(5000, new Delegate<Void>() {
             public void execute(Void element) {
               findSomministrazioneScadutaDelegate.execute(null);
             }
           });
-          GwtUtils.createTimer(60000, true, new Delegate<Void>() {
+          GwtUtils.createTimer(20000, true, new Delegate<Void>() {
             public void execute(Void element) {
               PhonegapLog.log("sviluppo somministrazioni in background...");
               MainController.getInstance().sviluppaSomministrazioniInBackground();

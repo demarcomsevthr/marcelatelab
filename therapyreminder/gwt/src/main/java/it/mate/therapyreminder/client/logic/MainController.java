@@ -73,13 +73,16 @@ public class MainController {
   }
   
   public void sviluppaSomministrazioniInBackground() {
+    if (sviluppaSomministrazioni$operazioneInCorso) {
+      return;
+    }
     dao.findAllPrescrizioniAttive(new Date(), new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioni) {
         if (prescrizioni == null || prescrizioni.size() == 0) {
           return;
         }
         for (Prescrizione prescrizione : prescrizioni) {
-          sviluppaSomministrazioni(prescrizione);
+          sviluppaSomministrazioni(prescrizione, null);
         }
       }
     });
@@ -126,8 +129,23 @@ public class MainController {
       }
     });
   }
+
+  private Delegate<Prescrizione> sviluppaSomministrazioni$completionDelegate = null;
   
-  public void sviluppaSomministrazioni(final Prescrizione prescrizione) {
+  private boolean sviluppaSomministrazioni$operazioneInCorso = false;
+  
+  public void sviluppaSomministrazioni(final Prescrizione prescrizione, final Delegate<Prescrizione> completionDelegate) {
+    PhonegapUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+    this.sviluppaSomministrazioni$operazioneInCorso = true;
+    this.sviluppaSomministrazioni$completionDelegate = new Delegate<Prescrizione>() {
+      public void execute(Prescrizione prescrizione) {
+        PhonegapUtils.log("FINE SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+        sviluppaSomministrazioni$operazioneInCorso = false;
+        if (completionDelegate != null) {
+          completionDelegate.execute(prescrizione);
+        }
+      }
+    };
     dao.findLastSomministrazioneByPrescrizione(prescrizione, new Delegate<Somministrazione>() {
       public void execute(Somministrazione ultimaSomministrazione) {
         Date dataUltimaSomministrazione = null;
@@ -143,22 +161,57 @@ public class MainController {
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
+          //TODO
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
-            public void execute(List<Somministrazione> remoteSomministrazioni) {
-              if (remoteSomministrazioni != null) {
-                for (Somministrazione remoteSomministrazione : remoteSomministrazioni) {
-                  if (remoteSomministrazione.getRemoteId() != null) {
-                    dao.saveRemoteSomministrazione(remoteSomministrazione, new Delegate<Somministrazione>() {
+            public void execute(List<Somministrazione> somministrazioniInRemoto) {
+              
+              if (somministrazioniInRemoto == null) {
+                sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
+              } else {
+                
+                final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
+                innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
+                    public void execute(final Iterator<Somministrazione> it) {
+                      if (it.hasNext()) {
+                        Somministrazione somministrazioneInRemoto = it.next();
+                        if (somministrazioneInRemoto.getRemoteId() != null) {
+                          dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
+                            public void execute(Somministrazione updateRemoteSomministrazione) {
+                              PhonegapUtils.log("updated remote id somministrazione");
+                              innerDelegate.get().execute(it);
+                            }
+                          });
+                        } else {
+                          innerDelegate.get().execute(it);
+                        }
+                      } else {
+                        // finish processing
+                        sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
+                      }
+                    }
+                  }
+                );
+                innerDelegate.get().execute(somministrazioniInRemoto.iterator());
+
+                /*
+                for (Somministrazione somministrazioneInRemoto : somministrazioniInRemoto) {
+                  if (somministrazioneInRemoto.getRemoteId() != null) {
+                    dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
                       public void execute(Somministrazione updateRemoteSomministrazione) {
                         PhonegapUtils.log("updated remote somministrazione");
+                        sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
                       }
                     });
                   }
                 }
+                */
+                
               }
             }
           });
+        } else {
+          sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
         }
       }
     };
@@ -208,7 +261,6 @@ public class MainController {
       final List<Somministrazione> results, final Delegate<List<Somministrazione>> completionDelegate) {
     if (it.hasNext()) {
       Dosaggio dosaggio = it.next();
-      //TODO
       Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
       if (dataSomministrazione.before(new Date())) {
@@ -414,7 +466,6 @@ public class MainController {
   
   public boolean isOnlineMode() {
     String value = PhonegapUtils.getLocalStorageProperty("onlineMode");
-    PhonegapUtils.log("onlineMode = " + value);
     return ("true".equalsIgnoreCase(value));
   }
   
@@ -460,16 +511,17 @@ public class MainController {
     });
   }
    
-  private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
-    final List<Somministrazione> somministrazioniDaSalvare = new ArrayList<Somministrazione>();
+  private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> completionDelegate) {
+    final List<Somministrazione> somministrazioniDaSalvareInRemoto = new ArrayList<Somministrazione>();
     for (Somministrazione somministrazione : somministrazioni) {
       if (isRemoteSomministrazione(somministrazione)) {
-//      somministrazione.setLanguage(PhonegapUtils.getCurrentLanguage());
-        somministrazioniDaSalvare.add(somministrazione);
+        somministrazioniDaSalvareInRemoto.add(somministrazione);
       }
     }
     
-    if (somministrazioniDaSalvare.size() > 0) {
+    if (somministrazioniDaSalvareInRemoto.size() == 0) {
+      completionDelegate.execute(somministrazioni);
+    } else {
       // 18/06/2014 introdotto il wrapped iterator per recuperare il language dal globalization plugin (che è asincrono!)
       final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
       innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
@@ -486,23 +538,22 @@ public class MainController {
               Account account = getAccountFromLocalStorage();
               String devInfoId = getDevInfoIdFromLocalStorage();
               PhonegapUtils.log("before save remote somministrazioni");
-              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
+              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemoto, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
                 public void onSuccess(List<Somministrazione> somministrazioni) {
                   PhonegapUtils.log("saved remote somministrazioni");
-                  delegate.execute(somministrazioni);
+                  completionDelegate.execute(somministrazioni);
                 }
                 public void onFailure(Throwable caught) {
                   processFailure(null, caught);
-                  delegate.execute(null);
+                  completionDelegate.execute(null);
                 }
               });
             }
           }
         }
       );
-      innerDelegate.get().execute(somministrazioniDaSalvare.iterator());
-    } else {
-      delegate.execute(somministrazioni);
+      innerDelegate.get().execute(somministrazioniDaSalvareInRemoto.iterator());
+      
     }
 
     /********   OLD VERSION       
