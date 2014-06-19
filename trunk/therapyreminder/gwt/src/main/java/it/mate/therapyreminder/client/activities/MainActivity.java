@@ -275,8 +275,10 @@ public class MainActivity extends MGWTAbstractActivity implements
       }
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
+      setHeaderWaiting(true);
       dao.findSomministrazioniNonEseguite(new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> results) {
+          setHeaderWaiting(false);
           view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
         }
       });
@@ -357,9 +359,11 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (home) {
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
+    /*
     if (!home) {
       setVisibleOptionsBtn(true);
     }
+    */
   }
   
   private void setVisibleOptionsBtn(boolean visible) {
@@ -496,22 +500,34 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   @Override
-  public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, Delegate<Prescrizione> endDelegate) {
-    final Delegate<Prescrizione> fEndDelegate = endDelegate != null ? endDelegate : new Delegate<Prescrizione>() {
-      public void execute(Prescrizione element) {
-        goToTherapyListView();
+  public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, final Delegate<Prescrizione> completionDelegate) {
+    setHeaderWaiting(true);
+    PhonegapUtils.log("INIZIO SALVATAGGIO PRESCRIZIONE");
+    final Delegate<Prescrizione> innerCompletionDelegate = new Delegate<Prescrizione>() {
+      public void execute(Prescrizione prescrizione) {
+        setHeaderWaiting(false);
+        PhonegapUtils.log("FINE SALVATAGGIO PRESCRIZIONE");
+        if (completionDelegate != null) {
+          completionDelegate.execute(prescrizione);
+        } else {
+          goToTherapyListView();
+        }
       }
     };
     dao.savePrescrizione(newPrescrizione, new Delegate<Prescrizione>() {
       public void execute(final Prescrizione newPrescrizioneSalvata) {
         if (oldPrescrizione.hasEqualSomministrazioneOf(newPrescrizioneSalvata)) {
-          fEndDelegate.execute(newPrescrizioneSalvata);
+          innerCompletionDelegate.execute(newPrescrizioneSalvata);
         } else {
-          final Delegate<Prescrizione> sviluppoDelegate = new Delegate<Prescrizione>() {
+          final Delegate<Prescrizione> doSviluppoSomministrazioniDelegate = new Delegate<Prescrizione>() {
             public void execute(Prescrizione prescrizione) {
               try {
-                MainController.getInstance().sviluppaSomministrazioni(prescrizione);
-                fEndDelegate.execute(prescrizione);
+                MainController.getInstance().sviluppaSomministrazioni(prescrizione, new Delegate<Prescrizione>() {
+                  public void execute(Prescrizione prescrizione) {
+                    // TODO SVILUPPO SOMMINISTRAZIONI COMPLETATO
+                    innerCompletionDelegate.execute(prescrizione);
+                  }
+                });
               } catch (ServiceException ex) {
                 processFailure(null, ex);
               }
@@ -520,11 +536,11 @@ public class MainActivity extends MGWTAbstractActivity implements
           if (oldPrescrizione.isPersistent()) {
             MainController.getInstance().cancellaSomministrazioni(oldPrescrizione, new Delegate<Void>() {
               public void execute(Void element) {
-                sviluppoDelegate.execute(newPrescrizioneSalvata);
+                doSviluppoSomministrazioniDelegate.execute(newPrescrizioneSalvata);
               }
             });
           } else {
-            sviluppoDelegate.execute(newPrescrizioneSalvata);
+            doSviluppoSomministrazioniDelegate.execute(newPrescrizioneSalvata);
           }
         }
       }

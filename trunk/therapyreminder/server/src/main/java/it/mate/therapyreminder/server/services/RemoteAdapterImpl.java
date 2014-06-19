@@ -88,7 +88,7 @@ public class RemoteAdapterImpl implements RemoteAdapter {
             statoSomministrazione = Somministrazione.STATO_NOTIFICATION_FAILURE;
           }
         }
-        if (somministrazione.getTelefonoTutor() != null) {
+        if (somministrazione.getTelefonoTutor() != null && somministrazione.getTelefonoTutor().trim().length() > 0) {
           try {
             LoggingUtils.debug(getClass(), "sending sms notification for somministrazione " + somministrazione);
             sendSmsNotification(composeNotificationMessage(somministrazione, account), somministrazione.getTelefonoTutor());
@@ -242,7 +242,7 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   }
   
   private void correggiPrefissoInternazionale(SomministrazioneDs somministrazione) {
-    if (somministrazione.getTelefonoTutor() != null) {
+    if (somministrazione.getTelefonoTutor() != null && somministrazione.getTelefonoTutor().trim().length() > 0) {
       if (!somministrazione.getTelefonoTutor().trim().startsWith("+")) {
         //manca il prefisso
         if (somministrazione.getLanguage() != null) {

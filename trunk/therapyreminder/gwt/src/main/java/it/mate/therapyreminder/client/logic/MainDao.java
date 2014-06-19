@@ -2,6 +2,7 @@ package it.mate.therapyreminder.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.PhonegapLog;
+import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
@@ -20,6 +21,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+/**************************************************
+ * 
+ * [19/06/2014]
+ * 
+ * IMPORTANTISSIMO
+ * 
+ * NEI LOOP DI READ (iterateXXXForRead) NON CHIAMARE MAI METODI CHE CREANO NUOVE TRANSAZIONI
+ * 
+ * ES: iteratePrescrizioniForRead e findContattoById
+ * 
+ * DA JavaScriptException (InvalidStateError)
+ * 
+ *
+ */
 
 public class MainDao extends WebSQLDao {
   
@@ -323,7 +339,7 @@ public class MainDao extends WebSQLDao {
               }
               
               Integer idTutor = ((PrescrizioneTx)prescrizione).getIdTutor();
-              findContattoById(idTutor, new Delegate<Contatto>() {
+              internalFindContattoById(tr, idTutor, new Delegate<Contatto>() {
                 public void execute(Contatto contatto) {
                   prescrizione.setTutor(contatto);
                   iteratePrescrizioniForRead(it, tr, delegate, results);
@@ -711,7 +727,7 @@ public class MainDao extends WebSQLDao {
     });
   }
   
-  public void saveRemoteSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+  public void saveRemoteIdSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String sql = "UPDATE somministrazioni SET ";
@@ -772,25 +788,29 @@ public class MainDao extends WebSQLDao {
       delegate.execute(null);
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
-        sql += " WHERE id = ? ";
-        tr.doExecuteSql(sql, new Object[] {id}, 
-          new SQLStatementCallback() {
-            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-              if (rs.getRows().getLength() > 0) {
-                delegate.execute(flushRSToContatto(rs, 0));
-              } else {
-                delegate.execute(null);
-              }
-            }
-          }, new SQLStatementErrorCallback() {
-            public void handleEvent(SQLTransaction tr, SQLError error) {
-              delegate.execute(null);
-            }
-          }
-        );
+        internalFindContattoById(tr, id, delegate);
       }
     });
+  }
+  
+  private void internalFindContattoById(SQLTransaction tr, final Integer id, final Delegate<Contatto> delegate) {
+    String sql = "SELECT id, " + CONTATTI_FIELDS + " FROM contatti ";
+    sql += " WHERE id = ? ";
+    tr.doExecuteSql(sql, new Object[] {id}, 
+      new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          if (rs.getRows().getLength() > 0) {
+            delegate.execute(flushRSToContatto(rs, 0));
+          } else {
+            delegate.execute(null);
+          }
+        }
+      }, new SQLStatementErrorCallback() {
+        public void handleEvent(SQLTransaction tr, SQLError error) {
+          delegate.execute(null);
+        }
+      }
+    );
   }
   
   protected class RSToContattiIterator {

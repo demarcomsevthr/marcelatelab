@@ -76,7 +76,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   
   @UiField MTextBox titleBox;
   @UiField PhCalendarBox inizioBox;
-//@UiField TouchCombo tipoTerapiaCombo;
   @UiField TouchCombo tipoRicorrenzaCombo;
   @UiField TouchCombo tipoOrariCombo;
   @UiField Panel orariRegolariPanel;
@@ -89,7 +88,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField StatePanel estremiPrescrizionePanel;
   @UiField StatePanel ricorrenzaPrescrizionePanel;
   @UiField StatePanel orariPrescrizionePanel;
-//@UiField PhTextBox rangeBox;
   @UiField TouchCombo rangeCombo;
   @UiField PhTextBox rangeOrariBox;
   @UiField PhTimeBox orarioInizioBox;
@@ -211,9 +209,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_SEMESTRALE;
       }
       tipoRicorrenzaCombo.setValue(tipoRicorrenza);
-      /*
-      rangeBox.setValue(valoreRicorrenza);
-      */
       rangeCombo.setValue(valoreRicorrenza.toString());
       tipoOrariCombo.setValue(prescrizione.getTipoRicorrenzaOraria());
       if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
@@ -231,8 +226,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       qtaRimanenteBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente()));
       numConfezBox.setValue(0);
       
-      if (prescrizione.getTutor() != null) {
-        cbxNotificheTutor.setValue(true);
+      if (prescrizione.isPersistent()) {
+        if (prescrizione.getTutor() != null) {
+          cbxNotificheTutor.setValue(true);
+        }
+      } else {
+        if (getPresenter().isOnlineMode()) {
+          cbxNotificheTutor.setValue(true);
+        }
       }
       
       if (prescrizione.isPersistent()) {
@@ -390,7 +391,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     }
     orariListPanel.add(row);
     refreshScrollPanel();
-//  WebkitCssUtil.moveScrollPanelY(getScrollPanelImpl(), 50);
   }
   
   private PhTimeBox createOrarioBox(Dosaggio dosaggio) {
@@ -400,10 +400,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     return orarioBox;
   }
   
-  private void refreshScrollPanel() {
-    getScrollPanel().refresh();
-  }
-
   private void initBottomBar() {
     HorizontalPanel bottomBar = new HorizontalPanel();
     bottomBar.addStyleName("ui-bottom-button-bar");
@@ -573,10 +569,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     if (validateError != null) {
       PhgDialogUtils.showMessageDialog(validateError, "Alert", PhgDialogUtils.BUTTONS_OK);
     } else {
-      
-//    delegate.execute(prescrizione);
       getPresenter().savePrescrizione(prescrizione, oldPrescrizione, successDelegate);
-      
     }
   }
   
@@ -631,7 +624,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
               tutorCombo.setItem(tutor.getId().toString(), tutor.getNome(), selected);
             }
           } else {
-            PhgDialogUtils.showMessageDialog("To use this feature you have to enter at least a tutor. Do you want to do it now? ", 
+            PhgDialogUtils.showMessageDialog("To use the TUTOR feature you have to enter at least a tutor. Do you want to do it now? ", 
                 "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
                   public void execute(Integer btn) {
                     if (btn == 1) {
