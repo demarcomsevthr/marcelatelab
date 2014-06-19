@@ -176,4 +176,8 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     }
   }
   
+  protected void refreshScrollPanel() {
+    getScrollPanel().refresh();
+  }
+
 }
