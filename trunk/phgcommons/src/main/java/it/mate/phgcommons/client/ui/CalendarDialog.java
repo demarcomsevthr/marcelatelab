@@ -260,7 +260,7 @@ public class CalendarDialog {
     doneBox.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
         fireSelectedDateChange(selectedDate);
-        CalendarDialog.this.hide();
+//      CalendarDialog.this.hide();
       }
     });
     doneBox.addTouchEndHandler(new TouchEndHandler() {

@@ -22,12 +22,22 @@ public class JSONUtils {
   private static native boolean isAbsentStringify () /*-{
     return (typeof JSON == "undefined");
   }-*/;
+  
+  public static String stringify(JavaScriptObject jso) {
+    ensureStringify();
+    return stringifyImpl(jso);
+  }
+  
+  public static JavaScriptObject parse(String json) {
+    ensureStringify();
+    return parseImpl(json);
+  }
 
-  public static native String stringify(JavaScriptObject jso) /*-{
+  protected static native String stringifyImpl(JavaScriptObject jso) /*-{
     return JSON.stringify(jso);
   }-*/;
   
-  public static native JavaScriptObject parse(String json) /*-{
+  protected static native JavaScriptObject parseImpl(String json) /*-{
     return JSON.parse(json);
   }-*/;
 
