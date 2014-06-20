@@ -9,4 +9,8 @@ public class StringUtils {
     return text;
   }
   
+  public static boolean isNumber(String text) {
+    return text != null && text.matches("[0-9]*");
+  }
+  
 }
