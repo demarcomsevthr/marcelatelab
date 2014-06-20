@@ -22,4 +22,8 @@ public class NumberUtils {
     return (int)Math.floor(value);
   }
   
+  public static boolean isNumber(String text) {
+    return StringUtils.isNumber(text);
+  }
+  
 }
