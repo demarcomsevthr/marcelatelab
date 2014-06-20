@@ -62,7 +62,7 @@ public class CalendarDialog {
   private class Month {
     private Date date;
     private Month(Date date) {
-      this.date = date;
+      this.date = CalendarUtil.copyDate(date);
     }
     protected Month clone() {
       return new Month(CalendarUtil.copyDate(date));
@@ -90,6 +90,9 @@ public class CalendarDialog {
     @Override
     public String toString() {
       return "Month [" + (date.getYear()+1900) + "/" + (date.getMonth()+1) + "]";
+    }
+    public boolean isDateInMonth(Date thatDate) {
+      return (date.getYear() == thatDate.getYear() && date.getMonth() == thatDate.getMonth());
     }
   }
   
@@ -155,7 +158,7 @@ public class CalendarDialog {
   
   public CalendarDialog(Date initialDate, String[] labels) {
     if (initialDate != null) {
-      this.selectedDate = initialDate;
+      this.selectedDate = CalendarUtil.copyDate(initialDate);
     } else {
       this.selectedDate = new Date();
     }
@@ -241,10 +244,6 @@ public class CalendarDialog {
     }
     
     if (glassEnabled) {
-      /*
-      popup.setGlassStyleName("phg-PopupPanelGlass");
-      popup.setGlassEnabled(true);
-      */
       createGlass("phg-PopupPanelGlass");
     }
     
@@ -260,7 +259,6 @@ public class CalendarDialog {
     doneBox.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
         fireSelectedDateChange(selectedDate);
-//      CalendarDialog.this.hide();
       }
     });
     doneBox.addTouchEndHandler(new TouchEndHandler() {
@@ -510,17 +508,6 @@ public class CalendarDialog {
       dayCell.addStyleName("phg-outsideMonth");
     }
 
-    /*
-    if (CalendarUtil.isSameDate(date, selectedDate)) {
-      html.addStyleName("phg-CalendarDialog-Month-Day-selected");
-    }
-    */
-    /*
-    html.addTouchStartHandler(new TouchStartHandler() {
-      public void onTouchStart(TouchStartEvent event) {
-      }
-    });
-    */
     dayCell.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         if (scrollPending) {
@@ -556,8 +543,13 @@ public class CalendarDialog {
   }
   
   private void setSelectedDateStyle(Date date) {
-    if (date == null)
+    if (date == null) {
       return;
+    }
+    if (!curMonth.isDateInMonth(date)) {
+      return;
+    }
+    PhonegapUtils.log("setting selected date style " + GwtUtils.dateToString(date, "dd/MM/yyyy"));
     Widget cell = getDateCellWidget(date);
     if (cell != null) {
       cell.addStyleName("phg-CalendarDialog-Month-Day-selected");
@@ -569,14 +561,6 @@ public class CalendarDialog {
     for (Element element : elements) {
       element.removeClassName("phg-CalendarDialog-Month-Day-selected");
     }
-    /*
-    if (date == null)
-      return;
-    Widget cell = getDateCellWidget(date);
-    if (cell != null) {
-      cell.removeStyleName("phg-CalendarDialog-Month-Day-selected");
-    }
-    */
   }
   
   public void setSelectedDate(Date selectedDate) {
