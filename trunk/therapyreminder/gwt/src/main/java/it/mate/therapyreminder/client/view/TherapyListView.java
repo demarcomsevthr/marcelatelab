@@ -10,6 +10,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.view.TherapyListView.Presenter;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 
@@ -177,7 +178,7 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
   public void onDeleteBtn(TouchEndEvent event) {
     if (selectedPrescrizioni == null || selectedPrescrizioni.size() == 0)
       return;
-    PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected therapies?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+    PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyListView_onDeleteBtn_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
       public void execute(Integer selectedButton) {
         if (selectedButton == 1) {
           getPresenter().deletePrescrizioni(selectedPrescrizioni);

@@ -11,25 +11,27 @@
     <g:HTML HTML="Account settings" addStyleNames="ui-view-header"/>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
-      <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn">
+        <ui:attribute name="text" description="text" key="saveBtn.text"/>
+      </p:TouchButton>
     </g:HorizontalPanel>
 
     <hr class="ui-view-separator-1"/>
     
-    <g:Label text="Name:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:Label text="Name:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="text" description="text" key="nameLabel.text"/>
+    </g:Label>
     <ph:PhTextBox ui:field="nameBox" addStyleNames="ui-app-textbox, ui-name-box"/>
 
-    <!-- 
-    <g:Label text="Password:" addStyleNames="ui-field-label ui-field-label-1"/>
-    <ph:PhTextBox ui:field="pwdBox" addStyleNames="ui-app-textbox, ui-pwd-box"/>
-     -->
-
-    <g:Label text="Email:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:Label text="Email:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="text" description="text" key="emailLabel.text"/>
+    </g:Label>
     <ph:PhTextBox ui:field="emailBox" addStyleNames="ui-app-textbox, ui-email-box"/>
 
-    <g:Label text="Phone number:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:Label text="Phone number:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="text" description="text" key="phoneLabel.text"/>
+    </g:Label>
     <ph:PhTextBox ui:field="phoneBox" addStyleNames="ui-app-textbox, ui-phone-box"/>
-
   
   </g:HTMLPanel>
   

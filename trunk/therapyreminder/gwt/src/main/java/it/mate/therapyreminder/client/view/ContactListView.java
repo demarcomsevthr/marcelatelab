@@ -178,19 +178,4 @@ public class ContactListView extends BaseMgwtView <Presenter> {
     });
   }
 
-  /*
-  @UiHandler ("deleteBtn")
-  public void onDeleteBtn(TouchEndEvent event) {
-    if (selectedPrescrizioni == null || selectedPrescrizioni.size() == 0)
-      return;
-    PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected therapies?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
-      public void execute(Integer selectedButton) {
-        if (selectedButton == 1) {
-          getPresenter().deletePrescrizioni(selectedPrescrizioni);
-        }
-      }
-    });
-  }
-  */
-  
 }

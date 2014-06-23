@@ -11,13 +11,21 @@
     <gc:Spacer addStyleNames="ui-homeSpacer1"/>
     
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-home-terapies-btn" text="Therapies" ui:field="therapiesBtn"/>
-      <p:TouchAnchor addStyleNames="ui-home-reminders-btn" text="Reminders" ui:field="remindersBtn"/>
+      <p:TouchAnchor addStyleNames="ui-home-terapies-btn" text="Therapies" ui:field="therapiesBtn">
+        <ui:attribute name="text" description="text" key="therapiesBtn.text"/>
+      </p:TouchAnchor>
+      <p:TouchAnchor addStyleNames="ui-home-reminders-btn" text="Reminders" ui:field="remindersBtn">
+        <ui:attribute name="text" description="text" key="remindersBtn.text"/>
+      </p:TouchAnchor>
     </g:HorizontalPanel>
     
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-home-doctors-btn" text="Doctors and Tutors" ui:field="doctorsBtn"/>
-      <p:TouchAnchor addStyleNames="ui-home-preferences-btn" text="Settings" ui:field="preferencesBtn"/>
+      <p:TouchAnchor addStyleNames="ui-home-doctors-btn" text="Doctors and Tutors" ui:field="doctorsBtn">
+        <ui:attribute name="text" description="text" key="doctorsBtn.text"/>
+      </p:TouchAnchor>
+      <p:TouchAnchor addStyleNames="ui-home-preferences-btn" text="Settings" ui:field="preferencesBtn">
+        <ui:attribute name="text" description="text" key="preferencesBtn.text"/>
+      </p:TouchAnchor>
     </g:HorizontalPanel>
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>

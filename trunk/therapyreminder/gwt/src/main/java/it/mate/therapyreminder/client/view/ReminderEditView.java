@@ -8,6 +8,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Position;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
@@ -79,7 +80,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       
       if (MainController.isScaduta(somministrazione)) {
         
-        PhgDialogUtils.showMessageDialog("Did you take this medicine?", "Reminder expired", PhgDialogUtils.BUTTONS_YESNO,
+        PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ReminderEditView_setModel_msg1(), AppMessages.IMPL.ReminderEditView_setModel_title1(), PhgDialogUtils.BUTTONS_YESNO,
             new Position(getPopupTop(), null) /* null */,
             new Delegate<Integer>() {
               public void execute(Integer btnIndex) {
@@ -105,7 +106,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       
       int qtaRimanente = NumberUtils.doubleAsInt(somministrazione.getPrescrizione().getQtaRimanente());
       
-      PhgDialogUtils.showMessageDialog("This medicine is going to finish, you got only " + qtaRimanente + " yet", "Alert", PhgDialogUtils.BUTTONS_OK,
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ReminderEditView_setModel_msg2(qtaRimanente), "Alert", PhgDialogUtils.BUTTONS_OK,
           new Position(getPopupTop(), null) /* null */,
           new Delegate<Integer>() {
             public void execute(Integer btnIndex) {
