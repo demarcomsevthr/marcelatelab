@@ -17,6 +17,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.logic.MainController;
@@ -481,8 +482,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (isOnlineMode()) {
       AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CONTACT_TUTOR_LIST));
     } else {
-      String msg = "You can use the tutor feature only in online mode. Do you want to activate it?";
-      PhgDialogUtils.showMessageDialog(msg, "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_goToContactTutorListView_msg1(), "Alert", 
+          PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
         public void execute(Integer btn) {
           if (btn == 1) {
             goToSettingsView();
@@ -703,7 +704,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       new AsyncCallback<String>() {
         public void onFailure(Throwable caught) {
           if (isOnlineMode()) {
-            PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_dataConnectionOff_msg());
           }
           GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
         }
@@ -755,7 +756,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         boolean procedi = true;
         if (account != null) {
           if (account.getName().trim().equals(contatto.getNome().trim())) {
-            PhgDialogUtils.showMessageDialog("Cannot insert contact with the same name as the account name");
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveContatto_msg1());
             procedi = false;
           }
         }
@@ -769,17 +770,17 @@ public class MainActivity extends MGWTAbstractActivity implements
                     continue;
                   }
                   if (contattoInDb.getNome().trim().equalsIgnoreCase(contatto.getNome().trim())) {
-                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same name");
+                    PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveContatto_msg2());
                     procedi = false;
                     break;
                   }
                   if (contattoInDb.getEmail().trim().equalsIgnoreCase(contatto.getEmail().trim())) {
-                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same email");
+                    PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveContatto_msg3());
                     procedi = false;
                     break;
                   }
                   if (contattoInDb.getTelefono() != null && contattoInDb.getTelefono().trim().equalsIgnoreCase(contatto.getTelefono().trim())) {
-                    PhgDialogUtils.showMessageDialog("Cannot insert two contacts with same phone number");
+                    PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveContatto_msg4());
                     procedi = false;
                     break;
                   }
@@ -824,11 +825,11 @@ public class MainActivity extends MGWTAbstractActivity implements
           AppClientFactory.IMPL.getRemoteFacade().createAccount(account, new AsyncCallback<Account>() {
             public void onFailure(Throwable caught) {
               setHeaderWaiting(false);
-              PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+              PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_dataConnectionOff_msg());
             }
             public void onSuccess(final Account account) {
               setHeaderWaiting(false);
-              PhgDialogUtils.showMessageDialog("Account created", "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
+              PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveAccount_msg1(), "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
                 public void execute(Integer element) {
                   MainController.getInstance().setAccountInLocalStorage(account);
                   successDelegate.execute(account);
@@ -843,11 +844,11 @@ public class MainActivity extends MGWTAbstractActivity implements
       AppClientFactory.IMPL.getRemoteFacade().updateAccount(account, new AsyncCallback<Account>() {
         public void onFailure(Throwable caught) {
           setHeaderWaiting(false);
-          PhgDialogUtils.showMessageDialog("Maybe data connection is off");
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_dataConnectionOff_msg());
         }
         public void onSuccess(Account account) {
           setHeaderWaiting(false);
-          PhgDialogUtils.showMessageDialog("Account saved");
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveAccount_msg2());
           MainController.getInstance().setAccountInLocalStorage(account);
           successDelegate.execute(account);
         }
@@ -860,7 +861,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     dao.findPrescrizioniAttiveByContatto(new Date(), contatto, new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioni) {
         if (prescrizioni != null && prescrizioni.size() > 0) {
-          PhgDialogUtils.showMessageDialog("This contact cannot be deleted: you have some therapies associated to it");
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_deleteContatto_msg1());
           goToPrevious();
           return;
         } else {

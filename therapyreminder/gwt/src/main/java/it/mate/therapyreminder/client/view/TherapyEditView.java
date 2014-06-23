@@ -18,6 +18,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
@@ -449,7 +450,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiHandler ("deleteBtn")
   public void onDeleteBtn (TouchEndEvent event) {
     if (oldPrescrizione.getId() != null) {
-      PhgDialogUtils.showMessageDialog("Are you sure you want to delete this therapy?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_onDeleteBtn_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
         public void execute(Integer selectedButton) {
           if (selectedButton == 1) {
             List<Prescrizione> prescrizioni = new ArrayList<Prescrizione>();
@@ -467,7 +468,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     if (prescrizione == null || prescrizione.equals(oldPrescrizione)) {
       handler.doClose();
     } else {
-      PhgDialogUtils.showMessageDialog("There are some changes. Do you want to save it?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_onClosingView_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
         public void execute(Integer selectedButton) {
           if (selectedButton == 1) {
             savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
@@ -517,7 +518,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       prescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
       if (orarioInizioBox.getValue() == null) {
         if (verbose) {
-          PhgDialogUtils.showMessageDialog("Devi inserire l'orario di inizio prescrizione", "Alert", PhgDialogUtils.BUTTONS_OK);
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg1(), "Alert", PhgDialogUtils.BUTTONS_OK);
         }
         return null;
       }
@@ -526,14 +527,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       if (prescrizione.getDosaggi() == null) {
         if (verbose) {
-          PhgDialogUtils.showMessageDialog("Devi inserire almeno un orario di assunzione", "Alert", PhgDialogUtils.BUTTONS_OK);
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg2(), "Alert", PhgDialogUtils.BUTTONS_OK);
         }
         return null;
       }
       for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
         if (dosaggio.getOrario() == null) {
           if (verbose) {
-            PhgDialogUtils.showMessageDialog("Orario di assunzione non impostato", "Alert", PhgDialogUtils.BUTTONS_OK);
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg3(), "Alert", PhgDialogUtils.BUTTONS_OK);
           }
           return null;
         }
@@ -624,7 +625,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
               tutorCombo.setItem(tutor.getId().toString(), tutor.getNome(), selected);
             }
           } else {
-            PhgDialogUtils.showMessageDialog("To use the TUTOR feature you have to enter at least a tutor. Do you want to do it now? ", 
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_fillTutorCombo_msg1(), 
                 "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
                   public void execute(Integer btn) {
                     if (btn == 1) {

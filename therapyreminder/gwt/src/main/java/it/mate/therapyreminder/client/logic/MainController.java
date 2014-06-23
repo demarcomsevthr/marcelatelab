@@ -12,6 +12,7 @@ import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Dosaggio;
@@ -451,7 +452,7 @@ public class MainController {
           delegate.execute(true);
         }
         public void onFailure(Throwable caught) {
-          PhgDialogUtils.showMessageDialog("In online mode you need to turn on the mobile data connection");
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainController_checkConnectionIfOnlineMode_msg1());
           delegate.execute(false);
         }
       });

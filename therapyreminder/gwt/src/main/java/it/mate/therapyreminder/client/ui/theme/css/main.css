@@ -368,6 +368,12 @@ body {
   border-radius: 6px;
 }
 
+.ui-home-terapies-btn a, .ui-home-reminders-btn a, .ui-home-doctors-btn a, .ui-home-preferences-btn a {
+  font-size: 1.1em;
+  padding-left: 0px;
+  margin-left: -5px;
+}
+
 .ui-home-terapies-btn {
   background: url('main/images/terapies-128.png') no-repeat 8px 4px;
 }
@@ -378,12 +384,6 @@ body {
 
 .ui-home-doctors-btn {
   background: url('main/images/doctors-128.png') no-repeat 4px 2px;
-}
-
-.ui-home-doctors-btn a {
-  font-size: 1.1em;
-  padding-left: 0px;
-  margin-left: -5px;
 }
 
 .ui-home-preferences-btn {
@@ -431,11 +431,18 @@ body {
   margin-bottom: -0.3em;
 }
 
+.ui-app-alert-riordino, .ui-app-notifiche-tutor, .ui-app-online-mode-ckb {
+  height: 1.2em;
+  width: 1.2em;
+}
+
 .ui-app-alert-riordino, .ui-app-notifiche-tutor {
-  height: 1em;
-  width: 1em;
   margin-left: 0.5em;
   margin-right: -0.1em;
+}
+
+.ui-app-online-mode-ckb {
+  margin-left: 0.8em;
 }
 
 .ui-app-alert-riordino-label, .ui-app-notifiche-tutor-label {
@@ -518,13 +525,7 @@ body {
 }
 
 .ui-setting-row td:first-child {
-  width: 50%;
-}
-
-.ui-app-online-mode-ckb {
-  width: 1em;
-  height: 1em;
-  margin-left: 0.8em;
+  width: 35%;
 }
 
 .ui-settings-btn.mgwt-SmartButton {
@@ -538,6 +539,7 @@ body {
   padding-right: 2em;
   margin-left: 1em;
   margin-right: 1em;
+  color: #555;
 }
 
 .ui-settings-separator {
@@ -568,4 +570,8 @@ body {
 
 .ui-contacts-tutor-btn {
   background: url('main/images/contacts-tutor-128.png') no-repeat 4px 2px;
+}
+
+.ui-lang-combobox {
+  margin: 0.7em;
 }

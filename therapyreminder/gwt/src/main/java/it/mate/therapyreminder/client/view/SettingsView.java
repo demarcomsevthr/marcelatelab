@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.plugins.EmailComposerPlugin;
 import it.mate.phgcommons.client.ui.TouchButton;
+import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
@@ -45,12 +46,10 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  
   @UiField TouchButton traceBtn;
-  
   @UiField PhCheckBox cbxOnlineMode;
-  
   @UiField Panel accountPanel;
+  @UiField TouchCombo langCmb;
   
   public SettingsView() {
     initUI();
@@ -63,24 +62,22 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
     wrapperPanel.getElement().getStyle().clearHeight();
-    
     if (PhonegapUtils.getTrace() != null) {
       traceBtn.setText("Dump trace");
     }
-    
   }
   
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
-    
     if (getPresenter().isOnlineMode()) {
       cbxOnlineMode.setValue(true);
       accountPanel.setVisible(true);
     }
-    
+    String localLanguage = PhonegapUtils.getAppLocalLanguage();
+    langCmb.addItem("en", "English", "en".equals(localLanguage));
+    langCmb.addItem("it", "Italiano", "it".equals(localLanguage));
   }
 
   @Override
@@ -116,13 +113,9 @@ public class SettingsView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("dumpBtn")
   public void onDumpBtn (TouchEndEvent event) {
-
     final MainDao dao = AppClientFactory.IMPL.getPrescrizioniDao();
-    
     final EmailWrapper email = new EmailWrapper("THR db dump");
-    
     final Delegate<String> previousErrorDelegate = dao.getErrorDelegate();
-    
     dao.setErrorDelegate(new Delegate<String>() {
       public void execute(String error) {
         PhonegapUtils.log(">>> intercettato errore db " + error);
@@ -131,7 +124,6 @@ public class SettingsView extends BaseMgwtView <Presenter> {
         email.showMailComposer();
       }
     });
-    
     email.println(">>> START DUMP <<<");
     email.println("finding all prescrizioni...");
     dao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
@@ -223,6 +215,11 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("legalNotesBtn")
   public void onLegalNotesBtn (TouchEndEvent event) {
     getPresenter().goToLegalNotes();
+  }
+
+  @UiHandler ("langCmb")
+  public void onLangCmb(ValueChangeEvent<String> event) {
+    PhonegapUtils.setAppLocalLanguageAndReload(event.getValue());
   }
   
 }

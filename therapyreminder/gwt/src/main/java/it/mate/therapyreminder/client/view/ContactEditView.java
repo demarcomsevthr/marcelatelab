@@ -6,6 +6,7 @@ import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.view.ContactEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.impl.ContattoTx;
@@ -73,7 +74,7 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiHandler ("deleteBtn")
   public void onDeleteBtn (TouchEndEvent event) {
     if (originalModel.getId() != null) {
-      PhgDialogUtils.showMessageDialog("Are you sure you want to delete this contact?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ContactEditView_onDeleteBtn_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
         public void execute(Integer selectedButton) {
           if (selectedButton == 1) {
             getPresenter().deleteContatto(originalModel);
@@ -89,7 +90,7 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
     if (modifiedModel == null || originalModel.equals(modifiedModel)) {
       handler.doClose();
     } else {
-      PhgDialogUtils.showMessageDialog("There are some changes. Do you want to save it?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ContactEditView_onClosingView_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
         public void execute(Integer selectedButton) {
           if (selectedButton == 1) {
             getPresenter().saveContatto(modifiedModel, new Delegate<Contatto>() {
@@ -112,13 +113,13 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
     modifiedModel.setTelefono(phoneBox.getValue());
     if (modifiedModel.getNome().trim().equals("")) {
       if (validate) {
-        PhgDialogUtils.showMessageDialog("Missing name");
+        PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ContactEditView_flushModel_msg1());
         return null;
       }
     }
     if (modifiedModel.getEmail().trim().equals("") && modifiedModel.getTelefono().trim().equals("")) {
       if (validate) {
-        PhgDialogUtils.showMessageDialog("Missing email or phone number");
+        PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ContactEditView_flushModel_msg2());
         return null;
       }
     }
