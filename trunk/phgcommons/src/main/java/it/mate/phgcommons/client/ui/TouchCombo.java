@@ -70,6 +70,10 @@ public class TouchCombo extends TouchHTML implements HasClickHandlers, HasValue<
     this.itemWidth = itemWidth;
   }
   
+  public void addItem(String value, String description, boolean selected) {
+    setItem(value, description, selected);
+  }
+  
   public void setItem(String value, String description, boolean selected) {
 //  LogUtil.log("setItem: value = "+value+", description = "+description+", selected = " + selected);
     for (Item item : items) {

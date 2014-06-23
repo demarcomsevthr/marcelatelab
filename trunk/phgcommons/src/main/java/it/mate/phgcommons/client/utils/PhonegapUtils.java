@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -46,6 +48,7 @@ public class PhonegapUtils {
     log("Device.platform " + getDevicePlatform());
     log("Device.uuid " + getDeviceUuid());
     log("Device.version " + getDeviceVersion());
+    log("Locale.language " + getAppLocalLanguage());
   }
   
   public static String getLayoutInfo() {
@@ -121,8 +124,6 @@ public class PhonegapUtils {
     
     if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSetting("TraceLogToFile"))) {
 //    logImpl("Ready to write to trace.log > " + logMsg);
-      //TODO: 30/05/2014
-      // scrittura su file di log
       
       if (trace != null) {
         trace.add(logMsg);
@@ -254,7 +255,7 @@ public class PhonegapUtils {
   }
   
   public static String dateToString(Date date) {
-    String lang = getLocalStorageLanguage();
+    String lang = getAppLocalLanguage();
     if (lang == null) {
       lang = getNavigator().getLanguage();
     }
@@ -266,14 +267,6 @@ public class PhonegapUtils {
     } else {
       return GwtUtils.dateToString(date, "MM/dd/yyyy");
     }
-  }
-  
-  public static String getLocalStorageLanguage() {
-    return getLocalStorageProperty("PhonegapUtils.language");
-  }
-  
-  public static void setLocalStorageLanguage(String value) {
-    setLocalStorageProperty("PhonegapUtils.language", value);
   }
   
   public static void startTrace() {
@@ -288,6 +281,27 @@ public class PhonegapUtils {
     PhonegapUtils.trace = null;
   }
   
+  public static void callDebugHook(JavaScriptObject jso) {
+    if (isGlobalDebugHookUndefined()) {
+      createGlobalDebugHookImpl();
+    }
+    callGlobalDebugHookImpl(jso);
+  }
+  
+  private native static boolean isGlobalDebugHookUndefined() /*-{
+    return typeof($wnd.glbDebugHook) == "undefined";
+  }-*/;
+  
+  private native static void createGlobalDebugHookImpl() /*-{
+    $wnd.glbDebugHook = function (jso) {
+        var _tt = "INSERT BREAK POINT HERE";
+      };
+  }-*/;
+  
+  private native static void callGlobalDebugHookImpl(JavaScriptObject jso) /*-{
+    $wnd.glbDebugHook(jso);
+  }-*/;
+
   public static void getCurrentLanguage(final Delegate<String> delegate) {
     getGlobalizationLanguage(new StringCallback() {
       public void handle(String language) {
@@ -322,4 +336,43 @@ public class PhonegapUtils {
     }
   }-*/;
 
+  //TODO
+  public static void setAppLocalLanguageAndReload(final String language) {
+    setAppLocalLanguageImpl(language);
+    // se lanciato da una combo da una IllegalStateException su una onDetach
+    // workaround: disabilito l'handler delle eccezioni
+    GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      public void onUncaughtException(Throwable e) {
+        // do nothing
+      }
+    });
+    Window.Location.reload();
+  }
+  
+  private static native void setAppLocalLanguageImpl(String language) /*-{
+    $wnd.setAppLocalLanguage(language);
+  }-*/;
+
+  public static String getAppLocalLanguage() {
+    String lang = getAppLocalLanguageImpl();
+    if (lang == null || lang.trim().length() == 0) {
+      lang = "en";
+    }
+    return lang;
+  }
+  
+  private static native String getAppLocalLanguageImpl() /*-{
+    return $wnd.getAppLocalLanguage();
+  }-*/;
+
+  /*
+  public static String getLocalStorageLanguage() {
+    return getLocalStorageProperty("PhonegapUtils.language");
+  }
+  
+  public static void setLocalStorageLanguage(String value) {
+    setLocalStorageProperty("PhonegapUtils.language", value);
+  }
+  */
+  
 }
