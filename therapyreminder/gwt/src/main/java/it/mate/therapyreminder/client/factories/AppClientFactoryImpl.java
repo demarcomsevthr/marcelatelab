@@ -7,12 +7,12 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
+import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
@@ -33,6 +33,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.Timer;
@@ -133,6 +134,20 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     DefaultTheme.Impl.get().css().ensureInjected();
     
     CustomTheme.Instance.get().css().ensureInjected();
+
+    CalendarDialog.setLanguage(PhonegapUtils.getAppLocalLanguage());
+    
+    PhonegapUtils.log("TIME FORMAT = " + LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().timeFormat());
+    PhonegapUtils.getGlobalizationDatePattern(new Delegate<String>() {
+      public void execute(String pattern) {
+        PhonegapUtils.log("GLOB DATE PATTERN = " + pattern);
+      }
+    });
+    PhonegapUtils.getGlobalizationTimePattern(new Delegate<String>() {
+      public void execute(String pattern) {
+        PhonegapUtils.log("GLOB TIME PATTERN = " + pattern);
+      }
+    });
     
     PhonegapUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
@@ -344,7 +359,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           });
           GwtUtils.createTimer(20000, true, new Delegate<Void>() {
             public void execute(Void element) {
-              PhonegapLog.log("sviluppo somministrazioni in background...");
+//            PhonegapLog.log("sviluppo somministrazioni in background...");
               MainController.getInstance().sviluppaSomministrazioniInBackground();
             }
           });
@@ -373,18 +388,18 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     public void execute(Void element) {
       if (!alertsEnabled)
         return;
-      PhonegapLog.log("checking somministrazione scaduta...");
+//    PhonegapLog.log("checking somministrazione scaduta...");
       MainController.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
         public void execute(Somministrazione somministrazione) {
           if (firstRun) {
             if (somministrazione != null) {
-              PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+//            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
               defaultPlace = new MainPlace(MainPlace.REMINDER_EDIT, somministrazione);
             }
             initHistoryHandler(historyHandler, defaultPlace);
           } else {
             if (somministrazione != null) {
-              PhonegapLog.log("found somministrazione scaduta " + somministrazione);
+//            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
               getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
             }
           }

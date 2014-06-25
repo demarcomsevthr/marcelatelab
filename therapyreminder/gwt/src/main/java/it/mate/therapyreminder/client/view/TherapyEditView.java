@@ -124,24 +124,24 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     
     wrapperPanel.getElement().getStyle().clearHeight();
     
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO, "Ogni giorno", true);
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI, "A giorni alterni", false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_ogniGiorno(), true);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNI_ALTERNI, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_giorniAlterni(), false);
 
 // Gorini 16/06/2014: chiede di togliere questa opzione    
 //  tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_GIORNALIERA, "Giornaliera", false);
     
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, "Settimanale", false);
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_MENSILE, "Mensile", false);
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_TRIMESTRALE, "Trimestrale", false);
-    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SEMESTRALE, "Semestrale", false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SETTIMANALE, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_settimanale(), false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_MENSILE, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_mensile(), false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_TRIMESTRALE, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_trimestrale(), false);
+    tipoRicorrenzaCombo.setItem(Prescrizione.TIPO_RICORRENZA_SEMESTRALE, AppMessages.IMPL.TherapyEditView_tipoRicorrenzaCombo_semestrale(), false);
     tipoRicorrenzaCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoRicorrenzaValue();
       }
     });
     
-    tipoOrariCombo.setItem(Prescrizione.TIPO_ORARI_A_INTERVALLI, "A intervalli regolari", false);
-    tipoOrariCombo.setItem(Prescrizione.TIPO_ORARI_FISSI, "A orari fissi", false);
+    tipoOrariCombo.setItem(Prescrizione.TIPO_ORARI_A_INTERVALLI, AppMessages.IMPL.TherapyEditView_tipoOrariCombo_aIntervalli(), false);
+    tipoOrariCombo.setItem(Prescrizione.TIPO_ORARI_FISSI, AppMessages.IMPL.TherapyEditView_tipoOrariCombo_aOrariFissi(), false);
     tipoOrariCombo.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         checkTipoOrarioValue();
@@ -405,9 +405,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     HorizontalPanel bottomBar = new HorizontalPanel();
     bottomBar.addStyleName("ui-bottom-button-bar");
     bottomBar.setSpacing(0);
-    initBottomBarItem(bottomBar, "What", "what", "estremiPrescrizionePanel");
-    initBottomBarItem(bottomBar, "When", "when", "ricorrenzaPrescrizionePanel");
-    initBottomBarItem(bottomBar, "Hours", "hours", "orariPrescrizionePanel");
+    initBottomBarItem(bottomBar, AppMessages.IMPL.TherapyEditView_bottomBar_what(), "what", "estremiPrescrizionePanel");
+    initBottomBarItem(bottomBar, AppMessages.IMPL.TherapyEditView_bottomBar_when(), "when", "ricorrenzaPrescrizionePanel");
+    initBottomBarItem(bottomBar, AppMessages.IMPL.TherapyEditView_bottomBar_hours(), "hours", "orariPrescrizionePanel");
     RootPanel.get().add(bottomBar);
     this.bottomBar = bottomBar;
   }

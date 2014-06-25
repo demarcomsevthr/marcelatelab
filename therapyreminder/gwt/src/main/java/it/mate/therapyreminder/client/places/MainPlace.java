@@ -23,7 +23,7 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String ACCOUNT_EDIT = "editAccount";
   
-  public static final String LEGAL_NOTES = "legalNotes";
+  public static final String ABOUT = "about";
   
   public static final String CONTACT_MENU = "contactsMenu";
   

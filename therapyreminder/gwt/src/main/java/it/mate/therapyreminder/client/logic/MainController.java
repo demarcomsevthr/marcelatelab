@@ -136,11 +136,11 @@ public class MainController {
   private boolean sviluppaSomministrazioni$operazioneInCorso = false;
   
   public void sviluppaSomministrazioni(final Prescrizione prescrizione, final Delegate<Prescrizione> completionDelegate) {
-    PhonegapUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+//  PhonegapUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
     this.sviluppaSomministrazioni$operazioneInCorso = true;
     this.sviluppaSomministrazioni$completionDelegate = new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
-        PhonegapUtils.log("FINE SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+//      PhonegapUtils.log("FINE SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
         sviluppaSomministrazioni$operazioneInCorso = false;
         if (completionDelegate != null) {
           completionDelegate.execute(prescrizione);

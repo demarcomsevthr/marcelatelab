@@ -8,7 +8,9 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel ui-ExecutionListView">
     
-    <g:HTML HTML="Reminders" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Reminders" addStyleNames="ui-view-header">
+      <ui:attribute name="HTML" description="text" key="header.html"/>
+    </g:HTML>
     
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     

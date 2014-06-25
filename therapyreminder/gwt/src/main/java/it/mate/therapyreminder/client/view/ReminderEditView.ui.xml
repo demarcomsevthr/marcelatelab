@@ -8,16 +8,22 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-therapy-panel">
       
-    <g:HTML HTML="Reminder" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Reminder" addStyleNames="ui-view-header">
+      <ui:attribute name="HTML" description="text" key="header.html"/>
+    </g:HTML>
     
     <hr class="ui-view-separator-1"/>
     
-    <g:Label text="Farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:Label text="Farmaco:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="text" description="text" key="farmacoLabel.text"/>
+    </g:Label>
     <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box" readOnly="true"/>
 
     <hr class="ui-view-separator"/>
     
-    <g:Label text="Data/ora:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:Label text="Data/ora:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="text" description="text" key="dataoraLabel.text"/>
+    </g:Label>
     <g:HorizontalPanel addStyleNames="ui-form-row-1">
       <ph:PhTextBox ui:field="dateBox" addStyleNames="ui-app-textbox, ui-title-box" readOnly="true" width="5em"/>
       <ph:PhTextBox ui:field="oraBox" addStyleNames="ui-app-textbox, ui-orario-box" readOnly="true" width="4em"/>
@@ -25,7 +31,9 @@
     
     <hr class="ui-view-separator"/>
     
-    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label ui-field-label-1">
+      <ui:attribute name="HTML" description="text" key="qtaLabel.html"/>
+    </g:HTML>
     <g:HorizontalPanel addStyleNames="ui-form-row-1">
       <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" readOnly="true" width="5em"/>
       <ph:PhTextBox ui:field="umBox" addStyleNames="ui-app-textbox, ui-um-box" readOnly="true"/>

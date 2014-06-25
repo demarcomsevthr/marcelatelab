@@ -489,7 +489,8 @@ body {
   float: right;
   font-family: Arial, sans-serif;
   font-size: 0.8em;
-  color: lightgrey;
+  color: rgba(34, 34, 34, 0.80);
+  font-weight: bold;
 }
 
 .ui-row-reminder-subject {
@@ -574,4 +575,12 @@ body {
 
 .ui-lang-combobox {
   margin: 0.7em;
+}
+
+.ui-about-header {
+  width: 100%;
+}
+
+.ui-about-header * {
+  text-align: center;
 }

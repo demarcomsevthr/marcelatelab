@@ -31,7 +31,7 @@ public class MainEntryPoint implements EntryPoint {
     PhonegapUtils.logEnvironment();
     
     PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhonegapUtils.log("AppConstants.versionCredits = "+AppProperties.IMPL.versionCredits());
+    PhonegapUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {

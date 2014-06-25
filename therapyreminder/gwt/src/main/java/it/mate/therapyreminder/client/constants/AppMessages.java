@@ -79,4 +79,55 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String TherapyListView_onDeleteBtn_msg1();
   
+  @DefaultMessage("")
+  String ContactListView_showListaContatti_msg1();
+  
+  @DefaultMessage("")
+  String DosageEditView_setModel_msg1(String orario);
+  
+  @DefaultMessage("")
+  String ReminderListView_showListaSomministrazioni_msg1();
+  
+  @DefaultMessage("")
+  String ReminderListView_showRow_at_text();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_ogniGiorno();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_giorniAlterni();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_settimanale();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_mensile();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_trimestrale();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoRicorrenzaCombo_semestrale();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoOrariCombo_aIntervalli();
+  
+  @DefaultMessage("")
+  String TherapyEditView_tipoOrariCombo_aOrariFissi();
+  
+  @DefaultMessage("")
+  String TherapyEditView_bottomBar_what();
+  
+  @DefaultMessage("")
+  String TherapyEditView_bottomBar_when();
+  
+  @DefaultMessage("")
+  String TherapyEditView_bottomBar_hours();
+  
+  @DefaultMessage("")
+  String ReminderListView_today_text();
+  
+  @DefaultMessage("")
+  String ReminderListView_tomorrow_text();
+  
 }

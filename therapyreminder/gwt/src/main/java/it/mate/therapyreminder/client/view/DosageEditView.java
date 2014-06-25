@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.DosageEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Prescrizione;
@@ -60,7 +61,7 @@ public class DosageEditView extends BaseMgwtView <Presenter> {
     if (TAG_DOSAGGIO.equals(tag)) {
       TouchUtils.setDisabled(qtaBox.getElement());
       this.model = (DosaggioEditModel)model;
-      dsgLbl.setText("Dosaggio delle ore " + this.model.getDosaggio().getOrario());
+      dsgLbl.setText(AppMessages.IMPL.DosageEditView_setModel_msg1(this.model.getDosaggio().getOrario()));
       qtaBox.setValue(this.model.getDosaggio().getQuantita());
       getPresenter().getUdmDescription(qtaBox.getValueAsDouble(), this.model.getDosaggio().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {

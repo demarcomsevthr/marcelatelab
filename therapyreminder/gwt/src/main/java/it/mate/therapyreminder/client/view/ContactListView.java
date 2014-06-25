@@ -9,6 +9,7 @@ import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.view.ContactListView.Presenter;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.impl.ContattoTx;
@@ -103,11 +104,11 @@ public class ContactListView extends BaseMgwtView <Presenter> {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void setModel(Object model, String tag) {
     if (TAG_TIPO_CONTATTO.equals(tag)) {
       tipoContatto = (String)model;
     } else if (TAG_CONTATTI.equals(tag)) {
-      @SuppressWarnings("unchecked")
       List<Contatto> contatti = (List<Contatto>)model;
       showListaContatti(contatti);
     }
@@ -121,7 +122,7 @@ public class ContactListView extends BaseMgwtView <Presenter> {
   private void showListaContatti(List<Contatto> contatti) {
     resultsPanel.clear();
     if (contatti == null || contatti.size() == 0) {
-      Label noResultsLbl = new Label("You have no contacts of this type.");
+      Label noResultsLbl = new Label(AppMessages.IMPL.ContactListView_showListaContatti_msg1());
       noResultsLbl.addStyleName("ui-no-results");
       resultsPanel.add(noResultsLbl);
       return;
