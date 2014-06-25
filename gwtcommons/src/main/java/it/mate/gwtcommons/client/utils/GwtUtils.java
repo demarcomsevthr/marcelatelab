@@ -396,7 +396,7 @@ public class GwtUtils {
     boolean repeating = false;
     
     public MobileTimerAnimationSchedulerImpl() {
-      GwtUtils.log("creating new mobile timer");
+//    GwtUtils.log("creating new mobile timer");
     }
 
     @Override
@@ -415,7 +415,7 @@ public class GwtUtils {
       lastShotTime = System.currentTimeMillis();
       animationCallback = new AnimationCallback() {
         public void execute(double shotTime) {
-          GwtUtils.log("shot");
+//        GwtUtils.log("shot");
           if (cancelRequested)
             return;
           if (shotTime > lastShotTime + periodMillis) {
@@ -432,7 +432,7 @@ public class GwtUtils {
 
     @Override
     public void cancel() {
-      GwtUtils.log("cancel mobile timer");
+//    GwtUtils.log("cancel mobile timer");
       this.cancelRequested = true;
     }
     
@@ -441,7 +441,7 @@ public class GwtUtils {
   protected abstract static class MobileTimerSchedulerImpl extends Timer {
     boolean cancelRequested = false;
     public MobileTimerSchedulerImpl() { 
-      GwtUtils.log("creating new mobile timer");
+//    GwtUtils.log("creating new mobile timer");
     }
     @Override
     public void scheduleRepeating(int periodMillis) {
@@ -458,7 +458,7 @@ public class GwtUtils {
     public void schedule(int periodMillis) {
       Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
         public boolean execute() {
-          GwtUtils.log("run mobile timer");
+//        GwtUtils.log("run mobile timer");
           MobileTimerSchedulerImpl.this.run();
           return true;
         }
@@ -466,7 +466,7 @@ public class GwtUtils {
     }
     @Override
     public void cancel() {
-      GwtUtils.log("cancel request for mobile timer");
+//    GwtUtils.log("cancel request for mobile timer");
       this.cancelRequested = true;
     }
   }
@@ -1192,6 +1192,45 @@ public class GwtUtils {
     return getParentWidgetByClassAndStyle(parent, classname, stylename);
   }
   
+  public native static void setJSOProperty(JavaScriptObject obj, String name, String value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setJSOProperty(JavaScriptObject obj, String name, int value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setJSOProperty(JavaScriptObject obj, String name, boolean value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setJSOProperty(JavaScriptObject obj, String name, double value) /*-{
+    obj[name] = value;
+  }-*/;
+  
+  public native static String getJSOPropertyString(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+  public native static int getJSOPropertyInt(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return 0;
+    }
+    return obj[name];
+  }-*/;
+  public native static boolean getJSOPropertyBool(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return false;
+    }
+    return obj[name];
+  }-*/;
+  public native static double getJSOPropertyDouble(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return 0;
+    }
+    return obj[name];
+  }-*/;
+  
+
   public native static void setPropertyImpl(JavaScriptObject obj, String name, String value) /*-{
     obj[name] = value;
   }-*/;
