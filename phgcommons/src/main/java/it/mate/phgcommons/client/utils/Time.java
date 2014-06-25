@@ -9,6 +9,8 @@ public class Time {
   
   private int minutes;
   
+  private static boolean use12HFormat = false;
+  
   private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
   
   public Time() { 
@@ -31,6 +33,10 @@ public class Time {
   
   public int getHours() {
     return hours;
+  }
+  
+  public int getHours12() {
+    return hours % 12;
   }
   
   public Time setHours(int hours) {
@@ -92,6 +98,27 @@ public class Time {
       incHours(hoursAmount);
     }
     return this;
+  }
+  
+  public boolean isAM() {
+    return hours < 12;
+  }
+  
+  public boolean isPM() {
+    return hours >= 12;
+  }
+  
+  public static boolean is12HFormat() {
+    return use12HFormat;
+  }
+  
+  public static void set12HFormat(boolean use12hFormat) {
+    use12HFormat = use12hFormat;
+    fmt = use12hFormat ? DateTimeFormat.getFormat("h:mm a") : DateTimeFormat.getFormat("HH:mm");
+  }
+  
+  public static DateTimeFormat getCurrentFormat() {
+    return fmt;
   }
   
 }

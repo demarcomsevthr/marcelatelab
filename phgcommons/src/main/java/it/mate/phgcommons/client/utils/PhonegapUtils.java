@@ -302,17 +302,21 @@ public class PhonegapUtils {
     $wnd.glbDebugHook(jso);
   }-*/;
 
+  public static String getCurrentLanguage() {
+    String language = LocaleInfo.getCurrentLocale().getLocaleName();
+    if ("default".equals(language)) {
+      language = getNavigatorLanguage();
+    }
+    return language;
+  }
+  
   public static void getCurrentLanguage(final Delegate<String> delegate) {
     getGlobalizationLanguage(new StringCallback() {
       public void handle(String language) {
         if (language != null) {
           delegate.execute(language);
         } else {
-          language = LocaleInfo.getCurrentLocale().getLocaleName();
-          if ("default".equals(language)) {
-            language = getNavigatorLanguage();
-          }
-          delegate.execute(language);
+          delegate.execute(getCurrentLanguage());
         }
       }
     });
@@ -336,6 +340,57 @@ public class PhonegapUtils {
     }
   }-*/;
 
+  public static void getGlobalizationDatePattern(final Delegate<String> resultDelegate) {
+    JavaScriptObject options = JavaScriptObject.createObject();
+    GwtUtils.setJSOProperty(options, "formatLength", "short");
+    GwtUtils.setJSOProperty(options, "selector", "date");
+    getGlobalizationDatePatternImpl(options, new StringCallback() {
+      public void handle(String result) {
+        resultDelegate.execute(result);
+      }
+    });
+  }
+  public static void getGlobalizationTimePattern(final Delegate<String> resultDelegate) {
+    JavaScriptObject options = JavaScriptObject.createObject();
+    GwtUtils.setJSOProperty(options, "formatLength", "short");
+    GwtUtils.setJSOProperty(options, "selector", "time");
+    getGlobalizationDatePatternImpl(options, new StringCallback() {
+      public void handle(String result) {
+        resultDelegate.execute(result);
+      }
+    });
+  }
+    
+  private static native void getGlobalizationDatePatternImpl(JavaScriptObject options, StringCallback callback) /*-{
+    if (typeof(navigator.globalization) == 'undefined') {
+      
+      if (typeof($wnd.cordova) != 'undefined' && typeof($wnd.cordova.exec) != 'undefined') {
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("js globalization wrapper is undefined");
+        var jsSuccessCallback = $entry(function(date) {
+          callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(date.pattern);
+        });
+        var jsErrorCallback = $entry(function() {
+          @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("js error during globalization getDatePattern");
+          callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
+        });
+        $wnd.cordova.exec(jsSuccessCallback, jsErrorCallback, "Globalization", "getDatePattern", [{"options": options}]);
+      }
+      
+    } else {
+      var jsSuccessCallback = $entry(function(date) {
+        callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(date.pattern);
+      });
+      var jsErrorCallback = $entry(function() {
+        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("js error during globalization getDatePattern");
+        callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
+      });
+      navigator.globalization.getDatePattern(jsSuccessCallback, jsErrorCallback );
+//    navigator.globalization.getDatePattern(jsSuccessCallback, jsErrorCallback , options );
+    }
+    
+    
+  }-*/;
+
   //TODO
   public static void setAppLocalLanguageAndReload(final String language) {
     setAppLocalLanguageImpl(language);
@@ -356,7 +411,7 @@ public class PhonegapUtils {
   public static String getAppLocalLanguage() {
     String lang = getAppLocalLanguageImpl();
     if (lang == null || lang.trim().length() == 0) {
-      lang = "en";
+      lang = getCurrentLanguage();
     }
     return lang;
   }

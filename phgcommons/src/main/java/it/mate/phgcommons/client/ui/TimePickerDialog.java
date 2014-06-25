@@ -1,12 +1,14 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.gwtcommons.client.ui.SimpleContainer;
+import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.EventUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.Time;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -72,17 +74,30 @@ public class TimePickerDialog {
   
   private Time currentTime = new Time(0, 0);
   
-  private int currentDigit = 0;
+  private int currentDigitPosition = 0;
   
   private TouchHTML digits[] = new TouchHTML[4];
   
   private HandlerRegistration modalHandlerRegistration;
   
+  private TouchHTML ampmBtn;
+  
   public TimePickerDialog() {
-    this(null);
+    this(null, null);
+  }
+  
+  public TimePickerDialog(Time initialTime) {
+    this(null, initialTime);
   }
   
   public TimePickerDialog(Options options) {
+    this(options, null);
+  }
+  
+  public TimePickerDialog(Options options, Time initialTime) {
+    if (initialTime != null) {
+      this.currentTime = initialTime;
+    }
     this.options = options != null ? options : new Options();
     initUI();
   }
@@ -124,6 +139,24 @@ public class TimePickerDialog {
     digitsRow.add(createDigitHtml(2, getPositionalDigit(currentTime.getMinutes(), 0)));
     digitsRow.add(createDigitHtml(3, getPositionalDigit(currentTime.getMinutes(), 1)));
     
+    if (Time.is12HFormat()) {
+      
+      //TODO
+      digitsRow.add(new Spacer("0.5em"));
+      digitsRow.getElement().getStyle().setPaddingLeft(12, Unit.PCT);
+      
+      ampmBtn = new TouchHTML(currentTime.isAM() ? "AM" : "PM");
+      ampmBtn.addStyleName("phg-TimePickerDialog-AMPM");
+      digitsRow.add(ampmBtn);
+      ampmBtn.addTouchEndHandler(new TouchEndHandler() {
+        public void onTouchEnd(TouchEndEvent event) {
+          currentTime.incHours(+12);
+          renderTime();
+        }
+      });
+      
+    }
+    
     FlexTable keypad = new FlexTable();
     keypad.addStyleName("phg-TimePickerDialog-Keypad");
     container.add(keypad);
@@ -132,37 +165,70 @@ public class TimePickerDialog {
       public void onTouchEnd(TouchEndEvent event) {
         Widget source = (Widget)event.getSource();
         int newDigit = getWidgetValue(source);
-        if (currentDigit == 0) {
-          if (newDigit <= 2) {
-            int hours = currentTime.getHours();
-            currentTime.setHours(setPositionalDigit(hours, 0, newDigit));
+        if (currentDigitPosition == 0) {
+          if (Time.is12HFormat()) {
+            if (newDigit == 0) {
+              int hours = currentTime.getHours();
+              currentTime.setHours(setDigitInPosition(hours, 0, newDigit));
+            } else if (newDigit == 1) {
+              if (currentTime.isAM()) {
+                int hours = currentTime.getHours();
+                currentTime.setHours(setDigitInPosition(hours, 0, newDigit));
+              } else {
+                int d1 = getWidgetValue(digits[1]);
+                if (d1 <= 2) {
+                  currentTime.setHours(22 + d1);
+                } else {
+                  currentTime.setHours(22);
+                }
+              }
+            }
+          } else {
+            if (newDigit <= 2) {
+              int hours = currentTime.getHours();
+              currentTime.setHours(setDigitInPosition(hours, 0, newDigit));
+            }
           }
-          currentDigit ++;
+          currentDigitPosition ++;
           renderTime();
-        } else if (currentDigit == 1) {
+        } else if (currentDigitPosition == 1) {
           int d0 = getWidgetValue(digits[0]);
-          if (d0 == 0 || d0 == 1) {
+          if (d0 == 0) {
             int hours = currentTime.getHours();
-            currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
+            currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+          } else if (d0 == 1) {
+            if (Time.is12HFormat()) {
+              if (newDigit <= 2) {
+                if (currentTime.isAM()) {
+                  int hours = currentTime.getHours();
+                  currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+                } else {
+                  currentTime.setHours(setDigitInPosition(10, 1, newDigit) + 12);
+                }
+              }
+            } else {
+              int hours = currentTime.getHours();
+              currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+            }
           } else if (d0 == 2) {
             if (newDigit <= 4) {
               int hours = currentTime.getHours();
-              currentTime.setHours(setPositionalDigit(hours, 1, newDigit));
+              currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
             }
           }
-          currentDigit ++;
+          currentDigitPosition ++;
           renderTime();
-        } else if (currentDigit == 2) {
+        } else if (currentDigitPosition == 2) {
           if (newDigit <= 5) {
             int minutes = currentTime.getMinutes();
-            currentTime.setMinutes(setPositionalDigit(minutes, 0, newDigit));
+            currentTime.setMinutes(setDigitInPosition(minutes, 0, newDigit));
           }
-          currentDigit ++;
+          currentDigitPosition ++;
           renderTime();
-        } else if (currentDigit == 3) {
+        } else if (currentDigitPosition == 3) {
           int minutes = currentTime.getMinutes();
-          currentTime.setMinutes(setPositionalDigit(minutes, 1, newDigit));
-          currentDigit = 0;
+          currentTime.setMinutes(setDigitInPosition(minutes, 1, newDigit));
+          currentDigitPosition = 0;
           renderTime();
         }
       }
@@ -177,7 +243,7 @@ public class TimePickerDialog {
       }
     };
     
-    TouchEndHandler hoursHandler = new TouchEndHandler() {
+    TouchEndHandler incHandler = new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         Widget source = (Widget)event.getSource();
         int incr = getWidgetValue(source);
@@ -212,9 +278,9 @@ public class TimePickerDialog {
     keypad.setWidget(2, 1, createKeypadCell("8", 8, digitHandler, null));
     keypad.setWidget(2, 2, createKeypadCell("9", 9, digitHandler, null));
     keypad.setWidget(2, 3, createKeypadCell("45", 45, minutesHandler, "minutes"));
-    keypad.setWidget(3, 0, createKeypadCell("-1h", -1, hoursHandler, "hours"));
+    keypad.setWidget(3, 0, createKeypadCell("-1h", -1, incHandler, "hours"));
     keypad.setWidget(3, 1, createKeypadCell("0", 0, digitHandler, null));
-    keypad.setWidget(3, 2, createKeypadCell("+1h", +1, hoursHandler, "hours"));
+    keypad.setWidget(3, 2, createKeypadCell("+1h", +1, incHandler, "hours"));
     keypad.setWidget(3, 3, createKeypadCell("00", 00, minutesHandler, "minutes"));
     
     
@@ -271,18 +337,29 @@ public class TimePickerDialog {
   }
   
   private void renderTime() {
+    
+    PhonegapUtils.log("rendering " + currentTime);
+    
     int hours = currentTime.getHours();
+    
+    //TODO
+    if (Time.is12HFormat()) {
+      ampmBtn.setHtml(currentTime.isAM() ? "AM" : "PM");
+      hours = currentTime.getHours12();
+    }
+    
     int d0 = hours / 10;
     int d1 = hours % 10;
     int minutes = currentTime.getMinutes();
     int d2 = minutes / 10;
     int d3 = minutes % 10;
+    
     setDigitHtmlValue(digits[0], d0);
     setDigitHtmlValue(digits[1], d1);
     setDigitHtmlValue(digits[2], d2);
     setDigitHtmlValue(digits[3], d3);
     for (int it = 0; it < 4; it++) {
-      if (currentDigit == it) {
+      if (currentDigitPosition == it) {
         digits[it].addStyleName("phg-TimePickerDialog-TimeDigit-selected");
       } else {
         digits[it].removeStyleName("phg-TimePickerDialog-TimeDigit-selected");
@@ -300,7 +377,7 @@ public class TimePickerDialog {
     digit.addStyleName("phg-TimePickerDialog-TimeDigit");
     digit.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        currentDigit = index;
+        currentDigitPosition = index;
         renderTime();
       }
     });
@@ -338,7 +415,7 @@ public class TimePickerDialog {
     return -1;
   }
   
-  private static int setPositionalDigit(int value, int pos, int digit) {
+  private static int setDigitInPosition(int value, int pos, int digit) {
     assert value >= 00 && value <= 59;
     assert pos == 0 || pos == 1;
     if (pos == 0) {
