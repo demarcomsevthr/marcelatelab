@@ -8,11 +8,17 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel ui-TherapyListView">
     
-    <g:HTML HTML="Therapies" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Therapies" addStyleNames="ui-view-header">
+      <ui:attribute name="HTML" description="text" key="header.html"/>
+    </g:HTML>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
-      <p:TouchButton text="New" ui:field="newBtn" addStyleNames="ui-top-action-btn"/>
-      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn"/>
+      <p:TouchButton text="New" ui:field="newBtn" addStyleNames="ui-top-action-btn">
+        <ui:attribute name="text" description="text" key="newBtn.text"/>
+      </p:TouchButton>
+      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn">
+        <ui:attribute name="text" description="text" key="deleteBtn.text"/>
+      </p:TouchButton>
     </g:HorizontalPanel>
     
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>

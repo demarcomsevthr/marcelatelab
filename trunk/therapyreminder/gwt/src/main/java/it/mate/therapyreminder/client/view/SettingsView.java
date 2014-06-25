@@ -38,7 +38,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     public void setOnlineMode(boolean onlineMode);
     public boolean isOnlineMode();
     public void goToAccountEditView(Account account);
-    public void goToLegalNotes();
+    public void goToAbout();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -212,9 +212,9 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     });
   }
   
-  @UiHandler ("legalNotesBtn")
-  public void onLegalNotesBtn (TouchEndEvent event) {
-    getPresenter().goToLegalNotes();
+  @UiHandler ("aboutBtn")
+  public void onAboutBtn (TouchEndEvent event) {
+    getPresenter().goToAbout();
   }
 
   @UiHandler ("langCmb")

@@ -9,12 +9,14 @@ import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.view.ReminderListView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -27,6 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
@@ -48,7 +51,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
   
   DateTimeFormat dayNameFmt = DateTimeFormat.getFormat("EEEE");
   
-  DateTimeFormat dateFmt = DateTimeFormat.getFormat("MMM dd");
+  DateTimeFormat dateFmt = "it".equals(PhonegapUtils.getAppLocalLanguage()) ? DateTimeFormat.getFormat("dd MMM") : DateTimeFormat.getFormat("MMM dd");
   
   @UiField Panel wrapperPanel;
   @UiField ScrollPanel resultsPanel;
@@ -110,7 +113,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
   private void showListaSomministrazioni(List<Somministrazione> somministrazioni) {
     resultsPanel.clear();
     if (somministrazioni == null || somministrazioni.size() == 0) {
-      Label noResultsLbl = new Label("You have no therapies.");
+      Label noResultsLbl = new Label(AppMessages.IMPL.ReminderListView_showListaSomministrazioni_msg1());
       noResultsLbl.addStyleName("ui-no-results");
       resultsPanel.add(noResultsLbl);
       return;
@@ -130,14 +133,9 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
           actualHeight.set(actualHeight.get() + showRow(somministrazione, list, prevDate, udm));
           if (somministrazione.getId() == lastId) {
             // su ios funziona
-//          int panelHeight = Math.max(actualHeight.get(), (Window.getClientHeight() - resultsPanel.getAbsoluteTop()));
             int panelHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
             PhonegapUtils.log("panelHeight = " + panelHeight);
             resultsPanel.setHeight(panelHeight + "px");
-            /*
-            getScrollPanel().setHeight(panelHeight + "px");
-            getScrollPanel().setMaxScrollY(panelHeight);
-            */
             refreshScrollPanel();
           }
         }
@@ -145,26 +143,26 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     }
     resultsPanel.add(list);
     TouchUtils.applyFocusPatch();
-    /*
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        int panelHeight = Math.max(actualHeight.get(), (Window.getClientHeight() - resultsPanel.getAbsoluteTop()));
-        resultsPanel.setHeight("" + panelHeight + "px");
-        refreshScrollPanel();
-      }
-    });
-    */
   }
   
-  private int showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<String> prevDate, UdM udm) {
-    String curDate = GwtUtils.dateToString(somministrazione.getData(), "yyyyMMdd");
+  private int showRow(final Somministrazione somministrazione, SimpleContainer list, ObjectWrapper<String> lastTimestamp, UdM udm) {
+    String rowTimestamp = GwtUtils.dateToString(somministrazione.getData(), "yyyyMMdd");
     HorizontalPanel row = new HorizontalPanel();
     row.addStyleName("ui-row-reminder");
     list.add(row);
     String html = "";
-    if (prevDate.get() == null || !prevDate.get().equals(curDate)) {
+    if (lastTimestamp.get() == null || !lastTimestamp.get().equals(rowTimestamp)) {
       html += "<p class='ui-row-date'>";
       html += "<span class='ui-row-date-name'>";
+      Date refDate = new Date();
+      if (rowTimestamp.equals(GwtUtils.dateToString(refDate, "yyyyMMdd"))) {
+        html +=  AppMessages.IMPL.ReminderListView_today_text() + ", ";
+      } else {
+        CalendarUtil.addDaysToDate(refDate, +1);
+        if (rowTimestamp.equals(GwtUtils.dateToString(refDate, "yyyyMMdd"))) {
+          html +=  AppMessages.IMPL.ReminderListView_tomorrow_text() + ", ";
+        }
+      }
       html += dayNameFmt.format(somministrazione.getData());
       html += "</span>";
       html += "<span class='ui-row-date-date'>";
@@ -174,7 +172,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     }
     html += "<p class='ui-row-reminder-subject'>" + somministrazione.getPrescrizione().getNome() + "</p>";
     html += "<p class='ui-row-reminder-note'>" + somministrazione.getQuantita().intValue() + " " + udm.getDescrizione().toLowerCase();
-    html += " at " + somministrazione.getOrario() + "</p>";
+    html += " "+ AppMessages.IMPL.ReminderListView_showRow_at_text() +" " + somministrazione.getOrario() + "</p>";
     TouchHTML rowHtml = new TouchHTML(html);
     row.add(rowHtml);
     rowHtml.addTouchEndHandler(new TouchEndHandler() {
@@ -185,7 +183,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       }
     });
     PhonegapUtils.log("row.height = " + row.getElement().getClientHeight());
-    prevDate.set(curDate);
+    lastTimestamp.set(rowTimestamp);
     return row.getElement().getClientHeight();
   }
   

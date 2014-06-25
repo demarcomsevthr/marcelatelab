@@ -23,6 +23,7 @@ import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.places.MainPlace;
+import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
@@ -30,7 +31,6 @@ import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
-import it.mate.therapyreminder.client.view.LegalNotesView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
@@ -48,7 +48,6 @@ import it.mate.therapyreminder.shared.model.impl.UdMTx;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -68,7 +67,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   DosageEditView.Presenter, 
   CalendarEventTestView.Presenter, SettingsView.Presenter,
   ReminderListView.Presenter, ReminderEditView.Presenter,
-  AccountEditView.Presenter, LegalNotesView.Presenter,
+  AccountEditView.Presenter, AboutView.Presenter,
   ContactMenuView.Presenter, ContactListView.Presenter,
   ContactEditView.Presenter {
   
@@ -90,7 +89,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
-          PhonegapUtils.log("devInfoId in activity is " + devInfoId);
+          PhonegapUtils.log("devInfoId is " + devInfoId);
         }
       });
       setBackgroundAlertsEnabled(true);
@@ -197,9 +196,9 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-    if (place.getToken().equals(MainPlace.LEGAL_NOTES)) {
+    if (place.getToken().equals(MainPlace.ABOUT)) {
       setBackgroundAlertsEnabled(false);
-      LegalNotesView view = AppClientFactory.IMPL.getGinjector().getLegalNotesView();
+      AboutView view = AppClientFactory.IMPL.getGinjector().getAboutView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
@@ -465,8 +464,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ACCOUNT_EDIT, account));
   }
 
-  public void goToLegalNotes() {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.LEGAL_NOTES));
+  public void goToAbout() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ABOUT));
   }
 
   public void goToContactMenu() {
@@ -612,7 +611,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate) {
-    final String currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
+//  final String currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
+    final String currentLocaleName = PhonegapUtils.getAppLocalLanguage();
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
       public void execute(List<UdM> udms) {

@@ -8,7 +8,9 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-homePanel-clearHeight, ui-dosage-panel">
       
-    <g:HTML HTML="Dosaggio prescrizione" addStyleNames="ui-view-header"/>
+    <g:HTML HTML="Dosaggio prescrizione" addStyleNames="ui-view-header">
+      <ui:attribute name="HTML" description="text" key="header.html"/>
+    </g:HTML>
     
     <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
       <p:TouchButton text="OK" ui:field="okBtn" addStyleNames="ui-top-action-btn"/>
@@ -19,7 +21,9 @@
     
     <hr class="ui-view-separator-1"/>
     
-    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label"/>
+    <g:HTML HTML="Quantità:" addStyleNames="ui-field-label">
+      <ui:attribute name="HTML" description="text" key="qtaLabel.html"/>
+    </g:HTML>
     <gc:Spacer height="0.3em"/>
     <g:HorizontalPanel>
       <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>

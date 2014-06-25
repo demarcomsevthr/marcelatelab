@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.logic.MainDao;
+import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
 import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
@@ -11,7 +12,6 @@ import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
-import it.mate.therapyreminder.client.view.LegalNotesView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
@@ -46,7 +46,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public AccountEditView getAccountEditView();
   
-  public LegalNotesView getLegalNotesView();
+  public AboutView getAboutView();
   
   public ContactMenuView getContactMenuView();
   

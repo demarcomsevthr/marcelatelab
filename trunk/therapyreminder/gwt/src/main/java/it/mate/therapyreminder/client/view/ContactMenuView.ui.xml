@@ -11,8 +11,12 @@
     <gc:Spacer addStyleNames="ui-homeSpacer1"/>
     
     <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      <p:TouchAnchor addStyleNames="ui-contacts-doctor-btn" text="Doctors" ui:field="doctorsBtn"/>
-      <p:TouchAnchor addStyleNames="ui-contacts-tutor-btn" text="Tutors" ui:field="tutorsBtn"/>
+      <p:TouchAnchor addStyleNames="ui-contacts-doctor-btn" text="Doctors" ui:field="doctorsBtn">
+        <ui:attribute name="text" description="text" key="doctorBtn.text"/>
+      </p:TouchAnchor>
+      <p:TouchAnchor addStyleNames="ui-contacts-tutor-btn" text="Tutors" ui:field="tutorsBtn">
+        <ui:attribute name="text" description="text" key="tutorsBtn.text"/>
+      </p:TouchAnchor>
     </g:HorizontalPanel>
     
   </g:HTMLPanel>

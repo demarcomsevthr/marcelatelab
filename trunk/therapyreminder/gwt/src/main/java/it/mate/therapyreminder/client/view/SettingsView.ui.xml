@@ -42,7 +42,7 @@
     <hr class="ui-settings-separator"/>
     <g:HTMLPanel>
       <gc:Spacer height="0.5em"/>
-      <p:TouchHTML text="Legal Notes" addStyleNames="ui-settings-label ui-app-legal-notes-label" ui:field="legalNotesBtn"/>
+      <p:TouchHTML text="About" addStyleNames="ui-settings-label ui-app-legal-notes-label" ui:field="aboutBtn"/>
     </g:HTMLPanel>    
 
   </g:HTMLPanel>
