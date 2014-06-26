@@ -462,29 +462,29 @@ public class MainController {
   }
   
   public void setOnlineMode(boolean onlineMode) {
-    PhonegapUtils.setLocalStorageProperty("onlineMode", ""+onlineMode);
+    PhonegapUtils.setLocalStorageItem("onlineMode", ""+onlineMode);
   }
   
   public boolean isOnlineMode() {
-    String value = PhonegapUtils.getLocalStorageProperty("onlineMode");
+    String value = PhonegapUtils.getLocalStorageItem("onlineMode");
     return ("true".equalsIgnoreCase(value));
   }
   
   public void setDevInfoIdInLocalStorage(String devInfoId) {
-    PhonegapUtils.setLocalStorageProperty("devInfoId", devInfoId);
+    PhonegapUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
 
   public String getDevInfoIdFromLocalStorage() {
-    return PhonegapUtils.getLocalStorageProperty("devInfoId");
+    return PhonegapUtils.getLocalStorageItem("devInfoId");
   }
 
   public void setAccountInLocalStorage(Account account) {
     AccountTx tx = (AccountTx)account;
-    PhonegapUtils.setLocalStorageProperty("account", JSONUtils.stringify(tx.asJS()));
+    PhonegapUtils.setLocalStorageItem("account", JSONUtils.stringify(tx.asJS()));
   }
   
   public Account getAccountFromLocalStorage() {
-    String accountJson = PhonegapUtils.getLocalStorageProperty("account");
+    String accountJson = PhonegapUtils.getLocalStorageItem("account");
     if (accountJson != null && accountJson.contains("{")) {
       Account account = AccountTx.fromJS(JSONUtils.parse(accountJson));
       return account;
