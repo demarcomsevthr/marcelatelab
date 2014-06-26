@@ -284,7 +284,7 @@ public class PhgUtils {
     if ("it".equals(lang)) {
       return GwtUtils.dateToString(date, "dd/MM/yyyy");
     } else {
-      return GwtUtils.dateToString(date, "MM/dd/yyyy");
+      return GwtUtils.dateToString(date, "M/d/yyyy");
     }
   }
   

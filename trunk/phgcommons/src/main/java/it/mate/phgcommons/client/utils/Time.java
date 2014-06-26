@@ -85,6 +85,10 @@ public class Time {
     return fmt.format(asDate());
   }
   
+  public static String asString(Date date) {
+    return fmt.format(date);
+  }
+  
   @Override
   public String toString() {
     return "Time [" + hours + ":" + minutes + "]";
