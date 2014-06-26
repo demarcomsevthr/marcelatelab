@@ -1,7 +1,7 @@
 package it.mate.postscriptum.client;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.postscriptum.client.constants.AppProperties;
 import it.mate.postscriptum.client.factories.AppClientFactory;
 
@@ -20,18 +20,18 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    PhonegapUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
-    PhonegapUtils.logEnvironment();
+    PhgUtils.logEnvironment();
     
-    PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhonegapUtils.log("AppConstants.versionCredits = "+AppProperties.IMPL.versionCredits());
+    PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhgUtils.log("AppConstants.versionCredits = "+AppProperties.IMPL.versionCredits());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
         log.log(Level.SEVERE, "uncaught exception", ex);
         ex.printStackTrace();
-        if (!PhonegapUtils.isSuspendUncaughtExceptionAlerts()) {
+        if (!PhgUtils.isSuspendUncaughtExceptionAlerts()) {
           Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
         }
       }

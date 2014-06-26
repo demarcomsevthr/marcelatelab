@@ -5,7 +5,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.constants.AppProperties;
@@ -145,7 +145,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   private boolean isFirstRun() {
     String remoteUserJson = getRemoteUserImpl();
-    PhonegapUtils.log("localStorage.remoteUser = " + remoteUserJson);
+    PhgUtils.log("localStorage.remoteUser = " + remoteUserJson);
     return (remoteUserJson == null || !remoteUserJson.contains("{"));
   }
   

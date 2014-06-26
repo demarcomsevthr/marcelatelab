@@ -19,7 +19,9 @@
     <g:HorizontalPanel>
       <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
       <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
+      <!-- 
       <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
+       -->
     </g:HorizontalPanel>
     
     <p:TouchButton text="SUBMIT EMAIL" ui:field="sendBtn" addStyleNames="ui-sendBtn"/>

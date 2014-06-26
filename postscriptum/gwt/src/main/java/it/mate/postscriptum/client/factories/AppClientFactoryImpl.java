@@ -9,7 +9,7 @@ import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.activities.mapper.MainActivityMapper;
 import it.mate.postscriptum.client.activities.mapper.MainAnimationMapper;
@@ -124,10 +124,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     CustomTheme.Instance.get().css().ensureInjected();
     
-    PhonegapUtils.addOrientationChangeHandler(new Delegate<Void>() {
+    PhgUtils.commonInitializations();
+    
+    PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
-        PhonegapUtils.log("CKD - changing orientation handler");
-        PhonegapUtils.logEnvironment();
+        PhgUtils.log("CKD - changing orientation handler");
+        PhgUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
       }
     });
@@ -151,7 +153,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
       public void execute(Map<String, String> properties) {
         for (String name : properties.keySet()) {
-          PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
+          PhgUtils.log("natProp " + name + "=" + properties.get(name));
         }
         AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
@@ -276,9 +278,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate) {
     
-    PhonegapUtils.log("setRemoteUserDelegate - ver. 746.6");
+    PhgUtils.log("setRemoteUserDelegate - ver. 746.6");
     
-    PhonegapUtils.log("remoteUser = " + remoteUser);
+    PhgUtils.log("remoteUser = " + remoteUser);
     
     this.remoteUserDelegate = remoteUserDelegate;
     if (remoteUser != null) {
@@ -286,10 +288,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     } else {
       
       String remoteUserJson = getRemoteUserFromLocalStorage();
-      PhonegapUtils.log("remoteUserJson = " + remoteUserJson);
+      PhgUtils.log("remoteUserJson = " + remoteUserJson);
       if (remoteUserJson != null && remoteUserJson.contains("{") ) {
         RemoteUserJS remoteUserJS = JSONUtils.parse(remoteUserJson).cast();
-        PhonegapUtils.log("discovered remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
+        PhgUtils.log("discovered remoteUserJS in localStorage " + JSONUtils.stringify(remoteUserJS));
         remoteUser = remoteUserJS.asRemoteUser();
         remoteUserDelegate.execute(remoteUser);
       } else {
@@ -350,12 +352,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     if (stickMailEPProxy == null) {
       createStickMailEPProxy(new Delegate<Void>() {
         public void execute(Void element) {
-          PhonegapUtils.log("AppClientFactoryImpl: calling proxy::auth");
+          PhgUtils.log("AppClientFactoryImpl: calling proxy::auth");
           stickMailEPProxy.reAuthorize();
         }
       });
     } else {
-      PhonegapUtils.log("AppClientFactoryImpl: calling proxy::auth");
+      PhgUtils.log("AppClientFactoryImpl: calling proxy::auth");
       stickMailEPProxy.reAuthorize();
     }
   }

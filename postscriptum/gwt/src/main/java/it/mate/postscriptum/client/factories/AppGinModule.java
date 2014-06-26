@@ -1,7 +1,7 @@
 package it.mate.postscriptum.client.factories;
 
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.postscriptum.client.activities.mapper.MainActivityMapper;
 import it.mate.postscriptum.shared.service.StickFacade;
 import it.mate.postscriptum.shared.service.StickFacadeAsync;
@@ -31,7 +31,7 @@ public class AppGinModule extends AbstractGinModule {
   
   @Provides
   public StickFacadeAsync getStickFacade() {
-    PhonegapUtils.log("preparing stick facade...");
+    PhgUtils.log("preparing stick facade...");
     StickFacadeAsync facade = GWT.create(StickFacade.class);
     ServiceDefTarget service = (ServiceDefTarget)facade;
     if (OsDetectionUtils.isDesktop()) {
@@ -41,7 +41,7 @@ public class AppGinModule extends AbstractGinModule {
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_MODULE_URL, DEFAULT_FACADE_MODULE_URL), 
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_PATH, DEFAULT_FACADE_RELATIVE_PATH));
     }
-    PhonegapUtils.log("set on " + service.getServiceEntryPoint());
+    PhgUtils.log("set on " + service.getServiceEntryPoint());
     return facade;
   }
   

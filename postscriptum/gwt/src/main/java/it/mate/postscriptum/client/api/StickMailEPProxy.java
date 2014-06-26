@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.api.AbstractEndpointProxy;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.postscriptum.client.factories.AppClientFactory;
 import it.mate.postscriptum.shared.model.RemoteUser;
 
@@ -61,10 +61,10 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
   }
 
   public void getBuildNumber(final Delegate<String> delegate) {
-    PhonegapUtils.log("calling getBuildNumberImpl");
+    PhgUtils.log("calling getBuildNumberImpl");
     getBuildNumberImpl(API_NAME, null, new Callback() {
       public void execute(JavaScriptObject resp) {
-        PhonegapUtils.log("received buildNumber response " + JSONUtils.stringify(resp));
+        PhgUtils.log("received buildNumber response " + JSONUtils.stringify(resp));
         if (delegate != null)
           delegate.execute("endpoint test success");
       }
@@ -78,17 +78,17 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
       } else {
         var msg = "StickMailEPProxy::getBuildNumberImpl - FAILURE - resp = ";
         msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(msg);
       }
     });
   }-*/;
 
   public void getRemoteUser(final Delegate<RemoteUser> delegate) {
-    PhonegapUtils.log("calling getRemoteUserImpl");
+    PhgUtils.log("calling getRemoteUserImpl");
     getRemoteUserImpl(API_NAME, "null", new Callback() {
       public void execute(JavaScriptObject resp) {
         RemoteUserJS remoteUserJs = resp.cast();
-        PhonegapUtils.log("received remoteUser " + remoteUserJs.toStringCustom());
+        PhgUtils.log("received remoteUser " + remoteUserJs.toStringCustom());
         if (delegate != null) {
           delegate.execute(remoteUserJs.asRemoteUser());
         }
@@ -103,7 +103,7 @@ public class StickMailEPProxy extends AbstractEndpointProxy {
       } else {
         var msg = "StickMailEPProxy::getRemoteUserImpl - FAILURE - resp = ";
         msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(msg);
       }
     });
   }-*/;
