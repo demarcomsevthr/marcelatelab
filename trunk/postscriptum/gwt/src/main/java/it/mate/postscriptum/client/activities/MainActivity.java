@@ -7,7 +7,7 @@ import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.constants.AppProperties;
 import it.mate.postscriptum.client.factories.AppClientFactory;
@@ -116,12 +116,12 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (devInfoId != null)
       return;
     String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
-    String layout = PhonegapUtils.getLayoutInfo();
-    String devName = PhonegapUtils.getDeviceName();
-    String phgVersion = PhonegapUtils.getDevicePhonegap();
-    String platform = PhonegapUtils.getDevicePlatform();
-    String devUuid = PhonegapUtils.getDeviceUuid();
-    String devVersion = PhonegapUtils.getDeviceVersion();
+    String layout = PhgUtils.getLayoutInfo();
+    String devName = PhgUtils.getDeviceName();
+    String phgVersion = PhgUtils.getDevicePhonegap();
+    String platform = PhgUtils.getDevicePlatform();
+    String devUuid = PhgUtils.getDeviceUuid();
+    String devVersion = PhgUtils.getDeviceVersion();
     AppClientFactory.IMPL.getStickFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
       new AsyncCallback<String>() {
         public void onFailure(Throwable caught) {
@@ -208,9 +208,9 @@ public class MainActivity extends MGWTAbstractActivity implements
         Date clientTime = new Date();
         long deltaTime = 0;
 //      long deltaTime = clientTime.getTime() - serverTime.getTime();
-        PhonegapUtils.log("serverTime = " + serverTime);
-        PhonegapUtils.log("clientTime = " + clientTime);
-        PhonegapUtils.log("delta time = " + deltaTime);
+        PhgUtils.log("serverTime = " + serverTime);
+        PhgUtils.log("clientTime = " + clientTime);
+        PhgUtils.log("delta time = " + deltaTime);
         stickMail.setCreated(new Date(stickMail.getCreated().getTime() - deltaTime));
         stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
 //      AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
@@ -286,7 +286,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   private void processFailure(String message, Throwable caught) {
     setHeaderWaiting(false);
     if (caught != null) {
-      PhonegapUtils.log(caught.getClass().getName()+" - "+caught.getMessage());
+      PhgUtils.log(caught.getClass().getName()+" - "+caught.getMessage());
       if (caught instanceof InvocationException) {
         PhgDialogUtils.showMessageDialog("Maybe data connection is not active", "Error", PhgDialogUtils.BUTTONS_OK);
       } else {
@@ -328,7 +328,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       optionsBtn.addStyleName("ui-optionsBtn");
       optionsBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
-          PhonegapUtils.log("optons tapped");
+          PhgUtils.log("optons tapped");
           AppClientFactory.IMPL.authenticate();
         }
       });
@@ -344,7 +344,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       optionsBtn.addStyleName("ui-changeUserBtn");
       optionsBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
-          PhonegapUtils.log("optons tapped");
+          PhgUtils.log("optons tapped");
           AppClientFactory.IMPL.authenticate();
         }
       });

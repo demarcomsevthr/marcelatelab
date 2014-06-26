@@ -1,7 +1,7 @@
 package it.mate.postscriptum.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.postscriptum.client.factories.AppClientFactory;
 import it.mate.postscriptum.shared.model.RemoteUser;
 
@@ -54,11 +54,11 @@ public class SignPanel extends Composite {
       public void execute(RemoteUser remoteUser) {
         SignPanel.this.remoteUser = remoteUser;
         if (remoteUser != null) {
-          PhonegapUtils.log("SignPanel::authDelegate: signed in");
+          PhgUtils.log("SignPanel::authDelegate: signed in");
           signPromptLbl.setText(signLblText);
           signLbl.setText(remoteUser.getEmail());
         } else {
-          PhonegapUtils.log("SignPanel::authDelegate: signed out");
+          PhgUtils.log("SignPanel::authDelegate: signed out");
           signPromptLbl.setText("Not signed");
           signLbl.setText("");
         }
@@ -72,7 +72,7 @@ public class SignPanel extends Composite {
   }
   
   public void onSignInBtn (TouchEndEvent event) {
-    PhonegapUtils.log("SignPanel: signIn Btn pressed");
+    PhgUtils.log("SignPanel: signIn Btn pressed");
     AppClientFactory.IMPL.authenticate();
   }
   

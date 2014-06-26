@@ -8,7 +8,7 @@ import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
@@ -192,7 +192,7 @@ public class MailListView extends BaseMgwtView <Presenter> {
     if (checkedMails == null || checkedMails.size() == 0)
       return;
     for (StickMail mail : checkedMails) {
-      PhonegapUtils.log("deleting " + mail);
+      PhgUtils.log("deleting " + mail);
     }
     PhgDialogUtils.showMessageDialog("Are you sure you want to delete the selected mail?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
       public void execute(Integer selectedButton) {

@@ -8,7 +8,7 @@ import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox.AfterDialogCloseEvent;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox.BeforeDialogOpenEvent;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -105,13 +105,13 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("calBox")
   public void onCalChange (ValueChangeEvent<Date> event) {
-    PhonegapUtils.log("new value is " + event.getValue());
+    PhgUtils.log("new value is " + event.getValue());
     this.scheduledDate = event.getValue();
   }
   
   @UiHandler ("timeBox")
   public void onTimeChange (ValueChangeEvent<Time> event) {
-    PhonegapUtils.log("new value is " + event.getValue());
+    PhgUtils.log("new value is " + event.getValue());
     this.scheduledTime = event.getValue();
   }
 
