@@ -67,6 +67,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     public void goToContactTutorListView();
     public void goToContactEditView(Contatto contatto);
     public void deletePrescrizioni(List<Prescrizione> prescrizioni);
+    public void setOnlineMode(boolean onlineMode);
+    public void goToSettingsView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -180,7 +182,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
-    notificheTutorPanel.setVisible(getPresenter().isOnlineMode());
+//  notificheTutorPanel.setVisible(getPresenter().isOnlineMode());
+    notificheTutorPanel.setVisible(true);
   }
   
   @Override
@@ -609,36 +612,52 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   private void fillTutorCombo() {
-    if (cbxNotificheTutor.getValue() && tutorCombo.getItems().size() == 0) {
-      getPresenter().findAllTutors(new Delegate<List<Contatto>>() {
-        public void execute(List<Contatto> results) {
-          tutors = results;
-          if (results != null && results.size() > 0) {
-            boolean onlyonerow = (results.size() == 1);
-            for (Contatto tutor : results) {
-              boolean selected = onlyonerow;
-              if (prescrizione != null && prescrizione.getTutor() != null) {
-                if (prescrizione.getTutor().getId().equals(tutor.getId())) {
-                  selected = true;
+    if (cbxNotificheTutor.getValue()) {
+
+      if (!getPresenter().isOnlineMode()) {
+        PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_fillTutorCombo_msg2(), 
+            "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+              public void execute(Integer btn) {
+                if (btn == 1) {
+                  getPresenter().setOnlineMode(true);
+                  getPresenter().goToSettingsView();
+                } else {
+                  cbxNotificheTutor.setValue(false);
                 }
               }
-              tutorCombo.setItem(tutor.getId().toString(), tutor.getNome(), selected);
-            }
-          } else {
-            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_fillTutorCombo_msg1(), 
-                "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
-                  public void execute(Integer btn) {
-                    if (btn == 1) {
-                      //getPresenter().goToContactTutorListView();
-                      getPresenter().goToContactEditView(new ContattoTx(Contatto.TIPO_TUTOR));
-                    } else {
-                      cbxNotificheTutor.setValue(false);
-                    }
+            });
+      } else if (tutorCombo.getItems().size() == 0) {
+        getPresenter().findAllTutors(new Delegate<List<Contatto>>() {
+          public void execute(List<Contatto> results) {
+            tutors = results;
+            if (results != null && results.size() > 0) {
+              boolean onlyonerow = (results.size() == 1);
+              for (Contatto tutor : results) {
+                boolean selected = onlyonerow;
+                if (prescrizione != null && prescrizione.getTutor() != null) {
+                  if (prescrizione.getTutor().getId().equals(tutor.getId())) {
+                    selected = true;
                   }
-                });
+                }
+                tutorCombo.setItem(tutor.getId().toString(), tutor.getNome(), selected);
+              }
+            } else {
+              PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_fillTutorCombo_msg1(), 
+                  "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+                    public void execute(Integer btn) {
+                      if (btn == 1) {
+                        //getPresenter().goToContactTutorListView();
+                        getPresenter().goToContactEditView(new ContattoTx(Contatto.TIPO_TUTOR));
+                      } else {
+                        cbxNotificheTutor.setValue(false);
+                      }
+                    }
+                  });
+            }
           }
-        }
-      });
+        });
+      }
+      
     }
   }
   

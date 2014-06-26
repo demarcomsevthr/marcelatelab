@@ -5,7 +5,7 @@ import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.NumberUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Position;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppMessages;
@@ -69,7 +69,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       final Somministrazione somministrazione = (Somministrazione)model;
 //    AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
       titleBox.setValue(somministrazione.getPrescrizione().getNome());
-      dateBox.setValue(PhonegapUtils.dateToString(somministrazione.getData()));
+      dateBox.setValue(PhgUtils.dateToString(somministrazione.getData()));
       if (NumberUtils.isInteger(somministrazione.getQuantita())) {
         Integer qti = (int)Math.floor(somministrazione.getQuantita());
         qtaBox.setValue(""+qti);
@@ -85,12 +85,12 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
             new Delegate<Integer>() {
               public void execute(Integer btnIndex) {
                 if (btnIndex == 1) {
-                  PhonegapUtils.log("executing " + somministrazione);
+                  PhgUtils.log("executing " + somministrazione);
                   somministrazione.setEseguita();
                   getPresenter().updateSomministrazione(somministrazione);
                 }
                 if (btnIndex == 2) {
-                  PhonegapUtils.log("canceling " + somministrazione);
+                  PhgUtils.log("canceling " + somministrazione);
                   somministrazione.setAnnullata();
                   getPresenter().updateSomministrazione(somministrazione);
                 }
@@ -122,9 +122,9 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   private int getPopupTop() {
     int top = popupRuler.getAbsoluteTop();
     if (top > 0) {
-      PhonegapUtils.setLocalStorageItem("ReminderEditView.popupRuler.top", ""+top);
+      PhgUtils.setLocalStorageItem("ReminderEditView.popupRuler.top", ""+top);
     } else {
-      String v = PhonegapUtils.getLocalStorageItem("ReminderEditView.popupRuler.top");
+      String v = PhgUtils.getLocalStorageItem("ReminderEditView.popupRuler.top");
       if (v != null) {
         top = Integer.parseInt(v);
       } else {

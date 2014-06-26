@@ -1,7 +1,7 @@
 package it.mate.therapyreminder.client.factories;
 
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
@@ -34,7 +34,7 @@ public class AppGinModule extends AbstractGinModule {
   
   @Provides
   public RemoteFacadeAsync getRemoteFacade() {
-    PhonegapUtils.log("preparing remote facade...");
+    PhgUtils.log("preparing remote facade...");
     RemoteFacadeAsync facade = GWT.create(RemoteFacade.class);
     ServiceDefTarget service = (ServiceDefTarget)facade;
     if (OsDetectionUtils.isDesktop()) {
@@ -44,7 +44,7 @@ public class AppGinModule extends AbstractGinModule {
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_MODULE_URL, DEFAULT_FACADE_MODULE_URL), 
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_PATH, DEFAULT_FACADE_RELATIVE_PATH));
     }
-    PhonegapUtils.log("remote facade set on " + service.getServiceEntryPoint());
+    PhgUtils.log("remote facade set on " + service.getServiceEntryPoint());
     return facade;
   }
   

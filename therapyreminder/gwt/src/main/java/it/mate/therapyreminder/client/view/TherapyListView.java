@@ -7,7 +7,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppMessages;
@@ -159,7 +159,7 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
       
       rowHtml.addLongTapHandler(new LongTapHandler() {
         public void onLongTap(LongTapEvent event) {
-          PhonegapUtils.log("long tapped " + prescrizione);
+          PhgUtils.log("long tapped " + prescrizione);
 //        getPresenter().goToTherapyEditView(prescrizione);
         }
       });
