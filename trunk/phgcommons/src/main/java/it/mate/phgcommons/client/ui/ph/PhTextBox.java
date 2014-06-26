@@ -2,7 +2,7 @@ package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.TextBox;
@@ -30,7 +30,7 @@ public class PhTextBox extends MTextBox implements HasModel {
 
   private void applyPatch() {
     if (OsDetectionUtils.isAndroid()) {
-      String version = PhonegapUtils.getDeviceVersion().trim();
+      String version = PhgUtils.getDeviceVersion().trim();
       if (version.startsWith("2") || version.startsWith("3") || version.startsWith("4.0")) {
         box.getElement().getStyle().setProperty("webkitUserModify", "initial");
       }
@@ -55,7 +55,7 @@ public class PhTextBox extends MTextBox implements HasModel {
     } else if ("url".equalsIgnoreCase(type)) {
     } else if ("week".equalsIgnoreCase(type)) {
     } else {
-      PhonegapUtils.log("cannot set input type " + type);
+      PhgUtils.log("cannot set input type " + type);
       return;
     }
     box.getElement().setAttribute("type", type.toLowerCase());

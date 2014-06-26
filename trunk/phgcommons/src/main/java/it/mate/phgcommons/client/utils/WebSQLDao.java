@@ -72,7 +72,7 @@ public abstract class WebSQLDao {
   protected void openDatabase(SQLTransactionCallback openCallback) {
     db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
-        PhonegapUtils.log("creation callback");
+        PhgUtils.log("creation callback");
         if (creationCallback != null)
           creationCallback.handleEvent(db);
       }
@@ -85,13 +85,13 @@ public abstract class WebSQLDao {
       final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, creationCallback).cast();
       final SQLTransactionCallback migrationCallback = new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
-          PhonegapUtils.log("creating table version if not exists");
+          PhgUtils.log("creating table version if not exists");
           transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
-          PhonegapUtils.log("select count on table version");
+          PhgUtils.log("select count on table version");
           transaction.doExecuteSql("SELECT COUNT(*) AS c FROM version", null, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction transaction, SQLResultSet resultSet) {
               if (resultSet.getRows().getLength() == 0 || resultSet.getRows().getValueInt(0, "c") == 0) {
-                PhonegapUtils.log("INITIALIZING TABLE VERSION");
+                PhgUtils.log("INITIALIZING TABLE VERSION");
                 transaction.doExecuteSql("INSERT INTO version VALUES (-1)");
               }
             }
@@ -208,7 +208,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(er) {
           var txt = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.transaction(jsCallback, jsErrorCallback, jsSuccessCallback);
@@ -247,7 +247,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(er) {
           var txt = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.readTransaction(jsCallback, jsErrorCallback, jsSuccessCallback);
@@ -316,7 +316,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(tr, er) {
           var txt = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.executeSql(sqlStatement, arguments, jsCallback, jsErrorCallback);
@@ -436,7 +436,7 @@ public abstract class WebSQLDao {
       this.dao = dao;
       db.getVersionAsync(0, new Delegate<Integer>() {
         public void execute(Integer currentVersion) {
-          PhonegapUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
+          PhgUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
           doMigration(currentVersion);
         }
       });
@@ -462,7 +462,7 @@ public abstract class WebSQLDao {
           }
         });
       } else {
-        PhonegapUtils.log("db is ready");
+        PhgUtils.log("db is ready");
         dao.ready = true;
       }
     }

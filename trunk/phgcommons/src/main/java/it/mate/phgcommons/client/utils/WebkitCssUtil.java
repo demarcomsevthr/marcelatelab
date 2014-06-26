@@ -51,7 +51,7 @@ public class WebkitCssUtil {
   public static void moveScrollPanelY(final ScrollPanelImpl scrollPanel, final int deltaY) {
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
-        PhonegapUtils.log("scrollPanelImpl.y = " + scrollPanel.getY());
+        PhgUtils.log("scrollPanelImpl.y = " + scrollPanel.getY());
         int newY = scrollPanel.getY() - deltaY;
         Widget wrappedPanel = scrollPanel.iterator().next();
         setTransform(wrappedPanel.getElement().getStyle(), "translate3d(0px, "+ newY +"px, 0px)");

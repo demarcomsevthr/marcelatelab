@@ -1,12 +1,12 @@
 package com.google.gwt.dom.client;
 
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 public class DOMImplWebkitPatched extends DOMImplWebkit {
   
   public DOMImplWebkitPatched() {
     super();
-    PhonegapUtils.log("Using DOMImplWebkitPatched");
+    PhgUtils.log("Using DOMImplWebkitPatched");
   }
 
   @Override

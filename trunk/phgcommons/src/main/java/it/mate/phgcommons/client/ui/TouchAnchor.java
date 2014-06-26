@@ -84,7 +84,7 @@ public class TouchAnchor extends TouchWidget implements HasClickHandlers, HasTag
   /*
   @Override
   public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
-    PhonegapUtils.log("ATTENZIONE: CON LA FOCUS PATCH (27/01/2014) NON FUNZIONA PIU' IL TOUCH START HANDLER!");
+    PhgUtils.log("ATTENZIONE: CON LA FOCUS PATCH (27/01/2014) NON FUNZIONA PIU' IL TOUCH START HANDLER!");
     return super.addTouchStartHandler(handler);
   }
   */

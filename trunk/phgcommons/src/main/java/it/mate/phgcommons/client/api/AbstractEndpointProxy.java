@@ -3,7 +3,7 @@ package it.mate.phgcommons.client.api;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.JSONUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
@@ -65,7 +65,7 @@ public abstract class AbstractEndpointProxy {
     this.initDelegate = initDelegate;
     this.useAuthentication = useAuthentication;
     this.authDelegate = authDelegate;
-    PhonegapUtils.log("initializing endpoint proxy " + apiName + "...");
+    PhgUtils.log("initializing endpoint proxy " + apiName + "...");
     JSONUtils.ensureStringify();
     initClientApi();
   }
@@ -109,15 +109,15 @@ public abstract class AbstractEndpointProxy {
   }-*/;
 
   protected void initEndpointApi() {
-    PhonegapUtils.log("calling initEndpointImpl");
-    PhonegapUtils.log("apiRoot = " + apiRoot);
-    PhonegapUtils.log("apiName = " + apiName);
-    PhonegapUtils.log("apiKey = " + getApiKey());
-    PhonegapUtils.log("proxyBuildNm = " + PROXY_BUILD_NUMBER);
+    PhgUtils.log("calling initEndpointImpl");
+    PhgUtils.log("apiRoot = " + apiRoot);
+    PhgUtils.log("apiName = " + apiName);
+    PhgUtils.log("apiKey = " + getApiKey());
+    PhgUtils.log("proxyBuildNm = " + PROXY_BUILD_NUMBER);
     initEndpointApiImpl(apiRoot, apiName, getApiKey(), useAuthentication, new Callback() {
       public void execute(JavaScriptObject proxyRef) {
         if (proxyRef == null) {
-          PhonegapUtils.log("initEndpointApi.callback: ALERT: proxyRef is null!");
+          PhgUtils.log("initEndpointApi.callback: ALERT: proxyRef is null!");
         }
         initialized = true;
         onInit();
@@ -137,10 +137,10 @@ public abstract class AbstractEndpointProxy {
         $wnd.glbDebugHook($wnd.gapi.client[apiName]);
         var msg = "initEndpointApiImpl: gapi.client = ";
         msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(msg);
         msg = "initEndpointApiImpl: gapi.client["+apiName+"] = ";
         msg += @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(msg);
         pCallback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
       }
     }
@@ -164,20 +164,20 @@ public abstract class AbstractEndpointProxy {
   
   private void signIn(final boolean immediate) {
     
-    PhonegapUtils.log("called signIn " + immediate);
+    PhgUtils.log("called signIn " + immediate);
     
     final Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
-        PhonegapUtils.log("authorization failure");
+        PhgUtils.log("authorization failure");
       }
     };
     
     if (Window.Navigator.getUserAgent().toLowerCase().contains("windows nt")) {
       
-      PhonegapUtils.log("calling signInDesktopImpl");
-      PhonegapUtils.log("clientId " + getDesktopClientId());
-      PhonegapUtils.log("scopes " + AUTH_SCOPES);
-      PhonegapUtils.log("immediate " + immediate);
+      PhgUtils.log("calling signInDesktopImpl");
+      PhgUtils.log("clientId " + getDesktopClientId());
+      PhgUtils.log("scopes " + AUTH_SCOPES);
+      PhgUtils.log("immediate " + immediate);
       signInDesktopImpl(immediate, getDesktopClientId(), null, AUTH_SCOPES, new Callback() {
         public void execute(JavaScriptObject jso) {
           userAuthedLightImpl(new Callback() {
@@ -193,16 +193,16 @@ public abstract class AbstractEndpointProxy {
       
     } else {
       
-      PhonegapUtils.log("calling signInMobileImpl");
-      PhonegapUtils.log("clientId " + getMobileClientId());
-      PhonegapUtils.log("scopes " + AUTH_SCOPES);
-      PhonegapUtils.log("immediate " + immediate);
+      PhgUtils.log("calling signInMobileImpl");
+      PhgUtils.log("clientId " + getMobileClientId());
+      PhgUtils.log("scopes " + AUTH_SCOPES);
+      PhgUtils.log("immediate " + immediate);
       
       final Delegate<Token> validTokenDelegate = new Delegate<Token>() {
         public void execute(Token token) {
-          PhonegapUtils.log("setting gapi auth token");
+          PhgUtils.log("setting gapi auth token");
           setTokenInApiImpl(token);
-          PhonegapUtils.log("calling user authed");
+          PhgUtils.log("calling user authed");
           userAuthedLightImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
               signedIn = true;
@@ -224,7 +224,7 @@ public abstract class AbstractEndpointProxy {
         signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
           public void execute(JavaScriptObject jso) {
             Token token = jso.cast();
-            PhonegapUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+            PhgUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
             validTokenDelegate.execute(token);
           }
         }, failure);
@@ -235,10 +235,10 @@ public abstract class AbstractEndpointProxy {
           // ON SUCCESS
           public void execute(JavaScriptObject jso) {
             Token token = null;
-            PhonegapUtils.log("FOUND VALID TOKEN IN LOCAL STORAGE");
+            PhgUtils.log("FOUND VALID TOKEN IN LOCAL STORAGE");
             token = jso.cast();
-            PhonegapUtils.log("found token '" + JSONUtils.stringify(token) + "'");
-            PhonegapUtils.log("calling valid token delegate");
+            PhgUtils.log("found token '" + JSONUtils.stringify(token) + "'");
+            PhgUtils.log("calling valid token delegate");
             validTokenDelegate.execute(token);
           }
         }, new Callback() {
@@ -247,12 +247,12 @@ public abstract class AbstractEndpointProxy {
             signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
               public void execute(JavaScriptObject data) {
                 Token token = data.cast();
-                PhonegapUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+                PhgUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
                 
-                PhonegapUtils.log("setting token in local storage");
+                PhgUtils.log("setting token in local storage");
                 setTokenInStorageImpl(data);
                 
-                PhonegapUtils.log("calling valid token delegate");
+                PhgUtils.log("calling valid token delegate");
                 validTokenDelegate.execute(token);
 
               }
@@ -278,7 +278,7 @@ public abstract class AbstractEndpointProxy {
    */
   private native void getTokenFromStorageImpl(String clientId, String clientSecret, Callback success, Callback failure) /*-{
     if (localStorage.refresh_token) {
-      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('refreshing token');
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('refreshing token');
       $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
         refresh_token: localStorage.refresh_token,
         client_id: clientId,
@@ -332,7 +332,7 @@ public abstract class AbstractEndpointProxy {
     var loadstartHandler = function(e) {
         $wnd.glbDebugHook();
         var url = e.originalEvent.url;
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
         
         var code = /\?code=(.+)$/.exec(url);
         var error = /\?error=(.+)$/.exec(url);
@@ -344,7 +344,7 @@ public abstract class AbstractEndpointProxy {
   
         if (code) {
             code = @it.mate.phgcommons.client.api.AbstractEndpointProxy::purgeBlanks(Ljava/lang/String;)(code[1]);
-            @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received auth code '" + code + "'");
+            @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("received auth code '" + code + "'");
             //Exchange the authorization code for an access token
             $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
                 code: code,
@@ -363,7 +363,7 @@ public abstract class AbstractEndpointProxy {
         
     };
   
-    @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('setting loadstart handler');
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('setting loadstart handler');
     $wnd.$(authWindow).on('loadstart', loadstartHandler);
     
   }-*/;
@@ -377,9 +377,9 @@ public abstract class AbstractEndpointProxy {
       if (!resp.code) {
         callback.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
       } else {
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
         var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
       }
     });
   }-*/;
@@ -406,7 +406,7 @@ public abstract class AbstractEndpointProxy {
   }
   
   private void signOut() {
-    PhonegapUtils.log("AbstractEndpointProxy: signing out...");
+    PhgUtils.log("AbstractEndpointProxy: signing out...");
     signOutImpl();
     signedIn = false;
     if (authDelegate != null) {
@@ -422,7 +422,7 @@ public abstract class AbstractEndpointProxy {
       success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
     }).fail(function(resp) {
       var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-      @it.mate.phgcommons.client.utils.PhonegapUtils::log(Ljava/lang/String;)('revoking token failure - ' + msg);
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('revoking token failure - ' + msg);
       // chiamo ugualmente la success per andare avanti
       success.@it.mate.phgcommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
     });
@@ -481,7 +481,7 @@ public abstract class AbstractEndpointProxy {
     if ((pos = code.indexOf(' ')) > -1) {
       code = code.substring(pos);
     }
-    PhonegapUtils.log("purged code = '" + code + "'");
+    PhgUtils.log("purged code = '" + code + "'");
     return code;
   }
   

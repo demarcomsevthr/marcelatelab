@@ -85,9 +85,11 @@ public class PhgDialogUtils {
   private static void createButtonsAndShow(final Widget dialogContainer, Panel buttonsPanel, String message, final String title, final int buttonsType, final Position position, final Delegate<Integer> delegate) {
     String buttonMsg = null;
     
+    String lang = PhgUtils.getAppLocalLanguage();
+    
     if (buttonsPanel != null) {
       if (buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
-        buttonMsg = "Yes";
+        buttonMsg = "it".equals(lang) ? "Si" : "Yes";
       } else {
         buttonMsg = "OK";
       }
@@ -103,7 +105,7 @@ public class PhgDialogUtils {
     
     if (buttonsType == BUTTONS_OKCANCEL || buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
       if (buttonsType == BUTTONS_OKCANCEL) {
-        buttonMsg = "Cancel";
+        buttonMsg = "it".equals(lang) ? "Annulla" : "Cancel";
       } else {
         buttonMsg = "No";
       }
@@ -119,7 +121,7 @@ public class PhgDialogUtils {
     }
     
     if (buttonsType == BUTTONS_YESNOCANCEL) {
-      buttonMsg = "Cancel";
+      buttonMsg = "it".equals(lang) ? "Annulla" : "Cancel";
       TouchAnchor btn = new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
         public void onTap(TapEvent event) {
           hideMessageDialog();
@@ -134,7 +136,7 @@ public class PhgDialogUtils {
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
         if (messageDialog != null) {
-          PhonegapUtils.log("message dialog is just opened!");
+          PhgUtils.log("message dialog is just opened!");
           return;
         }
         if (position != null) {
@@ -177,58 +179,6 @@ public class PhgDialogUtils {
     
     createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, null, delegate);
 
-    /*
-    String buttonMsg = null;
-    if (buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
-      buttonMsg = "Yes";
-    } else {
-      buttonMsg = "OK";
-    }
-    buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
-      public void onTap(TapEvent event) {
-        hideMessageDialog();
-        if (delegate != null)
-          delegate.execute(1);
-      }
-    }));
-    
-    if (buttonsType == BUTTONS_OKCANCEL || buttonsType == BUTTONS_YESNO || buttonsType == BUTTONS_YESNOCANCEL) {
-      if (buttonsType == BUTTONS_OKCANCEL) {
-        buttonMsg = "Cancel";
-      } else {
-        buttonMsg = "No";
-      }
-      buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
-        public void onTap(TapEvent event) {
-          hideMessageDialog();
-          if (delegate != null)
-            delegate.execute(2);
-        }
-      }));
-    }
-    
-    if (buttonsType == BUTTONS_YESNOCANCEL) {
-      buttonMsg = "Cancel";
-      buttonsPanel.add(new TouchAnchor(SafeHtmlUtils.fromTrustedString(buttonMsg), new TapHandler() {
-        public void onTap(TapEvent event) {
-          hideMessageDialog();
-          if (delegate != null)
-            delegate.execute(3);
-        }
-      }));
-    }
-
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        if (messageDialog != null) {
-          PhonegapUtils.log("message dialog is just opened!");
-          return;
-        }
-        messageDialog = MgwtDialogs.popin(title, dialogContainer);
-      }
-    });
-    */
-    
   }
   
   private static void hideMessageDialog() {
@@ -272,7 +222,7 @@ public class PhgDialogUtils {
   }
   
   public static class Configuration {
-    private String captionText = "Attenzione";
+    private String captionText = "it".equals(PhgUtils.getAppLocalLanguage()) ? "Attenzione" : "Alert";
     private String bodyText = null;
     private SafeHtml bodyHtml = null;
     private Widget bodyWidget = null;

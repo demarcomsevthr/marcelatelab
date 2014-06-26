@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.place;
 
 import it.mate.gwtcommons.client.places.HasToken;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.LinkedList;
 
@@ -22,7 +22,7 @@ public class PlaceControllerWithHistory extends PlaceController {
     super.goTo(newPlace);
     
     if (!(newPlace instanceof HasToken)) {
-      PhonegapUtils.log("ERROR: " + getClass() + " can be used only with place implementing HasToken interface!");
+      PhgUtils.log("ERROR: " + getClass() + " can be used only with place implementing HasToken interface!");
     }
     
     if (history.size() > 0) {
@@ -45,7 +45,7 @@ public class PlaceControllerWithHistory extends PlaceController {
       logMsg += placeInHistory;
     }
     logMsg += "}";
-    PhonegapUtils.log(logMsg);
+    PhgUtils.log(logMsg);
     
   }
   

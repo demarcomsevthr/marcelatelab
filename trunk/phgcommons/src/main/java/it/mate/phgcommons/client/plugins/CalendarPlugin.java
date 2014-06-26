@@ -3,7 +3,7 @@ package it.mate.phgcommons.client.plugins;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.JSONUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,29 +78,29 @@ public class CalendarPlugin {
   
   public static void createEvent(Event event) {
     JSONUtils.ensureStringify();
-    PhonegapUtils.log("creating event " + event);
+    PhgUtils.log("creating event " + event);
 //  createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
     callPluginImpl("createEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
+        PhgUtils.log("Success - " + JSONUtils.stringify(results));
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Failure - " + JSONUtils.stringify(results));
+        PhgUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
   }
   
   public static void deleteEvent(Event event) {
     JSONUtils.ensureStringify();
-    PhonegapUtils.log("deleting event " + event);
+    PhgUtils.log("deleting event " + event);
     callPluginImpl("deleteEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
+        PhgUtils.log("Success - " + JSONUtils.stringify(results));
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Failure - " + JSONUtils.stringify(results));
+        PhgUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
   }
@@ -146,11 +146,11 @@ public class CalendarPlugin {
       event.setLocation("");
     if (event.getNotes() == null)
       event.setNotes("");
-    PhonegapUtils.log("finding event " + event);
+    PhgUtils.log("finding event " + event);
 //  findEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
     callPluginImpl("findEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Success - " + JSONUtils.stringify(results));
+        PhgUtils.log("Success - " + JSONUtils.stringify(results));
         JsArray<JavaScriptObject> jsEvents = results.cast();
         List<Event> events = new ArrayList<CalendarPlugin.Event>();
         for (int it = 0; it < jsEvents.length(); it++) {
@@ -167,7 +167,7 @@ public class CalendarPlugin {
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        PhonegapUtils.log("Failure - " + JSONUtils.stringify(results));
+        PhgUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
   }

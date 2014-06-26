@@ -15,7 +15,7 @@ public class Time {
   
   private final static DateTimeFormat fmt24 = DateTimeFormat.getFormat("HH:mm");
   
-  private static DateTimeFormat fmt = fmt24;
+  private static DateTimeFormat fmt = null;
   
   public Time() { 
     this(new Date());
@@ -106,7 +106,7 @@ public class Time {
         try {
           temp = fmt12.parse(text);
         } catch (IllegalArgumentException ex2) {
-          PhonegapUtils.log("ERROR PARSING TIME FROM STRING " + text);
+          PhgUtils.log("ERROR PARSING TIME FROM STRING " + text);
           return null;
         }
       }
