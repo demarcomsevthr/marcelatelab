@@ -20,7 +20,7 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    String traceActive = PhonegapUtils.getLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE);
+    String traceActive = PhonegapUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
     if ("true".equals(traceActive)) {
       PhonegapUtils.log("***********    TRACE ENABLED   *************");
       PhonegapUtils.startTrace();

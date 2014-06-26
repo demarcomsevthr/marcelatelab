@@ -1,8 +1,6 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.phgcommons.client.ui.TimePickerDialog;
-import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.view.HomeView.Presenter;

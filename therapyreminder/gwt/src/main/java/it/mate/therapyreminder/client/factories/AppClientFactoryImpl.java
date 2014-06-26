@@ -137,8 +137,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     CalendarDialog.setLanguage(PhonegapUtils.getAppLocalLanguage());
     
-//  PhonegapUtils.log("TIME FORMAT = " + LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().timeFormat());
-    
     PhonegapUtils.getGlobalizationDatePattern(new Delegate<String>() {
       public void execute(String pattern) {
         PhonegapUtils.log("GLOB DATE PATTERN = " + pattern);
@@ -148,8 +146,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       public void execute(String pattern) {
         PhonegapUtils.log("GLOB TIME PATTERN = " + pattern);
         if (pattern == null) {
-          Time.set24HFormat();
-        } else if (pattern.contains("HH")) {
+          pattern = PhonegapUtils.getLocalStorageItem("debug-time-pattern");
+          if (pattern == null) {
+            pattern = "HH:mm";
+            PhonegapUtils.setLocalStorageItem("debug-time-pattern", pattern);
+          }
+        } 
+        if (pattern.contains("HH")) {
           Time.set24HFormat();
         } else {
           Time.set12HFormat();
@@ -181,7 +184,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     startTimersAndInitHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
-
+  
   private void initHistoryHandler(final MGWTPlaceHistoryHandler historyHandler, MainPlace defaultPlace) {
 //  AppClientFactory clientFactory = this;
 //  historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), defaultPlace);

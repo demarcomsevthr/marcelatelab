@@ -160,7 +160,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("traceBtn")
   public void onTraceBtn (TouchEndEvent event) {
     if (PhonegapUtils.getTrace() == null) {
-      PhonegapUtils.setLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE, "true");
+      PhonegapUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "true");
       Window.Location.assign("index.html");
     } else {
       EmailWrapper email = new EmailWrapper("THR trace dump");
@@ -169,7 +169,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       }
       email.showMailComposer();
       PhonegapUtils.clearTrace();
-      PhonegapUtils.setLocalStorageProperty(AppClientFactory.KEY_TRACE_ACTIVE, "false");
+      PhonegapUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "false");
     }
     getPresenter().goToHome();
   }
