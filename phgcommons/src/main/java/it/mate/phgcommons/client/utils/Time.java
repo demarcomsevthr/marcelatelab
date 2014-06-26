@@ -131,7 +131,15 @@ public class Time {
     return use12HFormat;
   }
   
-  public static void set12HFormat(boolean use12hFormat) {
+  public static void set24HFormat() {
+    setUse12HFormat(false);
+  }
+  
+  public static void set12HFormat() {
+    setUse12HFormat(true);
+  }
+  
+  private static void setUse12HFormat(boolean use12hFormat) {
     use12HFormat = use12hFormat;
     fmt = use12hFormat ? fmt12 : fmt24;
   }
