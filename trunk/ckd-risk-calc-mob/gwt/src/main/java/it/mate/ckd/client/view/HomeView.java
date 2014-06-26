@@ -10,7 +10,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.JQueryUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import java.util.List;
@@ -88,7 +88,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       
     } else if (AppProperties.IMPL.HomeView_langInfo_visible()) {
       devInfo.setVisible(true);
-      String info = "Language = " + PhonegapUtils.getNavigator().getLanguage();
+      String info = "Language = " + PhgUtils.getNavigator().getLanguage();
       devInfo.setText(info);
     }
     
@@ -133,7 +133,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
   private PopinDialog ratingDialog;
   
   private void createRatingDialog () {
-    String rating = PhonegapUtils.getLocalStorageItem("ckd-free-rating");
+    String rating = PhgUtils.getLocalStorageItem("ckd-free-rating");
     if (rating == null) {
       rating = "4";
     }
@@ -144,21 +144,21 @@ public class HomeView extends BaseMgwtView <Presenter> {
     } else if (ratingCount > 0) {
       ratingCount --;
       rating = "" + ratingCount;
-      PhonegapUtils.setLocalStorageItem("ckd-free-rating", rating);
+      PhgUtils.setLocalStorageItem("ckd-free-rating", rating);
       getPresenter().goToCkdInput();
     } else {
       final SimpleContainer dialogPanel = new SimpleContainer();
       dialogPanel.add(new SimplePanel(new MyAnchor("Yes Now", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked yes");
           ratingDialog.hide();
-          PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id669006296");
+          PhgUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id669006296");
         }
       })));
       dialogPanel.add(new SimplePanel(new MyAnchor("Remind Me Later", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "4");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "4");
           GwtUtils.log("clicked maybe");
           ratingDialog.hide();
           getPresenter().goToCkdInput();
@@ -166,7 +166,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
       })));
       dialogPanel.add(new SimplePanel(new MyAnchor("No, Thanks", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked no");
           ratingDialog.hide();
           getPresenter().goToCkdInput();

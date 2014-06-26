@@ -226,7 +226,7 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
             char separatorToAvoid = ',';
             
             /*
-//          String language = PhonegapUtils.getNavigator().getLanguage();
+//          String language = PhgUtils.getNavigator().getLanguage();
             if (language != null && language.toLowerCase().startsWith("it")) {
               separatorToAvoid = '.';
             }

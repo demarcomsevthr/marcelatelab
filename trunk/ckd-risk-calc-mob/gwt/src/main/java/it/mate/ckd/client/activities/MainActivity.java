@@ -20,7 +20,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.MgwtDialogs;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -160,9 +160,9 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void openHelpPage() {
     String appLanguage = GwtUtils.getJSVar("appLanguage", null);
     if ("it".equals(appLanguage)) {
-      PhonegapUtils.openInAppBrowser("help-it.html");
+      PhgUtils.openInAppBrowser("help-it.html");
     } else {
-      PhonegapUtils.openInAppBrowser("help.html");
+      PhgUtils.openInAppBrowser("help.html");
     }
   }
   
@@ -235,8 +235,8 @@ public class MainActivity extends MGWTAbstractActivity implements
     dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Yes Now", new ClickHandler() {
       public void onClick(ClickEvent event) {
         advDialog.hide();
-        PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id773220859");
-//      PhonegapUtils.openInAppBrowser("https://itunes.apple.com/app/ckd-risk-calc-pro/id773220859");
+        PhgUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id773220859");
+//      PhgUtils.openInAppBrowser("https://itunes.apple.com/app/ckd-risk-calc-pro/id773220859");
         delegate.execute(advDialog);
       }
     })));
@@ -267,7 +267,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       return;
     }
     
-    String rating = PhonegapUtils.getLocalStorageItem("ckd-free-rating");
+    String rating = PhgUtils.getLocalStorageItem("ckd-free-rating");
     if (rating == null) {
       rating = "4";
     }
@@ -281,22 +281,22 @@ public class MainActivity extends MGWTAbstractActivity implements
     } else if (ratingCount > 0) {
       ratingCount --;
       rating = "" + ratingCount;
-      PhonegapUtils.setLocalStorageItem("ckd-free-rating", rating);
+      PhgUtils.setLocalStorageItem("ckd-free-rating", rating);
 //    getPresenter().goToCkdInput();
       delegate.execute(ratingDialog);
     } else {
       final SimpleContainer dialogPanel = new SimpleContainer();
       dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Yes Now", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked yes");
           ratingDialog.hide();
-          PhonegapUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id669006296");
+          PhgUtils.openInAppBrowser("itms-apps://itunes.apple.com/app/id669006296");
         }
       })));
       dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("Remind Me Later", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "4");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "4");
           GwtUtils.log("clicked maybe");
           ratingDialog.hide();
 //        getPresenter().goToCkdInput();
@@ -305,7 +305,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       })));
       dialogPanel.add(new SimplePanel(new AnchorWithClickHandler("No, Thanks", new ClickHandler() {
         public void onClick(ClickEvent event) {
-          PhonegapUtils.setLocalStorageItem("ckd-free-rating", "-1");
+          PhgUtils.setLocalStorageItem("ckd-free-rating", "-1");
           GwtUtils.log("clicked no");
           ratingDialog.hide();
 //        getPresenter().goToCkdInput();
