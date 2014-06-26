@@ -569,7 +569,8 @@ public class CalendarDialog {
     setSelectedDateStyle(this.selectedDate);
     if (selectedDateCell != null) {
       if (selectedDate != null) {
-        selectedDateCell.setText(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
+//      selectedDateCell.setText(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
+        selectedDateCell.setText(PhgUtils.dateToString(selectedDate));
       } else {
         selectedDateCell.setHtml(SafeHtmlUtils.fromTrustedString(" "));
       }
