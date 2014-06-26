@@ -34,7 +34,6 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.Timer;
@@ -148,14 +147,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     PhonegapUtils.getGlobalizationTimePattern(new Delegate<String>() {
       public void execute(String pattern) {
         PhonegapUtils.log("GLOB TIME PATTERN = " + pattern);
-        
-        ///////////////////////////////////////////////////////
-        //   DEBUGGING
         if (pattern == null) {
-          Time.set12HFormat(false);
-          PhonegapUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
+          Time.set24HFormat();
+        } else if (pattern.contains("HH")) {
+          Time.set24HFormat();
+        } else {
+          Time.set12HFormat();
         }
-        
+        PhonegapUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
       }
     });
     
