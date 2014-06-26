@@ -76,30 +76,12 @@ public class PhonegapUtils {
     return $wnd.navigator;
   }-*/;
   
-  /**
-   * @see 
-   * USE getLocalStorageProperty
-   */
-  @Deprecated
   public static native String getLocalStorageItem(String name) /*-{
-    return $wnd.getLocalStorageItem(name);
+    return $wnd.localStorage[name];
   }-*/;
   
-  /**
-   * @see 
-   * USE setLocalStorageProperty
-   */
-  @Deprecated
   public static native void setLocalStorageItem(String name, String value) /*-{
-    $wnd.setLocalStorageItem(name, value);
-  }-*/;
-
-  public static native String getLocalStorageProperty(String name) /*-{
-    return localStorage[name];
-  }-*/;
-  
-  public static native void setLocalStorageProperty(String name, String value) /*-{
-    localStorage[name] = value;
+    $wnd.localStorage[name] = value;
   }-*/;
 
   public static native String getWindowSetting(String name) /*-{
