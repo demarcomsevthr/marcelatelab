@@ -14,7 +14,7 @@ public abstract class AbstractPluginWrapper {
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }
@@ -26,7 +26,7 @@ public abstract class AbstractPluginWrapper {
       }
     }, new JsStringCallback() {
       public void execute(String jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }
@@ -39,7 +39,7 @@ public abstract class AbstractPluginWrapper {
       }
     }, new JsStringCallback() {
       public void execute(String jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }

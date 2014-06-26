@@ -21,12 +21,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_DATE_DIALOG, JsDateTimeResult.fromDate(value), new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        PhonegapUtils.log("received " + res.asString());
+        PhgUtils.log("received " + res.asString());
         delegate.execute(res.asDate());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }
@@ -35,12 +35,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_CALENDAR_VIEW, JsDateTimeResult.fromDate(value), new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        PhonegapUtils.log("received " + res.asString());
+        PhgUtils.log("received " + res.asString());
         delegate.execute(res.asDate());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }
@@ -49,12 +49,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_TIME_DIALOG, null, new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        PhonegapUtils.log("received " + res.asString());
+        PhgUtils.log("received " + res.asString());
         delegate.execute(res.asTime());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        PhonegapUtils.log("error executing plugin");
+        PhgUtils.log("error executing plugin");
       }
     });
   }

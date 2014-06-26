@@ -5,7 +5,7 @@ import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.utils.EventUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -377,7 +377,7 @@ public class TimePickerDialog {
   public void hide() {
     popup.hide();
     EventUtils.removeModalHandler(modalHandlerRegistration);
-    PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
+    PhgUtils.setSuspendUncaughtExceptionAlerts(false);
     onHide();
   }
   
@@ -387,7 +387,7 @@ public class TimePickerDialog {
   
   private void renderTime() {
     
-    PhonegapUtils.log("rendering " + currentTime);
+    PhgUtils.log("rendering " + currentTime);
     
     int hours = currentTime.getHours();
     

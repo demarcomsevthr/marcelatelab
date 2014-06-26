@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.user.client.ui.TextBox;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
@@ -32,7 +32,7 @@ public class MTextBoxPatched extends MTextBox {
   // TODO: da testare su device 4.1+ e IOS
   private void applyPatch() {
     if (OsDetectionUtils.isAndroid()) {
-      String version = PhonegapUtils.getDeviceVersion().trim();
+      String version = PhgUtils.getDeviceVersion().trim();
       if (version.startsWith("2") || version.startsWith("3") || version.startsWith("4.0")) {
         box.getElement().getStyle().setProperty("webkitUserModify", "initial");
       }

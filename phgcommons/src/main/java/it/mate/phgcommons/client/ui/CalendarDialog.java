@@ -6,7 +6,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.utils.EventUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,7 +184,7 @@ public class CalendarDialog {
   }
   
   public void show() {
-    PhonegapUtils.setSuspendUncaughtExceptionAlerts(true);
+    PhgUtils.setSuspendUncaughtExceptionAlerts(true);
     initUI();
   }
   
@@ -196,7 +196,7 @@ public class CalendarDialog {
     }
     popup.hide();
     EventUtils.removeModalHandler(modalHandlerRegistration);
-    PhonegapUtils.setSuspendUncaughtExceptionAlerts(false);
+    PhgUtils.setSuspendUncaughtExceptionAlerts(false);
     onHide();
   }
   
@@ -511,7 +511,7 @@ public class CalendarDialog {
     dayCell.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         if (scrollPending) {
-          PhonegapUtils.log("scrollPending!");
+          PhgUtils.log("scrollPending!");
         } else {
           onDateCellTouched(dayCell);
           setSelectedDate(date);
@@ -549,7 +549,7 @@ public class CalendarDialog {
     if (!curMonth.isDateInMonth(date)) {
       return;
     }
-    PhonegapUtils.log("setting selected date style " + GwtUtils.dateToString(date, "dd/MM/yyyy"));
+    PhgUtils.log("setting selected date style " + GwtUtils.dateToString(date, "dd/MM/yyyy"));
     Widget cell = getDateCellWidget(date);
     if (cell != null) {
       cell.addStyleName("phg-CalendarDialog-Month-Day-selected");
