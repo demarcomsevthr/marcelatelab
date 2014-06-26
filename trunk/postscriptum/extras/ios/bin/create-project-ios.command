@@ -20,5 +20,7 @@ cordova plugin add org.apache.cordova.console
 
 cordova plugin add org.apache.cordova.inappbrowser
 
+cordova plugin add org.apache.cordova.globalization
+
 cordova build ios
 
