@@ -48,7 +48,7 @@ public class PhonegapUtils {
     log("Device.platform " + getDevicePlatform());
     log("Device.uuid " + getDeviceUuid());
     log("Device.version " + getDeviceVersion());
-    log("Locale.language " + getAppLocalLanguage());
+    log("AppLocalLanguage = " + getAppLocalLanguage());
   }
   
   public static String getLayoutInfo() {
@@ -396,6 +396,12 @@ public class PhonegapUtils {
     String lang = getAppLocalLanguageImpl();
     if (lang == null || lang.trim().length() == 0) {
       lang = getCurrentLanguage();
+      if (lang != null) {
+        if (lang.length() > 2) {
+          lang = lang.substring(0, 2);
+        }
+        lang = lang.toLowerCase();
+      }
     }
     return lang;
   }
