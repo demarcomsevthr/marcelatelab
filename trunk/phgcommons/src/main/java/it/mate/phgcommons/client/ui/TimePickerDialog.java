@@ -100,6 +100,7 @@ public class TimePickerDialog {
     }
     this.options = options != null ? options : new Options();
     initUI();
+    setTime(currentTime);
   }
   
   public void setTime(Time time) {
@@ -167,22 +168,45 @@ public class TimePickerDialog {
         int newDigit = getWidgetValue(source);
         if (currentDigitPosition == 0) {
           if (Time.is12HFormat()) {
+            if (newDigit <= 0) {
+              int hours = currentTime.getHours12();
+              currentTime.setHours12(setDigitInPosition(hours, 0, newDigit));
+            } else if (newDigit == 1) {
+              int d1 = getWidgetValue(digits[1]);
+              if (d1 <= 2) {
+                int hours = currentTime.getHours12();
+                currentTime.setHours12(setDigitInPosition(hours, 0, newDigit));
+              } else {
+                currentTime.setHours12(10);
+              }
+            }
+            /*
             if (newDigit == 0) {
+              int d1 = getWidgetValue(digits[1]);
+              if (d1 <= 2) {
+                
+              }
               int hours = currentTime.getHours();
               currentTime.setHours(setDigitInPosition(hours, 0, newDigit));
             } else if (newDigit == 1) {
+              int d1 = getWidgetValue(digits[1]);
+              int hours = currentTime.getHours();
               if (currentTime.isAM()) {
-                int hours = currentTime.getHours();
-                currentTime.setHours(setDigitInPosition(hours, 0, newDigit));
+                if (d1 < 2) {
+                  hours = 10 + d1;
+                } else if (d1 == 2) {
+                  hours = 0;
+                }
               } else {
-                int d1 = getWidgetValue(digits[1]);
-                if (d1 <= 2) {
-                  currentTime.setHours(22 + d1);
-                } else {
-                  currentTime.setHours(22);
+                if (d1 < 2) {
+                  hours = 22 + d1;
+                } else if (d1 == 2) {
+                  hours = 12;
                 }
               }
+              currentTime.setHours(hours);
             }
+            */
           } else {
             if (newDigit <= 2) {
               int hours = currentTime.getHours();
@@ -192,28 +216,53 @@ public class TimePickerDialog {
           currentDigitPosition ++;
           renderTime();
         } else if (currentDigitPosition == 1) {
-          int d0 = getWidgetValue(digits[0]);
-          if (d0 == 0) {
-            int hours = currentTime.getHours();
-            currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
-          } else if (d0 == 1) {
-            if (Time.is12HFormat()) {
+          if (Time.is12HFormat()) {
+            int d0 = getWidgetValue(digits[0]);
+            if (d0 <= 0) {
+              int hours = currentTime.getHours12();
+              currentTime.setHours12(setDigitInPosition(hours, 1, newDigit));
+            } else if (d0 == 1) {
               if (newDigit <= 2) {
+                int hours = currentTime.getHours12();
+                currentTime.setHours12(setDigitInPosition(hours, 1, newDigit));
+              }
+            }
+            /*
+            int d0 = getWidgetValue(digits[0]);
+            if (d0 == 0) {
+              int hours = currentTime.getHours();
+              currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+            } else if (d0 == 1) {
+              if (newDigit <= 1) {
                 if (currentTime.isAM()) {
-                  int hours = currentTime.getHours();
-                  currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+                  currentTime.setHours(setDigitInPosition(10, 1, newDigit));
                 } else {
                   currentTime.setHours(setDigitInPosition(10, 1, newDigit) + 12);
                 }
+              } else if (newDigit == 2) {
+                if (currentTime.isAM()) {
+                  currentTime.setHours(0);
+                } else {
+                  currentTime.setHours(12);
+                }
               }
-            } else {
-              int hours = currentTime.getHours();
-              currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+            } else if (d0 == 2) {
+              if (newDigit <= 4) {
+                int hours = currentTime.getHours();
+                currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+              }
             }
-          } else if (d0 == 2) {
-            if (newDigit <= 4) {
+            */
+          } else {
+            int d0 = getWidgetValue(digits[0]);
+            if (d0 <= 1) {
               int hours = currentTime.getHours();
               currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+            } else if (d0 == 2) {
+              if (newDigit <= 3) {
+                int hours = currentTime.getHours();
+                currentTime.setHours(setDigitInPosition(hours, 1, newDigit));
+              }
             }
           }
           currentDigitPosition ++;

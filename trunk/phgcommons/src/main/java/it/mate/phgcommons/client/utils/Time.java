@@ -40,11 +40,31 @@ public class Time {
   }
   
   public int getHours12() {
+    if (hours == 0 || hours == 12) {
+      return 12;
+    }
     return hours % 12;
   }
   
   public Time setHours(int hours) {
     this.hours = hours;
+    return this;
+  }
+  
+  public Time setHours12(int hours) {
+    if (hours < 12) {
+      if (isAM()) {
+        this.hours = hours;
+      } else {
+        this.hours = hours + 12;
+      }
+    } else if (hours == 12) {
+      if (isAM()) {
+        this.hours = 0;
+      } else {
+        this.hours = 12;
+      }
+    }
     return this;
   }
   
