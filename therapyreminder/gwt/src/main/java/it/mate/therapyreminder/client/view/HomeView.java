@@ -50,17 +50,6 @@ public class HomeView extends BaseMgwtView <Presenter> {
   @Override
   public void setPresenter(Presenter presenter) {
     super.setPresenter(presenter);
-    
-    ////////////////////////////////////////////////////////
-    //   DEBUGGING
-    
-    Time.set12HFormat(true);
-    new TimePickerDialog();
-    
-    
-    ////////////////////////////////////////////////////////
-    
-    
   }
 
   @Override

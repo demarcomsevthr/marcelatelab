@@ -14,6 +14,7 @@ import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
@@ -137,7 +138,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     CalendarDialog.setLanguage(PhonegapUtils.getAppLocalLanguage());
     
-    PhonegapUtils.log("TIME FORMAT = " + LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().timeFormat());
+//  PhonegapUtils.log("TIME FORMAT = " + LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().timeFormat());
+    
     PhonegapUtils.getGlobalizationDatePattern(new Delegate<String>() {
       public void execute(String pattern) {
         PhonegapUtils.log("GLOB DATE PATTERN = " + pattern);
@@ -146,6 +148,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     PhonegapUtils.getGlobalizationTimePattern(new Delegate<String>() {
       public void execute(String pattern) {
         PhonegapUtils.log("GLOB TIME PATTERN = " + pattern);
+        
+        ///////////////////////////////////////////////////////
+        //   DEBUGGING
+        if (pattern == null) {
+          Time.set12HFormat(false);
+          PhonegapUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
+        }
+        
       }
     });
     
