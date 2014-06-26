@@ -150,6 +150,11 @@ body {
   font-size: 19px;
 }
 
+.phg-TimeBox {
+  padding-right: 20px;
+  padding-left: 4px;
+}
+
 .ui-optionsBtn {
   background: url(main/images/options-28.png) no-repeat;
   height: 32px;
@@ -329,7 +334,8 @@ body {
 
 .phg-TimeBox.ui-app-timebox {
   height: 1em;
-  width: 3.6em;
+  width: 4.5em;
+  /* width: 3.6em; */
 }
 
 .ui-hourrange-box {
