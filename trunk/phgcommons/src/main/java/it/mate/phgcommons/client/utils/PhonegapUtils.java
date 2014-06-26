@@ -374,6 +374,8 @@ public class PhonegapUtils {
           callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
         });
         $wnd.cordova.exec(jsSuccessCallback, jsErrorCallback, "Globalization", "getDatePattern", [{"options": options}]);
+      } else {
+        callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
       }
       
     } else {

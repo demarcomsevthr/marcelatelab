@@ -11,7 +11,11 @@ public class Time {
   
   private static boolean use12HFormat = false;
   
-  private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
+  private final static DateTimeFormat fmt12 = DateTimeFormat.getFormat("h:mm a");
+  
+  private final static DateTimeFormat fmt24 = DateTimeFormat.getFormat("HH:mm");
+  
+  private static DateTimeFormat fmt = fmt24;
   
   public Time() { 
     this(new Date());
@@ -71,7 +75,22 @@ public class Time {
   }
   
   public static Time fromString(String text) {
-    Date temp = fmt.parse(text);
+    Date temp = null;
+    try {
+      temp = fmt.parse(text);
+    } catch (IllegalArgumentException ex) {
+      // provo a fare il parsing con il formato inverso
+      if (is12HFormat()) {
+        temp = fmt24.parse(text);
+      } else {
+        try {
+          temp = fmt12.parse(text);
+        } catch (IllegalArgumentException ex2) {
+          PhonegapUtils.log("ERROR PARSING TIME FROM STRING " + text);
+          return null;
+        }
+      }
+    }
     return new Time(temp);
   }
   
@@ -114,7 +133,7 @@ public class Time {
   
   public static void set12HFormat(boolean use12hFormat) {
     use12HFormat = use12hFormat;
-    fmt = use12hFormat ? DateTimeFormat.getFormat("h:mm a") : DateTimeFormat.getFormat("HH:mm");
+    fmt = use12hFormat ? fmt12 : fmt24;
   }
   
   public static DateTimeFormat getCurrentFormat() {

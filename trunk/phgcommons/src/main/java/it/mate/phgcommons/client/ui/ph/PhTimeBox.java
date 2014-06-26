@@ -20,7 +20,6 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HasValue;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -39,7 +38,8 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   
   private List<AfterDialogCloseEvent.Handler> afterDialogCloseHandlers = new ArrayList<AfterDialogCloseEvent.Handler>();
   
-  private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
+//private static DateTimeFormat fmt = DateTimeFormat.getFormat("HH:mm");
+//private static DateTimeFormat fmt = Time.getCurrentFormat();
   
   private Object model;
   
@@ -124,7 +124,8 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   public void setValue(Time value, boolean fireEvents) {
     this.value = value;
     if (value != null) {
-      element.setValue(timeToString(value));
+      String text = timeToString(value);
+      element.setValue(text);
       if (fireEvents) {
         TimeChangeEvent.fire(this, value);
       }
@@ -132,7 +133,7 @@ public class PhTimeBox extends TouchWidget implements HasValue<Time>, HasChangeH
   }
   
   private String timeToString(Time time) {
-    return fmt.format(time.asDate());
+    return Time.getCurrentFormat().format(time.asDate());
   }
   
   @Override
