@@ -1,7 +1,7 @@
 package it.mate.therapyreminder.client;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 
@@ -20,24 +20,24 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    String traceActive = PhonegapUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
+    String traceActive = PhgUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
     if ("true".equals(traceActive)) {
-      PhonegapUtils.log("***********    TRACE ENABLED   *************");
-      PhonegapUtils.startTrace();
+      PhgUtils.log("***********    TRACE ENABLED   *************");
+      PhgUtils.startTrace();
     }
     
-    PhonegapUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
-    PhonegapUtils.logEnvironment();
+    PhgUtils.logEnvironment();
     
-    PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhonegapUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
+    PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhgUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
         log.log(Level.SEVERE, "uncaught exception", ex);
         ex.printStackTrace();
-        if (!PhonegapUtils.isSuspendUncaughtExceptionAlerts()) {
+        if (!PhgUtils.isSuspendUncaughtExceptionAlerts()) {
           Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
         }
       }

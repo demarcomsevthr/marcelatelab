@@ -3,7 +3,7 @@ package it.mate.therapyreminder.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.view.AccountEditView.Presenter;
@@ -70,7 +70,7 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
 
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
-    PhonegapUtils.log("save btn");
+    PhgUtils.log("save btn");
     flushAndSaveAccount(new Delegate<Account>() {
       public void execute(Account account) {
         getPresenter().goToPrevious();
@@ -80,7 +80,7 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   
   @Override
   public void onClosingView(final ClosingHandler handler) {
-    PhonegapUtils.log("close delegate");
+    PhgUtils.log("close delegate");
     flushAndSaveAccount(new Delegate<Account>() {
       public void execute(Account account) {
         handler.doClose();

@@ -10,7 +10,7 @@ import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
@@ -98,7 +98,7 @@ public class MainController {
             if (isRemoteSomministrazione(newSomministrazione)) {
               saveRemoteSomministrazione(newSomministrazione, new Delegate<Somministrazione>() {
                 public void execute(Somministrazione result) {
-                  PhonegapUtils.log("updated remote somministrazione " + result);
+                  PhgUtils.log("updated remote somministrazione " + result);
                 }
               });
             }
@@ -136,11 +136,11 @@ public class MainController {
   private boolean sviluppaSomministrazioni$operazioneInCorso = false;
   
   public void sviluppaSomministrazioni(final Prescrizione prescrizione, final Delegate<Prescrizione> completionDelegate) {
-//  PhonegapUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+//  PhgUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
     this.sviluppaSomministrazioni$operazioneInCorso = true;
     this.sviluppaSomministrazioni$completionDelegate = new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
-//      PhonegapUtils.log("FINE SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+//      PhgUtils.log("FINE SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
         sviluppaSomministrazioni$operazioneInCorso = false;
         if (completionDelegate != null) {
           completionDelegate.execute(prescrizione);
@@ -179,7 +179,7 @@ public class MainController {
                         if (somministrazioneInRemoto.getRemoteId() != null) {
                           dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
                             public void execute(Somministrazione updateRemoteSomministrazione) {
-                              PhonegapUtils.log("updated remote id somministrazione");
+                              PhgUtils.log("updated remote id somministrazione");
                               innerDelegate.get().execute(it);
                             }
                           });
@@ -200,7 +200,7 @@ public class MainController {
                   if (somministrazioneInRemoto.getRemoteId() != null) {
                     dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
                       public void execute(Somministrazione updateRemoteSomministrazione) {
-                        PhonegapUtils.log("updated remote somministrazione");
+                        PhgUtils.log("updated remote somministrazione");
                         sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
                       }
                     });
@@ -462,29 +462,29 @@ public class MainController {
   }
   
   public void setOnlineMode(boolean onlineMode) {
-    PhonegapUtils.setLocalStorageItem("onlineMode", ""+onlineMode);
+    PhgUtils.setLocalStorageItem("onlineMode", ""+onlineMode);
   }
   
   public boolean isOnlineMode() {
-    String value = PhonegapUtils.getLocalStorageItem("onlineMode");
+    String value = PhgUtils.getLocalStorageItem("onlineMode");
     return ("true".equalsIgnoreCase(value));
   }
   
   public void setDevInfoIdInLocalStorage(String devInfoId) {
-    PhonegapUtils.setLocalStorageItem("devInfoId", devInfoId);
+    PhgUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
 
   public String getDevInfoIdFromLocalStorage() {
-    return PhonegapUtils.getLocalStorageItem("devInfoId");
+    return PhgUtils.getLocalStorageItem("devInfoId");
   }
 
   public void setAccountInLocalStorage(Account account) {
     AccountTx tx = (AccountTx)account;
-    PhonegapUtils.setLocalStorageItem("account", JSONUtils.stringify(tx.asJS()));
+    PhgUtils.setLocalStorageItem("account", JSONUtils.stringify(tx.asJS()));
   }
   
   public Account getAccountFromLocalStorage() {
-    String accountJson = PhonegapUtils.getLocalStorageItem("account");
+    String accountJson = PhgUtils.getLocalStorageItem("account");
     if (accountJson != null && accountJson.contains("{")) {
       Account account = AccountTx.fromJS(JSONUtils.parse(accountJson));
       return account;
@@ -528,7 +528,7 @@ public class MainController {
       innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
           public void execute(final Iterator<Somministrazione> it) {
             if (it.hasNext()) {
-              PhonegapUtils.getCurrentLanguage(new Delegate<String>() {
+              PhgUtils.getCurrentLanguage(new Delegate<String>() {
                 public void execute(String language) {
                   it.next().setLanguage(language);
                   innerDelegate.get().execute(it);
@@ -538,10 +538,10 @@ public class MainController {
               // finish processing
               Account account = getAccountFromLocalStorage();
               String devInfoId = getDevInfoIdFromLocalStorage();
-              PhonegapUtils.log("before save remote somministrazioni");
+              PhgUtils.log("before save remote somministrazioni");
               AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemoto, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
                 public void onSuccess(List<Somministrazione> somministrazioni) {
-                  PhonegapUtils.log("saved remote somministrazioni");
+                  PhgUtils.log("saved remote somministrazioni");
                   completionDelegate.execute(somministrazioni);
                 }
                 public void onFailure(Throwable caught) {
@@ -561,10 +561,10 @@ public class MainController {
     if (somministrazioniDaSalvare.size() > 0) {
       Account account = getAccountFromLocalStorage();
       String devInfoId = getDevInfoIdFromLocalStorage();
-      PhonegapUtils.log("before save remote somministrazioni");
+      PhgUtils.log("before save remote somministrazioni");
       AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
         public void onSuccess(List<Somministrazione> somministrazioni) {
-          PhonegapUtils.log("saved remote somministrazioni");
+          PhgUtils.log("saved remote somministrazioni");
           delegate.execute(somministrazioni);
         }
         public void onFailure(Throwable caught) {
@@ -627,7 +627,7 @@ public class MainController {
       caught.printStackTrace();
     }
     if (logMsg != null)
-      PhonegapUtils.log(logMsg);
+      PhgUtils.log(logMsg);
     PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
   }
   

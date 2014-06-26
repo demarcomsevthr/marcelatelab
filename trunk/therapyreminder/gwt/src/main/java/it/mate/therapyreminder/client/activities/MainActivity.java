@@ -14,7 +14,7 @@ import it.mate.phgcommons.client.utils.IterationUtil.FinishDelegate;
 import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.constants.AppMessages;
@@ -89,7 +89,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
-          PhonegapUtils.log("devInfoId is " + devInfoId);
+          PhgUtils.log("devInfoId is " + devInfoId);
         }
       });
       setBackgroundAlertsEnabled(true);
@@ -253,7 +253,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private void retrieveModel() {
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
-      PhonegapUtils.log("retrieving therapy list from db");
+      PhgUtils.log("retrieving therapy list from db");
       dao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
         public void execute(List<Prescrizione> results) {
           view.setModel(results, TherapyListView.TAG_PRESCRIZIONI);
@@ -337,7 +337,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       popupTitle = "Error";
     }
     if (logMsg != null)
-      PhonegapUtils.log(logMsg);
+      PhgUtils.log(logMsg);
     PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
   }
   
@@ -372,7 +372,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       optionsBtn.addStyleName("ui-optionsBtn");
       optionsBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
-          PhonegapUtils.log("optons tapped");
+          PhgUtils.log("optons tapped");
         }
       });
       view.getHeaderPanel().setRightWidget(optionsBtn);
@@ -502,11 +502,11 @@ public class MainActivity extends MGWTAbstractActivity implements
   @Override
   public void savePrescrizione(Prescrizione newPrescrizione, final Prescrizione oldPrescrizione, final Delegate<Prescrizione> completionDelegate) {
     setHeaderWaiting(true);
-    PhonegapUtils.log("INIZIO SALVATAGGIO PRESCRIZIONE");
+    PhgUtils.log("INIZIO SALVATAGGIO PRESCRIZIONE");
     final Delegate<Prescrizione> innerCompletionDelegate = new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {
         setHeaderWaiting(false);
-        PhonegapUtils.log("FINE SALVATAGGIO PRESCRIZIONE");
+        PhgUtils.log("FINE SALVATAGGIO PRESCRIZIONE");
         if (completionDelegate != null) {
           completionDelegate.execute(prescrizione);
         } else {
@@ -561,7 +561,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void doFinish() {
         dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
           public void execute(Void element) {
-            PhonegapUtils.log("going to therapy list view");
+            PhgUtils.log("going to therapy list view");
             goToTherapyListView();
           }
         });
@@ -612,7 +612,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate) {
 //  final String currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
-    final String currentLocaleName = PhonegapUtils.getAppLocalLanguage();
+    final String currentLocaleName = PhgUtils.getAppLocalLanguage();
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
       public void execute(List<UdM> udms) {
@@ -693,13 +693,13 @@ public class MainActivity extends MGWTAbstractActivity implements
     GwtUtils.setClientAttribute(duringGenerateDevInfoSemaphore, "true");
     
     String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
-    String layout = PhonegapUtils.getLayoutInfo();
-    String devName = PhonegapUtils.getDeviceName();
-    String phgVersion = PhonegapUtils.getDevicePhonegap();
-    String platform = PhonegapUtils.getDevicePlatform();
-    String devUuid = PhonegapUtils.getDeviceUuid();
-    String devVersion = PhonegapUtils.getDeviceVersion();
-    PhonegapUtils.log("calling sendDevInfo on remote facade...");
+    String layout = PhgUtils.getLayoutInfo();
+    String devName = PhgUtils.getDeviceName();
+    String phgVersion = PhgUtils.getDevicePhonegap();
+    String platform = PhgUtils.getDevicePlatform();
+    String devUuid = PhgUtils.getDeviceUuid();
+    String devVersion = PhgUtils.getDeviceVersion();
+    PhgUtils.log("calling sendDevInfo on remote facade...");
     AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
       new AsyncCallback<String>() {
         public void onFailure(Throwable caught) {
@@ -710,7 +710,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
         public void onSuccess(String devInfoId) {
           if (devInfoId != null) {
-            PhonegapUtils.log("received devInfoId "+ devInfoId +" from remote facade");
+            PhgUtils.log("received devInfoId "+ devInfoId +" from remote facade");
             MainController.getInstance().setDevInfoIdInLocalStorage(devInfoId);
             GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
           }
@@ -792,7 +792,7 @@ public class MainActivity extends MGWTAbstractActivity implements
                     if (account != null && Contatto.TIPO_TUTOR.equals(savedContatto.getTipo())) {
                       AppClientFactory.IMPL.getRemoteFacade().updateDatiContatto(savedContatto, account, new AsyncCallback<Void>() {
                         public void onSuccess(Void result) {
-                          PhonegapUtils.log("tutor data remotely saved");
+                          PhgUtils.log("tutor data remotely saved");
                         }
                         public void onFailure(Throwable caught) {
                           processFailure(null, caught);
@@ -821,7 +821,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
           account.setDevInfoId(devInfoId);
-          PhonegapUtils.log("creating account " + account);
+          PhgUtils.log("creating account " + account);
           AppClientFactory.IMPL.getRemoteFacade().createAccount(account, new AsyncCallback<Account>() {
             public void onFailure(Throwable caught) {
               setHeaderWaiting(false);
@@ -840,7 +840,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     } else {
-      PhonegapUtils.log("updating account " + account);
+      PhgUtils.log("updating account " + account);
       AppClientFactory.IMPL.getRemoteFacade().updateAccount(account, new AsyncCallback<Account>() {
         public void onFailure(Throwable caught) {
           setHeaderWaiting(false);

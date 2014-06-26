@@ -7,8 +7,9 @@ import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.ui.SignPanel;
@@ -63,7 +64,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     wrapperPanel.getElement().getStyle().clearHeight();
-    if (PhonegapUtils.getTrace() != null) {
+    if (PhgUtils.getTrace() != null) {
       traceBtn.setText("Dump trace");
     }
   }
@@ -75,7 +76,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       cbxOnlineMode.setValue(true);
       accountPanel.setVisible(true);
     }
-    String localLanguage = PhonegapUtils.getAppLocalLanguage();
+    String localLanguage = PhgUtils.getAppLocalLanguage();
     langCmb.addItem("en", "English", "en".equals(localLanguage));
     langCmb.addItem("it", "Italiano", "it".equals(localLanguage));
   }
@@ -118,7 +119,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     final Delegate<String> previousErrorDelegate = dao.getErrorDelegate();
     dao.setErrorDelegate(new Delegate<String>() {
       public void execute(String error) {
-        PhonegapUtils.log(">>> intercettato errore db " + error);
+        PhgUtils.log(">>> intercettato errore db " + error);
         dao.setErrorDelegate(previousErrorDelegate);
         email.println(error);
         email.showMailComposer();
@@ -159,17 +160,17 @@ public class SettingsView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("traceBtn")
   public void onTraceBtn (TouchEndEvent event) {
-    if (PhonegapUtils.getTrace() == null) {
-      PhonegapUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "true");
+    if (PhgUtils.getTrace() == null) {
+      PhgUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "true");
       Window.Location.assign("index.html");
     } else {
       EmailWrapper email = new EmailWrapper("THR trace dump");
-      for (String line : PhonegapUtils.getTrace()) {
+      for (String line : PhgUtils.getTrace()) {
         email.println(line);
       }
       email.showMailComposer();
-      PhonegapUtils.clearTrace();
-      PhonegapUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "false");
+      PhgUtils.clearTrace();
+      PhgUtils.setLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE, "false");
     }
     getPresenter().goToHome();
   }
@@ -184,8 +185,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
         public void execute(Account account) {
           if (account == null) {
             
-            String msg = "In online mode you can send notifications to the tutors: in order to use this feature you must have mobile data connection TURNED ON and you have to create a personal account.";
-            PhgDialogUtils.showMessageDialog(msg, "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.SettingsView_onCkbOnlineMode_msg1(), "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
               public void execute(Integer btn) {
                 if (btn == 1) {
                   getPresenter().goToAccountEditView(null);
@@ -219,7 +219,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("langCmb")
   public void onLangCmb(ValueChangeEvent<String> event) {
-    PhonegapUtils.setAppLocalLanguageAndReload(event.getValue());
+    PhgUtils.setAppLocalLanguageAndReload(event.getValue());
   }
   
 }

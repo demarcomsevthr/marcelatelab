@@ -13,7 +13,7 @@ import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
@@ -135,35 +135,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     CustomTheme.Instance.get().css().ensureInjected();
 
-    CalendarDialog.setLanguage(PhonegapUtils.getAppLocalLanguage());
+    PhgUtils.commonInitializations();
     
-    PhonegapUtils.getGlobalizationDatePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        PhonegapUtils.log("GLOB DATE PATTERN = " + pattern);
-      }
-    });
-    PhonegapUtils.getGlobalizationTimePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        PhonegapUtils.log("GLOB TIME PATTERN = " + pattern);
-        if (pattern == null) {
-          pattern = PhonegapUtils.getLocalStorageItem("debug-time-pattern");
-          if (pattern == null) {
-            pattern = "HH:mm";
-            PhonegapUtils.setLocalStorageItem("debug-time-pattern", pattern);
-          }
-        } 
-        if (pattern.contains("HH")) {
-          Time.set24HFormat();
-        } else {
-          Time.set12HFormat();
-        }
-        PhonegapUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
-      }
-    });
-    
-    PhonegapUtils.addOrientationChangeHandler(new Delegate<Void>() {
+    PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
-        PhonegapUtils.logEnvironment();
+        PhgUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
       }
     });
@@ -192,7 +168,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
       public void execute(Map<String, String> properties) {
         for (String name : properties.keySet()) {
-          PhonegapUtils.log("natProp " + name + "=" + properties.get(name));
+          PhgUtils.log("natProp " + name + "=" + properties.get(name));
         }
         AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
@@ -322,7 +298,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       value = nativeProperties.get(name);
     }
     if (value == null) {
-      value = PhonegapUtils.getWindowSetting(name);
+      value = PhgUtils.getWindowSetting(name);
     }
     if (value == null)
       value = defValue;
@@ -354,7 +330,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private void startTimersAndInitHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
     getPrescrizioniDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
-        PhonegapUtils.log(errorMessage);
+        PhgUtils.log(errorMessage);
         PhgDialogUtils.showMessageDialog(errorMessage);
       }
     });

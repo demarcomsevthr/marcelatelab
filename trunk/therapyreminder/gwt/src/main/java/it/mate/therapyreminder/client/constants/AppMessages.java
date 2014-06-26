@@ -130,4 +130,10 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String ReminderListView_tomorrow_text();
   
+  @DefaultMessage("")
+  String TherapyEditView_fillTutorCombo_msg2();
+  
+  @DefaultMessage("")
+  String SettingsView_onCkbOnlineMode_msg1();
+  
 }

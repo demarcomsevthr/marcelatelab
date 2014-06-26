@@ -6,7 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.ui.TouchHTML;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.constants.AppMessages;
@@ -51,7 +51,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
   
   DateTimeFormat dayNameFmt = DateTimeFormat.getFormat("EEEE");
   
-  DateTimeFormat dateFmt = "it".equals(PhonegapUtils.getAppLocalLanguage()) ? DateTimeFormat.getFormat("dd MMM") : DateTimeFormat.getFormat("MMM dd");
+  DateTimeFormat dateFmt = "it".equals(PhgUtils.getAppLocalLanguage()) ? DateTimeFormat.getFormat("dd MMM") : DateTimeFormat.getFormat("MMM dd");
   
   @UiField Panel wrapperPanel;
   @UiField ScrollPanel resultsPanel;
@@ -134,7 +134,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
           if (somministrazione.getId() == lastId) {
             // su ios funziona
             int panelHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
-            PhonegapUtils.log("panelHeight = " + panelHeight);
+            PhgUtils.log("panelHeight = " + panelHeight);
             resultsPanel.setHeight(panelHeight + "px");
             refreshScrollPanel();
           }
@@ -182,7 +182,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         }
       }
     });
-    PhonegapUtils.log("row.height = " + row.getElement().getClientHeight());
+    PhgUtils.log("row.height = " + row.getElement().getClientHeight());
     lastTimestamp.set(rowTimestamp);
     return row.getElement().getClientHeight();
   }
