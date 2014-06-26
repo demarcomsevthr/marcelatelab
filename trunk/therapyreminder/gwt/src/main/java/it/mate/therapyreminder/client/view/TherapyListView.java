@@ -147,7 +147,8 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
         }
       });
       row.add(check);
-      TouchHTML rowHtml = new TouchHTML("<p class='ui-row-subject'>" + prescrizione.getNome() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(prescrizione.getDataInizio(), "dd/MM/yyyy") + "</p>");
+//    TouchHTML rowHtml = new TouchHTML("<p class='ui-row-subject'>" + prescrizione.getNome() + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(prescrizione.getDataInizio(), "dd/MM/yyyy") + "</p>");
+      TouchHTML rowHtml = new TouchHTML("<p class='ui-row-subject'>" + prescrizione.getNome() + "</p><p class='ui-row-scheduled'>" + PhgUtils.dateToString(prescrizione.getDataInizio()) + "</p>");
       row.add(rowHtml);
       rowHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
