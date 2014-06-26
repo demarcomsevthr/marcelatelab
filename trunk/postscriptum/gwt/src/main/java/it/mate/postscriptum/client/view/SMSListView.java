@@ -9,6 +9,7 @@ import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
@@ -167,7 +168,8 @@ public class SMSListView extends BaseMgwtView <Presenter> {
       row.add(check);
       String shortBody = sms.getBody() != null ? sms.getBody() : "";
       shortBody = shortBody.length() > 20 ? (shortBody.substring(0, 20) + "...") : shortBody;
-      TouchHTML smsHtml = new TouchHTML("<p class='ui-row-subject'><b>" + sms.getReceiverNumber() + "</b> " + shortBody + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(sms.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
+//    TouchHTML smsHtml = new TouchHTML("<p class='ui-row-subject'><b>" + sms.getReceiverNumber() + "</b> " + shortBody + "</p><p class='ui-row-scheduled'>" + GwtUtils.dateToString(sms.getScheduled(), "dd/MM/yyyy HH:mm") + "</p>");
+      TouchHTML smsHtml = new TouchHTML("<p class='ui-row-subject'><b>" + sms.getReceiverNumber() + "</b> " + shortBody + "</p><p class='ui-row-scheduled'>" + PhgUtils.dateToString(sms.getScheduled()) + " " + Time.asString(sms.getScheduled()) + "</p>");
       row.add(smsHtml);
       smsHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
