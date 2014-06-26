@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.ui.ph;
 
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.CalendarDialog;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 
 import java.util.ArrayList;
@@ -87,7 +87,8 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
 
   public void setValue(Date value, boolean fireEvents) {
     this.value = value;
-    element.setValue(value != null ? GwtUtils.dateToString(value, "dd/MM/yyyy") : null);
+//  element.setValue(value != null ? GwtUtils.dateToString(value, "dd/MM/yyyy") : null);
+    element.setValue(value != null ? PhgUtils.dateToString(value) : null);
     if (fireEvents) {
       DateChangeEvent.fire(this, value);
     }
