@@ -4,7 +4,7 @@ import it.mate.ckd.client.constants.AppConstants;
 import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.factories.AppClientFactory;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,12 +21,12 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    PhonegapUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
-    PhonegapUtils.logEnvironment();
+    PhgUtils.logEnvironment();
     
-    PhonegapUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhonegapUtils.log("AppConstants.versionCredits = "+AppConstants.IMPL.versionCredits());
+    PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhgUtils.log("AppConstants.versionCredits = "+AppConstants.IMPL.versionCredits());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {

@@ -4,7 +4,7 @@ import it.mate.ckd.client.constants.AppProperties;
 import it.mate.ckd.client.ui.theme.custom.CustomTheme;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -129,7 +129,7 @@ public class SpinnerDoubleBoxV2 extends Composite implements HasValueChangeHandl
       });
     }
     
-    final String language = PhonegapUtils.getNavigator().getLanguage();
+    final String language = PhgUtils.getNavigator().getLanguage();
 
     if (AppProperties.IMPL.SpinnerDoubleBox_keyPress_fix_enabled()) {
       valueBox.addKeyPressHandler(new KeyPressHandler() {

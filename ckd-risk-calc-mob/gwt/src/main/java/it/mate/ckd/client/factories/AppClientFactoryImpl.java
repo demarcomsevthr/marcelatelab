@@ -14,7 +14,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhonegapUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 
 import com.google.gwt.core.shared.GWT;
@@ -101,10 +101,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     CustomTheme.Instance.get().css().ensureInjected();
     
-    PhonegapUtils.addOrientationChangeHandler(new Delegate<Void>() {
+    PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
-        PhonegapUtils.log("CKD - changing orientation handler");
-        PhonegapUtils.logEnvironment();
+        PhgUtils.log("CKD - changing orientation handler");
+        PhgUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
       }
     });
