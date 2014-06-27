@@ -128,7 +128,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     this.presenter = presenter;
   }
   
-  protected void initHeaderBackButton(String text, final Delegate<TapEvent> delegate) {
+  public void initHeaderBackButton(String text, final Delegate<TapEvent> delegate) {
     getHeaderBackButton().setText(text);
     getHeaderBackButton().addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
