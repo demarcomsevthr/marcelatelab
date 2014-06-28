@@ -25,5 +25,10 @@
   <feature name="NativePropertiesPlugin">
     <param name="android-package" value="it.mate.therapyreminder.plugin.NativePropertiesPlugin" />
   </feature>
+  
+  <!-- 28/06/2014 -->
+  <feature name="Calendar">
+    <param name="android-package" value="nl.xservices.plugins.Calendar" />
+  </feature>
     
 </widget>
