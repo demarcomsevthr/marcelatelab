@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.plugins;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.JSONUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
@@ -79,16 +80,27 @@ public class CalendarPlugin {
   public static void createEvent(Event event) {
     JSONUtils.ensureStringify();
     PhgUtils.log("creating event " + event);
-//  createEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
-    callPluginImpl("createEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
-      public void handleEvent(JavaScriptObject results) {
-        PhgUtils.log("Success - " + JSONUtils.stringify(results));
-      }
-    }, new JSOFailure() {
-      public void handleEvent(JavaScriptObject results) {
-        PhgUtils.log("Failure - " + JSONUtils.stringify(results));
-      }
-    });
+    if (OsDetectionUtils.isAndroid()) {
+      callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+        public void handleEvent(JavaScriptObject results) {
+          PhgUtils.log("Success - " + JSONUtils.stringify(results));
+        }
+      }, new JSOFailure() {
+        public void handleEvent(JavaScriptObject results) {
+          PhgUtils.log("Failure - " + JSONUtils.stringify(results));
+        }
+      });
+    } else {
+      callPluginImpl("createEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+        public void handleEvent(JavaScriptObject results) {
+          PhgUtils.log("Success - " + JSONUtils.stringify(results));
+        }
+      }, new JSOFailure() {
+        public void handleEvent(JavaScriptObject results) {
+          PhgUtils.log("Failure - " + JSONUtils.stringify(results));
+        }
+      });
+    }
   }
   
   public static void deleteEvent(Event event) {
@@ -105,39 +117,6 @@ public class CalendarPlugin {
     });
   }
   
-  private static native void callPluginImpl (String methodName, String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
-    var jsSuccess = $entry(function(message) {
-      success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
-    });
-    var jsFailure = $entry(function(message) {
-      failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOFailure::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
-    });
-    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", methodName, [{
-      "title": title,
-      "location": location,
-      "notes": notes,
-      "startTime": startTime,
-      "endTime": endTime
-    }])
-  }-*/;
-
-  /*
-  private static native void createEventImpl (String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
-    var jsSuccess = $entry(function(message) {
-      success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
-    });
-    var jsFailure = $entry(function(message) {
-      failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOFailure::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
-    });
-    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", "createEvent", [{
-      "title": title,
-      "location": location,
-      "notes": notes,
-      "startTime": startTime,
-      "endTime": endTime
-    }])
-  }-*/;
-
   public static void findEvent(Event event, final Delegate<List<Event>> delegate) {
     JSONUtils.ensureStringify();
     if (event.getTitle() == null)
@@ -147,7 +126,6 @@ public class CalendarPlugin {
     if (event.getNotes() == null)
       event.setNotes("");
     PhgUtils.log("finding event " + event);
-//  findEventImpl(event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
     callPluginImpl("findEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
         PhgUtils.log("Success - " + JSONUtils.stringify(results));
@@ -172,21 +150,41 @@ public class CalendarPlugin {
     });
   }
 
-  /*
-  private static native void findEventImpl (String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
+  private static native void callPluginImpl (String methodName, String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
     var jsSuccess = $entry(function(message) {
       success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
     });
     var jsFailure = $entry(function(message) {
       failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOFailure::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
     });
-    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", "findEvent", [{
+    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", methodName, [{
       "title": title,
       "location": location,
       "notes": notes,
       "startTime": startTime,
       "endTime": endTime
-    }])
+    }]);
+  }-*/;
+
+  private static native void callPluginWithOptionsImpl (String methodName, String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
+    var jsSuccess = $entry(function(message) {
+      success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
+    });
+    var jsFailure = $entry(function(message) {
+      failure.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOFailure::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
+    });
+    $wnd.cordova.exec(jsSuccess, jsFailure, "Calendar", methodName, [
+      {
+        "title": title,
+        "location": location,
+        "notes": notes,
+        "startTime": startTime,
+        "endTime": endTime,
+        "options": {
+          "firstReminderMinutes": 0
+        }
+      }
+    ]);
   }-*/;
 
   protected static interface JSOCallback {
