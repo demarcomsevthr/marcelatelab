@@ -48,6 +48,23 @@
   background-image: clockImageUrl;
   background-repeat: no-repeat;
   background-position: 98% 42%;
+  padding-right: 20px;
+  padding-left: 4px;
+}
+
+.phg-DateBox, .phg-TimeBox {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  -webkit-appearance: none;
+  font-size: 19px;
 }
 
 .phg-CalendarDialog {
@@ -61,7 +78,9 @@
 
 .phg-CalendarDialog-Header .phg-TouchHTML {
   text-align: center;
-  padding-top: 5px;
+  padding-top: 0.5em;
+  font-size: 22px;
+  height: 1.9em;
 }
 
 .phg-CalendarDialog-MonthWrapper {
@@ -335,6 +354,7 @@
   background: white;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 15px;
+  height: 1.4em;
 }
 
 .phg-TouchCombo-arrow {

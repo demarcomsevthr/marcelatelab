@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -13,7 +14,12 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
+import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
+import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 public class TouchUtils {
   
@@ -197,5 +203,28 @@ public class TouchUtils {
   private static native void setElementDisabled(Element elem) /*-{
     elem.disabled = "true";
   }-*/;
+  
+  
+  public static void addTouchEndHandlerPreventingScroll (TouchWidget widget, final TouchEndHandler handler) {
+    final ObjectWrapper<Integer> touchStartY = new ObjectWrapper<Integer>();
+    widget.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+        try {
+          touchStartY.set(event.getTouches().get(0).getPageY());
+        } catch (Exception ex) {}
+      }
+    });
+    widget.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        try {
+          int endY = event.getChangedTouches().get(0).getPageY();
+          int diffY = Math.abs((touchStartY.get() - endY));
+          if (diffY < 10) {
+            handler.onTouchEnd(event);
+          }
+        } catch (Exception ex) {}
+      }
+    });
+  }
   
 }

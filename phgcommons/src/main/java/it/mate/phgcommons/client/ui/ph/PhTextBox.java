@@ -4,6 +4,9 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.TextBox;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
@@ -94,6 +97,19 @@ public class PhTextBox extends MTextBox implements HasModel {
     try {
       return Long.parseLong(textValue);
     } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
+  
+  public Date getValueAsDate() {
+    String textValue = getText();
+    try {
+      if (PhgUtils.getDefaultDatePattern() != null) {
+        DateTimeFormat fmt = DateTimeFormat.getFormat(PhgUtils.getDefaultDatePattern());
+        return fmt.parse(textValue);
+      }
+      return null;
+    } catch (Exception ex) {
       return null;
     }
   }
