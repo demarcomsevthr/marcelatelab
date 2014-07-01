@@ -25,6 +25,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class CalendarPlugin {
   
+  /*
   public static class Event {
     private String title;
     private String location = "";
@@ -66,6 +67,7 @@ public class CalendarPlugin {
       this.endDate = endDate;
     }
   }
+  */
   
   private static final DateTimeFormat dtmFMT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
   
@@ -77,7 +79,7 @@ public class CalendarPlugin {
     }
   }
   
-  public static void createEvent(Event event) {
+  public static void createEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
     PhgUtils.log("creating event " + event);
     if (OsDetectionUtils.isAndroid()) {
@@ -103,7 +105,7 @@ public class CalendarPlugin {
     }
   }
   
-  public static void deleteEvent(Event event) {
+  public static void deleteEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
     PhgUtils.log("deleting event " + event);
     callPluginImpl("deleteEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
@@ -117,7 +119,7 @@ public class CalendarPlugin {
     });
   }
   
-  public static void findEvent(Event event, final Delegate<List<Event>> delegate) {
+  public static void findEvent(CalendarEvent event, final Delegate<List<CalendarEvent>> delegate) {
     JSONUtils.ensureStringify();
     if (event.getTitle() == null)
       event.setTitle("");
@@ -130,10 +132,10 @@ public class CalendarPlugin {
       public void handleEvent(JavaScriptObject results) {
         PhgUtils.log("Success - " + JSONUtils.stringify(results));
         JsArray<JavaScriptObject> jsEvents = results.cast();
-        List<Event> events = new ArrayList<CalendarPlugin.Event>();
+        List<CalendarEvent> events = new ArrayList<CalendarEvent>();
         for (int it = 0; it < jsEvents.length(); it++) {
           JavaScriptObject jsEvent = jsEvents.get(it);
-          Event event = new Event(); 
+          CalendarEvent event = new CalendarEvent(); 
           event.setTitle(GwtUtils.getPropertyStringImpl(jsEvent, "title"));
           event.setStartDate(jsStringToDate(GwtUtils.getPropertyStringImpl(jsEvent, "startDate")));
           event.setEndDate(jsStringToDate(GwtUtils.getPropertyStringImpl(jsEvent, "endDate")));
