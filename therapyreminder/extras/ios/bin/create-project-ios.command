@@ -27,5 +27,7 @@ cordova plugin add https://github.com/jcjee/email-composer.git
 
 cordova plugin add org.apache.cordova.globalization
 
+cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications.git
+
 cordova build ios
 
