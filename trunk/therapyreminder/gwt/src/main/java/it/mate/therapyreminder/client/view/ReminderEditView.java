@@ -13,11 +13,14 @@ import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.therapyreminder.shared.model.UdM;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
@@ -29,6 +32,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     void updateSomministrazione(Somministrazione somministrazione);
+    public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ReminderEditView> { }
@@ -40,9 +44,10 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   @UiField MTextBox titleBox;
   @UiField MTextBox dateBox;
   @UiField MTextBox qtaBox;
-  @UiField MTextBox umBox;
+//@UiField MTextBox umBox;
   @UiField MTextBox oraBox;
   @UiField Spacer popupRuler;
+  @UiField HTML umHtml;
   
   public ReminderEditView() {
     initUI();
@@ -77,6 +82,12 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
         qtaBox.setValue(""+somministrazione.getQuantita());
       }
       oraBox.setValue(somministrazione.getOrario());
+      
+      getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
+        public void execute(UdM udm) {
+          umHtml.setHTML(SafeHtmlUtils.fromTrustedString(udm.getDescrizione()));
+        }
+      });
       
       if (MainController.isScaduta(somministrazione)) {
         

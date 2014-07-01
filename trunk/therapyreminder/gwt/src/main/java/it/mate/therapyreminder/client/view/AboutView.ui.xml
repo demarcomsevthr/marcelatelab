@@ -14,16 +14,16 @@
     </div>   
     
     <gc:Spacer height="2em"/>   
-
-    <p>
-      Therapy Reminder is an innovative application that allows you to have under control every drugs prescription.
-    </p>      
+    
+    <g:HTML HTML="">
+      <ui:attribute name="HTML" description="text" key="presentation.html"/>
+    </g:HTML>
 
     <gc:Spacer height="2em"/>   
 
-    <p>
-      This app includes some free images created by <a href="http://www.aha-soft.com/">Aha-Soft</a>
-    </p>      
+    <g:HTML HTML="">
+      <ui:attribute name="HTML" description="text" key="legalNotes.html"/>
+    </g:HTML>
 
   </g:HTMLPanel>
   

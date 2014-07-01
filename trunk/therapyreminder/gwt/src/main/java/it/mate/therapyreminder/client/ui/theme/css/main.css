@@ -412,8 +412,8 @@ body {
 }
 
 .ui-app-alert-riordino, .ui-app-notifiche-tutor, .ui-app-online-mode-ckb {
-  height: 1.2em;
-  width: 1.2em;
+  height: 1.5em;
+  width: 1.5em;
 }
 
 .ui-app-alert-riordino, .ui-app-notifiche-tutor {
@@ -564,3 +564,11 @@ body {
 .ui-about-header * {
   text-align: center;
 }
+
+.ui-um-html {
+  font-size: 1.2em;
+  padding: 0.2em;
+  color: blue;
+  font-weight: bold;
+}
+

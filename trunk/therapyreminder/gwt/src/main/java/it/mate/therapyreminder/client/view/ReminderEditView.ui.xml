@@ -36,7 +36,10 @@
     </g:HTML>
     <g:HorizontalPanel addStyleNames="ui-form-row-1">
       <ph:PhTextBox ui:field="qtaBox" addStyleNames="ui-app-textbox, ui-qta-box" readOnly="true" width="5em"/>
+      <!-- 
       <ph:PhTextBox ui:field="umBox" addStyleNames="ui-app-textbox, ui-um-box" readOnly="true"/>
+       -->
+      <g:HTML ui:field="umHtml" addStyleNames="ui-um-html"/>
     </g:HorizontalPanel>
 
     <gc:Spacer height="0.4em"/>    
