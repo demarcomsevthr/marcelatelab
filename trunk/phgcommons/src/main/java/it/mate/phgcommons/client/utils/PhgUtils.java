@@ -365,6 +365,7 @@ public class PhgUtils {
           }
         }
         defaultDatePattern = pattern;
+        PhgUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
         resultDelegate.execute(pattern);
       }
     });
@@ -385,6 +386,7 @@ public class PhgUtils {
           }
         }
         defaultTimePattern = pattern;
+        PhgUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
         resultDelegate.execute(pattern);
       }
     });

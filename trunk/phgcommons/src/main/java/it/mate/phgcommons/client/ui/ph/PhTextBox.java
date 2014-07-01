@@ -6,7 +6,6 @@ import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.Date;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.TextBox;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
@@ -102,13 +101,25 @@ public class PhTextBox extends MTextBox implements HasModel {
   }
   
   public Date getValueAsDate() {
-    String textValue = getText();
-    try {
-      if (PhgUtils.getDefaultDatePattern() != null) {
-        DateTimeFormat fmt = DateTimeFormat.getFormat(PhgUtils.getDefaultDatePattern());
-        return fmt.parse(textValue);
-      }
+    Date result = null;
+    result = getValueAsDate(PhgUtils.getDefaultDatePattern());
+    if (result == null) {
+      result = getValueAsDate("dd/MM/yyyy");
+    }
+    if (result == null) {
+      result = getValueAsDate("MM/dd/yyyy");
+    }
+    if (result == null) {
+      result = getValueAsDate("yyyy-MM-dd");
+    }
+    return result;
+  }
+  
+  private Date getValueAsDate(String pattern) {
+    if (pattern == null)
       return null;
+    try {
+      return GwtUtils.stringToDate(getText(), pattern);
     } catch (Exception ex) {
       return null;
     }
