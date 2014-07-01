@@ -6,15 +6,14 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
+import it.mate.phgcommons.client.plugins.LocalNotificationsPlugin;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
-import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
-import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
@@ -28,6 +27,7 @@ import it.mate.therapyreminder.client.ui.theme.CustomTheme;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.shared.GWT;
@@ -133,6 +133,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     DefaultTheme.Impl.get().css().ensureInjected();
     
+    PhgUtils.log("LOCAL NOTIFICATION PLUGIN INSTALLED = " + LocalNotificationsPlugin.isInstalled());
+    
     CustomTheme.Instance.get().css().ensureInjected();
 
     PhgUtils.commonInitializations();
@@ -156,14 +158,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    // 20/15/2014
-    startTimersAndInitHistoryHandler(new FindSomministrazioneScadutaDelegate(historyHandler));
+    startTimersAndHistory(new FindSomministrazioneScadutaDelegate(historyHandler));
     
   }
   
   private void initHistoryHandler(final MGWTPlaceHistoryHandler historyHandler, MainPlace defaultPlace) {
-//  AppClientFactory clientFactory = this;
-//  historyHandler.register(clientFactory.getPlaceController(), clientFactory.getBinderyEventBus(), defaultPlace);
     historyHandler.register(this.getPlaceController(), this.getBinderyEventBus(), defaultPlace);
     NativePropertiesPlugin.getProperties(new Delegate<Map<String,String>>() {
       public void execute(Map<String, String> properties) {
@@ -214,8 +213,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public PlaceController getPlaceController() {
     if (placeController == null)
-      // 04/06/2014
-//    placeController = new PlaceController(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
       placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
     return placeController;
   }
@@ -327,13 +324,24 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   // 15/05/2014
-  private void startTimersAndInitHistoryHandler(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+  private void startTimersAndHistory(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+    
+    // setting dao error delegate
     getPrescrizioniDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
         PhgUtils.log(errorMessage);
         PhgDialogUtils.showMessageDialog(errorMessage);
       }
     });
+    
+    // purge orphan notifications
+    LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
+      public void execute(List<String> ids) {
+        MainController.getInstance().purgeNotificationIds(ids);
+      }
+    });
+    
+    // starting timers
     final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
     timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {
       public void execute(Void element) {

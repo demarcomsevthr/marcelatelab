@@ -4,13 +4,14 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.gwtcommons.shared.services.ServiceException;
+import it.mate.phgcommons.client.plugins.CalendarEvent;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
-import it.mate.phgcommons.client.plugins.CalendarPlugin.Event;
+import it.mate.phgcommons.client.plugins.LocalNotificationsPlugin;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
-import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
@@ -162,7 +163,6 @@ public class MainController {
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
-          //TODO
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
             public void execute(List<Somministrazione> somministrazioniInRemoto) {
@@ -351,71 +351,6 @@ public class MainController {
     } else {
       endDelegate.execute(null);
     }
-  }
-  
-  private CalendarPlugin.Event instantiateCalEvent(Prescrizione prescrizione, Somministrazione somministrazione) {
-    CalendarPlugin.Event calEvent = new CalendarPlugin.Event();
-    
-    if (somministrazione != null) {
-      calEvent.setStartDate(somministrazione.getData());
-    } else {
-      calEvent.setStartDate(prescrizione.getDataInizio());
-    }
-    
-    if (somministrazione != null) {
-      calEvent.setEndDate(CalendarUtil.copyDate(somministrazione.getData()));
-      Time endTime = Time.fromDate(calEvent.getEndDate());
-      endTime.incMinutes(5).setInDate(calEvent.getEndDate());
-    } else {
-      if (prescrizione.getDataFine() != null) {
-        calEvent.setEndDate(prescrizione.getDataFine());
-      } else {
-        calEvent.setEndDate(GwtUtils.getDate(31, 12, 2099));
-      }
-    }
-    
-    if (somministrazione != null) {
-      calEvent.setTitle(prescrizione.getNome() + " at " + somministrazione.getOrario());
-      if (MGWT.getOsDetection().isIOs()) {
-        calEvent.setNotes("Tap here: therapy://open");
-      } else {
-        calEvent.setNotes("Keep the pill!");
-      }
-    }
-    
-    calEvent.setLocation("#"+prescrizione.getId());
-    
-    return calEvent;
-  }
-  
-  private void saveCalEvent (Somministrazione somministrazione) {
-    CalendarPlugin.Event calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
-    PhonegapLog.log("creating " + calEvent);
-    if (OsDetectionUtils.isDesktop())
-      return;
-    CalendarPlugin.createEvent(calEvent);
-  }
-  
-  private void deleteCalEvent (Somministrazione somministrazione) {
-    CalendarPlugin.Event calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
-    PhonegapLog.log("deleting " + calEvent);
-    if (OsDetectionUtils.isDesktop())
-      return;
-    CalendarPlugin.deleteEvent(calEvent);
-  }
-
-  public void findCalEvents (Prescrizione prescrizione) {
-    CalendarPlugin.Event calEvent = instantiateCalEvent(prescrizione, null);
-    PhonegapLog.log("finding " + calEvent);
-    if (OsDetectionUtils.isDesktop())
-      return;
-    CalendarPlugin.findEvent(calEvent, new Delegate<List<CalendarPlugin.Event>>() {
-      public void execute(List<Event> events) {
-        for (Event event : events) {
-          PhonegapLog.log("found " + event);
-        }
-      }
-    });
   }
   
   public static boolean isScaduta(Somministrazione somministrazione) {
@@ -629,6 +564,110 @@ public class MainController {
     if (logMsg != null)
       PhgUtils.log(logMsg);
     PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+  }
+
+
+  private CalendarEvent instantiateCalEvent(Prescrizione prescrizione, Somministrazione somministrazione) {
+    CalendarEvent calEvent = new CalendarEvent();
+    
+    if (somministrazione != null) {
+      calEvent.setStartDate(somministrazione.getData());
+    } else {
+      calEvent.setStartDate(prescrizione.getDataInizio());
+    }
+    
+    if (somministrazione != null) {
+      calEvent.setEndDate(CalendarUtil.copyDate(somministrazione.getData()));
+      Time endTime = Time.fromDate(calEvent.getEndDate());
+      endTime.incMinutes(5).setInDate(calEvent.getEndDate());
+    } else {
+      if (prescrizione.getDataFine() != null) {
+        calEvent.setEndDate(prescrizione.getDataFine());
+      } else {
+        calEvent.setEndDate(GwtUtils.getDate(31, 12, 2099));
+      }
+    }
+    
+    if (somministrazione != null) {
+      calEvent.setTitle(prescrizione.getNome() + " at " + somministrazione.getOrario());
+      if (MGWT.getOsDetection().isIOs()) {
+        calEvent.setNotes("Tap here: therapy://open");
+      } else {
+        calEvent.setNotes("Keep the pill!");
+      }
+    }
+    
+    calEvent.setLocation("#"+prescrizione.getId());
+    
+    if (LocalNotificationsPlugin.isInstalled()) {
+      calEvent.setNotes("Tap here");
+      if (somministrazione != null) {
+        long notId = prescrizione.getId() * 100000 + somministrazione.getId();
+        calEvent.setNotificationId("" + notId);
+      }
+    }
+    
+    return calEvent;
+  }
+  
+  private void saveCalEvent (Somministrazione somministrazione) {
+    CalendarEvent calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
+    PhonegapLog.log("creating " + calEvent);
+    if (OsDetectionUtils.isDesktop())
+      return;
+    if (LocalNotificationsPlugin.isInstalled()) {
+      LocalNotificationsPlugin.createEvent(calEvent);
+    } else {
+      CalendarPlugin.createEvent(calEvent);
+    }
+  }
+  
+  private void deleteCalEvent (Somministrazione somministrazione) {
+    CalendarEvent calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
+    PhonegapLog.log("deleting " + calEvent);
+    if (OsDetectionUtils.isDesktop())
+      return;
+    if (LocalNotificationsPlugin.isInstalled()) {
+      LocalNotificationsPlugin.deleteEvent(calEvent);
+    } else {
+      CalendarPlugin.deleteEvent(calEvent);
+    }
+  }
+  
+  public void purgeNotificationIds(List<String> ids) {
+    if (ids == null)
+      return;
+    for (final String notificationId : ids) {
+      int len = notificationId.length();
+      if (len > 5) {
+        int idSomministrazione = Integer.parseInt(notificationId.substring(len - 5, len));
+        PhgUtils.log("finding somministrazione with id " + idSomministrazione);
+        dao.findSomministrazioneById(idSomministrazione, new Delegate<Somministrazione>() {
+          public void execute(Somministrazione somministrazione) {
+            if (somministrazione == null) {
+              PhgUtils.log("deleting notification with id " + notificationId);
+              CalendarEvent calEvent = new CalendarEvent();
+              calEvent.setNotificationId(notificationId);
+              LocalNotificationsPlugin.deleteEvent(calEvent);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  public void findCalEvents (Prescrizione prescrizione) {
+    CalendarEvent calEvent = instantiateCalEvent(prescrizione, null);
+    PhonegapLog.log("finding " + calEvent);
+    if (OsDetectionUtils.isDesktop())
+      return;
+    CalendarPlugin.findEvent(calEvent, new Delegate<List<CalendarEvent>>() {
+      public void execute(List<CalendarEvent> events) {
+        for (CalendarEvent event : events) {
+          PhonegapLog.log("found " + event);
+        }
+      }
+    });
   }
   
 }
