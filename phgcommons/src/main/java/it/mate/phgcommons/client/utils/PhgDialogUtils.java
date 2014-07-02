@@ -1,6 +1,6 @@
 package it.mate.phgcommons.client.utils;
 
-import it.mate.gwtcommons.client.ui.SimpleContainer;
+import it.mate.gwtcommons.client.ui.Span;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
@@ -8,20 +8,16 @@ import it.mate.gwtcommons.client.utils.JQuery.StyleProperties;
 import it.mate.phgcommons.client.ui.TouchAnchor;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 
 public class PhgDialogUtils {
@@ -159,35 +155,53 @@ public class PhgDialogUtils {
     });
   }
   
-  public static void showMessageDialog_Div(final String message, final String title, int buttonsType, final Delegate<Integer> delegate) {
-    
-    final SimpleContainer dialogContainer = new SimpleContainer();
-    
-    SimplePanel row;
-    
-    row = new SimplePanel();
-    row.addStyleName("phg-PopinDialog-MessageRow");
-    dialogContainer.add(row);
-    HTML messageHtml = new HTML(SafeHtmlUtils.fromTrustedString(message));
-    row.add(messageHtml);
-    
-    row = new SimplePanel();
-    row.addStyleName("phg-PopinDialog-ButtonsRow");
-    dialogContainer.add(row);
-    HorizontalPanel buttonsPanel = new HorizontalPanel();
-    row.add(buttonsPanel);
-    
-    createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, null, delegate);
-
-  }
-  
   private static void hideMessageDialog() {
     if (messageDialog != null) {
       messageDialog.hide();
       messageDialog = null;
     }
   }
+  
+  private static PopinDialog modalNotification = null;
+  
+  public static void showModalNotification(String message) {
+    
+    final VerticalPanel container = new VerticalPanel();
+    container.setSpacing(0);
+    container.setWidth("100%");
+    container.addStyleName("phg-Notification-Container");
+    
+    Span span = new Span();
+    span.setHTML(SafeHtmlUtils.fromTrustedString(message));
+    container.add(span);
+    
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        
+        if (modalNotification != null) {
+          PhgUtils.log("modal notification dialog just opened!");
+          return;
+        }
+        
+        modalNotification = MgwtDialogs.popin(null, container, false, false, Animation.DISSOLVE_REVERSE, Animation.DISSOLVE);
+        
+        StyleProperties prop = JQuery.createStyleProperties();
+        prop.setBackgroundColor("transparent");
+        JQuery.select(".mgwt-DialogAnimationContainer-Shadow").css(prop);
+        
+      }
+    });
+    
+  }
+  
+  public static void hideModalNotification() {
+    if (modalNotification != null) {
+      modalNotification.hide();
+      modalNotification = null;
+    }
+  }
 
+  /*
   public static DialogBox create(Configuration config) {
     
     DialogBox dialog = new DialogBox();
@@ -253,5 +267,9 @@ public class PhgDialogUtils {
       return this;
     }
   }
+  
+  */
+  
+  
   
 }
