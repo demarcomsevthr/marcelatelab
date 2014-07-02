@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.dialog.AlertDialog;
 import com.googlecode.mgwt.ui.client.dialog.ConfirmDialog;
@@ -53,9 +54,21 @@ public class MgwtDialogs {
   }
   
   public static PopinDialog popin (String title, Widget body, boolean hideOnBackgroundClick) {
-    PopinDialog dialog = createPopin(title, body);
+    return popin(title, body, hideOnBackgroundClick, true);
+  }
+  
+  public static PopinDialog popin (String title, Widget body, boolean hideOnBackgroundClick, boolean centered) {
+    return popin(title, body, hideOnBackgroundClick, centered, null, null);
+  }
+  
+  public static PopinDialog popin (String title, Widget body, boolean hideOnBackgroundClick, boolean centered, Animation showAnimation, Animation hideAnimation) {
+    PopinDialog dialog = createPopin(title, body, showAnimation, hideAnimation);
     dialog.setHideOnBackgroundClick(hideOnBackgroundClick);
-    dialog.center();
+    if (centered) {
+      dialog.center();
+    } else {
+      dialog.show();
+    }
     return dialog;
   }
   
@@ -85,10 +98,34 @@ public class MgwtDialogs {
   }
   
   private static PopinDialog createPopin (String title, Widget body) {
+    return createPopin(title, body, null, null);
+  }
+  
+  private static PopinDialog createPopin (String title, Widget body, final Animation showAnimation, final Animation hideAnimation) {
     
     // 19/12/2013
 //  PopinDialog popinDialog = new PopinDialog();
-    PopinDialog popinDialog = new ModalPopinDialog();
+    
+    PopinDialog popinDialog = new ModalPopinDialog() {
+      protected Animation getShowAnimation() {
+        if (showAnimation != null) {
+          return showAnimation;
+        } else {
+          return super.getShowAnimation();
+        }
+      }
+      protected Animation getHideAnimation() {
+        if (hideAnimation != null) {
+          return hideAnimation;
+        } else {
+          return super.getHideAnimation();
+        }
+      }
+    };
+    if (showAnimation != null) {
+    } else {
+      popinDialog = new ModalPopinDialog();
+    }
 
     SimpleContainer dialogWrapper = new SimpleContainer();
     dialogWrapper.addStyleName("phg-PopinDialog-Wrapper");

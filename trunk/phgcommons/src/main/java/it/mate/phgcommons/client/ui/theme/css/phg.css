@@ -407,3 +407,19 @@
   border-bottom: 1px solid grey;
 }
 
+.phg-Notification-Container {
+  position: absolute;
+  bottom: 0.5em;
+}
+
+.phg-Notification-Container td {
+  text-align: center;
+}
+
+.phg-Notification-Container span {
+  background: black;
+  padding: 0.8em 4em;
+  font-size: 14px;
+  font-weight: normal;
+}
+
