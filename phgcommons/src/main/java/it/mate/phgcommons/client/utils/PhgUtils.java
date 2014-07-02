@@ -251,7 +251,7 @@ public class PhgUtils {
     return eval("window.jsNativePropertiesWrapper.get"+name+"()");
   }-*/;
 
-  public static void adaptWrapperPanel(Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
+  public static void adaptWrapperPanel(final Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
     wrapperPanel.getElement().setId(id);
     if (OsDetectionUtils.isTablet()) {
       GwtUtils.onAvailable(id, new Delegate<Element>() {
@@ -279,8 +279,23 @@ public class PhgUtils {
       
       //09/10/2013
       // Patch per IPhone per far funzionare le animazioni jquery
-      wrapperPanel.setHeight((Window.getClientHeight() - HEADER_PANEL_HEIGHT ) + "px");
-      wrapperPanel.setWidth(Window.getClientWidth() + "px");
+      
+      int actualHeight = (Window.getClientHeight() - HEADER_PANEL_HEIGHT );
+      
+      if (OsDetectionUtils.isIOs() && actualHeight < 380) {
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+            int actualHeight = (Window.getClientHeight() - HEADER_PANEL_HEIGHT );
+            PhgUtils.log("setting wrapperPanel height to " + actualHeight);
+            wrapperPanel.setHeight(actualHeight + "px");
+            wrapperPanel.setWidth(Window.getClientWidth() + "px");
+          }
+        });
+      } else {
+        PhgUtils.log("setting wrapperPanel height to " + actualHeight);
+        wrapperPanel.setHeight(actualHeight + "px");
+        wrapperPanel.setWidth(Window.getClientWidth() + "px");
+      }
       
     }
   }
