@@ -31,6 +31,10 @@ public class PhgUtils {
   
   private static List<String> trace = null;
   
+  private static String defaultDatePattern;
+  
+  private static String defaultTimePattern;
+  
 
   public static void logEnvironment() {
     log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
@@ -54,21 +58,59 @@ public class PhgUtils {
   }
   
   public static void commonInitializations() {
+    commonInitializations(null, null, null);
+  }
+  
+  public static void commonInitializations(String initialLanguage, String initialDatePattern, String initialTimePattern) {
     
-    log("Calendar language initialization...");
+    log("Language initialization...");
+    if (initialLanguage != null) {
+      setAppLocalLanguageImpl(initialLanguage);
+    }
     CalendarDialog.setLanguage(PhgUtils.getAppLocalLanguage());
     
-    log("Date format initialization (TODO)...");
-    PhgUtils.getGlobalizationDatePattern(new Delegate<String>() {
+    log("Date format initialization...");
+    Delegate<String> datePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
-        PhgUtils.log("GLOB DATE PATTERN = " + pattern);
+        if (pattern == null) {
+          PhgUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = PhgUtils.getLocalStorageItem("debug-date-pattern");
+          if (pattern == null) {
+            if ("it".equals(getAppLocalLanguage())) {
+              pattern = "dd/MM/yyyy";
+            } else {
+              pattern = "MM/dd/yyyy";
+            }
+            PhgUtils.setLocalStorageItem("debug-date-pattern", pattern);
+          }
+        }
+        defaultDatePattern = pattern;
+        PhgUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
       }
-    });
+    };
+    if (initialDatePattern != null) {
+      datePatternInitializer.execute(initialDatePattern);
+    } else {
+      GlobalizationPlugin.getDatePattern(datePatternInitializer);
+    }
     
     log("Time format initialization...");
-    PhgUtils.getGlobalizationTimePattern(new Delegate<String>() {
+    Delegate<String> timePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
-        PhgUtils.log("GLOBALIZATION TIME PATTERN = " + pattern);
+        if (pattern == null) {
+          PhgUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = PhgUtils.getLocalStorageItem("debug-time-pattern");
+          if (pattern == null) {
+            if ("it".equals(getAppLocalLanguage())) {
+              pattern = "HH:mm";
+            } else {
+              pattern = "h:mm a";
+            }
+            PhgUtils.setLocalStorageItem("debug-time-pattern", pattern);
+          }
+        }
+        defaultTimePattern = pattern;
+        PhgUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
         if (pattern.contains("HH")) {
           Time.set24HFormat();
         } else {
@@ -76,10 +118,41 @@ public class PhgUtils {
         }
         PhgUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
       }
-    });
+    };
+    if (initialTimePattern != null) {
+      timePatternInitializer.execute(initialTimePattern);
+    } else {
+      GlobalizationPlugin.getTimePattern(timePatternInitializer);
+    }
     
   }
   
+  public static String getDefaultDatePattern() {
+    return defaultDatePattern;
+  }
+  
+  public static String getDefaultTimePattern() {
+    return defaultTimePattern;
+  }
+  
+  /*
+  private static void getGlobalizationDatePattern(final Delegate<String> resultDelegate) {
+    GlobalizationPlugin.getDatePattern(new Delegate<String>() {
+      public void execute(String pattern) {
+        resultDelegate.execute(pattern);
+      }
+    });
+  }
+  
+  private static void getGlobalizationTimePattern(final Delegate<String> resultDelegate) {
+    GlobalizationPlugin.getTimePattern(new Delegate<String>() {
+      public void execute(String pattern) {
+        resultDelegate.execute(pattern);
+      }
+    });
+  }
+  */
+    
   public static String getLayoutInfo() {
     String layoutInfo = "Width " + Window.getClientWidth();
     layoutInfo += " Height " + Window.getClientHeight();
@@ -337,61 +410,6 @@ public class PhgUtils {
     return navigator.language;
   }-*/;
 
-  private static String defaultDatePattern;
-  
-  public static String getDefaultDatePattern() {
-    return defaultDatePattern;
-  }
-  
-  private static String defaultTimePattern;
-  
-  public static String getDefaultTimePattern() {
-    return defaultTimePattern;
-  }
-  
-  public static void getGlobalizationDatePattern(final Delegate<String> resultDelegate) {
-    GlobalizationPlugin.getDatePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        if (pattern == null) {
-          PhgUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = PhgUtils.getLocalStorageItem("debug-date-pattern");
-          if (pattern == null) {
-            if ("it".equals(getAppLocalLanguage())) {
-              pattern = "dd/MM/yyyy";
-            } else {
-              pattern = "MM/dd/yyyy";
-            }
-            PhgUtils.setLocalStorageItem("debug-date-pattern", pattern);
-          }
-        }
-        defaultDatePattern = pattern;
-        PhgUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
-        resultDelegate.execute(pattern);
-      }
-    });
-  }
-  public static void getGlobalizationTimePattern(final Delegate<String> resultDelegate) {
-    GlobalizationPlugin.getTimePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        if (pattern == null) {
-          PhgUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = PhgUtils.getLocalStorageItem("debug-time-pattern");
-          if (pattern == null) {
-            if ("it".equals(getAppLocalLanguage())) {
-              pattern = "HH:mm";
-            } else {
-              pattern = "h:mm a";
-            }
-            PhgUtils.setLocalStorageItem("debug-time-pattern", pattern);
-          }
-        }
-        defaultTimePattern = pattern;
-        PhgUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
-        resultDelegate.execute(pattern);
-      }
-    });
-  }
-    
   public static void setAppLocalLanguageAndReload(final String language) {
     setAppLocalLanguageImpl(language);
     // se lanciato da una combo da una IllegalStateException su una onDetach
@@ -405,7 +423,11 @@ public class PhgUtils {
   }
   
   private static native void setAppLocalLanguageImpl(String language) /*-{
-    $wnd.setAppLocalLanguage(language);
+    if ($wnd.setAppLocalLanguage === undefined) {
+      $wnd.localStorage.setItem("app-local-language", language);
+    } else {
+      $wnd.setAppLocalLanguage(language);
+    }
   }-*/;
 
   public static String getAppLocalLanguage() {
