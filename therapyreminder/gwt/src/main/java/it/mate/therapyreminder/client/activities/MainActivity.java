@@ -25,7 +25,6 @@ import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
-import it.mate.therapyreminder.client.view.CalendarEventTestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
 import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
@@ -34,6 +33,7 @@ import it.mate.therapyreminder.client.view.HomeView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
+import it.mate.therapyreminder.client.view.TestView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Account;
@@ -64,8 +64,7 @@ import com.googlecode.mgwt.ui.client.MGWT;
 @SuppressWarnings("rawtypes")
 public class MainActivity extends MGWTAbstractActivity implements 
   HomeView.Presenter, TherapyEditView.Presenter, TherapyListView.Presenter,
-  DosageEditView.Presenter, 
-  CalendarEventTestView.Presenter, SettingsView.Presenter,
+  DosageEditView.Presenter, TestView.Presenter, SettingsView.Presenter,
   ReminderListView.Presenter, ReminderEditView.Presenter,
   AccountEditView.Presenter, AboutView.Presenter,
   ContactMenuView.Presenter, ContactListView.Presenter,
@@ -94,6 +93,7 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
       setBackgroundAlertsEnabled(true);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
+//    TestView view = AppClientFactory.IMPL.getGinjector().getTestView();
       this.view = view;
       initBaseMgwtView(true);
       view.setPresenter(this);

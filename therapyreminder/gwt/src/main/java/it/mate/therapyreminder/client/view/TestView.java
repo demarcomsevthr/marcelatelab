@@ -1,12 +1,10 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.phgcommons.client.ui.BasicDatepickerDialog;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
-import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
-import it.mate.therapyreminder.client.view.CalendarEventTestView.Presenter;
-
-import java.util.Date;
+import it.mate.therapyreminder.client.view.TestView.Presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -17,13 +15,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class CalendarEventTestView extends BaseMgwtView <Presenter> {
+public class TestView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
 
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, CalendarEventTestView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, TestView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -31,7 +29,7 @@ public class CalendarEventTestView extends BaseMgwtView <Presenter> {
   @UiField MTextBox titleBox;
   @UiField PhTimeBox orarioInizioBox;
   
-  public CalendarEventTestView() {
+  public TestView() {
     initUI();
   }
 
@@ -53,6 +51,10 @@ public class CalendarEventTestView extends BaseMgwtView <Presenter> {
   @UiHandler ("testBtn")
   public void testBtn(TouchEndEvent event) {
     
+    BasicDatepickerDialog datepicker = new BasicDatepickerDialog();
+    datepicker.show();
+    
+    /*
     Date startDate = new Date();
     Time startTime = new Time(orarioInizioBox.getValue()); 
     startTime.setInDate(startDate);
@@ -61,7 +63,6 @@ public class CalendarEventTestView extends BaseMgwtView <Presenter> {
     Time endTime = new Time(orarioInizioBox.getValue());
     endTime.incMinutes(5).setInDate(endDate);
     
-    /*
     CalendarPlugin.Event calEvent = new CalendarPlugin.Event();
     calEvent.setTitle(titleBox.getValue() + " at " + startTime.asString());
     if (MGWT.getOsDetection().isIOs()) {

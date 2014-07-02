@@ -6,7 +6,7 @@ import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
-import it.mate.therapyreminder.client.view.CalendarEventTestView;
+import it.mate.therapyreminder.client.view.TestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
 import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
@@ -50,7 +50,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public ContactMenuView getContactMenuView();
   
-  public CalendarEventTestView getCalendarEventTestView();
+  public TestView getTestView();
   
   public ContactListView getContactListView();
   
