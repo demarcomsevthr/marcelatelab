@@ -53,6 +53,9 @@ echo adding plugins
 pause
 call cordova plugin add org.apache.cordova.device
 call cordova plugin add org.apache.cordova.inappbrowser
+call cordova plugin add org.apache.cordova.console
+call cordova plugin add org.apache.cordova.globalization
+call cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications.git
 
 echo.
 echo.
