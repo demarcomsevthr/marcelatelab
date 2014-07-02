@@ -11,6 +11,9 @@
     <!-- .............................................................................. -->
     <hr class="ui-view-separator-1"/>
     
+    <g:Label text="Data test:" addStyleNames="ui-field-label ui-field-label-1"/>
+    <ph:PhTextBox type="date" addStyleNames="ui-app-textbox, ui-title-box"/>
+    
     <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1"/>
     <p:MTextBoxPatched ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
     
