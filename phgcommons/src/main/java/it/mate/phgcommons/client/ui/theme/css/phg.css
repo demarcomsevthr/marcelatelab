@@ -423,3 +423,66 @@
   font-weight: normal;
 }
 
+.phg-BasicDatepicker {
+  color: black;
+  background-color: #383838;
+  padding: 1em;
+  border-radius: 0.8em;
+}
+
+.phg-BasicDatepicker-spinControl {
+  padding: 0.5em;
+}
+
+.phg-BasicDatepicker .mgwt-TextBox .mgwt-InputBox-box {
+  width: 3em;
+  background-color: white;
+  color: black;
+  margin: 0.2em;
+  text-align: center;
+  height: 1.5em;
+}
+
+.phg-BasicDatepicker .mgwt-TextBox .mgwt-InputBox-box:focus {
+  background-color: white;
+}
+
+.phg-BasicDatepicker-header {
+  width: 100%;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid white;
+  margin-bottom: 0.5em;
+}
+
+.phg-BasicDatepicker-header td {
+  text-align: center;
+  color: white;
+}
+
+.phg-BasicDatepicker-center td {
+  width: 3em;
+  text-align: center;
+}
+
+.phg-BasicDatepicker-centerLeft, .phg-BasicDatepicker-centerMiddle, .phg-BasicDatepicker-centerRight {
+  background-color: #9E9E9E;
+  border-radius: 0.4em;
+  margin: 0.2em;
+}
+
+.phg-BasicDatepicker-bottom {
+  width: 100%;
+  border-top: 1px solid white;
+  margin-top: 0.5em;
+  margin-bottom: -0.6em;
+}
+
+.phg-BasicDatepicker-doneBtn, .phg-BasicDatepicker-cancelBtn {
+  background-color: #9e9e9e;
+  color: white;
+  margin: 0.5em;
+  text-align: center;
+  border-radius: 0.4em;
+  padding: 0.3em 0.8em;
+}
+
