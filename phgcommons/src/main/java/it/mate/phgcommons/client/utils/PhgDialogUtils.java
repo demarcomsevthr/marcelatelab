@@ -198,6 +198,15 @@ public class PhgDialogUtils {
     if (modalNotification != null) {
       modalNotification.hide();
       modalNotification = null;
+    } else {
+      GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+        public void execute(Void element) {
+          if (modalNotification != null) {
+            modalNotification.hide();
+            modalNotification = null;
+          }
+        }
+      });
     }
   }
 

@@ -1,6 +1,7 @@
 package it.mate.phgcommons.client.ui.ph;
 
 import it.mate.phgcommons.client.ui.CalendarDialog;
+import it.mate.phgcommons.client.ui.SimpleDatepickerDialog;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 
@@ -33,9 +34,11 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
   
   private List<ValueChangeHandler<Date>> valueChangeHandlers = new ArrayList<ValueChangeHandler<Date>>();
   
-//private final static boolean USE_DATE_PICKER_PLUGIN = false;
-  
   private Object model;
+  
+  private boolean useSimpleDatepicker = false;
+  
+  private Date suggestedDate = null;
   
   public PhDateBox() {
     element = DOM.createInputText().cast();
@@ -53,14 +56,24 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
   }
   
   protected void onDateBoxTapEvent(TapEvent event) {
-    CalendarDialog calendar = new CalendarDialog(this.value);
-    calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
-      public void onSelectedDateChange(Date date) {
-        setValue(date, true);
-      }
-    });
-    calendar.setGlassEnabled(true);
-    calendar.show();
+    if (useSimpleDatepicker) {
+      SimpleDatepickerDialog picker = new SimpleDatepickerDialog(suggestedDate != null ? suggestedDate : value) {
+        public void onDone(Date selectedDate) {
+          suggestedDate = null;
+          setValue(selectedDate, true);
+        }
+      };
+      picker.show();
+    } else {
+      CalendarDialog calendar = new CalendarDialog(this.value);
+      calendar.addSelectedDateChangeHandler(new CalendarDialog.SelectedDateChangeHandler() {
+        public void onSelectedDateChange(Date date) {
+          setValue(date, true);
+        }
+      });
+      calendar.setGlassEnabled(true);
+      calendar.show();
+    }
   }
 
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<Date> handler) {
@@ -87,7 +100,6 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
 
   public void setValue(Date value, boolean fireEvents) {
     this.value = value;
-//  element.setValue(value != null ? GwtUtils.dateToString(value, "dd/MM/yyyy") : null);
     element.setValue(value != null ? PhgUtils.dateToString(value) : null);
     if (fireEvents) {
       DateChangeEvent.fire(this, value);
@@ -119,7 +131,6 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     }
 
     protected DateChangeEvent(Date value) {
-      // The date must be copied in case one handler causes it to change.
       super(CalendarUtil.copyDate(value));
     }
 
@@ -141,5 +152,16 @@ public class PhDateBox extends TouchWidget implements HasValue<Date>, HasChangeH
     return model;
   }
 
+  public void setUseSimpleDatepicker(boolean useSimpleDatepicker) {
+    this.useSimpleDatepicker = useSimpleDatepicker;
+  }
+  
+  public void setUseSimpleDatepicker(String value) {
+    setUseSimpleDatepicker(Boolean.parseBoolean(value));
+  }
+  
+  public void setSuggestedDate(Date suggestedDate) {
+    this.suggestedDate = suggestedDate;
+  }
 
 }

@@ -1,11 +1,15 @@
 package it.mate.phgcommons.client.ui;
 
 import it.mate.gwtcommons.client.ui.SimpleContainer;
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -13,12 +17,12 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 
-public class BasicDatepickerDialog {
+public abstract class SimpleDatepickerDialog {
 
-  private static final String[] MONTH_NAMES_EN = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-  private static final String[] MONTH_NAMES_IT = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+  private static final String[] MONTH_NAMES_EN = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+  private static final String[] MONTH_NAMES_IT = {"Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"};
 
-  private Date selectedDate = new Date();
+  private Date selectedDate;
   
   private PopupPanel popup;
   
@@ -29,16 +33,23 @@ public class BasicDatepickerDialog {
   PhTextBox monthBox;
   PhTextBox yearBox;
 
-  public BasicDatepickerDialog() {
+  public SimpleDatepickerDialog() {
     this(new Date());
   }
   
-  public BasicDatepickerDialog(Date selectedDate) {
-    this.selectedDate = selectedDate;
+  public SimpleDatepickerDialog(Date initialDate) {
+    this.selectedDate = CalendarUtil.copyDate(initialDate);
+    this.selectedDate.setHours(0);
+    this.selectedDate.setMinutes(0);
+    this.selectedDate.setSeconds(0);
   }
   
   public void show() {
-    initUI();
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        initUI();
+      }
+    });
   }
   
   public void hide() {
@@ -47,6 +58,8 @@ public class BasicDatepickerDialog {
       popup = null;
     }
   }
+  
+  public abstract void onDone(Date selectedDate);
   
   private void initUI() {
     
@@ -79,6 +92,16 @@ public class BasicDatepickerDialog {
     centerLeftPanel.add(addDayBox);
     dayBox = new PhTextBox();
     dayBox.addStyleName(baseStylename+"-dayBox");
+    dayBox.setType("number");
+    dayBox.addChangeHandler(new ChangeHandler() {
+      public void onChange(ChangeEvent event) {
+        Integer dd = dayBox.getValueAsInteger();
+        if (dd != null && dd >= 1 && dd <= 31) {
+          selectedDate.setDate(dd);
+        }
+        showSelectedDate();
+      }
+    });
     centerLeftPanel.add(dayBox);
     TouchHTML subDayBox = new TouchHTML("-");
     subDayBox.addStyleName(baseStylename+"-spinControl");
@@ -98,6 +121,7 @@ public class BasicDatepickerDialog {
     centerMiddlePanel.add(addMonthBox);
     monthBox = new PhTextBox();
     monthBox.addStyleName(baseStylename+"-monthBox");
+    monthBox.setReadOnly(true);
     centerMiddlePanel.add(monthBox);
     TouchHTML subMonthBox = new TouchHTML("-");
     subMonthBox.addStyleName(baseStylename+"-spinControl");
@@ -118,6 +142,16 @@ public class BasicDatepickerDialog {
     centerRightPanel.add(addYearBox);
     yearBox = new PhTextBox();
     yearBox.addStyleName(baseStylename+"-yearBox");
+    yearBox.setType("number");
+    yearBox.addChangeHandler(new ChangeHandler() {
+      public void onChange(ChangeEvent event) {
+        Integer yy = yearBox.getValueAsInteger();
+        if (yy != null && yy >= 1900) {
+          selectedDate.setYear(yy - 1900);
+        }
+        showSelectedDate();
+      }
+    });
     centerRightPanel.add(yearBox);
     TouchHTML subYearBox = new TouchHTML("-");
     subYearBox.addStyleName(baseStylename+"-spinControl");
@@ -129,12 +163,23 @@ public class BasicDatepickerDialog {
     bottom.addStyleName(baseStylename+"-bottom");
     container.add(bottom);
     
-    TouchHTML doneBtn = new TouchHTML("DONE");
+    TouchHTML doneBtn = new TouchHTML(PhgUtils.isAppLocalLanguageIT()?"FINITO":"DONE");
     doneBtn.addStyleName(baseStylename+"-doneBtn");
+    doneBtn.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        onDone(selectedDate);
+        hide();
+      }
+    });
     bottom.add(doneBtn);
     
-    TouchHTML cancelBtn = new TouchHTML("Cancel");
+    TouchHTML cancelBtn = new TouchHTML(PhgUtils.isAppLocalLanguageIT()?"Annulla":"Cancel");
     cancelBtn.addStyleName(baseStylename+"-cancelBtn");
+    cancelBtn.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        hide();
+      }
+    });
     bottom.add(cancelBtn);
     
     showSelectedDate();
@@ -166,8 +211,13 @@ public class BasicDatepickerDialog {
   private void showSelectedDate() {
     dateBox.setHtml(GwtUtils.dateToString(selectedDate, "dd/MM/yyyy"));
     dayBox.setValue(GwtUtils.dateToString(selectedDate, "dd"));
-    monthBox.setValue(GwtUtils.dateToString(selectedDate, "MMM"));
     yearBox.setValue(GwtUtils.dateToString(selectedDate, "yyyy"));
+    int mm = selectedDate.getMonth();
+    if (PhgUtils.isAppLocalLanguageIT()) {
+      monthBox.setValue(MONTH_NAMES_IT[mm]);
+    } else {
+      monthBox.setValue(MONTH_NAMES_EN[mm]);
+    }
   }
   
   
