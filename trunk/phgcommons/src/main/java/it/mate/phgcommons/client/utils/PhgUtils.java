@@ -444,6 +444,10 @@ public class PhgUtils {
       $wnd.setAppLocalLanguage(language);
     }
   }-*/;
+  
+  public static boolean isAppLocalLanguageIT() {
+    return "it".equals(getAppLocalLanguage());
+  }
 
   public static String getAppLocalLanguage() {
     String lang = getAppLocalLanguageImpl();
