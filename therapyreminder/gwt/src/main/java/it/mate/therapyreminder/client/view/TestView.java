@@ -1,7 +1,6 @@
 package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.phgcommons.client.ui.BasicDatepickerDialog;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.view.TestView.Presenter;
@@ -50,9 +49,11 @@ public class TestView extends BaseMgwtView <Presenter> {
 
   @UiHandler ("testBtn")
   public void testBtn(TouchEndEvent event) {
-    
-    BasicDatepickerDialog datepicker = new BasicDatepickerDialog();
+
+    /*
+    SimpleDatepickerDialog datepicker = new SimpleDatepickerDialog();
     datepicker.show();
+    */
     
     /*
     Date startDate = new Date();
