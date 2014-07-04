@@ -3,6 +3,7 @@ package it.mate.postscriptum.shared.service;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.impl.TestTx;
 
 import java.util.Date;
 import java.util.List;
@@ -42,5 +43,8 @@ public interface StickFacade extends RemoteService {
 
   public void deleteSMS(List<StickSms> entities);
   
+  ////////////////////////////////////
+
+  public void doTest(TestTx test);
   
 }
