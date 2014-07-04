@@ -57,19 +57,21 @@ public class PlaceControllerWithHistory extends PlaceController {
     return newHistory;
   }
   
-  public void goBack(Place home) {
-    if (history.size() > 1) {
-      Place place = history.get(history.size() - 2);
-      goTo(place);
+  public void goBack(Place defaultPlace) {
+    Place previousPlace = getPreviousPlace();
+    if (previousPlace != null) {
+      goTo(previousPlace);
     } else {
-      goTo(home);
+      goTo(defaultPlace);
     }
   }
   
-  /*
   public Place getPreviousPlace() {
-    return lastPlace;
+    if (history.size() > 1) {
+      return history.get(history.size() - 2);
+    } else {
+      return null;
+    }
   }
-  */
 
 }
