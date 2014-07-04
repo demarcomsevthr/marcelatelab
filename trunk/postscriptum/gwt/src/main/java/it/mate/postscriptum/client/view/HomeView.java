@@ -9,8 +9,10 @@ import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.constants.AppProperties;
+import it.mate.postscriptum.client.factories.AppClientFactory;
 import it.mate.postscriptum.client.view.HomeView.Presenter;
 import it.mate.postscriptum.shared.model.RemoteUser;
+import it.mate.postscriptum.shared.model.impl.TestTx;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
@@ -21,6 +23,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -186,6 +189,22 @@ public class HomeView extends BaseMgwtView <Presenter> {
             checkFirstRunCompleteTimer.cancel();
           }
         }
+      }
+    });
+  }
+  
+  @UiHandler ("testBtn")
+  public void onTestBtn (TouchEndEvent event) {
+    TestTx test = new TestTx();
+    test.setId("12345678");
+    test.setVersion("1");
+    test.setField1("field1");
+    AppClientFactory.IMPL.getStickFacade().doTest(test, new AsyncCallback<Void>() {
+      public void onSuccess(Void result) {
+        PhgUtils.log("doTest success");
+      }
+      public void onFailure(Throwable caught) {
+        PhgUtils.log("doTest failure: " + caught.getMessage());
       }
     });
   }
