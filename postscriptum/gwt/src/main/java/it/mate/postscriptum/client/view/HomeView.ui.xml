@@ -25,6 +25,7 @@
     <!--     
     <p:TouchButton text="New SMS" ui:field="newSmsBtn"/>
      -->
+    <p:TouchButton text="Test" ui:field="testBtn"/>
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     

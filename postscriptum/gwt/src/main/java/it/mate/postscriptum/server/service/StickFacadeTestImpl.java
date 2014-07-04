@@ -3,6 +3,7 @@ package it.mate.postscriptum.server.service;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.impl.TestTx;
 import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
 
@@ -24,7 +25,7 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   
   private StickFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = false;
+  private final boolean LOCALTEST = true;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".stickFacade";
   
@@ -118,7 +119,10 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
     remoteFacade.deleteSMS(entities);
   }
 
-  
-  
+  @Override
+  public void doTest(TestTx test) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.doTest(test);
+  }
   
 }

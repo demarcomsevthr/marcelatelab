@@ -10,6 +10,7 @@ it.mate.postscriptum.shared.model.impl.StickMailTx, true, true, true, true, it.m
 [Lit.mate.postscriptum.shared.model.impl.StickMailTx;, true, true, true, true, [Lit.mate.postscriptum.shared.model.impl.StickMailTx;/175794130, 175794130
 it.mate.postscriptum.shared.model.impl.StickSmsTx, true, true, true, true, it.mate.postscriptum.shared.model.impl.StickSmsTx/4008841799, 4008841799
 [Lit.mate.postscriptum.shared.model.impl.StickSmsTx;, true, true, true, true, [Lit.mate.postscriptum.shared.model.impl.StickSmsTx;/3033187983, 3033187983
+it.mate.postscriptum.shared.model.impl.TestTx, false, false, true, true, it.mate.postscriptum.shared.model.impl.TestTx/4267320830, 4267320830
 it.mate.postscriptum.shared.service.AdapterException, true, true, false, false, it.mate.postscriptum.shared.service.AdapterException/3439872313, 3439872313
 it.mate.postscriptum.shared.service.StickFacade, false, false, false, false, _, 1958972528
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
