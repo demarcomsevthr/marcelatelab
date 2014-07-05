@@ -3,6 +3,7 @@ package it.mate.postscriptum.server.service;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.impl.ExtensibleTx;
 import it.mate.postscriptum.shared.model.impl.TestTx;
 import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
@@ -123,6 +124,12 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   public void doTest(TestTx test) {
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.doTest(test);
+  }
+
+  @Override
+  public void doExtensibleTest(ExtensibleTx test) {
+    logger.debug("calling " + moduleBaseUrl);
+    remoteFacade.doExtensibleTest(test);
   }
   
 }
