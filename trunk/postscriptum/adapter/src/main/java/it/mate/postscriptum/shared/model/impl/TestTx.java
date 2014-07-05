@@ -2,8 +2,9 @@ package it.mate.postscriptum.shared.model.impl;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class TestTx implements Serializable {
+
+  private static final long serialVersionUID = -9023633831136189873L;
 
   private String id;
   
@@ -11,9 +12,11 @@ public class TestTx implements Serializable {
   
   private String field1;
 
+  private String field2;
+  
   @Override
   public String toString() {
-    return "TestTx [id=" + id + ", version=" + version + ", field1=" + field1 + "]";
+    return "TestTx [id=" + id + ", version=" + version + ", field1=" + field1 + ", field2=" + field2 + "]";
   }
 
   public String getId() {
@@ -39,5 +42,13 @@ public class TestTx implements Serializable {
   public void setVersion(String version) {
     this.version = version;
   }
-  
+
+  public String getField2() {
+    return field2;
+  }
+
+  public void setField2(String field2) {
+    this.field2 = field2;
+  }
+
 }
