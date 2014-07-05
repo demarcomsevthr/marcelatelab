@@ -114,6 +114,7 @@
         <version>${appengine.target.version}</version>
         <configuration>
           <enableJarClasses>false</enableJarClasses>
+          <address>0.0.0.0</address>
           <jvmFlags>
             <jvmFlag>-Xdebug</jvmFlag>
             <jvmFlag>-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</jvmFlag>
