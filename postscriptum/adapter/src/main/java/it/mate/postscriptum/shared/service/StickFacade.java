@@ -3,6 +3,7 @@ package it.mate.postscriptum.shared.service;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.impl.ExtensibleTx;
 import it.mate.postscriptum.shared.model.impl.TestTx;
 
 import java.util.Date;
@@ -46,5 +47,7 @@ public interface StickFacade extends RemoteService {
   ////////////////////////////////////
 
   public void doTest(TestTx test);
+  
+  public void doExtensibleTest(ExtensibleTx test);
   
 }
