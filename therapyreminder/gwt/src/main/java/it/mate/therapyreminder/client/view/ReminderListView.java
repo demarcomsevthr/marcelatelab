@@ -75,12 +75,7 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     getScrollPanel().setScrollingEnabledY(false);
     resultsPanel.setScrollingEnabledY(true);
     
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        int resultsHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
-        resultsPanel.getElement().getStyle().setHeight(resultsHeight, Unit.PX);
-      }
-    });
+    setResultsPanelHeight();
     
     resultsPanel.addScrollMoveHandler(new ScrollMoveEvent.Handler() {
       public void onScrollMove(ScrollMoveEvent event) {
@@ -93,6 +88,15 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       }
     });
     
+  }
+  
+  private void setResultsPanelHeight() {
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        int resultsHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
+        resultsPanel.getElement().getStyle().setHeight(resultsHeight, Unit.PX);
+      }
+    });
   }
   
   @Override
@@ -133,11 +137,14 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
           actualHeight.set(actualHeight.get() + showRow(somministrazione, list, prevDate, udm));
           if (somministrazione.getId() == lastId) {
             // su ios funziona
+            /*
             int panelHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
             PhgUtils.log("panelHeight = " + panelHeight);
             resultsPanel.setHeight(panelHeight + "px");
+            */
             refreshScrollPanel();
           }
+          setResultsPanelHeight();
         }
       });
     }
