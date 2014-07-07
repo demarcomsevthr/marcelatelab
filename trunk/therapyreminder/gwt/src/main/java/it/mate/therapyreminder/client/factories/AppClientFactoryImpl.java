@@ -137,6 +137,16 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     CustomTheme.Instance.get().css().ensureInjected();
 
+    // 07/07/2014: bug fix 
+    if (PhgUtils.getAppLocalLanguageImpl() == null) {
+      if (Window.Location.getHref().contains("index.html")) {
+        if ("it".equals(PhgUtils.getCurrentLanguage())) {
+          PhgUtils.setAppLocalLanguageAndReload("it");
+          return;
+        }
+      }
+    }
+    
     PhgUtils.commonInitializations();
     
     PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {

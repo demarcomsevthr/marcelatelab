@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.ui.TouchImage;
@@ -42,12 +43,14 @@ import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
+import it.mate.therapyreminder.shared.model.impl.ContattoTx;
 import it.mate.therapyreminder.shared.model.impl.DosaggioEditModel;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
 
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -328,11 +331,16 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (message != null) {
       popupMsg = message;
     } else if (caught != null) {
+      caught.printStackTrace();
       logMsg = caught.getClass().getName()+" - "+caught.getMessage();
       if (caught instanceof InvocationException) {
         popupMsg = "Maybe data connection is not active";
       } else {
-        popupMsg = caught.getMessage();
+        if (caught.getMessage() != null) {
+          popupMsg = caught.getMessage();
+        } else {
+          popupMsg = caught.getClass().getName();
+        }
       }
       popupTitle = "Error";
     }
@@ -524,7 +532,6 @@ public class MainActivity extends MGWTAbstractActivity implements
               try {
                 MainController.getInstance().sviluppaSomministrazioni(prescrizione, new Delegate<Prescrizione>() {
                   public void execute(Prescrizione prescrizione) {
-                    // TODO SVILUPPO SOMMINISTRAZIONI COMPLETATO
                     innerCompletionDelegate.execute(prescrizione);
                   }
                 });
@@ -636,16 +643,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
-  public void dropDB() {
+  public void completeReset() {
     dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
+        
+        JsArrayString localStorageKeys = PhgUtils.getLocalStorageKeys();
+        for (int it = 0; it < localStorageKeys.length(); it++) {
+          String key = localStorageKeys.get(it);
+          PhgUtils.log("removing localStorage item " + key);
+          PhgUtils.removeLocalStorageItem(key);
+        }
+        
         GwtUtils.deferredExecution(2000, new Delegate<Void>() {
           public void execute(Void element) {
-            if (OsDetectionUtils.isAndroid()) {
-              AppClientFactory.IMPL.getPhoneGap().exitApp();
-            } else {
-              goToHome();
-            }
+            PhgUtils.setAppLocalLanguageAndReload(PhgUtils.getCurrentLanguage());
           }
         });
       }
@@ -668,8 +679,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       }
     });
   }
-  
-  //TODO: 05/06/2014 - ONLINE MODE
   
   public void setOnlineMode(boolean onlineMode) {
     MainController.getInstance().setOnlineMode(onlineMode);
@@ -790,7 +799,9 @@ public class MainActivity extends MGWTAbstractActivity implements
                 dao.saveContatto(contatto, new Delegate<Contatto>() {
                   public void execute(Contatto savedContatto) {
                     if (account != null && Contatto.TIPO_TUTOR.equals(savedContatto.getTipo())) {
-                      AppClientFactory.IMPL.getRemoteFacade().updateDatiContatto(savedContatto, account, new AsyncCallback<Void>() {
+                      RpcMap contattoMap = ((ContattoTx)savedContatto).toRpcMap();
+                      RpcMap accountMap = ((AccountTx)account).toRpcMap();
+                      AppClientFactory.IMPL.getRemoteFacade().updateDatiContatto(contattoMap, accountMap, new AsyncCallback<Void>() {
                         public void onSuccess(Void result) {
                           PhgUtils.log("tutor data remotely saved");
                         }
@@ -822,17 +833,18 @@ public class MainActivity extends MGWTAbstractActivity implements
         public void execute(String devInfoId) {
           account.setDevInfoId(devInfoId);
           PhgUtils.log("creating account " + account);
-          AppClientFactory.IMPL.getRemoteFacade().createAccount(account, new AsyncCallback<Account>() {
+          AppClientFactory.IMPL.getRemoteFacade().createAccount(((AccountTx)account).toRpcMap(), new AsyncCallback<RpcMap>() {
             public void onFailure(Throwable caught) {
               setHeaderWaiting(false);
               PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_dataConnectionOff_msg());
             }
-            public void onSuccess(final Account account) {
+            public void onSuccess(final RpcMap resultAccountMap) {
+              final AccountTx resultAccount = new AccountTx().fromRpcMap(resultAccountMap);
               setHeaderWaiting(false);
               PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveAccount_msg1(), "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
                 public void execute(Integer element) {
-                  MainController.getInstance().setAccountInLocalStorage(account);
-                  successDelegate.execute(account);
+                  MainController.getInstance().setAccountInLocalStorage(resultAccount);
+                  successDelegate.execute(resultAccount);
                 }
               });
             }
@@ -841,12 +853,12 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     } else {
       PhgUtils.log("updating account " + account);
-      AppClientFactory.IMPL.getRemoteFacade().updateAccount(account, new AsyncCallback<Account>() {
+      AppClientFactory.IMPL.getRemoteFacade().updateAccount(((AccountTx)account).toRpcMap(), new AsyncCallback<RpcMap>() {
         public void onFailure(Throwable caught) {
           setHeaderWaiting(false);
           PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_dataConnectionOff_msg());
         }
-        public void onSuccess(Account account) {
+        public void onSuccess(RpcMap resultAccount) {
           setHeaderWaiting(false);
           PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveAccount_msg2());
           MainController.getInstance().setAccountInLocalStorage(account);

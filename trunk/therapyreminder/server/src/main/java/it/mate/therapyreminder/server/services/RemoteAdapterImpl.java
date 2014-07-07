@@ -5,6 +5,7 @@ import it.mate.commons.server.dao.FindContext;
 import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.server.model.AccountDs;
 import it.mate.therapyreminder.server.model.DevInfoDs;
 import it.mate.therapyreminder.server.model.SomministrazioneDs;

@@ -1,8 +1,6 @@
 package it.mate.therapyreminder.shared.service;
 
-import it.mate.therapyreminder.shared.model.Account;
-import it.mate.therapyreminder.shared.model.Contatto;
-import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.Date;
 import java.util.List;
@@ -16,17 +14,18 @@ public interface RemoteFacadeAsync {
   void sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion,
       AsyncCallback<String> callback);
 
-  void createAccount(Account entity, AsyncCallback<Account> callback);
+  void createAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
 
-  void updateAccount(Account entity, AsyncCallback<Account> callback);
+  void updateAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
 
   void checkConnection(AsyncCallback<Boolean> callback);
 
-  void saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId, AsyncCallback<List<Somministrazione>> callback);
+  void saveSomministrazioni(List<RpcMap> somministrazioni, RpcMap account, String devInfoId, AsyncCallback<List<RpcMap>> callback);
 
-  void updateDatiContatto(Contatto tutor, Account account, AsyncCallback<Void> callback);
+  void updateDatiContatto(RpcMap tutor, RpcMap account, AsyncCallback<Void> callback);
 
-  void deleteSomministrazioni(List<Somministrazione> somministrazioni, AsyncCallback<Void> callback);
+  void deleteSomministrazioni(List<RpcMap> somministrazioni, AsyncCallback<Void> callback);
+
 
 
 }
