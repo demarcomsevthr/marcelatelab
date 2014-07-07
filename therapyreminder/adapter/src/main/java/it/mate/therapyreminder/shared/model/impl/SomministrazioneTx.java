@@ -1,12 +1,14 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.gwtcommons.shared.rpc.IsMappable;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class SomministrazioneTx implements Somministrazione {
+public class SomministrazioneTx implements Somministrazione, IsMappable {
 
   private Prescrizione prescrizione;
   
@@ -25,6 +27,35 @@ public class SomministrazioneTx implements Somministrazione {
   // salvato solo in remoto
   private String language;
   
+  
+  @Override
+  public RpcMap toRpcMap() {
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("data", data);
+    map.put("quantita", quantita);
+    map.put("orario", orario);
+    map.put("stato", stato);
+    map.put("remoteId", remoteId);
+    map.put("language", language);
+    map.put("prescrizione", prescrizione != null ? ((PrescrizioneTx)prescrizione).toRpcMap() : null);
+    return map;
+  }
+
+  @Override
+  public SomministrazioneTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.data = (Date)map.get("data");
+    this.quantita = (Double)map.get("quantita");
+    this.orario = (String)map.get("orario");
+    this.stato = (Integer)map.get("stato");
+    this.remoteId = (String)map.get("remoteId");
+    this.language = (String)map.get("language");
+    this.prescrizione = map.get("prescrizione") != null ? new PrescrizioneTx().fromRpcMap((RpcMap)map.get("prescrizione")) : null;
+    return this;
+  }
+  
+
   public SomministrazioneTx() {
 
   }

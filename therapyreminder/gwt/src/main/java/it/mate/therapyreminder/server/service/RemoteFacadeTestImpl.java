@@ -1,8 +1,6 @@
 package it.mate.therapyreminder.server.service;
 
-import it.mate.therapyreminder.shared.model.Account;
-import it.mate.therapyreminder.shared.model.Contatto;
-import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.service.RemoteFacade;
 
 import java.util.Date;
@@ -23,7 +21,7 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   
   private RemoteFacade remoteFacade = null;
   
-  private final boolean LOCALTEST = false;
+  private final boolean LOCALTEST = true;
   
   private final String REMOTE_SERVICE_RELATIVE_PATH = ".remoteFacade";
   
@@ -51,13 +49,13 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   }
 
   @Override
-  public Account createAccount(Account entity) {
+  public RpcMap createAccount(RpcMap entity) {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.createAccount(entity);
   }
   
   @Override
-  public Account updateAccount(Account entity) {
+  public RpcMap updateAccount(RpcMap entity) {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.updateAccount(entity);
   }
@@ -69,19 +67,19 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   }
 
   @Override
-  public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId) {
+  public List<RpcMap> saveSomministrazioni(List<RpcMap> somministrazioni, RpcMap account, String devInfoId) {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.saveSomministrazioni(somministrazioni, account, devInfoId);
   }
 
   @Override
-  public void updateDatiContatto(Contatto tutor, Account account) {
+  public void updateDatiContatto(RpcMap tutor, RpcMap account) {
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.updateDatiContatto(tutor, account);
   }
 
   @Override
-  public void deleteSomministrazioni(List<Somministrazione> somministrazioni) {
+  public void deleteSomministrazioni(List<RpcMap> somministrazioni) {
     logger.debug("calling " + moduleBaseUrl);
     remoteFacade.deleteSomministrazioni(somministrazioni);
   }

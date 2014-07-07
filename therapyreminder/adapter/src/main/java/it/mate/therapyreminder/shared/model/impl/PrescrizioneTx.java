@@ -1,5 +1,7 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.gwtcommons.shared.rpc.IsMappable;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
 import it.mate.therapyreminder.shared.model.Prescrizione;
@@ -10,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PrescrizioneTx implements Prescrizione {
+public class PrescrizioneTx implements Prescrizione, IsMappable {
   
   private Integer id;
   
@@ -52,7 +54,27 @@ public class PrescrizioneTx implements Prescrizione {
   private Integer idTutor;
   
   
-  
+  @Override
+  public RpcMap toRpcMap() {
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("nome", nome);
+    map.put("dataInizio", dataInizio);
+    map.put("dataFine", dataFine);
+    map.put("tutor", tutor != null ? ((ContattoTx)tutor).toRpcMap() : null);
+    return map;
+  }
+
+  @Override
+  public PrescrizioneTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.nome = (String)map.get("nome");
+    this.dataInizio = (Date)map.get("dataInizio");
+    this.dataFine = (Date)map.get("dataFine");
+    this.tutor = map.get("tutor") != null ? new ContattoTx().fromRpcMap((RpcMap)map.get("tutor")) : null;
+    return this;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj == null)

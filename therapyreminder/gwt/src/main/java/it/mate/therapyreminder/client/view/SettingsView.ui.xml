@@ -12,7 +12,7 @@
     
     <g:HorizontalPanel addStyleNames="ui-setting-row">
       <g:HTML HTML="Debug" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
-      <p:TouchButton text="Clear DB" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
+      <p:TouchButton text="Clear ALL" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
     </g:HorizontalPanel>
     <g:HorizontalPanel addStyleNames="ui-setting-row">
       <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>

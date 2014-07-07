@@ -3,6 +3,7 @@ package it.mate.therapyreminder.client.logic;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.plugins.CalendarEvent;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
@@ -473,11 +474,26 @@ public class MainController {
               // finish processing
               Account account = getAccountFromLocalStorage();
               String devInfoId = getDevInfoIdFromLocalStorage();
+
+              // TODO: 07/07/2014 - passaggio a RpcMap
+              List<RpcMap> somministrazioniDaSalvareInRemotoMap = new ArrayList<RpcMap>();
+              for (Somministrazione somministrazioneDaSalvareInRemoto : somministrazioniDaSalvareInRemoto) {
+                somministrazioniDaSalvareInRemotoMap.add(((SomministrazioneTx)somministrazioneDaSalvareInRemoto).toRpcMap());
+              }
+              RpcMap accountMap = ((AccountTx)account).toRpcMap();
               PhgUtils.log("before save remote somministrazioni");
-              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemoto, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
-                public void onSuccess(List<Somministrazione> somministrazioni) {
+              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemotoMap, accountMap, devInfoId, new AsyncCallback<List<RpcMap>>() {
+                public void onSuccess(List<RpcMap> somministrazioniMap) {
                   PhgUtils.log("saved remote somministrazioni");
-                  completionDelegate.execute(somministrazioni);
+                  if (somministrazioniMap == null) {
+                    completionDelegate.execute(null);
+                  } else {
+                    List<Somministrazione> somministrazioni = new ArrayList<Somministrazione>();
+                    for (RpcMap somministrazioneMap : somministrazioniMap) {
+                      somministrazioni.add(new SomministrazioneTx().fromRpcMap(somministrazioneMap));
+                    }
+                    completionDelegate.execute(somministrazioni);
+                  }
                 }
                 public void onFailure(Throwable caught) {
                   processFailure(null, caught);
@@ -525,7 +541,14 @@ public class MainController {
         }
       }
       if (somministrazioiniDaCancellare.size() > 0) {
-        AppClientFactory.IMPL.getRemoteFacade().deleteSomministrazioni(somministrazioiniDaCancellare, new AsyncCallback<Void>() {
+        
+        // TODO: 07/07/2014 - passaggio a RpcMap
+        List<RpcMap> somministrazioiniDaCancellareMap = new ArrayList<RpcMap>();
+        for (Somministrazione somministrazioneDaCancellare : somministrazioiniDaCancellare) {
+          somministrazioiniDaCancellareMap.add(((SomministrazioneTx)somministrazioneDaCancellare).toRpcMap());
+        }
+        
+        AppClientFactory.IMPL.getRemoteFacade().deleteSomministrazioni(somministrazioiniDaCancellareMap, new AsyncCallback<Void>() {
           public void onSuccess(Void result) {
             delegate.execute(somministrazioni);
           }

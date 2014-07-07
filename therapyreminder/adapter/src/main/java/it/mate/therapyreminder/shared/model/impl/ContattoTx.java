@@ -1,10 +1,12 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.gwtcommons.shared.rpc.IsMappable;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.utils.ModelUtils;
 
 @SuppressWarnings("serial")
-public class ContattoTx implements Contatto {
+public class ContattoTx implements Contatto, IsMappable {
 
   private Integer id;
   
@@ -16,7 +18,27 @@ public class ContattoTx implements Contatto {
   
   private String telefono;
   
-  
+  @Override
+  public RpcMap toRpcMap() {
+    RpcMap map = new RpcMap();
+    if (id != null) map.put("id", id);
+    if (tipo != null) map.put("tipo", tipo);
+    if (nome != null) map.put("nome", nome);
+    if (email != null) map.put("email", email);
+    if (telefono != null) map.put("telefono", telefono);
+    return map;
+  }
+
+  @Override
+  public ContattoTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.tipo = (String)map.get("tipo");
+    this.nome = (String)map.get("nome");
+    this.email = (String)map.get("email");
+    this.telefono = (String)map.get("telefono");
+    return this;
+  }
+
   @Override
   public String toString() {
     return "ContattoTx [id=" + id + ", tipo=" + tipo + ", nome=" + nome + ", email=" + email + ", telefono=" + telefono + "]";

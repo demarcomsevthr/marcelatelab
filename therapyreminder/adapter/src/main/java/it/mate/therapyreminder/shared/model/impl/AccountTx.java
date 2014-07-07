@@ -1,12 +1,14 @@
 package it.mate.therapyreminder.shared.model.impl;
 
+import it.mate.gwtcommons.shared.rpc.IsMappable;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.utils.ModelUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 @SuppressWarnings("serial")
-public class AccountTx implements Account {
+public class AccountTx implements Account, IsMappable {
 
   private String id;
   
@@ -26,6 +28,30 @@ public class AccountTx implements Account {
   
   public static AccountTx NULL_USER = new AccountTx(true);
   
+  @Override
+  public RpcMap toRpcMap() {
+    RpcMap map = new RpcMap();
+    if (id != null) map.put("id", id);
+    if (email != null) map.put("email", email);
+    if (name != null) map.put("name", name);
+    if (password != null) map.put("password", password);
+    if (devInfoId != null) map.put("devInfoId", devInfoId);
+    if (authDomain != null) map.put("authDomain", authDomain);
+    if (federatedIdentity != null) map.put("federatedIdentity", federatedIdentity);
+    return map;
+  }
+
+  @Override
+  public AccountTx fromRpcMap(RpcMap map) {
+    this.id = (String)map.get("id");
+    this.email = (String)map.get("email");
+    this.name = (String)map.get("name");
+    this.password = (String)map.get("password");
+    this.devInfoId = (String)map.get("devInfoId");
+    this.authDomain = (String)map.get("authDomain");
+    this.federatedIdentity = (String)map.get("federatedIdentity");
+    return this;
+  }
   
   @Override
   public String toString() {

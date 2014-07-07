@@ -1,8 +1,6 @@
 package it.mate.therapyreminder.shared.service;
 
-import it.mate.therapyreminder.shared.model.Account;
-import it.mate.therapyreminder.shared.model.Contatto;
-import it.mate.therapyreminder.shared.model.Somministrazione;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.Date;
 import java.util.List;
@@ -16,18 +14,18 @@ public interface RemoteFacade extends RemoteService {
   
   Date getServerTime();
   
-  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
+  String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
 
-  public Account createAccount(Account entity);
+  RpcMap createAccount(RpcMap entity);
   
-  public Account updateAccount(Account entity);
+  RpcMap updateAccount(RpcMap entity);
   
-  public Boolean checkConnection();
+  Boolean checkConnection();
 
-  public List<Somministrazione> saveSomministrazioni(List<Somministrazione> somministrazioni, Account account, String devInfoId);
+  List<RpcMap> saveSomministrazioni(List<RpcMap> somministrazioni, RpcMap account, String devInfoId);
   
-  public void updateDatiContatto(Contatto tutor, Account account);
+  void updateDatiContatto(RpcMap tutor, RpcMap account);
   
-  public void deleteSomministrazioni(List<Somministrazione> somministrazioni);
+  void deleteSomministrazioni(List<RpcMap> somministrazioni);
   
 }
