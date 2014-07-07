@@ -37,6 +37,20 @@
       <ui:attribute name="text" description="text" key="phoneLabel.text"/>
     </g:Label>
     <ph:PhTextBox ui:field="phoneBox" type="tel" addStyleNames="ui-app-textbox, ui-phone-box"/>
+    
+    <g:VerticalPanel width="100%" spacing="0" ui:field="doctorOnlyPanel" visible="false">
+    
+      <g:Label text="Address:" addStyleNames="ui-field-label ui-field-label-1">
+        <ui:attribute name="text" description="text" key="addressLabel.text"/>
+      </g:Label>
+      <ph:PhTextBox ui:field="addressBox" addStyleNames="ui-app-textbox, ui-address-box"/>
+    
+      <g:Label text="Office hours:" addStyleNames="ui-field-label ui-field-label-1">
+        <ui:attribute name="text" description="text" key="hoursLabel.text"/>
+      </g:Label>
+      <ph:PhTextBox ui:field="hoursBox" addStyleNames="ui-app-textbox, ui-address-box"/>
+    
+    </g:VerticalPanel>
   
   </g:HTMLPanel>
   

@@ -301,14 +301,15 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public String getNativeProperty(String name, String defValue) {
     String value = null;
-    if (nativeProperties != null) {
-      value = nativeProperties.get(name);
-    }
     if (value == null) {
       value = PhgUtils.getWindowSetting(name);
     }
-    if (value == null)
+    if (value == null && nativeProperties != null) {
+      value = nativeProperties.get(name);
+    }
+    if (value == null) {
       value = defValue;
+    }
     return value;
   }
   

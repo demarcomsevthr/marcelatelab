@@ -66,7 +66,11 @@ public class MainDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS = SOMMINISTRAZIONI_FIELDS_0 + ", " + SOMMINISTRAZIONI_FIELDS_2;
   
-  private final static String CONTATTI_FIELDS = "tipo, nome, email, telefono";
+  private final static String CONTATTI_FIELDS_2 = "tipo, nome, email, telefono";
+  
+  private final static String CONTATTI_FIELDS_3 = "indirizzo, orari";
+  
+  private final static String CONTATTI_FIELDS = CONTATTI_FIELDS_2 + ", " + CONTATTI_FIELDS_3;
   
   public MainDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
@@ -156,7 +160,7 @@ public class MainDao extends WebSQLDao {
       PhonegapLog.log("updating db therapies to version " + number);
       
       PhonegapLog.log("creating table contatti");
-      tr.doExecuteSql("CREATE TABLE contatti (id "+SERIAL_ID+", " + CONTATTI_FIELDS + " )");
+      tr.doExecuteSql("CREATE TABLE contatti (id "+SERIAL_ID+", " + CONTATTI_FIELDS_2 + " )");
       
       PhonegapLog.log("altering table prescrizioni");
       tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN idTutor");
@@ -167,8 +171,19 @@ public class MainDao extends WebSQLDao {
     }
   };
   
+  private final static MigratorCallback MIGRATION_CALLBACK_3 = new MigratorCallback() {
+    public void doMigration(int number, SQLTransaction tr) {
+      PhonegapLog.log("updating db therapies to version " + number);
+      
+      PhonegapLog.log("altering table contatti");
+      tr.doExecuteSql("ALTER TABLE contatti ADD COLUMN indirizzo");
+      tr.doExecuteSql("ALTER TABLE contatti ADD COLUMN orari");
+      
+    }
+  };
+  
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2 
+    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2, MIGRATION_CALLBACK_3 
   };
   
   public void findAllUdM(final Delegate<List<UdM>> delegate) {
@@ -838,6 +853,8 @@ public class MainDao extends WebSQLDao {
     result.setNome(rs.getRows().getValueString(it, "nome"));
     result.setEmail(rs.getRows().getValueString(it, "email"));
     result.setTelefono(rs.getRows().getValueString(it, "telefono"));
+    result.setIndirizzo(rs.getRows().getValueString(it, "indirizzo"));
+    result.setOrari(rs.getRows().getValueString(it, "orari"));
     return result;
   }
   
@@ -845,12 +862,14 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (contatto.getId() == null) {
-          tr.doExecuteSql("INSERT INTO contatti (" + CONTATTI_FIELDS + ") VALUES (?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO contatti (" + CONTATTI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
               new Object[] {
               contatto.getTipo(),
               contatto.getNome(),
               contatto.getEmail(),
-              contatto.getTelefono()
+              contatto.getTelefono(),
+              contatto.getIndirizzo(),
+              contatto.getOrari()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   contatto.setId(rs.getInsertId());
@@ -863,12 +882,16 @@ public class MainDao extends WebSQLDao {
           sql += " ,nome = ?";
           sql += " ,email = ?";
           sql += " ,telefono = ?";
+          sql += " ,indirizzo = ?";
+          sql += " ,orari = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               contatto.getTipo(),
               contatto.getNome(),
               contatto.getEmail(),
-              contatto.getTelefono()
+              contatto.getTelefono(),
+              contatto.getIndirizzo(),
+              contatto.getOrari()
               , contatto.getId()
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

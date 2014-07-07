@@ -31,13 +31,13 @@ public class AccountTx implements Account, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
-    if (id != null) map.put("id", id);
-    if (email != null) map.put("email", email);
-    if (name != null) map.put("name", name);
-    if (password != null) map.put("password", password);
-    if (devInfoId != null) map.put("devInfoId", devInfoId);
-    if (authDomain != null) map.put("authDomain", authDomain);
-    if (federatedIdentity != null) map.put("federatedIdentity", federatedIdentity);
+    map.put("id", id);
+    map.put("email", email);
+    map.put("name", name);
+    map.put("password", password);
+    map.put("devInfoId", devInfoId);
+    map.put("authDomain", authDomain);
+    map.put("federatedIdentity", federatedIdentity);
     return map;
   }
 
