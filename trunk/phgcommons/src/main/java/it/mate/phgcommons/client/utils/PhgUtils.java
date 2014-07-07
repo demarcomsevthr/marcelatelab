@@ -14,6 +14,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -184,6 +185,18 @@ public class PhgUtils {
   
   public static native void setLocalStorageItem(String name, String value) /*-{
     $wnd.localStorage[name] = value;
+  }-*/;
+
+  public static native JsArrayString getLocalStorageKeys() /*-{
+    var results = [];
+    for (var it = 0; it < localStorage.length; it++){
+      results[it] = $wnd.localStorage.key(it);
+    }
+    return results;
+  }-*/;
+
+  public static native void removeLocalStorageItem(String key) /*-{
+    $wnd.localStorage.removeItem(key);
   }-*/;
 
   public static native String getWindowSetting(String name) /*-{
@@ -418,6 +431,12 @@ public class PhgUtils {
     if ("default".equals(language)) {
       language = getNavigatorLanguage();
     }
+    if (language != null) {
+      if (language.length() > 2) {
+        language = language.substring(0, 2);
+      }
+      language = language.toLowerCase();
+    }
     return language;
   }
   
@@ -453,19 +472,13 @@ public class PhgUtils {
     String lang = getAppLocalLanguageImpl();
     if (lang == null || lang.trim().length() == 0) {
       lang = getCurrentLanguage();
-      if (lang != null) {
-        if (lang.length() > 2) {
-          lang = lang.substring(0, 2);
-        }
-        lang = lang.toLowerCase();
-      }
     }
     return lang;
   }
   
-  private static native String getAppLocalLanguageImpl() /*-{
+  public static native String getAppLocalLanguageImpl() /*-{
     if (typeof($wnd.getAppLocalLanguage) == 'undefined') {
-      return null;
+      return $wnd.localStorage.getItem("app-local-language");
     }
     return $wnd.getAppLocalLanguage();
   }-*/;
