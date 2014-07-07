@@ -44,6 +44,10 @@ body {
   background: transparent url('main/images/ajax-loader-24-1.gif') no-repeat 92% 42%;
 }	
 
+.ui-HeaderPanel-center-home {
+  background: transparent url('main/images/home-24.png') no-repeat 92% 42%;
+}	
+
 .mgwt-ScrollPanel-container {
   width: 100%;
 }
@@ -134,6 +138,13 @@ body {
   height: 32px;
   padding-right: 24px;
   margin-top: 4px;  
+}
+
+.ui-homeBtn {
+  background: url(main/images/home-24.png) no-repeat;
+  height: 32px;
+  padding-right: 24px;
+  margin-top: 10px;  
 }
 
 .ui-changeUserBtn {

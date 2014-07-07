@@ -168,7 +168,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    startTimersAndHistory(new FindSomministrazioneScadutaDelegate(historyHandler));
+    startTimersAndHistory(new FindSomministrazioniScaduteDelegate(historyHandler));
     
   }
   
@@ -335,7 +335,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   // 15/05/2014
-  private void startTimersAndHistory(final FindSomministrazioneScadutaDelegate findSomministrazioneScadutaDelegate) {
+  private void startTimersAndHistory(final FindSomministrazioniScaduteDelegate findSomministrazioneScadutaDelegate) {
     
     // setting dao error delegate
     getPrescrizioniDao().setErrorDelegate(new Delegate<String>() {
@@ -379,7 +379,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     this.alertsEnabled = enabled;
   }
   
-  protected class FindSomministrazioneScadutaDelegate implements Delegate<Void> {
+  protected class FindSomministrazioniScaduteDelegate implements Delegate<Void> {
     
     private boolean firstRun = true;
     
@@ -387,7 +387,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     private MainPlace defaultPlace = new MainPlace();
     
-    protected FindSomministrazioneScadutaDelegate(MGWTPlaceHistoryHandler historyHandler) {
+    protected FindSomministrazioniScaduteDelegate(MGWTPlaceHistoryHandler historyHandler) {
       this.historyHandler = historyHandler;
     }
 
@@ -395,19 +395,42 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     public void execute(Void element) {
       if (!alertsEnabled)
         return;
-//    PhonegapLog.log("checking somministrazione scaduta...");
-      MainController.getInstance().findPrimaSomministrazioneScaduta(new Delegate<Somministrazione>() {
-        public void execute(Somministrazione somministrazione) {
+      MainController.getInstance().findSomministrazioniScadute(new Delegate<List<Somministrazione>>() {
+        public void execute(final List<Somministrazione> somministrazioni) {
           if (firstRun) {
-            if (somministrazione != null) {
-//            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
-              defaultPlace = new MainPlace(MainPlace.REMINDER_EDIT, somministrazione);
+            if (somministrazioni != null && somministrazioni.size() > 0) {
+              
+              if (somministrazioni.size() == 1) {
+                defaultPlace = new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0));
+              } else {
+                
+                defaultPlace = new MainPlace(MainPlace.REMINDER_LIST);
+                GwtUtils.deferredExecution(500, new Delegate<Void>() {
+                  public void execute(Void element) {
+                    PhgDialogUtils.showMessageDialog("Il sistema ha trovato diverse somministrazioni scadute. Vuoi annullarle tutte in blocco?", "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+                      public void execute(Integer btn) {
+                        if (btn == 1) {
+                          MainController.getInstance().annullaSomministrazioni(somministrazioni, new Delegate<Void>() {
+                            public void execute(Void element) {
+                              PhgDialogUtils.showMessageDialog("Somministrazioni annullate");
+                              getPlaceController().goTo(new MainPlace());
+                            }
+                          });
+                        } else {
+                          getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0)));
+                        }
+                      }
+                    });
+                  }
+                });
+                
+              }
+              
             }
             initHistoryHandler(historyHandler, defaultPlace);
           } else {
-            if (somministrazione != null) {
-//            PhonegapLog.log("found somministrazione scaduta " + somministrazione);
-              getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
+            if (somministrazioni != null && somministrazioni.size() > 0) {
+              getPlaceController().goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0)));
             }
           }
           firstRun = false;

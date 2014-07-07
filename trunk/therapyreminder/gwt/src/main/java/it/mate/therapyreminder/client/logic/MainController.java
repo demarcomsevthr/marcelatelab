@@ -62,14 +62,14 @@ public class MainController {
     delegate.execute(prescrizione);
   }
   
-  public void findPrimaSomministrazioneScaduta(final Delegate<Somministrazione> delegate) {
+  public void findSomministrazioniScadute(final Delegate<List<Somministrazione>> delegate) {
     Date dataRiferimento = new Date();
     dao.findSomministrazioniScadute(dataRiferimento, new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni == null || somministrazioni.size() <= 0) {
           delegate.execute(null);
         } else {
-          delegate.execute(somministrazioni.get(0));
+          delegate.execute(somministrazioni);
         }
       }
     });
@@ -89,6 +89,26 @@ public class MainController {
         }
       }
     });
+  }
+  
+  public void annullaSomministrazioni(final List<Somministrazione> somministrazioni, Delegate<Void> resultDelegate) {
+    iterateSomministrazioniForAnnullamento(somministrazioni.iterator(), resultDelegate);
+  }
+  
+  private void iterateSomministrazioniForAnnullamento(final Iterator<Somministrazione> it, final Delegate<Void> resultDelegate) {
+    if (it.hasNext()) {
+      Somministrazione somministrazione = it.next();
+      somministrazione.setAnnullata();
+      updateSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+        public void execute(Somministrazione element) {
+          iterateSomministrazioniForAnnullamento(it, resultDelegate);
+        }
+      }, new Delegate<Somministrazione>() {
+        public void execute(Somministrazione element) { }
+      });
+    } else {
+      resultDelegate.execute(null);
+    }
   }
   
   public void updateSomministrazione(final Somministrazione newSomministrazione, final Delegate<Somministrazione> somministrazioneAggiornataDelegate, 

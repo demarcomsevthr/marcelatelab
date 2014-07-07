@@ -368,6 +368,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     } else {
       view.getTitle().removeStyleName("ui-HeaderPanel-center-waiting");
     }
+    setVisibleHomeBtn(!flag);
   }
   
   private void initBaseMgwtView(boolean home) {
@@ -380,11 +381,9 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (home) {
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
-    /*
     if (!home) {
-      setVisibleOptionsBtn(true);
+      setVisibleHomeBtn(true);
     }
-    */
   }
   
   private void setVisibleOptionsBtn(boolean visible) {
@@ -397,6 +396,21 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
       view.getHeaderPanel().setRightWidget(optionsBtn);
+    } else {
+      view.getHeaderPanel().setRightWidget(new Label());
+    }
+  }
+  
+  private void setVisibleHomeBtn(boolean visible) {
+    if (visible) {
+      TouchImage homeBtn = new TouchImage();
+      homeBtn.addStyleName("ui-homeBtn");
+      homeBtn.addTouchEndHandler(new TouchEndHandler() {
+        public void onTouchEnd(TouchEndEvent event) {
+          goToHome();
+        }
+      });
+      view.getHeaderPanel().setRightWidget(homeBtn);
     } else {
       view.getHeaderPanel().setRightWidget(new Label());
     }
