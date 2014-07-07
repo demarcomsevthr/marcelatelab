@@ -18,14 +18,18 @@ public class ContattoTx implements Contatto, IsMappable {
   
   private String telefono;
   
+  private String indirizzo;
+  
+  private String orari;
+  
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
-    if (id != null) map.put("id", id);
-    if (tipo != null) map.put("tipo", tipo);
-    if (nome != null) map.put("nome", nome);
-    if (email != null) map.put("email", email);
-    if (telefono != null) map.put("telefono", telefono);
+    map.put("id", id);
+    map.put("tipo", tipo);
+    map.put("nome", nome);
+    map.put("email", email);
+    map.put("telefono", telefono);
     return map;
   }
 
@@ -60,6 +64,8 @@ public class ContattoTx implements Contatto, IsMappable {
       this.nome = that.nome;
       this.email = that.email;
       this.telefono = that.telefono;
+      this.indirizzo = that.indirizzo;
+      this.orari = that.orari;
     }
   }
   
@@ -78,6 +84,10 @@ public class ContattoTx implements Contatto, IsMappable {
       if (!ModelUtils.equals(this.email, that.email))
         return false;
       if (!ModelUtils.equals(this.telefono, that.telefono))
+        return false;
+      if (!ModelUtils.equals(this.indirizzo, that.indirizzo))
+        return false;
+      if (!ModelUtils.equals(this.orari, that.orari))
         return false;
       return true;
     }
@@ -122,6 +132,22 @@ public class ContattoTx implements Contatto, IsMappable {
 
   public void setTelefono(String phoneNumber) {
     this.telefono = phoneNumber;
+  }
+
+  public String getIndirizzo() {
+    return indirizzo;
+  }
+
+  public void setIndirizzo(String indirizzo) {
+    this.indirizzo = indirizzo;
+  }
+
+  public String getOrari() {
+    return orari;
+  }
+
+  public void setOrari(String orari) {
+    this.orari = orari;
   }
   
 }

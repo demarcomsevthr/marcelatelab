@@ -79,6 +79,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   
   @UiField MTextBox titleBox;
   @UiField PhCalendarBox inizioBox;
+  @UiField PhCalendarBox fineBox;
   @UiField TouchCombo tipoRicorrenzaCombo;
   @UiField TouchCombo tipoOrariCombo;
   @UiField Panel orariRegolariPanel;
@@ -195,6 +196,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       
       titleBox.setValue(prescrizione.getNome());
       inizioBox.setValue(prescrizione.getDataInizio());
+      fineBox.setValue(prescrizione.getDataFine());
       qtaBox.setValue(prescrizione.getQuantita());
       umCombo.setValue(prescrizione.getCodUdM());
       
@@ -492,6 +494,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     prescrizione.setId(oldPrescrizione.getId());
     prescrizione.setNome(titleBox.getValue());
     prescrizione.setDataInizio(inizioBox.getValue());
+    prescrizione.setDataFine(fineBox.getValue());
     prescrizione.setQuantita(qtaUnica);
     prescrizione.setCodUdM(umCombo.getValue());
     String tipoRicorrenza = tipoRicorrenzaCombo.getValue();

@@ -279,12 +279,25 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
       setHeaderWaiting(true);
+      
+      //TODO
+      MainController.getInstance().findSomministrazioniNonEseguiteInMemoria(new Delegate<List<Somministrazione>>() {
+        public void execute(List<Somministrazione> results) {
+          setHeaderWaiting(false);
+          if (results != null && results.size() > 0) {
+            view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
+          }
+        }
+      });
+      
+      /*
       dao.findSomministrazioniNonEseguite(new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> results) {
           setHeaderWaiting(false);
           view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
         }
       });
+      */
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
       if (place.getModel() != null) {

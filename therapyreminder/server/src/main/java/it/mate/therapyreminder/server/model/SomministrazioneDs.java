@@ -65,12 +65,14 @@ public class SomministrazioneDs implements HasKey, Somministrazione {
   
   //////////////////////////////////////////////////////////////////////
 
+  
   @Override
   public String toString() {
     return "SomministrazioneDs [id=" + id + ", localId=" + localId + ", data=" + data + ", quantita=" + quantita + ", orario=" + orario + ", stato=" + stato
-        + ", devInfoId=" + devInfoId + ", accountId=" + accountId + ", nomeTutor=" + nomeTutor + ", emailTutor=" + emailTutor + ", telefonoTutor="
-        + telefonoTutor + "]";
+        + ", language=" + language + ", devInfoId=" + devInfoId + ", accountId=" + accountId + ", nomeTutor=" + nomeTutor + ", emailTutor=" + emailTutor
+        + ", telefonoTutor=" + telefonoTutor + ", nomeFarmaco=" + nomeFarmaco + "]";
   }
+
 
   @Override
   public void setPrescrizione(Prescrizione prescrizione) {

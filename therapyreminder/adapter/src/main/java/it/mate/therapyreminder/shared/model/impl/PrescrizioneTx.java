@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.user.datepicker.client.CalendarUtil;
+
 @SuppressWarnings("serial")
 public class PrescrizioneTx implements Prescrizione, IsMappable {
   
@@ -52,6 +54,9 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
 
   // serve solo nel dao
   private Integer idTutor;
+
+  // serve solo nel MainController
+  private Date dataLimiteSviluppoSomministrazioni;
   
   
   @Override
@@ -227,6 +232,17 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
     this.dataInizio = dataInizio;
   }
 
+  public Date getActualDataFine() {
+    Date actualDataFine = null;
+    if (dataFine != null) {
+      actualDataFine = CalendarUtil.copyDate(dataFine);
+      actualDataFine.setHours(23);
+      actualDataFine.setMinutes(59);
+      actualDataFine.setSeconds(59);
+    }
+    return actualDataFine;
+  }
+
   public Date getDataFine() {
     return dataFine;
   }
@@ -372,6 +388,14 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   
   public Integer getIdTutor() {
     return idTutor;
+  }
+
+  public Date getDataLimiteSviluppoSomministrazioni() {
+    return dataLimiteSviluppoSomministrazioni;
+  }
+
+  public void setDataLimiteSviluppoSomministrazioni(Date dataLimiteSviluppoSomministrazioni) {
+    this.dataLimiteSviluppoSomministrazioni = dataLimiteSviluppoSomministrazioni;
   }
   
 }

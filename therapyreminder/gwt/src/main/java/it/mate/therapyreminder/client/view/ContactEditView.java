@@ -36,6 +36,9 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField PhTextBox nameBox;
   @UiField PhTextBox emailBox;
   @UiField PhTextBox phoneBox;
+  @UiField Panel doctorOnlyPanel;
+  @UiField PhTextBox addressBox;
+  @UiField PhTextBox hoursBox;
   
   Contatto originalModel;
   
@@ -60,6 +63,13 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
       nameBox.setValue(originalModel.getNome());
       emailBox.setValue(originalModel.getEmail());
       phoneBox.setValue(originalModel.getTelefono());
+      
+      if (originalModel.getTipo().equals(Contatto.TIPO_MEDICO)) {
+        doctorOnlyPanel.setVisible(true);
+        addressBox.setValue(originalModel.getIndirizzo());
+        hoursBox.setValue(originalModel.getOrari());
+      }
+      
     }
   }
 
@@ -111,6 +121,8 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
     modifiedModel.setNome(nameBox.getValue());
     modifiedModel.setEmail(emailBox.getValue());
     modifiedModel.setTelefono(phoneBox.getValue());
+    modifiedModel.setIndirizzo(addressBox.getValue());
+    modifiedModel.setOrari(hoursBox.getValue());
     if (modifiedModel.getNome().trim().equals("")) {
       if (validate) {
         PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ContactEditView_flushModel_msg1());

@@ -33,13 +33,6 @@
 
         <hr class="ui-view-separator"/>
         
-        <g:Label text="Data inizio:" addStyleNames="ui-field-label">
-          <ui:attribute name="text" description="text" key="startDateLabel.text"/>
-        </g:Label>
-        <ph:PhCalendarBox ui:field="inizioBox" addStyleNames="ui-app-calbox"/>
-        
-        <hr class="ui-view-separator"/>
-        
         <g:HTML HTML="Quantità da assumere:" addStyleNames="ui-field-label">
           <ui:attribute name="HTML" description="text" key="qtaLabel.html"/>
         </g:HTML>
@@ -115,6 +108,26 @@
     <gc:StatePanel stateId="ricorrenzaPrescrizionePanel" ui:field="ricorrenzaPrescrizionePanel">
       <g:HTMLPanel>
       
+        <g:HorizontalPanel width="100%" spacing="0">
+        
+          <g:VerticalPanel spacing="0">
+            <g:Label text="Data inizio:" addStyleNames="ui-field-label">
+              <ui:attribute name="text" description="text" key="startDateLabel.text"/>
+            </g:Label>
+            <ph:PhCalendarBox ui:field="inizioBox" addStyleNames="ui-app-calbox"/>
+          </g:VerticalPanel>
+          
+          <g:VerticalPanel spacing="0">
+            <g:Label text="Data fine:" addStyleNames="ui-field-label">
+              <ui:attribute name="text" description="text" key="endDateLabel.text"/>
+            </g:Label>
+            <ph:PhCalendarBox ui:field="fineBox" addStyleNames="ui-app-calbox"/>
+          </g:VerticalPanel>
+        
+        </g:HorizontalPanel>
+        
+        <hr class="ui-view-separator"/>
+        
         <g:Label text="Tipo di ricorrenza:" addStyleNames="ui-field-label">
           <ui:attribute name="text" description="text" key="tipoRicorrenzaLabel.text"/>
         </g:Label>

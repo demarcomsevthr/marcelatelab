@@ -105,5 +105,11 @@ public interface Prescrizione extends Serializable {
   public Contatto getTutor();
   
   public void setTutor(Contatto tutor);
+  
+  public Date getActualDataFine();
+  
+  public Date getDataLimiteSviluppoSomministrazioni();
+
+  public void setDataLimiteSviluppoSomministrazioni(Date dataLimiteSviluppoSomministrazioni);
 
 }

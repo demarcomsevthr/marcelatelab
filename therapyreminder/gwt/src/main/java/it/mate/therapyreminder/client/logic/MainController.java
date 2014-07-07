@@ -132,6 +132,77 @@ public class MainController {
       }
     });
   }
+  
+  
+  public void findSomministrazioniNonEseguiteInMemoria(final Delegate<List<Somministrazione>> resultsDelegate) {
+    Date today = new Date();
+    dao.findAllPrescrizioniAttive(today, new Delegate<List<Prescrizione>>() {
+      public void execute(List<Prescrizione> prescrizioniAttive) {
+        if (prescrizioniAttive != null) {
+          List<Somministrazione> results = new ArrayList<Somministrazione>();
+          iteratePrescrizioniAttiveForSviluppoInMemoria(prescrizioniAttive.iterator(), results, resultsDelegate);
+        }
+      }
+    });
+  }
+  
+  private void iteratePrescrizioniAttiveForSviluppoInMemoria(final Iterator<Prescrizione> it, final List<Somministrazione> results, final Delegate<List<Somministrazione>> resultsDelegate) {
+    if (it.hasNext()) {
+      Prescrizione prescrizione = it.next();
+      setDataLimiteSviluppoSomministrazioniInMemoria(prescrizione);
+      sviluppaSomministrazioniInMemoria(prescrizione, new Delegate<List<Somministrazione>>() {
+        public void execute(List<Somministrazione> somministrazioni) {
+          if (somministrazioni != null && somministrazioni.size() > 0) {
+            results.addAll(somministrazioni);
+          }
+          iteratePrescrizioniAttiveForSviluppoInMemoria(it, results, resultsDelegate);
+        }
+      });
+    } else {
+      resultsDelegate.execute(results);
+    }
+  }
+  
+  private void setDataLimiteSviluppoSomministrazioniInMemoria(Prescrizione prescrizione) {
+    Date dataLimiteSviluppoSomministrazioni = new Date();
+    if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
+      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, +30);
+      prescrizione.setDataLimiteSviluppoSomministrazioni(dataLimiteSviluppoSomministrazioni);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_SETTIMANALE)) {
+      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, +90);
+      prescrizione.setDataLimiteSviluppoSomministrazioni(dataLimiteSviluppoSomministrazioni);
+    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_MENSILE)) {
+      CalendarUtil.addMonthsToDate(dataLimiteSviluppoSomministrazioni, +12);
+      prescrizione.setDataLimiteSviluppoSomministrazioni(dataLimiteSviluppoSomministrazioni);
+    }
+  }
+
+  public void sviluppaSomministrazioniInMemoria(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> resultsDelegate) {
+    dao.findSomministrazioniSchedulateByPrescrizione(prescrizione, new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> somministrazioniPersistenti) {
+        Date dataUltimaSomministrazione = CalendarUtil.copyDate(prescrizione.getDataInizio());
+        CalendarUtil.addDaysToDate(dataUltimaSomministrazione, -1);
+        if (somministrazioniPersistenti != null && somministrazioniPersistenti.size() > 0) {
+          dataUltimaSomministrazione = CalendarUtil.copyDate(somministrazioniPersistenti.get(somministrazioniPersistenti.size() - 1).getData());
+        }
+        if (prescrizione.getDataFine() != null) {
+          if (dataUltimaSomministrazione.after(prescrizione.getDataFine())) {
+            resultsDelegate.execute(somministrazioniPersistenti);
+            return;
+          }
+        }
+        final boolean inMemory = true;
+        sviluppaRicorrenzaSuccessiva(prescrizione, dataUltimaSomministrazione, somministrazioniPersistenti, inMemory, new Delegate<List<Somministrazione>>() {
+          public void execute(List<Somministrazione> somministrazioniTotali) {
+            resultsDelegate.execute(somministrazioniTotali);
+          }
+        });
+        
+      }
+    });
+  }
+  
+  
 
   private Delegate<Prescrizione> sviluppaSomministrazioni$completionDelegate = null;
   
@@ -161,17 +232,19 @@ public class MainController {
   }
   
   private void sviluppaSomministrazioniAPartireDa(final Prescrizione prescrizione, Date dataUltimaSomministrazione) {
+    
+    final boolean inMemory = false;
+    
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
+          
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
             public void execute(List<Somministrazione> somministrazioniInRemoto) {
-              
               if (somministrazioniInRemoto == null) {
                 sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
               } else {
-                
                 final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
                 innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
                     public void execute(final Iterator<Somministrazione> it) {
@@ -195,42 +268,30 @@ public class MainController {
                   }
                 );
                 innerDelegate.get().execute(somministrazioniInRemoto.iterator());
-
-                /*
-                for (Somministrazione somministrazioneInRemoto : somministrazioniInRemoto) {
-                  if (somministrazioneInRemoto.getRemoteId() != null) {
-                    dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
-                      public void execute(Somministrazione updateRemoteSomministrazione) {
-                        PhgUtils.log("updated remote somministrazione");
-                        sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
-                      }
-                    });
-                  }
-                }
-                */
-                
               }
             }
           });
+          
         } else {
           sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
         }
       }
     };
+
     if (dataUltimaSomministrazione == null) {
       iterateDosaggiForInsert(prescrizione, prescrizione.getDataInizio(), prescrizione.getDosaggi().iterator(), 
-          new ArrayList<Somministrazione>(), new Delegate<List<Somministrazione>>() {
+          new ArrayList<Somministrazione>(), inMemory, new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> somministrazioni) {
-          sviluppaRicorrenzaSuccessiva(prescrizione, prescrizione.getDataInizio(), somministrazioni, completionDelegate);
+          sviluppaRicorrenzaSuccessiva(prescrizione, prescrizione.getDataInizio(), somministrazioni, inMemory, completionDelegate);
         }
       });
     } else {
-      sviluppaRicorrenzaSuccessiva(prescrizione, dataUltimaSomministrazione, new ArrayList<Somministrazione>(), completionDelegate);
+      sviluppaRicorrenzaSuccessiva(prescrizione, dataUltimaSomministrazione, new ArrayList<Somministrazione>(), inMemory, completionDelegate);
     }
   }
   
   private void sviluppaRicorrenzaSuccessiva(final Prescrizione prescrizione, Date dataUltimaSomministrazione,
-      List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> completionDelegate) {
+      List<Somministrazione> somministrazioni, final boolean inMemory, final Delegate<List<Somministrazione>> completionDelegate) {
     final Date nextDataSomministrazione = CalendarUtil.copyDate(dataUltimaSomministrazione);
     if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
       int incremento = prescrizione.getValoreRicorrenza();
@@ -247,26 +308,26 @@ public class MainController {
       completionDelegate.execute(somministrazioni);
       return;
     }
-    if (prescrizione.getDataFine() != null && nextDataSomministrazione.after(prescrizione.getDataFine())) {
+    if (prescrizione.getActualDataFine() != null && nextDataSomministrazione.after(prescrizione.getActualDataFine())) {
       completionDelegate.execute(somministrazioni);
       return;
     }
     iterateDosaggiForInsert(prescrizione, nextDataSomministrazione, prescrizione.getDosaggi().iterator(), 
-        somministrazioni, new Delegate<List<Somministrazione>>() {
+        somministrazioni, inMemory, new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
-        sviluppaRicorrenzaSuccessiva(prescrizione, nextDataSomministrazione, somministrazioni, completionDelegate);
+        sviluppaRicorrenzaSuccessiva(prescrizione, nextDataSomministrazione, somministrazioni, inMemory, completionDelegate);
       }
     });
   }
   
   private void iterateDosaggiForInsert(final Prescrizione prescrizione, final Date dataSomministrazione, final Iterator<Dosaggio> it, 
-      final List<Somministrazione> results, final Delegate<List<Somministrazione>> completionDelegate) {
+      final List<Somministrazione> results, final boolean inMemory, final Delegate<List<Somministrazione>> completionDelegate) {
     if (it.hasNext()) {
       Dosaggio dosaggio = it.next();
       Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
       if (dataSomministrazione.before(new Date())) {
-        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, completionDelegate);
+        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
         return;
       }
       somministrazione.setData(CalendarUtil.copyDate(dataSomministrazione));
@@ -276,13 +337,22 @@ public class MainController {
         qta = prescrizione.getQuantita();
       somministrazione.setQuantita(qta);
       somministrazione.setSchedulata();
-      dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
-        public void execute(Somministrazione somministrazione) {
-          saveCalEvent(somministrazione);
-          results.add(somministrazione);
-          iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, completionDelegate);
-        }
-      });
+      
+      if (inMemory) {
+        Date now = new Date();
+        somministrazione.setId((int)now.getTime());
+        results.add(somministrazione);
+        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+      } else {
+        dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+          public void execute(Somministrazione somministrazione) {
+            saveCalEvent(somministrazione);
+            results.add(somministrazione);
+            iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+          }
+        });
+      }
+      
     } else {
       completionDelegate.execute(results);
     }
@@ -292,6 +362,9 @@ public class MainController {
     Date dataLimiteSviluppoSomministrazioni = new Date();
     if (prescrizione.getValoreRicorrenza() == null || prescrizione.getValoreRicorrenza() <= 0) {
       throw new ServiceException("Date range not set");
+    }
+    if (prescrizione.getDataLimiteSviluppoSomministrazioni() != null) {
+      return prescrizione.getDataLimiteSviluppoSomministrazioni();
     }
     if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
       int limite = 5 * prescrizione.getValoreRicorrenza();
@@ -303,26 +376,9 @@ public class MainController {
       int limite = 5 * prescrizione.getValoreRicorrenza();
       CalendarUtil.addMonthsToDate(dataLimiteSviluppoSomministrazioni, limite);
     }
-    
-    /*
-    final int DEFAULT_SVILUPPO_GIORNALIERO = 5;
-    final int DEFAULT_SVILUPPO_SETTIMANALE = 5;
-    final int DEFAULT_SVILUPPO_MENSILE = 5;
-    if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_GIORNALIERA)) {
-      int limite = Math.max(DEFAULT_SVILUPPO_GIORNALIERO, prescrizione.getValoreRicorrenza());
-      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, limite);
-    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_SETTIMANALE)) {
-      int limite = Math.max(DEFAULT_SVILUPPO_SETTIMANALE, prescrizione.getValoreRicorrenza());
-      CalendarUtil.addDaysToDate(dataLimiteSviluppoSomministrazioni, limite * 7);
-    } else if (prescrizione.getTipoRicorrenza().equals(Prescrizione.TIPO_RICORRENZA_MENSILE)) {
-      int limite = Math.max(DEFAULT_SVILUPPO_MENSILE, prescrizione.getValoreRicorrenza());
-      CalendarUtil.addMonthsToDate(dataLimiteSviluppoSomministrazioni, limite);
-    }
-    */
-    
     return dataLimiteSviluppoSomministrazioni;
   }
-
+  
   public void cancellaSomministrazioni(final Prescrizione prescrizione, final Delegate<Void> endDelegate) {
     dao.findSomministrazioniSchedulateByPrescrizione(prescrizione, new Delegate<List<Somministrazione>>() {
       public void execute(final List<Somministrazione> somministrazioni) {

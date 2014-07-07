@@ -27,5 +27,13 @@ public interface Contatto extends Serializable {
   public void setNome(String name);
 
   public String getNome();
+  
+  public String getIndirizzo();
+
+  public void setIndirizzo(String indirizzo);
+
+  public String getOrari();
+
+  public void setOrari(String orari);
 
 }
