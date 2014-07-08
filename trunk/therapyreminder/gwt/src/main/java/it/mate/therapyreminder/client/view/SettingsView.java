@@ -40,6 +40,8 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     public boolean isOnlineMode();
     public void goToAccountEditView(Account account);
     public void goToAbout();
+    public void setUseCalendar(boolean value);
+    public boolean isUseCalendar();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -51,6 +53,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiField PhCheckBox cbxOnlineMode;
   @UiField Panel accountPanel;
   @UiField TouchCombo langCmb;
+  @UiField PhCheckBox cbxUserCalendar;
   
   public SettingsView() {
     initUI();
@@ -79,6 +82,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     String localLanguage = PhgUtils.getAppLocalLanguage();
     langCmb.addItem("en", "English", "en".equals(localLanguage));
     langCmb.addItem("it", "Italiano", "it".equals(localLanguage));
+    cbxUserCalendar.setValue(getPresenter().isUseCalendar());
   }
 
   @Override
@@ -201,6 +205,11 @@ public class SettingsView extends BaseMgwtView <Presenter> {
         }
       });
     }
+  }
+  
+  @UiHandler ("cbxUserCalendar")
+  public void onCbxUserCalendar(ValueChangeEvent<Boolean> event) {
+    getPresenter().setUseCalendar(event.getValue());
   }
   
   @UiHandler ("accountBtn")

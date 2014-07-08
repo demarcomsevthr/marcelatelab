@@ -29,7 +29,8 @@
         <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1">
           <ui:attribute name="text" description="text" key="titleLabel.text"/>
         </g:Label>
-        <ph:PhTextBox ui:field="titleBox" addStyleNames="ui-app-textbox, ui-title-box"/>
+        <!-- 08/07/2014 type = email: workaround per disabilitare autocompletamento -->
+        <ph:PhTextBox ui:field="titleBox" type="email" addStyleNames="ui-app-textbox, ui-title-box"/>
 
         <hr class="ui-view-separator"/>
         

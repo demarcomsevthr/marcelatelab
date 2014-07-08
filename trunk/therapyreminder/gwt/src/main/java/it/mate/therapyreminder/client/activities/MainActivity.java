@@ -715,6 +715,14 @@ public class MainActivity extends MGWTAbstractActivity implements
     return MainController.getInstance().isOnlineMode();
   }
   
+  public void setUseCalendar(boolean value) {
+    MainController.getInstance().setUseCalendar(value);
+  }
+  
+  public boolean isUseCalendar() {
+    return MainController.getInstance().isUseCalendar();
+  }
+  
   private void ensureDevInfoId() {
     String devInfoId = MainController.getInstance().getDevInfoIdFromLocalStorage();
     if (devInfoId != null)

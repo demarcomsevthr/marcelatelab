@@ -482,6 +482,15 @@ public class MainController {
     return ("true".equalsIgnoreCase(value));
   }
   
+  public void setUseCalendar(boolean value) {
+    PhgUtils.setLocalStorageItem("useCalendar", ""+value);
+  }
+  
+  public boolean isUseCalendar() {
+    String value = PhgUtils.getLocalStorageItem("useCalendar");
+    return ("true".equalsIgnoreCase(value));
+  }
+  
   public void setDevInfoIdInLocalStorage(String devInfoId) {
     PhgUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
@@ -666,7 +675,33 @@ public class MainController {
   }
 
 
-  private CalendarEvent instantiateCalEvent(Prescrizione prescrizione, Somministrazione somministrazione) {
+  private void saveCalEvent (Somministrazione somministrazione) {
+    CalendarEvent calEvent = createCalEvent(somministrazione.getPrescrizione(), somministrazione, false);
+    PhonegapLog.log("creating " + calEvent);
+    if (OsDetectionUtils.isDesktop())
+      return;
+    if (LocalNotificationsPlugin.isInstalled()) {
+      LocalNotificationsPlugin.createEvent(createCalEvent(somministrazione.getPrescrizione(), somministrazione, true));
+    }
+    if (isUseCalendar()) {
+      CalendarPlugin.createEvent(calEvent);
+    }
+  }
+  
+  private void deleteCalEvent (Somministrazione somministrazione) {
+    CalendarEvent calEvent = createCalEvent(somministrazione.getPrescrizione(), somministrazione, false);
+    PhonegapLog.log("deleting " + calEvent);
+    if (OsDetectionUtils.isDesktop())
+      return;
+    if (LocalNotificationsPlugin.isInstalled()) {
+      LocalNotificationsPlugin.deleteEvent(createCalEvent(somministrazione.getPrescrizione(), somministrazione, true));
+    }
+    if (isUseCalendar()) {
+      CalendarPlugin.deleteEvent(calEvent);
+    }
+  }
+  
+  private CalendarEvent createCalEvent(Prescrizione prescrizione, Somministrazione somministrazione, boolean isNotification) {
     CalendarEvent calEvent = new CalendarEvent();
     
     if (somministrazione != null) {
@@ -698,7 +733,7 @@ public class MainController {
     
     calEvent.setLocation("#"+prescrizione.getId());
     
-    if (LocalNotificationsPlugin.isInstalled()) {
+    if (LocalNotificationsPlugin.isInstalled() && isNotification) {
       calEvent.setNotes("Tap here");
       if (somministrazione != null) {
         long notId = prescrizione.getId() * 100000 + somministrazione.getId();
@@ -707,30 +742,6 @@ public class MainController {
     }
     
     return calEvent;
-  }
-  
-  private void saveCalEvent (Somministrazione somministrazione) {
-    CalendarEvent calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
-    PhonegapLog.log("creating " + calEvent);
-    if (OsDetectionUtils.isDesktop())
-      return;
-    if (LocalNotificationsPlugin.isInstalled()) {
-      LocalNotificationsPlugin.createEvent(calEvent);
-    } else {
-      CalendarPlugin.createEvent(calEvent);
-    }
-  }
-  
-  private void deleteCalEvent (Somministrazione somministrazione) {
-    CalendarEvent calEvent = instantiateCalEvent(somministrazione.getPrescrizione(), somministrazione);
-    PhonegapLog.log("deleting " + calEvent);
-    if (OsDetectionUtils.isDesktop())
-      return;
-    if (LocalNotificationsPlugin.isInstalled()) {
-      LocalNotificationsPlugin.deleteEvent(calEvent);
-    } else {
-      CalendarPlugin.deleteEvent(calEvent);
-    }
   }
   
   public void purgeNotificationIds(List<String> ids) {
@@ -756,7 +767,7 @@ public class MainController {
   }
 
   public void findCalEvents (Prescrizione prescrizione) {
-    CalendarEvent calEvent = instantiateCalEvent(prescrizione, null);
+    CalendarEvent calEvent = createCalEvent(prescrizione, null, false);
     PhonegapLog.log("finding " + calEvent);
     if (OsDetectionUtils.isDesktop())
       return;
