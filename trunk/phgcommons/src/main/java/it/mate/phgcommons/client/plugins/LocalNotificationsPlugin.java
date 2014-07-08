@@ -122,5 +122,20 @@ public class LocalNotificationsPlugin {
   protected static interface JSOCallback {
     public void handleEvent(JavaScriptObject jso);
   }
+  
+  public static interface JSOEventCallback {
+    public void handleEvent(String id, String state, String json);
+  }
+  
+  public static void setOnCancel (JSOEventCallback callback) {
+    setOnCancelImpl(callback);
+  }
+  
+  private static native void setOnCancelImpl (JSOEventCallback callback) /*-{
+    var jsCallback = $entry(function(id, state, json) {
+      callback.@it.mate.phgcommons.client.plugins.LocalNotificationsPlugin.JSOEventCallback::handleEvent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(id, state, json);
+    });
+    $wnd.plugin.notification.local.oncancel = jsCallback;
+  }-*/;
 
 }
