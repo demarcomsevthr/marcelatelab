@@ -352,6 +352,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       }
     });
     
+    if (!OsDetectionUtils.isDesktop()) {
+      LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
+        public void handleEvent(String id, String state, String json) {
+          PhgUtils.log("RECEIVED CANCEL NOTIFICATION EVENT: id="+id);
+        }
+      });
+    }
+    
     // starting timers
     final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
     timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {

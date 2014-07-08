@@ -26,12 +26,12 @@
     <g:Label text="Email:" addStyleNames="ui-field-label ui-field-label-1">
       <ui:attribute name="text" description="text" key="emailLabel.text"/>
     </g:Label>
-    <ph:PhTextBox ui:field="emailBox" addStyleNames="ui-app-textbox, ui-email-box"/>
+    <ph:PhTextBox ui:field="emailBox" type="email" addStyleNames="ui-app-textbox, ui-email-box"/>
 
     <g:Label text="Phone number:" addStyleNames="ui-field-label ui-field-label-1">
       <ui:attribute name="text" description="text" key="phoneLabel.text"/>
     </g:Label>
-    <ph:PhTextBox ui:field="phoneBox" addStyleNames="ui-app-textbox, ui-phone-box"/>
+    <ph:PhTextBox ui:field="phoneBox" type="tel" addStyleNames="ui-app-textbox, ui-phone-box"/>
   
   </g:HTMLPanel>
   
