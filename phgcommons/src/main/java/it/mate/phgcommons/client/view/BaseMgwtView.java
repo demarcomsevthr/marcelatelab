@@ -2,12 +2,18 @@ package it.mate.phgcommons.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.IterationUtil;
+import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
+import it.mate.phgcommons.client.utils.IterationUtilSimple;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.WebkitCssUtil;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -179,5 +185,36 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   protected void refreshScrollPanel() {
     getScrollPanel().refresh();
   }
-
+  
+  protected void disableMainScrolling() {
+    getScrollPanel().setScrollingEnabledX(false);
+    getScrollPanel().setScrollingEnabledY(false);
+  }
+  
+  protected void adjustInnerScrollPanelHeight(final ScrollPanel innerScrollPanel) {
+    
+    // In alcuni casi non setta bene le altezze al primo run, quindi uso l'escamotage di ripetere 3 volte l'operazione
+    IterationUtilSimple.create(3, new ItemDelegate<Integer>() {
+      public void handleItem(Integer item, final IterationUtil<Integer> iteration) {
+        
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            try {
+              innerScrollPanel.setScrollingEnabledY(true);
+              int actualHeight = Window.getClientHeight() - innerScrollPanel.getAbsoluteTop();
+              innerScrollPanel.getElement().getStyle().setHeight(actualHeight, Unit.PX);
+              innerScrollPanel.refresh();
+              PhgUtils.log("windowHeight = " + Window.getClientHeight() + " resultsPanelTop = " + innerScrollPanel.getAbsoluteTop() + " actualHeight = " + actualHeight);
+              iteration.next();
+            } catch (Exception ex) {
+              PhgUtils.log("Error " + ex.getClass().getName() + " - " + ex.getMessage());
+            }
+          }
+        });
+        
+      }
+    }, null);
+    
+  }
+  
 }

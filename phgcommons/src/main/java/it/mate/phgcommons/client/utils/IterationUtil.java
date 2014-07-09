@@ -9,6 +9,10 @@ public class IterationUtil <T> {
   private ItemDelegate<T> itemDelegate;
   private FinishDelegate finishDelegate;
   
+  public static <T> IterationUtil<T> create(List<T> list, ItemDelegate<T> itemDelegate, FinishDelegate finishDelegate) {
+    return new IterationUtil<T>(list, itemDelegate, finishDelegate);
+  }
+  
   public IterationUtil(List<T> list, ItemDelegate<T> itemDelegate, FinishDelegate finishDelegate) {
     if (list == null)
       return;
@@ -23,15 +27,17 @@ public class IterationUtil <T> {
       T item = it.next();
       itemDelegate.handleItem(item, this);
     } else {
-      finishDelegate.doFinish();
+      if (finishDelegate != null) {
+        finishDelegate.doFinish();
+      }
     }
   }
   
-  public interface ItemDelegate <T> {
+  public static interface ItemDelegate <T> {
     public void handleItem(T item, final IterationUtil<T> iteration);
   }
   
-  public interface FinishDelegate {
+  public static interface FinishDelegate {
     public void doFinish();
   }
  
