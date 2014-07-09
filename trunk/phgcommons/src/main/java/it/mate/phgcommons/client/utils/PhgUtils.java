@@ -482,5 +482,5 @@ public class PhgUtils {
     }
     return $wnd.getAppLocalLanguage();
   }-*/;
-
+  
 }

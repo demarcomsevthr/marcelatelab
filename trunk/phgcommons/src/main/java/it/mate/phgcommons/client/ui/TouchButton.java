@@ -208,5 +208,5 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
   public void setTag(String tag) {
     this.tag = tag;
   }
-
+  
 }
