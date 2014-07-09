@@ -20,11 +20,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -67,15 +65,14 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
   }
 
   private void initUI() {
-    getHeaderBackButton().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-    getScrollPanel().setScrollingEnabledX(false);
-    getScrollPanel().setScrollingEnabledY(false);
-    resultsPanel.setScrollingEnabledY(true);
+//  getScrollPanel().setScrollingEnabledX(false);
+//  getScrollPanel().setScrollingEnabledY(false);
+//  resultsPanel.setScrollingEnabledY(true);
     
-    setResultsPanelHeight();
+    disableMainScrolling();
     
     resultsPanel.addScrollMoveHandler(new ScrollMoveEvent.Handler() {
       public void onScrollMove(ScrollMoveEvent event) {
@@ -88,15 +85,6 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       }
     });
     
-  }
-  
-  private void setResultsPanelHeight() {
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        int resultsHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
-        resultsPanel.getElement().getStyle().setHeight(resultsHeight, Unit.PX);
-      }
-    });
   }
   
   @Override
@@ -130,21 +118,14 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     final SimpleContainer list = new SimpleContainer();
     final ObjectWrapper<String> prevDate = new ObjectWrapper<String>();
     final ObjectWrapper<Integer> actualHeight = new ObjectWrapper<Integer>(0);
-    final int lastId = somministrazioni.get(somministrazioni.size() - 1).getId();
+    final int lastRowId = somministrazioni.get(somministrazioni.size() - 1).getId();
     for (final Somministrazione somministrazione : somministrazioni) {
       getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
           actualHeight.set(actualHeight.get() + showRow(somministrazione, list, prevDate, udm));
-          if (somministrazione.getId() == lastId) {
-            // su ios funziona
-            /*
-            int panelHeight = Window.getClientHeight() - resultsPanel.getAbsoluteTop();
-            PhgUtils.log("panelHeight = " + panelHeight);
-            resultsPanel.setHeight(panelHeight + "px");
-            */
-            refreshScrollPanel();
+          if (somministrazione.getId() == lastRowId) {
+            adjustInnerScrollPanelHeight(resultsPanel);
           }
-          setResultsPanelHeight();
         }
       });
     }
@@ -189,7 +170,6 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         }
       }
     });
-    PhgUtils.log("row.height = " + row.getElement().getClientHeight());
     lastTimestamp.set(rowTimestamp);
     return row.getElement().getClientHeight();
   }

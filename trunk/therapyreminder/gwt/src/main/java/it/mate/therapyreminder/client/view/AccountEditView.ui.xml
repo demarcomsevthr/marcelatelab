@@ -16,6 +16,10 @@
       </p:TouchButton>
     </g:HorizontalPanel>
 
+    <g:HTML HTML="Insert your informations" addStyleNames="ui-view-header-2">
+      <ui:attribute name="HTML" description="text" key="header2.HTML"/>
+    </g:HTML>
+    
     <hr class="ui-view-separator-1"/>
     
     <g:Label text="Name:" addStyleNames="ui-field-label ui-field-label-1">
@@ -23,6 +27,7 @@
     </g:Label>
     <ph:PhTextBox ui:field="nameBox" addStyleNames="ui-app-textbox, ui-name-box"/>
 
+    <!-- 
     <g:Label text="Email:" addStyleNames="ui-field-label ui-field-label-1">
       <ui:attribute name="text" description="text" key="emailLabel.text"/>
     </g:Label>
@@ -32,6 +37,7 @@
       <ui:attribute name="text" description="text" key="phoneLabel.text"/>
     </g:Label>
     <ph:PhTextBox ui:field="phoneBox" type="tel" addStyleNames="ui-app-textbox, ui-phone-box"/>
+     -->
   
   </g:HTMLPanel>
   

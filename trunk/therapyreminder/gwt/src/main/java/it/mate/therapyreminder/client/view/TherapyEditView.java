@@ -112,6 +112,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   private Prescrizione prescrizione;
   private List<Contatto> tutors;
   
+  private boolean forceClose = false;
+  
   
   public TherapyEditView() {
     initUI();
@@ -429,6 +431,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         statePanelUtil.setCurrentState(taggable.getTag());
         checkTipoOrarioValue();
         checkTipoRicorrenzaValue();
+        onCbxAlertRiordino(null);
       }
     });
     bottomBar.add(button);
@@ -464,13 +467,16 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
           }
         }
       });
+    } else {
+      forceClose = true;
+      getPresenter().goToPrevious();
     }
   }
   
   @Override
   public void onClosingView(final ClosingHandler handler) {
     final Prescrizione prescrizione = flushPrescrizione(false);
-    if (prescrizione == null || prescrizione.equals(oldPrescrizione)) {
+    if (prescrizione == null || prescrizione.equals(oldPrescrizione) || forceClose) {
       handler.doClose();
     } else {
       PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_onClosingView_msg1(), "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
@@ -581,9 +587,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   @UiHandler ("cbxAlertRiordino")
-  public void onCkbAlertRiordino(ValueChangeEvent<Boolean> event) {
-    alertRiordinoPanel.setVisible(event.getValue());
-    if (event.getValue()) {
+  public void onCbxAlertRiordino(ValueChangeEvent<Boolean> event) {
+    boolean checked = cbxAlertRiordino.getValue();
+    alertRiordinoPanel.setVisible(checked);
+    if (checked) {
       refreshScrollPanel();
     }
   }

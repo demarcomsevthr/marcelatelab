@@ -7,24 +7,30 @@
        xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.therapyreminder.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-legal-notes-panel">
-
-    <div class="ui-about-header">
-      <h1><g:Label ui:field="header1Label"/></h1>
-      <h5><g:Label ui:field="header2Label"/></h5>
-    </div>   
+    <m:ScrollPanel ui:field="innerScrollPanel">
+      <g:HTMLPanel>
+      
+        <div class="ui-about-header">
+          <h1><g:Label ui:field="header1Label"/></h1>
+          <h5><g:Label ui:field="header2Label"/></h5>
+        </div>   
+        
+        <gc:Spacer height="2em"/>   
+        
+        <g:HTML HTML="">
+          <ui:attribute name="HTML" description="text" key="presentation.html"/>
+        </g:HTML>
     
-    <gc:Spacer height="2em"/>   
+        <gc:Spacer height="2em"/>   
     
-    <g:HTML HTML="">
-      <ui:attribute name="HTML" description="text" key="presentation.html"/>
-    </g:HTML>
-
-    <gc:Spacer height="2em"/>   
-
-    <g:HTML HTML="">
-      <ui:attribute name="HTML" description="text" key="legalNotes.html"/>
-    </g:HTML>
-
+        <g:HTML HTML="">
+          <ui:attribute name="HTML" description="text" key="legalNotes.html"/>
+        </g:HTML>
+      
+        <gc:Spacer height="2em"/>   
+    
+      </g:HTMLPanel>
+    </m:ScrollPanel>
   </g:HTMLPanel>
   
 </ui:UiBinder>

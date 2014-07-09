@@ -136,4 +136,13 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String SettingsView_onCkbOnlineMode_msg1();
   
+  @DefaultMessage("")
+  String AccountEditView_flushAndSaveAccount_msg1();
+  
+  @DefaultMessage("")
+  String ContactEditView_header2_TUTOR_HTML();
+  
+  @DefaultMessage("")
+  String TherapyListView_showListaPrescrizioni_noRows_text();
+  
 }
