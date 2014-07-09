@@ -12,7 +12,7 @@
       <ui:attribute name="HTML" description="text" key="header.html"/>
     </g:HTML>
     
-    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" width="100%">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn">
         <ui:attribute name="text" description="text" key="saveBtn.text"/>
       </p:TouchButton>
@@ -21,6 +21,10 @@
       </p:TouchButton>
     </g:HorizontalPanel>
 
+    <hr class="ui-view-separator-1"/>
+    
+    <g:HTML ui:field="header2" addStyleNames="ui-view-header-2"/>
+    
     <hr class="ui-view-separator-1"/>
     
     <g:Label text="Name:" addStyleNames="ui-field-label ui-field-label-1">

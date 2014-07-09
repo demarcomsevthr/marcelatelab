@@ -2,6 +2,7 @@ package it.mate.therapyreminder.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -15,6 +16,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
@@ -33,12 +36,14 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
+  @UiField HTML header2;
   @UiField PhTextBox nameBox;
   @UiField PhTextBox emailBox;
   @UiField PhTextBox phoneBox;
   @UiField Panel doctorOnlyPanel;
   @UiField PhTextBox addressBox;
   @UiField PhTextBox hoursBox;
+  @UiField TouchButton deleteBtn;
   
   Contatto originalModel;
   
@@ -60,6 +65,12 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
   public void setModel(Object model, String tag) {
     if (TAG_CONTACT.equals(tag)) {
       originalModel = (Contatto)model;
+      
+      if (originalModel.getId() == null) {
+        HorizontalPanel bar = (HorizontalPanel)deleteBtn.getParent();
+        bar.remove(deleteBtn);
+      }
+      
       nameBox.setValue(originalModel.getNome());
       emailBox.setValue(originalModel.getEmail());
       phoneBox.setValue(originalModel.getTelefono());
@@ -68,6 +79,10 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
         doctorOnlyPanel.setVisible(true);
         addressBox.setValue(originalModel.getIndirizzo());
         hoursBox.setValue(originalModel.getOrari());
+      }
+      
+      if (originalModel.getTipo().equals(Contatto.TIPO_TUTOR)) {
+        header2.setHTML(AppMessages.IMPL.ContactEditView_header2_TUTOR_HTML());
       }
       
     }

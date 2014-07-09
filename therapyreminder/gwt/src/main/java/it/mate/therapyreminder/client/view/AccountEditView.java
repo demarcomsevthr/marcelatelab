@@ -3,9 +3,10 @@ package it.mate.therapyreminder.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
-import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.view.AccountEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
@@ -34,7 +35,7 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField Panel wrapperPanel;
   @UiField PhTextBox nameBox;
   //@UiField PhTextBox pwdBox;
-  @UiField PhTextBox emailBox;
+  //@UiField PhTextBox emailBox;
   
   Account account;
   
@@ -49,28 +50,20 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
     wrapperPanel.getElement().getStyle().clearHeight();
-    
   }
   
   @Override
   public void setModel(Object model, String tag) {
-    
     if (TAG_ACCOUNT.equals(tag)) {
-      
       account = (Account)model;
-      
       nameBox.setValue(account.getName());
-      emailBox.setValue(account.getEmail());
-      
+      //emailBox.setValue(account.getEmail());
     }
-      
   }
 
   @UiHandler ("saveBtn")
   public void onSaveBtn (TouchEndEvent event) {
-    PhgUtils.log("save btn");
     flushAndSaveAccount(new Delegate<Account>() {
       public void execute(Account account) {
         getPresenter().goToPrevious();
@@ -80,7 +73,6 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   
   @Override
   public void onClosingView(final ClosingHandler handler) {
-    PhgUtils.log("close delegate");
     flushAndSaveAccount(new Delegate<Account>() {
       public void execute(Account account) {
         handler.doClose();
@@ -89,9 +81,13 @@ public class AccountEditView extends BaseMgwtView <Presenter> implements HasClos
   }
   
   private void flushAndSaveAccount(Delegate<Account> successDelegate) {
+    if (nameBox.getValue().trim().length() == 0) {
+      PhgDialogUtils.showMessageDialog(AppMessages.IMPL.AccountEditView_flushAndSaveAccount_msg1());
+      return;
+    }
     Account modifiedAccount = new AccountTx(account);
     modifiedAccount.setName(nameBox.getValue());
-    modifiedAccount.setEmail(emailBox.getValue());
+    //modifiedAccount.setEmail(emailBox.getValue());
     if (modifiedAccount.equals(account)) {
       successDelegate.execute(modifiedAccount);
     } else {

@@ -119,7 +119,8 @@ public class TherapyListView extends BaseMgwtView <Presenter> {
   private void showListaPrescrizioni(List<Prescrizione> prescrizioni) {
     resultsPanel.clear();
     if (prescrizioni == null || prescrizioni.size() == 0) {
-      Label noResultsLbl = new Label("You have no therapies.");
+      //TODO
+      Label noResultsLbl = new Label(AppMessages.IMPL.TherapyListView_showListaPrescrizioni_noRows_text());
       noResultsLbl.addStyleName("ui-no-results");
       resultsPanel.add(noResultsLbl);
       return;

@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 public class AboutView extends BaseMgwtView <Presenter> {
   
@@ -27,6 +28,8 @@ public class AboutView extends BaseMgwtView <Presenter> {
   @UiField Label header1Label;
   @UiField Label header2Label;
   
+  @UiField ScrollPanel innerScrollPanel;
+  
   public AboutView() {
     initUI();
   }
@@ -38,9 +41,14 @@ public class AboutView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    wrapperPanel.getElement().getStyle().clearHeight();
+    disableMainScrolling();
     header1Label.setText("Therapy Reminder " + AppProperties.IMPL.versionNumber());
     header2Label.setText("By " + AppProperties.IMPL.devName() + " @2014");
+  }
+  
+  @Override
+  public void setPresenter(Presenter presenter) {
+    adjustInnerScrollPanelHeight(innerScrollPanel);
   }
   
   @Override

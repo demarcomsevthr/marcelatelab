@@ -12,7 +12,7 @@
       <ui:attribute name="HTML" description="text" key="header.html"/>
     </g:HTML>
     
-    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" width="100%">
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn">
         <ui:attribute name="text" description="text" key="saveBtn.text"/>
       </p:TouchButton>

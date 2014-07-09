@@ -659,7 +659,10 @@ public class MainActivity extends MGWTAbstractActivity implements
             if (udmDescription == null)
               udmDescription = getLanguageDescription(udm.getDescrizione(), "default");
             String[] numerTokens = udmDescription.split("/");
-            String desc = numerTokens[0] + (singular ? numerTokens[1] : numerTokens[2]);
+            String desc = numerTokens[0];
+            if (numerTokens.length == 3) {
+              desc += (singular ? numerTokens[1] : numerTokens[2]);
+            }
             UdM udmToView = new UdMTx();
             udmToView.setCodice(udm.getCodice());
             udmToView.setDescrizione(desc);
