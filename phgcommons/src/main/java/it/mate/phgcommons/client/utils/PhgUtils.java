@@ -2,10 +2,10 @@ package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
 import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.utils.callbacks.StringCallback;
+import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +35,8 @@ public class PhgUtils {
   private static String defaultDatePattern;
   
   private static String defaultTimePattern;
+  
+  private static boolean suspendUncaughtExceptionAlerts;
   
 
   public static void logEnvironment() {
@@ -136,24 +138,6 @@ public class PhgUtils {
     return defaultTimePattern;
   }
   
-  /*
-  private static void getGlobalizationDatePattern(final Delegate<String> resultDelegate) {
-    GlobalizationPlugin.getDatePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        resultDelegate.execute(pattern);
-      }
-    });
-  }
-  
-  private static void getGlobalizationTimePattern(final Delegate<String> resultDelegate) {
-    GlobalizationPlugin.getTimePattern(new Delegate<String>() {
-      public void execute(String pattern) {
-        resultDelegate.execute(pattern);
-      }
-    });
-  }
-  */
-    
   public static String getLayoutInfo() {
     String layoutInfo = "Width " + Window.getClientWidth();
     layoutInfo += " Height " + Window.getClientHeight();
@@ -239,12 +223,6 @@ public class PhgUtils {
     $wnd.console.log(text);
   }-*/;
 
-  public static void addOrientationChangeHandler(Delegate<Void> delegate) {
-    JQuery.select("body").bind("orientationchange", delegate);
-  }
-  
-  private static boolean suspendUncaughtExceptionAlerts;
-  
   public static void setSuspendUncaughtExceptionAlerts(boolean flag) {
     suspendUncaughtExceptionAlerts = flag;
   }
@@ -446,6 +424,10 @@ public class PhgUtils {
 
   public static void setAppLocalLanguageAndReload(final String language) {
     setAppLocalLanguageImpl(language);
+    reloadApp();
+  }
+  
+  public static void reloadApp() {
     // se lanciato da una combo da una IllegalStateException su una onDetach
     // workaround: disabilito l'handler delle eccezioni
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
@@ -481,6 +463,33 @@ public class PhgUtils {
       return $wnd.localStorage.getItem("app-local-language");
     }
     return $wnd.getAppLocalLanguage();
+  }-*/;
+  
+  public static void addOrientationChangeHandler(final Delegate<Void> delegate) {
+//  JQuery.select("body").bind("orientationchange", delegate);
+    addOrientationChangeHandler(new VoidCallback() {
+      public void handle() {
+        delegate.execute(null);
+      }
+    });
+  }
+  
+  public static void addOrientationChangeHandler(VoidCallback callback) {
+    addWindowHandlerImpl("orientationchange", callback);
+  }
+  
+  public static void addResizeHandler(VoidCallback callback) {
+    addWindowHandlerImpl("resize", callback);
+  }
+  
+  private static native void addWindowHandlerImpl(String eventName, VoidCallback callback) /*-{
+    if (callback != null) {
+      var jsCallback = null;
+      jsCallback = $entry(function() {
+        callback.@it.mate.phgcommons.client.utils.callbacks.VoidCallback::handle()();
+      });
+      $wnd.addEventListener(eventName, jsCallback, false);
+    }
   }-*/;
   
 }
