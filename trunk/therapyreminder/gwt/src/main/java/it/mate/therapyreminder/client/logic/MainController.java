@@ -488,6 +488,9 @@ public class MainController {
   
   public boolean isUseCalendar() {
     String value = PhgUtils.getLocalStorageItem("useCalendar");
+    if (value == null) {
+      value = "true";
+    }
     return ("true".equalsIgnoreCase(value));
   }
   

@@ -14,6 +14,7 @@ import it.mate.phgcommons.client.utils.IOSPatches;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
@@ -148,11 +149,31 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     }
     
     PhgUtils.commonInitializations();
-    
+
+    /*
     PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
         PhgUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
+      }
+    });
+    */
+
+    /*
+    PhgUtils.log("setting orientationchange handler");
+    PhgUtils.addOrientationChangeHandler(new VoidCallback() {
+      public void handle() {
+        PhgUtils.log(">>>>>>>>>>>> ORIENTATION CHANGED <<<<<<<<<<<<");
+        PhgUtils.reloadApp();
+      }
+    });
+    */
+    
+    PhgUtils.log("setting resize handler");
+    PhgUtils.addResizeHandler(new VoidCallback() {
+      public void handle() {
+        PhgUtils.log(">>>>>>>>>>>> WINDOW RESIZE <<<<<<<<<<<<");
+        PhgUtils.reloadApp();
       }
     });
 
