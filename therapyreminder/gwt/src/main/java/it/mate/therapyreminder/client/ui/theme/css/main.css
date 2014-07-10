@@ -357,7 +357,7 @@ body {
   margin-top: 10px;
 }
 
-.ui-home-terapies-btn, .ui-home-reminders-btn, .ui-home-doctors-btn, .ui-home-preferences-btn {
+.ui-home-terapies-btn, .ui-home-reminders-btn, .ui-home-doctors-btn, .ui-home-preferences-btn, .ui-contacts-doctor-btn, .ui-contacts-tutor-btn {
   width: 128px;
   height: 52px;
   padding-top: 130px;
@@ -386,6 +386,14 @@ body {
 
 .ui-home-preferences-btn {
   background: url('main/images/preferences-128.png') no-repeat 4px 2px;
+}
+
+.ui-contacts-doctor-btn {
+  background: url('main/images/contacts-doctor-128.png') no-repeat 4px 2px;
+}
+
+.ui-contacts-tutor-btn {
+  background: url('main/images/contacts-tutor-128.png') no-repeat 4px 2px;
 }
 
 .ui-bottom-button-bar {
@@ -552,23 +560,6 @@ body {
   font-weight: bold;
   margin-bottom: -5px;
   margin-top: 0.2em;
-}
-
-.ui-contacts-doctor-btn, .ui-contacts-tutor-btn {
-  width: 128px;
-  height: 52px;
-  padding-top: 130px;
-  padding-left: 10px;
-  border: 3px solid rgba(0, 0, 255, 0.1);
-  border-radius: 6px;
-}
-
-.ui-contacts-doctor-btn {
-  background: url('main/images/contacts-doctor-128.png') no-repeat 4px 2px;
-}
-
-.ui-contacts-tutor-btn {
-  background: url('main/images/contacts-tutor-128.png') no-repeat 4px 2px;
 }
 
 .ui-lang-combobox {
