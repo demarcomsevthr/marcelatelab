@@ -11,7 +11,9 @@ import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
 import it.mate.postscriptum.shared.model.impl.StickMailTx;
+import it.mate.postscriptum.shared.model.impl.StickMailTx2;
 import it.mate.postscriptum.shared.model.impl.StickSmsTx;
+import it.mate.postscriptum.shared.model.impl.StickSmsTx2;
 import it.mate.postscriptum.shared.service.AdapterException;
 
 import java.util.Calendar;
@@ -49,6 +51,10 @@ public class StickAdapterImpl implements StickAdapter {
   
   private static final int MAX_SMS_PER_DAY_FREE_QUOTA = 5;
   
+  private static final int MAX_TOTAL_SMS_FREE_QUOTA = 10;
+  
+  private static final String PAID_CLIENT_TYPE_1 = "PaidClientType1";
+  
   
   @PostConstruct
   public void postConstruct() {
@@ -75,6 +81,14 @@ public class StickAdapterImpl implements StickAdapter {
     LoggingUtils.debug(getClass(), "creating " + entity);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
+  }
+
+  @Override
+  public StickMailTx2 createV2(StickMailTx2 entity) {
+    StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    LoggingUtils.debug(getClass(), "creating " + entity);
+    ds = dao.create(ds);
+    return CloneUtils.clone (ds, StickMailTx2.class);
   }
 
   @Override
@@ -105,6 +119,12 @@ public class StickAdapterImpl implements StickAdapter {
     return CloneUtils.clone(mails, StickMailTx.class, StickMail.class);
   }
   
+  //TODO
+  public List<StickMail> findAllMailsV2() {
+    List<StickMailDs> mails = dao.findAll(StickMailDs.class);
+    return CloneUtils.clone(mails, StickMailTx2.class, StickMail.class);
+  }
+  
   public List<StickMail> findAllScheduledMails() {
     List<StickMailDs> results = dao.findList(StickMailDs.class, "state == stateParam", 
         Dao.Utils.buildParameters(new ParameterDefinition[] {
@@ -114,6 +134,16 @@ public class StickAdapterImpl implements StickAdapter {
     return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
   }
 
+  //TODO
+  public List<StickMail> findAllScheduledMailsV2() {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, StickMail.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickMailTx2.class, StickMail.class);
+  }
+  
   public StickMail update(StickMail entity) {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
     try {
@@ -125,11 +155,30 @@ public class StickAdapterImpl implements StickAdapter {
     ds = dao.update(ds);
     return CloneUtils.clone (ds, StickMailTx.class);
   }
+
+  // TODO
+  public StickMailTx2 updateV2(StickMail entity) {
+    StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    try {
+      StickMailDs origDs = dao.findById(StickMailDs.class, entity.getId());
+      if (origDs.getDevInfoId() != null) {
+        ds.setDevInfoId(origDs.getDevInfoId());
+      }
+    } catch (Exception ex) { }
+    ds = dao.update(ds);
+    return CloneUtils.clone (ds, StickMailTx2.class);
+  }
   
   @Override
   public List<StickMail> findMailsByUser(RemoteUser user) {
     List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam", String.class.getName() + " userIdParam", null, user.getUserId() );
     return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
+  }
+
+  //TODO
+  public List<StickMail> findMailsByUserV2(RemoteUser user) {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam", String.class.getName() + " userIdParam", null, user.getUserId() );
+    return CloneUtils.clone(results, StickMailTx2.class, StickMail.class);
   }
 
   @Override
@@ -141,6 +190,17 @@ public class StickAdapterImpl implements StickAdapter {
         }), 
         null, user.getUserId(), StickMail.STATE_SCHEDULED );
     return CloneUtils.clone(results, StickMailTx.class, StickMail.class);
+  }
+
+  //TODO
+  public List<StickMail> findScheduledMailsByUserV2(RemoteUser user) {
+    List<StickMailDs> results = dao.findList(StickMailDs.class, "userId == userIdParam && state == stateParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(String.class, "userIdParam"),
+            new ParameterDefinition(String.class, "stateParam")
+        }), 
+        null, user.getUserId(), StickMail.STATE_SCHEDULED );
+    return CloneUtils.clone(results, StickMailTx2.class, StickMail.class);
   }
   
   public void delete(List<StickMail> entities) {
@@ -227,6 +287,31 @@ public class StickAdapterImpl implements StickAdapter {
     LoggingUtils.debug(getClass(), "creating " + ds);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickSmsTx.class);
+  }
+
+  //TODO
+  public StickSmsTx2 createSMSV2(StickSmsTx2 sms) throws AdapterException {
+    List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(sms.getUser(), getMidnight());
+    LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
+    
+    if (PAID_CLIENT_TYPE_1.equals(sms.getClientType())) {
+      //OK
+    } else {
+      if (userSMSs != null && userSMSs.size() >= MAX_TOTAL_SMS_FREE_QUOTA) {
+        throw new AdapterException("You reached the max number of SMS for the free version");
+      }
+    }
+    
+    if (sms.getBody() == null || sms.getBody().length() <= 0) {
+      throw new AdapterException("The text of the message cannot be empty");
+    }
+    if (sms.getBody().length() > 120) {
+      throw new AdapterException("The lenght of the message cannot be more than 120 characters");
+    }
+    StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
+    LoggingUtils.debug(getClass(), "creating " + ds);
+    ds = dao.create(ds);
+    return CloneUtils.clone (ds, StickSmsTx2.class);
   }
 
   @Override

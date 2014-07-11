@@ -1,10 +1,9 @@
 package it.mate.postscriptum.server.service;
 
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
-import it.mate.postscriptum.shared.model.impl.ExtensibleTx;
-import it.mate.postscriptum.shared.model.impl.TestTx;
 import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
 
@@ -121,15 +120,9 @@ public class StickFacadeTestImpl extends RemoteServiceServlet implements StickFa
   }
 
   @Override
-  public void doTest(TestTx test) {
+  public RpcMap createV2(RpcMap stickMail) {
     logger.debug("calling " + moduleBaseUrl);
-    remoteFacade.doTest(test);
+    return remoteFacade.createV2(stickMail);
   }
 
-  @Override
-  public void doExtensibleTest(ExtensibleTx test) {
-    logger.debug("calling " + moduleBaseUrl);
-    remoteFacade.doExtensibleTest(test);
-  }
-  
 }
