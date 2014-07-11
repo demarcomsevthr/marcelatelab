@@ -1,10 +1,9 @@
 package it.mate.postscriptum.shared.service;
 
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
-import it.mate.postscriptum.shared.model.impl.ExtensibleTx;
-import it.mate.postscriptum.shared.model.impl.TestTx;
 
 import java.util.Date;
 import java.util.List;
@@ -40,8 +39,6 @@ public interface StickFacadeAsync {
 
   void deleteSMS(List<StickSms> entities, AsyncCallback<Void> callback);
 
-  void doTest(TestTx test, AsyncCallback<Void> callback);
-
-  void doExtensibleTest(ExtensibleTx test, AsyncCallback<Void> callback);
+  void createV2(RpcMap stickMail, AsyncCallback<RpcMap> callback);
 
 }
