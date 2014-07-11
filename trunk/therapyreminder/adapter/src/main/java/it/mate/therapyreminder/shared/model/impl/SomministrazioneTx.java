@@ -26,6 +26,9 @@ public class SomministrazioneTx implements Somministrazione, IsMappable {
   
   // salvato solo in remoto
   private String language;
+
+  // utilizzato solo in locale
+  private int needSynchronization = 0;
   
   
   @Override
@@ -183,6 +186,14 @@ public class SomministrazioneTx implements Somministrazione, IsMappable {
 
   public void setLanguage(String language) {
     this.language = language;
+  }
+
+  public int getNeedSynchronization() {
+    return needSynchronization;
+  }
+
+  public void setNeedSynchronization(int value) {
+    this.needSynchronization = value;
   }
   
 }
