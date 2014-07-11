@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
@@ -56,21 +57,34 @@ public class MainController {
         PhgDialogUtils.showMessageDialog(errorMessage);
       }
     });
-    
-    // purge orphan notifications
-    LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
-      public void execute(List<String> ids) {
-        MainController.getInstance().purgeNotificationIds(ids);
-      }
-    });
-    
+
     if (!OsDetectionUtils.isDesktop()) {
+      checkOrphanNotifications();
       LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
         public void handleEvent(String id, String state, String json) {
           PhgUtils.log("RECEIVED CANCEL NOTIFICATION EVENT: id="+id);
         }
       });
     }
+  }
+  
+  private void checkOrphanNotifications() {
+    final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
+    timer.set(GwtUtils.createTimer(1000, new Delegate<Void>() {
+      public void execute(Void element) {
+        if (MainController.getInstance().isReady()) {
+          timer.get().cancel();
+          
+          // purge orphan notifications
+          LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
+            public void execute(List<String> ids) {
+              MainController.getInstance().purgeNotificationIds(ids);
+            }
+          });
+          
+        }
+      }
+    }));
   }
   
   public boolean isReady() {
