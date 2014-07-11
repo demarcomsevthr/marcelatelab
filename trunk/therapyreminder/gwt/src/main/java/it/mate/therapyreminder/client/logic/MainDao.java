@@ -63,9 +63,11 @@ public class MainDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS_0 = "idPrescrizione, data, quantita, orario, stato";
   
-  private final static String SOMMINISTRAZIONI_FIELDS_2 = "remoteId, needSynchronization";
+  private final static String SOMMINISTRAZIONI_FIELDS_2 = "remoteId";
   
-  private final static String SOMMINISTRAZIONI_FIELDS = SOMMINISTRAZIONI_FIELDS_0 + ", " + SOMMINISTRAZIONI_FIELDS_2;
+  private final static String SOMMINISTRAZIONI_FIELDS_4 = "needSynchronization";
+  
+  private final static String SOMMINISTRAZIONI_FIELDS = SOMMINISTRAZIONI_FIELDS_0 + ", " + SOMMINISTRAZIONI_FIELDS_2 + ", " + SOMMINISTRAZIONI_FIELDS_4;
   
   private final static String CONTATTI_FIELDS_2 = "tipo, nome, email, telefono";
   
@@ -167,7 +169,6 @@ public class MainDao extends WebSQLDao {
       
       PhonegapLog.log("altering table somministrazioni");
       tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN remoteId");
-      tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN needSynchronization");
       
     }
   };
@@ -183,8 +184,18 @@ public class MainDao extends WebSQLDao {
     }
   };
   
+  private final static MigratorCallback MIGRATION_CALLBACK_4 = new MigratorCallback() {
+    public void doMigration(int number, SQLTransaction tr) {
+      PhonegapLog.log("updating db therapies to version " + number);
+      
+      PhonegapLog.log("altering table somministrazioni");
+      tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN needSynchronization");
+      
+    }
+  };
+  
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2, MIGRATION_CALLBACK_3 
+    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2, MIGRATION_CALLBACK_3, MIGRATION_CALLBACK_4 
   };
   
   public void findAllUdM(final Delegate<List<UdM>> delegate) {
