@@ -9,6 +9,10 @@ public class IterationUtil <T> {
   private ItemDelegate<T> itemDelegate;
   private FinishDelegate finishDelegate;
   
+  public static <T> IterationUtil<T> create(List<T> list, ItemDelegate<T> itemDelegate) {
+    return create(list, itemDelegate, null);
+  }
+  
   public static <T> IterationUtil<T> create(List<T> list, ItemDelegate<T> itemDelegate, FinishDelegate finishDelegate) {
     return new IterationUtil<T>(list, itemDelegate, finishDelegate);
   }
