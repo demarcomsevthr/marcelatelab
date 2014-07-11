@@ -21,8 +21,11 @@ import it.mate.phgcommons.client.view.HasClosingViewHandler;
 import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
+import it.mate.therapyreminder.client.logic.CheckSomministrazioniScaduteTask;
 import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.logic.MainDao;
+import it.mate.therapyreminder.client.logic.SviluppaSomministrazioniTask;
+import it.mate.therapyreminder.client.logic.SynchSomministrazioniTask;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
@@ -87,6 +90,13 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
+
+    //TODO: REVISIONE BACKGROUND TASKS
+    if (AppClientFactory.USE_BACKGROUND_TASKS) {
+      SviluppaSomministrazioniTask.getInstance();
+      CheckSomministrazioniScaduteTask.getInstance();
+      SynchSomministrazioniTask.getInstance();
+    }
     
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
@@ -280,7 +290,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
       setHeaderWaiting(true);
       
-      //TODO
       MainController.getInstance().findSomministrazioniNonEseguiteInMemoria(new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> results) {
           setHeaderWaiting(false);
@@ -698,13 +707,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     dao.findContattiByTipo(Contatto.TIPO_TUTOR, delegate);
   }
   
+  //TODO: REVISIONE BACKGROUND TASKS
   private void setBackgroundAlertsEnabled(final boolean enabled) {
     MainController.getInstance().checkConnectionIfOnlineMode(new Delegate<Boolean>() {
-      public void execute(Boolean ok) {
-        if (ok) {
-          AppClientFactory.IMPL.setBackgroundAlertsEnabled(enabled);
+      public void execute(Boolean connessioneDatiAttiva) {
+        if (AppClientFactory.USE_BACKGROUND_TASKS) {
+          SviluppaSomministrazioniTask.getInstance().setEnabled(enabled);
+          CheckSomministrazioniScaduteTask.getInstance().setEnabled(enabled);
+          SynchSomministrazioniTask.getInstance().setEnabled(enabled);
         } else {
-          AppClientFactory.IMPL.setBackgroundAlertsEnabled(false);
+          if (connessioneDatiAttiva) {
+            AppClientFactory.IMPL.setBackgroundAlertsEnabled(enabled);
+          } else {
+            AppClientFactory.IMPL.setBackgroundAlertsEnabled(false);
+          }
         }
       }
     });

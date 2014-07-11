@@ -19,6 +19,8 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public static final String KEY_TRACE_ACTIVE = "traceActive";
 
+  public static final boolean USE_BACKGROUND_TASKS = true;
+  
   class Initializer {
     private static AppClientFactory create() {
       AppClientFactory clientFactory = new AppClientFactoryImpl();

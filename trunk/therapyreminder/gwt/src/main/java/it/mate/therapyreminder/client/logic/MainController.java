@@ -8,6 +8,8 @@ import it.mate.gwtcommons.shared.services.ServiceException;
 import it.mate.phgcommons.client.plugins.CalendarEvent;
 import it.mate.phgcommons.client.plugins.CalendarPlugin;
 import it.mate.phgcommons.client.plugins.LocalNotificationsPlugin;
+import it.mate.phgcommons.client.utils.IterationUtil;
+import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
@@ -47,7 +49,32 @@ public class MainController {
   }
   
   protected MainController() {
-
+    // setting dao error delegate
+    dao.setErrorDelegate(new Delegate<String>() {
+      public void execute(String errorMessage) {
+        PhgUtils.log(errorMessage);
+        PhgDialogUtils.showMessageDialog(errorMessage);
+      }
+    });
+    
+    // purge orphan notifications
+    LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
+      public void execute(List<String> ids) {
+        MainController.getInstance().purgeNotificationIds(ids);
+      }
+    });
+    
+    if (!OsDetectionUtils.isDesktop()) {
+      LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
+        public void handleEvent(String id, String state, String json) {
+          PhgUtils.log("RECEIVED CANCEL NOTIFICATION EVENT: id="+id);
+        }
+      });
+    }
+  }
+  
+  public boolean isReady() {
+    return dao != null && dao.isReady();
   }
   
   public void createPrescrizioneWithDefaults(Delegate<Prescrizione> delegate) {
@@ -258,20 +285,22 @@ public class MainController {
     final Delegate<List<Somministrazione>> completionDelegate = new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         if (somministrazioni != null && somministrazioni.size() > 0) {
-          
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
-            public void execute(List<Somministrazione> somministrazioniInRemoto) {
-              if (somministrazioniInRemoto == null) {
+            public void execute(List<Somministrazione> somministrazioniSincronizzate) {
+              if (somministrazioniSincronizzate == null) {
                 sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
               } else {
+                
+                //TODO: SPOSTATO SOTTO
+                /*
                 final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
                 innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
                     public void execute(final Iterator<Somministrazione> it) {
                       if (it.hasNext()) {
                         Somministrazione somministrazioneInRemoto = it.next();
                         if (somministrazioneInRemoto.getRemoteId() != null) {
-                          dao.saveRemoteIdSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
+                          dao.saveRemoteSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
                             public void execute(Somministrazione updateRemoteSomministrazione) {
                               PhgUtils.log("updated remote id somministrazione");
                               innerDelegate.get().execute(it);
@@ -287,7 +316,11 @@ public class MainController {
                     }
                   }
                 );
-                innerDelegate.get().execute(somministrazioniInRemoto.iterator());
+                innerDelegate.get().execute(somministrazioniSincronizzate.iterator());
+                */
+                
+                sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
+                
               }
             }
           });
@@ -516,6 +549,24 @@ public class MainController {
     return null;
   }
   
+  // TODO: NEW
+  public void synchSomministrazioniInBackground() {
+    dao.findSomministrazioniDaSincronizzare(new Delegate<List<Somministrazione>>() {
+      public void execute(List<Somministrazione> somministrazioniDaSincronizzare) {
+        if (somministrazioniDaSincronizzare != null && somministrazioniDaSincronizzare.size() > 0) {
+          PhgUtils.log("trovate " + somministrazioniDaSincronizzare.size() + " da sincronizzare");
+          saveRemoteSomministrazioni(somministrazioniDaSincronizzare, new Delegate<List<Somministrazione>>() {
+            public void execute(List<Somministrazione> somministrazioniSincronizzate) {
+              if (somministrazioniSincronizzate != null) {
+                PhgUtils.log("sincronizzate " + somministrazioniSincronizzate.size() + " in background");
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+  
   private boolean isRemoteSomministrazione(Somministrazione somministrazione) {
     if (isOnlineMode()) {
       if (somministrazione.getPrescrizione().getTutor() != null) {
@@ -536,6 +587,7 @@ public class MainController {
     });
   }
    
+  //TODO: REVISIONE BACKGROUND TASKS
   private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> completionDelegate) {
     final List<Somministrazione> somministrazioniDaSalvareInRemoto = new ArrayList<Somministrazione>();
     for (Somministrazione somministrazione : somministrazioni) {
@@ -547,7 +599,97 @@ public class MainController {
     if (somministrazioniDaSalvareInRemoto.size() == 0) {
       completionDelegate.execute(somministrazioni);
     } else {
-      // 18/06/2014 introdotto il wrapped iterator per recuperare il language dal globalization plugin (che è asincrono!)
+      
+      PhgUtils.getCurrentLanguage(new Delegate<String>() {
+        public void execute(final String language) {
+
+          Account account = getAccountFromLocalStorage();
+          String devInfoId = getDevInfoIdFromLocalStorage();
+
+          List<RpcMap> somministrazioniDaSalvareInRemotoMap = new ArrayList<RpcMap>();
+          for (Somministrazione somministrazioneDaSalvareInRemoto : somministrazioniDaSalvareInRemoto) {
+            somministrazioneDaSalvareInRemoto.setLanguage(language);
+            somministrazioniDaSalvareInRemotoMap.add(((SomministrazioneTx)somministrazioneDaSalvareInRemoto).toRpcMap());
+          }
+          RpcMap accountMap = ((AccountTx)account).toRpcMap();
+          PhgUtils.log("before save remote somministrazioni");
+          AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemotoMap, accountMap, devInfoId, new AsyncCallback<List<RpcMap>>() {
+            public void onSuccess(List<RpcMap> somministrazioniMap) {
+              PhgUtils.log("saved remote somministrazioni");
+              if (somministrazioniMap == null) {
+                completionDelegate.execute(null);
+              } else {
+                
+                List<Somministrazione> somministrazioniSincronizzate = new ArrayList<Somministrazione>();
+                for (RpcMap somministrazioneMap : somministrazioniMap) {
+                  somministrazioniSincronizzate.add(new SomministrazioneTx().fromRpcMap(somministrazioneMap));
+                }
+                
+                completionDelegate.execute(somministrazioniSincronizzate);
+                
+                final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
+                innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
+                    public void execute(final Iterator<Somministrazione> it) {
+                      if (it.hasNext()) {
+                        Somministrazione somministrazioneInRemoto = it.next();
+                        if (somministrazioneInRemoto.getRemoteId() != null) {
+                          dao.saveRemoteSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
+                            public void execute(Somministrazione updateRemoteSomministrazione) {
+                              PhgUtils.log("updated remote id somministrazione");
+                              innerDelegate.get().execute(it);
+                            }
+                          });
+                        } else {
+                          innerDelegate.get().execute(it);
+                        }
+                      /*
+                      } else {
+                        // finish processing
+                        sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
+                       */
+                      }
+                    }
+                  }
+                );
+                innerDelegate.get().execute(somministrazioniSincronizzate.iterator());
+                
+              }
+            }
+            public void onFailure(Throwable caught) {
+              
+              // TODO: 11/07/2014 - UPDATE flag synchRequired = TRUE
+              PhgUtils.log("REMOTE SAVE FAILURE - " + caught.getClass().getName() + " - " + caught.getMessage());
+              //processFailure(null, caught);
+              
+              PhgUtils.log("FAILURE PROCESSING .1 - somministrazioniDaSalvareInRemoto.size = " + somministrazioniDaSalvareInRemoto.size());
+
+              IterationUtil.create(somministrazioniDaSalvareInRemoto, 
+                new ItemDelegate<Somministrazione>() {
+                  public void handleItem(Somministrazione item, final IterationUtil<Somministrazione> iteration) {
+                    PhgUtils.log("FAILURE PROCESSING .2");
+                    SomministrazioneTx somministrazione = (SomministrazioneTx)item;
+                    PhgUtils.log("FAILURE PROCESSING .3");
+                    somministrazione.setNeedSynchronization(1);
+                    PhgUtils.log("FAILURE PROCESSING .4 - somministrazione = " + somministrazione);
+                    dao.updateNeedSynchronizationSomministrazione(somministrazione, new Delegate<SomministrazioneTx>() {
+                      public void execute(SomministrazioneTx result) {
+                        PhgUtils.log("FAILURE PROCESSING .5");
+                        iteration.next();
+                      }
+                    });
+                  }
+                });
+              
+              completionDelegate.execute(null);
+              
+            }
+          });
+          
+        }
+      });
+      
+
+      /******** DA RIMUOVERE
       final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
       innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
           public void execute(final Iterator<Somministrazione> it) {
@@ -559,63 +701,19 @@ public class MainController {
                 }
               });
             } else {
-              // finish processing
-              Account account = getAccountFromLocalStorage();
-              String devInfoId = getDevInfoIdFromLocalStorage();
-
-              // TODO: 07/07/2014 - passaggio a RpcMap
-              List<RpcMap> somministrazioniDaSalvareInRemotoMap = new ArrayList<RpcMap>();
-              for (Somministrazione somministrazioneDaSalvareInRemoto : somministrazioniDaSalvareInRemoto) {
-                somministrazioniDaSalvareInRemotoMap.add(((SomministrazioneTx)somministrazioneDaSalvareInRemoto).toRpcMap());
-              }
-              RpcMap accountMap = ((AccountTx)account).toRpcMap();
-              PhgUtils.log("before save remote somministrazioni");
-              AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvareInRemotoMap, accountMap, devInfoId, new AsyncCallback<List<RpcMap>>() {
-                public void onSuccess(List<RpcMap> somministrazioniMap) {
-                  PhgUtils.log("saved remote somministrazioni");
-                  if (somministrazioniMap == null) {
-                    completionDelegate.execute(null);
-                  } else {
-                    List<Somministrazione> somministrazioni = new ArrayList<Somministrazione>();
-                    for (RpcMap somministrazioneMap : somministrazioniMap) {
-                      somministrazioni.add(new SomministrazioneTx().fromRpcMap(somministrazioneMap));
-                    }
-                    completionDelegate.execute(somministrazioni);
-                  }
-                }
-                public void onFailure(Throwable caught) {
-                  processFailure(null, caught);
-                  completionDelegate.execute(null);
-                }
-              });
+              
+              
             }
           }
         }
       );
       innerDelegate.get().execute(somministrazioniDaSalvareInRemoto.iterator());
+      ***********/
+      
+
       
     }
 
-    /********   OLD VERSION       
-    if (somministrazioniDaSalvare.size() > 0) {
-      Account account = getAccountFromLocalStorage();
-      String devInfoId = getDevInfoIdFromLocalStorage();
-      PhgUtils.log("before save remote somministrazioni");
-      AppClientFactory.IMPL.getRemoteFacade().saveSomministrazioni(somministrazioniDaSalvare, account, devInfoId, new AsyncCallback<List<Somministrazione>>() {
-        public void onSuccess(List<Somministrazione> somministrazioni) {
-          PhgUtils.log("saved remote somministrazioni");
-          delegate.execute(somministrazioni);
-        }
-        public void onFailure(Throwable caught) {
-          processFailure(null, caught);
-          delegate.execute(null);
-        }
-      });
-    } else {
-      delegate.execute(somministrazioni);
-    }
-    ***********************************************/
-    
   }
   
   private void deleteRemoteSomministrazioni (final List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> delegate) {
@@ -630,7 +728,6 @@ public class MainController {
       }
       if (somministrazioiniDaCancellare.size() > 0) {
         
-        // TODO: 07/07/2014 - passaggio a RpcMap
         List<RpcMap> somministrazioiniDaCancellareMap = new ArrayList<RpcMap>();
         for (Somministrazione somministrazioneDaCancellare : somministrazioiniDaCancellare) {
           somministrazioiniDaCancellareMap.add(((SomministrazioneTx)somministrazioneDaCancellare).toRpcMap());
@@ -650,6 +747,7 @@ public class MainController {
     }
   }
   
+  @SuppressWarnings("unused")
   private void processFailure(String message, Throwable caught) {
     String popupTitle = "Alert";
     String popupMsg = "Failure";
