@@ -1,6 +1,7 @@
 package it.mate.therapyreminder.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.therapyreminder.shared.model.Contatto;
@@ -62,7 +63,7 @@ public class MainDao extends WebSQLDao {
   
   private final static String SOMMINISTRAZIONI_FIELDS_0 = "idPrescrizione, data, quantita, orario, stato";
   
-  private final static String SOMMINISTRAZIONI_FIELDS_2 = "remoteId";
+  private final static String SOMMINISTRAZIONI_FIELDS_2 = "remoteId, needSynchronization";
   
   private final static String SOMMINISTRAZIONI_FIELDS = SOMMINISTRAZIONI_FIELDS_0 + ", " + SOMMINISTRAZIONI_FIELDS_2;
   
@@ -166,6 +167,7 @@ public class MainDao extends WebSQLDao {
       
       PhonegapLog.log("altering table somministrazioni");
       tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN remoteId");
+      tr.doExecuteSql("ALTER TABLE somministrazioni ADD COLUMN needSynchronization");
       
     }
   };
@@ -547,6 +549,7 @@ public class MainDao extends WebSQLDao {
     result.setOrario(rs.getRows().getValueString(it, "orario"));
     result.setStato(rs.getRows().getValueInt(it, "stato"));
     result.setRemoteId(rs.getRows().getValueString(it, "remoteId"));
+    ((SomministrazioneTx)result).setNeedSynchronization(rs.getRows().getValueInt(it, "needSynchronization"));
     return result;
   }
   
@@ -557,6 +560,26 @@ public class MainDao extends WebSQLDao {
         sql += " WHERE stato = ? AND data <= ?";
         sql += " ORDER BY data";
         tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA, dateAsLong(dataRiferimento)}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              new RSToSomministrazioniIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  public void findSomministrazioniDaSincronizzare(final Delegate<List<Somministrazione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE needSynchronization = 1";
+        sql += " ORDER BY data";
+        tr.doExecuteSql(sql, new Object[] {}, 
           new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             if (rs.getRows().getLength() > 0) {
@@ -697,14 +720,15 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (somministrazione.getId() == null) {
-          tr.doExecuteSql("INSERT INTO somministrazioni (" + SOMMINISTRAZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO somministrazioni (" + SOMMINISTRAZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 somministrazione.getPrescrizione().getId(), 
                 dateAsLong(somministrazione.getData()),
                 somministrazione.getQuantita(), 
                 somministrazione.getOrario(),
                 somministrazione.getStato(),
-                somministrazione.getRemoteId()
+                somministrazione.getRemoteId(),
+                ((SomministrazioneTx)somministrazione).getNeedSynchronization()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   somministrazione.setId(rs.getInsertId());
@@ -720,6 +744,7 @@ public class MainDao extends WebSQLDao {
           sql += " ,orario = ?";
           sql += " ,stato = ?";
           sql += " ,remoteId = ?";
+          sql += " ,needSynchronization = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               somministrazione.getPrescrizione().getId(), 
@@ -727,7 +752,8 @@ public class MainDao extends WebSQLDao {
               somministrazione.getQuantita(), 
               somministrazione.getOrario(),
               somministrazione.getStato(),
-              somministrazione.getRemoteId()
+              somministrazione.getRemoteId(),
+              ((SomministrazioneTx)somministrazione).getNeedSynchronization()
               , somministrazione.getId()
             }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -740,11 +766,11 @@ public class MainDao extends WebSQLDao {
     });
   }
   
-  public void saveRemoteIdSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
+  public void saveRemoteSomministrazione(final Somministrazione somministrazione, final Delegate<Somministrazione> delegate) {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String sql = "UPDATE somministrazioni SET ";
-        sql += " remoteId = ?";
+        sql += " remoteId = ?, needSynchronization = 0";
         sql += " WHERE id = ?";
         tr.doExecuteSql(sql, new Object[] {
             somministrazione.getRemoteId()
@@ -752,6 +778,28 @@ public class MainDao extends WebSQLDao {
           }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             PhonegapLog.log("Updated remote somministrazione " + somministrazione);
+            delegate.execute(somministrazione);
+          }
+        });
+      }
+    });
+  }
+
+  public void updateNeedSynchronizationSomministrazione(final SomministrazioneTx somministrazione, final Delegate<SomministrazioneTx> delegate) {
+    PhgUtils.log("updateNeedSynchronizationSomministrazione .1");
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        PhgUtils.log("updateNeedSynchronizationSomministrazione .2");
+        String sql = "UPDATE somministrazioni SET ";
+        sql += " needSynchronization = ?";
+        sql += " WHERE id = ?";
+        PhgUtils.log("updateNeedSynchronizationSomministrazione .3");
+        tr.doExecuteSql(sql, new Object[] {
+            somministrazione.getNeedSynchronization(), somministrazione.getId()
+          }, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            PhgUtils.log("updateNeedSynchronizationSomministrazione .4");
+            PhonegapLog.log("Updated needSynchronization somministrazione " + somministrazione);
             delegate.execute(somministrazione);
           }
         });

@@ -150,32 +150,15 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     PhgUtils.commonInitializations();
 
-    /*
-    PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
-      public void execute(Void void_) {
-        PhgUtils.logEnvironment();
-        CustomTheme.Instance.get(true).css().ensureInjected();
-      }
-    });
-    */
-
-    /*
-    PhgUtils.log("setting orientationchange handler");
-    PhgUtils.addOrientationChangeHandler(new VoidCallback() {
-      public void handle() {
-        PhgUtils.log(">>>>>>>>>>>> ORIENTATION CHANGED <<<<<<<<<<<<");
-        PhgUtils.reloadApp();
-      }
-    });
-    */
-    
-    PhgUtils.log("setting resize handler");
-    PhgUtils.addResizeHandler(new VoidCallback() {
-      public void handle() {
-        PhgUtils.log(">>>>>>>>>>>> WINDOW RESIZE <<<<<<<<<<<<");
-        PhgUtils.reloadApp();
-      }
-    });
+    if (!OsDetectionUtils.isDesktop()) {
+      PhgUtils.log("setting resize handler");
+      PhgUtils.addResizeHandler(new VoidCallback() {
+        public void handle() {
+          PhgUtils.log(">>>>>>>>>>>> WINDOW RESIZE <<<<<<<<<<<<");
+          PhgUtils.reloadApp();
+        }
+      });
+    }
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
 
@@ -189,7 +172,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     MGWTPlaceHistoryHandler historyHandler = new MGWTPlaceHistoryHandler(historyMapper, historyObserver);
 
-    startTimersAndHistory(new FindSomministrazioniScaduteDelegate(historyHandler));
+    if (USE_BACKGROUND_TASKS) {
+      startHistory(historyHandler);
+    } else {
+      startTimersAndHistory(historyHandler);
+    }
     
   }
   
@@ -355,9 +342,19 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return ginjector.getPrescrizioniDao();
   }
   
-  // 15/05/2014
-  private void startTimersAndHistory(final FindSomministrazioniScaduteDelegate findSomministrazioneScadutaDelegate) {
+  // 11/07/2014 - VERSIONE CON TASKS ATTIVATI DALLA ACTIVITY
+  private void startHistory(MGWTPlaceHistoryHandler historyHandler) {
     
+    initHistoryHandler(historyHandler, new MainPlace());
+    
+  }
+    
+  // 15/05/2014
+  private void startTimersAndHistory(MGWTPlaceHistoryHandler historyHandler) {
+    
+    final FindSomministrazioniScaduteDelegate findSomministrazioneScadutaDelegate = new FindSomministrazioniScaduteDelegate(historyHandler);
+
+    /*** SPOSTATO NEL COSTRUTTORE DI MainController
     // setting dao error delegate
     getPrescrizioniDao().setErrorDelegate(new Delegate<String>() {
       public void execute(String errorMessage) {
@@ -365,14 +362,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         PhgDialogUtils.showMessageDialog(errorMessage);
       }
     });
-    
     // purge orphan notifications
     LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
       public void execute(List<String> ids) {
         MainController.getInstance().purgeNotificationIds(ids);
       }
     });
-    
     if (!OsDetectionUtils.isDesktop()) {
       LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
         public void handleEvent(String id, String state, String json) {
@@ -380,6 +375,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         }
       });
     }
+    **************************************************/
     
     // starting timers
     final ObjectWrapper<Timer> timer = new ObjectWrapper<Timer>();
@@ -395,13 +391,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
           });
           GwtUtils.createTimer(20000, true, new Delegate<Void>() {
             public void execute(Void element) {
-//            PhonegapLog.log("sviluppo somministrazioni in background...");
               MainController.getInstance().sviluppaSomministrazioniInBackground();
             }
           });
         }
       }
     }));
+    
   }
   
   public void setBackgroundAlertsEnabled(boolean enabled) {
