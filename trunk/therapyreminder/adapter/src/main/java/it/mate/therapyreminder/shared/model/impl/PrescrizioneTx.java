@@ -171,6 +171,9 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
 
   @Override
   public boolean hasEqualSomministrazioneOf(Prescrizione that) {
+    if (!isEqualAllowNull(this.getDataFine(), that.getDataFine())) {
+      return false;
+    }
     if (!isEqualAllowNull(this.getTipoRicorrenza(), that.getTipoRicorrenza())) {
       return false;
     }
