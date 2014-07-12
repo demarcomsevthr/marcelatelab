@@ -83,6 +83,16 @@
   height: 1.9em;
 }
 
+.gwt-HTML.phg-TouchHTML.phg-CalendarDialog-Header-Done {
+  
+}
+
+.gwt-HTML.phg-TouchHTML.phg-CalendarDialog-Header-Cancel {
+  font-size: 18px;
+  padding-top: 0.9em;
+  margin-left: -0.5em;
+}
+
 .phg-CalendarDialog-MonthWrapper {
   border: 1px solid rgb(120,120,120);
   background: white;

@@ -144,9 +144,9 @@ public class CalendarDialog {
   
   private List<SelectedDateChangeHandler> selectedDateChangeHandlers = new ArrayList<SelectedDateChangeHandler>();
   
-  private String closeLabel = "it".equals(language) ? "FINITO" : "DONE";
+  private String closeLabel = "it".equals(language) ? "OK" : "DONE";
   
-  private String cancelLabel = "it".equals(language) ? "cancel" : "cancel";
+  private String cancelLabel = "it".equals(language) ? "annulla" : "cancel";
   
   public CalendarDialog() {
     this(null);
@@ -255,6 +255,7 @@ public class CalendarDialog {
     header.setHeight(headerHeight+"px");
 
     TouchHTML doneBox = new TouchHTML(closeLabel);
+    doneBox.addStyleName("phg-CalendarDialog-Header-Done");
     doneBox.setWidth((popupWidth * 20 / 100) + "px");
     doneBox.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
@@ -269,6 +270,7 @@ public class CalendarDialog {
       }
     });
     TouchHTML cancelBox = new TouchHTML(cancelLabel);
+    cancelBox.addStyleName("phg-CalendarDialog-Header-Cancel");
     cancelBox.setWidth((popupWidth * 20 / 100) + "px");
     cancelBox.addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
