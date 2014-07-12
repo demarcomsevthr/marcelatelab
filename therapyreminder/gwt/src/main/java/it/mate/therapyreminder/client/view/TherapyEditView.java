@@ -34,6 +34,7 @@ import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -49,6 +50,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
@@ -497,17 +499,36 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
 
   private Prescrizione flushPrescrizione(boolean verbose) {
     Double qtaUnica = qtaBox.getValueAsDouble();
+    Date dataInizio = CalendarUtil.copyDate(inizioBox.getValue());
+    if (dataInizio != null) {
+      dataInizio.setHours(00);
+      dataInizio.setMinutes(00);
+      dataInizio.setSeconds(00);
+    }
+    Date dataFine = CalendarUtil.copyDate(fineBox.getValue());
+    if (dataFine != null) {
+      dataFine.setHours(23);
+      dataFine.setMinutes(59);
+      dataFine.setSeconds(59);
+    }
     prescrizione.setId(oldPrescrizione.getId());
     prescrizione.setNome(titleBox.getValue());
-    prescrizione.setDataInizio(inizioBox.getValue());
-    prescrizione.setDataFine(fineBox.getValue());
+    prescrizione.setDataInizio(dataInizio);
+    prescrizione.setDataFine(dataFine);
     prescrizione.setQuantita(qtaUnica);
     prescrizione.setCodUdM(umCombo.getValue());
+    
+    if (prescrizione.getDataFine() != null) {
+      if (dataFine.before(prescrizione.getDataInizio())) {
+        if (verbose) {
+          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg4(), "Alert", PhgDialogUtils.BUTTONS_OK);
+        }
+        return null;
+      }
+    }
+    
     String tipoRicorrenza = tipoRicorrenzaCombo.getValue();
     Integer valoreRicorrenza = null;
-    /*
-    Integer valoreRicorrenza = rangeBox.getValueAsInteger();
-    */
     if (Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO.equals(tipoRicorrenza)) {
       tipoRicorrenza = Prescrizione.TIPO_RICORRENZA_GIORNALIERA;
       valoreRicorrenza = 1;

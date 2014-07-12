@@ -398,11 +398,14 @@ body {
 
 .ui-bottom-button-bar {
   position: absolute;
+  /*
   top: bottomBarTop;
+  */
   height: bottomBarHeight;
   width: 100%;
   background: rgb(128, 128, 128);
   padding-left: 16px;
+  bottom: 0;
 }
 
 .ui-bottom-action-btn {
