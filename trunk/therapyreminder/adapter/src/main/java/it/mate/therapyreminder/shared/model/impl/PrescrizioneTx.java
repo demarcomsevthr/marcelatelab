@@ -341,7 +341,8 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   }
 
   public Double getQtaPerConfez() {
-    return qtaPerConfez != null ? qtaPerConfez : 0d;
+//  return qtaPerConfez != null ? qtaPerConfez : 0d;
+    return qtaPerConfez;
   }
 
   public void setQtaPerConfez(Double qtaPerConfez) {
@@ -349,7 +350,8 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   }
 
   public Double getQtaPerAvviso() {
-    return qtaPerAvviso != null ? qtaPerAvviso : 0d;
+//  return qtaPerAvviso != null ? qtaPerAvviso : 0d;
+    return qtaPerAvviso;
   }
 
   public void setQtaPerAvviso(Double qtaPerAvviso) {
@@ -373,7 +375,8 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   }
   
   public Double getNumConfezioni() {
-    return getQtaPerConfez() > 0 ? getQtaRimanente() / getQtaPerConfez() : 0d;
+//  return getQtaPerConfez() > 0 ? getQtaRimanente() / getQtaPerConfez() : 0d;
+    return getQtaPerConfez() > 0 ? getQtaRimanente() / getQtaPerConfez() : null;
   }
 
   public Contatto getTutor() {
