@@ -35,7 +35,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
-    public void completeReset();
+    public void clearALL();
     public void setOnlineMode(boolean onlineMode);
     public boolean isOnlineMode();
     public void goToAccountEditView(Account account);
@@ -95,7 +95,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     PhgDialogUtils.showMessageDialog("Are you sure you want to clear all data?", "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
       public void execute(Integer btnIndex) {
         if (btnIndex == 1) {
-          getPresenter().completeReset();
+          getPresenter().clearALL();
         }
       }
     });

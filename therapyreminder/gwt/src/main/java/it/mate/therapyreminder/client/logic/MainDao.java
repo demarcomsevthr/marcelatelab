@@ -91,11 +91,17 @@ public class MainDao extends WebSQLDao {
   
   private static void dropDBImpl(SQLTransaction tr) {
     PhonegapLog.log("dropping all tables");
+    PhonegapLog.log("dropping table version");
     tr.doExecuteSql("DROP TABLE IF EXISTS version");
+    PhonegapLog.log("dropping table udm");
     tr.doExecuteSql("DROP TABLE IF EXISTS udm");
+    PhonegapLog.log("dropping table prescrizioni");
     tr.doExecuteSql("DROP TABLE IF EXISTS prescrizioni");
+    PhonegapLog.log("dropping table dosaggi");
     tr.doExecuteSql("DROP TABLE IF EXISTS dosaggi");
+    PhonegapLog.log("dropping table somministrazioni");
     tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
+    PhonegapLog.log("dropping table contatti");
     tr.doExecuteSql("DROP TABLE IF EXISTS contatti");
   }
   
