@@ -270,7 +270,7 @@ public class MainController {
   private boolean sviluppaSomministrazioni$operazioneInCorso = false;
   
   public void sviluppaSomministrazioni(final Prescrizione prescrizione, final Delegate<Prescrizione> completionDelegate) {
-//  PhgUtils.log("INIZIO SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
+    PhgUtils.log("SVILUPPO SOMMINISTRAZIONI per " + prescrizione);
     this.sviluppaSomministrazioni$operazioneInCorso = true;
     this.sviluppaSomministrazioni$completionDelegate = new Delegate<Prescrizione>() {
       public void execute(Prescrizione prescrizione) {

@@ -145,4 +145,7 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String TherapyListView_showListaPrescrizioni_noRows_text();
   
+  @DefaultMessage("")
+  String TherapyEditView_flushPrescrizione_msg4();
+  
 }
