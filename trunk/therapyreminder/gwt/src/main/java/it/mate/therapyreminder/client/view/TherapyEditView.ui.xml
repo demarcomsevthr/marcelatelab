@@ -16,9 +16,11 @@
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn">
         <ui:attribute name="text" description="text" key="saveBtn.text"/>
       </p:TouchButton>
+      <!-- 
       <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn">
         <ui:attribute name="text" description="text" key="deleteBtn.text"/>
       </p:TouchButton>
+       -->
     </g:HorizontalPanel>
 
     <hr class="ui-view-separator-1"/>

@@ -682,7 +682,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
-  public void completeReset() {
+  public void clearALL() {
     dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
         

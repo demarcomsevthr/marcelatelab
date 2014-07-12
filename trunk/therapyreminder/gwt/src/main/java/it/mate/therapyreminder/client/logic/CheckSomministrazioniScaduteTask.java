@@ -67,12 +67,12 @@ public class CheckSomministrazioniScaduteTask {
         
         if (somministrazioni != null && somministrazioni.size() > 0) {
           
-          if (somministrazioni.size() == 1) {
+          if (somministrazioni.size() > 0) {
             
             placeController.goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0)));
-            
+
+          /* 12/07/2014 - tolgo annullamento in blocco
           } else {
-            
             GwtUtils.deferredExecution(500, new Delegate<Void>() {
               public void execute(Void element) {
                 PhgDialogUtils.showMessageDialog("Il sistema ha trovato diverse somministrazioni scadute. Vuoi annullarle tutte in blocco?", "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
@@ -91,6 +91,8 @@ public class CheckSomministrazioniScaduteTask {
                 });
               }
             });
+            */
+            
             
           }
           

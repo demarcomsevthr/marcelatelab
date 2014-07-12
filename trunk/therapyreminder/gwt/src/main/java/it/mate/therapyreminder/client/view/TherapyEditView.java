@@ -234,7 +234,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       qtaConfezBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerConfez()));
       qtaRiordinoBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerAvviso()));
       qtaRimanenteBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente()));
-      numConfezBox.setValue(0);
+//    numConfezBox.setValue(0);
       
       if (prescrizione.isPersistent()) {
         if (prescrizione.getTutor() != null) {
@@ -456,7 +456,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   public void onSaveBtn (TouchEndEvent event) {
     savePrescrizione(flushPrescrizione(true), null);
   }
-  
+
+  /*
   @UiHandler ("deleteBtn")
   public void onDeleteBtn (TouchEndEvent event) {
     if (oldPrescrizione.getId() != null) {
@@ -474,6 +475,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       getPresenter().goToPrevious();
     }
   }
+  */
   
   @Override
   public void onClosingView(final ClosingHandler handler) {
