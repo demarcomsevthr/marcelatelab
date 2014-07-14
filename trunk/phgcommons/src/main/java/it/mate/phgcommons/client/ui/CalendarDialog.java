@@ -172,9 +172,10 @@ public class CalendarDialog {
   
   private void initDefaults() {
     popupLeft = 0;
-    popupTop = 52;
     if (OsDetectionUtils.isIOs()) {
-      popupTop -= 11;
+      popupTop = 42;
+    } else {
+      popupTop = 52;
     }
     popupHeight = 392;
     popupWidth = Window.getClientWidth();
