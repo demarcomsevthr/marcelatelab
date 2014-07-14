@@ -1,6 +1,10 @@
 
 @external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
 
+.ui-homePanel {
+  font-size: 22px;
+}
+
 .mgwt-HeaderPanel-center {
   left: 39%;
 }
@@ -10,7 +14,7 @@
 }
 
 .ui-bottom-action-btn {
-  font-size: 18px;
+  font-size: 1.125em;
   width: 140px;
   height: 90px;
   padding-top: 16px;

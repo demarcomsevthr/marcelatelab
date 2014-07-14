@@ -1,6 +1,13 @@
 
 @external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
 
+.ui-home-terapies-btn, .ui-home-reminders-btn, .ui-home-doctors-btn, .ui-home-preferences-btn, .ui-contacts-doctor-btn, .ui-contacts-tutor-btn {
+  height: 64px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+}
+
 .ui-bottom-button-bar {
   bottom: 22%;
 }
