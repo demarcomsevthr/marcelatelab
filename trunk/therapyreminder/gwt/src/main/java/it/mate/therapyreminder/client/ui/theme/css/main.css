@@ -22,6 +22,10 @@ body {
   background-size: windowWidth windowHeight;
 }
 
+.ui-homePanel {
+  font-size: 16px;
+}
+
 .mgwt-HeaderPanel {
   background-color: #3b5998;
 }
@@ -34,6 +38,11 @@ body {
   margin-top: 0px;
   margin-left: -80px;
   padding-top: 10px;  
+}
+
+.ui-homePanel {
+  color: black;
+  height: homePanelHeight;
 }
 
 .ui-HeaderPanel-home {
@@ -61,7 +70,7 @@ body {
   margin: 5px;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 19px;
+  font-size: 1.2em;
   -webkit-appearance: none;  
 }
 
@@ -87,12 +96,6 @@ body {
   -webkit-user-modify: initial;
   padding-top: 3px;
   padding-left: 3px;
-}
-
-.ui-homePanel {
-  color: black;
-  font-size: 16px;
-  height: homePanelHeight;
 }
 
 .ui-homePanel-clearHeight {
@@ -124,7 +127,7 @@ body {
   color: rgba(30, 0, 253, 0.9);
   font-family: Trebuchet MS;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 1.25em;
   padding: 10px 10px;
 }
 
@@ -159,7 +162,7 @@ body {
   padding-left: 12px;
   width: 100%;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 0.75em;
   position: absolute;
   bottom: 1em;
 }
@@ -169,7 +172,7 @@ body {
   padding-left: 12px;
   width: 100%;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 0.75em;
 }
 
 .ui-signBtn {
@@ -177,14 +180,14 @@ body {
 }
 
 .ui-signBtn a {
-  font-size: 16px;
+  font-size: 1em;
 }
 
 .ui-signedLbl {
   padding-left: 12px;
   width: 13em;
   overflow: hidden;
-  font-size: 16.8px;
+  font-size: 1em;
 }
 
 .ui-homeSpacer1 {
@@ -243,7 +246,7 @@ body {
 }
 
 .ui-top-action-btn {
-  font-size: 14px;
+  font-size: 0.875em;
   font-family: arial, sans-serif;
   font-weight: bold;
   margin: 2px;
@@ -261,7 +264,7 @@ body {
   -webkit-appearance: none;
   height: 1.2em;
   background-color: white;
-  font-size: 19px;
+  font-size: 1.2em;
 }
 
 .ui-app-combobox {
@@ -285,7 +288,7 @@ body {
 }
 
 .ui-field-label {
-  font-size: 12px;
+  font-size: 0.75em;
   padding-left: 0.6em;
   color: blue;
   font-weight: bold;
@@ -409,7 +412,7 @@ body {
 }
 
 .ui-bottom-action-btn {
-  font-size: 11px;
+  font-size: 0.7em;
   font-family: arial, sans-serif;
   font-weight: bold;
   margin: 2px;
@@ -539,7 +542,7 @@ body {
 }
 
 .ui-settings-btn.mgwt-SmartButton {
-  font-size: 12px;
+  font-size: 0.75em;
   font-family: arial, sans-serif;
   font-weight: bold;
   background-color: #ddd;
@@ -557,7 +560,7 @@ body {
 }
 
 .ui-settings-label {
-  font-size: 12px;
+  font-size: 0.75em;
   padding-left: 0.6em;
   color: blue;
   font-weight: bold;
