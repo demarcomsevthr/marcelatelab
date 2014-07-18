@@ -91,6 +91,10 @@ public class MainActivity extends MGWTAbstractActivity implements
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
+    if (place.getToken().equals(MainPlace.HOME)) {
+      PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+    }
+
     //TODO: REVISIONE BACKGROUND TASKS
     if (AppClientFactory.USE_BACKGROUND_TASKS) {
       SviluppaSomministrazioniTask.getInstance();
