@@ -12,16 +12,19 @@ import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.touch.HasTouchHandlers;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchStartHandler;
-import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
 public class TouchUtils {
+  
+  private static String tappedStyle = "phg-TappedStyle";
   
   public static void fireClickEventFromTouchEvent(HasClickHandlers target, TouchEvent<?> touchEvent) {
     boolean touchPresent = touchEvent.getTouches() != null && touchEvent.getTouches().length() > 0;
@@ -204,8 +207,9 @@ public class TouchUtils {
     elem.disabled = "true";
   }-*/;
   
-  
-  public static void addTouchEndHandlerPreventingScroll (TouchWidget widget, final TouchEndHandler handler) {
+  public static void addTouchEndHandlerPreventingScroll (HasTouchHandlers widget, final TouchEndHandler handler) {
+    addTouchHandlersPreventingScroll(widget, null, handler);
+    /*
     final ObjectWrapper<Integer> touchStartY = new ObjectWrapper<Integer>();
     widget.addTouchStartHandler(new TouchStartHandler() {
       public void onTouchStart(TouchStartEvent event) {
@@ -225,6 +229,62 @@ public class TouchUtils {
         } catch (Exception ex) {}
       }
     });
+    */
+  }
+  
+  public static void addTouchHandlersPreventingScroll (HasTouchHandlers widget, final TouchStartHandler touchStartHandler, final TouchEndHandler touchEndHandler) {
+    final ObjectWrapper<Integer> touchStartY = new ObjectWrapper<Integer>();
+    widget.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+        try {
+          touchStartY.set(event.getTouches().get(0).getPageY());
+        } catch (Exception ex) {}
+        if (touchStartHandler != null) {
+          touchStartHandler.onTouchStart(event);
+        }
+      }
+    });
+    widget.addTouchEndHandler(new TouchEndHandler() {
+      public void onTouchEnd(TouchEndEvent event) {
+        try {
+          int endY = event.getChangedTouches().get(0).getPageY();
+          int diffY = Math.abs((touchStartY.get() - endY));
+          if (diffY < 10) {
+            if (touchEndHandler != null) {
+              touchEndHandler.onTouchEnd(event);
+            }
+          }
+        } catch (Exception ex) {}
+      }
+    });
+  }
+  
+  public static void addTappedStyleHandlers(final HasTouchHandlers widget) {
+    widget.addTouchStartHandler(new TouchStartHandler() {
+      public void onTouchStart(TouchStartEvent event) {
+        addTappedStyle(widget);
+        GwtUtils.deferredExecution(150, new Delegate<Void>() {
+          public void execute(Void element) {
+            removeTappedStyle(widget);
+          }
+        });
+      }
+    });
+  }
+  
+  protected static void addTappedStyle(final HasTouchHandlers widget) {
+    ((UIObject)widget).addStyleName(tappedStyle);
+  }
+  
+  protected static void removeTappedStyle(final HasTouchHandlers widget) {
+    ((UIObject)widget).removeStyleName(tappedStyle);
+    /*
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        ((UIObject)widget).removeStyleName(tappedStyle);
+      }
+    });
+    */
   }
   
 }

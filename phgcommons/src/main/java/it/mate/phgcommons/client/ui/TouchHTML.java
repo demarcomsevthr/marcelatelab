@@ -42,13 +42,12 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers, HasModel
   protected TouchHTML(HTML html) {
     setElement(html.getElement());
     addStyleName("phg-TouchHTML");
-
     addTouchEndHandler(new TouchEndHandler() {
       public void onTouchEnd(TouchEndEvent event) {
         TouchUtils.applyFocusPatch();
       }
     });
-
+    TouchUtils.addTappedStyleHandlers(this);
   }
   
   public void setTooltip(String tooltip) {

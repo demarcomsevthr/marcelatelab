@@ -16,17 +16,17 @@ import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.mgwt.ui.client.MGWT;
 
 public class PhgUtils {
   
   private static int tabletWrapperPct = 80;
-  
-  private static int HEADER_PANEL_HEIGHT = 40;
   
   private static boolean useLogPlugin = false;
   
@@ -271,12 +271,12 @@ public class PhgUtils {
       //09/10/2013
       // Patch per IPhone per far funzionare le animazioni jquery
       
-      int actualHeight = (Window.getClientHeight() - HEADER_PANEL_HEIGHT );
+      int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
       
       if (OsDetectionUtils.isIOs() && actualHeight < 380) {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
-            int actualHeight = (Window.getClientHeight() - HEADER_PANEL_HEIGHT );
+            int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
             PhgUtils.log("setting wrapperPanel height to " + actualHeight);
             wrapperPanel.setHeight(actualHeight + "px");
             wrapperPanel.setWidth(Window.getClientWidth() + "px");
@@ -491,5 +491,17 @@ public class PhgUtils {
       $wnd.addEventListener(eventName, jsCallback, false);
     }
   }-*/;
+  
+  public static void setDesktopDebugBorder(int width, int height) {
+    if (OsDetectionUtils.isDesktop()) {
+      PhgUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
+      RootPanel.getBodyElement().getStyle().setWidth(width, Unit.PX);
+      RootPanel.getBodyElement().getStyle().setHeight(height, Unit.PX);
+      RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
+      RootPanel.getBodyElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+      RootPanel.getBodyElement().getStyle().setBorderColor("red");
+      RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
+    }
+  }
   
 }

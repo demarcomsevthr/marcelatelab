@@ -52,6 +52,7 @@ public class TouchAnchor extends TouchWidget implements HasClickHandlers, HasTag
         TouchUtils.applyFocusPatch();
       }
     });
+    TouchUtils.addTappedStyleHandlers(this);
   }
   
   public void setHtml(SafeHtml html) {
@@ -80,13 +81,5 @@ public class TouchAnchor extends TouchWidget implements HasClickHandlers, HasTag
   public void setTag(String tag) {
     this.tag = tag;
   }
-
-  /*
-  @Override
-  public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
-    PhgUtils.log("ATTENZIONE: CON LA FOCUS PATCH (27/01/2014) NON FUNZIONA PIU' IL TOUCH START HANDLER!");
-    return super.addTouchStartHandler(handler);
-  }
-  */
 
 }
