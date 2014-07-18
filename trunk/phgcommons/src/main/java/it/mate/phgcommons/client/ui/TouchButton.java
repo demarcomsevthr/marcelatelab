@@ -1,7 +1,5 @@
 package it.mate.phgcommons.client.ui;
 
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,7 +9,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.HasTouchHandlers;
 import com.googlecode.mgwt.dom.client.event.touch.TouchCancelHandler;
@@ -32,17 +29,9 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
   
   private final boolean isAndroid = MGWT.getOsDetection().isAndroid();
   
-  private boolean changeColorOnTap = false;
-  
-  private int revertOriginalColorDelay = -1;
-  
-  private String originalColor;
-  
   private String tag;
   
   private boolean rounded = false;
-  
-  private String colorOnTap = "white";
   
   public TouchButton() {
     
@@ -58,18 +47,10 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
 
     setStyleName("mgwt-SmartButton");
     addStyleName("mgwt-Button");
+    addStyleName("phg-TouchButton");
     setRounded(rounded);
-    originalColor = getElement().getStyle().getColor();
-    if (originalColor == null || "".equals(originalColor)) {
-      originalColor = "black";
-    }
     
-    if (MGWT.getOsDetection().isAndroid()) {
-      changeColorOnTap = true;
-      revertOriginalColorDelay = 100; 
-    }
-
-    addChangeColorOnTap();
+    TouchUtils.addTappedStyleHandlers(this);
 
   }
   
@@ -84,37 +65,6 @@ public class TouchButton extends Composite implements HasClickHandlers, HasTouch
   
   public void setRounded(String text) {
     setRounded(Boolean.parseBoolean(text));
-  }
-  
-  private void addChangeColorOnTap() {
-    if (changeColorOnTap) {
-      addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          TouchButton.this.getElement().getStyle().setColor(colorOnTap);
-          if (revertOriginalColorDelay > 0) {
-            GwtUtils.deferredExecution(revertOriginalColorDelay, new Delegate<Void>() {
-              public void execute(Void element) {
-                setOriginalColor();
-              }
-            });
-          }
-        }
-      });
-    }
-  }
-  
-  public void setOriginalColor() {
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        TouchButton.this.getElement().getStyle().clearColor();
-        TouchButton.this.getElement().getStyle().clearBackgroundColor();
-      }
-    });
-  }
-  
-  public void setChangeColorOnTap(boolean changeColorOnClick) {
-    this.changeColorOnTap = changeColorOnClick;
-    addChangeColorOnTap();
   }
   
   public TouchButton(String html) {

@@ -177,7 +177,11 @@ public class CalendarDialog {
     } else {
       popupTop = 52;
     }
-    popupHeight = 392;
+    if (OsDetectionUtils.isIOs() && OsDetectionUtils.isPhone() && OsDetectionUtils.is3Inch()) {
+      popupHeight = 378;
+    } else {
+      popupHeight = 392;
+    }
     popupWidth = Window.getClientWidth();
     headerHeight = 36;
     dayHeight = 36;
