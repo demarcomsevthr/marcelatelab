@@ -86,30 +86,44 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
       getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
           umHtml.setHTML(SafeHtmlUtils.fromTrustedString(udm.getDescrizione()));
+          
+          if (MainController.isScaduta(somministrazione)) {
+            
+            String msg = somministrazione.getPrescrizione().getNome(); 
+            msg += " " + AppMessages.IMPL.ReminderEditView_setModel_msg3() + " " + somministrazione.getOrario();
+            msg += "§";
+            msg += NumberUtils.doubleAsInt(somministrazione.getQuantita()) + " ";
+            msg += udm.getDescrizione();
+            msg += "§§";
+            msg += AppMessages.IMPL.ReminderEditView_setModel_msg1();
+            
+//          Position pos = new Position(getPopupTop(), null);
+            Position pos = null;
+            
+            PhgDialogUtils.showMessageDialog(msg, AppMessages.IMPL.ReminderEditView_setModel_title1(), PhgDialogUtils.BUTTONS_YESNO,
+                pos,
+                new Delegate<Integer>() {
+                  public void execute(Integer btnIndex) {
+                    if (btnIndex == 1) {
+                      PhgUtils.log("executing " + somministrazione);
+                      somministrazione.setEseguita();
+                      getPresenter().updateSomministrazione(somministrazione);
+                    }
+                    if (btnIndex == 2) {
+                      PhgUtils.log("canceling " + somministrazione);
+                      somministrazione.setAnnullata();
+                      getPresenter().updateSomministrazione(somministrazione);
+                    }
+                  }
+                }
+              );
+            
+          }
+          
+          
         }
       });
       
-      if (MainController.isScaduta(somministrazione)) {
-        
-        PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ReminderEditView_setModel_msg1(), AppMessages.IMPL.ReminderEditView_setModel_title1(), PhgDialogUtils.BUTTONS_YESNO,
-            new Position(getPopupTop(), null) /* null */,
-            new Delegate<Integer>() {
-              public void execute(Integer btnIndex) {
-                if (btnIndex == 1) {
-                  PhgUtils.log("executing " + somministrazione);
-                  somministrazione.setEseguita();
-                  getPresenter().updateSomministrazione(somministrazione);
-                }
-                if (btnIndex == 2) {
-                  PhgUtils.log("canceling " + somministrazione);
-                  somministrazione.setAnnullata();
-                  getPresenter().updateSomministrazione(somministrazione);
-                }
-              }
-            }
-          );
-        
-      }
       
     } else if (TAG_FARMACO_DA_RIORDINARE.equals(tag)) {
       

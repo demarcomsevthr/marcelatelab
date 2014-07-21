@@ -8,6 +8,7 @@ import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.plugins.LocalNotificationsPlugin;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
+import it.mate.phgcommons.client.ui.ph.PhDateBox;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
@@ -150,6 +151,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     PhgUtils.commonInitializations();
 
+    // Gorini 19/07/2014
+    if (PhgUtils.getAppLocalLanguageImpl() == null || "en".equals(PhgUtils.getAppLocalLanguageImpl())) {
+      PhDateBox.setForcedDateFormat("dd MMM yyyy");
+    }
+    
     if (!OsDetectionUtils.isDesktop()) {
       PhgUtils.log("setting resize handler");
       PhgUtils.addResizeHandler(new VoidCallback() {

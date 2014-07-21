@@ -270,7 +270,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   private void retrieveModel() {
     if (place.getToken().equals(MainPlace.THERAPY_LIST)) {
-      PhgUtils.log("retrieving therapy list from db");
       dao.findAllPrescrizioni(new Delegate<List<Prescrizione>>() {
         public void execute(List<Prescrizione> results) {
           view.setModel(results, TherapyListView.TAG_PRESCRIZIONI);
@@ -294,8 +293,10 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
       setHeaderWaiting(true);
       
+      PhgUtils.log("MainActivity.retrieveModel.1");
       MainController.getInstance().findSomministrazioniNonEseguiteInMemoria(new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> results) {
+          PhgUtils.log("MainActivity.retrieveModel.2");
           setHeaderWaiting(false);
           if (results != null && results.size() > 0) {
             view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
@@ -360,7 +361,8 @@ public class MainActivity extends MGWTAbstractActivity implements
       caught.printStackTrace();
       logMsg = caught.getClass().getName()+" - "+caught.getMessage();
       if (caught instanceof InvocationException) {
-        popupMsg = "Maybe data connection is not active";
+//      popupMsg = "Maybe data connection is not active";
+        popupMsg = null;
       } else {
         if (caught.getMessage() != null) {
           popupMsg = caught.getMessage();
@@ -372,7 +374,9 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (logMsg != null)
       PhgUtils.log(logMsg);
-    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+    if (popupMsg != null) {
+      PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+    }
   }
   
   private void setHeaderWaiting(boolean flag) {
@@ -405,8 +409,8 @@ public class MainActivity extends MGWTAbstractActivity implements
       optionsBtn.addStyleName("ui-optionsBtn");
       optionsBtn.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
-          PhgUtils.log("optons tapped");
-        }
+          
+       }
       });
       view.getHeaderPanel().setRightWidget(optionsBtn);
     } else {
@@ -608,7 +612,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void doFinish() {
         dao.deletePrescrizioni(prescrizioni, new Delegate<Void>() {
           public void execute(Void element) {
-            PhgUtils.log("going to therapy list view");
             goToTherapyListView();
           }
         });
@@ -693,7 +696,6 @@ public class MainActivity extends MGWTAbstractActivity implements
         JsArrayString localStorageKeys = PhgUtils.getLocalStorageKeys();
         for (int it = 0; it < localStorageKeys.length(); it++) {
           String key = localStorageKeys.get(it);
-          PhgUtils.log("removing localStorage item " + key);
           PhgUtils.removeLocalStorageItem(key);
         }
         
@@ -713,7 +715,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   //TODO: REVISIONE BACKGROUND TASKS
   private void setBackgroundAlertsEnabled(final boolean enabled) {
-    MainController.getInstance().checkConnectionIfOnlineMode(new Delegate<Boolean>() {
+    MainController.getInstance().checkDataConnectionAvailable(false, new Delegate<Boolean>() {
       public void execute(Boolean connessioneDatiAttiva) {
         if (AppClientFactory.USE_BACKGROUND_TASKS) {
           SviluppaSomministrazioniTask.getInstance().setEnabled(enabled);
@@ -766,7 +768,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     String platform = PhgUtils.getDevicePlatform();
     String devUuid = PhgUtils.getDeviceUuid();
     String devVersion = PhgUtils.getDeviceVersion();
-    PhgUtils.log("calling sendDevInfo on remote facade...");
     AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
       new AsyncCallback<String>() {
         public void onFailure(Throwable caught) {
@@ -861,7 +862,7 @@ public class MainActivity extends MGWTAbstractActivity implements
                       RpcMap accountMap = ((AccountTx)account).toRpcMap();
                       AppClientFactory.IMPL.getRemoteFacade().updateDatiContatto(contattoMap, accountMap, new AsyncCallback<Void>() {
                         public void onSuccess(Void result) {
-                          PhgUtils.log("tutor data remotely saved");
+                          
                         }
                         public void onFailure(Throwable caught) {
                           processFailure(null, caught);

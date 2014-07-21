@@ -5,17 +5,13 @@ import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.therapyreminder.client.constants.AppProperties;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
-import com.google.gwt.user.client.Window;
 
 public class MainEntryPoint implements EntryPoint {
 
-  private Logger log = Logger.getLogger(getClass().getName());
+//private Logger log = Logger.getLogger(getClass().getName());
 
   @Override
   public void onModuleLoad() {
@@ -32,7 +28,9 @@ public class MainEntryPoint implements EntryPoint {
     
     PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
     PhgUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
-    
+
+    PhgUtils.setDefaultExceptionHandler(Logger.getLogger(getClass().getName()));
+    /*
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {
         log.log(Level.SEVERE, "uncaught exception", ex);
@@ -42,6 +40,8 @@ public class MainEntryPoint implements EntryPoint {
         }
       }
     });
+    */
+    
     
     startApp();
     

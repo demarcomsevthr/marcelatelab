@@ -13,6 +13,7 @@ import java.util.Map;
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.core.client.Scheduler;
@@ -1297,6 +1298,20 @@ public class GwtUtils {
 
   public static void setMobileOptimizations(boolean mobileOptimizations) {
     GwtUtils.mobileOptimizations = mobileOptimizations;
+  }
+  
+  public static void setDebugExceptionHandler() {
+    GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      public void onUncaughtException(Throwable th) {
+        GwtUtils.log("Uncaught exception: " + th.getClass().getName());
+        StackTraceElement[] st = th.getStackTrace();
+        if (st != null) {
+          for (StackTraceElement ste : st) {
+            GwtUtils.log("Stack trace: " + ste.getClassName()+" "+ste.getMethodName()+" "+ste.getLineNumber());
+          }
+        }
+      }
+    });
   }
 
 }

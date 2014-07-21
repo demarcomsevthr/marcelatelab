@@ -148,4 +148,10 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String TherapyEditView_flushPrescrizione_msg4();
   
+  @DefaultMessage("")
+  String ReminderEditView_setModel_msg3();
+  
+  @DefaultMessage("")
+  String CheckSomministrazioniScaduteTask_run_msg1();
+  
 }

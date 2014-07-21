@@ -170,24 +170,29 @@ public class MainController {
             if (!oldSomministrazione.isEseguita() && newSomministrazione.isEseguita()) {
               double qtaSomministrata = newSomministrazione.getQuantita();
               Prescrizione prescrizione = somministrazioneAggiornata.getPrescrizione();
-              double qtaRimanente = prescrizione.getQtaRimanente();
-              double qtaPerRiordino = prescrizione.getQtaPerAvviso();
-              if (qtaRimanente - qtaSomministrata > 0) {
-                qtaRimanente -= qtaSomministrata;
-                prescrizione.setQtaRimanente(qtaRimanente);
-                dao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
-                  public void execute(Prescrizione result) {
-                    
-                  }
-                });
+              
+              if (prescrizione.getQtaPerAvviso() != null && prescrizione.getQtaPerAvviso() > 0) {
+                double qtaRimanente = prescrizione.getQtaRimanente();
+                double qtaPerRiordino = prescrizione.getQtaPerAvviso();
+                if (qtaRimanente - qtaSomministrata > 0) {
+                  qtaRimanente -= qtaSomministrata;
+                  prescrizione.setQtaRimanente(qtaRimanente);
+                  dao.savePrescrizione(prescrizione, new Delegate<Prescrizione>() {
+                    public void execute(Prescrizione result) {
+
+                    }
+                  });
+                }
+                if (qtaRimanente < qtaPerRiordino) {
+                  farmacoDaRiordinareDelegate.execute(somministrazioneAggiornata);
+                  return;
+                }
               }
-              if (qtaRimanente < qtaPerRiordino) {
-                farmacoDaRiordinareDelegate.execute(somministrazioneAggiornata);
-                return;
-              }
+              
             }
             
             somministrazioneAggiornataDelegate.execute(somministrazioneAggiornata);
+            
           }
         });
       }
@@ -392,6 +397,11 @@ public class MainController {
     if (it.hasNext()) {
       Dosaggio dosaggio = it.next();
       Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
+      
+      if (Time.fromString(dosaggio.getOrario()) == null) {
+        completionDelegate.execute(results);
+      }
+      
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
       if (dataSomministrazione.before(new Date())) {
         iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
@@ -480,8 +490,12 @@ public class MainController {
   public static boolean isScaduta(Somministrazione somministrazione) {
     Date NOW = new Date();
     Date datetimeSomministrazione = somministrazione.getData();
-    Time.fromString(somministrazione.getOrario()).setInDate(datetimeSomministrazione);
-    return somministrazione.isSchedulata() && datetimeSomministrazione.before(NOW);
+    if (Time.fromString(somministrazione.getOrario()) != null) {
+      Time.fromString(somministrazione.getOrario()).setInDate(datetimeSomministrazione);
+      return somministrazione.isSchedulata() && datetimeSomministrazione.before(NOW);
+    } else {
+      return false;
+    }
   }
   
   public static String validatePrescrizione(Prescrizione prescrizione) {
@@ -504,14 +518,20 @@ public class MainController {
     return null;
   }
   
-  public void checkConnectionIfOnlineMode(final Delegate<Boolean> delegate) {
+  public void checkDataConnectionAvailable(final Delegate<Boolean> delegate) {
+    checkDataConnectionAvailable(true, delegate);
+  }
+  
+  public void checkDataConnectionAvailable(final boolean showMsgDialog, final Delegate<Boolean> delegate) {
     if (isOnlineMode()) {
       AppClientFactory.IMPL.getRemoteFacade().checkConnection(new AsyncCallback<Boolean>() {
         public void onSuccess(Boolean result) {
           delegate.execute(true);
         }
         public void onFailure(Throwable caught) {
-          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainController_checkConnectionIfOnlineMode_msg1());
+          if (showMsgDialog) {
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainController_checkConnectionIfOnlineMode_msg1());
+          }
           delegate.execute(false);
         }
       });
@@ -563,7 +583,6 @@ public class MainController {
     return null;
   }
   
-  // TODO: NEW
   public void synchSomministrazioniInBackground() {
     dao.findSomministrazioniDaSincronizzare(new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioniDaSincronizzare) {
@@ -771,7 +790,8 @@ public class MainController {
     } else if (caught != null) {
       logMsg = caught.getClass().getName()+" - "+caught.getMessage();
       if (caught instanceof InvocationException) {
-        popupMsg = "Maybe data connection is not active";
+//      popupMsg = "Maybe data connection is not active";
+        popupMsg = null;
       } else {
         if (caught.getMessage() != null) {
           popupMsg = caught.getMessage();
@@ -786,7 +806,9 @@ public class MainController {
     }
     if (logMsg != null)
       PhgUtils.log(logMsg);
-    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+    if (popupMsg != null) {
+      PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
+    }
   }
 
 

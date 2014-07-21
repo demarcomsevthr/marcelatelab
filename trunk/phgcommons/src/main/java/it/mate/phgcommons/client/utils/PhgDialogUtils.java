@@ -61,7 +61,7 @@ public class PhgDialogUtils {
     row = new SimplePanel();
     row.addStyleName("phg-PopinDialog-MessageRow");
     dialogContainer.add(row);
-    HTML messageHtml = new HTML(SafeHtmlUtils.fromTrustedString(message));
+    HTML messageHtml = new HTML(SafeHtmlUtils.fromTrustedString( encodeHtmlText(message) ));
     row.add(messageHtml);
     
     row = new SimplePanel();
@@ -76,6 +76,10 @@ public class PhgDialogUtils {
     
     createButtonsAndShow(dialogContainer, buttonsPanel, message, title, buttonsType, position, delegate);
     
+  }
+  
+  private static String encodeHtmlText(String text) {
+    return text.replace("§", "<BR/>");
   }
   
   private static void createButtonsAndShow(final Widget dialogContainer, Panel buttonsPanel, String message, final String title, final int buttonsType, final Position position, final Delegate<Integer> delegate) {

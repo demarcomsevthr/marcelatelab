@@ -10,6 +10,8 @@ import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
@@ -502,6 +504,26 @@ public class PhgUtils {
       RootPanel.getBodyElement().getStyle().setBorderColor("red");
       RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
     }
+  }
+  
+  public static void setDefaultExceptionHandler(final Logger log) {
+    GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      public void onUncaughtException(Throwable ex) {
+        if (log != null) {
+          log.log(Level.SEVERE, "uncaught exception", ex);
+        }
+        ex.printStackTrace();
+        if (!PhgUtils.isSuspendUncaughtExceptionAlerts()) {
+//        Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
+        }
+        StackTraceElement stea[] = ex.getStackTrace();
+        if (stea != null) {
+          for (StackTraceElement ste : stea) {
+            System.out.println("Stack trace: " + ste.getClassName()+" "+ste.getMethodName());;
+          }
+        }
+      }
+    });
   }
   
 }

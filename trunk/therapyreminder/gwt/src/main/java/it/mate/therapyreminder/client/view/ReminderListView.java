@@ -68,10 +68,6 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
-//  getScrollPanel().setScrollingEnabledX(false);
-//  getScrollPanel().setScrollingEnabledY(false);
-//  resultsPanel.setScrollingEnabledY(true);
-    
     disableMainScrolling();
     
     resultsPanel.addScrollMoveHandler(new ScrollMoveEvent.Handler() {
@@ -84,6 +80,9 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         scrollInProgress = false;
       }
     });
+
+    
+//  GwtUtils.setDebugExceptionHandler();
     
   }
   

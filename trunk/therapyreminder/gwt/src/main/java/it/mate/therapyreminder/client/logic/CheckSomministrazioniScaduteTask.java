@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.places.MainPlace;
 import it.mate.therapyreminder.shared.model.Somministrazione;
@@ -21,6 +22,8 @@ public class CheckSomministrazioniScaduteTask {
   private boolean enabled = true;
   
   private static CheckSomministrazioniScaduteTask inst;
+  
+  private static final boolean CHECK_DATA_CONNECTION_FIRST = true;
   
   public static CheckSomministrazioniScaduteTask getInstance() {
     if (inst == null) {
@@ -59,48 +62,31 @@ public class CheckSomministrazioniScaduteTask {
   public void run() {
     if (!enabled)
       return;
-    
     PhgUtils.log("running CheckSomministrazioniScaduteTask");
-    
     MainController.getInstance().findSomministrazioniScadute(new Delegate<List<Somministrazione>>() {
       public void execute(final List<Somministrazione> somministrazioni) {
-        
         if (somministrazioni != null && somministrazioni.size() > 0) {
-          
           if (somministrazioni.size() > 0) {
+            final Somministrazione somministrazione = somministrazioni.get(0);
             
-            placeController.goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0)));
-
-          /* 12/07/2014 - tolgo annullamento in blocco
-          } else {
-            GwtUtils.deferredExecution(500, new Delegate<Void>() {
-              public void execute(Void element) {
-                PhgDialogUtils.showMessageDialog("Il sistema ha trovato diverse somministrazioni scadute. Vuoi annullarle tutte in blocco?", "Alert", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
-                  public void execute(Integer btn) {
-                    if (btn == 1) {
-                      MainController.getInstance().annullaSomministrazioni(somministrazioni, new Delegate<Void>() {
-                        public void execute(Void element) {
-                          PhgDialogUtils.showMessageDialog("Somministrazioni annullate");
-                          placeController.goTo(new MainPlace());
-                        }
-                      });
-                    } else {
-                      placeController.goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazioni.get(0)));
-                    }
+            if ( CHECK_DATA_CONNECTION_FIRST && somministrazione.getPrescrizione().isRemote()) {
+              MainController.getInstance().checkDataConnectionAvailable(false, new Delegate<Boolean>() {
+                public void execute(Boolean available) {
+                  if (available) {
+                    placeController.goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
+                  } else {
+                    PhgDialogUtils.showMessageDialog(AppMessages.IMPL.CheckSomministrazioniScaduteTask_run_msg1());
                   }
-                });
-              }
-            });
-            */
-            
+                }
+              });
+            } else {
+              placeController.goTo(new MainPlace(MainPlace.REMINDER_EDIT, somministrazione));
+            }
             
           }
-          
         }
-        
       }
     });
   }
-  
   
 }
