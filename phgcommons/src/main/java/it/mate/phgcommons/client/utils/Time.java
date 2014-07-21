@@ -99,23 +99,80 @@ public class Time {
   }
   
   public static Time fromString(String text) {
+    
+    Time res = fromStringAllowsException(text, fmt);
+    if (res == null) {
+      // provo a fare il parsing con il formato inverso
+      if (is12HFormat()) {
+        res = fromStringAllowsException(text, fmt24);
+        if (res == null) {
+          res = fromStringAllowsException(text, fmt12);
+        }
+      } else {
+        res = fromStringAllowsException(text, fmt12);
+        if (res == null) {
+          res = fromStringAllowsException(text, fmt24);
+        }
+      }
+    }
+    if (res == null) {
+      PhgUtils.log("ALERT: cannot create Time from string " + text);
+    }
+    return res;
+    
+
+    /*
     Date temp = null;
     try {
+      PhgUtils.log("Time.fromString.2");
       temp = fmt.parse(text);
     } catch (IllegalArgumentException ex) {
       // provo a fare il parsing con il formato inverso
       if (is12HFormat()) {
-        temp = fmt24.parse(text);
+        try {
+          PhgUtils.log("Time.fromString.3");
+          temp = fmt24.parse(text);
+        } catch (IllegalArgumentException ex1) {
+          try {
+            PhgUtils.log("Time.fromString.4");
+            temp = fmt12.parse(text);
+          } catch (IllegalArgumentException ex2) {
+            PhgUtils.log("Time.fromString.5");
+            PhgUtils.log("ERROR PARSING TIME FROM STRING " + text);
+            return null;
+          }
+        }
       } else {
         try {
+          PhgUtils.log("Time.fromString.4");
           temp = fmt12.parse(text);
-        } catch (IllegalArgumentException ex2) {
-          PhgUtils.log("ERROR PARSING TIME FROM STRING " + text);
-          return null;
+        } catch (IllegalArgumentException ex1) {
+          try {
+            PhgUtils.log("Time.fromString.4");
+            temp = fmt24.parse(text);
+          } catch (IllegalArgumentException ex2) {
+            PhgUtils.log("Time.fromString.5");
+            PhgUtils.log("ERROR PARSING TIME FROM STRING " + text);
+            return null;
+          }
         }
       }
     }
+    PhgUtils.log("Time.fromString.6");
     return new Time(temp);
+    */
+  }
+  
+  private static Time fromStringAllowsException(String text, DateTimeFormat fmt) {
+    Date res = null;
+    try {
+      res = fmt.parse(text);
+    } catch (IllegalArgumentException ex2) {
+    }
+    if (res != null) {
+      return new Time(res);
+    }
+    return null;
   }
   
   public Date setInDate(Date date) {

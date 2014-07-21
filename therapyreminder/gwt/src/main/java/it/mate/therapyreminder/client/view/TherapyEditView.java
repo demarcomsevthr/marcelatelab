@@ -14,6 +14,7 @@ import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -45,6 +47,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -101,7 +104,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField Panel alertRiordinoPanel;
   @UiField PhTextBox qtaConfezBox;
   @UiField PhTextBox qtaRiordinoBox;
-  @UiField PhTextBox qtaRimanenteBox;
+//@UiField PhTextBox qtaRimanenteBox;
+  @UiField HTML qtaRimanenteBox;
   @UiField PhTextBox numConfezBox;
   @UiField Panel notificheTutorPanel;
   @UiField PhCheckBox cbxNotificheTutor;
@@ -115,6 +119,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   private List<Contatto> tutors;
   
   private boolean forceClose = false;
+  
+  private int qtaRimanente = 0;
   
   
   public TherapyEditView() {
@@ -233,7 +239,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       cbxAlertRiordino.setValue(prescrizione.isGstAvvisoRiordino());
       qtaConfezBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerConfez()));
       qtaRiordinoBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaPerAvviso()));
-      qtaRimanenteBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente()));
+//    qtaRimanenteBox.setValue(NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente()));
+      qtaRimanente = NumberUtils.doubleAsInteger(prescrizione.getQtaRimanente());
+      qtaRimanenteBox.setHTML(""+qtaRimanente);
 //    numConfezBox.setValue(0);
       
       if (prescrizione.isPersistent()) {
@@ -413,6 +421,11 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   private void initBottomBar() {
     HorizontalPanel bottomBar = new HorizontalPanel();
     bottomBar.addStyleName("ui-bottom-button-bar");
+    
+    if (OsDetectionUtils.is3Inch()) {
+      bottomBar.getElement().getStyle().setMarginBottom(-10, Unit.PX);
+    }
+    
     bottomBar.setSpacing(0);
     initBottomBarItem(bottomBar, AppMessages.IMPL.TherapyEditView_bottomBar_what(), "what", "estremiPrescrizionePanel");
     initBottomBarItem(bottomBar, AppMessages.IMPL.TherapyEditView_bottomBar_when(), "when", "ricorrenzaPrescrizionePanel");
@@ -582,7 +595,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     prescrizione.setGstAvvisoRiordino(cbxAlertRiordino.getValue());
     prescrizione.setQtaPerAvviso(qtaRiordinoBox.getValueAsDouble());
     prescrizione.setQtaPerConfez(qtaConfezBox.getValueAsDouble());
-    prescrizione.setQtaRimanente(qtaRimanenteBox.getValueAsDouble());
+    prescrizione.setQtaRimanente((double)qtaRimanente);
     
     prescrizione.setTutor(getSelectedTutor());
 
@@ -633,7 +646,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     if (nuoveConfezioni > 0) {
       int qtaPerConfezione = qtaConfezBox.getValueAsInt();
       int qtaRimanenteIniziale = NumberUtils.doubleAsInt(oldPrescrizione.getQtaRimanente());
-      qtaRimanenteBox.setValue(qtaRimanenteIniziale + nuoveConfezioni * qtaPerConfezione);
+      qtaRimanente = qtaRimanenteIniziale + nuoveConfezioni * qtaPerConfezione;
+//    qtaRimanenteBox.setValue(qtaRimanenteIniziale + nuoveConfezioni * qtaPerConfezione);
+      qtaRimanenteBox.setHTML(""+qtaRimanente);
     }
   }
   

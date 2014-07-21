@@ -71,37 +71,59 @@
           </g:HTML>
         </g:HorizontalPanel>
         
+        <g:HorizontalPanel spacing="0" width="100%" ui:field="alertRiordinoPanel" visible="false">
+        
+          <g:VerticalPanel>
+          
+            <g:HTML HTML="Quantità per il riordino:" addStyleNames="ui-field-label">
+              <ui:attribute name="HTML" description="text" key="qtaRiordinoLabel.html"/>
+            </g:HTML>
+            <gc:Spacer height="0.3em"/>
+            <g:HorizontalPanel>
+              <ph:PhTextBox ui:field="qtaRiordinoBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+            </g:HorizontalPanel>
+            <g:HTML HTML="Quantità per confezione:" addStyleNames="ui-field-label">
+              <ui:attribute name="HTML" description="text" key="qtaConfezioneLabel.html"/>
+            </g:HTML>
+            <gc:Spacer height="0.3em"/>
+            <g:HorizontalPanel>
+              <ph:PhTextBox ui:field="qtaConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+            </g:HorizontalPanel>
+            <g:HTML HTML="Nuove confezioni acquistate:" addStyleNames="ui-field-label">
+              <ui:attribute name="HTML" description="text" key="numConfezioniLabel.html"/>
+            </g:HTML>
+            <gc:Spacer height="0.3em"/>
+            <g:HorizontalPanel>
+              <ph:PhTextBox ui:field="numConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+            </g:HorizontalPanel>
+            
+            <gc:Spacer height="4em"/>
+          
+          </g:VerticalPanel>
+        
+          <g:VerticalPanel>
+          
+            <g:HTML HTML="Quantità rimanente:" addStyleNames="ui-field-label">
+              <ui:attribute name="HTML" description="text" key="qtaRimanenteLabel.html"/>
+            </g:HTML>
+            <gc:Spacer height="0.3em"/>
+            <g:HTML ui:field="qtaRimanenteBox" addStyleNames="ui-field-label ui-field-label-2"/>
+            
+            <!-- 
+            <g:HorizontalPanel>
+              <ph:PhTextBox ui:field="qtaRimanenteBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
+            </g:HorizontalPanel>
+             -->
+          
+          </g:VerticalPanel>
+        
+        </g:HorizontalPanel>
+
+        <!--         
         <g:VerticalPanel ui:field="alertRiordinoPanel" visible="false">
-          <g:HTML HTML="Quantità per il riordino:" addStyleNames="ui-field-label">
-            <ui:attribute name="HTML" description="text" key="qtaRiordinoLabel.html"/>
-          </g:HTML>
-          <gc:Spacer height="0.3em"/>
-          <g:HorizontalPanel>
-            <ph:PhTextBox ui:field="qtaRiordinoBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-          </g:HorizontalPanel>
-          <g:HTML HTML="Quantità per confezione:" addStyleNames="ui-field-label">
-            <ui:attribute name="HTML" description="text" key="qtaConfezioneLabel.html"/>
-          </g:HTML>
-          <gc:Spacer height="0.3em"/>
-          <g:HorizontalPanel>
-            <ph:PhTextBox ui:field="qtaConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-          </g:HorizontalPanel>
-          <g:HTML HTML="Nuove confezioni acquistate:" addStyleNames="ui-field-label">
-            <ui:attribute name="HTML" description="text" key="numConfezioniLabel.html"/>
-          </g:HTML>
-          <gc:Spacer height="0.3em"/>
-          <g:HorizontalPanel>
-            <ph:PhTextBox ui:field="numConfezBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-          </g:HorizontalPanel>
-          <g:HTML HTML="Quantità rimanente:" addStyleNames="ui-field-label">
-            <ui:attribute name="HTML" description="text" key="qtaRimanenteLabel.html"/>
-          </g:HTML>
-          <gc:Spacer height="0.3em"/>
-          <g:HorizontalPanel>
-            <ph:PhTextBox ui:field="qtaRimanenteBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-          </g:HorizontalPanel>
-          <gc:Spacer height="2em"/>
+        
         </g:VerticalPanel>
+         -->
         
         <gc:Spacer height="2em"/>
         

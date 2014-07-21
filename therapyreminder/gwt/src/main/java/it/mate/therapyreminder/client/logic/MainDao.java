@@ -332,6 +332,30 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void findPrescrizioneByNome(final String nome, final Delegate<Prescrizione> delegate) {
+    if (nome == null) {
+      delegate.execute(null);
+      return;
+    }
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + PRESCRIZIONI_FIELDS + " FROM prescrizioni";
+        sql += " WHERE nome = ?";
+        tr.doExecuteSql(sql, new Object[]{nome.trim()}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            Prescrizione result = null;
+            if (rs.getRows().getLength() == 1) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                result = flushRSToPrescrizione(rs, it);
+              }
+            }
+            delegate.execute(result);
+          }
+        });
+      }
+    });
+  }
+  
   private Prescrizione flushRSToPrescrizione(SQLResultSet rs, int it) {
     SQLResultSetRowList rows = rs.getRows();
     Prescrizione prescrizione = new PrescrizioneTx();
@@ -386,6 +410,21 @@ public class MainDao extends WebSQLDao {
   }
   
   public void savePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
+    if (prescrizione.getId() == null && prescrizione.getNome() != null) {
+      findPrescrizioneByNome(prescrizione.getNome(), new Delegate<Prescrizione>() {
+        public void execute(Prescrizione result) {
+          if (result != null) {
+            prescrizione.setId(result.getId());
+          }
+          doSavePrescrizione(prescrizione, delegate);
+        }
+      });
+    } else {
+      doSavePrescrizione(prescrizione, delegate);
+    }
+  }
+  
+  protected void doSavePrescrizione(final Prescrizione prescrizione, final Delegate<Prescrizione> delegate) {
 //  PhonegapLog.log("saving " + prescrizione);
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
