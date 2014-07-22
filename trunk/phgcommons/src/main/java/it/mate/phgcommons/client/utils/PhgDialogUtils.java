@@ -159,6 +159,10 @@ public class PhgDialogUtils {
     });
   }
   
+  public static boolean isMessageDialogVisible() {
+    return messageDialog != null;
+  }
+  
   private static void hideMessageDialog() {
     if (messageDialog != null) {
       messageDialog.hide();
