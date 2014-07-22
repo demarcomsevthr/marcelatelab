@@ -60,8 +60,12 @@ public class CheckSomministrazioniScaduteTask {
   }
   
   public void run() {
-    if (!enabled)
+    if (!enabled) {
       return;
+    }
+    if (PhgDialogUtils.isMessageDialogVisible()) {
+      return;
+    }
     PhgUtils.log("running CheckSomministrazioniScaduteTask");
     MainController.getInstance().findSomministrazioniScadute(new Delegate<List<Somministrazione>>() {
       public void execute(final List<Somministrazione> somministrazioni) {
