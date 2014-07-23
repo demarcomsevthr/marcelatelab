@@ -5,6 +5,18 @@ import it.mate.postscriptum.shared.model.StickMail;
 
 import java.util.Date;
 
+/**
+ * ATTENZIONE - 22/07/2014
+ * 
+ * NON MODIFICARE QUESTA INTERFACCIA
+ * 
+ * DEVE RIMANERE CONGELATA
+ * 
+ * UTILIZZARE StickMail2
+ *
+ */
+
+@Deprecated
 @SuppressWarnings("serial")
 public class StickMailTx implements StickMail {
 

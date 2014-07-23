@@ -3,6 +3,20 @@ package it.mate.postscriptum.shared.model;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * ATTENZIONE - 22/07/2014
+ * 
+ * NON MODIFICARE QUESTA INTERFACCIA
+ * 
+ * DEVE RIMANERE CONGELATA
+ * 
+ * UTILIZZARE StickMail2
+ *
+ */
+
+/*
+@Deprecated
+*/
 public interface StickMail extends Serializable {
   
   public static final String STATE_NEW = "NW";

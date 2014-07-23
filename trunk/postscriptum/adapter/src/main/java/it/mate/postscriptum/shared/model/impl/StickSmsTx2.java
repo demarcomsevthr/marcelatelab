@@ -4,20 +4,16 @@ import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.postscriptum.shared.model.RemoteUserUtils;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.StickSms2;
 
 import java.util.Date;
 
 
-@SuppressWarnings("serial")
-public class StickSmsTx2 extends StickSmsTx implements IsMappable {
+@SuppressWarnings({ "serial", "deprecation" })
+public class StickSmsTx2 extends StickSmsTx implements StickSms2, IsMappable {
 
   private String clientType;
   
-  @Override
-  public RpcMap toRpcMap() {
-    return toRpcMap(this);
-  }
-
   public static RpcMap toRpcMap(StickSms source) {
     RpcMap map = new RpcMap();
     map.put("id", source.getId());
@@ -34,12 +30,12 @@ public class StickSmsTx2 extends StickSmsTx implements IsMappable {
     return map;
   }
 
-  @Override
-  public StickSmsTx2 fromRpcMap(RpcMap map) {
-    return (StickSmsTx2)fromRpcMap(map, this);
+  public static StickSms2 fromRpcMap2(RpcMap map) {
+    StickSmsTx2 inst = new StickSmsTx2();
+    return fromRpcMap(map, inst);
   }
-
-  public static StickSms fromRpcMap(RpcMap map, StickSms target) {
+  
+  public static StickSms2 fromRpcMap(RpcMap map, StickSms2 target) {
     target.setId((String)map.get("id"));
     target.setState((String)map.get("state"));
     target.setCreated((Date)map.get("created"));
@@ -52,6 +48,16 @@ public class StickSmsTx2 extends StickSmsTx implements IsMappable {
       ((StickSmsTx2)target).setClientType((String)map.get("clientType"));
     }
     return target;
+  }
+
+  @Override
+  public RpcMap toRpcMap() {
+    return toRpcMap(this);
+  }
+
+  @Override
+  public StickSmsTx2 fromRpcMap(RpcMap map) {
+    return (StickSmsTx2)fromRpcMap(map, this);
   }
 
   public String getClientType() {
