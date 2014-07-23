@@ -1,10 +1,8 @@
 package it.mate.postscriptum.server.services;
 
-import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
-import it.mate.postscriptum.shared.model.impl.StickMailTx2;
 import it.mate.postscriptum.shared.service.AdapterException;
 import it.mate.postscriptum.shared.service.StickFacade;
 
@@ -16,6 +14,7 @@ import javax.servlet.ServletException;
 
 import org.apache.log4j.Logger;
 
+import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -31,6 +30,12 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
     AdapterUtil.initContext(config.getServletContext());
     adapter = AdapterUtil.getStickAdapter();
     logger.debug("initialized " + this);
+  }
+  
+  @Override
+  protected void onAfterRequestDeserialized(RPCRequest rpcRequest) {
+    logger.debug("calling method " + rpcRequest.getMethod().getName());
+    super.onAfterRequestDeserialized(rpcRequest);
   }
   
   @Override
@@ -55,18 +60,10 @@ public class StickFacadeImpl extends RemoteServiceServlet implements StickFacade
   }
 
   @Override
-  public RpcMap createV2(RpcMap stickMail) {
-    StickMailTx2 tx2 = new StickMailTx2().fromRpcMap(stickMail);
-    tx2.setState(StickMail.STATE_SCHEDULED);
-    tx2 = adapter.createV2(tx2);
-    return tx2.toRpcMap();
-  }
-
-  @Override
   public List<StickMail> findMailsByUser(RemoteUser user) {
     return adapter.findMailsByUser(user);
   }
-
+  
   @Override
   public List<StickMail> findScheduledMailsByUser(RemoteUser user) {
     return adapter.findScheduledMailsByUser(user);
