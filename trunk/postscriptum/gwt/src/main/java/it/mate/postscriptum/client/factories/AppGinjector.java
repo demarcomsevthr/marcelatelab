@@ -8,7 +8,7 @@ import it.mate.postscriptum.client.view.MailListView;
 import it.mate.postscriptum.client.view.NewMailView;
 import it.mate.postscriptum.client.view.NewSmsView;
 import it.mate.postscriptum.client.view.SMSListView;
-import it.mate.postscriptum.shared.service.StickFacadeAsync;
+import it.mate.postscriptum.shared.service.StickFacade2Async;
 
 import com.google.gwt.inject.client.GinModules;
 
@@ -27,6 +27,10 @@ public interface AppGinjector extends CommonGinjector {
   
   public SMSListView getSMSListView();
   
+  /*
   public StickFacadeAsync getStickFacade();
+  */
+  
+  public StickFacade2Async getStickFacade2();
   
 }

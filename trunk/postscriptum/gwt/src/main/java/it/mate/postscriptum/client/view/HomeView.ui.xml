@@ -22,10 +22,9 @@
       <p:TouchAnchor addStyleNames="ui-new-sms-btn" text="New SMS" ui:field="newSMSBtn"/>
     </g:HorizontalPanel>
 
-    <!--     
-    <p:TouchButton text="New SMS" ui:field="newSmsBtn"/>
-     -->
+    <!-- 
     <p:TouchButton text="Test" ui:field="testBtn"/>
+     -->
     
     <g:Label ui:field="homeLbl" addStyleNames="ui-homeLbl"/>
     

@@ -15,7 +15,7 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
 import it.mate.postscriptum.client.view.NewMailView.Presenter;
 import it.mate.postscriptum.shared.model.StickMail;
-import it.mate.postscriptum.shared.model.impl.StickMailTx;
+import it.mate.postscriptum.shared.model.impl.StickMailTx2;
 
 import java.util.Date;
 
@@ -28,7 +28,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
@@ -135,7 +134,7 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       return;
     }
     
-    StickMail stickMail = new StickMailTx();
+    StickMail stickMail = new StickMailTx2();
     stickMail.setSubject(subjectBox.getValue());
     stickMail.setBody(bodyArea.getValue());
     stickMail.setUser(signPanel.getRemoteUser());
