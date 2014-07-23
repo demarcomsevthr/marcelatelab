@@ -5,7 +5,7 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.shared.model.RemoteUser;
-import it.mate.postscriptum.shared.service.StickFacadeAsync;
+import it.mate.postscriptum.shared.service.StickFacade2Async;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Panel;
@@ -44,7 +44,7 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public boolean getNativeProperty(String name, boolean defValue);
   
-  public StickFacadeAsync getStickFacade();
+  public StickFacade2Async getStickFacade2();
 
   /*
   public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);

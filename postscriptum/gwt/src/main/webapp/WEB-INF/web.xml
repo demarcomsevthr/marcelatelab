@@ -6,13 +6,13 @@
 <web-app>
 
   <servlet>
-    <servlet-name>stickFacade</servlet-name>
+    <servlet-name>stickFacade2</servlet-name>
     <servlet-class>it.mate.postscriptum.server.service.StickFacadeTestImpl</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>stickFacade</servlet-name>
-    <url-pattern>*.stickFacade</url-pattern>
+    <servlet-name>stickFacade2</servlet-name>
+    <url-pattern>*.stickFacade2</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>

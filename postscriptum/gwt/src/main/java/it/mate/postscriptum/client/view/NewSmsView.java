@@ -15,7 +15,8 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
 import it.mate.postscriptum.client.view.NewSmsView.Presenter;
 import it.mate.postscriptum.shared.model.StickSms;
-import it.mate.postscriptum.shared.model.impl.StickSmsTx;
+import it.mate.postscriptum.shared.model.StickSms2;
+import it.mate.postscriptum.shared.model.impl.StickSmsTx2;
 
 import java.util.Date;
 
@@ -151,13 +152,16 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
       return;
     }
     
-    StickSms stickSMS = new StickSmsTx();
+    StickSms2 stickSMS = new StickSmsTx2();
     stickSMS.setReceiverNumber(receiverNumber);
     stickSMS.setBody(bodyArea.getValue());
     stickSMS.setUser(signPanel.getRemoteUser());
     stickSMS.setCreated(NOW);
     stickSMS.setScheduled(scheduledDateTime);
     stickSMS.setState(StickSms.STATE_NEW);
+    
+    // TEST PAID VERSION
+    //stickSMS.setClientType("PaidClientType1");
     
     getPresenter().postNewSMS(stickSMS, new Delegate<StickSms>() {
       public void execute(StickSms sms) {

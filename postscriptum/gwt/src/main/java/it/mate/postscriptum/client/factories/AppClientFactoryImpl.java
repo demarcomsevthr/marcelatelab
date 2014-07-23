@@ -21,6 +21,7 @@ import it.mate.postscriptum.client.places.MainPlace;
 import it.mate.postscriptum.client.places.MainPlaceHistoryMapper;
 import it.mate.postscriptum.client.ui.theme.CustomTheme;
 import it.mate.postscriptum.shared.model.RemoteUser;
+import it.mate.postscriptum.shared.service.StickFacade2Async;
 import it.mate.postscriptum.shared.service.StickFacadeAsync;
 
 import java.util.Map;
@@ -66,6 +67,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private Map<String, String> nativeProperties;
 
   private StickFacadeAsync facade = null;
+  
+  private StickFacade2Async facade2 = null;
   
   private StickMailEPProxy stickMailEPProxy;
 
@@ -385,12 +388,22 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return Boolean.parseBoolean(value);
   }
   
+  /*
   @Override
   public StickFacadeAsync getStickFacade() {
     if (facade == null) {
       facade = getGinjector().getStickFacade();
     }
     return facade;
+  }
+  */
+  
+  @Override
+  public StickFacade2Async getStickFacade2() {
+    if (facade2 == null) {
+      facade2 = getGinjector().getStickFacade2();
+    }
+    return facade2;
   }
   
 }

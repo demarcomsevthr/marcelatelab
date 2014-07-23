@@ -189,24 +189,12 @@ public class HomeView extends BaseMgwtView <Presenter> {
       }
     });
   }
-  
+
+  /*
   @UiHandler ("testBtn")
   public void onTestBtn (TouchEndEvent event) {
-    /*
-    TestTx test = new TestTx();
-    test.setId("12345678");
-    test.setVersion("1");
-    test.setField1("field1");
-    PhgUtils.log("calling remote doTest");
-    AppClientFactory.IMPL.getStickFacade().doTest(test, new AsyncCallback<Void>() {
-      public void onSuccess(Void result) {
-        PhgUtils.log("doTest success");
-      }
-      public void onFailure(Throwable caught) {
-        PhgUtils.log("doTest failure: " + caught.getMessage());
-      }
-    });
-    */
+
   }
+  */
   
 }
