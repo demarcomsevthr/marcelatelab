@@ -54,7 +54,11 @@ public class StickAdapterImpl implements StickAdapter {
   
   private static final int MAX_SMS_PER_DAY_FREE_QUOTA = 5;
   
-  private static final int MAX_TOTAL_SMS_FREE_QUOTA = 10;
+  // TODO
+  // ATTENZIONE: PER IL MOMENTO NON IMPONGO IL CHECK (METTO UN LIMITE ALTISSIMO)
+  // QUANDO DECIDERO' DI METTERLO BASTERA' RIPRISTINARE UN VALORE ADEGUATO (10)
+  private static final int MAX_TOTAL_SMS_FREE_QUOTA = 9999;
+//private static final int MAX_TOTAL_SMS_FREE_QUOTA = 10;
   
   private static final String PAID_CLIENT_TYPE_1 = "PaidClientType1";
   
