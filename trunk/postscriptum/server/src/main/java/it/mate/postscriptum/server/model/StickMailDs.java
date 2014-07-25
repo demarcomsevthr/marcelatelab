@@ -13,6 +13,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
@@ -23,7 +24,7 @@ public class StickMailDs implements StickMail, HasKey {
   Key id;
   
   @Persistent
-  private String body;
+  private Text body;
   
   @Persistent
   private String state;
@@ -65,11 +66,11 @@ public class StickMailDs implements StickMail, HasKey {
   }
 
   public String getBody() {
-    return body;
+    return body != null ? body.getValue() : null;
   }
 
   public void setBody(String body) {
-    this.body = body;
+    this.body = body != null ? new Text(body) : null;
   }
 
   public Date getScheduled() {
