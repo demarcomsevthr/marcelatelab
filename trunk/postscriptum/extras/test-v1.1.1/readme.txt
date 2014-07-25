@@ -14,6 +14,9 @@ PROCEDURA PER IL TEST ANDROID
 	
 PROCEDURA PER IL TEST IOS
 
+	>> ATTENZIONE: IN REALTA' QUESTA VER. E' PER ANDROID!
+		(probabilmente l'ho recuperata da una cartella www dove era andata a finire la ver. android)
+
 	> scompattare www in VIRTUAL_MACHINES\OSX\Mac_OS_X_10.9\shared\postscriptum\www
 		 
 	> creare nuova versione postscriptum-srv 5
