@@ -10,6 +10,7 @@ import it.mate.phgcommons.client.plugins.CalendarPlugin;
 import it.mate.phgcommons.client.plugins.LocalNotificationsPlugin;
 import it.mate.phgcommons.client.utils.IterationUtil;
 import it.mate.phgcommons.client.utils.IterationUtil.ItemDelegate;
+import it.mate.phgcommons.client.utils.IterationUtilSimple;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
@@ -200,13 +201,43 @@ public class MainController {
   }
   
   
-  public void findSomministrazioniNonEseguiteInMemoria(final Delegate<List<Somministrazione>> resultsDelegate) {
+  public void findSomministrazioniDaEseguireInMemoria(final Delegate<List<Somministrazione>> resultsDelegate) {
     Date today = new Date();
     dao.findAllPrescrizioniAttive(today, new Delegate<List<Prescrizione>>() {
       public void execute(List<Prescrizione> prescrizioniAttive) {
         if (prescrizioniAttive != null) {
           List<Somministrazione> results = new ArrayList<Somministrazione>();
           iteratePrescrizioniAttiveForSviluppoInMemoria(prescrizioniAttive.iterator(), results, resultsDelegate);
+        }
+      }
+    });
+  }
+  
+  //TODO: 28/07/2014
+  public void findSomministrazioniAnnullate(final Delegate<List<Somministrazione>> resultsDelegate) {
+    Date today = new Date();
+    dao.findAllPrescrizioniAttive(today, new Delegate<List<Prescrizione>>() {
+      public void execute(List<Prescrizione> prescrizioniAttive) {
+        if (prescrizioniAttive != null) {
+          final List<Somministrazione> somministrazioniResults = new ArrayList<Somministrazione>();
+          IterationUtil.create(prescrizioniAttive, new IterationUtil.ItemDelegate<Prescrizione>() {
+            public void handleItem(Prescrizione prescrizione, final IterationUtil<Prescrizione> iteration) {
+              dao.findSomministrazioniAnnullate(prescrizione, new Delegate<List<Somministrazione>>() {
+                public void execute(List<Somministrazione> parzialeSomministrazioni) {
+                  if (parzialeSomministrazioni != null) {
+                    somministrazioniResults.addAll(parzialeSomministrazioni);
+                  }
+                  iteration.next();
+                }
+              });
+            }
+          }, new IterationUtil.FinishDelegate() {
+            public void doFinish() {
+              resultsDelegate.execute(somministrazioniResults);
+            }
+          });
+        } else {
+          resultsDelegate.execute(null);
         }
       }
     });
@@ -307,43 +338,9 @@ public class MainController {
           PhonegapLog.log("EXECUTING REMOTE SAVE WITH " + somministrazioni.size() + " NEW SOMMINISTRAZIONI");
           saveRemoteSomministrazioni(somministrazioni, new Delegate<List<Somministrazione>>() {
             public void execute(List<Somministrazione> somministrazioniSincronizzate) {
-              if (somministrazioniSincronizzate == null) {
-                sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
-              } else {
-                
-                //TODO: SPOSTATO SOTTO
-                /*
-                final ObjectWrapper<Delegate<Iterator<Somministrazione>>> innerDelegate = new ObjectWrapper<Delegate<Iterator<Somministrazione>>>();
-                innerDelegate.set(new Delegate<Iterator<Somministrazione>>() {
-                    public void execute(final Iterator<Somministrazione> it) {
-                      if (it.hasNext()) {
-                        Somministrazione somministrazioneInRemoto = it.next();
-                        if (somministrazioneInRemoto.getRemoteId() != null) {
-                          dao.saveRemoteSomministrazione(somministrazioneInRemoto, new Delegate<Somministrazione>() {
-                            public void execute(Somministrazione updateRemoteSomministrazione) {
-                              PhgUtils.log("updated remote id somministrazione");
-                              innerDelegate.get().execute(it);
-                            }
-                          });
-                        } else {
-                          innerDelegate.get().execute(it);
-                        }
-                      } else {
-                        // finish processing
-                        sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
-                      }
-                    }
-                  }
-                );
-                innerDelegate.get().execute(somministrazioniSincronizzate.iterator());
-                */
-                
-                sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
-                
-              }
+              sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
             }
           });
-          
         } else {
           sviluppaSomministrazioni$completionDelegate.execute(prescrizione);
         }
@@ -351,7 +348,7 @@ public class MainController {
     };
 
     if (dataUltimaSomministrazione == null) {
-      iterateDosaggiForInsert(prescrizione, prescrizione.getDataInizio(), prescrizione.getDosaggi().iterator(), 
+      iterateDosaggiGiornoForInsert(prescrizione, prescrizione.getDataInizio(), prescrizione.getDosaggi().iterator(), 
           new ArrayList<Somministrazione>(), inMemory, new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> somministrazioni) {
           sviluppaRicorrenzaSuccessiva(prescrizione, prescrizione.getDataInizio(), somministrazioni, inMemory, completionDelegate);
@@ -384,7 +381,7 @@ public class MainController {
       completionDelegate.execute(somministrazioni);
       return;
     }
-    iterateDosaggiForInsert(prescrizione, nextDataSomministrazione, prescrizione.getDosaggi().iterator(), 
+    iterateDosaggiGiornoForInsert(prescrizione, nextDataSomministrazione, prescrizione.getDosaggi().iterator(), 
         somministrazioni, inMemory, new Delegate<List<Somministrazione>>() {
       public void execute(List<Somministrazione> somministrazioni) {
         sviluppaRicorrenzaSuccessiva(prescrizione, nextDataSomministrazione, somministrazioni, inMemory, completionDelegate);
@@ -392,19 +389,87 @@ public class MainController {
     });
   }
   
-  private void iterateDosaggiForInsert(final Prescrizione prescrizione, final Date dataSomministrazione, final Iterator<Dosaggio> it, 
+  private void iterateDosaggiGiornoForInsert(final Prescrizione prescrizione, final Date dataSomministrazione, final Iterator<Dosaggio> it, 
       final List<Somministrazione> results, final boolean inMemory, final Delegate<List<Somministrazione>> completionDelegate) {
     if (it.hasNext()) {
-      Dosaggio dosaggio = it.next();
-      Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       
+      Dosaggio dosaggio = it.next();
+      
+      final ObjectWrapper<Time> orarioSomministrazione = new ObjectWrapper<Time>(Time.fromString(dosaggio.getOrario()));
+      final ObjectWrapper<Integer> incrementoOrario = new ObjectWrapper<Integer>(0);
+      final Double qtaSomministrazione = dosaggio.getQuantita();
+      
+      int numeroSoministrazioniPerGiorno = 1;
+      if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+        if (prescrizione.getIntervalloOrario() == null || prescrizione.getIntervalloOrario() <= 0) {
+          PhgUtils.log("FATAL ERROR IN SVILUPPO SOMMINISTRAZIONI (intervallo orario non impostato!)");
+          PhgDialogUtils.showMessageDialog("Fatal error");
+          completionDelegate.execute(results);
+        }
+        numeroSoministrazioniPerGiorno = 24 / prescrizione.getIntervalloOrario();
+        incrementoOrario.set(prescrizione.getIntervalloOrario());
+      }
+      
+      //TODO: 28/07/2014
+      IterationUtilSimple.create(numeroSoministrazioniPerGiorno, new IterationUtilSimple.ItemDelegate<Integer>() {
+        public void handleItem(Integer item, final IterationUtil<Integer> iteration) {
+          
+          Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
+          
+          if (orarioSomministrazione.get() == null) {
+            completionDelegate.execute(results);
+          }
+          
+          orarioSomministrazione.get().setInDate(dataSomministrazione);
+          if (dataSomministrazione.before(new Date())) {
+            orarioSomministrazione.get().incHours(incrementoOrario.get());
+            iteration.next();
+            return;
+          }
+          somministrazione.setData(CalendarUtil.copyDate(dataSomministrazione));
+          somministrazione.setOrario(orarioSomministrazione.get().asString());
+          Double qta = qtaSomministrazione;
+          if (qta == null)
+            qta = prescrizione.getQuantita();
+          somministrazione.setQuantita(qta);
+          somministrazione.setSchedulata();
+          
+          if (inMemory) {
+            Date now = new Date();
+            somministrazione.setId((int)now.getTime());
+            results.add(somministrazione);
+            orarioSomministrazione.get().incHours(incrementoOrario.get());
+            iteration.next();
+            return;
+          } else {
+            dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
+              public void execute(Somministrazione somministrazione) {
+                saveCalEvent(somministrazione);
+                results.add(somministrazione);
+                orarioSomministrazione.get().incHours(incrementoOrario.get());
+                iteration.next();
+                return;
+              }
+            });
+          }
+          
+          
+        }
+      }, new IterationUtilSimple.FinishDelegate() {
+        public void doFinish() {
+          iterateDosaggiGiornoForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+        }
+      });
+      
+
+      /** PREV. VERSION
+      Somministrazione somministrazione = new SomministrazioneTx(prescrizione);
       if (Time.fromString(dosaggio.getOrario()) == null) {
         completionDelegate.execute(results);
       }
-      
       Time.fromString(dosaggio.getOrario()).setInDate(dataSomministrazione);
       if (dataSomministrazione.before(new Date())) {
-        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+        iterateDosaggiGiornoForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
         return;
       }
       somministrazione.setData(CalendarUtil.copyDate(dataSomministrazione));
@@ -414,21 +479,21 @@ public class MainController {
         qta = prescrizione.getQuantita();
       somministrazione.setQuantita(qta);
       somministrazione.setSchedulata();
-      
       if (inMemory) {
         Date now = new Date();
         somministrazione.setId((int)now.getTime());
         results.add(somministrazione);
-        iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+        iterateDosaggiGiornoForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
       } else {
         dao.saveSomministrazione(somministrazione, new Delegate<Somministrazione>() {
           public void execute(Somministrazione somministrazione) {
             saveCalEvent(somministrazione);
             results.add(somministrazione);
-            iterateDosaggiForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
+            iterateDosaggiGiornoForInsert(prescrizione, dataSomministrazione, it, results, inMemory, completionDelegate);
           }
         });
       }
+      **/
       
     } else {
       completionDelegate.execute(results);
@@ -498,21 +563,33 @@ public class MainController {
     }
   }
   
+  //TODO: 28/07/2014
   public static String validatePrescrizione(Prescrizione prescrizione) {
     if (prescrizione.getNome() == null || prescrizione.getNome().trim().length() == 0) {
-      return "Manca il nome del farmaco";
+      return AppMessages.IMPL.MainController_validatePrescrizione_msg1();
     }
     if (prescrizione.getDosaggi() == null) {
-      return "Manca l'orario di assunzione";
+      return AppMessages.IMPL.MainController_validatePrescrizione_msg2();
     }
     for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
       if (dosaggio.getOrario() == null) {
-        return "Orario di assunzione non impostato";
+        return AppMessages.IMPL.MainController_validatePrescrizione_msg2b();
       }
     }
     if (prescrizione.isGstAvvisoRiordino()) {
       if (prescrizione.getQtaPerConfez() <= 0) {
-        return "Quantità per confezione errata";
+        return AppMessages.IMPL.MainController_validatePrescrizione_msg3();
+      }
+    }
+    if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
+      if (prescrizione.getIntervalloOrario() == null || prescrizione.getIntervalloOrario() <= 0) {
+        return AppMessages.IMPL.MainController_validatePrescrizione_msg4();
+      }
+      if (prescrizione.getIntervalloOrario() != 1 && prescrizione.getIntervalloOrario() != 2
+          && prescrizione.getIntervalloOrario() != 3 && prescrizione.getIntervalloOrario() != 4
+          && prescrizione.getIntervalloOrario() != 6 && prescrizione.getIntervalloOrario() != 8
+          && prescrizione.getIntervalloOrario() != 12) {
+        return AppMessages.IMPL.MainController_validatePrescrizione_msg5();
       }
     }
     return null;
@@ -620,7 +697,6 @@ public class MainController {
     });
   }
    
-  //TODO: REVISIONE BACKGROUND TASKS
   private void saveRemoteSomministrazioni (List<Somministrazione> somministrazioni, final Delegate<List<Somministrazione>> completionDelegate) {
     final List<Somministrazione> somministrazioniDaSalvareInRemoto = new ArrayList<Somministrazione>();
     for (Somministrazione somministrazione : somministrazioni) {
@@ -690,7 +766,6 @@ public class MainController {
             }
             public void onFailure(Throwable caught) {
               
-              // TODO: 11/07/2014 - UPDATE flag synchRequired = TRUE
               PhgUtils.log("REMOTE SAVE FAILURE - " + caught.getClass().getName() + " - " + caught.getMessage());
               //processFailure(null, caught);
               

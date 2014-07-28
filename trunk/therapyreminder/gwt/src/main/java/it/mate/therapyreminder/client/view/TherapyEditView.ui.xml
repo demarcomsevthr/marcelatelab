@@ -16,11 +16,6 @@
       <p:TouchButton text="Save" ui:field="saveBtn" addStyleNames="ui-top-action-btn">
         <ui:attribute name="text" description="text" key="saveBtn.text"/>
       </p:TouchButton>
-      <!-- 
-      <p:TouchButton text="Delete" ui:field="deleteBtn" addStyleNames="ui-top-action-btn">
-        <ui:attribute name="text" description="text" key="deleteBtn.text"/>
-      </p:TouchButton>
-       -->
     </g:HorizontalPanel>
 
     <hr class="ui-view-separator-1"/>
@@ -31,7 +26,6 @@
         <g:Label text="Nome del farmaco:" addStyleNames="ui-field-label ui-field-label-1">
           <ui:attribute name="text" description="text" key="titleLabel.text"/>
         </g:Label>
-        <!-- 08/07/2014 type = email: workaround per disabilitare autocompletamento -->
         <ph:PhTextBox ui:field="titleBox" type="email" addStyleNames="ui-app-textbox, ui-title-box"/>
 
         <hr class="ui-view-separator"/>
@@ -109,22 +103,10 @@
             <gc:Spacer height="0.3em"/>
             <g:HTML ui:field="qtaRimanenteBox" addStyleNames="ui-field-label ui-field-label-2"/>
             
-            <!-- 
-            <g:HorizontalPanel>
-              <ph:PhTextBox ui:field="qtaRimanenteBox" addStyleNames="ui-app-textbox, ui-qta-box" type="number"/>
-            </g:HorizontalPanel>
-             -->
-          
           </g:VerticalPanel>
         
         </g:HorizontalPanel>
 
-        <!--         
-        <g:VerticalPanel ui:field="alertRiordinoPanel" visible="false">
-        
-        </g:VerticalPanel>
-         -->
-        
         <gc:Spacer height="2em"/>
         
       </g:HTMLPanel>

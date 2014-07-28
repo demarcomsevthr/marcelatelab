@@ -649,13 +649,34 @@ public class MainDao extends WebSQLDao {
     });
   }
   
-  public void findSomministrazioniNonEseguite(final Delegate<List<Somministrazione>> delegate) {
+  public void findSomministrazioniSchedulate(final Delegate<List<Somministrazione>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
         sql += " WHERE stato = ?";
         sql += " ORDER BY data";
         tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_SCHEDULATA}, 
+          new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              if (rs.getRows().getLength() > 0) {
+                new RSToSomministrazioniIterator(rs, delegate);
+              } else {
+                delegate.execute(null);
+              }
+            }
+        });
+      }
+    });
+  }
+  
+  //TODO
+  public void findSomministrazioniAnnullate(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + SOMMINISTRAZIONI_FIELDS + " FROM somministrazioni";
+        sql += " WHERE stato = ? AND idPrescrizione = ?";
+        sql += " ORDER BY data";
+        tr.doExecuteSql(sql, new Object[] {Somministrazione.STATO_ANNULLATA, prescrizione.getId()}, 
           new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               if (rs.getRows().getLength() > 0) {

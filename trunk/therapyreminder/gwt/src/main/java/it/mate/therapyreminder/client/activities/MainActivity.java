@@ -293,25 +293,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
       setHeaderWaiting(true);
       
-      PhgUtils.log("MainActivity.retrieveModel.1");
-      MainController.getInstance().findSomministrazioniNonEseguiteInMemoria(new Delegate<List<Somministrazione>>() {
-        public void execute(List<Somministrazione> results) {
-          PhgUtils.log("MainActivity.retrieveModel.2");
-          setHeaderWaiting(false);
-          if (results != null && results.size() > 0) {
-            view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
-          }
+      MainController.getInstance().findSomministrazioniAnnullate(new Delegate<List<Somministrazione>>() {
+        public void execute(List<Somministrazione> somministrazioniAnnullate) {
+          view.setModel(somministrazioniAnnullate, ReminderListView.TAG_SOMMINISTRAZIONI_ANNULLATE);
+          
+          MainController.getInstance().findSomministrazioniDaEseguireInMemoria(new Delegate<List<Somministrazione>>() {
+            public void execute(List<Somministrazione> somministrazioniSchedulate) {
+              setHeaderWaiting(false);
+              view.setModel(somministrazioniSchedulate, ReminderListView.TAG_SOMMINISTRAZIONI_SCHEDULATE);
+            }
+          });
+          
         }
       });
       
-      /*
-      dao.findSomministrazioniNonEseguite(new Delegate<List<Somministrazione>>() {
-        public void execute(List<Somministrazione> results) {
-          setHeaderWaiting(false);
-          view.setModel(results, ReminderListView.TAG_SOMMINISTRAZIONI);
-        }
-      });
-      */
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
       if (place.getModel() != null) {
@@ -944,6 +939,10 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       }
     });
+  }
+  
+  public void findSomministrazioniAnnullate(Delegate<List<Somministrazione>> resultsDelegate) {
+    MainController.getInstance().findSomministrazioniAnnullate(resultsDelegate);
   }
   
 }
