@@ -204,7 +204,6 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
               int actualHeight = Window.getClientHeight() - innerScrollPanel.getAbsoluteTop();
               innerScrollPanel.getElement().getStyle().setHeight(actualHeight, Unit.PX);
               innerScrollPanel.refresh();
-              PhgUtils.log("windowHeight = " + Window.getClientHeight() + " resultsPanelTop = " + innerScrollPanel.getAbsoluteTop() + " actualHeight = " + actualHeight);
               iteration.next();
             } catch (Exception ex) {
               PhgUtils.log("Error " + ex.getClass().getName() + " - " + ex.getMessage());
