@@ -12,6 +12,12 @@
       <ui:attribute name="HTML" description="text" key="header.html"/>
     </g:HTML>
     
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0" width="100%">
+      <p:TouchButton text="Show canceled administrations" ui:field="showCanceledBtn" addStyleNames="ui-top-action-btn" visible="false">
+        <ui:attribute name="text" description="text" key="showCanceledBtn.text"/>
+      </p:TouchButton>
+    </g:HorizontalPanel>
+    
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>

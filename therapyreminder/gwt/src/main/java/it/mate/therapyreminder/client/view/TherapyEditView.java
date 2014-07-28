@@ -186,6 +186,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       rangeCombo.setItem(""+it, ""+it, it == 1 ? true : false);
     }
     
+    orarioInizioBox.setDefaultTime(new Time().setMinutes(00).incHours(+1));    
+    
     initBottomBar();
     
   }

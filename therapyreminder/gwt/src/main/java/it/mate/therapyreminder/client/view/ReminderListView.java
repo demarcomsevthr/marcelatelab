@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.ui.SimpleContainer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
@@ -23,6 +24,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -36,11 +38,13 @@ import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
 
 public class ReminderListView extends BaseMgwtView <Presenter> {
   
-  public static final String TAG_SOMMINISTRAZIONI = "somministrazioni";
+  public static final String TAG_SOMMINISTRAZIONI_SCHEDULATE = "somministrazioniSchedulate";
+  public static final String TAG_SOMMINISTRAZIONI_ANNULLATE = "somministrazioniAnnullate";
 
   public interface Presenter extends BasePresenter {
     public void goToReminderEditView(Somministrazione somministrazione);
     public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate);
+    public void findSomministrazioniAnnullate(Delegate<List<Somministrazione>> resultsDelegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ReminderListView> { }
@@ -53,8 +57,12 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField ScrollPanel resultsPanel;
+  @UiField TouchButton showCanceledBtn;
   
   private boolean scrollInProgress = false;
+  
+  private List<Somministrazione> somministrazioniAnnullate;
+  private List<Somministrazione> somministrazioniSchedulate;
   
   public ReminderListView() {
     initUI();
@@ -84,6 +92,9 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     
 //  GwtUtils.setDebugExceptionHandler();
     
+    resultsContainer = new SimpleContainer();
+    resultsPanel.add(resultsContainer);
+    
   }
   
   @Override
@@ -93,16 +104,38 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
 
   @Override
   public void setModel(Object model, String tag) {
-    if (TAG_SOMMINISTRAZIONI.equals(tag)) {
-      @SuppressWarnings("unchecked")
+    if (TAG_SOMMINISTRAZIONI_SCHEDULATE.equals(tag)) {
       List<Somministrazione> somministrazioni = (List<Somministrazione>)model;
+      this.somministrazioniSchedulate = somministrazioni;
       showListaSomministrazioni(somministrazioni);
     }
-    
+    if (TAG_SOMMINISTRAZIONI_ANNULLATE.equals(tag)) {
+      List<Somministrazione> somministrazioni = (List<Somministrazione>)model;
+      this.somministrazioniAnnullate = somministrazioni;
+      if (somministrazioniAnnullate != null && somministrazioniAnnullate.size() > 0) {
+        showCanceledBtn.setVisible(true);
+        showSomministrazioniAnnullate();
+      }
+    }
   }
   
+  private boolean isShowingSomministrazioniAnnullate() {
+    Boolean flag = (Boolean)GwtUtils.getClientAttribute("ReminderListView.showingSomministrazioniAnnullate");
+    if (flag == null) {
+      flag = new Boolean(false);
+      setShowingSomministrazioniAnnullate(flag);
+    }
+    return flag;
+  }
+  
+  private void setShowingSomministrazioniAnnullate(boolean flag) {
+    GwtUtils.setClientAttribute("ReminderListView.showingSomministrazioniAnnullate", new Boolean(flag));
+  }
+  
+  private SimpleContainer resultsContainer = new SimpleContainer();
+  
   private void showListaSomministrazioni(List<Somministrazione> somministrazioni) {
-    resultsPanel.clear();
+//  resultsPanel.clear();
     if (somministrazioni == null || somministrazioni.size() == 0) {
       Label noResultsLbl = new Label(AppMessages.IMPL.ReminderListView_showListaSomministrazioni_msg1());
       noResultsLbl.addStyleName("ui-no-results");
@@ -114,21 +147,21 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
         return p1.getData().compareTo(p2.getData());
       }
     });
-    final SimpleContainer list = new SimpleContainer();
+//  final SimpleContainer list = new SimpleContainer();
     final ObjectWrapper<String> prevDate = new ObjectWrapper<String>();
     final ObjectWrapper<Integer> actualHeight = new ObjectWrapper<Integer>(0);
     final int lastRowId = somministrazioni.get(somministrazioni.size() - 1).getId();
     for (final Somministrazione somministrazione : somministrazioni) {
       getPresenter().getUdmDescription(somministrazione.getQuantita(), somministrazione.getPrescrizione().getCodUdM(), new Delegate<UdM>() {
         public void execute(UdM udm) {
-          actualHeight.set(actualHeight.get() + showRow(somministrazione, list, prevDate, udm));
+          actualHeight.set(actualHeight.get() + showRow(somministrazione, resultsContainer, prevDate, udm));
           if (somministrazione.getId() == lastRowId) {
             adjustInnerScrollPanelHeight(resultsPanel);
           }
         }
       });
     }
-    resultsPanel.add(list);
+//  resultsPanel.add(list);
     TouchUtils.applyFocusPatch();
   }
   
@@ -158,7 +191,13 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       html += "</p>";
     }
     html += "<p class='ui-row-reminder-subject'>" + somministrazione.getPrescrizione().getNome() + "</p>";
-    html += "<p class='ui-row-reminder-note'>" + somministrazione.getQuantita().intValue() + " " + udm.getDescrizione().toLowerCase();
+    
+    String cssAnnullata = "";
+    if (somministrazione.isAnnullata()) {
+      cssAnnullata = "ui-row-reminder-note-canceled";
+    }
+    
+    html += "<p class='ui-row-reminder-note "+cssAnnullata+"'>" + somministrazione.getQuantita().intValue() + " " + udm.getDescrizione().toLowerCase();
     html += " "+ AppMessages.IMPL.ReminderListView_showRow_at_text() +" " + somministrazione.getOrario() + "</p>";
     TouchHTML rowHtml = new TouchHTML(html);
     row.add(rowHtml);
@@ -171,6 +210,25 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
     });
     lastTimestamp.set(rowTimestamp);
     return row.getElement().getClientHeight();
+  }
+
+  @UiHandler ("showCanceledBtn")
+  public void onShowCanceledBtn(TouchEndEvent event) {
+    if (somministrazioniAnnullate != null && somministrazioniAnnullate.size() > 0) {
+      resultsContainer.clear();
+      setShowingSomministrazioniAnnullate(!isShowingSomministrazioniAnnullate());
+      showSomministrazioniAnnullate();
+      showListaSomministrazioni(somministrazioniSchedulate);
+    }
+  }
+  
+  private void showSomministrazioniAnnullate() {
+    if (isShowingSomministrazioniAnnullate()) {
+      showCanceledBtn.setText(AppMessages.IMPL.ReminderListView_showCanceledBtn_text_hide());
+      showListaSomministrazioni(somministrazioniAnnullate);
+    } else {
+      showCanceledBtn.setText(AppMessages.IMPL.ReminderListView_showCanceledBtn_text_show());
+    }
   }
   
 }

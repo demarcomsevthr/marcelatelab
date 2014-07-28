@@ -522,6 +522,10 @@ body {
   border-bottom: 1px solid lightskyblue;
 }
 
+.ui-row-reminder-note-canceled {
+  text-decoration: line-through;
+}
+
 .ui-legal-notes-panel, .ui-legal-notes-panel a {
   font-size: 0.8em;
 }

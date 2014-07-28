@@ -154,4 +154,28 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String CheckSomministrazioniScaduteTask_run_msg1();
   
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg1();
+  
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg2();
+  
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg2b();
+  
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg3();
+  
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg4();
+  
+  @DefaultMessage("")
+  String MainController_validatePrescrizione_msg5();
+  
+  @DefaultMessage("")
+  String ReminderListView_showCanceledBtn_text_show();
+  
+  @DefaultMessage("")
+  String ReminderListView_showCanceledBtn_text_hide();
+  
 }
