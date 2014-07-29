@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
+import it.mate.phgcommons.client.utils.KeyboardUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
@@ -59,6 +60,10 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     wrapperPanel.getElement().getStyle().clearHeight();
+
+    //TODO 29/07/2014 - IN TEST
+    KeyboardUtils.enableDoneButtonSurrogate();
+    
   }
   
   @Override
