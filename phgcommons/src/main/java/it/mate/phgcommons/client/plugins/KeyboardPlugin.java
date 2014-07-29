@@ -1,5 +1,14 @@
 package it.mate.phgcommons.client.plugins;
 
+
+/**
+ * 
+ * SEE ALSO:
+ * 
+ * https://github.com/martinmose/cordova-keyboard/
+ *
+ */
+
 public class KeyboardPlugin {
   
   public static native boolean isInstalled () /*-{
