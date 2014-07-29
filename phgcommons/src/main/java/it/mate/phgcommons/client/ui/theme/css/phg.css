@@ -499,3 +499,14 @@
 .phg-TappedStyle {
   color: white;
 }
+
+.phg-DoneButton {
+  position: absolute;
+  width: 5em;
+  background: rgb(90, 90, 255);
+  color: white;
+  font-size: 0.875em;
+  font-family: arial, sans-serif;
+  font-weight: bold; 
+  margin: 2px;
+}
