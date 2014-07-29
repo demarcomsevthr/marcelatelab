@@ -139,8 +139,24 @@ public class JQuery extends JavaScriptObject {
     });
   }
   
+  public final JQuery focus(final Delegate<Element> delegate) {
+    return focusImpl(new JQueryEventCallback() {
+      public void execute(JQueryEvent event) {
+        delegate.execute(event.getTarget());
+      }
+    });
+  }
+  
   public final JQuery blur() {
     return blurImpl();
+  }
+  
+  public final JQuery blur(final Delegate<Element> delegate) {
+    return blurImpl(new JQueryEventCallback() {
+      public void execute(JQueryEvent event) {
+        delegate.execute(event.getTarget());
+      }
+    });
   }
   
   
@@ -183,9 +199,14 @@ public class JQuery extends JavaScriptObject {
    *
    */
   
-  private static interface JQueryCallback {
+  protected static interface JQueryCallback {
     public void execute();
   }
+  
+  protected static interface JQueryEventCallback {
+    public void execute(JQueryEvent event);
+  }
+  
   
   /* --------------------------------------------------------------------------------------------------- */
   
@@ -274,6 +295,22 @@ public class JQuery extends JavaScriptObject {
     return this.blur();
   }-*/;
 
-  
+  private native JQuery blurImpl(JQueryEventCallback handler) /*-{
+    var jsHandler = $entry(function(event) {
+      handler.@it.mate.gwtcommons.client.utils.JQuery.JQueryEventCallback::execute(Lit/mate/gwtcommons/client/utils/JQueryEvent;)(event);
+    });
+    return this.blur(jsHandler);
+  }-*/;
+
+  private static native JQuery focusImpl(JQueryEventCallback handler) /*-{
+//  var str = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(this);
+//  @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("this = " + str);
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("this.length = " + this.length);
+    var jsHandler = $entry(function(event) {
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("siamo dentro focus handler");
+      handler.@it.mate.gwtcommons.client.utils.JQuery.JQueryEventCallback::execute(Lit/mate/gwtcommons/client/utils/JQueryEvent;)(event);
+    });
+    return this.focus(jsHandler);
+  }-*/;
 
 }
