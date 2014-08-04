@@ -29,5 +29,7 @@ cordova plugin add org.apache.cordova.globalization
 
 cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications.git
 
+cordova plugin add https://github.com/martinmose/cordova-keyboard.git
+
 cordova build ios
 
