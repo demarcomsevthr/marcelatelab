@@ -9,6 +9,7 @@ import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.activities.MainActivity;
 import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.client.logic.MainDao;
@@ -54,6 +55,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiField Panel accountPanel;
   @UiField TouchCombo langCmb;
   @UiField PhCheckBox cbxUserCalendar;
+  @UiField PhCheckBox cbxDoneBtnAddon;
   
   public SettingsView() {
     initUI();
@@ -83,6 +85,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     langCmb.addItem("en", "English", "en".equals(localLanguage));
     langCmb.addItem("it", "Italiano", "it".equals(localLanguage));
     cbxUserCalendar.setValue(getPresenter().isUseCalendar());
+    cbxDoneBtnAddon.setValue(MainActivity.isEnabledDoneBtnAddon(), false);
   }
 
   @Override
@@ -229,6 +232,11 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   @UiHandler ("langCmb")
   public void onLangCmb(ValueChangeEvent<String> event) {
     PhgUtils.setAppLocalLanguageAndReload(event.getValue());
+  }
+  
+  @UiHandler ("cbxDoneBtnAddon")
+  public void onCbxDoneBtnAddon(ValueChangeEvent<Boolean> event) {
+    MainActivity.setEnableDoneBtnAddon(event.getValue());
   }
   
 }

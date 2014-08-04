@@ -12,11 +12,13 @@ import it.mate.phgcommons.client.ui.ph.PhDateBox;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IOSPatches;
+import it.mate.phgcommons.client.utils.KeyboardUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.therapyreminder.client.activities.MainActivity;
 import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.activities.mapper.MainAnimationMapper;
 import it.mate.therapyreminder.client.constants.AppProperties;
@@ -195,6 +197,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         }
         AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
+
+        //TODO 30/07/2014
+        if (MainActivity.isEnabledDoneBtnAddon()) {
+          KeyboardUtils.enableDoneButtonAddon();
+        }
+        
       }
     });
   }

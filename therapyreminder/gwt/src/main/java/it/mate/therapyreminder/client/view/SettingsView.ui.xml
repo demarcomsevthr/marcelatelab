@@ -22,6 +22,10 @@
       <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
       <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-settings-btn"/>
     </g:HorizontalPanel>
+    <g:HorizontalPanel addStyleNames="ui-setting-row">
+      <g:HTML HTML="Done btn addon:" addStyleNames="ui-settings-label ui-app-done-btn-label"/>
+      <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxDoneBtnAddon"/>
+    </g:HorizontalPanel>
     
     <hr class="ui-settings-separator"/>
     <g:HorizontalPanel addStyleNames="ui-setting-row">

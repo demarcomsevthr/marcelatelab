@@ -60,10 +60,6 @@ public class ContactEditView extends BaseMgwtView <Presenter> implements HasClos
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     wrapperPanel.getElement().getStyle().clearHeight();
-
-    //TODO 29/07/2014 - IN TEST
-    KeyboardUtils.enableDoneButtonSurrogate();
-    
   }
   
   @Override
