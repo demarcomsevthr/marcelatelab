@@ -14,8 +14,10 @@ import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.ui.ph.PhTextBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
+import it.mate.phgcommons.client.utils.KeyboardUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.phgcommons.client.view.HasClosingViewHandler;
@@ -39,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -122,6 +125,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   
   private int qtaRimanente = 0;
   
+  private Delegate<Element> focusDelegate = null;
+  
   
   public TherapyEditView() {
     initUI();
@@ -197,6 +202,34 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     super.setPresenter(presenter);
 //  notificheTutorPanel.setVisible(getPresenter().isOnlineMode());
     notificheTutorPanel.setVisible(true);
+    
+    focusDelegate = new Delegate<Element>() {
+      public void execute(Element focusElement) {
+        if (bottomBar != null) {
+          if (KeyboardUtils.isValidInputElement(focusElement)) {
+            bottomBar.setVisible(false);
+          } else {
+            bottomBar.setVisible(true);
+          }
+        }
+      }
+    };
+    PhgUtils.log("adding focus delegate");
+    KeyboardUtils.addFocusDelegate(focusDelegate);
+    
+  }
+  
+  @Override
+  public void onUnload() {
+    if (bottomBar != null) {
+      bottomBar.setVisible(false);
+      bottomBar = null;
+    }
+    if (focusDelegate != null) {
+      KeyboardUtils.removeFocusDelegate(focusDelegate);
+      focusDelegate = null;
+    }
+    super.onUnload();
   }
   
   @Override
@@ -261,15 +294,6 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       }
       
     }
-  }
-  
-  @Override
-  public void onUnload() {
-    if (bottomBar != null) {
-      bottomBar.setVisible(false);
-      bottomBar = null;
-    }
-    super.onUnload();
   }
   
   private String getLastStatePanel() {

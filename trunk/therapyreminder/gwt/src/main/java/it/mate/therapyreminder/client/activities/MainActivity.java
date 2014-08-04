@@ -739,6 +739,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     MainController.getInstance().setUseCalendar(value);
   }
   
+  public static void setEnableDoneBtnAddon(boolean value) {
+    PhgUtils.setLocalStorageItem("thrDoneBtnAddon", ""+value);
+    PhgUtils.reloadApp();
+  }
+  
+  public static boolean isEnabledDoneBtnAddon() {
+    String value = PhgUtils.getLocalStorageItem("thrDoneBtnAddon");
+    if (value != null) {
+      return "true".equals(value);
+    } else {
+      return true;
+    }
+  }
+  
   public boolean isUseCalendar() {
     return MainController.getInstance().isUseCalendar();
   }
