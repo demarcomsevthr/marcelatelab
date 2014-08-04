@@ -15,8 +15,8 @@ public class KeyboardPlugin {
     return typeof ($wnd.Keyboard) != 'undefined';
   }-*/;
   
-  protected static void hideFormAccessoryBar(boolean flag) {
-    hideFormAccessoryBarImpl(flag);
+  public static void hideFormAccessoryBar() {
+    hideFormAccessoryBarImpl(true);
   }
   
   protected static native void hideFormAccessoryBarImpl(boolean flag) /*-{
