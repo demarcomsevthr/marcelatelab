@@ -20,3 +20,8 @@ https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-
 itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-0.14.plist
 	
 	
+itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/THR/THR-0.14.plist
+
+
+	
+	
