@@ -90,7 +90,9 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
           if (MainController.isScaduta(somministrazione)) {
             
             String msg = somministrazione.getPrescrizione().getNome(); 
-            msg += " " + AppMessages.IMPL.ReminderEditView_setModel_msg3() + " " + somministrazione.getOrario();
+            msg += "§";
+            msg += AppMessages.IMPL.ReminderEditView_setModel_msg3() + " " + somministrazione.getOrario();
+            msg += " " + AppMessages.IMPL.ReminderEditView_setModel_msg4() + " " + PhgUtils.dateToString(somministrazione.getData());
             msg += "§";
             msg += NumberUtils.doubleAsInt(somministrazione.getQuantita()) + " ";
             msg += udm.getDescrizione();

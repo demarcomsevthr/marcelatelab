@@ -178,4 +178,7 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String ReminderListView_showCanceledBtn_text_hide();
   
+  @DefaultMessage("")
+  String ReminderEditView_setModel_msg4();
+  
 }
