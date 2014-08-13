@@ -135,7 +135,8 @@ public class MainDao extends WebSQLDao {
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('06', 'default=Sachet//s,it=Bustin/a/e', 60)");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('07', 'default=Cap//s,it=Capsul/a/e', 70)");
       tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('08', 'default=Inhalation//s,it=Inalazion/e/i', 80)");
-      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('09', 'default=Other//,it=Altro//', 90)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('09', 'default=Measure//s,it=Misurin/o/i', 90)");
+      tr.doExecuteSql("INSERT INTO udm (" + UDM_FIELDS + ") VALUES ('10', 'default=Other//,it=Altro//', 100)");
       
       PhonegapLog.log("creating table prescrizioni");
       tr.doExecuteSql("CREATE TABLE prescrizioni (id "+SERIAL_ID+", " + PRESCRIZIONI_FIELDS_0 + " )");
