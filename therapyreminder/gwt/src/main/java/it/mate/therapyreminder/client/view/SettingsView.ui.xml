@@ -10,24 +10,28 @@
       
     <g:HTML HTML="Settings" addStyleNames="ui-view-header"/>
     
-    <g:HorizontalPanel addStyleNames="ui-setting-row">
-      <g:HTML HTML="Debug" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
-      <p:TouchButton text="Clear ALL" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
-    </g:HorizontalPanel>
-    <g:HorizontalPanel addStyleNames="ui-setting-row">
-      <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
-      <p:TouchButton text="Dump DB" ui:field="dumpBtn" addStyleNames="ui-settings-btn"/>
-    </g:HorizontalPanel>
-    <g:HorizontalPanel addStyleNames="ui-setting-row">
-      <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
-      <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-settings-btn"/>
-    </g:HorizontalPanel>
-    <g:HorizontalPanel addStyleNames="ui-setting-row">
-      <g:HTML HTML="Done btn addon:" addStyleNames="ui-settings-label ui-app-done-btn-label"/>
-      <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxDoneBtnAddon"/>
-    </g:HorizontalPanel>
+    <g:HTMLPanel ui:field="debugPanel" visible="false">
     
-    <hr class="ui-settings-separator"/>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="Debug" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Clear ALL" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Dump DB" ui:field="dumpBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="Done btn addon:" addStyleNames="ui-settings-label ui-app-done-btn-label"/>
+        <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxDoneBtnAddon"/>
+      </g:HorizontalPanel>
+      <hr class="ui-settings-separator"/>
+    
+    </g:HTMLPanel>
+    
     <g:HorizontalPanel addStyleNames="ui-setting-row">
       <g:HTML HTML="Language:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
       <p:TouchCombo ui:field="langCmb" addStyleNames="ui-app-combobox, ui-lang-combobox"/>
@@ -52,9 +56,12 @@
     <hr class="ui-settings-separator"/>
     <g:HTMLPanel>
       <gc:Spacer height="0.5em"/>
-      <p:TouchHTML text="About" addStyleNames="ui-settings-label ui-app-legal-notes-label" ui:field="aboutBtn"/>
+      <p:TouchHTML text="Help" addStyleNames="ui-settings-label ui-app-legal-notes-label" ui:field="aboutBtn"/>
     </g:HTMLPanel>    
 
+    <gc:Spacer height="1.5em"/>
+    <hr class="ui-settings-separator"/>
+    
   </g:HTMLPanel>
   
 </ui:UiBinder>
