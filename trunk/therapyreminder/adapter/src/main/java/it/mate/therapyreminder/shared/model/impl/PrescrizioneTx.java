@@ -198,6 +198,21 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
         return false;
       }
     }
+    
+    // 23/08/2014 doppio controllo (non trovavo i casi di aggiunta di orario)
+    for (Dosaggio thatDosaggio : that.getDosaggi()) {
+      boolean match = false;
+      for (Dosaggio thisDosaggio : this.getDosaggi()) {
+        if (isEqualAllowNull(thisDosaggio.getOrario(), thatDosaggio.getOrario())) {
+          match = true;
+          break;
+        }
+      }
+      if (!match) {
+        return false;
+      }
+    }
+    
     return true;
   }
   
