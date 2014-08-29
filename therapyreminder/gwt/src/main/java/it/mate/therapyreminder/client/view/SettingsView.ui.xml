@@ -56,7 +56,11 @@
     <hr class="ui-settings-separator"/>
     <g:HTMLPanel>
       <gc:Spacer height="0.5em"/>
-      <p:TouchHTML text="Help" addStyleNames="ui-settings-label ui-app-legal-notes-label" ui:field="aboutBtn"/>
+      <p:TouchHTML text="Help" addStyleNames="ui-settings-label ui-app-legal-notes-label"/>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Info" ui:field="aboutBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
     </g:HTMLPanel>    
 
     <gc:Spacer height="1.5em"/>
