@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -426,6 +427,7 @@ public class PhgUtils {
 
   public static void setAppLocalLanguageAndReload(final String language) {
     setAppLocalLanguageImpl(language);
+    Cookies.setCookie("mgwtLanguage", language, GwtUtils.getDate(31, 12, 2020));
     reloadApp();
   }
   
