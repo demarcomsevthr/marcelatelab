@@ -26,9 +26,9 @@ if "%GWT_LOG_LEVEL%"=="" SET GWT_LOG_LEVEL=INFO
 
 if "%SKIP_CLEAN_ASSETS%"=="true" GOTO NO_CLEAN_ASSETS
 
-cd %BASEAPPDIR%\..\assets
-rmdir /S /Q www
-mkdir www
+cd %BASEAPPDIR%\..\assets\www
+rmdir /S /Q main
+mkdir main
 
 :NO_CLEAN_ASSETS
 
