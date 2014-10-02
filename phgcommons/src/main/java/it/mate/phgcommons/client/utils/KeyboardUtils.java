@@ -138,6 +138,11 @@ public class KeyboardUtils {
   }
   
   public static void addFocusDelegate(Delegate<Element> delegate) {
+    if (OsDetectionUtils.isIOs() || OsDetectionUtils.isDesktop()) {
+      // continue
+    } else {
+      return;
+    }
     focusDelegates.add(delegate);
     if (focusTimer == null) {
       focusTimer = GwtUtils.createTimer(200, new Delegate<Void>() {
