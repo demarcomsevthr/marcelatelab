@@ -13,7 +13,7 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=D:\OPT\jdk1.7.0_21
+SET JAVA_HOME=P:\OPT\java\jdk1.7.0_67
 
 echo PATH VARIABLE
 echo %path%
@@ -45,6 +45,7 @@ echo.
 echo.
 echo adding android platform
 pause
+
 call cordova platform add android
 
 echo.
