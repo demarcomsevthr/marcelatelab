@@ -19,7 +19,6 @@
 
 package it.mate.postscriptum;
 
-import org.apache.cordova.Config;
 import org.apache.cordova.CordovaActivity;
 
 import android.annotation.SuppressLint;
@@ -32,10 +31,11 @@ public class PostScriptum extends CordovaActivity {
   @Override
   @SuppressLint("NewApi")
   public void onCreate(Bundle savedInstanceState) {
+    
     super.onCreate(savedInstanceState);
-    super.init();
-    super.loadUrl(Config.getStartUrl());
-
+    // Set by <content src="index.html" /> in config.xml
+    loadUrl(launchUrl);
+    
     /* SE SERVE IL REMOTE DEBUGGING NELL'EMULATORE OCCORRE SCOMMENTARE QUI: */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       WebView.setWebContentsDebuggingEnabled(true);
