@@ -8,8 +8,8 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.inappbrowser/www/InAppBrowser.js",
-        "id": "org.apache.cordova.inappbrowser.InAppBrowser",
+        "file": "plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js",
+        "id": "org.apache.cordova.inappbrowser.inappbrowser",
         "clobbers": [
             "window.open"
         ]
@@ -18,8 +18,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "org.apache.cordova.device": "0.2.7",
-    "org.apache.cordova.inappbrowser": "0.3.0"
+    "org.apache.cordova.device": "0.2.12",
+    "org.apache.cordova.inappbrowser": "0.5.2"
 }
 // BOTTOM OF METADATA
 });
