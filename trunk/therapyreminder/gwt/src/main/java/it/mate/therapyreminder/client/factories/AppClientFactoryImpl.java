@@ -163,7 +163,12 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       PhgUtils.addResizeHandler(new VoidCallback() {
         public void handle() {
           PhgUtils.log(">>>>>>>>>>>> WINDOW RESIZE <<<<<<<<<<<<");
-          PhgUtils.reloadApp();
+          
+          // TODO: 25/09/2014
+          if (!OsDetectionUtils.isAndroid()) {
+            PhgUtils.reloadApp();
+          }
+          
         }
       });
     }
