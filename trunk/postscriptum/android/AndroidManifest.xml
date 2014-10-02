@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest 
   android:hardwareAccelerated="true" 
-  android:versionCode="4" 
-  android:versionName="1.1.1" 
+  android:versionCode="5" 
+  android:versionName="1.2.0" 
   android:windowSoftInputMode="adjustPan" 
   package="it.mate.postscriptum"
   xmlns:android="http://schemas.android.com/apk/res/android">
@@ -29,15 +29,17 @@
     <activity 
       android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" 
       android:label="@string/app_name" 
+      android:launchMode="singleTop" 
       android:name="PostScriptum"
       android:theme="@android:style/Theme.Black.NoTitleBar"
+      android:windowSoftInputMode="adjustResize"
 
       >
       <!-- 
             android:screenOrientation="reversePortrait"
             android:screenOrientation="portrait"
             -->
-      <intent-filter>
+      <intent-filter android:label="@string/launcher_name">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
