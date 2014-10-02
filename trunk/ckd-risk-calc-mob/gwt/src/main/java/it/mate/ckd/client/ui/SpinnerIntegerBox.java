@@ -52,6 +52,7 @@ public class SpinnerIntegerBox extends Composite implements HasValueChangeHandle
     if (!disableSpinButtons) {
       rightSpin = new SpinControl(bundle.plusImage());
       GwtUtils.setStyleAttribute(rightSpin, "paddingLeft", "6px");
+      GwtUtils.setStyleAttribute(rightSpin, "marginLeft", "10px");
       hp.add(rightSpin);
     }
     

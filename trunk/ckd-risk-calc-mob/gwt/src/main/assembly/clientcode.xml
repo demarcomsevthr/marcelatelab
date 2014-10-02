@@ -13,8 +13,10 @@
                 <include>main/images/commons/**.*</include>
                 <include>main/images/messagebox/**.*</include>
                 <include>images/**.*</include>
+                <!-- 
         		<include>**/*.html</include>
 				<include>**/*.js</include>
+                -->
 			</includes>
 			<outputDirectory>../../../assets/www</outputDirectory>
 		</fileSet>

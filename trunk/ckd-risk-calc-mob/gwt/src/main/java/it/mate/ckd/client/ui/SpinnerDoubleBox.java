@@ -74,6 +74,7 @@ public class SpinnerDoubleBox extends Composite implements HasValueChangeHandler
     if (!disableSpinButtons) {
       rightSpin = new SpinControl(bundle.plusImage());
       GwtUtils.setStyleAttribute(rightSpin, "paddingLeft", "6px");
+      GwtUtils.setStyleAttribute(rightSpin, "marginLeft", "10px");
       hp.add(rightSpin);
     }
     
