@@ -2,16 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     
     package="it.mate.ckd.pro"
-    android:versionCode="5"
-    android:versionName="2.0.1" 
+    android:versionCode="11"
+    android:versionName="2.1.0" 
+    
+    android:hardwareAccelerated="true"
+    android:windowSoftInputMode="adjustPan"
     
     >
     
     <!-- 
     
-    == SUBMISSION VERSION HISTORY ==
+    == VERSION HISTORY ==
     
-    package="it.mate.ckd.pro"       // PRO - 20/12/2013
+    package="it.mate.ckd.pro"       // PRO  - 02/10/2013 - CDV 2.6.3 - android security issue
+    android:versionCode="11"
+    android:versionName="2.1.0" 
+    
+    package="it.mate.ckd"           // FREE - 02/10/2013 - CDV 2.6.3 - android security issue
+    android:versionCode="10"
+    android:versionName="1.1.0" 
+    
+    package="it.mate.ckd.pro"       // PRO  - 20/12/2013
     android:versionCode="5"
     android:versionName="2.0.1" 
     
@@ -19,7 +30,7 @@
     android:versionCode="4"
     android:versionName="1.0.3" 
     
-    package="it.mate.ckd.pro"       // PRO - 20/12/2013
+    package="it.mate.ckd.pro"       // PRO  - 20/12/2013
     android:versionCode="3"
     android:versionName="2.0" 
     
@@ -33,24 +44,50 @@
     
      -->
 
-    <!--
-         NOTA BENE
-         
-         Versione minima = 4.0 (14): attiva una serie di ottimizzazioni grafiche 
-         
-     -->
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="13"
+        android:targetSdkVersion="19" />
     
-	<uses-permission android:name="android.permission.INTERNET" />
+    <supports-screens 
+      android:anyDensity="true" 
+      android:largeScreens="true" 
+      android:normalScreens="true" 
+      android:resizeable="true"
+      android:smallScreens="true" 
+      android:xlargeScreens="true" />
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name="CkdRiskCalc"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="adjustResize" >
+
+            <!--  per test tablet:
+            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
+            -->
+            <intent-filter android:label="@string/launcher_name" >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+    
+    <!-- CDV 2.4.0
+    
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
-   
-    <!-- 
-        NOTA BENE: OCCORRE DISABILITARE L'ACCELERAZIONE HW
-    
-     -->
+  
 	<application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -67,5 +104,6 @@
             </intent-filter>
         </activity>
     </application>
+    -->
 
 </manifest>
