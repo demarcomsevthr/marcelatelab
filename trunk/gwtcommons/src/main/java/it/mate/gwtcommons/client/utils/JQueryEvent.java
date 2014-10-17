@@ -12,7 +12,7 @@ public class JQueryEvent extends JavaScriptObject {
   }
   
   public final Element getTarget() {
-    return GwtUtils.getPropertyJsoImpl(this, "target").cast();
+    return GwtUtils.getJsPropertyJso(this, "target").cast();
   }
   
 }

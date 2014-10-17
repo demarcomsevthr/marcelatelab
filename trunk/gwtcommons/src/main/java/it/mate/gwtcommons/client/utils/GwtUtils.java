@@ -15,6 +15,7 @@ import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
@@ -1192,101 +1193,79 @@ public class GwtUtils {
     }
     return getParentWidgetByClassAndStyle(parent, classname, stylename);
   }
-  
-  public native static void setJSOProperty(JavaScriptObject obj, String name, String value) /*-{
-    obj[name] = value;
-  }-*/;
-  public native static void setJSOProperty(JavaScriptObject obj, String name, int value) /*-{
-    obj[name] = value;
-  }-*/;
-  public native static void setJSOProperty(JavaScriptObject obj, String name, boolean value) /*-{
-    obj[name] = value;
-  }-*/;
-  public native static void setJSOProperty(JavaScriptObject obj, String name, double value) /*-{
-    obj[name] = value;
-  }-*/;
-  
-  public native static String getJSOPropertyString(JavaScriptObject obj, String name) /*-{
-    if (obj[name]===undefined) {
-      return null;
-    }
-    return obj[name];
-  }-*/;
-  public native static int getJSOPropertyInt(JavaScriptObject obj, String name) /*-{
-    if (obj[name]===undefined) {
-      return 0;
-    }
-    return obj[name];
-  }-*/;
-  public native static boolean getJSOPropertyBool(JavaScriptObject obj, String name) /*-{
-    if (obj[name]===undefined) {
-      return false;
-    }
-    return obj[name];
-  }-*/;
-  public native static double getJSOPropertyDouble(JavaScriptObject obj, String name) /*-{
-    if (obj[name]===undefined) {
-      return 0;
-    }
-    return obj[name];
-  }-*/;
-  
 
-  public native static void setPropertyImpl(JavaScriptObject obj, String name, String value) /*-{
+  
+  /**
+   * 
+   * get/set JS properties
+   * 
+   */
+  
+  public native static void setJsPropertyString(JavaScriptObject obj, String name, String value) /*-{
     obj[name] = value;
   }-*/;
-  public native static void setPropertyImpl(JavaScriptObject obj, String name, Integer value) /*-{
+  public native static void setJsPropertyInteger(JavaScriptObject obj, String name, Integer value) /*-{
     obj[name] = value;
   }-*/;
-  public native static void setPropertyImpl(JavaScriptObject obj, String name, boolean value) /*-{
+  public native static void setJsPropertyBool(JavaScriptObject obj, String name, boolean value) /*-{
+    obj[name] = value;
+  }-*/;
+  public native static void setJsPropertyDouble(JavaScriptObject obj, String name, double value) /*-{
     obj[name] = value;
   }-*/;
   
-  public native static JavaScriptObject getPropertyJsoImpl(JavaScriptObject obj, String name) /*-{
+  public native static JavaScriptObject getJsPropertyJso(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return null;
     }
     return obj[name];
   }-*/;
   
-  public native static Object getPropertyImpl(JavaScriptObject obj, String name) /*-{
+  public native static Object getJsPropertyObject(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return null;
     }
     return obj[name];
   }-*/;
 
-  public native static String getPropertyStringImpl(JavaScriptObject obj, String name) /*-{
+  public native static String getJsPropertyString(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return null;
     }
     return obj[name];
   }-*/;
 
-  public native static boolean getPropertyBoolImpl(JavaScriptObject obj, String name) /*-{
+  public native static JsDate getJsPropertyDate(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+
+  public native static JsArray<JavaScriptObject> getJsPropertyArray(JavaScriptObject obj, String name) /*-{
+    if (obj[name]===undefined) {
+      return null;
+    }
+    return obj[name];
+  }-*/;
+
+  public native static boolean getJsPropertyBool(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return false;
     }
     return obj[name];
   }-*/;
   
-  public native static int getPropertyIntImpl(JavaScriptObject obj, String name) /*-{
+  public native static int getJsPropertyInt(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return 0;
     }
     return obj[name];
   }-*/;
 
-  public native static double getPropertyDoubleImpl(JavaScriptObject obj, String name) /*-{
+  public native static double getJsPropertyDouble(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
       return 0;
-    }
-    return obj[name];
-  }-*/;
-
-  public native static JsDate getPropertyDateImpl(JavaScriptObject obj, String name) /*-{
-    if (obj[name]===undefined) {
-      return null;
     }
     return obj[name];
   }-*/;

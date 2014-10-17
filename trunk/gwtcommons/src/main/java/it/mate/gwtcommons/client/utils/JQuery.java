@@ -175,19 +175,19 @@ public class JQuery extends JavaScriptObject {
       return JavaScriptObject.createObject().cast();
     }
     public final Options setDuration(int duration) {
-      GwtUtils.setPropertyImpl(this, "duration", duration);
+      GwtUtils.setJsPropertyInteger(this, "duration", duration);
       return this;
     }
     public final Options setEasing(String easing) {
-      GwtUtils.setPropertyImpl(this, "easing", easing);
+      GwtUtils.setJsPropertyString(this, "easing", easing);
       return this;
     }
     public final Options setQueue(boolean queue) {
-      GwtUtils.setPropertyImpl(this, "queue", queue);
+      GwtUtils.setJsPropertyBool(this, "queue", queue);
       return this;
     }
     public final String toMyString() {
-      return "Options [duration = "+GwtUtils.getPropertyImpl(this, "duration")+", queue = "+GwtUtils.getPropertyBoolImpl(this, "queue")+"]";
+      return "Options [duration = "+GwtUtils.getJsPropertyObject(this, "duration")+", queue = "+GwtUtils.getJsPropertyBool(this, "queue")+"]";
     }
   }
   
