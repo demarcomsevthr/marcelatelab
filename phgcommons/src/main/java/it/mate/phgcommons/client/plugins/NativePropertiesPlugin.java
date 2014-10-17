@@ -52,10 +52,10 @@ public class NativePropertiesPlugin extends AbstractPluginWrapper {
   protected static class JsEntry extends JavaScriptObject {
     protected JsEntry() { }
     public final String getName() {
-      return (String)GwtUtils.getPropertyImpl(this, "name");
+      return (String)GwtUtils.getJsPropertyObject(this, "name");
     }
     public final String getValue() {
-      return (String)GwtUtils.getPropertyImpl(this, "value");
+      return (String)GwtUtils.getJsPropertyObject(this, "value");
     }
   }
   

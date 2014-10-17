@@ -19,13 +19,13 @@ public class MagicPacketPlugin {
       return packet;
     }
     public final void setHostAddr(String host) {
-      GwtUtils.setPropertyImpl(this, "hostAddr", host);
+      GwtUtils.setJsPropertyString(this, "hostAddr", host);
     }
     public final void setHostPort(String port) {
-      GwtUtils.setPropertyImpl(this, "hostPort", port);
+      GwtUtils.setJsPropertyString(this, "hostPort", port);
     }
     public final void setMacAddr(String mac) {
-      GwtUtils.setPropertyImpl(this, "macAddr", mac);
+      GwtUtils.setJsPropertyString(this, "macAddr", mac);
     }
   }
   

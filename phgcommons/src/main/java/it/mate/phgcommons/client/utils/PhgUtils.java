@@ -395,36 +395,65 @@ public class PhgUtils {
     $wnd.glbDebugHook(jso);
   }-*/;
 
-  public static void getCurrentLanguage(final Delegate<String> delegate) {
+  public static void getLocaleLanguageFromDevice(final Delegate<String> delegate) {
     GlobalizationPlugin.getLocaleName(new StringCallback() {
+      @SuppressWarnings("unused")
       public void handle(String language) {
+
+        // TODO: DA SISTEMARE
+        /**
+         * 15/10/2014 - FORZO L'UTILIZZO DEL CURRENT LOCALE PERCHE' HO RISCONTRATO
+         *              CHE IL GLOBALIZATION PLUGIN NON RILEVA CORRETTAMENTE IL
+         *              LANGUAGE IMPOSTATO SUL DEVICE!
+         */
+        language = null;
+        ////////////////////////////////////////////////////////////////////////////
+        
         if (language != null) {
-          delegate.execute(language);
+          delegate.execute(getCountryFromLocaleName(language));
         } else {
-          delegate.execute(getCurrentLanguage());
+          delegate.execute(getLocaleLanguageFromLocaleInfo());
         }
       }
     });
   }
   
-  public static String getCurrentLanguage() {
+  public static String getLocaleLanguageFromLocaleInfo() {
     String language = LocaleInfo.getCurrentLocale().getLocaleName();
     if ("default".equals(language)) {
-      language = getNavigatorLanguage();
+      language = getLocaleLanguageFromNavigator();
     }
     if (language != null) {
-      if (language.length() > 2) {
-        language = language.substring(0, 2);
-      }
-      language = language.toLowerCase();
+      language = getCountryFromLocaleName(language);
     }
     return language;
   }
   
-  private static native String getNavigatorLanguage() /*-{
-    return navigator.language;
+  private static native String getLocaleLanguageFromNavigator() /*-{
+    return $wnd.navigator.language;
   }-*/;
 
+  private static String getCountryFromLocaleName(String locale) {
+    if (locale != null) {
+      if (locale.length() > 2) {
+        int len = locale.length();
+        locale = locale.substring(len - 2, len);
+      }
+      locale = locale.toLowerCase();
+    }
+    return locale;
+  }
+  
+  private static String getLanguageFromLocaleName(String locale) {
+    if (locale != null) {
+      if (locale.length() > 2) {
+        locale = locale.substring(0, 2);
+      }
+      locale = locale.toLowerCase();
+    }
+    return locale;
+  }
+  
   public static void setAppLocalLanguageAndReload(final String language) {
     setAppLocalLanguageImpl(language);
     Cookies.setCookie("mgwtLanguage", language, GwtUtils.getDate(31, 12, 2020));
@@ -457,7 +486,7 @@ public class PhgUtils {
   public static String getAppLocalLanguage() {
     String lang = getAppLocalLanguageImpl();
     if (lang == null || lang.trim().length() == 0) {
-      lang = getCurrentLanguage();
+      lang = getLocaleLanguageFromLocaleInfo();
     }
     return lang;
   }

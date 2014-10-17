@@ -10,8 +10,12 @@ public class GlobalizationPlugin {
 
   public static void getDatePattern(final Delegate<String> resultDelegate) {
     JavaScriptObject options = JavaScriptObject.createObject();
+    GwtUtils.setJsPropertyString(options, "formatLength", "short");
+    GwtUtils.setJsPropertyString(options, "selector", "date");
+    /*
     GwtUtils.setJSOProperty(options, "formatLength", "short");
     GwtUtils.setJSOProperty(options, "selector", "date");
+    */
     getDatePatternImpl(options, new StringCallback() {
       public void handle(String result) {
         resultDelegate.execute(result);
@@ -20,8 +24,12 @@ public class GlobalizationPlugin {
   }
   public static void getTimePattern(final Delegate<String> resultDelegate) {
     JavaScriptObject options = JavaScriptObject.createObject();
+    GwtUtils.setJsPropertyString(options, "formatLength", "short");
+    GwtUtils.setJsPropertyString(options, "selector", "time");
+    /*
     GwtUtils.setJSOProperty(options, "formatLength", "short");
     GwtUtils.setJSOProperty(options, "selector", "time");
+    */
     getDatePatternImpl(options, new StringCallback() {
       public void handle(String result) {
         resultDelegate.execute(result);
@@ -47,7 +55,7 @@ public class GlobalizationPlugin {
   }-*/;
 
   public static native void getLocaleName(StringCallback callback) /*-{
-    if (typeof(navigator.globalization) == 'undefined') {
+    if (typeof($wnd.navigator.globalization) == 'undefined') {
       callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
     } else {
       var jsSuccessCallback = $entry(function(locale) {
@@ -56,7 +64,7 @@ public class GlobalizationPlugin {
       var jsErrorCallback = $entry(function(locale) {
         callback.@it.mate.phgcommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
       });
-      navigator.globalization.getLocaleName(jsSuccessCallback,jsErrorCallback);    
+      $wnd.navigator.globalization.getLocaleName(jsSuccessCallback,jsErrorCallback);    
     }
   }-*/;
   
