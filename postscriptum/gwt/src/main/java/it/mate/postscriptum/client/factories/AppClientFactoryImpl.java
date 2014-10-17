@@ -131,12 +131,18 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
-        PhgUtils.log("CKD - changing orientation handler");
+        PhgUtils.log("PST - changing orientation handler");
         PhgUtils.logEnvironment();
         CustomTheme.Instance.get(true).css().ensureInjected();
       }
     });
-
+    
+    PhgUtils.getLocaleLanguageFromDevice(new Delegate<String>() {
+      public void execute(String language) {
+        PhgUtils.log("CURRENT LANGUAGE FROM DEVICE = " + language);
+      }
+    });
+    
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
@@ -305,13 +311,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         } else {
           boolean isSigned = stickMailEPProxy.isSignedIn();
           authDelegate.execute(isSigned);
-          
-          
           if (!isSigned) {
-            //TODO: forzare la riautenticazione!
             stickMailEPProxy.reAuthorize();
           }
-          
         }
         
       }
@@ -388,6 +390,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return Boolean.parseBoolean(value);
   }
   
+  @Override
+  public StickFacade2Async getStickFacade2() {
+    if (facade2 == null) {
+      facade2 = getGinjector().getStickFacade2();
+    }
+    return facade2;
+  }
+
   /*
   @Override
   public StickFacadeAsync getStickFacade() {
@@ -397,13 +407,5 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     return facade;
   }
   */
-  
-  @Override
-  public StickFacade2Async getStickFacade2() {
-    if (facade2 == null) {
-      facade2 = getGinjector().getStickFacade2();
-    }
-    return facade2;
-  }
   
 }

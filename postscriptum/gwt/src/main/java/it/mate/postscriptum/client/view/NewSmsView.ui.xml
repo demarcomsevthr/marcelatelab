@@ -10,9 +10,16 @@
   
     <s:SignPanel ui:field="signPanel"/>
     
-    <g:Label text="Receiver phone number:" addStyleNames="ui-promptLbl"/>
-    <ph:PhTextBox ui:field="receiverBox" type="tel" addStyleNames="ui-subjectBox"/>
+    <g:Label text="" addStyleNames="ui-promptLbl" ui:field="recipientLbl"/>
+    
+    <g:HorizontalPanel width="100%">
+      <ph:PhTextBox ui:field="receiverBox" type="tel" addStyleNames="ui-phoneNumberBox"/>
+      <p:TouchButton text="" ui:field="contactBtn" addStyleNames="ui-contactBtn"/>
+    </g:HorizontalPanel>
+    
+    <!-- 14-10-2014
     <g:Label text="(including international prefix)" addStyleNames="ui-promptLbl ui-postfixLbl"/>
+     -->
     
     <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodySmsArea"/>
     

@@ -16,6 +16,7 @@ import it.mate.postscriptum.client.ui.SignPanel;
 import it.mate.postscriptum.client.view.SMSListView.Presenter;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.StickSms2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,7 @@ public class SMSListView extends BaseMgwtView <Presenter> {
     public void goToHome();
     public void findScheduledSMSsByUser(RemoteUser remoteUser);
     public void deleteSMSs(final RemoteUser remoteUser, List<StickSms> smss);
+    public void editSms(StickSms2 sms);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SMSListView> { }
@@ -174,7 +176,10 @@ public class SMSListView extends BaseMgwtView <Presenter> {
       smsHtml.addTouchEndHandler(new TouchEndHandler() {
         public void onTouchEnd(TouchEndEvent event) {
           if (!scrollInProgress) {
-
+            if (sms instanceof StickSms2) {
+              StickSms2 sms2 = (StickSms2)sms;
+              getPresenter().editSms(sms2);
+            }
           }
         }
       });

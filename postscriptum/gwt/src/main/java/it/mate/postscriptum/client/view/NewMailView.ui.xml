@@ -11,7 +11,11 @@
     <s:SignPanel ui:field="signPanel"/>
     
     <g:Label text="Subject:" addStyleNames="ui-promptLbl"/>
-    <p:MTextBoxPatched ui:field="subjectBox" addStyleNames="ui-subjectBox"/>
+    
+    <g:HorizontalPanel width="100%">
+      <p:MTextBoxPatched ui:field="subjectBox" addStyleNames="ui-subjectBox"/>
+      <p:TouchButton text="" ui:field="contactBtn" addStyleNames="ui-contactBtn"/>
+    </g:HorizontalPanel>
     
     <m:MTextArea ui:field="bodyArea" addStyleNames="ui-bodyArea"/>
     
@@ -19,9 +23,6 @@
     <g:HorizontalPanel>
       <ph:PhCalendarBox ui:field="calBox" addStyleNames="ui-calBox"/>
       <ph:PhTimeBox ui:field="timeBox" addStyleNames="ui-timeBox"/>
-      <!-- 
-      <p:TouchAnchor text="NOW" ui:field="nowBtn" addStyleNames="ui-nowBtn"/>
-       -->
     </g:HorizontalPanel>
     
     <p:TouchButton text="SUBMIT EMAIL" ui:field="sendBtn" addStyleNames="ui-sendBtn"/>
