@@ -696,7 +696,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         
         GwtUtils.deferredExecution(2000, new Delegate<Void>() {
           public void execute(Void element) {
-            PhgUtils.setAppLocalLanguageAndReload(PhgUtils.getCurrentLanguage());
+            PhgUtils.setAppLocalLanguageAndReload(PhgUtils.getLocaleLanguageFromLocaleInfo());
           }
         });
       }
