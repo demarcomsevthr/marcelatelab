@@ -22,5 +22,21 @@ cordova plugin add org.apache.cordova.inappbrowser
 
 cordova plugin add org.apache.cordova.globalization
 
+cordova plugin add org.apache.cordova.contacts
+
 cordova build ios
+
+
+
+######################################
+#
+# RICORDARSI DI AGGIORNARE:
+
+>> Staging/config.xml:
+
+      <preference name="BackupWebStorage" value="locale" />
+      
+      
+      
+
 
