@@ -13,6 +13,8 @@
     
     <p:TouchButton text="Delete selected sms" ui:field="deleteBtn" addStyleNames="ui-delete-btn" visible="false"/>
     
+    <g:Label text="or tap to edit" addStyleNames="ui-list-prompt-lbl"/>
+    
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>

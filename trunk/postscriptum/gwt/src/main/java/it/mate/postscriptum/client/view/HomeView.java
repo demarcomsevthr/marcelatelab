@@ -66,7 +66,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     getHeaderBackButton().setVisible(false);
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    homeLbl.setText(AppProperties.IMPL.versionCredits());
+    homeLbl.setText("Version " + AppProperties.IMPL.version() + " - " + AppProperties.IMPL.credits());
   }
   
   @Override
@@ -143,9 +143,14 @@ public class HomeView extends BaseMgwtView <Presenter> {
     return startLeft + "px";
   }
   
+  boolean firstLogIssued = false;
+  
   private boolean isFirstRun() {
     String remoteUserJson = getRemoteUserImpl();
-    PhgUtils.log("localStorage.remoteUser = " + remoteUserJson);
+    if (!firstLogIssued) {
+      firstLogIssued = true;
+      PhgUtils.log("localStorage.remoteUser = " + remoteUserJson);
+    }
     return (remoteUserJson == null || !remoteUserJson.contains("{"));
   }
   

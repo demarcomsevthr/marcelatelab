@@ -189,6 +189,16 @@ body {
   margin-bottom: -0.4em;
 }
 
+.ui-list-prompt-lbl {
+  padding-top: 0;
+  padding-left: 12px;
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  color: rgb(0, 0, 255);
+  margin-bottom: 0;
+}
+
 .ui-postfixLbl {
   margin-bottom: 0;
   padding-top: 0;
@@ -199,23 +209,6 @@ body {
 .ui-rememberLbl {
   text-align: justify;
   width: 92%;
-}
-
-.ui-subjectBox {
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  display: block;
-  position: relative;
-  padding: 9px 13px;
-  margin: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  -webkit-appearance: none;
-  height: 0.8em;
-  background-color: white;
-  font-size: 19px;
 }
 
 .ui-bodyArea {
@@ -395,3 +388,30 @@ body {
   text-align: center;
   padding-top: 2em;
 }
+
+.ui-subjectBox, .ui-phoneNumberBox {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  -webkit-appearance: none;
+  background-color: white;
+  font-size: 19px;
+  height: 1.2em;
+  width: 11.6em;
+}
+
+.ui-homePanel .mgwt-SmartButton.ui-contactBtn {
+  width: 16px;
+  height: 16px;
+  background: url(main/images/contacts-48.png) no-repeat -2px -7px;
+  color: transparent;
+  margin-left: -0.1em;
+}
+

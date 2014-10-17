@@ -30,47 +30,47 @@ public class RemoteUserJS extends JavaScriptObject {
   }
   
   public final String getUserId() {
-    return (String)GwtUtils.getPropertyImpl(this, "userId");
+    return (String)GwtUtils.getJsPropertyObject(this, "userId");
   }
   
   protected final void setUserId(String value) {
-    GwtUtils.setPropertyImpl(this, "userId", value);
+    GwtUtils.setJsPropertyString(this, "userId", value);
   }
   
   public final String getEmail() {
-    return (String)GwtUtils.getPropertyImpl(this, "email");
+    return (String)GwtUtils.getJsPropertyObject(this, "email");
   }
   
   protected final void setEmail(String value) {
-    GwtUtils.setPropertyImpl(this, "email", value);
+    GwtUtils.setJsPropertyString(this, "email", value);
   }
   
   public final String getNickname() {
-    return (String)GwtUtils.getPropertyImpl(this, "nickname");
+    return (String)GwtUtils.getJsPropertyObject(this, "nickname");
   }
   
   protected final void setNickname(String value) {
-    GwtUtils.setPropertyImpl(this, "nickname", value);
+    GwtUtils.setJsPropertyString(this, "nickname", value);
   }
   
   public final String getAuthDomain() {
-    return (String)GwtUtils.getPropertyImpl(this, "authDomain");
+    return (String)GwtUtils.getJsPropertyObject(this, "authDomain");
   }
   
   protected final void setAuthDomain(String value) {
-    GwtUtils.setPropertyImpl(this, "authDomain", value);
+    GwtUtils.setJsPropertyString(this, "authDomain", value);
   }
   
   public final String getFederatedIdentity() {
-    return (String)GwtUtils.getPropertyImpl(this, "federatedIdentity");
+    return (String)GwtUtils.getJsPropertyObject(this, "federatedIdentity");
   }
   
   protected final void setFederatedIdentity(String value) {
-    GwtUtils.setPropertyImpl(this, "federatedIdentity", value);
+    GwtUtils.setJsPropertyString(this, "federatedIdentity", value);
   }
   
   public final boolean isNullUser() {
-    return GwtUtils.getPropertyBoolImpl(this, "isNullUser");
+    return GwtUtils.getJsPropertyBool(this, "isNullUser");
   }
   
   public final String toStringCustom() {

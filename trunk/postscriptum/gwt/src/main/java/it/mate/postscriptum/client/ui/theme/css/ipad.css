@@ -1,0 +1,10 @@
+
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+
+.ui-home-row-top {
+  padding: 5em 10em 1em 10em;
+}
+
+.ui-home-row-bottom {
+  padding: 1em 10em 1em 10em;
+}

@@ -25,7 +25,7 @@ public class MainEntryPoint implements EntryPoint {
     PhgUtils.logEnvironment();
     
     PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    PhgUtils.log("AppConstants.versionCredits = "+AppProperties.IMPL.versionCredits());
+    PhgUtils.log("AppConstants.version = "+AppProperties.IMPL.version());
     
     GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       public void onUncaughtException(Throwable ex) {

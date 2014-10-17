@@ -21,6 +21,7 @@ import it.mate.postscriptum.client.view.SMSListView;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.StickSms2;
 import it.mate.postscriptum.shared.model.impl.StickMailTx2;
 import it.mate.postscriptum.shared.model.impl.StickSmsTx2;
 
@@ -113,6 +114,19 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.EDIT_SMS)) {
+      NewSmsView view = AppClientFactory.IMPL.getGinjector().getNewSmsView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      view.setModel(place.getModel(), "sms");
+      panel.setWidget(view.asWidget());
+      AndroidBackButtonHandler.setDelegate(new Delegate<String>() {
+        public void execute(String element) {
+          goToHome();
+        }
+      });
+    }
   }
   
   private void ensureDevInfoId() {
@@ -126,34 +140,23 @@ public class MainActivity extends MGWTAbstractActivity implements
     String platform = PhgUtils.getDevicePlatform();
     String devUuid = PhgUtils.getDeviceUuid();
     String devVersion = PhgUtils.getDeviceVersion();
+    
     AppClientFactory.IMPL.getStickFacade2().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
-      new AsyncCallback<String>() {
-        public void onFailure(Throwable caught) {
-          //nothing
-        }
-        public void onSuccess(String devInfoId) {
-          if (devInfoId != null) {
-            setDevInfoIdInLocalStorage(devInfoId);
+        new AsyncCallback<String>() {
+          public void onFailure(Throwable caught) {
+            //nothing
           }
-        }
-    });
+          public void onSuccess(String devInfoId) {
+            if (devInfoId != null) {
+              setDevInfoIdInLocalStorage(devInfoId);
+            }
+          }
+      });
+    
   }
   
   public void findMailsByUser(RemoteUser remoteUser) {
     setHeaderWaiting(true);
-    
-    /*
-    AppClientFactory.IMPL.getStickFacade().findMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
-      public void onSuccess(List<StickMail> results) {
-        setHeaderWaiting(false);
-        view.setModel(results, MailListView.TAG_MAILS);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-     */
-    
     AppClientFactory.IMPL.getStickFacade2().findMailsByUser(remoteUser, new AsyncCallback<List<RpcMap>>() {
       public void onSuccess(List<RpcMap> results) {
         setHeaderWaiting(false);
@@ -169,22 +172,10 @@ public class MainActivity extends MGWTAbstractActivity implements
         processFailure(null, caught);
       }
     });
-    
   }
   
   public void findScheduledMailsByUser(RemoteUser remoteUser) {
     setHeaderWaiting(true);
-    /*
-    AppClientFactory.IMPL.getStickFacade().findScheduledMailsByUser(remoteUser, new AsyncCallback<List<StickMail>>() {
-      public void onSuccess(List<StickMail> results) {
-        setHeaderWaiting(false);
-        view.setModel(results, MailListView.TAG_MAILS);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-     */
     AppClientFactory.IMPL.getStickFacade2().findScheduledMailsByUser(remoteUser, new AsyncCallback<List<RpcMap>>() {
       public void onSuccess(List<RpcMap> results) {
         setHeaderWaiting(false);
@@ -204,16 +195,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   public void deleteMails(final RemoteUser remoteUser, List<StickMail> mails) {
     setHeaderWaiting(true);
-    /*
-    AppClientFactory.IMPL.getStickFacade().delete(mails, new AsyncCallback<Void>() {
-      public void onSuccess(Void result) {
-        findScheduledMailsByUser(remoteUser);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-     */
     List<RpcMap> rpcs = new ArrayList<RpcMap>();
     if (mails != null) {
       for (StickMail mail : mails) {
@@ -274,28 +255,14 @@ public class MainActivity extends MGWTAbstractActivity implements
       public void onSuccess(Date serverTime) {
         Date clientTime = new Date();
         long deltaTime = 0;
-//      long deltaTime = clientTime.getTime() - serverTime.getTime();
         PhgUtils.log("serverTime = " + serverTime);
         PhgUtils.log("clientTime = " + clientTime);
         PhgUtils.log("delta time = " + deltaTime);
         stickMail.setCreated(new Date(stickMail.getCreated().getTime() - deltaTime));
         stickMail.setScheduled(new Date(stickMail.getScheduled().getTime() - deltaTime));
-        
-        /*
-        AppClientFactory.IMPL.getStickFacade().create(stickMail, new AsyncCallback<StickMail>() {
-         */
-        /*
-        AppClientFactory.IMPL.getStickFacade().createV101(stickMail, getDevInfoIdFromLocalStorage(), new AsyncCallback<StickMail>() {
-          public void onSuccess(StickMail result) {
-            setHeaderWaiting(false);
-            delegate.execute(result);
-          }
-          public void onFailure(Throwable caught) {
-            processFailure(null, caught);
-          }
-        });
-         */
-        
+        if (stickMail instanceof StickMailTx2) {
+          ((StickMailTx2)stickMail).setDevInfoId(getDevInfoIdFromLocalStorage());
+        }
         RpcMap rpc = StickMailTx2.toRpcMap(stickMail);
         AppClientFactory.IMPL.getStickFacade2().create(rpc, new AsyncCallback<RpcMap>() {
           public void onSuccess(RpcMap result) {
@@ -306,37 +273,33 @@ public class MainActivity extends MGWTAbstractActivity implements
             processFailure(null, caught);
           }
         });
-        
       }
     });
   }
   
-  public void postNewSMS(final StickSms stickSMS, final Delegate<StickSms> delegate) {
+  public void postNewSMS(final StickSms2 stickSMS, final Delegate<StickSms> delegate) {
     setHeaderWaiting(true);
     stickSMS.setDevInfoId(getDevInfoIdFromLocalStorage());
-    
-    /*
-    AppClientFactory.IMPL.getStickFacade2().createSMS(stickSMS, new AsyncCallback<StickSms>() {
-      public void onSuccess(StickSms result) {
-        setHeaderWaiting(false);
-        delegate.execute(result);
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
-      }
-    });
-     */
-    
-    RpcMap rpc = StickSmsTx2.toRpcMap(stickSMS);
-    AppClientFactory.IMPL.getStickFacade2().createSMS(rpc, new AsyncCallback<RpcMap>() {
-      public void onSuccess(RpcMap result) {
-        setHeaderWaiting(false);
-        delegate.execute(StickSmsTx2.fromRpcMap2(result));
-      }
-      public void onFailure(Throwable caught) {
-        processFailure(null, caught);
+
+    PhgUtils.getLocaleLanguageFromDevice(new Delegate<String>() {
+      public void execute(String language) {
+        
+        stickSMS.setLanguage(language);
+        
+        RpcMap rpc = StickSmsTx2.toRpcMap(stickSMS);
+        AppClientFactory.IMPL.getStickFacade2().createSMS(rpc, new AsyncCallback<RpcMap>() {
+          public void onSuccess(RpcMap result) {
+            setHeaderWaiting(false);
+            delegate.execute(StickSmsTx2.fromRpcMap2(result));
+          }
+          public void onFailure(Throwable caught) {
+            processFailure(null, caught);
+          }
+        });
+        
       }
     });
+    
   }
   
   public void sendSmsTest(final RemoteUser remoteUser, String to, String msg) {
@@ -349,6 +312,10 @@ public class MainActivity extends MGWTAbstractActivity implements
         setHeaderWaiting(false);
       }
     });
+  }
+  
+  public void editSms(StickSms2 sms) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.EDIT_SMS, sms));
   }
   
   public void goToHome() {
@@ -415,7 +382,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       view.getHeaderPanel().addStyleName("ui-HeaderPanel-home");
     }
     if (!home) {
-//    setVisibleChangeUserBtn(true);
       setVisibleOptionsBtn(true);
     }
   }
@@ -479,4 +445,12 @@ public class MainActivity extends MGWTAbstractActivity implements
     localStorage.lastReceiverNumber = receiverNumber;
   }-*/;
   
+  public native final String getLastReceiverName() /*-{
+    return localStorage.lastReceiverName;
+  }-*/;
+
+  public native final void setLastReceiverName(String receiverName) /*-{
+    localStorage.lastReceiverName = receiverName;
+  }-*/;
+
 }

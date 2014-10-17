@@ -2,6 +2,8 @@ package it.mate.postscriptum.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.plugins.Contact;
+import it.mate.phgcommons.client.plugins.ContactsPlugin;
 import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
 import it.mate.phgcommons.client.ui.ph.PhTimeBox;
@@ -15,6 +17,7 @@ import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.postscriptum.client.ui.SignPanel;
 import it.mate.postscriptum.client.view.NewMailView.Presenter;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickMail2;
 import it.mate.postscriptum.shared.model.impl.StickMailTx2;
 
 import java.util.Date;
@@ -52,6 +55,8 @@ public class NewMailView extends BaseMgwtView <Presenter> {
   
   private Date scheduledDate;
   private Time scheduledTime;
+  
+  private String receiverEmail = null;
   
   public NewMailView() {
     initUI();
@@ -110,14 +115,26 @@ public class NewMailView extends BaseMgwtView <Presenter> {
     this.scheduledTime = event.getValue();
   }
 
-  /*
-  @UiHandler ("nowBtn")
-  public void onNowBtn (TouchEndEvent event) {
-    Date now = new Date();
-    calBox.setValue(now);
-    timeBox.setValue(Time.fromDate(now));
+  @UiHandler ("contactBtn")
+  public void onContactBtn (TapEvent event) {
+    if (ContactsPlugin.isInstalled()) {
+      ContactsPlugin.pickContact(new Delegate<Contact>() {
+        public void execute(Contact contact) {
+          PhgUtils.log("picked " + contact);
+          if (contact != null && contact.getId() != null) {
+            if (contact.getEmails() != null && contact.getEmails().size() > 0) {
+              receiverEmail = contact.getEmails().get(0).getValue();
+              signPanel.setReceiverEmail(receiverEmail);
+            } else {
+              PhgDialogUtils.showMessageDialog("Cannot find email for this contact");
+            }
+          }
+        }
+      });
+    } else {
+      PhgUtils.log("Contacts plugin not installed!");
+    }
   }
-  */
   
   @UiHandler ("sendBtn")
   public void onTouchBtn (TapEvent event) {
@@ -134,13 +151,14 @@ public class NewMailView extends BaseMgwtView <Presenter> {
       return;
     }
     
-    StickMail stickMail = new StickMailTx2();
+    StickMail2 stickMail = new StickMailTx2();
     stickMail.setSubject(subjectBox.getValue());
     stickMail.setBody(bodyArea.getValue());
     stickMail.setUser(signPanel.getRemoteUser());
     stickMail.setScheduled(scheduledTime.setInDate(scheduledDate));
     stickMail.setCreated(new Date());
     stickMail.setState(StickMail.STATE_NEW);
+    stickMail.setReceiverEmail(receiverEmail);
     
     getPresenter().postNewMail(stickMail, new Delegate<StickMail>() {
       public void execute(StickMail element) {

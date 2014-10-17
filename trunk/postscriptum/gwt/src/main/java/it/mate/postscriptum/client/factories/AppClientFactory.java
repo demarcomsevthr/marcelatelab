@@ -44,16 +44,10 @@ public interface AppClientFactory extends BaseClientFactory<AppGinjector> {
   
   public boolean getNativeProperty(String name, boolean defValue);
   
+//public StickFacadeAsync getStickFacade();
+  
   public StickFacade2Async getStickFacade2();
 
-  /*
-  public void initEndpointProxy(Delegate<StickMailEPProxy> delegate, Delegate<Boolean> authDelegate);
-  
-  public StickMailEPProxy getStickMailEPProxy();
-  
-  public void getRemoteUser(final Delegate<RemoteUser> delegate);
-  */
-  
   public void setRemoteUserDelegate(Delegate<RemoteUser> remoteUserDelegate);
   
   public void authenticate();

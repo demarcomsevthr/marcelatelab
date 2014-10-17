@@ -49,6 +49,10 @@ public class SignPanel extends Composite {
     this.signLblText = signLblText;
   }
   
+  public void setReceiverEmail(String email) {
+    this.signLbl.setText(email);
+  }
+  
   public void setRemoteUserDelegate(Presenter presenter, final Delegate<RemoteUser> remoteUserDelegate) {
     presenter.setRemoteUserDelegate(new Delegate<RemoteUser>() {
       public void execute(RemoteUser remoteUser) {
