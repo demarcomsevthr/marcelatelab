@@ -709,7 +709,7 @@ public class MainController {
       completionDelegate.execute(somministrazioni);
     } else {
       
-      PhgUtils.getCurrentLanguage(new Delegate<String>() {
+      PhgUtils.getLocaleLanguageFromDevice(new Delegate<String>() {
         public void execute(final String language) {
 
           Account account = getAccountFromLocalStorage();
