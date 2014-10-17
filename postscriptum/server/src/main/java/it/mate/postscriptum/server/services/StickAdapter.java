@@ -41,7 +41,7 @@ public interface StickAdapter {
   public List<StickSms> findScheduledSMSsByUser(RemoteUser user);
   public void deleteSMS(List<StickSms> entities);
   
-  public StickSms2 createSMSV2(StickSms2 entity) throws AdapterException;
+  public StickSms2 createOrUpdateSMSV2(StickSms2 entity) throws AdapterException;
   public List<StickSms2> findScheduledSMSsByUserV2(RemoteUser user);
   
   

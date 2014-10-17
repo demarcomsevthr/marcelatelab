@@ -2,7 +2,7 @@ package it.mate.postscriptum.server.model;
 
 import it.mate.commons.server.model.HasKey;
 import it.mate.postscriptum.shared.model.RemoteUser;
-import it.mate.postscriptum.shared.model.StickSms;
+import it.mate.postscriptum.shared.model.StickSms2;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
-public class StickSmsDs implements StickSms, HasKey {
+public class StickSmsDs implements StickSms2, HasKey {
   
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
@@ -45,11 +45,27 @@ public class StickSmsDs implements StickSms, HasKey {
   
   @Persistent (dependentKey="false", defaultFetchGroup="true")
   private Key devInfoId;
+  
+  @Persistent
+  private String language;
 
+  @Persistent
+  private String clientType;
+
+  @Persistent
+  private String receiverName;
+  
+  @Persistent
+  private String clientVersion;
+  
+  @Persistent
+  private String ip;
+  
   @Override
   public String toString() {
-    return "StickSMSDs [id=" + id + ", body=" + body + ", state=" + state + ", created=" + created + ", scheduled=" + scheduled + ", userId=" + userId
-        + ", userEmail=" + userEmail + ", receiverNumber=" + receiverNumber + ", devInfoId=" + devInfoId + "]";
+    return "StickSmsDs [id=" + id + ", body=" + body + ", state=" + state + ", created=" + created + ", scheduled=" + scheduled + ", userId=" + userId
+        + ", userEmail=" + userEmail + ", receiverNumber=" + receiverNumber + ", devInfoId=" + devInfoId + ", language=" + language + ", clientType="
+        + clientType + ", receiverName=" + receiverName + ", clientVersion=" + clientVersion + ", ip=" + ip + "]";
   }
 
   public Key getKey() {
@@ -127,6 +143,46 @@ public class StickSmsDs implements StickSms, HasKey {
 
   public void setDevInfoId(String devInfoId) {
     this.devInfoId = devInfoId != null ? KeyFactory.stringToKey(devInfoId) : null;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+  public String getClientType() {
+    return clientType;
+  }
+
+  public void setClientType(String clientType) {
+    this.clientType = clientType;
+  }
+
+  public String getReceiverName() {
+    return receiverName;
+  }
+
+  public void setReceiverName(String receiverName) {
+    this.receiverName = receiverName;
+  }
+
+  public String getClientVersion() {
+    return clientVersion;
+  }
+
+  public void setClientVersion(String clientVersion) {
+    this.clientVersion = clientVersion;
+  }
+  
+  public String getIp() {
+    return ip;
+  }
+
+  public void setIp(String ip) {
+    this.ip = ip;
   }
   
 }

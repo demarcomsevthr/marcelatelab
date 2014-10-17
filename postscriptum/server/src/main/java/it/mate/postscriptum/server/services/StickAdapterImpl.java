@@ -8,6 +8,7 @@ import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.postscriptum.server.model.DevInfoDs;
 import it.mate.postscriptum.server.model.StickMailDs;
 import it.mate.postscriptum.server.model.StickSmsDs;
+import it.mate.postscriptum.server.utils.Countries;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
 import it.mate.postscriptum.shared.model.StickMail2;
@@ -60,7 +61,7 @@ public class StickAdapterImpl implements StickAdapter {
   private static final int MAX_TOTAL_SMS_FREE_QUOTA = 9999;
 //private static final int MAX_TOTAL_SMS_FREE_QUOTA = 10;
   
-  private static final String PAID_CLIENT_TYPE_1 = "PaidClientType1";
+  private static final String PAID_CLIENT_TYPE_1 = "P1";
   
   private static final Date v2Date = DateUtils.stringToDate("01/07/2014", "dd/MM/yyyy");
   
@@ -118,6 +119,7 @@ public class StickAdapterImpl implements StickAdapter {
   @Override
   public StickMail2 createV2(StickMail2 entity) {
     StickMailDs ds = CloneUtils.clone(entity, StickMailDs.class);
+    ds.setReceiverEmail(entity.getReceiverEmail());
     LoggingUtils.debug(getClass(), "creating " + entity);
     ds = dao.create(ds);
     return CloneUtils.clone (ds, StickMailTx2.class);
@@ -274,7 +276,8 @@ public class StickAdapterImpl implements StickAdapter {
   }
 
   @Override
-  public StickSms2 createSMSV2(StickSms2 sms) throws AdapterException {
+  public StickSms2 createOrUpdateSMSV2(StickSms2 sms) throws AdapterException {
+    
     List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(sms.getUser(), v2Date);
     LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
     
@@ -292,9 +295,27 @@ public class StickAdapterImpl implements StickAdapter {
     if (sms.getBody().length() > 120) {
       throw new AdapterException("The lenght of the message cannot be more than 120 characters");
     }
+    
+    // 14/10/2014
+    if (sms.getReceiverNumber() != null && !(sms.getReceiverNumber().trim().startsWith("+"))) {
+      if (sms.getLanguage() != null) {
+        String prefix = Countries.getInternationalPrefixFromLanguage(sms.getLanguage());
+        if (prefix != null) {
+          sms.setReceiverNumber("+" + prefix + sms.getReceiverNumber());
+        }
+      }
+    }
+    
     StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
-    LoggingUtils.debug(getClass(), "creating " + ds);
-    ds = dao.create(ds);
+    
+    if (ds.getKey() == null) {
+      LoggingUtils.debug(getClass(), "creating " + ds);
+      ds = dao.create(ds);
+    } else {
+      LoggingUtils.debug(getClass(), "updating " + ds);
+      ds = dao.update(ds);
+    }
+    
     return CloneUtils.clone (ds, StickSmsTx2.class);
   }
 
@@ -361,21 +382,19 @@ public class StickAdapterImpl implements StickAdapter {
     return CloneUtils.clone(smss, StickSmsTx.class, StickSms.class);
   }
 
-  @SuppressWarnings("deprecation")
   public List<StickSms> findAllScheduledSMSs() {
     List<StickSmsDs> results = dao.findList(StickSmsDs.class, "state == stateParam", 
         Dao.Utils.buildParameters(new ParameterDefinition[] {
             new ParameterDefinition(String.class, "stateParam")
         }), 
         null, StickSms.STATE_SCHEDULED );
-    return CloneUtils.clone(results, StickSmsTx.class, StickSms.class);
+    return CloneUtils.clone(results, StickSmsTx2.class, StickSms.class);
   }
   
-  @SuppressWarnings("deprecation")
   public StickSms update(StickSms entity) {
     StickSmsDs ds = CloneUtils.clone(entity, StickSmsDs.class);
     ds = dao.update(ds);
-    return CloneUtils.clone (ds, StickSmsTx.class);
+    return CloneUtils.clone (ds, StickSmsTx2.class);
   }
   
   private void sendSms(StickSms sms) {

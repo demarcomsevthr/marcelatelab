@@ -109,7 +109,9 @@ public class StickFacade2Impl extends RemoteServiceServlet implements StickFacad
   public RpcMap createSMS(RpcMap rpc) throws AdapterException {
     StickSms2 sms2 = StickSmsTx2.fromRpcMap2(rpc);
     sms2.setState(StickSms.STATE_SCHEDULED);
-    sms2 = adapter.createSMSV2(sms2);
+    String clientIp = getThreadLocalRequest().getRemoteAddr();
+    sms2.setIp(clientIp);
+    sms2 = adapter.createOrUpdateSMSV2(sms2);
     return StickSmsTx2.toRpcMap(sms2);
   }
 

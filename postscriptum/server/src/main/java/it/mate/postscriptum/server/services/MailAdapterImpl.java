@@ -2,6 +2,7 @@ package it.mate.postscriptum.server.services;
 
 import it.mate.postscriptum.server.model.MailRecipient;
 import it.mate.postscriptum.shared.model.StickMail;
+import it.mate.postscriptum.shared.model.StickMail2;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -38,7 +39,14 @@ public class MailAdapterImpl implements MailAdapter {
   public void sendStickMail(StickMail mail) throws MessagingException {
     StringBuffer text = new StringBuffer(mail.getBody());
     addFixedMailFooter(text);
-    doSendMail(new MailRecipient(mail.getUser().getEmail()), "Post Scriptum Reminder: " + mail.getSubject(), text, null, null);
+    String recipientEmail = mail.getUser().getEmail();
+    if (mail instanceof StickMail2) {
+      StickMail2 mail2 = (StickMail2)mail;
+      if (mail2.getReceiverEmail() != null && mail2.getReceiverEmail().trim().length() > 0) {
+        recipientEmail = mail2.getReceiverEmail();
+      }
+    }
+    doSendMail(new MailRecipient(recipientEmail), "Post Scriptum Reminder: " + mail.getSubject(), text, null, null);
   }
 
   protected void doSendMail (MailRecipient recipient, String subject, StringBuffer text, String attachName, byte[] attachBuffer) throws MessagingException {
