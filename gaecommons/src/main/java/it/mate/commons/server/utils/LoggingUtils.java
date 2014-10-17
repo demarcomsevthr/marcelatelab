@@ -23,7 +23,7 @@ public class LoggingUtils {
   
   public static void error(Class<?> clazz, String message, Throwable th) {
     org.apache.log4j.Logger.getLogger(clazz).error(message, th);
-    java.util.logging.Logger.getLogger(clazz.getName()).severe(message + " - " + th.getMessage());
+    java.util.logging.Logger.getLogger(clazz.getName()).severe(message + " - " + th.getClass() + " - " + th.getMessage());
   }
   
 }
