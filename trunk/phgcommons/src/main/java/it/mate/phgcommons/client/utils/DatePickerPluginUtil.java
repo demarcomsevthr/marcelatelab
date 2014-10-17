@@ -77,28 +77,28 @@ public class DatePickerPluginUtil {
       this[name] = value;
     }-*/;  
     public final int getYear() {
-      return GwtUtils.getPropertyIntImpl(this, "year");
+      return GwtUtils.getJsPropertyInt(this, "year");
     }
     public final void setYear (int value) {
       setPropertyImpl("year", value);
     }
     public final int getMonth() {
-      return GwtUtils.getPropertyIntImpl(this, "month");
+      return GwtUtils.getJsPropertyInt(this, "month");
     }
     public final void setMonth (int value) {
       setPropertyImpl("month", value);
     }
     public final int getDay() {
-      return GwtUtils.getPropertyIntImpl(this, "day");
+      return GwtUtils.getJsPropertyInt(this, "day");
     }
     public final void setDay (int value) {
       setPropertyImpl("day", value);
     }
     public final int getHour() {
-      return GwtUtils.getPropertyIntImpl(this, "hour");
+      return GwtUtils.getJsPropertyInt(this, "hour");
     }
     public final int getMinute() {
-      return GwtUtils.getPropertyIntImpl(this, "minute");
+      return GwtUtils.getJsPropertyInt(this, "minute");
     }
     @SuppressWarnings("deprecation")
     public final Date asDate() {

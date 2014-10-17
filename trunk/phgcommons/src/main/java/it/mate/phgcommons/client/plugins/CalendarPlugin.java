@@ -136,11 +136,11 @@ public class CalendarPlugin {
         for (int it = 0; it < jsEvents.length(); it++) {
           JavaScriptObject jsEvent = jsEvents.get(it);
           CalendarEvent event = new CalendarEvent(); 
-          event.setTitle(GwtUtils.getPropertyStringImpl(jsEvent, "title"));
-          event.setStartDate(jsStringToDate(GwtUtils.getPropertyStringImpl(jsEvent, "startDate")));
-          event.setEndDate(jsStringToDate(GwtUtils.getPropertyStringImpl(jsEvent, "endDate")));
-          event.setNotes(GwtUtils.getPropertyStringImpl(jsEvent, "message"));
-          event.setLocation(GwtUtils.getPropertyStringImpl(jsEvent, "location"));
+          event.setTitle(GwtUtils.getJsPropertyString(jsEvent, "title"));
+          event.setStartDate(jsStringToDate(GwtUtils.getJsPropertyString(jsEvent, "startDate")));
+          event.setEndDate(jsStringToDate(GwtUtils.getJsPropertyString(jsEvent, "endDate")));
+          event.setNotes(GwtUtils.getJsPropertyString(jsEvent, "message"));
+          event.setLocation(GwtUtils.getJsPropertyString(jsEvent, "location"));
           events.add(event);
         }
         delegate.execute(events);

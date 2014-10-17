@@ -450,25 +450,25 @@ public abstract class AbstractEndpointProxy {
   protected static class Token extends JavaScriptObject {
     protected Token() { }
     protected final String getAccessToken() {
-      return (String)GwtUtils.getPropertyImpl(this, "access_token");
+      return (String)GwtUtils.getJsPropertyObject(this, "access_token");
     }
     protected final String getTokenType() {
-      return (String)GwtUtils.getPropertyImpl(this, "token_type");
+      return (String)GwtUtils.getJsPropertyObject(this, "token_type");
     }
     protected final String getExpiresIn() {
-      return (String)GwtUtils.getPropertyImpl(this, "expires_in");
+      return (String)GwtUtils.getJsPropertyObject(this, "expires_in");
     }
     protected final String getIdToken() {
-      return (String)GwtUtils.getPropertyImpl(this, "id_token");
+      return (String)GwtUtils.getJsPropertyObject(this, "id_token");
     }
     protected final String getRefreshToken() {
-      return (String)GwtUtils.getPropertyImpl(this, "refresh_token");
+      return (String)GwtUtils.getJsPropertyObject(this, "refresh_token");
     }
     protected final String getError() {
-      return (String)GwtUtils.getPropertyImpl(this, "error");
+      return (String)GwtUtils.getJsPropertyObject(this, "error");
     }
     protected final String getState() {
-      return (String)GwtUtils.getPropertyImpl(this, "state");
+      return (String)GwtUtils.getJsPropertyObject(this, "state");
     }
     protected final String toMyString() {
       return "Token [getAccessToken()=" + getAccessToken() + ", getError()=" + getError() + ", getExpiresIn()=" + getExpiresIn() + ", getState()=" + getState()
