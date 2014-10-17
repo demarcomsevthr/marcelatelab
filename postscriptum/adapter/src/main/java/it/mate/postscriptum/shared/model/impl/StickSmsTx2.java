@@ -14,6 +14,14 @@ public class StickSmsTx2 extends StickSmsTx implements StickSms2, IsMappable {
 
   private String clientType;
   
+  private String clientVersion;
+  
+  private String language;
+  
+  private String receiverName;
+  
+  private String ip;
+  
   public static RpcMap toRpcMap(StickSms source) {
     RpcMap map = new RpcMap();
     map.put("id", source.getId());
@@ -25,16 +33,16 @@ public class StickSmsTx2 extends StickSmsTx implements StickSms2, IsMappable {
     map.put("devInfoId", source.getDevInfoId());
     map.put("user", RemoteUserUtils.toRpcMap(source.getUser()));
     if (source instanceof StickSmsTx2) {
-      map.put("clientType", ((StickSmsTx2)source).getClientType());
+      StickSmsTx2 source2 = (StickSmsTx2)source;
+      map.put("clientType", source2.getClientType());
+      map.put("language", source2.getLanguage());
+      map.put("receiverName", source2.getReceiverName());
+      map.put("clientVersion", source2.getClientVersion());
+      map.put("ip", source2.getIp());
     }
     return map;
   }
 
-  public static StickSms2 fromRpcMap2(RpcMap map) {
-    StickSmsTx2 inst = new StickSmsTx2();
-    return fromRpcMap(map, inst);
-  }
-  
   public static StickSms2 fromRpcMap(RpcMap map, StickSms2 target) {
     target.setId((String)map.get("id"));
     target.setState((String)map.get("state"));
@@ -45,11 +53,21 @@ public class StickSmsTx2 extends StickSmsTx implements StickSms2, IsMappable {
     target.setDevInfoId((String)map.get("devInfoId"));
     target.setUser(RemoteUserUtils.fromRpcMap((RpcMap)map.get("user")));
     if (target instanceof StickSmsTx2) {
-      ((StickSmsTx2)target).setClientType((String)map.get("clientType"));
+      StickSmsTx2 target2 = (StickSmsTx2)target;
+      target2.setClientType((String)map.get("clientType"));
+      target2.setLanguage((String)map.get("language"));
+      target2.setReceiverName((String)map.get("receiverName"));
+      target2.setClientVersion((String)map.get("clientVersion"));
+      target2.setIp((String)map.get("ip"));
     }
     return target;
   }
 
+  public static StickSms2 fromRpcMap2(RpcMap map) {
+    StickSmsTx2 inst = new StickSmsTx2();
+    return fromRpcMap(map, inst);
+  }
+  
   @Override
   public RpcMap toRpcMap() {
     return toRpcMap(this);
@@ -66,6 +84,38 @@ public class StickSmsTx2 extends StickSmsTx implements StickSms2, IsMappable {
 
   public void setClientType(String clientType) {
     this.clientType = clientType;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+  public String getReceiverName() {
+    return receiverName;
+  }
+
+  public void setReceiverName(String receiverName) {
+    this.receiverName = receiverName;
+  }
+
+  public String getClientVersion() {
+    return clientVersion;
+  }
+
+  public void setClientVersion(String clientVersion) {
+    this.clientVersion = clientVersion;
+  }
+
+  public String getIp() {
+    return ip;
+  }
+
+  public void setIp(String ip) {
+    this.ip = ip;
   }
   
 }
