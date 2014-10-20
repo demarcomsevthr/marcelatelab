@@ -20,6 +20,7 @@ import it.mate.postscriptum.shared.model.impl.StickSmsTx;
 import it.mate.postscriptum.shared.model.impl.StickSmsTx2;
 import it.mate.postscriptum.shared.service.AdapterException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -30,12 +31,16 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.factory.MessageFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Message;
 import com.twilio.sdk.resource.instance.Sms;
 
 @Service
@@ -266,9 +271,11 @@ public class StickAdapterImpl implements StickAdapter {
     if (sms.getBody() == null || sms.getBody().length() <= 0) {
       throw new AdapterException("The text of the message cannot be empty");
     }
+    /*
     if (sms.getBody().length() > 120) {
       throw new AdapterException("The lenght of the message cannot be more than 120 characters");
     }
+    */
     StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
     LoggingUtils.debug(getClass(), "creating " + ds);
     ds = dao.create(ds);
@@ -292,9 +299,11 @@ public class StickAdapterImpl implements StickAdapter {
     if (sms.getBody() == null || sms.getBody().length() <= 0) {
       throw new AdapterException("The text of the message cannot be empty");
     }
+    /*
     if (sms.getBody().length() > 120) {
       throw new AdapterException("The lenght of the message cannot be more than 120 characters");
     }
+    */
     
     // 14/10/2014
     if (sms.getReceiverNumber() != null && !(sms.getReceiverNumber().trim().startsWith("+"))) {
@@ -398,38 +407,55 @@ public class StickAdapterImpl implements StickAdapter {
   }
   
   private void sendSms(StickSms sms) {
-    
     try {
       LoggingUtils.debug(getClass(), "starting twilio rest client - with sms " + sms);
-      
       TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
-
-      int maxLenght = 160 - 25 - sms.getUser().getEmail().length();
+      String smsBody = sms.getBody();
+      String body = "Post Scriptum: ";
+      body += smsBody;
+      body += " >> By " + sms.getUser().getEmail();
       
+      LoggingUtils.debug(getClass(), "GETTING NEW MESSAGE FACTORY");
+      MessageFactory messageFactory = client.getAccount().getMessageFactory();
+      List<NameValuePair> messageParams = new ArrayList<NameValuePair>();
+      messageParams.add(new BasicNameValuePair("From", TWILIO_FROM_NUMBER));
+      messageParams.add(new BasicNameValuePair("To", sms.getReceiverNumber()));
+      messageParams.add(new BasicNameValuePair("Body", body));
+      LoggingUtils.debug(getClass(), "creating message");
+      Message message = messageFactory.create(messageParams);      
+      LoggingUtils.debug(getClass(), "message created - sid = " + message.getSid());
+
+    } catch (Exception ex) {
+      LoggingUtils.error(getClass(), "error", ex);
+      logger.error("error", ex);
+    }
+  }
+  
+  private void sendSms_OLD_VERSION (StickSms sms) {
+    try {
+      LoggingUtils.debug(getClass(), "starting twilio rest client - with sms " + sms);
+      TwilioRestClient client = new TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+      int maxLenght = 160 - 25 - sms.getUser().getEmail().length();
       String smsBody = sms.getBody();
       if (smsBody == null) {
         smsBody = "";
       }
       smsBody = smsBody.length() < maxLenght ? smsBody : smsBody.substring(0, maxLenght);
-      
 //    String body = "Post Scriptum: ";
       String body = "";
       body += smsBody;
       body += " >> By " + sms.getUser().getEmail();
 //    body += " >> This is an automatically generated message: please do not reply.";
-      
       // Build a filter for the SmsList
       Map<String, String> params = new HashMap<String, String>();
       params.put("Body", body);
       params.put("To", sms.getReceiverNumber());
       params.put("From", TWILIO_FROM_NUMBER);
-   
       LoggingUtils.debug(getClass(), "getting sms factory");
       SmsFactory messageFactory = client.getAccount().getSmsFactory();
       LoggingUtils.debug(getClass(), "creating message");
       Sms message = messageFactory.create(params);
       LoggingUtils.debug(getClass(), "message created - sid = " + message.getSid());
-      
     } catch (Exception ex) {
       LoggingUtils.error(getClass(), "error", ex);
       logger.error("error", ex);
