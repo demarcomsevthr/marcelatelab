@@ -26,6 +26,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
+import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
+import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
 
 public class PhgUtils {
   
@@ -555,6 +558,28 @@ public class PhgUtils {
         }
       }
     });
+  }
+  
+  public static void prepareInnerScrollPanel(final ScrollPanel scrollPanel, final Delegate<Boolean> scrollDelegate) {
+    scrollPanel.setScrollingEnabledY(true);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        int resultsHeight = Window.getClientHeight() - scrollPanel.getAbsoluteTop();
+        scrollPanel.getElement().getStyle().setHeight(resultsHeight, Unit.PX);
+      }
+    });
+    if (scrollDelegate != null) {
+      scrollPanel.addScrollMoveHandler(new ScrollMoveEvent.Handler() {
+        public void onScrollMove(ScrollMoveEvent event) {
+          scrollDelegate.execute(true);
+        }
+      });
+      scrollPanel.addScrollEndHandler(new ScrollEndEvent.Handler() {
+        public void onScrollEnd(ScrollEndEvent event) {
+          scrollDelegate.execute(false);
+        }
+      });
+    }
   }
   
 }
