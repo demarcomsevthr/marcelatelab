@@ -13,9 +13,14 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=P:\OPT\java\jdk1.7.0_67
+::SET JAVA_HOME=P:\OPT\java\jdk1.7.0_67
+SET JAVA_HOME=D:\OPT\jdk1.7.0_21
 
-echo PATH VARIABLE
+echo JAVA_HOME = %JAVA_HOME%
+echo.
+echo.
+
+echo SYSTEM PATH =
 echo %path%
 
 SET BASEDIR=%~dp0
@@ -54,6 +59,10 @@ echo adding plugins
 pause
 call cordova plugin add org.apache.cordova.device
 call cordova plugin add org.apache.cordova.inappbrowser
+
+:: ADDED 23/10/2014
+call cordova plugin add org.apache.cordova.globalization
+call cordova plugin add org.apache.cordova.contacts
 
 echo.
 echo.
