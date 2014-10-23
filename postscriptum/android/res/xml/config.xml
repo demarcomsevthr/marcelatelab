@@ -12,6 +12,12 @@
   <feature name="InAppBrowser">
       <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
   </feature>
+  <feature name="Globalization">
+      <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
+  </feature>
+  <feature name="Contacts">
+      <param name="android-package" value="org.apache.cordova.contacts.ContactManager" />
+  </feature>
   <name>PostScriptum</name>
   <description>
       A sample Apache Cordova application that responds to the deviceready event.
