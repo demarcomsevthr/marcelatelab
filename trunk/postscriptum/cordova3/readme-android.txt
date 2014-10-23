@@ -101,6 +101,16 @@
   
   call npm update -g cordova
   
+  OPPURE:
+  
+  call npm list -g cordova
+  
+  call npm install -g cordova@3.6.3-0.2.13
+  
+  call npm install -g phonegap@3.6.0-0.21.19
+  
+  ---------------------------------------- 
+  
   >> POI RICREARE IL TEMPLATE PROJECT E FARE UPDATE/MERGE DEL PROJECT EFFETTIVO COME DI CONSUETO:
   
     > platforms/android/assets/www/plugins 																					(MERGE)
