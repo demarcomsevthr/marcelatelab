@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.plugins.NativePropertiesPlugin;
+import it.mate.phgcommons.client.ui.ph.PhDateBox;
 import it.mate.phgcommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.JSONUtils;
@@ -128,6 +129,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     CustomTheme.Instance.get().css().ensureInjected();
     
     PhgUtils.commonInitializations();
+    
+    if (PhgUtils.getAppLocalLanguageImpl() == null || "en".equals(PhgUtils.getAppLocalLanguageImpl())) {
+      PhDateBox.setForcedDateFormat("MMM dd yyyy");
+    }
     
     PhgUtils.addOrientationChangeHandler(new Delegate<Void>() {
       public void execute(Void void_) {
