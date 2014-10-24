@@ -315,6 +315,10 @@ public class StickAdapterImpl implements StickAdapter {
       }
     }
     
+    if (sms.getReceiverName() != null && "undefined".equals(sms.getReceiverName().trim().toLowerCase())) {
+      sms.setReceiverName("");
+    }
+    
     StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
     
     if (ds.getKey() == null) {
