@@ -8,6 +8,7 @@ import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.postscriptum.server.model.DevInfoDs;
 import it.mate.postscriptum.server.model.StickMailDs;
 import it.mate.postscriptum.server.model.StickSmsDs;
+import it.mate.postscriptum.server.model.UserInfoDs;
 import it.mate.postscriptum.server.utils.Countries;
 import it.mate.postscriptum.shared.model.RemoteUser;
 import it.mate.postscriptum.shared.model.StickMail;
@@ -22,6 +23,8 @@ import it.mate.postscriptum.shared.service.AdapterException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -305,6 +308,42 @@ public class StickAdapterImpl implements StickAdapter {
     }
     */
     
+    //TODO: quando sara pubblicata la PAID version:
+    
+    // se clientType = F0 && countSmsF0 > 10 >> BLOCK MESSAGE 'You have to upgrade version'
+    
+    // se clientType = F1 && countSmsF0 < 10 && countSmsF1 > 10 >> BLOCK MESSAGE 'You have to upgrade to PAID version'
+    
+    if (sms.getBody().trim().equalsIgnoreCase("test exception")) {
+//    throw new AdapterException("Test exception: <a href='https://itunes.apple.com/us/app/post-scriptum-free/id830580894?ls=1&mt=8'>Go to App Store</a>");
+      throw new AdapterException("In this version you can send up to 10 free text messages. If you want to send more, please upgrade to paid version (search 'Post Scriptum Paid' on the App Store). Thank you!");
+    }
+
+    if (sms.getBody().startsWith("testuser=")) {
+      String realEmail = sms.getUser().getEmail();
+      String testEmail = sms.getBody().substring(sms.getBody().indexOf("=") + 1);
+      UserInfoDs realUserInfo = findUserInfoByEmail(realEmail);
+      UserInfoDs testUserInfo = findUserInfoByEmail(testEmail);
+      LoggingUtils.debug(getClass(), "realUserInfo = " + realUserInfo);
+      LoggingUtils.debug(getClass(), "testUserInfo = " + testUserInfo);
+    }
+    
+    if (sms.getCreated() == null) {
+      throw new AdapterException("Creation date not set");
+    }
+    
+    if (sms.getScheduled() == null) {
+      throw new AdapterException("Scheduled date not set");
+    }
+    
+    if (sms.getScheduled().before(sms.getCreated())) {
+      throw new AdapterException("The scheduled date is in the past");
+    }
+    
+    if (getMinutesBetween(sms.getCreated(), sms.getScheduled()) < 30) {
+      throw new AdapterException("You have to set the scheduled time at least 30 minutes in the future");
+    }
+    
     // 14/10/2014
     if (sms.getReceiverNumber() != null && !(sms.getReceiverNumber().trim().startsWith("+"))) {
       if (sms.getLanguage() != null) {
@@ -330,6 +369,12 @@ public class StickAdapterImpl implements StickAdapter {
     }
     
     return CloneUtils.clone (ds, StickSmsTx2.class);
+  }
+  
+  private long getMinutesBetween(Date d1, Date d2) {
+    long m2 = (d2.getTime() / 60000);
+    long m1 = (d1.getTime() / 60000);
+    return m2 - m1;
   }
 
   @Override
@@ -485,6 +530,119 @@ public class StickAdapterImpl implements StickAdapter {
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
     return cal.getTime();
+  }
+  
+  public void updateUserInfos() {
+    
+    Date NOW = new Date();
+    LoggingUtils.debug(getClass(), "STARTING USER INFO UPDATE AT " + NOW);
+    
+    List<StickSmsDs> smsList = findAllSMSDs();
+    LoggingUtils.debug(getClass(), String.format("Fetched %s sms messages", smsList.size()));
+    
+    Collections.sort(smsList, new Comparator<StickSmsDs>() {
+      public int compare(StickSmsDs s1, StickSmsDs s2) {
+        if (s1.getCreated() != null && s2.getCreated() != null) {
+          return s1.getCreated().compareTo(s2.getCreated());
+        }
+        return 0;
+      }
+    });
+    
+    List<UserInfoDs> userInfoList = findAllUserInfoDs();
+    LoggingUtils.debug(getClass(), String.format("Fetched %s user infos", userInfoList.size()));
+
+    // azzero i contatori
+    for (UserInfoDs userInfo : userInfoList) {
+      userInfo.setCountSmsF0(0);
+      userInfo.setCountSmsF1(0);
+      userInfo.setCountSmsP1(0);
+    }
+    
+    LoggingUtils.debug(getClass(), String.format("Starting processing %s sms messages", smsList.size()));
+    
+    int counter = 0;
+    
+    for (StickSmsDs sms : smsList) {
+      
+      String userEmail = sms.getUserEmail();
+      UserInfoDs userInfo = null;
+      for (UserInfoDs item : userInfoList) {
+        if (item.getUserEmail().equals(userEmail)) {
+          userInfo = item;
+          break;
+        }
+      }
+      if (userInfo == null) {
+        userInfo = new UserInfoDs();
+        userInfo.setUserEmail(sms.getUserEmail());
+        userInfoList.add(userInfo);
+      }
+      
+      userInfo.setDevInfoId(sms.getDevInfoIdKey());
+      userInfo.setUserId(sms.getUserId());
+      
+      userInfo.setLastClientType(sms.getClientType());
+      userInfo.setLastClientVersion(sms.getClientVersion());
+      userInfo.setLastIp(sms.getIp());
+      userInfo.setLastLanguage(sms.getLanguage());
+      userInfo.setLastReceiverName(sms.getReceiverName());
+      userInfo.setLastSms(sms.getCreated());
+      
+      if ("F1".equals(sms.getClientType())) {
+        userInfo.setCountSmsF1(userInfo.getCountSmsF1().intValue() + 1);
+      } else if ("P1".equals(sms.getClientType())) {
+        userInfo.setCountSmsP1(userInfo.getCountSmsP1().intValue() + 1);
+      } else {
+        userInfo.setCountSmsF0(userInfo.getCountSmsF0().intValue() + 1);
+      }
+      
+      if (counter % 100 == 0) {
+        LoggingUtils.debug(getClass(), String.format("Processed %s sms - current user = %s", counter, userInfo));
+      }
+      
+      counter ++;
+      
+    }
+    
+    LoggingUtils.debug(getClass(), String.format("Starting updating %s user infos", userInfoList.size()));
+    
+    counter = 0;
+
+    for (UserInfoDs userInfo : userInfoList) {
+      if (userInfo.getKey() == null) {
+        userInfo = dao.create(userInfo);
+      } else {
+        userInfo = dao.update(userInfo);
+      }
+      if (counter % 100 == 0) {
+        LoggingUtils.debug(getClass(), String.format("Updated %s user infos - current user = %s", counter, userInfo));
+      }
+      counter ++;
+    }
+    
+    LoggingUtils.debug(getClass(), "FINISH USER INFO UPDATE");
+    
+  }
+  
+  private List<StickSmsDs> findAllSMSDs() {
+    List<StickSmsDs> smss = dao.findAll(StickSmsDs.class);
+    return smss;
+  }
+
+  private List<UserInfoDs> findAllUserInfoDs() {
+    List<UserInfoDs> results = dao.findAll(UserInfoDs.class);
+    if (results == null) {
+      results = new ArrayList<UserInfoDs>();
+    }
+    return results;
+  }
+  
+  private UserInfoDs findUserInfoByEmail(String email) {
+    UserInfoDs userInfo = dao.findSingle(UserInfoDs.class, "userEmail == userEmailParam", Dao.Utils.buildParameters(new ParameterDefinition[] {
+        new ParameterDefinition(String.class, "userEmailParam")
+    }), null, email);
+    return userInfo;
   }
 
 }

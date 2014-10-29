@@ -141,6 +141,10 @@ public class StickSmsDs implements StickSms2, HasKey {
     return devInfoId != null ? KeyFactory.keyToString(devInfoId) : null;
   }
 
+  public Key getDevInfoIdKey() {
+    return devInfoId;
+  }
+
   public void setDevInfoId(String devInfoId) {
     this.devInfoId = devInfoId != null ? KeyFactory.stringToKey(devInfoId) : null;
   }
@@ -183,6 +187,14 @@ public class StickSmsDs implements StickSms2, HasKey {
 
   public void setIp(String ip) {
     this.ip = ip;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public String getUserEmail() {
+    return userEmail;
   }
   
 }
