@@ -43,6 +43,8 @@ public interface StickAdapter {
   
   public StickSms2 createOrUpdateSMSV2(StickSms2 entity) throws AdapterException;
   public List<StickSms2> findScheduledSMSsByUserV2(RemoteUser user);
+
   
+  public void updateUserInfos();
   
 }
