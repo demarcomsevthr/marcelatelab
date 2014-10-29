@@ -17,11 +17,10 @@ public class AppGinModule extends AbstractGinModule {
   private final static String NAT_PROP_FACADE_MODULE_URL = "stickFacadeModuleUrl";
   
   // TO DEBUG
-//private final static String DEFAULT_FACADE_MODULE_URL = "http://6.postscriptumsrv.appspot.com/main/";
+//private final static String DEFAULT_FACADE_MODULE_URL = "http://7.postscriptumsrv.appspot.com/main/";
   private final static String DEFAULT_FACADE_MODULE_URL = "https://postscriptumsrv.appspot.com/main/";
   
   private final static String NAT_PROP_FACADE_RELATIVE_PATH = "stickFacadeRelativePath";
-  private final static String DEFAULT_FACADE1_RELATIVE_PATH = ".stickFacade";
   private final static String DEFAULT_FACADE2_RELATIVE_PATH = ".stickFacade2";
   
   @Override
