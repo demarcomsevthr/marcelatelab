@@ -30,7 +30,7 @@ public abstract class WebSQLDao {
   
   private Long estimatedSize;
   
-  private DatabaseCallback creationCallback;
+  private DatabaseCallback afterCreationCallback;
   
   private final static String sNULL = null;
   
@@ -42,14 +42,14 @@ public abstract class WebSQLDao {
   
   private MigratorCallback[] migrationCallbacks;
   
-  private SQLTransactionCallback openCallback;
+  private SQLTransactionCallback beforeMigrationCallback;
   
-  protected WebSQLDao(String name, long estimatedSize, MigratorCallback migrationCallbacks[], DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
+  protected WebSQLDao(String name, long estimatedSize, MigratorCallback migrationCallbacks[], DatabaseCallback afterCreationCallback, SQLTransactionCallback beforeMigrationCallback) {
     this.name = name;
     this.estimatedSize = estimatedSize;
-    this.creationCallback = creationCallback;
+    this.afterCreationCallback = afterCreationCallback;
     this.migrationCallbacks = migrationCallbacks;
-    this.openCallback = openCallback;
+    this.beforeMigrationCallback = beforeMigrationCallback;
     initDB();
   }
   
@@ -57,8 +57,9 @@ public abstract class WebSQLDao {
     if (db == null) {
       openDatabase(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction tr) {
-          if (openCallback != null)
-            openCallback.handleEvent(tr);
+          PhgUtils.log("WebSQLDao::after open callback");
+          if (beforeMigrationCallback != null)
+            beforeMigrationCallback.handleEvent(tr);
           doMigrations(migrationCallbacks);
         }
       });
@@ -69,44 +70,62 @@ public abstract class WebSQLDao {
     return ready;
   }
   
-  protected void openDatabase(SQLTransactionCallback openCallback) {
+  protected void openDatabase(SQLTransactionCallback afterOpenCallback) {
     db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
-        PhgUtils.log("creation callback");
-        if (creationCallback != null)
-          creationCallback.handleEvent(db);
+        PhgUtils.log("WebSQLDao::after creation callback");
+        if (afterCreationCallback != null)
+          afterCreationCallback.handleEvent(db);
       }
-    }, openCallback);
+    }, afterOpenCallback);
   }
   
   public static class WindowDatabase extends JavaScriptObject {
     protected WindowDatabase() { }
-    private static WindowDatabase openDatabase (String name, String version, long estimatedSize, DatabaseCallback creationCallback, SQLTransactionCallback openCallback) {
-      final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, creationCallback).cast();
-      final SQLTransactionCallback migrationCallback = new SQLTransactionCallback() {
+    private static WindowDatabase openDatabase (String name, String version, long estimatedSize, DatabaseCallback afterCreationCallback, final SQLTransactionCallback afterOpenCallback) {
+      final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, afterCreationCallback).cast();
+      final SQLTransactionCallback initializationCallback= new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
+          PhgUtils.log("WebSQLDao::initialization callback");
           PhgUtils.log("creating table version if not exists");
-          transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
+          // 28/10/2014
+          //transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
+          transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number INTEGER NOT NULL DEFAULT -1)");
           PhgUtils.log("select count on table version");
           transaction.doExecuteSql("SELECT COUNT(*) AS c FROM version", null, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction transaction, SQLResultSet resultSet) {
               if (resultSet.getRows().getLength() == 0 || resultSet.getRows().getValueInt(0, "c") == 0) {
                 PhgUtils.log("INITIALIZING TABLE VERSION");
                 transaction.doExecuteSql("INSERT INTO version VALUES (-1)");
+                PhgUtils.log("end initialization callback");
+                // 28/10/2014
+                if (afterOpenCallback != null) {
+                  afterOpenCallback.handleEvent(transaction);
+                }
+              } else {
+                PhgUtils.log("end initialization callback");
+                // 28/10/2014
+                if (afterOpenCallback != null) {
+                  afterOpenCallback.handleEvent(transaction);
+                }
               }
             }
           });
         }
       };
-      if (openCallback != null) {
-        db.transactionImpl(openCallback, null, new SQLVoidCallback() {
+      // 28/10/2014
+      db.transactionImpl(initializationCallback, null, null);
+      /*
+      if (afterOpenCallback != null) {
+        db.transactionImpl(afterOpenCallback, null, new SQLVoidCallback() {
           public void handleEvent() {
-            db.transactionImpl(migrationCallback, null, null);
+            db.transactionImpl(initializationCallback, null, null);
           }
         });
       } else {
-        db.transactionImpl(migrationCallback, null, null);
+        db.transactionImpl(initializationCallback, null, null);
       }
+      */
       return db;
     }
     private static native JavaScriptObject openDatabaseImpl (String name, String version, Long estimatedSize, DatabaseCallback creationCallback) /*-{
@@ -423,6 +442,7 @@ public abstract class WebSQLDao {
   }
   
   private void doMigrations(final MigratorCallback migrationCallbacks[]) {
+    PhgUtils.log("WebSQLDao::do migrations");
     new Migrator(WebSQLDao.this, migrationCallbacks);
   }
 
