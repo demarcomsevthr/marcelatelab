@@ -1,0 +1,71 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.protoph.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel, ui-wrapper-panel-clearHeight, ui-settings-panel">
+      
+    <g:HTML HTML="Settings" addStyleNames="ui-view-header"/>
+    
+    <g:HTMLPanel ui:field="debugPanel" visible="true">
+    
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="Debug" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Clear ALL" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Dump DB" ui:field="dumpBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Start trace" ui:field="traceBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="Done btn addon:" addStyleNames="ui-settings-label ui-app-done-btn-label"/>
+        <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxDoneBtnAddon"/>
+      </g:HorizontalPanel>
+      <hr class="ui-settings-separator"/>
+    
+    </g:HTMLPanel>
+    
+    <g:HorizontalPanel addStyleNames="ui-setting-row">
+      <g:HTML HTML="Language:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+      <p:TouchCombo ui:field="langCmb" addStyleNames="ui-app-combobox, ui-lang-combobox"/>
+    </g:HorizontalPanel>
+    
+    <hr class="ui-settings-separator"/>
+    <g:HorizontalPanel addStyleNames="ui-setting-row">
+      <g:HTML HTML="Online mode:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+      <ph:PhCheckBox addStyleNames="ui-app-online-mode-ckb" ui:field="cbxOnlineMode"/>
+    </g:HorizontalPanel>
+    <g:HorizontalPanel addStyleNames="ui-setting-row" spacing="0" ui:field="accountPanel" visible="false">
+      <g:HTML HTML="Account:" addStyleNames="ui-settings-label ui-app-account-label"/>
+      <p:TouchButton text="Edit" ui:field="accountBtn" addStyleNames="ui-settings-btn"/>
+    </g:HorizontalPanel>
+    
+    <hr class="ui-settings-separator"/>
+    <g:HorizontalPanel addStyleNames="ui-setting-row">
+      <g:HTML HTML="Insert reminder in user calendar:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+      <ph:PhCheckBox addStyleNames="ui-app-online-mode-ckb" ui:field="cbxUserCalendar"/>
+    </g:HorizontalPanel>
+    
+    <hr class="ui-settings-separator"/>
+    <g:HTMLPanel>
+      <gc:Spacer height="0.5em"/>
+      <p:TouchHTML text="Help" addStyleNames="ui-settings-label ui-app-legal-notes-label"/>
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Info" ui:field="aboutBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+    </g:HTMLPanel>    
+
+    <gc:Spacer height="1.5em"/>
+    <hr class="ui-settings-separator"/>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

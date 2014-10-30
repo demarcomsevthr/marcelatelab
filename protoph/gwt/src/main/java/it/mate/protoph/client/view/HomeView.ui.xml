@@ -1,0 +1,27 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
+  
+    <g:VerticalPanel addStyleNames="ui-home-view-row" horizontalAlignment="CENTER">
+      <p:TouchButton text="Applications" ui:field="btnApplications" addStyleNames="ui-home-view-btn">
+        <ui:attribute name="text" description="text" key="btnApplications.text"/>
+      </p:TouchButton>
+      <p:TouchButton text="Settings" ui:field="btnSettings" addStyleNames="ui-home-view-btn">
+        <ui:attribute name="text" description="text" key="btnSettings.text"/>
+      </p:TouchButton>
+      <p:TouchButton text="Test" ui:field="btnTest" addStyleNames="ui-home-view-btn">
+        <ui:attribute name="text" description="text" key="btnTest.text"/>
+      </p:TouchButton>
+    </g:VerticalPanel>
+      
+    <g:Label ui:field="homeLbl" addStyleNames="ui-home-lbl"/>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
