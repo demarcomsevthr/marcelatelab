@@ -51,4 +51,18 @@
 	
 	see also http://stackoverflow.com/questions/25756669/app-does-not-contain-the-correct-beta-entitlement	
 	
+  ______________________________________________________________________________________
+
+    XCODE 6 EXPORT
+
+    [30/10/2014]
+    
+    XCODE 6 > SEMBRA CHE NON FUNZIONI BENE L'EXPORT DEL FILE IPA E LA SCELTA DEL PROVISIONING PROFILE
+    (vedi http://stackoverflow.com/questions/25056144/xcode-6-how-to-pick-signing-certificate-provisioning-profile-for-ad-hoc-distri)
+    
+    WORKAROUND: utilizzare il comando xcodebuild
+    
+    (Es: /protoph/extras/ios/bin/protoph-xcodebuild.command)
+    
+    
 	
