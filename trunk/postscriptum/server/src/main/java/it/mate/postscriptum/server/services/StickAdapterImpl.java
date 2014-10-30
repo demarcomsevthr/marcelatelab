@@ -287,17 +287,26 @@ public class StickAdapterImpl implements StickAdapter {
 
   @Override
   public StickSms2 createOrUpdateSMSV2(StickSms2 sms) throws AdapterException {
+
     
-    List<StickSms> userSMSs = findSMSsByUserAndCreatedAfter(sms.getUser(), v2Date);
-    LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSs != null ? userSMSs.size() : "null"));
-    
+    List<StickSms> userSMSListAfterV2 = findSMSsByUserAndCreatedAfter(sms.getUser(), v2Date);
+    LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSListAfterV2 != null ? userSMSListAfterV2.size() : "null"));
     if (PAID_CLIENT_TYPE_1.equals(sms.getClientType())) {
       //OK
     } else {
-      if (userSMSs != null && userSMSs.size() >= MAX_TOTAL_SMS_FREE_QUOTA) {
+      if (userSMSListAfterV2 != null && userSMSListAfterV2.size() >= MAX_TOTAL_SMS_FREE_QUOTA) {
         throw new AdapterException("You reached the max number of allowed SMS for the free version");
       }
     }
+    
+
+    // 30/10/2014 - ripristinato
+    List<StickSms> userSMSListAfterMidnight = findSMSsByUserAndCreatedAfter(sms.getUser(), getMidnight());
+    LoggingUtils.debug(getClass(), "createdSms.size " + (userSMSListAfterMidnight != null ? userSMSListAfterMidnight.size() : "null"));
+    if (userSMSListAfterMidnight != null && userSMSListAfterMidnight.size() >= MAX_SMS_PER_DAY_FREE_QUOTA) {
+      throw new AdapterException(String.format("You cannot submit more than %s SMS per day in this version", MAX_SMS_PER_DAY_FREE_QUOTA));
+    }
+    
     
     if (sms.getBody() == null || sms.getBody().length() <= 0) {
       throw new AdapterException("The text of the message cannot be empty");
