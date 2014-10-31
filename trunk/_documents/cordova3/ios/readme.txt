@@ -64,5 +64,21 @@
     
     (Es: /protoph/extras/ios/bin/protoph-xcodebuild.command)
     
-    
 	
+  ______________________________________________________________________________________
+
+    INSTALLAZIONE MULTIPLA XCODE 6 E XCODE 5
+    
+	> APPLE DOWNLOADS >> https://developer.apple.com/downloads/index.action
+	
+	> cercare xcode >> Xcode 5.1.1 (10/04/2014)
+
+    >> http://iosdevelopertips.com/xcode/install-multiple-versions-of-xcode.html
+
+	  1 - mkdir /Applications/Xcode5.1.1
+	  
+	  2 - OPEN DMG FILE
+	
+	  3 - USING FINDER DRAG/DROP THE Xcode.app ICON IN THE CREATED FOLDER
+	  
+	  4 - LAUNCH Xcode.app
