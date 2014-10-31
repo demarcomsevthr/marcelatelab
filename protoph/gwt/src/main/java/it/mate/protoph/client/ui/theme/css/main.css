@@ -1,5 +1,5 @@
 
-@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*, pph*;
 
 @eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
 
@@ -416,3 +416,18 @@ input.gwt-TextBox.mgwt-InputBox-box {
   padding-top: 1em;
   text-align: center;
 }
+
+.ppg-OvalTable {
+  width: 100%;
+}
+
+.pph-Oval {
+  background-color: red;
+  width: 6em;
+  height: 3em;
+  border-top-left-radius: 3em 1.5em;
+  border-top-right-radius: 3em 1.5em;
+  border-bottom-left-radius: 3em 1.5em;
+  border-bottom-right-radius: 3em 1.5em;
+}
+

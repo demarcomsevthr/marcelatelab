@@ -472,7 +472,7 @@ public class MainActivity extends MGWTAbstractActivity implements
         setHeaderWaiting(false);
         PhgDialogUtils.showMessageDialog("Application saved", "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
           public void execute(Integer btnIndex) {
-            goToPrevious();
+//          goToPrevious();
           }
         });
       }
