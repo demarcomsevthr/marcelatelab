@@ -80,5 +80,12 @@
 	  2 - OPEN DMG FILE
 	
 	  3 - USING FINDER DRAG/DROP THE Xcode.app ICON IN THE CREATED FOLDER
+	      (Copying Xcode to Xcode5.1.1...)
 	  
 	  4 - LAUNCH Xcode.app
+
+	>> SELEZIONE DELLA VERSIONE DI XCODE DA UTILIZZARE
+	
+	  $sudo xcode-select --switch /Applications/Xcode5.1.1/Xcode.app
+	  
+	
