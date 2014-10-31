@@ -71,7 +71,7 @@
     
 	> APPLE DOWNLOADS >> https://developer.apple.com/downloads/index.action
 	
-	> cercare xcode >> Xcode 5.1.1 (10/04/2014)
+	> scaricare >> Xcode 5.1.1 (10/04/2014) (xcode_5.1.1.dmg)
 
     >> http://iosdevelopertips.com/xcode/install-multiple-versions-of-xcode.html
 
