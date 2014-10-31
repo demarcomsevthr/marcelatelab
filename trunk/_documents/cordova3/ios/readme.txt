@@ -81,6 +81,8 @@
 	
 	  3 - USING FINDER DRAG/DROP THE Xcode.app ICON IN THE CREATED FOLDER
 	      (Copying Xcode to Xcode5.1.1...)
+	      (click su Xcode app icon -> ci sta un pò...)
+	      (Xcode is an application downloaded from internet. Are you sure you want to open? > Open)
 	  
 	  4 - LAUNCH Xcode.app
 
@@ -89,5 +91,9 @@
 	  $sudo xcode-select --switch /Applications/Xcode5.1.1/Xcode.app
 	  
 	  $sudo xcode-select --switch /Applications/Xcode.app
+	  
+	  > SE NON FUNZIONA APRIRE XCODE (VERSIONE X) E DOVREBBE MOSTRARE I PROGETTI APERTI CON LA VERSIONE DI DEFAULT
+	  
+	  
 	  
 	
