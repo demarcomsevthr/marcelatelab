@@ -85,8 +85,10 @@
 	      (Xcode is an application downloaded from internet. Are you sure you want to open? > Open)
 	  
 	  4 - LAUNCH Xcode.app
+	  
+	>> HO PROVATO ANCHE A FARE IL CONTRARIO (prima XC5 poi XC6 e sembra funzionare lo stesso)
 
-	>> SELEZIONARE LA VERSIONE DI XCODE DA UTILIZZARE
+	>> SELEZIONARE LA VERSIONE DI XCODE DA UTILIZZARE (SEMBRA CHE NON SERVA)
 	
 	  $sudo xcode-select --switch /Applications/Xcode5.1.1/Xcode.app
 	  
