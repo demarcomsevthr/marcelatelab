@@ -84,8 +84,10 @@
 	  
 	  4 - LAUNCH Xcode.app
 
-	>> SELEZIONE DELLA VERSIONE DI XCODE DA UTILIZZARE
+	>> SELEZIONARE LA VERSIONE DI XCODE DA UTILIZZARE
 	
 	  $sudo xcode-select --switch /Applications/Xcode5.1.1/Xcode.app
+	  
+	  $sudo xcode-select --switch /Applications/Xcode.app
 	  
 	
