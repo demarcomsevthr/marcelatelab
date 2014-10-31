@@ -33,6 +33,7 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField HTML headerBox;
+  @UiField HTML applyPanel;
   
   public ApplicationApplyView() {
     initUI();
@@ -56,6 +57,7 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   public void setModel(Object model, String tag) {
     if (TAG_APPLICAZIONE.equals(tag)) {
       final Applicazione applicazione = (Applicazione)model;
+      populateApplyPanel();
       getPresenter().deleteWorkDir(new Delegate<String>() {
         public void execute(String element) {
           iteratePrincipiAttivi(applicazione.getPrincipiAttivi().iterator(), new Delegate<Void>() {
@@ -66,6 +68,22 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
         }
       });
     }
+  }
+  
+  private void populateApplyPanel() {
+    String html = "";
+    html += "<table class='ppg-OvalTable'>";
+    for (int ir = 0; ir < 9; ir++) {
+      html += "<tr>";
+      for (int ic = 0; ic < 3; ic++) {
+        html += "<td>";
+        html += "<div class='pph-Oval'></div>";
+        html += "</td>";
+      }
+      html += "</tr>";
+    }
+    html += "</table>";
+    applyPanel.setHTML(html);
   }
   
   private void iteratePrincipiAttivi(final Iterator<PrincipioAttivo> it, final Delegate<Void> delegate) {
