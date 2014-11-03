@@ -72,7 +72,7 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   
   private void populateApplyPanel() {
     String html = "";
-    html += "<table class='ppg-OvalTable'>";
+    html += "<table class='pph-OvalTable'>";
     for (int ir = 0; ir < 9; ir++) {
       html += "<tr>";
       for (int ic = 0; ic < 3; ic++) {
