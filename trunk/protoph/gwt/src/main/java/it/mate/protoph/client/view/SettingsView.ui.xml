@@ -48,7 +48,7 @@
     </g:HorizontalPanel>
     
     <hr class="ui-settings-separator"/>
-    <g:HorizontalPanel addStyleNames="ui-setting-row">
+    <g:HorizontalPanel addStyleNames="ui-setting-row" visible="false">
       <g:HTML HTML="Insert reminder in user calendar:" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
       <ph:PhCheckBox addStyleNames="ui-app-online-mode-ckb" ui:field="cbxUserCalendar"/>
     </g:HorizontalPanel>

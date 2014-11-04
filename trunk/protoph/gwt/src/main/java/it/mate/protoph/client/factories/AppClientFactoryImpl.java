@@ -180,9 +180,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
         AppClientFactoryImpl.this.nativeProperties = properties;
         historyHandler.handleCurrentHistory();
 
+        /*
         if (MainActivity.isEnabledDoneBtnAddon()) {
           KeyboardUtils.enableDoneButtonAddon();
         }
+        */
         
       }
     });
