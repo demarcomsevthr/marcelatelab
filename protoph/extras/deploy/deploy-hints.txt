@@ -1,0 +1,29 @@
+
+	>>>>>    DEPLOY HINTS     <<<<<
+
+> Distribute...
+
+> Save for Enterprise or Ad-Hoc Deploy
+	
+> Provisioning profile = Protoph Ad Hoc
+	
+> Save As PPH-0.1
+	
+> Application url =
+	
+https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.1.ipa
+		
+> Title = PPH 0.1
+	
+> Download url da mandare al tester:
+	
+itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.1.plist
+	
+> se non funziona gph:	
+
+itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/PPH/PPH-0.1.plist
+
+
+
+
+
