@@ -12,8 +12,12 @@ public class PrincipioAttivoTx implements PrincipioAttivo, IsMappable {
   private String nome;
   
   private String path;
-  
-  
+
+  @Override
+  public String toString() {
+    return "PrincipioAttivoTx [id=" + id + "]";
+  }
+
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();

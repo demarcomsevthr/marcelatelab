@@ -22,7 +22,9 @@ public interface Applicazione extends Serializable {
 
   public Date getDataFine();
 
+  /*
   public void setPrincipiAttivi(List<PrincipioAttivo> principiAttivi);
+  */
 
   public List<PrincipioAttivo> getPrincipiAttivi();
 

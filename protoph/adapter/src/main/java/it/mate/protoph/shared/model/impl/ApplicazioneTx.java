@@ -23,6 +23,11 @@ public class ApplicazioneTx implements Applicazione, IsMappable {
   private List<PrincipioAttivo> principiAttivi = new ArrayList<PrincipioAttivo>();
   
   @Override
+  public String toString() {
+    return "ApplicazioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", principiAttivi=" + principiAttivi + "]";
+  }
+
+  @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
     map.put("id", id);
@@ -77,8 +82,10 @@ public class ApplicazioneTx implements Applicazione, IsMappable {
     return principiAttivi;
   }
 
+  /*
   public void setPrincipiAttivi(List<PrincipioAttivo> principiAttivi) {
     this.principiAttivi = principiAttivi;
   }
+  */
   
 }
