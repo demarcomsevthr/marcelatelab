@@ -1,14 +1,11 @@
 
-@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*, pph*;
 
-.ui-home-terapies-btn, .ui-home-reminders-btn, .ui-home-doctors-btn, .ui-home-preferences-btn, .ui-contacts-doctor-btn, .ui-contacts-tutor-btn {
-  height: 64px;
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-  margin-top: 0px;
+.pph-Oval {
+  width: 20em;
+  height: 6em;
+  border-top-left-radius: 7.5em 3em;
+  border-top-right-radius: 7.5em 3em;
+  border-bottom-left-radius: 7.5em 3em;
+  border-bottom-right-radius: 7.5em 3em;
 }
-
-.ui-bottom-button-bar {
-  bottom: 22%;
-}
-
