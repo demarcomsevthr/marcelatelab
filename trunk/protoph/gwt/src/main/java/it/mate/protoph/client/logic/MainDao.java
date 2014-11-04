@@ -1,6 +1,7 @@
 package it.mate.protoph.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.protoph.shared.model.Applicazione;
@@ -95,15 +96,15 @@ public class MainDao extends WebSQLDao {
       PhonegapLog.log("creating table principi");
       tr.doExecuteSql("CREATE TABLE principi (id "+SERIAL_ID+", " + PRINCIPI_FIELDS_0 + " )");
 
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio uno',     'test-001.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio due',     'test-002.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio tre',     'test-003.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio quattro', 'test-004.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio cinque',  'test-005.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sei',     'test-006.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sette',   'test-007.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio otto',    'test-008.data')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio nove',    'test-009.data')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio uno',     'file1.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio due',     'file2.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio tre',     'file3.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio quattro', 'file4.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio cinque',  'file5.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sei',     'file6.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sette',   'file7.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio otto',    'file8.zdat')");
+      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio nove',    'file9.zdat')");
       
     }
   };
@@ -167,11 +168,17 @@ public class MainDao extends WebSQLDao {
           }
         }
       }
+      
+      PhgUtils.log("flushed " + result);
+      
       return result;
     }
   }
   
   public void saveApplicazione(final Applicazione entity, final Delegate<Applicazione> delegate) {
+    
+    PhgUtils.log("updating " + entity);
+    
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         String principiList = "";
@@ -232,7 +239,7 @@ public class MainDao extends WebSQLDao {
   
   public void findAllPrincipiAttivi(final Delegate<List<PrincipioAttivo>> delegate) {
     if (this.cachePrincipiAttivi != null) {
-      delegate.execute(cachePrincipiAttivi);
+      delegate.execute(cloneList(cachePrincipiAttivi));
     } else {
       db.doReadTransaction(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction tr) {
@@ -245,12 +252,23 @@ public class MainDao extends WebSQLDao {
                 }
               }
               cachePrincipiAttivi = results;
-              delegate.execute(results);
+              delegate.execute(cloneList(results));
             }
           });
         }
       });
     }
+  }
+  
+  private <T> List<T> cloneList(List<T> items) {
+    if (items == null) {
+      return null;
+    }
+    List<T> results = new ArrayList<T>();
+    for (T item : items) {
+      results.add(item);
+    }
+    return results;
   }
   
   private PrincipioAttivo flushRSToPrincipioAttivo(SQLResultSet rs, int it) {
