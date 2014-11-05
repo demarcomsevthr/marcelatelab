@@ -24,7 +24,7 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void deleteWorkDir(Delegate<String> delegate);
-    public void copyDataFile(String fileName, final Delegate<String> delegate);
+    public void applyFile(String fileName, final Delegate<String> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ApplicationApplyView> { }
@@ -90,7 +90,7 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
     if (it.hasNext()) {
       PrincipioAttivo principio = it.next();
       String fileName = principio.getPath();
-      getPresenter().copyDataFile(fileName, new Delegate<String>() {
+      getPresenter().applyFile(fileName, new Delegate<String>() {
         public void execute(String element) {
           iteratePrincipiAttivi(it, delegate);
         }

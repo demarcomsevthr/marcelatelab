@@ -4,7 +4,6 @@ import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.protoph.shared.service.RemoteFacade;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -66,22 +65,4 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
     return remoteFacade.checkConnection();
   }
 
-  @Override
-  public List<RpcMap> saveSomministrazioni(List<RpcMap> somministrazioni, RpcMap account, String devInfoId) {
-    logger.debug("calling " + moduleBaseUrl);
-    return remoteFacade.saveSomministrazioni(somministrazioni, account, devInfoId);
-  }
-
-  @Override
-  public void updateDatiContatto(RpcMap tutor, RpcMap account) {
-    logger.debug("calling " + moduleBaseUrl);
-    remoteFacade.updateDatiContatto(tutor, account);
-  }
-
-  @Override
-  public void deleteSomministrazioni(List<RpcMap> somministrazioni) {
-    logger.debug("calling " + moduleBaseUrl);
-    remoteFacade.deleteSomministrazioni(somministrazioni);
-  }
-  
 }

@@ -9,6 +9,7 @@ import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.plugins.FileSystemPlugin;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
+import it.mate.phgcommons.client.utils.IterationUtil;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -68,6 +69,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   private final static String dataPath = "www/main/data";
   
   private final static String workPath = "protoph/workArea";
+  
+  private final static String downloadPath = "protoph/downloadArea";
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -351,6 +354,7 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_EDIT, applicazione));
   }
+  
   public static void setEnableDoneBtnAddon(boolean value) {
     PhgUtils.setLocalStorageItem("thrDoneBtnAddon", ""+value);
     PhgUtils.reloadApp();
@@ -522,22 +526,79 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
-  public void copyDataFile(String fileName, final Delegate<String> delegate) {
+  public void doApply(Applicazione applicazione) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_APPLY, applicazione));
+  }
+
+  public static void setUseDownloadedFiles(boolean value) {
+    PhgUtils.setLocalStorageItem("PPHUseDownloadedFiles", ""+value);
+  }
+  
+  public static boolean isUseDownloadedFiles() {
+    String value = PhgUtils.getLocalStorageItem("PPHUseDownloadedFiles");
+    if (value != null) {
+      return "true".equals(value);
+    } else {
+      return false;
+    }
+  }
+  
+  public void applyFile(String fileName, final Delegate<String> delegate) {
     if (FileSystemPlugin.isInstalled()) {
-      FileSystemPlugin.copyApplicationFileToTmpDir(dataPath + "/" + fileName, workPath, new Delegate<String>() {
-        public void execute(String result) {
-          PhgUtils.log("COPIED FILE " + result);
-          delegate.execute(result);
-        }
-      });
+      
+      if (isUseDownloadedFiles()) {
+        FileSystemPlugin.copyTempFileToTmpDir(downloadPath + "/" + fileName, workPath, new Delegate<String>() {
+          public void execute(String result) {
+            PhgUtils.log("COPIED FILE " + result);
+            delegate.execute(result);
+          }
+        });
+      } else {
+        FileSystemPlugin.copyApplicationFileToTmpDir(dataPath + "/" + fileName, workPath, new Delegate<String>() {
+          public void execute(String result) {
+            PhgUtils.log("COPIED FILE " + result);
+            delegate.execute(result);
+          }
+        });
+      }
+      
     } else {
       PhgUtils.log("FileSystem Plugin NOT INSTALLED!");
       delegate.execute(null);
     }
   }
 
-  public void doApply(Applicazione applicazione) {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_APPLY, applicazione));
+  public void downloadIngredients(final Delegate<String> delegate) {
+    if (FileSystemPlugin.isInstalled()) {
+      
+      dao.findAllPrincipiAttivi(new Delegate<List<PrincipioAttivo>>() {
+        public void execute(List<PrincipioAttivo> ingredients) {
+          
+          IterationUtil.create(ingredients, new IterationUtil.ItemDelegate<PrincipioAttivo>() {
+            public void handleItem(PrincipioAttivo ingredient, final IterationUtil<PrincipioAttivo> iteration) {
+              String baseUrl = "http://protophsrv.appspot.com/x.downloadServlet";
+              String sourceUrl = baseUrl + "?name=" + ingredient.getPath();
+              String targetPath = downloadPath + "/" + ingredient.getPath();
+              FileSystemPlugin.downloadRemoteFileToTempDir(sourceUrl, targetPath, new Delegate<String>() {
+                public void execute(String result) {
+                  PhgUtils.log("DOWNLOADED FILE " + result);
+                  iteration.next();
+                }
+              });
+            }
+          }, new IterationUtil.FinishDelegate() {
+            public void doFinish() {
+              delegate.execute("DONE");
+            }
+          });
+          
+        }
+      });
+      
+    } else {
+      PhgUtils.log("FileSystem Plugin NOT INSTALLED!");
+      delegate.execute(null);
+    }
   }
-
+  
 }
