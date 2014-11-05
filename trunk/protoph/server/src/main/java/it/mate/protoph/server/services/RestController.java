@@ -28,11 +28,4 @@ public class RestController {
     response.getOutputStream().print("Adapter scheduled checks started");
   }
   
-  @RequestMapping ("/debugAnticipaDataSomministrazioni")
-  public void debugAnticipaDataSomministrazioni(HttpServletResponse response) throws Exception {
-    logger.debug("anticipa data somministrazioni starting");
-    adapter.debugAnticipaDataSomministrazioni();
-    response.getOutputStream().print("Anticipa data somministrazioni started");
-  }
-  
 }

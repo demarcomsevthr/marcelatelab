@@ -1,8 +1,7 @@
 package it.mate.protoph.server.services;
 
+import it.mate.protoph.server.model.PrincipioAttivoDs;
 import it.mate.protoph.shared.model.Account;
-import it.mate.protoph.shared.model.Contatto;
-import it.mate.protoph.shared.model.Somministrazione;
 
 
 public interface RemoteAdapter {
@@ -15,12 +14,8 @@ public interface RemoteAdapter {
   
   public Account updateAccount(Account entity);
   
-  public Somministrazione saveSomministrazione(Somministrazione somministrazioneTx, Account accountTx, String devInfoId);
+  public PrincipioAttivoDs findPrincipioAttivoByName (String name);
   
-  public void debugAnticipaDataSomministrazioni();
-  
-  public void updateDatiContatto(Contatto tutor, Account account);
-  
-  public void deleteSomministrazione(Somministrazione somministrazione);
+  public PrincipioAttivoDs savePrincipioAttivoDs(PrincipioAttivoDs entity);
   
 }
