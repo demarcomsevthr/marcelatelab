@@ -3,7 +3,6 @@ package it.mate.protoph.shared.service;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.Date;
-import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -22,10 +21,4 @@ public interface RemoteFacade extends RemoteService {
   
   Boolean checkConnection();
 
-  List<RpcMap> saveSomministrazioni(List<RpcMap> somministrazioni, RpcMap account, String devInfoId);
-  
-  void updateDatiContatto(RpcMap tutor, RpcMap account);
-  
-  void deleteSomministrazioni(List<RpcMap> somministrazioni);
-  
 }
