@@ -369,6 +369,23 @@ public class StickAdapterImpl implements StickAdapter {
     
     StickSmsDs ds = CloneUtils.clone(sms, StickSmsDs.class);
     
+    if (PAID_CLIENT_TYPE_1.equals(sms.getClientType())) {
+      LoggingUtils.debug(getClass(), "PAID USER");
+    } else {
+      try {
+        UserInfoDs userInfo = findUserInfoByEmail(ds.getUserEmail());
+        LoggingUtils.debug(getClass(), "found " + userInfo);
+        Date loyalUserLimit = DateUtils.stringToDate("20141001", "yyyyMMdd");
+        if (userInfo != null && userInfo.getFirstSms() != null && userInfo.getFirstSms().before(loyalUserLimit)) {
+          LoggingUtils.debug(getClass(), "LOYAL USER");
+        } else {
+          LoggingUtils.debug(getClass(), "NEWBIE USER");
+        }
+      } catch (Exception ex) {
+        LoggingUtils.error(getClass(), ex.getMessage());
+      }
+    }
+    
     if (ds.getKey() == null) {
       LoggingUtils.debug(getClass(), "creating " + ds);
       ds = dao.create(ds);
@@ -596,7 +613,15 @@ public class StickAdapterImpl implements StickAdapter {
       userInfo.setLastIp(sms.getIp());
       userInfo.setLastLanguage(sms.getLanguage());
       userInfo.setLastReceiverName(sms.getReceiverName());
-      userInfo.setLastSms(sms.getCreated());
+
+      if (sms.getCreated() != null) {
+        if (userInfo.getLastSms() == null || sms.getCreated().after(userInfo.getLastSms())) {
+          userInfo.setLastSms(sms.getCreated());
+        }
+        if (userInfo.getFirstSms() == null || sms.getCreated().before(userInfo.getFirstSms())) {
+          userInfo.setFirstSms(sms.getCreated());
+        }
+      }
       
       if ("F1".equals(sms.getClientType())) {
         userInfo.setCountSmsF1(userInfo.getCountSmsF1().intValue() + 1);

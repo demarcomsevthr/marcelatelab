@@ -45,6 +45,9 @@ public class UserInfoDs implements Serializable, HasKey {
   private String lastIp;
   
   @Persistent
+  private Date firstSms;
+
+  @Persistent
   private Date lastSms;
 
   @Persistent
@@ -181,6 +184,14 @@ public class UserInfoDs implements Serializable, HasKey {
 
   public void setCountSmsP1(Integer countSmsP1) {
     this.countSmsP1 = countSmsP1;
+  }
+
+  public Date getFirstSms() {
+    return firstSms;
+  }
+
+  public void setFirstSms(Date firstSms) {
+    this.firstSms = firstSms;
   }
   
 }
