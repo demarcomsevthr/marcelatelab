@@ -11,6 +11,22 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class FileSystemPlugin {
   
+  
+  /**
+   *  DOCUMENTATION
+   *  
+   *    https://github.com/apache/cordova-plugin-file/blob/master/doc/index.md
+   *  
+   *    http://docs.phonegap.com/en/3.3.0/cordova_file_file.md.html
+   *    
+   *    http://www.html5rocks.com/en/tutorials/file/filesystem/
+   *    
+   *    https://github.com/apache/cordova-plugin-file-transfer
+   * 
+   * 
+   */
+  
+  
   /* 5 MB */
   private final static int DEFAULT_SIZE = 5 * 1024 * 1024;
 
@@ -72,6 +88,56 @@ public class FileSystemPlugin {
             } else {
               delegate.execute(null);
             }
+          }
+        }, failure);
+      }
+    }, failure);
+  }
+  
+  public static void downloadRemoteFileToTempDir (final String sourceUrl, final String targetRelativePath, final Delegate<String> delegate) {
+    PhgUtils.log("DOWNLOADING FROM " + sourceUrl + " TO " + targetRelativePath);
+    final JSOStringCallback failure = new JSOStringCallback() {
+      public void handle(String errorCode) {
+        PhgUtils.log("DOWNLOADING ERROR CODE = " + errorCode);
+        delegate.execute(null);
+      }
+    };
+    downloadRemoteFileToTempDirImpl(sourceUrl, targetRelativePath, new JSOSuccess() {
+      public void handle(JavaScriptObject targetFileEntry) {
+        PhgUtils.log("target file = " + JSONUtils.stringify(targetFileEntry));
+        String result = GwtUtils.getJsPropertyString(targetFileEntry, "fullPath");
+        double size = GwtUtils.getJsPropertyDouble(targetFileEntry, "size");
+        delegate.execute(result + " size = " + (long)size);
+      }
+    }, failure);
+  }
+  
+  public static void copyTempFileToTmpDir (final String sourceFile, final String destPath, final Delegate<String> delegate) {
+    PhgUtils.log("COPYING " + sourceFile + " TO " + destPath);
+    final JSOStringCallback failure = new JSOStringCallback() {
+      public void handle(String errorCode) {
+        PhgUtils.log("COPYING ERROR CODE = " + errorCode);
+        delegate.execute(null);
+      }
+    };
+    getTempFileImpl(sourceFile, new JSOSuccess() {
+      public void handle(final JavaScriptObject sourceFileEntry) {
+        //PhgUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
+        getTempDirImpl(new JSOSuccess() {
+          public void handle(JavaScriptObject tempDirEntry) {
+            //PhgUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
+              public void handle(JavaScriptObject destDirEntry) {
+                //PhgUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
+                copyFileImpl(sourceFileEntry, destDirEntry, null, new JSOSuccess() {
+                  public void handle(JavaScriptObject destFileEntry) {
+                    PhgUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
+                    String result = GwtUtils.getJsPropertyString(destFileEntry, "fullPath");
+                    delegate.execute(result);
+                  }
+                }, failure);
+              }
+            }, failure);
           }
         }, failure);
       }
@@ -189,5 +255,33 @@ public class FileSystemPlugin {
     });
     dirEntry.removeRecursively(jsSuccess, jsFailure);
   }-*/;
+  
+  /**
+   * Example:
+   * 
+   * sourceUrl = "http://some.server.com/download.php"
+   * targetRelativePath = "protoph/downloadArea"
+   * 
+   * see:
+   * 
+   *   https://github.com/apache/cordova-plugin-file-transfer/blob/master/doc/index.md
+   * 
+   */
+  
+  private static native void downloadRemoteFileToTempDirImpl (String sourceUrl, String targetRelativePath, JSOSuccess success, JSOStringCallback failure) /*-{
+    var jsSuccess = $entry(function(fileEntry) {
+      success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
+    });
+    var jsFailure = $entry(function(error) {
+      failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
+    });
+    
+    var fileTransfer = new $wnd.FileTransfer();
+    var uri = $wnd.encodeURI(sourceUrl);
+    fileTransfer.download(uri, $wnd.cordova.file.tempDirectory + targetRelativePath, jsSuccess, jsFailure, false );    
+    
+  }-*/;
+
+  
 
 }
