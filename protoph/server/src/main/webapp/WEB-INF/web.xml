@@ -42,6 +42,26 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>*.remoteFacade</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>it.mate.protoph.server.servlet.UploadServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>*.uploadServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>downloadServlet</servlet-name>
+    <servlet-class>it.mate.protoph.server.servlet.DownloadServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>downloadServlet</servlet-name>
+    <url-pattern>*.downloadServlet</url-pattern>
+  </servlet-mapping>
+  
   <!-- 
   <security-constraint>
     <web-resource-collection>
