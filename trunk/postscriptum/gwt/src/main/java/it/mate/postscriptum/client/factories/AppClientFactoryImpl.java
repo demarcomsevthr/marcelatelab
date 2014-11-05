@@ -148,6 +148,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       }
     });
     
+    PhgUtils.log("CLIENT TYPE = " + AppProperties.IMPL.clientType());
+    
     AppClientFactory clientFactory = AppClientFactory.IMPL;
 
     MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);

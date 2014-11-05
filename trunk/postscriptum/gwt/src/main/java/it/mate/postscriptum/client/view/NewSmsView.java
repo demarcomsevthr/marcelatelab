@@ -240,7 +240,8 @@ public class NewSmsView extends BaseMgwtView <Presenter> {
     
     // TEST PAID VERSION
     //editingSms.setClientType("P1");
-    editingSms.setClientType("F1");
+    //editingSms.setClientType("F1");
+    editingSms.setClientType(AppProperties.IMPL.clientType());
     editingSms.setClientVersion(AppProperties.IMPL.version());
     
     getPresenter().postNewSMS(editingSms, new Delegate<StickSms>() {

@@ -27,4 +27,7 @@ public interface AppProperties extends Constants {
   @DefaultBooleanValue(false)
   boolean extendedVersion();
   
+  @DefaultStringValue("F1")
+  String clientType();
+  
 }
