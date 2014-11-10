@@ -46,6 +46,8 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
+    getScrollPanel().setScrollingEnabledX(false);
+    getScrollPanel().setScrollingEnabledY(false);
   }
   
   @Override
