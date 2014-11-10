@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCheckBox;
+import it.mate.phgcommons.client.utils.PhgDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
@@ -41,6 +42,7 @@ public class ApplicationListView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToHome();
     public void goToApplicationEditView(Applicazione applicazione);
+    public void deleteApplicazioni(List<Applicazione> applicazioni);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ApplicationListView> { }
@@ -146,6 +148,19 @@ public class ApplicationListView extends BaseMgwtView <Presenter> {
   @UiHandler ("newBtn")
   public void onNewBtn (TouchEndEvent event) {
     getPresenter().goToApplicationEditView(null);
+  }
+  
+  @UiHandler ("deleteBtn")
+  public void onDeleteBtn(TouchEndEvent event) {
+    if (selectedItems == null || selectedItems.size() == 0)
+      return;
+    PhgDialogUtils.showMessageDialog("Confirm delete of selected items?", "Confirm", PhgDialogUtils.BUTTONS_YESNO, new Delegate<Integer>() {
+      public void execute(Integer selectedButton) {
+        if (selectedButton == 1) {
+          getPresenter().deleteApplicazioni(selectedItems);
+        }
+      }
+    });
   }
   
 }

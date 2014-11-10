@@ -483,6 +483,13 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
+  public void deleteApplicazioni(List<Applicazione> applicazioni) {
+    dao.deleteApplicazioni( applicazioni, new Delegate<Void>() {
+      public void execute(Void element) {
+        goToApplicationListView();
+      }
+    });
+  }
   
   private int testNumber = 0;
 

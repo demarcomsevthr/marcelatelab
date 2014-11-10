@@ -10,6 +10,7 @@ import it.mate.protoph.shared.model.impl.ApplicazioneTx;
 import it.mate.protoph.shared.model.impl.PrincipioAttivoTx;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**************************************************
@@ -313,6 +314,33 @@ public class MainDao extends WebSQLDao {
         }
       }
     });
+  }
+  
+  
+  public void deleteApplicazioni(final List<Applicazione> applicazioni, final Delegate<Void> delegate) {
+    if (applicazioni == null || applicazioni.size() == 0) {
+      delegate.execute(null);
+    }
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(final SQLTransaction tr) {
+        iterateApplicazioniForDelete(applicazioni.iterator(), tr, delegate);
+      }
+    });
+  }
+  
+  private void iterateApplicazioniForDelete(final Iterator<Applicazione> it, SQLTransaction tr, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      final Applicazione applicazione = it.next();
+      PhonegapLog.log("deleting " + applicazione);
+      tr.doExecuteSql("DELETE FROM applicazioni WHERE id = ?", new Object[] {applicazione.getId()}, new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          iterateApplicazioniForDelete(it, tr, delegate);
+        }
+      });
+    } else {
+      PhonegapLog.log("calling finish delegate");
+      delegate.execute(null);
+    }
   }
   
 }
