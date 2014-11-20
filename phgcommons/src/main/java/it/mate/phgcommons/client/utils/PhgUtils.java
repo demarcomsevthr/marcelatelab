@@ -249,26 +249,34 @@ public class PhgUtils {
   }-*/;
 
   public static void adaptWrapperPanel(final Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
+    PhgUtils.log("adaptWrapperPanel.1");
     wrapperPanel.getElement().setId(id);
+    PhgUtils.log("adaptWrapperPanel.2");
     if (OsDetectionUtils.isTablet()) {
+      PhgUtils.log("adaptWrapperPanel.3");
       GwtUtils.onAvailable(id, new Delegate<Element>() {
-        public void execute(Element wrapperPanelElem) {
-          int height = getTabletWrapperHeight();
-          GwtUtils.log("applying wrapperPanel height = " + height);
-          wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
-          if (adaptVerMargin) {
-            int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
-            wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
-            wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
-          }
-          int width = getTabletWrapperWidth();
-          wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
-          int horMargin = ( Window.getClientWidth() - width ) / 2;
-          wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
-          wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
-          if (delegate != null) {
-            delegate.execute(wrapperPanelElem);
-          }
+        public void execute(final Element wrapperPanelElem) {
+          GwtUtils.deferredExecution(new Delegate<Void>() {
+            public void execute(Void element) {
+              PhgUtils.log("adaptWrapperPanel.4");
+              int height = getTabletWrapperHeight();
+              PhgUtils.log("applying wrapperPanel height = " + height);
+              wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
+              if (adaptVerMargin) {
+                int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
+                wrapperPanelElem.getStyle().setMarginTop(verMargin, Unit.PX);
+                wrapperPanelElem.getStyle().setMarginBottom(verMargin, Unit.PX);
+              }
+              int width = getTabletWrapperWidth();
+              wrapperPanelElem.getStyle().setWidth(width, Unit.PX);
+              int horMargin = ( Window.getClientWidth() - width ) / 2;
+              wrapperPanelElem.getStyle().setMarginLeft(horMargin, Unit.PX);
+              wrapperPanelElem.getStyle().setMarginRight(horMargin, Unit.PX);
+              if (delegate != null) {
+                delegate.execute(wrapperPanelElem);
+              }
+            }
+          });
         }
       });
       

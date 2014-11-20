@@ -126,7 +126,7 @@ public class CalendarDialog {
   
   private int dayHeight;
   
-  private int scrollHeight;
+  protected int scrollHeight;
   
   private TouchHTML selectedDateCell;
   
@@ -170,7 +170,7 @@ public class CalendarDialog {
     initDefaults();
   }
   
-  private void initDefaults() {
+  protected void initDefaults() {
     popupLeft = 0;
     if (OsDetectionUtils.isIOs()) {
       popupTop = 42;
