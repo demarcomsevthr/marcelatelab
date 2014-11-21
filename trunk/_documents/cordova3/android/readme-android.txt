@@ -90,6 +90,14 @@
     
   ________________________________________________________
   >
+  >   VISUALIZZARE LA VERSIONE CORDOVA INSTALLATA
+  >
+  
+  call npm list -g cordova
+
+  
+  ________________________________________________________
+  >
   >   UPGRADE CORDOVA 3.6.3 (android security issue)
   >
   
@@ -102,8 +110,6 @@
   call npm update -g cordova
   
   OPPURE:
-  
-  call npm list -g cordova
   
   call npm install -g cordova@3.6.3-0.2.13
   
