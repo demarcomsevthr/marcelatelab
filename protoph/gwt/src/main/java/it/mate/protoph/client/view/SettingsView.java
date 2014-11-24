@@ -28,6 +28,8 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     public void goToHome();
     public void clearALL();
     public void downloadIngredients(final Delegate<String> delegate);
+    public void resetPrincipiAttivi();
+    public void doTestFile();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -87,6 +89,17 @@ public class SettingsView extends BaseMgwtView <Presenter> {
       public void execute(Integer btnIndex) {
         if (btnIndex == 1) {
           getPresenter().clearALL();
+        }
+      }
+    });
+  }
+  
+  @UiHandler ("resetIngredientsBtn")
+  public void onResetIngredientsBtn (TouchEndEvent event) {
+    PhgDialogUtils.showMessageDialog("Are you sure you want to reset ingredients?", "Alert", PhgDialogUtils.BUTTONS_OKCANCEL, new Delegate<Integer>() {
+      public void execute(Integer btnIndex) {
+        if (btnIndex == 1) {
+          getPresenter().resetPrincipiAttivi();
         }
       }
     });
@@ -214,4 +227,9 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     });
   }
 
+  @UiHandler ("testBtn")
+  public void onTestBtn (TouchEndEvent event) {
+    getPresenter().doTestFile();
+  }
+  
 }

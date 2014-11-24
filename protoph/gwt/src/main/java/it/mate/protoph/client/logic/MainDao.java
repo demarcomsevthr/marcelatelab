@@ -1,6 +1,7 @@
 package it.mate.protoph.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
@@ -94,21 +95,27 @@ public class MainDao extends WebSQLDao {
       PhonegapLog.log("creating table applicazioni");
       tr.doExecuteSql("CREATE TABLE applicazioni (id "+SERIAL_ID+", " + APPLICAZIONI_FIELDS_0 + " )");
 
-      PhonegapLog.log("creating table principi");
-      tr.doExecuteSql("CREATE TABLE principi (id "+SERIAL_ID+", " + PRINCIPI_FIELDS_0 + " )");
-
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio uno',     'file1.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio due',     'file2.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio tre',     'file3.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio quattro', 'file4.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio cinque',  'file5.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sei',     'file6.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sette',   'file7.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio otto',    'file8.zdat')");
-      tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio nove',    'file9.zdat')");
+      createPrincipiAttivi(tr);
       
     }
   };
+  
+  private static void createPrincipiAttivi(SQLTransaction tr) {
+    PhonegapLog.log("creating table principi");
+    tr.doExecuteSql("CREATE TABLE principi (id "+SERIAL_ID+", " + PRINCIPI_FIELDS_0 + " )");
+
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio uno',     'file1.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio due',     'file2.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio tre',     'file3.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio quattro', 'file4.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio cinque',  'file5.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sei',     'file6.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio sette',   'file7.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio otto',    'file8.zdat')");
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Principio nove',    'file9.zdat')");
+    
+    tr.doExecuteSql("INSERT INTO principi (nome, path) VALUES ('Quantares',    'Quantares')");
+  }
   
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
     MIGRATION_CALLBACK_0 
@@ -341,6 +348,21 @@ public class MainDao extends WebSQLDao {
       PhonegapLog.log("calling finish delegate");
       delegate.execute(null);
     }
+  }
+  
+  public void resetPrincipiAttivi(final Delegate<Void> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("DROP TABLE principi",
+            null, new SQLStatementCallback() {
+              public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                createPrincipiAttivi(tr);
+                PhonegapLog.log("Reset principi done");
+                GwtUtils.deferredExecution(1000, delegate);
+              }
+            });
+      }
+    });
   }
   
 }

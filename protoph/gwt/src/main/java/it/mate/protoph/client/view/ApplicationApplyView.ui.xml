@@ -20,7 +20,7 @@
     
     <hr class="ui-view-separator-1"/>
     
-    <g:HTML ui:field="applyPanel"></g:HTML>
+    <g:HTML ui:field="applyPanel" addStyleNames="pph-apply-panel"></g:HTML>
     
   </g:HTMLPanel>
   

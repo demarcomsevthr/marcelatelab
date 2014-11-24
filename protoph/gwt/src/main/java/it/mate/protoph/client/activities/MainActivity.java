@@ -450,6 +450,22 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
 
+  public void resetPrincipiAttivi() {
+    dao.resetPrincipiAttivi(new Delegate<Void>() {
+      public void execute(Void element) {
+        PhgDialogUtils.showMessageDialog("Reset ingredients done", "Info", PhgDialogUtils.BUTTONS_OK, new Delegate<Integer>() {
+          public void execute(Integer btnIndex) {
+            GwtUtils.deferredExecution(2000, new Delegate<Void>() {
+              public void execute(Void element) {
+                PhgUtils.setAppLocalLanguageAndReload(PhgUtils.getLocaleLanguageFromLocaleInfo());
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
   protected String getDevInfoIdFromLocalStorage() {
     return PhgUtils.getLocalStorageItem("devInfoId");
   }
@@ -498,6 +514,13 @@ public class MainActivity extends MGWTAbstractActivity implements
     
     if (FileSystemPlugin.isInstalled()) {
       
+      FileSystemPlugin.testPlugin("www/main/data/file1.zdat", "protoph/workArea", new Delegate<String>() {
+        public void execute(String result) {
+          PhgUtils.log("TEST COMPLETE");
+        }
+      });
+
+      /*
       if ((testNumber % 2) == 0) {
         FileSystemPlugin.copyApplicationFileToTmpDir("www/data/test.txt", "protoph/workArea", new Delegate<String>() {
           public void execute(String result) {
@@ -511,6 +534,8 @@ public class MainActivity extends MGWTAbstractActivity implements
           }
         });
       }
+      */
+      
       testNumber ++;
       
     } else {

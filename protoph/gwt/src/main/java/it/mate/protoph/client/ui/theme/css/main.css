@@ -431,3 +431,7 @@ input.gwt-TextBox.mgwt-InputBox-box {
   border-bottom-right-radius: 3em 1.5em;
 }
 
+.pph-apply-panel {
+  background: transparent url('main/images/bgr-1600x1200.png');
+}
+
