@@ -1,17 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Therapy Reminder</string>
-    
-    <!-- 
-    <string name="endpointApiRoot">http://10.0.2.2:8080/_ah/api</string>
-     -->
-    <string name="endpointApiRoot">https://protophsrv.appspot.com/_ah/api</string>
-
-    <!--     
-    <string name="stickFacadeModuleUrl">http://127.0.0.1:8080/main/</string>
-     -->
-    <string name="stickFacadeModuleUrl">https://protophsrv.appspot.com/main/</string>
-    
-    <string name="stickFacadeRelativePath">.stickFacade</string>
-    
+    <string name="app_name">Protoph</string>
+    <string name="launcher_name">@string/app_name</string>
+    <string name="activity_name">@string/launcher_name</string>
 </resources>
