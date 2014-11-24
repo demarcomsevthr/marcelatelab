@@ -10,9 +10,11 @@ import it.mate.protoph.shared.model.PrincipioAttivo;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,6 +75,11 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   }
   
   private void populateApplyPanel() {
+    applyPanel.getElement().getStyle().setWidth(Window.getClientWidth(), Unit.PX);
+    applyPanel.getElement().getStyle().setHeight(Window.getClientHeight(), Unit.PX);
+  }
+  
+  private void populateApplyPanel_v0_3() {
     String html = "";
     html += "<table class='pph-OvalTable'>";
     for (int ir = 0; ir < 9; ir++) {

@@ -17,6 +17,11 @@
         <p:TouchButton text="Clear ALL" ui:field="resetBtn" addStyleNames="ui-settings-btn"/>
       </g:HorizontalPanel>
       
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Reset ingredients" ui:field="resetIngredientsBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
+      
       <!-- 
       <g:HorizontalPanel addStyleNames="ui-setting-row">
         <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
@@ -31,6 +36,11 @@
         <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxDoneBtnAddon"/>
       </g:HorizontalPanel>
        -->
+      
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
+        <p:TouchButton text="Test file" ui:field="testBtn" addStyleNames="ui-settings-btn"/>
+      </g:HorizontalPanel>
       
       <hr class="ui-settings-separator"/>
     

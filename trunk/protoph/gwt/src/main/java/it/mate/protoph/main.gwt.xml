@@ -19,7 +19,7 @@
   <!-- 
      VALORI DA UTILIZZARE = iphone, android
    -->
-  <set-property name="mgwt.os" value="iphone" />
+  <set-property name="mgwt.os" value="android" />
 
   <add-linker name="xsiframe" />
   

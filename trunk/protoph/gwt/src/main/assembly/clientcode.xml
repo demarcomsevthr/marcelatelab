@@ -11,7 +11,7 @@
         <include>main/*.*</include>
         <include>main/images/*.*</include>
         <include>main/js/*.*</include>
-        <include>main/data/*.*</include>
+        <include>main/data/*</include>
         <include>**/*.html</include>
         <include>**/app*.js</include>
         <include>**/jquery*.*</include>

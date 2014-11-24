@@ -19,9 +19,13 @@ public class MainAnimationMapper implements AnimationMapper {
       if (oldPlace == null) {
         return Animation.DISSOLVE_REVERSE;
       } else if (newPlace.getToken().equals(MainPlace.HOME)) {
-        return Animation.SWAP_REVERSE;
+        return Animation.SLIDE_REVERSE;
+      } else if (oldPlace.getToken().equals(MainPlace.APPLICATION_APPLY) && newPlace.getToken().equals(MainPlace.APPLICATION_EDIT)) {
+        return Animation.SLIDE_REVERSE;
+      } else if (oldPlace.getToken().equals(MainPlace.APPLICATION_EDIT) && newPlace.getToken().equals(MainPlace.APPLICATION_LIST)) {
+        return Animation.SLIDE_REVERSE;
       }
-      return Animation.SWAP;
+      return Animation.SLIDE;
     }
     return Animation.SLIDE;
   }
