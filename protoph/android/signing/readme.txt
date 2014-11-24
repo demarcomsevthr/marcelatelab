@@ -1,5 +1,6 @@
-[22/09/2014]
+[24/11/2014]
+keystore = PPH.keystore
 keystore password = lacedemone
-alias = MedupDev
+alias = Mdm
 password = lacedemone
 
