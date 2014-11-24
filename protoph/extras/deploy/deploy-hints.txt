@@ -7,21 +7,21 @@
 	
 > Provisioning profile = Protoph Ad Hoc
 	
-> Save As PPH-0.3
+> Save As PPH-0.4
 	
 > Application url =
 	
-https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.3.ipa
+https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.4.ipa
 		
-> Title = PPH 0.1
+> Title = PPH-0.4
 	
 > Download url da mandare al tester:
 	
-itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.3.plist
+itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/protoph/extras/deploy/PPH-0.4.plist
 	
 > se non funziona gph:	
 
-itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/PPH/PPH-0.3.plist
+itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/PPH/PPH-0.4.plist
 
 
 
