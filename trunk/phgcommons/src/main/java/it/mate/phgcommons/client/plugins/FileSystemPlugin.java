@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.plugins;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.JSONUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOStringCallback;
 import it.mate.phgcommons.client.utils.callbacks.JSOSuccess;
@@ -47,7 +48,7 @@ public class FileSystemPlugin {
     getApplicationFileImpl(sourceFile, new JSOSuccess() {
       public void handle(final JavaScriptObject sourceFileEntry) {
         //PhgUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
-        getTempDirImpl(new JSOSuccess() {
+        getTempDirImpl(OsDetectionUtils.isAndroid(),  new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
             //PhgUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
@@ -76,7 +77,7 @@ public class FileSystemPlugin {
         delegate.execute(null);
       }
     };
-    getTempFileImpl(dirPath, new JSOSuccess() {
+    getTempFileImpl(dirPath, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(final JavaScriptObject dirEntry) {
         //PhgUtils.log("dest dir = " + JSONUtils.stringify(dirEntry));
         deleteDirImpl(dirEntry, new JSOSuccess() {
@@ -102,7 +103,7 @@ public class FileSystemPlugin {
         delegate.execute(null);
       }
     };
-    downloadRemoteFileToTempDirImpl(sourceUrl, targetRelativePath, new JSOSuccess() {
+    downloadRemoteFileToTempDirImpl(sourceUrl, targetRelativePath, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(JavaScriptObject targetFileEntry) {
         PhgUtils.log("target file = " + JSONUtils.stringify(targetFileEntry));
         String result = GwtUtils.getJsPropertyString(targetFileEntry, "fullPath");
@@ -120,10 +121,10 @@ public class FileSystemPlugin {
         delegate.execute(null);
       }
     };
-    getTempFileImpl(sourceFile, new JSOSuccess() {
+    getTempFileImpl(sourceFile, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(final JavaScriptObject sourceFileEntry) {
         //PhgUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
-        getTempDirImpl(new JSOSuccess() {
+        getTempDirImpl(OsDetectionUtils.isAndroid(), new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
             //PhgUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
@@ -147,6 +148,8 @@ public class FileSystemPlugin {
   public static native boolean isInstalled () /*-{
     return typeof ($wnd.requestFileSystem) != 'undefined' && typeof ($wnd.resolveLocalFileSystemURL) != 'undefined';
   }-*/;
+  
+  
 
   /*****************************************************************************************************************/
   
@@ -180,7 +183,17 @@ public class FileSystemPlugin {
     fs.root.getFile(src, {}, jsSuccess, jsFailure);
   }-*/;
 
-  private static native void getApplicationFileImpl (String src, JSOSuccess success, JSOStringCallback failure) /*-{
+  
+  private static void getApplicationFileImpl (String src, JSOSuccess success, JSOStringCallback failure) {
+    if (OsDetectionUtils.isAndroid()) {
+      String fileName = src.substring(src.lastIndexOf("/") + 1);
+      getApplicationFileAndroidImpl(src, fileName, success, failure);
+    } else {
+      getApplicationFileDefaultImpl(src, success, failure);
+    }
+  }
+  
+  private static native void getApplicationFileDefaultImpl (String src, JSOSuccess success, JSOStringCallback failure) /*-{
     var jsSuccess = $entry(function(fileEntry) {
       success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
@@ -190,34 +203,58 @@ public class FileSystemPlugin {
     $wnd.resolveLocalFileSystemURL($wnd.cordova.file.applicationDirectory + src, jsSuccess, jsFailure);
   }-*/;
 
-  private static native void getTempFileImpl (String src, JSOSuccess success, JSOStringCallback failure) /*-{
+  private static native void getApplicationFileAndroidImpl (String srcPath, String fileName, JSOSuccess success, JSOStringCallback failure) /*-{
     var jsSuccess = $entry(function(fileEntry) {
       success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
     var jsFailure = $entry(function(error) {
       failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
     });
-    $wnd.resolveLocalFileSystemURL($wnd.cordova.file.tempDirectory + src, jsSuccess, jsFailure);
+    var fileApplUrl = $wnd.cordova.file.applicationDirectory + srcPath;
+    var fileTransfer = new $wnd.FileTransfer();
+    var fileDataPath = $wnd.cordova.file.dataDirectory + fileName;
+    fileTransfer.download($wnd.encodeURI(fileApplUrl), fileDataPath, (jsSuccess), (jsFailure), true);
   }-*/;
 
-  private static native void getTempDirImpl (JSOSuccess success, JSOStringCallback failure) /*-{
+  private static native void getTempFileImpl (String src, boolean isAndroid, JSOSuccess success, JSOStringCallback failure) /*-{
     var jsSuccess = $entry(function(fileEntry) {
       success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
     var jsFailure = $entry(function(error) {
       failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
     });
-    $wnd.resolveLocalFileSystemURL($wnd.cordova.file.tempDirectory, jsSuccess, jsFailure);
+    var tempDir = isAndroid ? $wnd.cordova.file.dataDirectory : $wnd.cordova.file.tempDirectory;
+    $wnd.resolveLocalFileSystemURL(tempDir + src, jsSuccess, jsFailure);
   }-*/;
 
+  private static native void getTempDirImpl (boolean isAndroid, JSOSuccess success, JSOStringCallback failure) /*-{
+    var jsSuccess = $entry(function(fileEntry) {
+      success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
+    });
+    var jsFailure = $entry(function(error) {
+      failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
+    });
+    var tempDir = isAndroid ? $wnd.cordova.file.dataDirectory : $wnd.cordova.file.tempDirectory;
+    $wnd.resolveLocalFileSystemURL(tempDir, jsSuccess, jsFailure);
+  }-*/;
+
+  // TODO
+  
   private static native void createDirIfNotExistsImpl (JavaScriptObject rootDirEntry, String path, JSOSuccess success, JSOStringCallback failure) /*-{
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.1 " + path);
+    
     var jsSuccess = $entry(function(fileEntry) {
+      var str = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.success " + str);
       success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
     var jsFailure = $entry(function(error) {
+      var str = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.failure " + str);
       failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
     });
     var jsCreateDirFn = $entry(function (rootDirEntry, folders) {
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.2 " + folders[0]);
       if (folders[0] == '.' || folders[0] == '') {
         folders = folders.slice(1);
       }
@@ -268,7 +305,7 @@ public class FileSystemPlugin {
    * 
    */
   
-  private static native void downloadRemoteFileToTempDirImpl (String sourceUrl, String targetRelativePath, JSOSuccess success, JSOStringCallback failure) /*-{
+  private static native void downloadRemoteFileToTempDirImpl (String sourceUrl, String targetRelativePath, boolean isAndroid, JSOSuccess success, JSOStringCallback failure) /*-{
     var jsSuccess = $entry(function(fileEntry) {
       success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
@@ -278,10 +315,66 @@ public class FileSystemPlugin {
     
     var fileTransfer = new $wnd.FileTransfer();
     var uri = $wnd.encodeURI(sourceUrl);
-    fileTransfer.download(uri, $wnd.cordova.file.tempDirectory + targetRelativePath, jsSuccess, jsFailure, false );    
+    var tempDir = isAndroid ? $wnd.cordova.file.dataDirectory : $wnd.cordova.file.tempDirectory;
+    fileTransfer.download(uri, tempDir + targetRelativePath, jsSuccess, jsFailure, false );    
     
   }-*/;
 
   
+  /* , {
+    headers: {
+      Authorization: "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+    } 
+  } );    
+  */
 
+
+  public static void testPlugin (final String sourceFile, final String destPath, final Delegate<String> delegate) {
+    PhgUtils.log("PLUGIN TEST source = " + sourceFile + " dest = " + destPath);
+    final JSOStringCallback failure = new JSOStringCallback() {
+      public void handle(String errorCode) {
+        PhgUtils.log("PLUGIN TEST ERROR CODE = " + errorCode);
+        delegate.execute(null);
+      }
+    };
+    
+    getApplicationFileImpl(sourceFile, new JSOSuccess() {
+      public void handle(final JavaScriptObject sourceFileEntry) {
+        PhgUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
+        getTempDirImpl(OsDetectionUtils.isAndroid(), new JSOSuccess() {
+          public void handle(JavaScriptObject tempDirEntry) {
+            PhgUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
+              public void handle(JavaScriptObject destDirEntry) {
+                PhgUtils.log("created dest dir = " + JSONUtils.stringify(destDirEntry));
+              }
+            }, failure);
+          }
+        }, failure);
+
+        /*
+        getTempDirImpl(new JSOSuccess() {
+          public void handle(JavaScriptObject tempDirEntry) {
+            //PhgUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
+              public void handle(JavaScriptObject destDirEntry) {
+                //PhgUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
+                copyFileImpl(sourceFileEntry, destDirEntry, null, new JSOSuccess() {
+                  public void handle(JavaScriptObject destFileEntry) {
+                    PhgUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
+                    String result = GwtUtils.getJsPropertyString(destFileEntry, "fullPath");
+                    delegate.execute(result);
+                  }
+                }, failure);
+              }
+            }, failure);
+          }
+        }, failure);
+        */
+        
+      }
+    }, failure);
+  }
+  
+  
 }
