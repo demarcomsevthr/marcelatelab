@@ -13,7 +13,11 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=D:\OPT\jdk1.7.0_21
+SET JAVA_HOME=P:\OPT\java\jdk1.7.0_17
+
+SET PACKAGE=it.mate.protoph
+
+SET APPNAME=Protoph
 
 echo PATH VARIABLE
 echo %path%
@@ -21,10 +25,6 @@ echo %path%
 SET BASEDIR=%~dp0
 
 SET PROJNAME=template-project
-
-SET PACKAGE=it.mate.protoph
-
-SET APPNAME=Protoph
 
 cd %BASEDIR%
 
@@ -55,7 +55,10 @@ call cordova plugin add org.apache.cordova.device
 call cordova plugin add org.apache.cordova.inappbrowser
 call cordova plugin add org.apache.cordova.console
 call cordova plugin add org.apache.cordova.globalization
-call cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications.git
+
+call cordova plugin add org.apache.cordova.file
+call cordova plugin add org.apache.cordova.file-transfer
+
 
 echo.
 echo.
