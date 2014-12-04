@@ -39,6 +39,14 @@
           <p:TouchCombo ui:field="umCombo" addStyleNames="ui-app-combobox, ui-um-combobox"/>
         </g:HorizontalPanel>
         
+        <hr class="ui-view-separator"/>
+        
+        <g:HTML HTML="Paziente:" addStyleNames="ui-field-label">
+          <ui:attribute name="HTML" description="text" key="pazienteLabel.html"/>
+        </g:HTML>
+        <gc:Spacer height="0.3em"/>
+        <p:TouchButton ui:field="pazienteBox" text="" addStyleNames="ui-paziente-box"/>
+        
         <g:HTMLPanel ui:field="notificheTutorPanel" visible="false">
         
           <hr class="ui-view-separator"/>

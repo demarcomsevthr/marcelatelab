@@ -8,6 +8,7 @@ import it.mate.gwtcommons.client.utils.NumberUtils;
 import it.mate.gwtcommons.client.utils.StatePanelUtil;
 import it.mate.phgcommons.client.ui.HasTag;
 import it.mate.phgcommons.client.ui.TouchAnchor;
+import it.mate.phgcommons.client.ui.TouchButton;
 import it.mate.phgcommons.client.ui.TouchCombo;
 import it.mate.phgcommons.client.ui.TouchHTML;
 import it.mate.phgcommons.client.ui.ph.PhCalendarBox;
@@ -27,6 +28,7 @@ import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.TherapyEditView.Presenter;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
+import it.mate.therapyreminder.shared.model.Paziente;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.ContattoTx;
@@ -65,6 +67,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   
   public static final String TAG_PRESCRIZIONE = "prescrizione";
 
+  public static final String TAG_PAZIENTE_SELECTED = "paziente";
+
   public interface Presenter extends BasePresenter, SignPanel.Presenter {
     public void goToHome();
     public void savePrescrizione(Prescrizione newPrescrizione, Prescrizione oldPrescrizione, final Delegate<Prescrizione> delegate);
@@ -77,6 +81,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     public void deletePrescrizioni(List<Prescrizione> prescrizioni);
     public void setOnlineMode(boolean onlineMode);
     public void goToSettingsView();
+    public void goToPatientListView(Prescrizione prescrizione);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TherapyEditView> { }
@@ -115,6 +120,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   @UiField Panel tutorPanel;
   @UiField TouchCombo tutorCombo;
   
+  @UiField TouchButton pazienteBox;
+  
   StatePanelUtil statePanelUtil = new StatePanelUtil();
   private Widget bottomBar = null;
   private Prescrizione oldPrescrizione;
@@ -126,6 +133,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   private int qtaRimanente = 0;
   
   private Delegate<Element> focusDelegate = null;
+  
+  private Paziente selectedPaziente = null;
   
   
   public TherapyEditView() {
@@ -293,6 +302,14 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
         titleBox.setReadOnly(true);
       }
       
+      if (prescrizione.getPaziente() != null) {
+        pazienteBox.setText(prescrizione.getPaziente().getNome());
+      }
+      
+    }
+    if (TAG_PAZIENTE_SELECTED.equals(tag)) {
+      this.selectedPaziente = (Paziente)model;
+      pazienteBox.setText(selectedPaziente.getNome());
     }
   }
   
@@ -539,6 +556,10 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
   }
 
   private Prescrizione flushPrescrizione(boolean verbose) {
+    return flushPrescrizione(verbose, true);
+  }
+  
+  private Prescrizione flushPrescrizione(boolean verbose, boolean doValidate) {
     Double qtaUnica = qtaBox.getValueAsDouble();
     Date dataInizio = CalendarUtil.copyDate(inizioBox.getValue());
     if (dataInizio != null) {
@@ -561,10 +582,12 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     
     if (prescrizione.getDataFine() != null) {
       if (dataFine.before(prescrizione.getDataInizio())) {
-        if (verbose) {
-          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg4(), "Alert", PhgDialogUtils.BUTTONS_OK);
+        if (doValidate) {
+          if (verbose) {
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg4(), "Alert", PhgDialogUtils.BUTTONS_OK);
+          }
+          return null;
         }
-        return null;
       }
     }
     
@@ -591,26 +614,32 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     if (Prescrizione.TIPO_ORARI_A_INTERVALLI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       prescrizione.setIntervalloOrario(rangeOrariBox.getValueAsInteger());
       if (orarioInizioBox.getValue() == null) {
-        if (verbose) {
-          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg1(), "Alert", PhgDialogUtils.BUTTONS_OK);
+        if (doValidate) {
+          if (verbose) {
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg1(), "Alert", PhgDialogUtils.BUTTONS_OK);
+          }
+          return null;
         }
-        return null;
       }
       prescrizione.setDosaggi(new ArrayList<Dosaggio>());
       prescrizione.getDosaggi().add(new DosaggioTx(qtaUnica, orarioInizioBox.getValue().asString()));
     } else if (Prescrizione.TIPO_ORARI_FISSI.equals(prescrizione.getTipoRicorrenzaOraria())) {
       if (prescrizione.getDosaggi() == null) {
-        if (verbose) {
-          PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg2(), "Alert", PhgDialogUtils.BUTTONS_OK);
+        if (doValidate) {
+          if (verbose) {
+            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg2(), "Alert", PhgDialogUtils.BUTTONS_OK);
+          }
+          return null;
         }
-        return null;
       }
       for (Dosaggio dosaggio : prescrizione.getDosaggi()) {
         if (dosaggio.getOrario() == null) {
-          if (verbose) {
-            PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg3(), "Alert", PhgDialogUtils.BUTTONS_OK);
+          if (doValidate) {
+            if (verbose) {
+              PhgDialogUtils.showMessageDialog(AppMessages.IMPL.TherapyEditView_flushPrescrizione_msg3(), "Alert", PhgDialogUtils.BUTTONS_OK);
+            }
+            return null;
           }
-          return null;
         }
         if (dosaggio.getQuantita() == null) {
           dosaggio.setQuantita(qtaUnica);
@@ -624,6 +653,8 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
     prescrizione.setQtaRimanente((double)qtaRimanente);
     
     prescrizione.setTutor(getSelectedTutor());
+    
+    prescrizione.setPaziente(selectedPaziente);
 
     return prescrizione;
     
@@ -745,6 +776,11 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       }
     }
     return null;
+  }
+
+  @UiHandler ("pazienteBox")
+  public void onPazienteBox (TouchEndEvent event) {
+    getPresenter().goToPatientListView(flushPrescrizione(false, false));
   }
 
 }

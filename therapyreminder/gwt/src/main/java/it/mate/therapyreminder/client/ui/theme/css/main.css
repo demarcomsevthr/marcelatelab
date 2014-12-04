@@ -22,6 +22,20 @@ body {
   background-size: windowWidth windowHeight;
 }
 
+/*
+   Correzione bug input fields 'floating'
+*/
+input.gwt-TextBox.mgwt-InputBox-box {
+  height: 2em;
+}
+
+/*
+.ui-homePanel .mgwt-TextBox .mgwt-InputBox-box:hover {
+  padding-top: 3px;
+  margin-top: -10px;
+}
+*/
+
 .ui-homePanel {
   font-size: 16px;
 }
@@ -595,5 +609,14 @@ body {
   padding: 0.2em;
   color: blue;
   font-weight: bold;
+}
+
+.mgwt-SmartButton.mgwt-Button.phg-TouchButton.ui-paziente-box {
+  background: white;
+  color: black;
+  font: normal 1em Helvetica;
+  text-align: left;
+  padding-left: 1em;
+  height: 1.2em;
 }
 

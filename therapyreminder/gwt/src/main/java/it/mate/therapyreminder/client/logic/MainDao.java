@@ -6,11 +6,13 @@ import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
+import it.mate.therapyreminder.shared.model.Paziente;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 import it.mate.therapyreminder.shared.model.impl.ContattoTx;
 import it.mate.therapyreminder.shared.model.impl.DosaggioTx;
+import it.mate.therapyreminder.shared.model.impl.PazienteTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 import it.mate.therapyreminder.shared.model.impl.UdMTx;
@@ -57,7 +59,10 @@ public class MainDao extends WebSQLDao {
   private final static String PRESCRIZIONI_FIELDS_2 = 
       "idTutor ";
   
-  private final static String PRESCRIZIONI_FIELDS = PRESCRIZIONI_FIELDS_0 + ", " + PRESCRIZIONI_FIELDS_1 + ", " + PRESCRIZIONI_FIELDS_2;
+  private final static String PRESCRIZIONI_FIELDS_5 = 
+      "idPaziente ";
+  
+  private final static String PRESCRIZIONI_FIELDS = PRESCRIZIONI_FIELDS_0 + ", " + PRESCRIZIONI_FIELDS_1 + ", " + PRESCRIZIONI_FIELDS_2 + ", " + PRESCRIZIONI_FIELDS_5;
       
   private final static String DOSAGGI_FIELDS = "idPrescrizione, quantita, orario";
   
@@ -74,6 +79,10 @@ public class MainDao extends WebSQLDao {
   private final static String CONTATTI_FIELDS_3 = "indirizzo, orari";
   
   private final static String CONTATTI_FIELDS = CONTATTI_FIELDS_2 + ", " + CONTATTI_FIELDS_3;
+  
+  private final static String PAZIENTI_FIELDS_5 = "nome";
+  
+  private final static String PAZIENTI_FIELDS = PAZIENTI_FIELDS_5;
   
   public MainDao() {
     super("TherapiesDB", ESTIMATED_SIZE, migrationCallbacks, new DatabaseCallback() {
@@ -103,6 +112,8 @@ public class MainDao extends WebSQLDao {
     tr.doExecuteSql("DROP TABLE IF EXISTS somministrazioni");
     PhonegapLog.log("dropping table contatti");
     tr.doExecuteSql("DROP TABLE IF EXISTS contatti");
+    PhonegapLog.log("dropping table pazienti");
+    tr.doExecuteSql("DROP TABLE IF EXISTS pazienti");
   }
   
   public void dropDB(final Delegate<Void> delegate) {
@@ -201,8 +212,22 @@ public class MainDao extends WebSQLDao {
     }
   };
   
+  private final static MigratorCallback MIGRATION_CALLBACK_5 = new MigratorCallback() {
+    public void doMigration(int number, SQLTransaction tr) {
+      PhonegapLog.log("updating db therapies to version " + number);
+      
+      PhonegapLog.log("creating table pazienti");
+      tr.doExecuteSql("CREATE TABLE pazienti (id "+SERIAL_ID+", " + PAZIENTI_FIELDS_5 + " )");
+      
+      PhonegapLog.log("altering table prescrizioni");
+      tr.doExecuteSql("ALTER TABLE prescrizioni ADD COLUMN idPaziente");
+      
+    }
+  };
+  
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
-    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2, MIGRATION_CALLBACK_3, MIGRATION_CALLBACK_4 
+    MIGRATION_CALLBACK_0, MIGRATION_CALLBACK_1, MIGRATION_CALLBACK_2, MIGRATION_CALLBACK_3, MIGRATION_CALLBACK_4,
+    MIGRATION_CALLBACK_5
   };
   
   public void findAllUdM(final Delegate<List<UdM>> delegate) {
@@ -376,6 +401,7 @@ public class MainDao extends WebSQLDao {
     prescrizione.setQtaRimanente(rows.getValueDouble(it, "qtaRimanente"));
     prescrizione.setUltimoAvvisoRiordino(longAsDate(rows.getValueLong(it, "ultimoAvvisoRiordino")));
     ((PrescrizioneTx)prescrizione).setIdTutor(rows.getValueInt(it, "idTutor"));
+    ((PrescrizioneTx)prescrizione).setIdPaziente(rows.getValueInt(it, "idPaziente"));
     return prescrizione;
   }
   
@@ -399,6 +425,13 @@ public class MainDao extends WebSQLDao {
               internalFindContattoById(tr, idTutor, new Delegate<Contatto>() {
                 public void execute(Contatto contatto) {
                   prescrizione.setTutor(contatto);
+                }
+              });
+              
+              Integer idPaziente = ((PrescrizioneTx)prescrizione).getIdPaziente();
+              internalFindPazienteById(tr, idPaziente, new Delegate<Paziente>() {
+                public void execute(Paziente paziente) {
+                  prescrizione.setPaziente(paziente);
                   iteratePrescrizioniForRead(it, tr, delegate, results);
                 }
               });
@@ -430,7 +463,7 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (prescrizione.getId() == null) {
-          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO prescrizioni (" + PRESCRIZIONI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 prescrizione.getNome(), 
                 dateAsLong(prescrizione.getDataInizio()), 
@@ -447,7 +480,8 @@ public class MainDao extends WebSQLDao {
                 prescrizione.getQtaPerAvviso(),
                 prescrizione.getQtaRimanente(),
                 dateAsLong(prescrizione.getUltimoAvvisoRiordino()),
-                ((PrescrizioneTx)prescrizione).getIdTutor()
+                ((PrescrizioneTx)prescrizione).getIdTutor(),
+                ((PrescrizioneTx)prescrizione).getIdPaziente()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   prescrizione.setId(rs.getInsertId());
@@ -482,6 +516,8 @@ public class MainDao extends WebSQLDao {
           
           sql += " ,idTutor = ?";
           
+          sql += " ,idPaziente = ?";
+          
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
 
@@ -501,7 +537,8 @@ public class MainDao extends WebSQLDao {
               prescrizione.getQtaPerAvviso(),
               prescrizione.getQtaRimanente(),
               dateAsLong(prescrizione.getUltimoAvvisoRiordino()),
-              ((PrescrizioneTx)prescrizione).getIdTutor()
+              ((PrescrizioneTx)prescrizione).getIdTutor(),
+              ((PrescrizioneTx)prescrizione).getIdPaziente()
               
               , prescrizione.getId()
               
@@ -670,7 +707,6 @@ public class MainDao extends WebSQLDao {
     });
   }
   
-  //TODO
   public void findSomministrazioniAnnullate(final Prescrizione prescrizione, final Delegate<List<Somministrazione>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
@@ -1039,6 +1075,123 @@ public class MainDao extends WebSQLDao {
       }
     });
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////
   
+  public void findAllPazienti(final Delegate<List<Paziente>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        String sql = "SELECT id, " + PAZIENTI_FIELDS + " FROM pazienti ";
+        tr.doExecuteSql(sql, new Object[] {}, 
+          new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              new RSToPazientiIterator(rs, delegate);
+            } else {
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
   
+  protected class RSToPazientiIterator {
+    SQLResultSet rs;
+    List<Paziente> results = new ArrayList<Paziente>();
+    Delegate<List<Paziente>> delegate;
+    protected RSToPazientiIterator(SQLResultSet rs, Delegate<List<Paziente>> delegate) {
+      this.rs = rs;
+      this.delegate = delegate;
+      iterate(0);
+    }
+    private void iterate(final int it) {
+      if (it < rs.getRows().getLength()) {
+        results.add(flushRSToPaziente(rs, it));
+        iterate(it + 1);
+      } else {
+        delegate.execute(results);
+      }
+    }
+  }
+
+  private Paziente flushRSToPaziente(SQLResultSet rs, int it) {
+    Paziente result = new PazienteTx();
+    result.setId(rs.getRows().getValueInt(it, "id"));
+    result.setNome(rs.getRows().getValueString(it, "nome"));
+    return result;
+  }
+  
+  public void findPazienteById(final Integer id, final Delegate<Paziente> delegate) {
+    if (id == null)
+      delegate.execute(null);
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        internalFindPazienteById(tr, id, delegate);
+      }
+    });
+  }
+  
+  private void internalFindPazienteById(SQLTransaction tr, final Integer id, final Delegate<Paziente> delegate) {
+    String sql = "SELECT id, " + PAZIENTI_FIELDS + " FROM pazienti ";
+    sql += " WHERE id = ? ";
+    tr.doExecuteSql(sql, new Object[] {id}, 
+      new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          if (rs.getRows().getLength() > 0) {
+            delegate.execute(flushRSToPaziente(rs, 0));
+          } else {
+            delegate.execute(null);
+          }
+        }
+      }, new SQLStatementErrorCallback() {
+        public void handleEvent(SQLTransaction tr, SQLError error) {
+          delegate.execute(null);
+        }
+      }
+    );
+  }
+  
+  public void savePaziente(final Paziente paziente, final Delegate<Paziente> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        if (paziente.getId() == null) {
+          tr.doExecuteSql("INSERT INTO pazienti (" + PAZIENTI_FIELDS + ") VALUES (?)", 
+              new Object[] {
+              paziente.getNome()
+              }, new SQLStatementCallback() {
+                public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                  paziente.setId(rs.getInsertId());
+                  delegate.execute(paziente);
+                }
+              });
+        } else {
+          String sql = "UPDATE pazienti SET ";
+          sql += " ,nome = ?";
+          sql += " WHERE id = ?";
+          tr.doExecuteSql(sql, new Object[] {
+              paziente.getNome()
+              , paziente.getId()
+            }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              delegate.execute(paziente);
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  public void deletePaziente(final Paziente paziente, final Delegate<Void> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(final SQLTransaction tr) {
+        tr.doExecuteSql("DELETE FROM pazienti WHERE id = ?", new Object[] {paziente.getId()}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            delegate.execute(null);
+          }
+        });
+      }
+    });
+  }
+
 }
