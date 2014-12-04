@@ -82,6 +82,18 @@ public class CalendarPlugin {
   public static void createEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
     PhgUtils.log("creating event " + event);
+    
+    callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+      public void handleEvent(JavaScriptObject results) {
+        PhgUtils.log("Success - " + JSONUtils.stringify(results));
+      }
+    }, new JSOFailure() {
+      public void handleEvent(JavaScriptObject results) {
+        PhgUtils.log("Failure - " + JSONUtils.stringify(results));
+      }
+    });
+    
+    /*
     if (OsDetectionUtils.isAndroid()) {
       callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
         public void handleEvent(JavaScriptObject results) {
@@ -103,6 +115,8 @@ public class CalendarPlugin {
         }
       });
     }
+    */
+    
   }
   
   public static void deleteEvent(CalendarEvent event) {
@@ -183,7 +197,11 @@ public class CalendarPlugin {
         "startTime": startTime,
         "endTime": endTime,
         "options": {
-          "firstReminderMinutes": 0
+          "calendarName": null,
+          "firstReminderMinutes": 0,
+          "secondReminderMinutes": 0,
+          "recurrence": null,
+          "recurrenceEndTime": null
         }
       }
     ]);
