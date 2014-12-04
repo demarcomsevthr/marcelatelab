@@ -25,6 +25,9 @@ body {
   background-size: windowWidth windowHeight;
 }
 
+/*
+   Correzione bug input fields 'floating'
+*/
 input.gwt-TextBox.mgwt-InputBox-box {
   height: 2em;
 }
