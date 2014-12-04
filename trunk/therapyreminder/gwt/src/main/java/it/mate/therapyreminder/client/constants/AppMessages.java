@@ -181,4 +181,19 @@ public interface AppMessages extends Messages {
   @DefaultMessage("")
   String ReminderEditView_setModel_msg4();
   
+  @DefaultMessage("")
+  String PatientListView_showListaPazienti_msg1();
+  
+  @DefaultMessage("")
+  String PatientEditView_onClosingView_msg1();
+  
+  @DefaultMessage("")
+  String PatientEditView_flushModel_msg1();
+  
+  @DefaultMessage("")
+  String PatientEditView_flushModel_msg2();
+  
+  @DefaultMessage("")
+  String PatientEditView_onDeleteBtn_msg1();
+  
 }

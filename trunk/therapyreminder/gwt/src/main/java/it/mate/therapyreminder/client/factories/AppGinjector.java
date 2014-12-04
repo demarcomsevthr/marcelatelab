@@ -6,15 +6,17 @@ import it.mate.therapyreminder.client.activities.mapper.MainActivityMapper;
 import it.mate.therapyreminder.client.logic.MainDao;
 import it.mate.therapyreminder.client.view.AboutView;
 import it.mate.therapyreminder.client.view.AccountEditView;
-import it.mate.therapyreminder.client.view.TestView;
 import it.mate.therapyreminder.client.view.ContactEditView;
 import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.PatientEditView;
+import it.mate.therapyreminder.client.view.PatientListView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
+import it.mate.therapyreminder.client.view.TestView;
 import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.service.RemoteFacadeAsync;
@@ -55,5 +57,9 @@ public interface AppGinjector extends CommonGinjector {
   public ContactListView getContactListView();
   
   public ContactEditView getContactEditView();
+  
+  public PatientListView getPatientListView();
+  
+  public PatientEditView getPatientEditView();
   
 }

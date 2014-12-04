@@ -35,6 +35,10 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String CONTACT_TUTOR_EDIT = "editTutor";
   
+  public static final String PATIENT_LIST = "listPatients";
+  
+  public static final String PATIENT_EDIT = "editPatient";
+  
   public static final String TEST = "test";
   
   private String token;

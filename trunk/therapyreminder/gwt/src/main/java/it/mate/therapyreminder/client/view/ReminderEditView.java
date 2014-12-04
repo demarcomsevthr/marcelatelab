@@ -12,6 +12,7 @@ import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.logic.MainController;
 import it.mate.therapyreminder.client.ui.SignPanel;
 import it.mate.therapyreminder.client.view.ReminderEditView.Presenter;
+import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
 
@@ -40,11 +41,9 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  
   @UiField MTextBox titleBox;
   @UiField MTextBox dateBox;
   @UiField MTextBox qtaBox;
-//@UiField MTextBox umBox;
   @UiField MTextBox oraBox;
   @UiField Spacer popupRuler;
   @UiField HTML umHtml;
@@ -72,7 +71,6 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
   public void setModel(Object model, String tag) {
     if (TAG_SOMMINISTRAZIONE.equals(tag)) {
       final Somministrazione somministrazione = (Somministrazione)model;
-//    AppClientFactory.IMPL.setEditingSomministrazione(somministrazione);
       titleBox.setValue(somministrazione.getPrescrizione().getNome());
       dateBox.setValue(PhgUtils.dateToString(somministrazione.getData()));
       if (NumberUtils.isInteger(somministrazione.getQuantita())) {
@@ -89,7 +87,14 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
           
           if (MainController.isScaduta(somministrazione)) {
             
-            String msg = somministrazione.getPrescrizione().getNome(); 
+            Prescrizione prescrizione = somministrazione.getPrescrizione();
+            
+            String msg = "";
+            if (prescrizione.getPaziente() != null) {
+              msg += prescrizione.getPaziente().getNome() + ":";
+              msg += "§";
+            }
+            msg += prescrizione.getNome();
             msg += "§";
             msg += AppMessages.IMPL.ReminderEditView_setModel_msg3() + " " + somministrazione.getOrario();
             msg += " " + AppMessages.IMPL.ReminderEditView_setModel_msg4() + " " + PhgUtils.dateToString(somministrazione.getData());
@@ -99,7 +104,6 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
             msg += "§§";
             msg += AppMessages.IMPL.ReminderEditView_setModel_msg1();
             
-//          Position pos = new Position(getPopupTop(), null);
             Position pos = null;
             
             PhgDialogUtils.showMessageDialog(msg, AppMessages.IMPL.ReminderEditView_setModel_title1(), PhgDialogUtils.BUTTONS_YESNO,
@@ -122,7 +126,6 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
             
           }
           
-          
         }
       });
       
@@ -130,9 +133,7 @@ public class ReminderEditView extends BaseMgwtView <Presenter> {
     } else if (TAG_FARMACO_DA_RIORDINARE.equals(tag)) {
       
       final Somministrazione somministrazione = (Somministrazione)model;
-      
       int qtaRimanente = NumberUtils.doubleAsInt(somministrazione.getPrescrizione().getQtaRimanente());
-      
       PhgDialogUtils.showMessageDialog(AppMessages.IMPL.ReminderEditView_setModel_msg2(qtaRimanente), "Alert", PhgDialogUtils.BUTTONS_OK,
           new Position(getPopupTop(), null) /* null */,
           new Delegate<Integer>() {

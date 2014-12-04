@@ -34,6 +34,8 @@ import it.mate.therapyreminder.client.view.ContactListView;
 import it.mate.therapyreminder.client.view.ContactMenuView;
 import it.mate.therapyreminder.client.view.DosageEditView;
 import it.mate.therapyreminder.client.view.HomeView;
+import it.mate.therapyreminder.client.view.PatientEditView;
+import it.mate.therapyreminder.client.view.PatientListView;
 import it.mate.therapyreminder.client.view.ReminderEditView;
 import it.mate.therapyreminder.client.view.ReminderListView;
 import it.mate.therapyreminder.client.view.SettingsView;
@@ -42,6 +44,7 @@ import it.mate.therapyreminder.client.view.TherapyEditView;
 import it.mate.therapyreminder.client.view.TherapyListView;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Contatto;
+import it.mate.therapyreminder.shared.model.Paziente;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.UdM;
@@ -74,7 +77,10 @@ public class MainActivity extends MGWTAbstractActivity implements
   ReminderListView.Presenter, ReminderEditView.Presenter,
   AccountEditView.Presenter, AboutView.Presenter,
   ContactMenuView.Presenter, ContactListView.Presenter,
-  ContactEditView.Presenter {
+  ContactEditView.Presenter,
+  PatientListView.Presenter, PatientEditView.Presenter {
+  
+  
   
   private MainPlace place;
   
@@ -83,6 +89,10 @@ public class MainActivity extends MGWTAbstractActivity implements
   private MainDao dao = AppClientFactory.IMPL.getGinjector().getPrescrizioniDao();
   
   private final static String ALL_UDM_KEY = "AllUdM";
+
+  private final static String PRESCRIZIONE_IN_EDITING_KEY = "PrescrizioneInEditing";
+
+  private final static String PAZIENTE_SELECTED_KEY = "PazienteSelected";
 
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -95,7 +105,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
     }
 
-    //TODO: REVISIONE BACKGROUND TASKS
     if (AppClientFactory.USE_BACKGROUND_TASKS) {
       SviluppaSomministrazioniTask.getInstance();
       CheckSomministrazioniScaduteTask.getInstance();
@@ -110,7 +119,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
       setBackgroundAlertsEnabled(true);
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
-//    TestView view = AppClientFactory.IMPL.getGinjector().getTestView();
       this.view = view;
       initBaseMgwtView(true);
       view.setPresenter(this);
@@ -265,6 +273,32 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.PATIENT_LIST)) {
+      setBackgroundAlertsEnabled(false);
+      PatientListView view = AppClientFactory.IMPL.getGinjector().getPatientListView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.PATIENT_EDIT)) {
+      setBackgroundAlertsEnabled(false);
+      PatientEditView view = AppClientFactory.IMPL.getGinjector().getPatientEditView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
+        }
+      });
+    }
     retrieveModel();
   }
   
@@ -277,7 +311,16 @@ public class MainActivity extends MGWTAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.THERAPY_EDIT)) {
-      if (place.getModel() != null) {
+      Paziente pazienteSelected = (Paziente)GwtUtils.getClientAttribute(PAZIENTE_SELECTED_KEY);
+      if (pazienteSelected != null) {
+        GwtUtils.setClientAttribute(PAZIENTE_SELECTED_KEY, null);
+        view.setModel(pazienteSelected, TherapyEditView.TAG_PAZIENTE_SELECTED);
+      }
+      Prescrizione prescrizioneInEditing = (Prescrizione)GwtUtils.getClientAttribute(PRESCRIZIONE_IN_EDITING_KEY);
+      if (prescrizioneInEditing != null) {
+        GwtUtils.setClientAttribute(PRESCRIZIONE_IN_EDITING_KEY, null);
+        view.setModel(prescrizioneInEditing, TherapyEditView.TAG_PRESCRIZIONE);
+      } else if (place.getModel() != null) {
         view.setModel(place.getModel(), TherapyEditView.TAG_PRESCRIZIONE);
       } else {
         goToHome();
@@ -292,21 +335,17 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.REMINDER_LIST)) {
       setHeaderWaiting(true);
-      
       MainController.getInstance().findSomministrazioniAnnullate(new Delegate<List<Somministrazione>>() {
         public void execute(List<Somministrazione> somministrazioniAnnullate) {
           view.setModel(somministrazioniAnnullate, ReminderListView.TAG_SOMMINISTRAZIONI_ANNULLATE);
-          
           MainController.getInstance().findSomministrazioniDaEseguireInMemoria(new Delegate<List<Somministrazione>>() {
             public void execute(List<Somministrazione> somministrazioniSchedulate) {
               setHeaderWaiting(false);
               view.setModel(somministrazioniSchedulate, ReminderListView.TAG_SOMMINISTRAZIONI_SCHEDULATE);
             }
           });
-          
         }
       });
-      
     }
     if (place.getToken().equals(MainPlace.REMINDER_EDIT)) {
       if (place.getModel() != null) {
@@ -343,6 +382,16 @@ public class MainActivity extends MGWTAbstractActivity implements
     if (place.getToken().equals(MainPlace.CONTACT_DOCTOR_EDIT) || place.getToken().equals(MainPlace.CONTACT_TUTOR_EDIT)) {
       view.setModel(place.getModel(), ContactEditView.TAG_CONTACT);
     }
+    if (place.getToken().equals(MainPlace.PATIENT_LIST)) {
+      dao.findAllPazienti(new Delegate<List<Paziente>>() {
+        public void execute(List<Paziente> results) {
+          view.setModel(results, PatientListView.TAG_PAZIENTI);
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.PATIENT_EDIT)) {
+      view.setModel(place.getModel(), PatientEditView.TAG_PATIENT);
+    }
   }
   
   private void processFailure(String message, Throwable caught) {
@@ -356,7 +405,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       caught.printStackTrace();
       logMsg = caught.getClass().getName()+" - "+caught.getMessage();
       if (caught instanceof InvocationException) {
-//      popupMsg = "Maybe data connection is not active";
         popupMsg = null;
       } else {
         if (caught.getMessage() != null) {
@@ -395,21 +443,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (!home) {
       setVisibleHomeBtn(true);
-    }
-  }
-  
-  private void setVisibleOptionsBtn(boolean visible) {
-    if (visible) {
-      TouchImage optionsBtn = new TouchImage();
-      optionsBtn.addStyleName("ui-optionsBtn");
-      optionsBtn.addTouchEndHandler(new TouchEndHandler() {
-        public void onTouchEnd(TouchEndEvent event) {
-          
-       }
-      });
-      view.getHeaderPanel().setRightWidget(optionsBtn);
-    } else {
-      view.getHeaderPanel().setRightWidget(new Label());
     }
   }
   
@@ -524,7 +557,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
 
   public void goToContactTutorListView() {
-    
     if (isOnlineMode()) {
       AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CONTACT_TUTOR_LIST));
     } else {
@@ -537,7 +569,6 @@ public class MainActivity extends MGWTAbstractActivity implements
         }
       });
     }
-    
   }
 
   @Override
@@ -622,7 +653,6 @@ public class MainActivity extends MGWTAbstractActivity implements
       }
     }, new Delegate<Somministrazione>() {
       public void execute(Somministrazione result) {
-        // farmaco da riordinare
         view.setModel(result, ReminderEditView.TAG_FARMACO_DA_RIORDINARE);
       }
     });
@@ -656,7 +686,6 @@ public class MainActivity extends MGWTAbstractActivity implements
   }
   
   public void getUdmDescription(Double qta, final String udmCode, final Delegate<UdM> delegate) {
-//  final String currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
     final String currentLocaleName = PhgUtils.getAppLocalLanguage();
     final boolean singular = qta != null && qta == 1d;
     findAllUdM(new Delegate<List<UdM>>() {
@@ -687,13 +716,11 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void clearALL() {
     dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
-        
         JsArrayString localStorageKeys = PhgUtils.getLocalStorageKeys();
         for (int it = 0; it < localStorageKeys.length(); it++) {
           String key = localStorageKeys.get(it);
           PhgUtils.removeLocalStorageItem(key);
         }
-        
         GwtUtils.deferredExecution(2000, new Delegate<Void>() {
           public void execute(Void element) {
             PhgUtils.setAppLocalLanguageAndReload(PhgUtils.getLocaleLanguageFromLocaleInfo());
@@ -708,7 +735,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     dao.findContattiByTipo(Contatto.TIPO_TUTOR, delegate);
   }
   
-  //TODO: REVISIONE BACKGROUND TASKS
   private void setBackgroundAlertsEnabled(final boolean enabled) {
     MainController.getInstance().checkDataConnectionAvailable(false, new Delegate<Boolean>() {
       public void execute(Boolean connessioneDatiAttiva) {
@@ -795,12 +821,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
 
-  /*
-  private String getDevInfoIdFromLocalStorage() {
-    return MainController.getInstance().getDevInfoIdFromLocalStorage();
-  }
-  */
-
   public void getDevInfoId(final Delegate<String> delegate) {
     final ObjectWrapper<Boolean> delegateFired = new ObjectWrapper<Boolean>(false);
     GwtUtils.createTimerDelegate(500, true, new Delegate<Timer>() {
@@ -818,9 +838,6 @@ public class MainActivity extends MGWTAbstractActivity implements
     });
   }
   
-  /**
-   * chiamato dalla ui per mostrare il remote user
-   */
   public void getAccount(final Delegate<Account> delegate) {
     delegate.execute(MainController.getInstance().getAccountFromLocalStorage());
   }
@@ -957,6 +974,36 @@ public class MainActivity extends MGWTAbstractActivity implements
   
   public void findSomministrazioniAnnullate(Delegate<List<Somministrazione>> resultsDelegate) {
     MainController.getInstance().findSomministrazioniAnnullate(resultsDelegate);
+  }
+
+  public void goToPatientListView(Prescrizione prescrizione) {
+    GwtUtils.setClientAttribute(PRESCRIZIONE_IN_EDITING_KEY, prescrizione);
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.PATIENT_LIST));
+  }
+
+  @Override
+  public void editPatient(Paziente paziente) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.PATIENT_EDIT, paziente));
+  }
+
+  @Override
+  public void selectPatient(Paziente paziente) {
+    GwtUtils.setClientAttribute(PAZIENTE_SELECTED_KEY, paziente);
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.THERAPY_EDIT));
+  }
+
+  @Override
+  public void savePaziente(Paziente paziente, Delegate<Paziente> delegate) {
+    dao.savePaziente(paziente, new Delegate<Paziente>() {
+      public void execute(Paziente element) {
+        AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.PATIENT_LIST));
+      }
+    });
+  }
+
+  @Override
+  public void deletePaziente(Paziente paziente) {
+    
   }
   
 }
