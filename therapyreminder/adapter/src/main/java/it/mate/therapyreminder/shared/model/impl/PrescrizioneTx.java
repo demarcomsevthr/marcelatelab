@@ -4,6 +4,7 @@ import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.therapyreminder.shared.model.Contatto;
 import it.mate.therapyreminder.shared.model.Dosaggio;
+import it.mate.therapyreminder.shared.model.Paziente;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.utils.ModelUtils;
 
@@ -52,12 +53,17 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   
   private Contatto tutor;
 
+  private Paziente paziente;
+
   // serve solo nel dao
   private Integer idTutor;
 
   // serve solo nel MainController
   private Date dataLimiteSviluppoSomministrazioni;
   
+  // serve solo nel dao
+  private Integer idPaziente;
+
   
   @Override
   public RpcMap toRpcMap() {
@@ -122,6 +128,8 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
         return false;
       if (!ModelUtils.equals(this.idTutor, that.idTutor))
         return false;
+      if (!ModelUtils.equals(this.idPaziente, that.idPaziente))
+        return false;
       return true;
     }
     return super.equals(obj);
@@ -133,7 +141,7 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
         + ", idComposizione=" + idComposizione + ", tipoRicorrenza=" + tipoRicorrenza + ", valoreRicorrenza=" + valoreRicorrenza + ", codUdM=" + codUdM
         + ", tipoRicorrenzaOraria=" + tipoRicorrenzaOraria + ", intervalloOrario=" + intervalloOrario + ", flgGstAvvisoRiordino=" + flgGstAvvisoRiordino
         + ", qtaPerConfez=" + qtaPerConfez + ", qtaPerAvviso=" + qtaPerAvviso + ", qtaRimanente=" + qtaRimanente + ", ultimoAvvisoRiordino="
-        + ultimoAvvisoRiordino + ", tutor=" + tutor + ", idTutor=" + idTutor + "]";
+        + ultimoAvvisoRiordino + ", tutor=" + tutor + ", idTutor=" + idTutor + ", idPaziente=" + idPaziente + "]";
   }
 
   @Override
@@ -166,6 +174,7 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
     this.qtaRimanente = that.getQtaRimanente();
     if (that instanceof PrescrizioneTx) {
       this.idTutor = ((PrescrizioneTx)that).idTutor;
+      this.idPaziente = ((PrescrizioneTx)that).idPaziente;
     }
   }
 
@@ -421,6 +430,23 @@ public class PrescrizioneTx implements Prescrizione, IsMappable {
   
   public boolean isRemote() {
     return tutor != null;
+  }
+  
+  public Paziente getPaziente() {
+    return paziente;
+  }
+  
+  public void setPaziente(Paziente paziente) {
+    this.paziente = paziente;
+    setIdPaziente(paziente != null ? paziente.getId() : null);
+  }
+
+  public Integer getIdPaziente() {
+    return idPaziente;
+  }
+
+  public void setIdPaziente(Integer idPaziente) {
+    this.idPaziente = idPaziente;
   }
   
 }

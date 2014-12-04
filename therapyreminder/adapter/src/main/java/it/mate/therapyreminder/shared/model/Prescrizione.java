@@ -113,5 +113,13 @@ public interface Prescrizione extends Serializable {
   public void setDataLimiteSviluppoSomministrazioni(Date dataLimiteSviluppoSomministrazioni);
   
   public boolean isRemote();
+  
+  public Paziente getPaziente();
+  
+  public void setPaziente(Paziente paziente);
+
+  public Integer getIdPaziente();
+
+  public void setIdPaziente(Integer idPaziente);
 
 }
