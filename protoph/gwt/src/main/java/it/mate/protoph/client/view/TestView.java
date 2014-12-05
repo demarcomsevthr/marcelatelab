@@ -10,6 +10,7 @@ import it.mate.protoph.client.view.TestView.Presenter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -47,16 +48,15 @@ public class TestView extends BaseMgwtView <Presenter> {
     getScrollPanel().setScrollingEnabledX(false);
     getScrollPanel().setScrollingEnabledY(false);
     
-    final MyPopup popup = new MyPopup();
+    MyPopup popup = new MyPopup();
     popup.getElement().getStyle().setBackgroundColor("transparent");
     popup.show();
     popup.getElement().getStyle().setTop(50, Unit.PX);
     
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        doTest();
-      }
-    });
+//  doTest1(popup);
+//  doTest2(popup);
+    doTest3(popup);
+    
   }
   
   @Override
@@ -65,27 +65,76 @@ public class TestView extends BaseMgwtView <Presenter> {
   }
   
   private class MyPopup extends PopupPanel {
+    HTML widget;
     public MyPopup() {
       super();
-      String html = "<div id='div1'></div><img id='drag1' src='main/images/ingredient-test.png' width='64' height='64'></img>";
-      HTML wid = new HTML(html);
-      setWidget(wid);
+      widget = new HTML();
+      setWidget(widget);
     }
   }
   
-  private void doTest() {
-    
-    Element dropable = DOM.getElementById("div1");
-    dropable.getStyle().setBorderWidth(1, Unit.PX);
-    dropable.getStyle().setBorderStyle(BorderStyle.SOLID);
-    dropable.getStyle().setBorderColor("red");
-    dropable.getStyle().setWidth(200, Unit.PX);
-    dropable.getStyle().setHeight(100, Unit.PX);
-    
-    Element dragable = DOM.getElementById("drag1");
-    
-    DndUtils.doTest(dropable, dragable);
-    
+  private void doTest1(MyPopup popup) {
+    String html = "<div id='div1'></div><img id='drag1' src='main/images/ingredient-test.png' width='64' height='64'></img>";
+    popup.widget.setHTML(html);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        Element dropable = DOM.getElementById("div1");
+        dropable.getStyle().setBorderWidth(1, Unit.PX);
+        dropable.getStyle().setBorderStyle(BorderStyle.SOLID);
+        dropable.getStyle().setBorderColor("red");
+        dropable.getStyle().setWidth(200, Unit.PX);
+        dropable.getStyle().setHeight(100, Unit.PX);
+        Element dragable = DOM.getElementById("drag1");
+        DndUtils.doTest1(dropable, dragable);
+      }
+    });
   }
+  
+  private void doTest2(MyPopup popup) {
+    String html = "";
+    html += "<div id='dropable1'></div>";
+    html += "<div id='dragable1'></div>";
+    popup.widget.setHTML(html);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        Element dragable = DOM.getElementById("dragable1");
+        dragable.getStyle().setWidth(70, Unit.PX);
+        dragable.getStyle().setHeight(70, Unit.PX);
+        dragable.getStyle().setBackgroundColor("red");
+        dragable.getStyle().setPosition(Position.ABSOLUTE);
+        DndUtils.doTest2(dragable);
+      }
+    });
+  }
+  
+  private void doTest3(MyPopup popup) {
+    String html = "";
+    html += "<div id='dragable1'></div>";
+    html += "<div id='dropable1'></div>";
+    popup.widget.setHTML(html);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        
+        final Element dropable = DOM.getElementById("dropable1");
+        dropable.getStyle().setBorderWidth(1, Unit.PX);
+        dropable.getStyle().setBorderStyle(BorderStyle.SOLID);
+        dropable.getStyle().setBorderColor("red");
+        dropable.getStyle().setWidth(200, Unit.PX);
+        dropable.getStyle().setHeight(100, Unit.PX);
+        dropable.getStyle().setPosition(Position.ABSOLUTE);
+        dropable.getStyle().setTop(100, Unit.PX);
+        
+        Element dragable = DOM.getElementById("dragable1");
+        dragable.getStyle().setWidth(70, Unit.PX);
+        dragable.getStyle().setHeight(70, Unit.PX);
+        dragable.getStyle().setBackgroundColor("red");
+        dragable.getStyle().setPosition(Position.ABSOLUTE);
+        dragable.getStyle().setZIndex(Integer.MAX_VALUE);
 
+        DndUtils.doTest4(dragable, dropable);
+
+      }
+    });
+  }
+  
 }

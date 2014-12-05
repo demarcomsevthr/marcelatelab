@@ -1,10 +1,14 @@
 package it.mate.protoph.client.utils;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 
 public class DndUtils {
   
-  public static void doTest(Element dropable, Element dragable) {
+  public static void doTest1(Element dropable, Element dragable) {
     jsMakeDropableImpl(dropable);
     jsMakeDraggableImpl(dragable);
     jsTouchPunchImpl(dropable);
@@ -73,5 +77,224 @@ public class DndUtils {
 
   }-*/;
   
+  
+  public static void doTest2(Element dragable) {
+    JavaScriptObject offset = getTouchOffsetImpl(dragable.getParentElement(), 0);
+    jsMakeDraggable2Impl(dragable, offset);
+  }
+  
+  /*
+   * SEE http://mobiforge.com/design-development/touch-friendly-drag-and-drop
+   */
+  
+  private static native void jsMakeDraggable2Impl(Element draggable, JavaScriptObject offset) /*-{
+    
+    var touchMoveHandler = $entry(function(event) {
+      var touch = event.targetTouches[0];
+      draggable.style.left = touch.pageX - offset.left + 'px';
+      draggable.style.top = touch.pageY - offset.top + 'px';
+      event.preventDefault();
+    });
+    
+    draggable.addEventListener('touchmove', touchMoveHandler, false);
+    
+    var mouseMoveHandler = $entry(function(event) {
+      draggable.style.left = event.pageX - offset.left + 'px';
+      draggable.style.top = event.pageY - offset.top + 'px';
+    });
+    
+    var mouseDownHandler = $entry(function(event) {
+      draggable.addEventListener("mousemove", mouseMoveHandler, false);
+    });
+    
+    draggable.addEventListener('mousedown', mouseDownHandler, false);
+    
+    var mouseUpHandler = $entry(function(event) {
+      event.preventDefault();
+      draggable.removeEventListener("mousemove", mouseMoveHandler, false); 
+    });
+    
+    draggable.addEventListener('mouseup', mouseUpHandler, false);
+    
+  }-*/;
+
+  private static native JavaScriptObject getTouchOffsetImpl(Element obj, double factor) /*-{
+    var offsetLeft = 0;
+    var offsetTop = 0;
+    var offsetWidth = obj.offsetWidth;
+    var offsetHeight = obj.offsetHeight;
+    do {
+      if (!isNaN(obj.offsetLeft)) {
+          offsetLeft += obj.offsetLeft;
+      }
+      if (!isNaN(obj.offsetTop)) {
+          offsetTop += obj.offsetTop;
+      }   
+    } while(obj = obj.offsetParent );
+    return {left: (offsetLeft + offsetWidth * factor), top: (offsetTop + offsetHeight * factor)};
+  }-*/;
+
+  
+  public static void doTest3(Element dragable, Element dropable) {
+    jsMakeDraggableAndDropable3Impl(dragable, dropable);
+  }
+  
+  private static native void jsMakeDraggableAndDropable3Impl(Element dragable, Element dropable) /*-{
+    
+    var dragableOffset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(dragable, 0.5);
+    @it.mate.protoph.client.utils.DndUtils::jsLog(Lcom/google/gwt/dom/client/Element;)(dragableOffset);
+    
+    var touchMoveHandler = $entry(function(event) {
+      var touch = event.targetTouches[0];
+      dragable.style.left = touch.pageX - dragableOffset.left + 'px';
+      dragable.style.top = touch.pageY - dragableOffset.top + 'px';
+      event.preventDefault();
+    });
+    
+    dragable.addEventListener('touchmove', touchMoveHandler, false);
+    
+    var mouseMoveHandler = $entry(function(event) {
+      dragable.style.left = event.pageX - dragableOffset.left + 'px';
+      dragable.style.top = event.pageY - dragableOffset.top + 'px';
+    });
+    
+    var mouseDownHandler = $entry(function(event) {
+      dragable.addEventListener("mousemove", mouseMoveHandler, false);
+    });
+    
+    dragable.addEventListener('mousedown', mouseDownHandler, false);
+    
+    var detectHit = function (xt,yt,x1,y1,w1,h1) {
+      if(xt-x1>w1) return false;
+      if(yt-y1>h1) return false;
+      return true;
+    }
+  
+    var dropableOffset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(dropable, 0);
+    @it.mate.protoph.client.utils.DndUtils::jsLog(Lcom/google/gwt/dom/client/Element;)(dropableOffset);
+    
+    var touchEndHandler = $entry(function(event) {
+      var touch = event.targetTouches[0];
+      if (detectHit(touch.pageX, touch.pageY, dropableOffset.left, dropableOffset.top, dropable.offsetWidth, dropable.offsetHeight)) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('detected hit on dropable element');
+      }
+    });
+    
+    dragable.addEventListener('touchend', touchEndHandler, false);
+    
+    var mouseUpHandler = $entry(function(event) {
+      event.preventDefault();
+      dragable.removeEventListener("mousemove", mouseMoveHandler, false); 
+      if (detectHit(event.pageX, event.pageY, dropableOffset.left, dropableOffset.top, dropable.offsetWidth, dropable.offsetHeight)) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('detected hit on dropable element');
+      }
+    });
+    
+    dragable.addEventListener('mouseup', mouseUpHandler, false);
+    
+  }-*/;
+
+  private static native void jsLog(Element element) /*-{
+    var msg = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(element);
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('element = ' + msg);
+  }-*/;
+  
+  private static native void jsCloneElementOnTouch(Element element, ElementCallback callback) /*-{
+    
+    var touchHandler = $entry(function(event) {
+      var clonedElem = element.cloneNode(true);
+      element.parentElement.appendChild(clonedElem);
+      callback.@it.mate.protoph.client.utils.DndUtils.ElementCallback::handle(Lcom/google/gwt/dom/client/Element;)(clonedElem);
+    });
+    
+    element.addEventListener('mousedown', touchHandler, false);
+    element.addEventListener('touchstart', touchHandler, false);
+    
+  }-*/;
+  
+  public interface ElementCallback {
+    public void handle(Element element);
+  }
+  
+  public static void doTest4(Element dragable, final Element dropable) {
+    jsCloneElementOnTouch(dragable, new ElementCallback() {
+      public void handle(final Element dragable) {
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+            jsMakeDraggableAndDropable4Impl(dragable, dropable);
+          }
+        });
+      }
+    });
+  }
+  
+  private static native void jsMakeDraggableAndDropable4Impl(Element dragable, Element dropable) /*-{
+  
+    var lastTouch;
+    
+    var mobileDetect = (typeof window.orientation !== 'undefined');
+  
+    var dragableOffset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(dragable, 0.5);
+    @it.mate.protoph.client.utils.DndUtils::jsLog(Lcom/google/gwt/dom/client/Element;)(dragableOffset);
+    
+    var touchMoveHandler = $entry(function(event) {
+      var touch = event.targetTouches[0];
+      if (touch == null || typeof touch == 'undefined') {
+        return;
+      }
+      lastTouch = touch;
+      dragable.style.left = touch.pageX - dragableOffset.left + 'px';
+      dragable.style.top = touch.pageY - dragableOffset.top + 'px';
+      event.preventDefault();
+    });
+    
+    dragable.addEventListener('touchmove', touchMoveHandler, false);
+    
+    var mouseMoveHandler = $entry(function(event) {
+      dragable.style.left = event.pageX - dragableOffset.left + 'px';
+      dragable.style.top = event.pageY - dragableOffset.top + 'px';
+    });
+    
+    dragable.addEventListener("mousemove", mouseMoveHandler, false);
+    
+    var detectHit = function (xt,yt,x1,y1,w1,h1) {
+      if(xt-x1>w1) return false;
+      if(yt-y1>h1) return false;
+      return true;
+    }
+  
+    var dropableOffset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(dropable, 0);
+    @it.mate.protoph.client.utils.DndUtils::jsLog(Lcom/google/gwt/dom/client/Element;)(dropableOffset);
+    
+    var touchEndHandler = $entry(function(event) {
+      dragable.removeEventListener("touchmove", touchMoveHandler, false); 
+//    var touch = event.targetTouches[0];
+//    if (touch == null || typeof touch == 'undefined') {
+//      return;
+//    }
+      if (lastTouch == null || typeof lastTouch == 'undefined') {
+        return;
+      }
+      if (detectHit(lastTouch.pageX, lastTouch.pageY, dropableOffset.left, dropableOffset.top, dropable.offsetWidth, dropable.offsetHeight)) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('detected hit on dropable element (touch)');
+      }
+    });
+    
+    dragable.addEventListener('touchend', touchEndHandler, false);
+    
+    var mouseUpHandler = $entry(function(event) {
+      event.preventDefault();
+      dragable.removeEventListener("mousemove", mouseMoveHandler, false); 
+      if (mobileDetect) {
+        return;
+      }
+      if (detectHit(event.pageX, event.pageY, dropableOffset.left, dropableOffset.top, dropable.offsetWidth, dropable.offsetHeight)) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('detected hit on dropable element (mouse)');
+      }
+    });
+    
+    dragable.addEventListener('mouseup', mouseUpHandler, false);
+    
+  }-*/;
 
 }
