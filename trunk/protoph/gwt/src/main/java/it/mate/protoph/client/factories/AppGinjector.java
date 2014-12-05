@@ -11,6 +11,7 @@ import it.mate.protoph.client.view.ApplicationListView;
 import it.mate.protoph.client.view.HomeView;
 import it.mate.protoph.client.view.IngredientListView;
 import it.mate.protoph.client.view.SettingsView;
+import it.mate.protoph.client.view.TestView;
 import it.mate.protoph.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.inject.client.GinModules;
@@ -37,5 +38,7 @@ public interface AppGinjector extends CommonGinjector {
   public ApplicationApplyView getApplicationApplyView();
   
   public IngredientListView getIngredientListView();
+  
+  public TestView getTestView();
   
 }

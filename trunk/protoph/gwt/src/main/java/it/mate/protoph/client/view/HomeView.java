@@ -20,6 +20,7 @@ public class HomeView extends BaseMgwtView <Presenter> {
     public void goToApplicationListView();
     public void goToSettingsView();
     public void doTestFile();
+    public void goToTestView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -66,7 +67,8 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler("btnTest")
   public void onBtnTest(TouchEndEvent event) {
-    getPresenter().doTestFile();
+//  getPresenter().doTestFile();
+    getPresenter().goToTestView();
   }
   
 }
