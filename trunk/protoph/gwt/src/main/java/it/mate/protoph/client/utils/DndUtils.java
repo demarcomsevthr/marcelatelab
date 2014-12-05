@@ -221,7 +221,15 @@ public class DndUtils {
       public void handle(final Element dragable) {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
-            jsMakeDraggableAndDropable4Impl(dragable, dropable);
+            
+            jsTriggerTouchEventImpl(dragable);
+            
+            GwtUtils.deferredExecution(new Delegate<Void>() {
+              public void execute(Void element) {
+                jsMakeDraggableAndDropable4Impl(dragable, dropable);
+              }
+            });
+            
           }
         });
       }
@@ -229,10 +237,12 @@ public class DndUtils {
   }
   
   private static native void jsMakeDraggableAndDropable4Impl(Element dragable, Element dropable) /*-{
+
+    dragable.style.zIndex = "99999";
   
     var lastTouch;
     
-    var mobileDetect = (typeof window.orientation !== 'undefined');
+    var mobileDetected = (typeof window.orientation !== 'undefined');
   
     var dragableOffset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(dragable, 0.5);
     @it.mate.protoph.client.utils.DndUtils::jsLog(Lcom/google/gwt/dom/client/Element;)(dragableOffset);
@@ -285,7 +295,7 @@ public class DndUtils {
     var mouseUpHandler = $entry(function(event) {
       event.preventDefault();
       dragable.removeEventListener("mousemove", mouseMoveHandler, false); 
-      if (mobileDetect) {
+      if (mobileDetected) {
         return;
       }
       if (detectHit(event.pageX, event.pageY, dropableOffset.left, dropableOffset.top, dropable.offsetWidth, dropable.offsetHeight)) {
@@ -295,6 +305,31 @@ public class DndUtils {
     
     dragable.addEventListener('mouseup', mouseUpHandler, false);
     
+  }-*/;
+
+  /*
+   * SEE https://developer.apple.com/library/iad/documentation/UserExperience/Reference/TouchEventClassReference/TouchEvent/TouchEvent.html#//apple_ref/javascript/instm/TouchEvent/initTouchEvent
+   */
+  private static native void jsTriggerTouchEventImpl(Element target) /*-{
+    var mobileDetected = (typeof window.orientation !== 'undefined');
+    if (!mobileDetected) {
+      return;
+    }
+    var event = $doc.createEvent('TouchEvent');
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(
+      'jsTriggerTouchEventImpl.1 - '+
+      @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(event)
+    );
+    var offset = @it.mate.protoph.client.utils.DndUtils::getTouchOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(target, 0);
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(
+      'jsTriggerTouchEventImpl.2 - '+
+      @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(offset)
+    );
+    var touch = $doc.createTouch($wnd, target, 0, (offset.left+1), (offset.top+1), (offset.left+1), (offset.top+1));
+    var touchlist = $doc.createTouchList(touch);
+    event.initTouchEvent ('touchstart', true, true, $wnd, 1, (offset.left+1), (offset.top+1), (offset.left+1), (offset.top+1), 
+      false, false, false, false, touchlist, touchlist, touchlist, 1.0, 0.0);
+    target.dispatchEvent(event);  
   }-*/;
 
 }
