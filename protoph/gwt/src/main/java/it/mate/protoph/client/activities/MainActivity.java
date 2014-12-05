@@ -26,6 +26,7 @@ import it.mate.protoph.client.view.ApplicationListView;
 import it.mate.protoph.client.view.HomeView;
 import it.mate.protoph.client.view.IngredientListView;
 import it.mate.protoph.client.view.SettingsView;
+import it.mate.protoph.client.view.TestView;
 import it.mate.protoph.shared.model.Account;
 import it.mate.protoph.shared.model.Applicazione;
 import it.mate.protoph.shared.model.PrincipioAttivo;
@@ -56,7 +57,8 @@ public class MainActivity extends MGWTAbstractActivity implements
   IngredientListView.Presenter,
   ApplicationApplyView.Presenter,
   SettingsView.Presenter,
-  AboutView.Presenter {
+  AboutView.Presenter,
+  TestView.Presenter  {
   
   private MainPlace place;
   
@@ -150,6 +152,18 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
       SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
+      this.view = view;
+      initBaseMgwtView(false);
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+      setBackButtonDelegate(new Delegate<Void>() {
+        public void execute(Void element) {
+          goToPrevious();
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.TEST)) {
+      TestView view = AppClientFactory.IMPL.getGinjector().getTestView();
       this.view = view;
       initBaseMgwtView(false);
       view.setPresenter(this);
@@ -355,6 +369,10 @@ public class MainActivity extends MGWTAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_EDIT, applicazione));
   }
   
+  public void goToTestView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TEST));
+  }
+
   public static void setEnableDoneBtnAddon(boolean value) {
     PhgUtils.setLocalStorageItem("thrDoneBtnAddon", ""+value);
     PhgUtils.reloadApp();

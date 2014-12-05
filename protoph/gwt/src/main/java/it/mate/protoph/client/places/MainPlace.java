@@ -21,6 +21,8 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String ABOUT = "about";
   
+  public static final String TEST = "test";
+  
   private String token;
   
   private Object model;
