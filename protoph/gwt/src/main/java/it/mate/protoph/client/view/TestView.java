@@ -74,7 +74,9 @@ public class TestView extends BaseMgwtView <Presenter> {
   }
   
   private void doTest1(MyPopup popup) {
-    String html = "<div id='div1'></div><img id='drag1' src='main/images/ingredient-test.png' width='64' height='64'></img>";
+    String html = "";
+    html += "<div id='div1'></div>";
+    html += "<img id='drag1' src='main/images/ingredient-test.png' width='64' height='64'></img>";
     popup.widget.setHTML(html);
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
@@ -109,8 +111,15 @@ public class TestView extends BaseMgwtView <Presenter> {
   
   private void doTest3(MyPopup popup) {
     String html = "";
+
+    /*
     html += "<div id='dragable1'></div>";
     html += "<div id='dropable1'></div>";
+    */
+    
+    html += "<img id='dragable1' src='main/images/cherry.png' width='64' height='64'></img>";
+    html += "<div id='dropable1'></div>";
+    
     popup.widget.setHTML(html);
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
@@ -127,9 +136,9 @@ public class TestView extends BaseMgwtView <Presenter> {
         Element dragable = DOM.getElementById("dragable1");
         dragable.getStyle().setWidth(70, Unit.PX);
         dragable.getStyle().setHeight(70, Unit.PX);
-        dragable.getStyle().setBackgroundColor("red");
+//      dragable.getStyle().setBackgroundColor("red");
         dragable.getStyle().setPosition(Position.ABSOLUTE);
-        dragable.getStyle().setZIndex(Integer.MAX_VALUE);
+//      dragable.getStyle().setZIndex(Integer.MAX_VALUE);
 
         DndUtils.doTest4(dragable, dropable);
 
