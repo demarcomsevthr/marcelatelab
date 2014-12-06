@@ -3,8 +3,11 @@ package it.mate.protoph.client.view;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.protoph.client.utils.DndUtils;
+import it.mate.protoph.client.utils.HammerUtils;
+import it.mate.protoph.client.utils.HammerUtils.DragEvent;
 import it.mate.protoph.client.view.TestView.Presenter;
 
 import com.google.gwt.core.client.GWT;
@@ -16,7 +19,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,7 +33,7 @@ public class TestView extends BaseMgwtView <Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
-  @UiField Panel wrapperPanel;
+  @UiField HTMLPanel wrapperPanel;
   
   public TestView() {
     initUI();
@@ -48,20 +51,78 @@ public class TestView extends BaseMgwtView <Presenter> {
     getScrollPanel().setScrollingEnabledX(false);
     getScrollPanel().setScrollingEnabledY(false);
     
-    MyPopup popup = new MyPopup();
-    popup.getElement().getStyle().setBackgroundColor("transparent");
-    popup.show();
-    popup.getElement().getStyle().setTop(50, Unit.PX);
-    
-//  doTest1(popup);
-//  doTest2(popup);
-    doTest3(popup);
+//  doTestWithDndUtils();
+    doTestWithHammer();
     
   }
   
   @Override
   public void setModel(Object model, String tag) {
     
+  }
+  
+  private void doTestWithHammer() {
+    
+    String html = "";
+    html += "<img id='dragable1' src='main/images/cherry.png' width='64' height='64'></img>";
+    html += "<div id='dropable1'></div>";
+    HTML widget = new HTML();
+    widget.setHTML(html);
+    wrapperPanel.add(widget);
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        
+        final Element dropable = DOM.getElementById("dropable1");
+        dropable.getStyle().setBorderWidth(1, Unit.PX);
+        dropable.getStyle().setBorderStyle(BorderStyle.SOLID);
+        dropable.getStyle().setBorderColor("red");
+        dropable.getStyle().setWidth(200, Unit.PX);
+        dropable.getStyle().setHeight(100, Unit.PX);
+        dropable.getStyle().setPosition(Position.ABSOLUTE);
+        dropable.getStyle().setTop(100, Unit.PX);
+        
+        final Element dragable = DOM.getElementById("dragable1");
+        dragable.getStyle().setWidth(70, Unit.PX);
+        dragable.getStyle().setHeight(70, Unit.PX);
+        dragable.getStyle().setPosition(Position.ABSOLUTE);
+        
+        HammerUtils.initialize(new Delegate<Void>() {
+          public void execute(Void element) {
+            
+            HammerUtils.cloneElementOnPress(dragable, new HammerUtils.ElementCallback() {
+              public void handle(Element clonedElement) {
+                HammerUtils.makeDraggable(clonedElement, new Delegate<HammerUtils.DragEvent>() {
+                  public void execute(DragEvent event) {
+                    PhgUtils.log("drag event " + event.getX() + " " + event.getY());
+                  }
+                });
+              }
+            });
+
+            /*
+            HammerUtils.makeDraggable(dragable, new Delegate<HammerUtils.DragEvent>() {
+              public void execute(DragEvent event) {
+                PhgUtils.log("drag event " + event.getX() + " " + event.getY());
+              }
+            });
+            */
+            
+          }
+        });
+
+      }
+    });
+    
+  }
+  
+  private void doTestWithDndUtils() {
+    MyPopup popup = new MyPopup();
+    popup.getElement().getStyle().setBackgroundColor("transparent");
+    popup.show();
+    popup.getElement().getStyle().setTop(50, Unit.PX);
+//  doTest1(popup);
+//  doTest2(popup);
+    doTest3(popup);
   }
   
   private class MyPopup extends PopupPanel {
