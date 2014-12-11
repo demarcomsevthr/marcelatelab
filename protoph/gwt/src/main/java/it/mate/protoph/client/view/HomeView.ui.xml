@@ -15,7 +15,7 @@
       <p:TouchButton text="Settings" ui:field="btnSettings" addStyleNames="ui-home-view-btn">
         <ui:attribute name="text" description="text" key="btnSettings.text"/>
       </p:TouchButton>
-      <p:TouchButton text="Test" ui:field="btnTest" addStyleNames="ui-home-view-btn" visible="true">
+      <p:TouchButton text="Test" ui:field="btnTest" addStyleNames="ui-home-view-btn" visible="false">
         <ui:attribute name="text" description="text" key="btnTest.text"/>
       </p:TouchButton>
     </g:VerticalPanel>

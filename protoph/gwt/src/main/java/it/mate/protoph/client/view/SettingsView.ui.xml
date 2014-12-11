@@ -22,6 +22,11 @@
         <p:TouchButton text="Reset ingredients" ui:field="resetIngredientsBtn" addStyleNames="ui-settings-btn"/>
       </g:HorizontalPanel>
       
+      <g:HorizontalPanel addStyleNames="ui-setting-row">
+        <g:HTML HTML="Use NFC:" addStyleNames="ui-settings-label ui-app-done-btn-label"/>
+        <ph:PhCheckBox addStyleNames="ui-app-done-btn-cbx" ui:field="cbxUseNfc"/>
+      </g:HorizontalPanel>
+      
       <!-- 
       <g:HorizontalPanel addStyleNames="ui-setting-row">
         <g:HTML HTML="" addStyleNames="ui-settings-label ui-app-online-mode-label"/>

@@ -7,6 +7,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.plugins.FileSystemPlugin;
+import it.mate.phgcommons.client.plugins.NfcPlugin;
 import it.mate.phgcommons.client.ui.TouchImage;
 import it.mate.phgcommons.client.utils.AndroidBackButtonHandler;
 import it.mate.phgcommons.client.utils.IterationUtil;
@@ -387,6 +388,20 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
+  public static void setUseNfc(boolean value) {
+    PhgUtils.setLocalStorageItem("PPHUseNfc", ""+value);
+    PhgUtils.reloadApp();
+  }
+  
+  public static boolean isUseNfc() {
+    String value = PhgUtils.getLocalStorageItem("PPHUseNfc");
+    if (value != null) {
+      return "true".equals(value);
+    } else {
+      return true;
+    }
+  }
+  
   private void ensureDevInfoId() {
     String devInfoId = getDevInfoIdFromLocalStorage();
     if (devInfoId != null)
@@ -593,6 +608,39 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
   
+  public void applyApplication(final Applicazione applicazione, final Delegate<Applicazione> delegate) {
+    deleteWorkDir(new Delegate<String>() {
+      public void execute(String element) {
+        iteratePrincipiAttivi(applicazione.getPrincipiAttivi().iterator(), new Delegate<Void>() {
+          public void execute(Void element) {
+            delegate.execute(applicazione);
+            if (isUseNfc() && NfcPlugin.isInstalled()) {
+              NfcPlugin.addNdefListener(new Delegate<String>() {
+                public void execute(String element) {
+                  PhgUtils.log("NDEF listener registered");
+                }
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  private void iteratePrincipiAttivi(final Iterator<PrincipioAttivo> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      PrincipioAttivo principio = it.next();
+      String fileName = principio.getPath();
+      applyFile(fileName, new Delegate<String>() {
+        public void execute(String element) {
+          iteratePrincipiAttivi(it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
+  }
+  
   public void applyFile(String fileName, final Delegate<String> delegate) {
     if (FileSystemPlugin.isInstalled()) {
       
@@ -618,6 +666,21 @@ public class MainActivity extends MGWTAbstractActivity implements
     }
   }
 
+  public void finishApplyApplication(final Applicazione applicazione, final Delegate<Applicazione> delegate) {
+    deleteWorkDir(new Delegate<String>() {
+      public void execute(String element) {
+        delegate.execute(applicazione);
+        if (NfcPlugin.isNdefListenerRegistered()) {
+          NfcPlugin.removeNdefListener(new Delegate<Void>() {
+            public void execute(Void element) {
+              PhgUtils.log("NDEF listener removed");
+            }
+          });
+        }
+      }
+    });
+  }
+  
   public void downloadIngredients(final Delegate<String> delegate) {
     if (FileSystemPlugin.isInstalled()) {
       
