@@ -187,6 +187,11 @@ module.exports = [
         "clobbers": [
             "window.FileTransfer"
         ]
+    },
+    {
+        "file": "plugins/com.chariotsolutions.nfc.plugin/www/phonegap-nfc.js",
+        "id": "com.chariotsolutions.nfc.plugin.NFC",
+        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -197,7 +202,8 @@ module.exports.metadata =
     "org.apache.cordova.console": "0.2.11",
     "org.apache.cordova.globalization": "0.3.2",
     "org.apache.cordova.file": "1.3.1",
-    "org.apache.cordova.file-transfer": "0.4.7"
+    "org.apache.cordova.file-transfer": "0.4.7",
+    "com.chariotsolutions.nfc.plugin": "0.6.0"
 }
 // BOTTOM OF METADATA
 });
