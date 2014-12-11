@@ -27,6 +27,8 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   public interface Presenter extends BasePresenter {
     public void deleteWorkDir(Delegate<String> delegate);
     public void applyFile(String fileName, final Delegate<String> delegate);
+    public void applyApplication(Applicazione applicazione, Delegate<Applicazione> delegate);
+    public void finishApplyApplication(Applicazione applicazione, Delegate<Applicazione> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ApplicationApplyView> { }
@@ -36,6 +38,8 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   @UiField Panel wrapperPanel;
   @UiField HTML headerBox;
   @UiField HTML applyPanel;
+  
+  private Applicazione applicazione;
   
   public ApplicationApplyView() {
     initUI();
@@ -60,8 +64,16 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (TAG_APPLICAZIONE.equals(tag)) {
-      final Applicazione applicazione = (Applicazione)model;
+      this.applicazione = (Applicazione)model;
       populateApplyPanel();
+      
+      getPresenter().applyApplication(applicazione, new Delegate<Applicazione>() {
+        public void execute(Applicazione element) {
+          headerBox.setHTML("Applying " + applicazione.getNome());
+        }
+      });
+      
+      /*
       getPresenter().deleteWorkDir(new Delegate<String>() {
         public void execute(String element) {
           iteratePrincipiAttivi(applicazione.getPrincipiAttivi().iterator(), new Delegate<Void>() {
@@ -71,6 +83,8 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
           });
         }
       });
+      */
+      
     }
   }
   
@@ -111,11 +125,21 @@ public class ApplicationApplyView extends BaseMgwtView <Presenter> {
   
   @UiHandler ("finishBtn")
   public void onFinishBtn (TouchEndEvent event) {
+
+    getPresenter().finishApplyApplication(applicazione, new Delegate<Applicazione>() {
+      public void execute(Applicazione element) {
+        getPresenter().goToPrevious();
+      }
+    });
+    
+    /*
     getPresenter().deleteWorkDir(new Delegate<String>() {
       public void execute(String element) {
         getPresenter().goToPrevious();
       }
     });
+    */
+    
   }
   
 }

@@ -48,6 +48,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
   
   @UiField PhCheckBox cbxUseDownloadedFiles;
   @UiField TouchButton downloadBtn;
+  @UiField PhCheckBox cbxUseNfc;
   
   public SettingsView() {
     initUI();
@@ -76,6 +77,7 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     langCmb.addItem("it", "Italiano", "it".equals(localLanguage));
 //  cbxDoneBtnAddon.setValue(MainActivity.isEnabledDoneBtnAddon(), false);
     cbxUseDownloadedFiles.setValue(MainActivity.isUseDownloadedFiles(), false);
+    cbxUseNfc.setValue(MainActivity.isUseNfc(), false);
   }
 
   @Override
@@ -206,12 +208,10 @@ public class SettingsView extends BaseMgwtView <Presenter> {
     PhgUtils.setAppLocalLanguageAndReload(event.getValue());
   }
 
-  /*
-  @UiHandler ("cbxDoneBtnAddon")
-  public void onCbxDoneBtnAddon(ValueChangeEvent<Boolean> event) {
-    MainActivity.setEnableDoneBtnAddon(event.getValue());
+  @UiHandler ("cbxUseNfc")
+  public void onCbxUseNfc(ValueChangeEvent<Boolean> event) {
+    MainActivity.setUseNfc(event.getValue());
   }
-  */
   
   @UiHandler ("cbxUseDownloadedFiles")
   public void onCbxUseCloudServer(ValueChangeEvent<Boolean> event) {
