@@ -1,6 +1,7 @@
 package it.mate.phgcommons.client.plugins;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 import it.mate.phgcommons.client.utils.callbacks.JSOSuccess;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
@@ -8,16 +9,22 @@ import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /*
- * SEE https://github.com/chariotsolutions/phonegap-nfc/blob/master/doc/GettingStartedCLI.md
+ * SEE https://github.com/chariotsolutions/phonegap-nfc
  */
 
-public class NdefPlugin {
+public class NfcPlugin {
 
+  private static JavaScriptObject registeredListenerCallback = null;
+  
   public static native boolean isInstalled () /*-{
     return typeof ($wnd.nfc) != 'undefined';
   }-*/;
 
-  public void addNdefListener(final Delegate<String> delegate) {
+  public static boolean isNdefListenerRegistered() {
+    return registeredListenerCallback != null;
+  }
+  
+  public static void addNdefListener(final Delegate<String> delegate) {
     addNdefListenerImpl(new JSOSuccess() {
       public void handle(JavaScriptObject jso) {
         delegate.execute("received tag");
@@ -47,6 +54,21 @@ public class NdefPlugin {
       failure.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
     });
     $wnd.nfc.addNdefListener (jsCallback, jsSuccess, jsFailure);
+    @it.mate.phgcommons.client.plugins.NfcPlugin::registeredListenerCallback = jsCallback;
+  }-*/;
+
+  public static void removeNdefListener(final Delegate<Void> delegate) {
+    removeNdefListenerImpl(registeredListenerCallback);
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        registeredListenerCallback = null;
+        delegate.execute(null);
+      }
+    });
+  }
+  
+  private static native void removeNdefListenerImpl (JavaScriptObject jsCallback) /*-{
+    $wnd.nfc.removeNdefListener (jsCallback);
   }-*/;
 
 }
