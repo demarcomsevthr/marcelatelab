@@ -4,10 +4,11 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
-import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.phgcommons.client.view.BaseMgwtViewNoScrollPanel;
 import it.mate.protoph.client.utils.DndUtils;
 import it.mate.protoph.client.utils.HammerUtils;
 import it.mate.protoph.client.utils.HammerUtils.DragEvent;
+import it.mate.protoph.client.utils.SortableUtils;
 import it.mate.protoph.client.view.TestView.Presenter;
 
 import com.google.gwt.core.client.GWT;
@@ -20,10 +21,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TestView extends BaseMgwtView <Presenter> {
+public class TestView extends /*BaseMgwtView <Presenter>*/ BaseMgwtViewNoScrollPanel<Presenter> {
 
   public interface Presenter extends BasePresenter {
 
@@ -34,6 +36,9 @@ public class TestView extends BaseMgwtView <Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField HTMLPanel wrapperPanel;
+  @UiField Panel groupPanel1;
+  @UiField Panel groupPanel2;
+  @UiField Panel groupPanel3;
   
   public TestView() {
     initUI();
@@ -48,11 +53,14 @@ public class TestView extends BaseMgwtView <Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     
+    /*
     getScrollPanel().setScrollingEnabledX(false);
     getScrollPanel().setScrollingEnabledY(false);
+    */
     
 //  doTestWithDndUtils();
-    doTestWithHammer();
+//  doTestWithHammer();
+    doTestWithSortable();
     
   }
   
@@ -60,6 +68,13 @@ public class TestView extends BaseMgwtView <Presenter> {
   public void setModel(Object model, String tag) {
     
   }
+  
+  private void doTestWithSortable() {
+    SortableUtils.makeSortable(groupPanel1.getElement(), "photo", 150, ".ui-draggable");
+    SortableUtils.makeSortable(groupPanel2.getElement(), "photo", 150, ".ui-draggable");
+    SortableUtils.makeSortable(groupPanel3.getElement(), "photo", 150, ".ui-draggable");
+  }
+  
   
   private void doTestWithHammer() {
     

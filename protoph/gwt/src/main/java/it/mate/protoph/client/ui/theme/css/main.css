@@ -438,3 +438,22 @@ input.gwt-TextBox.mgwt-InputBox-box {
   background: transparent url('main/images/bgr-1600x1200.png');
 }
 
+.ui-group-container {
+  padding: 0.4em 0.1em;
+  background-color: rgba(0, 186, 0, 0.44);
+  min-height: 8em;
+  min-width: 3em;
+  font-size: 1.5em;
+  margin: 0.1em;
+}
+
+.ui-group-container div {
+  background-color: red;
+  width: 3.6em;
+  margin: 0.4em 0.1em;
+  padding-left: 0.1em;
+}
+
+.ui-draggable {
+  cursor: move
+}
