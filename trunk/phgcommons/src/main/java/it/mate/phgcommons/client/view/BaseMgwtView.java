@@ -14,7 +14,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
@@ -28,7 +30,13 @@ import com.googlecode.mgwt.ui.client.widget.impl.ScrollPanelImpl;
 public abstract class BaseMgwtView <P extends BasePresenter> {
   
   protected LayoutPanel main;
+  
+  /* ATTENZIONE: MODIFICA DEL 13/12/2014 PER TESTARE ALTRI FRAMEWORK JS CHE ATTACCANO TOUCH HANDLER AL PANEL
+   * (vedi sortable.js in protoph/testview)
   protected ScrollPanel scrollPanel;
+  */
+  protected HasWidgets scrollPanel;
+  
   protected HeaderPanel headerPanel;
   protected HeaderButton headerBackButton;
   protected HeaderButton headerMainButton;
@@ -38,6 +46,10 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   
   public BaseMgwtView() {
     initUI();
+  }
+  
+  protected HasWidgets createScrollPanel() {
+    return new MyScrollPanel();
   }
 
   private void initUI() {
@@ -49,7 +61,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
       }
     };
 //  scrollPanel = new ScrollPanel();
-    scrollPanel = new MyScrollPanel();
+    scrollPanel = createScrollPanel();
     headerPanel = new HeaderPanel();
     title = new HTML();
     headerPanel.setCenterWidget(title);
@@ -71,7 +83,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
     }
 
     main.add(headerPanel);
-    main.add(scrollPanel);
+    main.add((Composite)scrollPanel);
     
     headerPanel.getElement().setId("mgwtHeaderPanel");
     
@@ -100,7 +112,11 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   }
   
   protected void initWidget(Widget widget) {
-    scrollPanel.setWidget(widget);
+    if (scrollPanel instanceof ScrollPanel) {
+      ((ScrollPanel)scrollPanel).setWidget(widget);
+    } else if (scrollPanel instanceof BaseMgwtViewNoScrollPanel.MyScrollPanel) {
+      ((BaseMgwtViewNoScrollPanel.MyScrollPanel)scrollPanel).setWidget(widget);
+    }
   }
   
   public HTML getTitle() {
@@ -108,7 +124,7 @@ public abstract class BaseMgwtView <P extends BasePresenter> {
   }
   
   protected ScrollPanel getScrollPanel() {
-    return scrollPanel;
+    return (ScrollPanel)scrollPanel;
   }
   
   protected ScrollPanelImpl getScrollPanelImpl() {
