@@ -1,0 +1,36 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph" xmlns:s="urn:import:it.mate.protons.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-homePanel, ui-legal-notes-panel">
+    <m:ScrollPanel ui:field="innerScrollPanel">
+      <g:HTMLPanel>
+      
+        <div class="ui-about-header">
+          <h1><g:Label ui:field="header1Label"/></h1>
+          <h5><g:Label ui:field="header2Label"/></h5>
+        </div>   
+        
+        <gc:Spacer height="2em"/>   
+        
+        <g:HTML HTML="">
+          <ui:attribute name="HTML" description="text" key="presentation.html"/>
+        </g:HTML>
+    
+        <gc:Spacer height="2em"/>   
+    
+        <g:HTML HTML="">
+          <ui:attribute name="HTML" description="text" key="legalNotes.html"/>
+        </g:HTML>
+      
+        <gc:Spacer height="2em"/>   
+    
+      </g:HTMLPanel>
+    </m:ScrollPanel>
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
