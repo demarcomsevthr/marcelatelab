@@ -1,0 +1,459 @@
+
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*, ppn*;
+
+@eval windowWidth it.mate.protons.client.ui.theme.CustomTheme.getWindowWidth();
+
+@eval windowHeight it.mate.protons.client.ui.theme.CustomTheme.getWindowHeight();
+
+@eval homePanelHeight it.mate.protons.client.ui.theme.CustomTheme.getHomePanelHeight();
+
+@def baseFontSize 16px;
+
+@def baseBackgroundColor rgba(238, 238, 238, 0.8);
+
+@def baseBorderColor rgba(45, 54, 66, 0.5);
+
+@def baseBorder 1px solid baseBorderColor;
+
+@def baseButtonBackgroundColor rgb(221, 41, 41);
+
+
+body {
+  background-image: none;
+  background-color: baseBackgroundColor;
+  background-repeat: repeat;
+  background-size: windowWidth windowHeight;
+}
+
+/*
+   Correzione bug input fields 'floating'
+*/
+input.gwt-TextBox.mgwt-InputBox-box {
+  height: 2em;
+}
+
+.mgwt-HeaderPanel {
+  background-color: baseBackgroundColor;
+  border-bottom: baseBorder;
+}
+
+.mgwt-HeaderPanel-center {
+  left: 25%;
+  width: 310px;
+  height: 40px;
+  margin-right: -1em;
+  margin-top: 0.36em;
+  margin-left: -25%;
+  padding-top: 0;
+  color: red;
+}
+
+.mgwt-ScrollPanel-container {
+  width: 100%;
+}
+
+.mgwt-TextArea {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: block;
+  position: relative;
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.2em;
+  -webkit-appearance: none;  
+}
+
+.phg-TimeBox.ui-app-timebox {
+  height: 1em;
+  width: 4.5em;
+}
+
+.phg-DateBox.ui-app-calbox {
+  width: 6em;
+  height: 1em;
+  padding-left: 3px;
+  padding-right: 18px;
+}
+
+.ui-wrapper-panel {
+  font-size: baseFontSize;
+  color: black;
+  height: homePanelHeight;
+}
+
+.ui-header-panel-home {
+  background: baseBackgroundColor url('main/images/home.png') no-repeat 5%;
+}
+
+.ui-header-panel-no-home {
+  background: baseBackgroundColor;
+}
+
+.ui-header-panel-center-waiting {
+  background: transparent url('main/images/ajax-loader-24-1.gif') no-repeat 92% 42%;
+}	
+
+.ui-header-panel-center-home {
+  background: transparent url('main/images/home-24.png') no-repeat 92% 42%;
+}	
+
+.ui-wrapper-panel .mgwt-TextArea .mgwt-InputBox-box {
+  color: black;
+  background-color: white;
+  margin: -5px -13px -9px -13px;
+  border-radius: 8px;
+  -webkit-user-modify: initial;
+}
+
+.ui-wrapper-panel .mgwt-TextArea .mgwt-InputBox-box:focus {
+  background-color: white;
+}
+
+.ui-wrapper-panel .mgwt-TextBox {
+  padding-top: 0.2em;
+}
+
+.ui-wrapper-panel .mgwt-TextBox .mgwt-InputBox-box {
+  color: black;
+  text-align: left;
+  -webkit-user-modify: initial;
+  padding-top: 3px;
+  padding-left: 3px;
+}
+
+.ui-wrapper-panel-clearHeight {
+  height: auto;
+}
+
+.ui-wrapper-panel * {
+  vertical-align: middle;
+}
+
+.ui-wrapper-panel td {
+  padding-top: 0.1em;
+}
+
+.ui-wrapper-panel input {
+  width: 2.6em;
+  text-align: center;
+}
+
+.ui-wrapper-panel textarea {
+  background-color: white;
+}
+
+.ui-wrapper-panel button {
+  font-weight: bolder;
+}
+
+.ui-wrapper-panel a {
+  color: rgba(30, 0, 253, 0.9);
+  font-family: Trebuchet MS;
+  font-weight: 600;
+  font-size: 1.25em;
+  padding: 10px 10px;
+}
+
+.ui-wrapper-panel .mgwt-SmartButton {
+  background: baseButtonBackgroundColor;
+  color: white;
+}
+
+.ui-home-view-row {
+  width: 100%;
+  padding-top: 10%;
+}
+
+.ui-home-view-row td {
+  padding-top: 0.8em;
+}
+
+.ui-home-view-btn {
+  font-size: 1.2em;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+  width: 70%;
+  height: 1.6em;
+  padding-top: 0.8em;
+}
+
+.ui-optionsBtn {
+  background: url(main/images/options-28.png) no-repeat;
+  height: 32px;
+  padding-right: 24px;
+  margin-top: 4px;  
+}
+
+.ui-homeBtn {
+  background: url(main/images/home-24.png) no-repeat;
+  height: 32px;
+  padding-right: 24px;
+  margin-top: 10px;  
+}
+
+.ui-home-lbl {
+  padding-top: 2%;
+  padding-left: 12px;
+  width: 100%;
+  overflow: hidden;
+  font-size: 0.75em;
+  position: absolute;
+  bottom: 1em;
+}
+
+.ui-scroll-panel {
+  border-top: 1px solid black;
+}
+
+.ui-view-header {
+  width: 100%;
+  text-align: center;
+  /* background-color: rgba(92, 144, 255, 0.76); */
+  background-color: #7089a9;
+  /* color: white; */
+  color: #FDA642;
+  height: 1.5em;
+  padding-top: 0.2em;
+  font-family: arial, sans-serif;
+  border-bottom: 1px solid #52a3c4;
+  font-weight: bold;
+}
+
+.ui-view-header-2 {
+  text-align: center;
+  padding: 12px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.ui-header-label {
+  font-size: 1.2em;
+  padding-left: 0.6em;
+  color: blue;
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.ui-top-button-bar {
+  width: 100%;
+  padding-top: 0.1em;
+  padding-bottom: 0.2em;
+}
+
+.ui-top-button-bar td {
+  width: 50%;
+  padding: 0;
+}
+
+.ui-top-action-btn {
+  font-size: 0.875em;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  margin: 2px;
+}
+
+.ui-app-textbox {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 9px 13px;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  -webkit-appearance: none;
+  height: 1.2em;
+  background-color: white;
+  font-size: 1.2em;
+}
+
+.ui-app-combobox {
+  height: 1.2em;
+}
+
+.ui-field-label {
+  font-size: 0.75em;
+  padding-left: 0.6em;
+  color: blue;
+  font-weight: bold;
+  margin-bottom: -5px;
+}
+
+.ui-field-label-1 {
+  margin-bottom: 0;
+}
+
+.ui-field-label-2 {
+  font-size: 1.5em;
+  font-weight: normal;
+  color: black;
+}
+
+.ui-inline-label {
+  color: blue;
+  font-weight: bold;
+  padding-left: 0.6em;
+  padding-top: 0.4em;
+  padding-right: 0.4em;
+}
+
+.ui-view-separator {
+  margin-top: 0.5em;
+}
+
+.ui-hourrange-box {
+  width: 3.6em;
+}
+
+.ui-edit-btn {
+  background: url(main/images/edit-28.png) no-repeat;
+  width: 28px;
+  height: 28px;
+  margin-top: 10px;
+  margin-right: 6px;
+}
+
+.ui-add-btn {
+  background: url(main/images/add-34.png) no-repeat;
+  width: 36px;
+  height: 36px;
+  margin-top: 5px;
+  margin-left: 3px;
+}
+
+.ui-remove-btn {
+  background: url(main/images/remove-28.png) no-repeat;
+  width: 28px;
+  height: 28px;
+  margin-top: 10px;
+}
+
+.ui-form-row-1 {
+  margin-bottom: -0.3em;
+}
+
+.ui-row {
+  width: 100%;
+  height: 2.5em;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid black;
+  background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+}
+
+.ui-row-reminder {
+  width: 100%;
+  height: 2.5em;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0.5em;
+  background: white;
+}
+
+.ui-row td:first-child {
+  width: 3em;
+}
+
+.ui-row-date {
+  background-color: lightgoldenrodyellow;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  margin-top: 0.8em;
+}
+
+.ui-setting-row {
+  width: 100%;
+  margin-bottom: 0.3em;
+}
+
+.ui-setting-row td:first-child {
+  width: 35%;
+}
+
+.ui-settings-btn.mgwt-SmartButton {
+  font-size: 0.75em;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  background-color: #ddd;
+  height: 1em;
+  padding-top: 0.3em;
+  padding-left: 2em;
+  padding-right: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  color: #555;
+}
+
+.ui-settings-separator {
+  margin-bottom: 0.5em;
+}
+
+.ui-settings-label {
+  font-size: 0.75em;
+  padding-left: 0.6em;
+  color: blue;
+  font-weight: bold;
+  margin-bottom: -5px;
+  margin-top: 0.2em;
+}
+
+.ui-lang-combobox {
+  margin: 0.7em;
+}
+
+.ui-about-header {
+  width: 100%;
+}
+
+.ui-about-header * {
+  text-align: center;
+}
+
+.ui-no-results {
+  padding-top: 1em;
+  text-align: center;
+}
+
+.ppn-OvalTable {
+  width: 100%;
+}
+
+.ppn-Oval {
+  background-color: red;
+  width: 6em;
+  height: 3em;
+  border-top-left-radius: 3em 1.5em;
+  border-top-right-radius: 3em 1.5em;
+  border-bottom-left-radius: 3em 1.5em;
+  border-bottom-right-radius: 3em 1.5em;
+}
+
+.ppn-apply-panel {
+  background: transparent url('main/images/bgr-1600x1200.png');
+}
+
+.ui-group-container {
+  padding: 0.4em 0.1em;
+  background-color: rgba(0, 186, 0, 0.44);
+  min-height: 8em;
+  min-width: 3em;
+  font-size: 1.5em;
+  margin: 0.1em;
+}
+
+.ui-group-container div {
+  background-color: red;
+  width: 3.6em;
+  margin: 0.4em 0.1em;
+  padding-left: 0.1em;
+}
+
+.ui-draggable {
+  cursor: move
+}

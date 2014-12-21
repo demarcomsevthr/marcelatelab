@@ -1,0 +1,11 @@
+
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*, ppn*;
+
+.ppn-Oval {
+  width: 15em;
+  height: 6em;
+  border-top-left-radius: 7.5em 3em;
+  border-top-right-radius: 7.5em 3em;
+  border-bottom-left-radius: 7.5em 3em;
+  border-bottom-right-radius: 7.5em 3em;
+}

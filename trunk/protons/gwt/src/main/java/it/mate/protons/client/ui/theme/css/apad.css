@@ -1,0 +1,16 @@
+
+@external gwt*, dialog*, mgwt*, phg*, stm*, ui*;
+
+.ui-bodyArea .mgwt-InputBox-box {
+  height: 35em;
+}
+
+.ui-bottom-action-btn {
+  /* font-size: 18px; */
+  width: 140px;
+  height: 90px;
+  padding-top: 16px;
+  padding-left: 80px;
+  background-size: 60px 60px;	
+}
+

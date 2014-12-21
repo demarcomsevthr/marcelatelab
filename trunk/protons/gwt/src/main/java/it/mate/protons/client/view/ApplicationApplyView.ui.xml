@@ -1,0 +1,27 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel ui-application-edit-view">
+    
+    <g:HTML HTML="Applying" addStyleNames="ui-view-header" ui:field="headerBox">
+      <ui:attribute name="HTML" description="text" key="header.html"/>
+    </g:HTML>
+    
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+      <p:TouchButton text="Finish" ui:field="finishBtn" addStyleNames="ui-top-action-btn">
+        <ui:attribute name="text" description="text" key="finishBtn.text"/>
+      </p:TouchButton>
+    </g:HorizontalPanel>
+    
+    <hr class="ui-view-separator-1"/>
+    
+    <g:HTML ui:field="applyPanel" addStyleNames="ppn-apply-panel"></g:HTML>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

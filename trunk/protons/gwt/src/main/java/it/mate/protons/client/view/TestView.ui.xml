@@ -1,0 +1,38 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:p="urn:import:it.mate.phgcommons.client.ui" 
+       xmlns:ph="urn:import:it.mate.phgcommons.client.ui.ph">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
+  
+    <!-- 
+    <div id="div1" ></div><img id="drag1" src="main/images/ingredient-test.png" width="64" height="64"></img>
+     -->
+     
+     
+     <g:HorizontalPanel width="100%">
+     
+       <g:HTMLPanel addStyleNames="ui-group-container" ui:field="groupPanel1">
+         <g:Label text="Uno" addStyleNames="ui-draggable"/>
+         <g:Label text="Due" addStyleNames="ui-draggable"/>
+         <g:Label text="Tre" addStyleNames="ui-draggable"/>
+       </g:HTMLPanel>
+       <g:HTMLPanel addStyleNames="ui-group-container" ui:field="groupPanel2">
+         <g:Label text="Quattro" addStyleNames="ui-draggable"/>
+         <g:Label text="Cinque" addStyleNames="ui-draggable"/>
+         <g:Label text="Sei" addStyleNames="ui-draggable"/>
+       </g:HTMLPanel>
+       <g:HTMLPanel addStyleNames="ui-group-container" ui:field="groupPanel3">
+         <g:Label text="Sette" addStyleNames="ui-draggable"/>
+         <g:Label text="Otto" addStyleNames="ui-draggable"/>
+         <g:Label text="Nove" addStyleNames="ui-draggable"/>
+       </g:HTMLPanel>
+     </g:HorizontalPanel>
+     
+  
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
