@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 
 import org.apache.log4j.Logger;
 
-import com.gdevelop.gwt.syncrpc.SyncProxy;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings({"serial"})
@@ -29,10 +28,15 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
+    /*
     moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "https://protonssrv.appspot.com/main/"; 
     remoteFacade = (RemoteFacade)SyncProxy.newProxyInstance(RemoteFacade.class, moduleBaseUrl, REMOTE_SERVICE_RELATIVE_PATH);
     logger.debug("initialized " + this);
     logger.debug("moduleBaseUrl = " + moduleBaseUrl);
+    */
+    
+    logger.debug("ATTENZIONE: RemoteFacadeTest DISABLED ");
+    
   }
   
   @Override

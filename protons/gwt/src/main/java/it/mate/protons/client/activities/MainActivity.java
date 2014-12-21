@@ -78,7 +78,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
   }
-  
+
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 

@@ -1,11 +1,15 @@
 package it.mate.protons.client.view;
 
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.nextgen.GWTUtils;
+import it.mate.gwtcommons.client.nextgen.HTMLElement;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.view.HomeView.Presenter;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -67,8 +71,16 @@ public class HomeView extends BaseMgwtView <Presenter> {
   
   @UiHandler("btnTest")
   public void onBtnTest(TouchEndEvent event) {
-//  getPresenter().doTestFile();
-    getPresenter().goToTestView();
+//  getPresenter().goToTestView();
+    
+    Document doc = GWTUtils.getDocument();
+    PhgUtils.log("doc = "+doc);
+    
+    HTMLElement elem = doc.createElement("ons-navigator").cast();
+    
+    GWTUtils.getBody().appendChild(elem);
+
+    
   }
   
 }
