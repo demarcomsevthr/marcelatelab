@@ -6,9 +6,10 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
+import com.google.web.bindery.event.shared.EventBus;
+//import com.google.gwt.event.shared.EventBus;
 
 public class MappedActivityManager extends ActivityManager {
   
