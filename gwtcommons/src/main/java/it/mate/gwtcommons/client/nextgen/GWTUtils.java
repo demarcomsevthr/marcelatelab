@@ -17,6 +17,12 @@ public class GWTUtils {
     return jsniImpl(snippet).cast();
   }
   
+  public static <T extends Element> T createElement(String tagName) {
+    Document doc = getDocument();
+    T elem = doc.createElement(tagName).cast();
+    return elem;
+  }
+  
   public static Document getDocument() {
     return jsni("$doc");
   }

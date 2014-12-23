@@ -303,11 +303,7 @@ public class JQuery extends JavaScriptObject {
   }-*/;
 
   private static native JQuery focusImpl(JQueryEventCallback handler) /*-{
-//  var str = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(this);
-//  @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("this = " + str);
-    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("this.length = " + this.length);
     var jsHandler = $entry(function(event) {
-      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("siamo dentro focus handler");
       handler.@it.mate.gwtcommons.client.utils.JQuery.JQueryEventCallback::execute(Lit/mate/gwtcommons/client/utils/JQueryEvent;)(event);
     });
     return this.focus(jsHandler);
