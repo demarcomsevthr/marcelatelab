@@ -6,7 +6,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
-import it.mate.onscommons.client.place.PlaceControllerWithHistory;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.OnsUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.protons.client.factories.AppClientFactory;
@@ -33,12 +33,6 @@ public class MainActivity extends OnsAbstractActivity implements
 //private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private final static boolean REMOTE_CALLS_DISABLED = true;
-  
-  private final static String dataPath = "www/main/data";
-  
-  private final static String workPath = "protons/workArea";
-  
-  private final static String downloadPath = "protons/downloadArea";
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
@@ -74,8 +68,13 @@ public class MainActivity extends OnsAbstractActivity implements
     
   }
   
+  private static int counter = 0;
+  
   private void retrieveModel() {
-
+    if (place.getToken().equals(MainPlace.SETTINGS)) {
+      counter++;
+      view.setModel(""+counter, "counter");
+    }
   }
   
   private void processFailure(String message, Throwable caught) {
@@ -113,12 +112,20 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
+    /*
     if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
       PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
       placeController.goBack(new MainPlace());
       return;
     }
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
+    */
+    OnsenUi.popPage();
+  }
+
+  @Override
+  public void goToHomeView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.HOME));
   }
 
   @Override

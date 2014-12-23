@@ -2,11 +2,23 @@
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" >
+       ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
 
-    <div>Settings view!</div>  
+    <o:OnsPage>
+    
+      <o:OnsToolbar>
+        <div class="center">Second Toolbar</div>
+      </o:OnsToolbar>
+  
+      <div>Settings view!</div>  
+      
+      <o:OnsButton text="Pop" ui:field="btnPop"></o:OnsButton>
+      
+      <g:Label ui:field="counterLbl"></g:Label>
+      
+    </o:OnsPage>
     
   </g:HTMLPanel>
   
