@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.onscommons.client.utils.OnsUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 
@@ -27,7 +28,7 @@ public class OnsButton extends Widget {
   public void onClickTest(JSOCallback callback) {
     OnsUtils.log("setting handler on element " + getElement());
 //  onClickImpl(getElement(), callback);
-//  onClickImpl(JQuery.withElement(getElement()), callback);
+    onClickImpl(JQuery.withElement(getElement()), callback);
 //  onClickImpl(getElementImpl("onsButton"), callback);
   }
   
@@ -41,8 +42,9 @@ public class OnsButton extends Widget {
       callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
     });
 //  element.on('click', jsCallback);
-    element.addEventListener('click', jsCallback);
+//  element.addEventListener('click', jsCallback);
 //  element.onclick(jsCallback);
+    element.click(jsCallback);
   }-*/;
 
 }
