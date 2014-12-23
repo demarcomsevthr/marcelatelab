@@ -8,7 +8,8 @@ public abstract class OnsAbstractActivity extends AbstractActivity {
 
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    start(panel, (com.google.web.bindery.event.shared.EventBus) eventBus);
+//  start(panel, (com.google.web.bindery.event.shared.EventBus) eventBus);
+    start(OnsActivityManager.getActiveTemplate(), (com.google.web.bindery.event.shared.EventBus) eventBus);
   }
 
   public void start(AcceptsOneWidget panel, com.google.web.bindery.event.shared.EventBus eventBus) {
