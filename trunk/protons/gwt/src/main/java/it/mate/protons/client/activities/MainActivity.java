@@ -12,6 +12,7 @@ import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.protons.client.factories.AppClientFactory;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.SettingsView;
 import it.mate.protons.shared.model.Account;
 
 import com.google.gwt.user.client.Timer;
@@ -22,7 +23,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
-  HomeView.Presenter
+  HomeView.Presenter, SettingsView.Presenter
   {
   
   private MainPlace place;
@@ -61,7 +62,16 @@ public class MainActivity extends OnsAbstractActivity implements
       view.setPresenter(this);
       panel.setWidget(view.asWidget());
     }
+    
+    if (place.getToken().equals(MainPlace.SETTINGS)) {
+      SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
     retrieveModel();
+    
   }
   
   private void retrieveModel() {

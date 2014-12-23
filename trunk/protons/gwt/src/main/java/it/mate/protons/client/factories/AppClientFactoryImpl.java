@@ -6,8 +6,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.mvp.MvpUtils;
 import it.mate.onscommons.client.mvp.OnsActivityMapper;
 import it.mate.onscommons.client.mvp.OnsNavigationDisplay;
-import it.mate.onscommons.client.onsen.OnsenReadyHandler;
-import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.onscommons.client.utils.OnsUtils;
@@ -127,12 +125,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       });
     }
 
-//  MainPlaceHistoryMapper historyMapper = GWT.create(MainPlaceHistoryMapper.class);
-
     createDisplay();
   
-//  initHistoryHandler(historyHandler, new MainPlace());
-    
   }
 
   private void createDisplay() {
@@ -146,14 +140,15 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     OnsNavigationDisplay display = new OnsNavigationDisplay(onsMapper);
     MainPlace defaultPlace = new MainPlace();
     MvpUtils.initOnsMvp(this, display, onsMapper, defaultPlace);
-
+    
+    /** COSI FUNZIONA LA PRIMA VOLTA:
     OnsenUi.initializeOnsen(new OnsenReadyHandler() {
       public void onReady() {
         OnsUtils.log("ONSEN READY");
       }
     });
-    
     OnsenUi.pushPage(defaultPlace.getToken());
+    **/
     
   }
   

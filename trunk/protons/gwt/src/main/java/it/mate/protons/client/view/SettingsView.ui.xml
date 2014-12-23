@@ -2,17 +2,11 @@
        xmlns:g="urn:import:com.google.gwt.user.client.ui" 
        xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-       ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
+       ui:generateLocales="default" >
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
 
-    <!--   
-    <g:Button ui:field="btnSettings" text="Settings"></g:Button>
-     -->
-    
-    <o:OnsButton text="Settings" ui:field="btnSettings"></o:OnsButton>
-  
-    <g:Label ui:field="homeLbl" addStyleNames="ui-home-lbl"/>
+    <div>Settings view!</div>  
     
   </g:HTMLPanel>
   
