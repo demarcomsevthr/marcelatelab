@@ -7,17 +7,20 @@ import it.mate.onscommons.client.ui.OnsTemplate;
 import it.mate.onscommons.client.utils.OnsUtils;
 
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class OnsActivityManager extends ActivityManager {
   
   OnsNavigationDisplay onsDisplay;
   
   EventBus eventBus;
+
+  private static OnsTemplate activeTemplate;
 
   public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
@@ -30,27 +33,10 @@ public class OnsActivityManager extends ActivityManager {
     super.setDisplay(new SimplePanel());
   }
   
-  private static int counter = -1;
-  
-  private static OnsTemplate activeTemplate;
-
   private void setActiveTemplate(HasToken place) {
-    counter ++;
-    OnsTemplate template = onsDisplay.getPlaceTemplate(place);
-    OnsUtils.log("SET ACTIVE TEMPLATE " + counter + " " + template);
+    OnsTemplate template = onsDisplay.getTemplateByPlace(place);
+    template.clear();
     activeTemplate = template;
-//  super.setDisplay(template);
-    /*
-    OnsenUi.compile(template.getElement());
-    OnsenUi.pushPage(place.getToken());
-    */
-    
-    final HandlerRegistration placeReg = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-      public void onPlaceChange(PlaceChangeEvent event) {
-        OnsUtils.log("MY PLACE CHANGE EVENT " + event);
-      }
-    });
-    
   }
   
   public static OnsTemplate getActiveTemplate() {
@@ -60,20 +46,13 @@ public class OnsActivityManager extends ActivityManager {
   @Override
   public void onPlaceChange(PlaceChangeEvent event) {
 
-    Place newPlace = event.getNewPlace();
+    final Place newPlace = event.getNewPlace();
     
     OnsUtils.log("onPlaceChange: newPlace = " + newPlace);
     
-    String newToken = null;
-    
     if (newPlace instanceof HasToken) {
-      
       HasToken hasToken = (HasToken)newPlace;
-      
-      newToken =  hasToken.getToken();
-      
       setActiveTemplate(hasToken);
-      
     }
     
     super.onPlaceChange(event);
@@ -84,19 +63,34 @@ public class OnsActivityManager extends ActivityManager {
       }
     });
     
-    OnsenUi.pushPage(newToken);
+    OnsUtils.log("activeTemplate " + activeTemplate.getId() + " attached = " + isReallyAttached(activeTemplate.getId()));
+    OnsUtils.log("activeTemplate " + activeTemplate);
     
-    /*
-    OnsenUi.initializeOnsen(new OnsenReadyHandler() {
-      public void onReady() {
-        OnsUtils.log("ONSEN READY");
+    if (!isReallyAttached(activeTemplate.getId())) {
+      try {
+        RootPanel.get().remove(activeTemplate);
+      } catch (Exception ex) { }
+      RootPanel.get().add(activeTemplate);
+    }
+
+    if (isReallyAttached(activeTemplate.getId())) {
+      Element templateElem = activeTemplate.getElement();
+      OnsUtils.log("compiling element " + templateElem);
+      if (templateElem != null) {
+        OnsenUi.compile(templateElem);
       }
-    });
-//  OnsenUi.compile(template.getElement());
+    }
+    
+    HasToken hasToken = (HasToken)newPlace;
+    String newToken =  hasToken.getToken();
     OnsenUi.pushPage(newToken);
-    */
     
   }
+  
+  protected static native boolean isReallyAttached(String elemId) /*-{
+    return $doc.getElementById(elemId) != null;
+  }-*/;
+  
   
   
 }

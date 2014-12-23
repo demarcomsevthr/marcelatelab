@@ -1,21 +1,18 @@
 package it.mate.onscommons.client.ui;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OnsPage extends ComplexPanel implements HasWidgets {
+public class OnsPage extends HTMLPanel {
 
+  private final static String TAG_NAME = "ons-page";
+  
   public OnsPage() {
-    this(DOM.createElement("ons-page"));
+    super(TAG_NAME, "");
   }
   
-  protected OnsPage(Element elem) {
-//  elem.setId(id);
-    setElement(elem);
-//  addStyleName("ons-Template");
+  public OnsPage(String html) {
+    super(TAG_NAME, html);
   }
   
   @Override

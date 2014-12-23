@@ -21,7 +21,8 @@ public class MvpUtils {
     
     CommonGinjector ginjector = clientFactory.getGinjector();
     
-    EventBus eventBus = ginjector.getEventBus();
+//  EventBus eventBus = ginjector.getEventBus();
+    EventBus eventBus = ginjector.getBinderyEventBus();
     
     OnsActivityManager activityManager = new OnsActivityManager(activityMapper, eventBus);
     
