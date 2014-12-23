@@ -5,11 +5,12 @@ import it.mate.gwtcommons.client.mvp.CurrentPlaceHolder;
 
 import java.util.Map;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.web.bindery.event.shared.EventBus;
+//import com.google.gwt.event.shared.EventBus;
 
 public interface BaseClientFactory <G extends CommonGinjector> extends CurrentPlaceHolder {
 

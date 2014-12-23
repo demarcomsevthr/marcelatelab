@@ -2,11 +2,10 @@ package it.mate.gwtcommons.client.history;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.web.bindery.event.shared.Event;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class LoggedSimpleEventBus extends SimpleEventBus {
   

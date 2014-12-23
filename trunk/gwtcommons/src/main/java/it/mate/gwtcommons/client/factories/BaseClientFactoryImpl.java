@@ -11,13 +11,15 @@ import java.util.Map;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+//import com.google.gwt.event.shared.HandlerRegistration;
+//import com.google.gwt.event.shared.EventBus;
 
 public abstract class BaseClientFactoryImpl <G extends CommonGinjector> implements BaseClientFactory<G> {
 
@@ -67,13 +69,15 @@ public abstract class BaseClientFactoryImpl <G extends CommonGinjector> implemen
       historyHandler = new MappedPlaceHistoryHandler(activityMapper.getHistoryName(), historyMapper);
       historyHandlerRegistration.handler = historyHandler;
     }
-    historyHandlerRegistration.registration = historyHandler.register(getPlaceController(), ginjector.getEventBus(), defaultPlace);
+//  historyHandlerRegistration.registration = historyHandler.register(getPlaceController(), ginjector.getEventBus(), defaultPlace);
+    historyHandlerRegistration.registration = historyHandler.register(getPlaceController(), ginjector.getBinderyEventBus(), defaultPlace);
     historyHandlerRegistrationMap.put(activityMapper.getHistoryName(), historyHandlerRegistration);
     historyHandler.handleCurrentHistory();
   }
 
   private void initActivityManager (SimplePanel panel, ActivityMapper activityMapper) {
-    EventBus eventBus = ginjector.getEventBus();
+//  EventBus eventBus = ginjector.getEventBus();
+    EventBus eventBus = ginjector.getBinderyEventBus();
 
     String historyName = null;
     if (activityMapper instanceof BaseActivityMapper) {
@@ -113,7 +117,8 @@ public abstract class BaseClientFactoryImpl <G extends CommonGinjector> implemen
   }
   
   public EventBus getEventBus() {
-    EventBus eventBus = ginjector.getEventBus();
+//  EventBus eventBus = ginjector.getEventBus();
+    EventBus eventBus = ginjector.getBinderyEventBus();
     GwtUtils.log(getClass(), "getEventBus", "eventBus = " + eventBus);
     return eventBus;
   }

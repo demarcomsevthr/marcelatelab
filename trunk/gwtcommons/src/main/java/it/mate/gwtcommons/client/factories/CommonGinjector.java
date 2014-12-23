@@ -1,12 +1,13 @@
 package it.mate.gwtcommons.client.factories;
 
-import com.google.gwt.event.shared.EventBus;
+//import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
 
 public interface CommonGinjector extends Ginjector {
 
-  public EventBus getEventBus();
+  @Deprecated
+//public com.google.gwt.event.shared.EventBus getEventBus();
   
   public PlaceController getPlaceController();
   
