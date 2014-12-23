@@ -11,17 +11,13 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String SETTINGS = "settings";
   
-  public static final String APPLICATION_LIST = "listApplication";
-  
-  public static final String APPLICATION_EDIT = "editApplication";
-  
-  public static final String APPLICATION_APPLY = "applyApplication";
-  
-  public static final String INGREDIENT_LIST = "listIngredient";
-  
   public static final String ABOUT = "about";
   
   public static final String TEST = "test";
+  
+  public static String[] getTokenList() {
+    return new String[] {HOME, SETTINGS, ABOUT, TEST};
+  }
   
   private String token;
   

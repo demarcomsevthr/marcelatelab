@@ -30,10 +30,10 @@
       
     <dependency>
       <groupId>it.mate</groupId>
-      <artifactId>phgcommons</artifactId>
+      <artifactId>onscommons</artifactId>
       <version>1.0</version>
     </dependency>
-      
+    
     <dependency>
       <groupId>com.googlecode.gwtphonegap</groupId>
       <artifactId>gwtphonegap</artifactId>
@@ -41,17 +41,10 @@
     </dependency>
 
     <dependency>
-      <groupId>com.googlecode.mgwt</groupId>
-      <artifactId>mgwt</artifactId>
-      <version>1.1.2</version>
-    </dependency>
-
-    <dependency>
       <groupId>it.mate</groupId>
       <artifactId>protons-adapter</artifactId>
       <version>0.1</version>
     </dependency>
-    
     
     <dependency>
       <groupId>com.netiq</groupId>
