@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.protons.client.activities.mapper.MainActivityMapper;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.SettingsView;
 import it.mate.protons.shared.service.RemoteFacadeAsync;
 
 import com.google.gwt.inject.client.GinModules;
@@ -16,5 +17,7 @@ public interface AppGinjector extends CommonGinjector {
   public RemoteFacadeAsync getRemoteFacade();
   
   public HomeView getHomeView();
+  
+  public SettingsView getSettingsView();
   
 }

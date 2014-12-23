@@ -2,13 +2,14 @@ package it.mate.protons.client.view;
 
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.nextgen.GWTUtils;
-import it.mate.gwtcommons.client.nextgen.HTMLElement;
+import it.mate.onscommons.client.ui.OnsButton;
+import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.view.HomeView.Presenter;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Label;
@@ -30,6 +31,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField Label homeLbl;
+  @UiField OnsButton btnSettings;
   
   public HomeView() {
     initUI();
@@ -43,6 +45,13 @@ public class HomeView extends AbstractBaseView<Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
+    
+    btnSettings.onClickTest(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        OnsUtils.log("btnSettings touched");
+      }
+    });
+    
   }
   
   @Override
@@ -50,22 +59,12 @@ public class HomeView extends AbstractBaseView<Presenter> {
     
   }
 
-//@UiHandler("btnTest")
-  public void onBtnTest(TouchEndEvent event) {
-    
-//  getPresenter().goToTestView();
-
-    /*
-    Document doc = GWTUtils.getDocument();
-    PhgUtils.log("doc = "+doc);
-    HTMLElement elem = doc.createElement("ons-navigator").cast();
-    */
-    
-    HTMLElement elem = GWTUtils.createElement("ons-navigator");
-    
-    GWTUtils.getBody().appendChild(elem);
-
-    
+  /*
+  @UiHandler("btnSettings")
+  public void onBtnSettings(TouchEndEvent event) {
+    OnsUtils.log("btnSettings touched");
+    getPresenter().goToSettingsView();
   }
+  */
   
 }
