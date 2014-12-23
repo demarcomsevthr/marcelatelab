@@ -5,14 +5,20 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
-
-    <!--   
-    <g:Button ui:field="btnSettings" text="Settings"></g:Button>
-     -->
+     
+    <o:OnsPage>
     
-    <o:OnsButton text="Settings" ui:field="btnSettings"></o:OnsButton>
+      <o:OnsToolbar>
+        <div class="center">First Toolbar</div>
+      </o:OnsToolbar>
   
-    <g:Label ui:field="homeLbl" addStyleNames="ui-home-lbl"/>
+      <g:VerticalPanel width="100%" horizontalAlignment="center">
+        <o:OnsButton text="Settings" ui:field="btnSettings"></o:OnsButton>
+        <g:Label ui:field="homeLbl" addStyleNames="ui-home-lbl"/>
+      </g:VerticalPanel>
+      
+    </o:OnsPage>
+     
     
   </g:HTMLPanel>
   

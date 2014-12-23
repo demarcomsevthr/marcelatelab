@@ -2,8 +2,6 @@ package it.mate.protons.client.view;
 
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.utils.OnsUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
@@ -55,18 +53,6 @@ public class HomeView extends AbstractBaseView<Presenter> {
       }
     });
 
-    /*
-    GwtUtils.deferredExecution(1000, new Delegate<Void>() {
-      public void execute(Void element) {
-        btnSettings.onClickTest(new JSOCallback() {
-          public void handle(JavaScriptObject jso) {
-            OnsUtils.log("btnSettings touched");
-          }
-        });
-      }
-    });
-    */
-    
   }
   
   @Override
