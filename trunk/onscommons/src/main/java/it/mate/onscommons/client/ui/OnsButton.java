@@ -1,6 +1,7 @@
 package it.mate.onscommons.client.ui;
 
-import it.mate.gwtcommons.client.utils.JQuery;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.utils.HammerUtils;
 import it.mate.onscommons.client.utils.OnsUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 
@@ -25,11 +26,18 @@ public class OnsButton extends Widget {
     getElement().setInnerText(text);
   }
   
-  public void onClickTest(JSOCallback callback) {
+  public void onClickTest(final JSOCallback callback) {
     OnsUtils.log("setting handler on element " + getElement());
 //  onClickImpl(getElement(), callback);
-    onClickImpl(JQuery.withElement(getElement()), callback);
 //  onClickImpl(getElementImpl("onsButton"), callback);
+//  onClickImpl(JQuery.withElement(getElement()), callback);
+    
+    HammerUtils.onPress(getElement(), new Delegate<Element>() {
+      public void execute(Element element) {
+        callback.handle(element);
+      }
+    });
+    
   }
   
   protected static native JavaScriptObject getElementImpl(String id) /*-{
