@@ -21,6 +21,10 @@ public class OnsTemplate extends ComplexPanel implements HasWidgets, AcceptsOneW
     return token;
   }
   
+  public String getId() {
+    return token;
+  }
+  
   protected OnsTemplate(Element elem, String id) {
     elem.setId(id);
     setElement(elem);

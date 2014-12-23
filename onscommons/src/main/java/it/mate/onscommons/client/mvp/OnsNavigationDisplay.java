@@ -40,12 +40,12 @@ public class OnsNavigationDisplay extends Composite {
     String[] tokens = mapper.getTokenList();
     for (String token : tokens) {
       OnsTemplate template = new OnsTemplate(token);
-      RootPanel.get().add(template);
+//    RootPanel.get().add(template);
       templates.add(template);
     }
   }
   
-  public OnsTemplate getPlaceTemplate(HasToken place) {
+  public OnsTemplate getTemplateByPlace(HasToken place) {
     String token = place.getToken();
     for (OnsTemplate template : templates) {
       if (template.getToken().equals(token)) {

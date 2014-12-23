@@ -15,15 +15,6 @@ public class OnsenUi {
     }
   }
   
-  public static void pushPage(String pageId) {
-    JsOnsOptions options = JsOnsOptions.create();
-    pushPageImpl(pageId, options);
-  }
-  
-  public static void compile(Element element) {
-    compileImpl(element);
-  }
-  
   protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
     @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAPING');
     $wnd.ons.bootstrap();
@@ -34,6 +25,11 @@ public class OnsenUi {
     @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN HOOKING READY');
     $wnd.ons.ready(jsHandler);
   }-*/;
+  
+  public static void pushPage(String pageId) {
+    JsOnsOptions options = JsOnsOptions.create();
+    pushPageImpl(pageId, options);
+  }
   
   protected static native void pushPageImpl(String pageId, JsOnsOptions options) /*-{
     @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN PUSHING PAGE ' + pageId);
@@ -47,9 +43,22 @@ public class OnsenUi {
     }
   }
 
+  public static void compile(Element element) {
+    compileImpl(element);
+  }
+  
   protected static native void compileImpl(Element element) /*-{
     @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('COMPILING ELEMENT ' + element);
     $wnd.ons.compile(element);
+  }-*/;
+
+  public static void popPage() {
+    popPageImpl();
+  }
+  
+  protected static native void popPageImpl() /*-{
+    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN POPING PAGE');
+    $wnd.ons.navigator.popPage();    
   }-*/;
 
 }
