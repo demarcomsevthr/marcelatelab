@@ -1,6 +1,6 @@
 package it.mate.onscommons.client.ui;
 
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -12,13 +12,13 @@ public class OnsButton extends Widget {
   
   public OnsButton() {
     this(DOM.createElement("ons-button"));
-//  setStyleName("gwt-Button");
   }
 
   protected OnsButton(Element element) {
     if (element.getId() == null || "".equals(element.getId())) {
-      element.setId("onsButton"+System.currentTimeMillis());
+      element.setId(DOM.createUniqueId());
     }
+    element.addClassName("ons-button");
     setElement(element);
   }
   
@@ -27,7 +27,8 @@ public class OnsButton extends Widget {
   }
   
   public void onClickTest(final JSOCallback callback) {
-    OnsUtils.log("setting handler on element " + getElement());
+    CdvUtils.log("setting handler on element " + getElement());
+    
     /*
     HammerUtils.onPress(getElement(), new Delegate<Element>() {
       public void execute(Element element) {
@@ -42,7 +43,7 @@ public class OnsButton extends Widget {
   
   protected static native void onClickImpl(JavaScriptObject element, JSOCallback callback) /*-{
     var jsCallback = $entry(function(event) {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('JS CALLBACK');
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('JS CALLBACK');
       callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
     });
     $doc.addEventListener("click", function(e) {

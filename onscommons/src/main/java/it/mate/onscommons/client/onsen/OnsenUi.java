@@ -1,5 +1,8 @@
 package it.mate.onscommons.client.onsen;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.utils.callbacks.JSOCallback;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 
@@ -16,13 +19,13 @@ public class OnsenUi {
   }
   
   protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAPING');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAPING');
     $wnd.ons.bootstrap();
     var jsHandler = $entry(function() {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN JS READY');
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN JS READY');
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN HOOKING READY');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN HOOKING READY');
     $wnd.ons.ready(jsHandler);
   }-*/;
   
@@ -32,7 +35,7 @@ public class OnsenUi {
   }
   
   protected static native void pushPageImpl(String pageId, JsOnsOptions options) /*-{
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN PUSHING PAGE ' + pageId);
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN PUSHING PAGE ' + pageId);
     $wnd.ons.navigator.pushPage(pageId, options);    
   }-*/;
   
@@ -48,7 +51,7 @@ public class OnsenUi {
   }
   
   protected static native void compileImpl(Element element) /*-{
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('COMPILING ELEMENT ' + element);
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('COMPILING ELEMENT ' + element);
     $wnd.ons.compile(element);
   }-*/;
 
@@ -57,8 +60,42 @@ public class OnsenUi {
   }
   
   protected static native void popPageImpl() /*-{
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('ONSEN POPING PAGE');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN POPING PAGE');
     $wnd.ons.navigator.popPage();    
+  }-*/;
+
+  public static void onPageChanging(final Delegate<JavaScriptObject> delegate) {
+    onPageChangingImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute(jso);
+      }
+    });
+  }
+  
+  protected static native void onPageChangingImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+//    $wnd.glbDebugHook(event);
+    });
+    $wnd.ons.navigator.on('prepush', jsCallback);    
+    $wnd.ons.navigator.on('prepop', jsCallback);    
+  }-*/;
+
+  public static void onPageChanged(final Delegate<JavaScriptObject> delegate) {
+    onPageChangedImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute(jso);
+      }
+    });
+  }
+  
+  protected static native void onPageChangedImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+      $wnd.glbDebugHook(event);
+    });
+    $wnd.ons.navigator.on('postpush', jsCallback);    
+    $wnd.ons.navigator.on('postpop', jsCallback);    
   }-*/;
 
 }

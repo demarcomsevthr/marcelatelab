@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.utils.JSONUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOStringCallback;
 import it.mate.onscommons.client.utils.callbacks.JSOSuccess;
 
@@ -38,25 +38,25 @@ public class FileSystemPlugin {
    * 
    */
   public static void copyApplicationFileToTmpDir (final String sourceFile, final String destPath, final Delegate<String> delegate) {
-    OnsUtils.log("COPYING " + sourceFile + " TO " + destPath);
+    CdvUtils.log("COPYING " + sourceFile + " TO " + destPath);
     final JSOStringCallback failure = new JSOStringCallback() {
       public void handle(String errorCode) {
-        OnsUtils.log("COPYING ERROR CODE = " + errorCode);
+        CdvUtils.log("COPYING ERROR CODE = " + errorCode);
         delegate.execute(null);
       }
     };
     getApplicationFileImpl(sourceFile, new JSOSuccess() {
       public void handle(final JavaScriptObject sourceFileEntry) {
-        //OnsUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
+        //CdvUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
         getTempDirImpl(OsDetectionUtils.isAndroid(),  new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
-            //OnsUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            //CdvUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
               public void handle(JavaScriptObject destDirEntry) {
-                //OnsUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
+                //CdvUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
                 copyFileImpl(sourceFileEntry, destDirEntry, null, new JSOSuccess() {
                   public void handle(JavaScriptObject destFileEntry) {
-                    OnsUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
+                    CdvUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
                     String result = GwtUtils.getJsPropertyString(destFileEntry, "fullPath");
                     delegate.execute(result);
                   }
@@ -70,19 +70,19 @@ public class FileSystemPlugin {
   }
 
   public static void deleteTmpDir (final String dirPath, final Delegate<String> delegate) {
-    OnsUtils.log("DELETING " + dirPath);
+    CdvUtils.log("DELETING " + dirPath);
     final JSOStringCallback failure = new JSOStringCallback() {
       public void handle(String errorCode) {
-        OnsUtils.log("DELETING ERROR CODE = " + errorCode);
+        CdvUtils.log("DELETING ERROR CODE = " + errorCode);
         delegate.execute(null);
       }
     };
     getTempFileImpl(dirPath, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(final JavaScriptObject dirEntry) {
-        //OnsUtils.log("dest dir = " + JSONUtils.stringify(dirEntry));
+        //CdvUtils.log("dest dir = " + JSONUtils.stringify(dirEntry));
         deleteDirImpl(dirEntry, new JSOSuccess() {
           public void handle(JavaScriptObject deletedDirEntry) {
-            OnsUtils.log("deleted dir entry " + JSONUtils.stringify(dirEntry));
+            CdvUtils.log("deleted dir entry " + JSONUtils.stringify(dirEntry));
             if (deletedDirEntry != null) {
               String result = GwtUtils.getJsPropertyString(deletedDirEntry, "fullPath");
               delegate.execute(result);
@@ -96,16 +96,16 @@ public class FileSystemPlugin {
   }
   
   public static void downloadRemoteFileToTempDir (final String sourceUrl, final String targetRelativePath, final Delegate<String> delegate) {
-    OnsUtils.log("DOWNLOADING FROM " + sourceUrl + " TO " + targetRelativePath);
+    CdvUtils.log("DOWNLOADING FROM " + sourceUrl + " TO " + targetRelativePath);
     final JSOStringCallback failure = new JSOStringCallback() {
       public void handle(String errorCode) {
-        OnsUtils.log("DOWNLOADING ERROR CODE = " + errorCode);
+        CdvUtils.log("DOWNLOADING ERROR CODE = " + errorCode);
         delegate.execute(null);
       }
     };
     downloadRemoteFileToTempDirImpl(sourceUrl, targetRelativePath, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(JavaScriptObject targetFileEntry) {
-        OnsUtils.log("target file = " + JSONUtils.stringify(targetFileEntry));
+        CdvUtils.log("target file = " + JSONUtils.stringify(targetFileEntry));
         String result = GwtUtils.getJsPropertyString(targetFileEntry, "fullPath");
         double size = GwtUtils.getJsPropertyDouble(targetFileEntry, "size");
         delegate.execute(result + " size = " + (long)size);
@@ -114,25 +114,25 @@ public class FileSystemPlugin {
   }
   
   public static void copyTempFileToTmpDir (final String sourceFile, final String destPath, final Delegate<String> delegate) {
-    OnsUtils.log("COPYING " + sourceFile + " TO " + destPath);
+    CdvUtils.log("COPYING " + sourceFile + " TO " + destPath);
     final JSOStringCallback failure = new JSOStringCallback() {
       public void handle(String errorCode) {
-        OnsUtils.log("COPYING ERROR CODE = " + errorCode);
+        CdvUtils.log("COPYING ERROR CODE = " + errorCode);
         delegate.execute(null);
       }
     };
     getTempFileImpl(sourceFile, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(final JavaScriptObject sourceFileEntry) {
-        //OnsUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
+        //CdvUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
         getTempDirImpl(OsDetectionUtils.isAndroid(), new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
-            //OnsUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            //CdvUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
               public void handle(JavaScriptObject destDirEntry) {
-                //OnsUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
+                //CdvUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
                 copyFileImpl(sourceFileEntry, destDirEntry, null, new JSOSuccess() {
                   public void handle(JavaScriptObject destFileEntry) {
-                    OnsUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
+                    CdvUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
                     String result = GwtUtils.getJsPropertyString(destFileEntry, "fullPath");
                     delegate.execute(result);
                   }
@@ -241,20 +241,20 @@ public class FileSystemPlugin {
   // TODO
   
   private static native void createDirIfNotExistsImpl (JavaScriptObject rootDirEntry, String path, JSOSuccess success, JSOStringCallback failure) /*-{
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.1 " + path);
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.1 " + path);
     
     var jsSuccess = $entry(function(fileEntry) {
       var str = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.success " + str);
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.success " + str);
       success.@it.mate.onscommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(fileEntry);
     });
     var jsFailure = $entry(function(error) {
       var str = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.failure " + str);
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.failure " + str);
       failure.@it.mate.onscommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
     });
     var jsCreateDirFn = $entry(function (rootDirEntry, folders) {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.2 " + folders[0]);
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("createDirIfNotExistsImpl.2 " + folders[0]);
       if (folders[0] == '.' || folders[0] == '') {
         folders = folders.slice(1);
       }
@@ -330,23 +330,23 @@ public class FileSystemPlugin {
 
 
   public static void testPlugin (final String sourceFile, final String destPath, final Delegate<String> delegate) {
-    OnsUtils.log("PLUGIN TEST source = " + sourceFile + " dest = " + destPath);
+    CdvUtils.log("PLUGIN TEST source = " + sourceFile + " dest = " + destPath);
     final JSOStringCallback failure = new JSOStringCallback() {
       public void handle(String errorCode) {
-        OnsUtils.log("PLUGIN TEST ERROR CODE = " + errorCode);
+        CdvUtils.log("PLUGIN TEST ERROR CODE = " + errorCode);
         delegate.execute(null);
       }
     };
     
     getApplicationFileImpl(sourceFile, new JSOSuccess() {
       public void handle(final JavaScriptObject sourceFileEntry) {
-        OnsUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
+        CdvUtils.log("source file = " + JSONUtils.stringify(sourceFileEntry));
         getTempDirImpl(OsDetectionUtils.isAndroid(), new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
-            OnsUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            CdvUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
               public void handle(JavaScriptObject destDirEntry) {
-                OnsUtils.log("created dest dir = " + JSONUtils.stringify(destDirEntry));
+                CdvUtils.log("created dest dir = " + JSONUtils.stringify(destDirEntry));
               }
             }, failure);
           }
@@ -355,13 +355,13 @@ public class FileSystemPlugin {
         /*
         getTempDirImpl(new JSOSuccess() {
           public void handle(JavaScriptObject tempDirEntry) {
-            //OnsUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
+            //CdvUtils.log("temp dir = " + JSONUtils.stringify(tempDirEntry));
             createDirIfNotExistsImpl(tempDirEntry, destPath, new JSOSuccess() {
               public void handle(JavaScriptObject destDirEntry) {
-                //OnsUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
+                //CdvUtils.log("dest dir = " + JSONUtils.stringify(destDirEntry));
                 copyFileImpl(sourceFileEntry, destDirEntry, null, new JSOSuccess() {
                   public void handle(JavaScriptObject destFileEntry) {
-                    OnsUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
+                    CdvUtils.log("copied file entry " + JSONUtils.stringify(destFileEntry));
                     String result = GwtUtils.getJsPropertyString(destFileEntry, "fullPath");
                     delegate.execute(result);
                   }

@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.utils.JSONUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,15 +81,15 @@ public class CalendarPlugin {
   
   public static void createEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
-    OnsUtils.log("creating event " + event);
+    CdvUtils.log("creating event " + event);
     
     callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Success - " + JSONUtils.stringify(results));
+        CdvUtils.log("Success - " + JSONUtils.stringify(results));
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Failure - " + JSONUtils.stringify(results));
+        CdvUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
     
@@ -97,21 +97,21 @@ public class CalendarPlugin {
     if (OsDetectionUtils.isAndroid()) {
       callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
         public void handleEvent(JavaScriptObject results) {
-          OnsUtils.log("Success - " + JSONUtils.stringify(results));
+          CdvUtils.log("Success - " + JSONUtils.stringify(results));
         }
       }, new JSOFailure() {
         public void handleEvent(JavaScriptObject results) {
-          OnsUtils.log("Failure - " + JSONUtils.stringify(results));
+          CdvUtils.log("Failure - " + JSONUtils.stringify(results));
         }
       });
     } else {
       callPluginImpl("createEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
         public void handleEvent(JavaScriptObject results) {
-          OnsUtils.log("Success - " + JSONUtils.stringify(results));
+          CdvUtils.log("Success - " + JSONUtils.stringify(results));
         }
       }, new JSOFailure() {
         public void handleEvent(JavaScriptObject results) {
-          OnsUtils.log("Failure - " + JSONUtils.stringify(results));
+          CdvUtils.log("Failure - " + JSONUtils.stringify(results));
         }
       });
     }
@@ -121,14 +121,14 @@ public class CalendarPlugin {
   
   public static void deleteEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
-    OnsUtils.log("deleting event " + event);
+    CdvUtils.log("deleting event " + event);
     callPluginImpl("deleteEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Success - " + JSONUtils.stringify(results));
+        CdvUtils.log("Success - " + JSONUtils.stringify(results));
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Failure - " + JSONUtils.stringify(results));
+        CdvUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
   }
@@ -141,10 +141,10 @@ public class CalendarPlugin {
       event.setLocation("");
     if (event.getNotes() == null)
       event.setNotes("");
-    OnsUtils.log("finding event " + event);
+    CdvUtils.log("finding event " + event);
     callPluginImpl("findEvent", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Success - " + JSONUtils.stringify(results));
+        CdvUtils.log("Success - " + JSONUtils.stringify(results));
         JsArray<JavaScriptObject> jsEvents = results.cast();
         List<CalendarEvent> events = new ArrayList<CalendarEvent>();
         for (int it = 0; it < jsEvents.length(); it++) {
@@ -161,7 +161,7 @@ public class CalendarPlugin {
       }
     }, new JSOFailure() {
       public void handleEvent(JavaScriptObject results) {
-        OnsUtils.log("Failure - " + JSONUtils.stringify(results));
+        CdvUtils.log("Failure - " + JSONUtils.stringify(results));
       }
     });
   }

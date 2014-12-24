@@ -3,7 +3,7 @@ package it.mate.onscommons.client.mvp;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.gwtcommons.client.places.HasToken;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -17,7 +17,7 @@ public class MvpUtils {
   public static void initOnsMvp (BaseClientFactory<? extends CommonGinjector> clientFactory, 
       OnsNavigationDisplay display, OnsActivityMapper activityMapper, Place defaultPlace) {
     
-    OnsUtils.log("Initializing MVP with in ONS history manager (defaultPlace="+defaultPlace.toString()+")");
+    CdvUtils.log("Initializing MVP with in ONS history manager (defaultPlace="+defaultPlace.toString()+")");
     
     CommonGinjector ginjector = clientFactory.getGinjector();
     

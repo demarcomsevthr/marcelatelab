@@ -21,12 +21,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_DATE_DIALOG, JsDateTimeResult.fromDate(value), new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        OnsUtils.log("received " + res.asString());
+        CdvUtils.log("received " + res.asString());
         delegate.execute(res.asDate());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        OnsUtils.log("error executing plugin");
+        CdvUtils.log("error executing plugin");
       }
     });
   }
@@ -35,12 +35,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_CALENDAR_VIEW, JsDateTimeResult.fromDate(value), new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        OnsUtils.log("received " + res.asString());
+        CdvUtils.log("received " + res.asString());
         delegate.execute(res.asDate());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        OnsUtils.log("error executing plugin");
+        CdvUtils.log("error executing plugin");
       }
     });
   }
@@ -49,12 +49,12 @@ public class DatePickerPluginUtil {
     execImpl(ACTION_SHOW_TIME_DIALOG, null, new JsCallback() {
       public void execute(JavaScriptObject jso) {
         JsDateTimeResult res = JsDateTimeResult.from(jso);
-        OnsUtils.log("received " + res.asString());
+        CdvUtils.log("received " + res.asString());
         delegate.execute(res.asTime());
       }
     }, new JsCallback() {
       public void execute(JavaScriptObject jso) {
-        OnsUtils.log("error executing plugin");
+        CdvUtils.log("error executing plugin");
       }
     });
   }

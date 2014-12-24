@@ -39,17 +39,17 @@ public class GlobalizationPlugin {
   
   private static native void getDatePatternImpl(JavaScriptObject options, StringCallback callback) /*-{
     if (typeof($wnd.cordova) != 'undefined' && typeof($wnd.cordova.exec) != 'undefined') {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("calling globalization plugin");
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("calling globalization plugin");
       var jsSuccessCallback = $entry(function(date) {
         callback.@it.mate.onscommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(date.pattern);
       });
       var jsErrorCallback = $entry(function() {
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("js error during call globalization plugin");
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("js error during call globalization plugin");
         callback.@it.mate.onscommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
       });
       $wnd.cordova.exec(jsSuccessCallback, jsErrorCallback, "Globalization", "getDatePattern", [{"options": options}]);
     } else {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("cordova is undefined");
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("cordova is undefined");
       callback.@it.mate.onscommons.client.utils.callbacks.StringCallback::handle(Ljava/lang/String;)(null);
     }
   }-*/;

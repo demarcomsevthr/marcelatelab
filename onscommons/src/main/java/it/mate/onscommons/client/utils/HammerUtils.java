@@ -54,7 +54,7 @@ public class HammerUtils {
   
   private static native void log(String prompt, JavaScriptObject jso) /*-{
     var str = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(jso);
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)(prompt+str);
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)(prompt+str);
   }-*/;
 
   public static class DragEvent {
@@ -133,11 +133,11 @@ public class HammerUtils {
   
   private static native void jsOnPressImpl(Element element, ElementCallback callback) /*-{
     var jsHandler = $entry(function(event) {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('received hammer handler');
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('received hammer handler');
       callback.@it.mate.onscommons.client.utils.HammerUtils.ElementCallback::handle(Lcom/google/gwt/dom/client/Element;)(element);
     });
     var hammertime = new $wnd.Hammer(element);
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('setting hammer handler');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('setting hammer handler');
 //  hammertime.on("press", jsHandler);
     hammertime.on("tap", jsHandler);
   }-*/;

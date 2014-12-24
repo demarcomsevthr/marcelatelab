@@ -45,12 +45,12 @@ public class NfcPlugin {
       callback.@it.mate.onscommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(nfcEvent);
     });
     var jsSuccess = $entry(function() {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("nfc listener added");
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("nfc listener added");
       success.@it.mate.onscommons.client.utils.callbacks.VoidCallback::handle()();
     });
     var jsFailure = $entry(function(error) {
       var ers = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("nfc listener error - " + ers);
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("nfc listener error - " + ers);
       failure.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
     });
     $wnd.nfc.addNdefListener (jsCallback, jsSuccess, jsFailure);

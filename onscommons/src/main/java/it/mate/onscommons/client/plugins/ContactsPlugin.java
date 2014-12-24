@@ -3,7 +3,7 @@ package it.mate.onscommons.client.plugins;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.utils.JSONUtils;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOStringCallback;
 import it.mate.onscommons.client.utils.callbacks.JSOSuccess;
 
@@ -19,13 +19,13 @@ public class ContactsPlugin {
   public static void pickContact(final Delegate<Contact> delegate) {
     pickContactImpl(new JSOSuccess() {
       public void handle(JavaScriptObject jsContact) {
-        OnsUtils.log("Success - " + JSONUtils.stringify(jsContact));
+        CdvUtils.log("Success - " + JSONUtils.stringify(jsContact));
         Contact contact = parseJsContact(jsContact);
         delegate.execute(contact);
       }
     }, new JSOStringCallback() {
       public void handle(String message) {
-        OnsUtils.log("Error - " + message);
+        CdvUtils.log("Error - " + message);
       }
     });
   }

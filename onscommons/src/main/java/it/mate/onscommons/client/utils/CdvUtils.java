@@ -25,7 +25,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class OnsUtils {
+public class CdvUtils {
   
   private static int tabletWrapperPct = 80;
   
@@ -75,19 +75,19 @@ public class OnsUtils {
     Delegate<String> datePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
         if (pattern == null) {
-          OnsUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = OnsUtils.getLocalStorageItem("debug-date-pattern");
+          CdvUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = CdvUtils.getLocalStorageItem("debug-date-pattern");
           if (pattern == null) {
             if ("it".equals(getAppLocalLanguage())) {
               pattern = "dd/MM/yyyy";
             } else {
               pattern = "MM/dd/yyyy";
             }
-            OnsUtils.setLocalStorageItem("debug-date-pattern", pattern);
+            CdvUtils.setLocalStorageItem("debug-date-pattern", pattern);
           }
         }
         defaultDatePattern = pattern;
-        OnsUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
+        CdvUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
       }
     };
     if (initialDatePattern != null) {
@@ -100,25 +100,25 @@ public class OnsUtils {
     Delegate<String> timePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
         if (pattern == null) {
-          OnsUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = OnsUtils.getLocalStorageItem("debug-time-pattern");
+          CdvUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = CdvUtils.getLocalStorageItem("debug-time-pattern");
           if (pattern == null) {
             if ("it".equals(getAppLocalLanguage())) {
               pattern = "HH:mm";
             } else {
               pattern = "h:mm a";
             }
-            OnsUtils.setLocalStorageItem("debug-time-pattern", pattern);
+            CdvUtils.setLocalStorageItem("debug-time-pattern", pattern);
           }
         }
         defaultTimePattern = pattern;
-        OnsUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
+        CdvUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
         if (pattern.contains("HH")) {
           Time.set24HFormat();
         } else {
           Time.set12HFormat();
         }
-        OnsUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
+        CdvUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
       }
     };
     if (initialTimePattern != null) {
@@ -242,18 +242,18 @@ public class OnsUtils {
   }-*/;
 
   public static void adaptWrapperPanel(final Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
-    OnsUtils.log("adaptWrapperPanel.1");
+    CdvUtils.log("adaptWrapperPanel.1");
     wrapperPanel.getElement().setId(id);
-    OnsUtils.log("adaptWrapperPanel.2");
+    CdvUtils.log("adaptWrapperPanel.2");
     if (OsDetectionUtils.isTablet()) {
-      OnsUtils.log("adaptWrapperPanel.3");
+      CdvUtils.log("adaptWrapperPanel.3");
       GwtUtils.onAvailable(id, new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
           GwtUtils.deferredExecution(new Delegate<Void>() {
             public void execute(Void element) {
-              OnsUtils.log("adaptWrapperPanel.4");
+              CdvUtils.log("adaptWrapperPanel.4");
               int height = getTabletWrapperHeight();
-              OnsUtils.log("applying wrapperPanel height = " + height);
+              CdvUtils.log("applying wrapperPanel height = " + height);
               wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
               if (adaptVerMargin) {
                 int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
@@ -284,13 +284,13 @@ public class OnsUtils {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
             int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
-            OnsUtils.log("setting wrapperPanel height to " + actualHeight);
+            CdvUtils.log("setting wrapperPanel height to " + actualHeight);
             wrapperPanel.setHeight(actualHeight + "px");
             wrapperPanel.setWidth(Window.getClientWidth() + "px");
           }
         });
       } else {
-        OnsUtils.log("setting wrapperPanel height to " + actualHeight);
+        CdvUtils.log("setting wrapperPanel height to " + actualHeight);
         wrapperPanel.setHeight(actualHeight + "px");
         wrapperPanel.setWidth(Window.getClientWidth() + "px");
       }
@@ -309,7 +309,7 @@ public class OnsUtils {
   }
   
   public static void setTabletWrapperPct(int tabletWrapperPct) {
-    OnsUtils.tabletWrapperPct = tabletWrapperPct;
+    CdvUtils.tabletWrapperPct = tabletWrapperPct;
   }
   
   public static native String getDeviceName() /*-{
@@ -348,7 +348,7 @@ public class OnsUtils {
   }-*/;
 
   public static void setUseLogPlugin(boolean useLogPlugin) {
-    OnsUtils.useLogPlugin = useLogPlugin;
+    CdvUtils.useLogPlugin = useLogPlugin;
   }
   
   public static String dateToString(Date date) {
@@ -367,7 +367,7 @@ public class OnsUtils {
   }
   
   public static void startTrace() {
-    OnsUtils.trace = new ArrayList<String>();
+    CdvUtils.trace = new ArrayList<String>();
   }
   
   public static List<String> getTrace() {
@@ -375,7 +375,7 @@ public class OnsUtils {
   }
   
   public static void clearTrace() {
-    OnsUtils.trace = null;
+    CdvUtils.trace = null;
   }
   
   public static void callDebugHook(JavaScriptObject jso) {
@@ -531,7 +531,7 @@ public class OnsUtils {
   
   public static void setDesktopDebugBorder(int width, int height) {
     if (OsDetectionUtils.isDesktop()) {
-      OnsUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
+      CdvUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
       RootPanel.getBodyElement().getStyle().setWidth(width, Unit.PX);
       RootPanel.getBodyElement().getStyle().setHeight(height, Unit.PX);
       RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
@@ -548,7 +548,7 @@ public class OnsUtils {
           log.log(Level.SEVERE, "uncaught exception", ex);
         }
         ex.printStackTrace();
-        if (!OnsUtils.isSuspendUncaughtExceptionAlerts()) {
+        if (!CdvUtils.isSuspendUncaughtExceptionAlerts()) {
 //        Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
         }
         StackTraceElement stea[] = ex.getStackTrace();

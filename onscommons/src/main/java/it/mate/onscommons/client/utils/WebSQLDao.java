@@ -57,7 +57,7 @@ public abstract class WebSQLDao {
     if (db == null) {
       openDatabase(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction tr) {
-          OnsUtils.log("WebSQLDao::after open callback");
+          CdvUtils.log("WebSQLDao::after open callback");
           if (beforeMigrationCallback != null)
             beforeMigrationCallback.handleEvent(tr);
           doMigrations(migrationCallbacks);
@@ -73,7 +73,7 @@ public abstract class WebSQLDao {
   protected void openDatabase(SQLTransactionCallback afterOpenCallback) {
     db = WindowDatabase.openDatabase(name, "", estimatedSize, new DatabaseCallback() {
       public void handleEvent(WindowDatabase db) {
-        OnsUtils.log("WebSQLDao::after creation callback");
+        CdvUtils.log("WebSQLDao::after creation callback");
         if (afterCreationCallback != null)
           afterCreationCallback.handleEvent(db);
       }
@@ -86,24 +86,24 @@ public abstract class WebSQLDao {
       final WindowDatabase db = openDatabaseImpl(name, version, estimatedSize, afterCreationCallback).cast();
       final SQLTransactionCallback initializationCallback= new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction transaction) {
-          OnsUtils.log("WebSQLDao::initialization callback");
-          OnsUtils.log("creating table version if not exists");
+          CdvUtils.log("WebSQLDao::initialization callback");
+          CdvUtils.log("creating table version if not exists");
           // 28/10/2014
           //transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number)");
           transaction.doExecuteSql("CREATE TABLE IF NOT EXISTS version (number INTEGER NOT NULL DEFAULT -1)");
-          OnsUtils.log("select count on table version");
+          CdvUtils.log("select count on table version");
           transaction.doExecuteSql("SELECT COUNT(*) AS c FROM version", null, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction transaction, SQLResultSet resultSet) {
               if (resultSet.getRows().getLength() == 0 || resultSet.getRows().getValueInt(0, "c") == 0) {
-                OnsUtils.log("INITIALIZING TABLE VERSION");
+                CdvUtils.log("INITIALIZING TABLE VERSION");
                 transaction.doExecuteSql("INSERT INTO version VALUES (-1)");
-                OnsUtils.log("end initialization callback");
+                CdvUtils.log("end initialization callback");
                 // 28/10/2014
                 if (afterOpenCallback != null) {
                   afterOpenCallback.handleEvent(transaction);
                 }
               } else {
-                OnsUtils.log("end initialization callback");
+                CdvUtils.log("end initialization callback");
                 // 28/10/2014
                 if (afterOpenCallback != null) {
                   afterOpenCallback.handleEvent(transaction);
@@ -227,7 +227,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(er) {
           var txt = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.transaction(jsCallback, jsErrorCallback, jsSuccessCallback);
@@ -266,7 +266,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(er) {
           var txt = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.readTransaction(jsCallback, jsErrorCallback, jsSuccessCallback);
@@ -335,7 +335,7 @@ public abstract class WebSQLDao {
       } else {
         jsErrorCallback = $entry(function(tr, er) {
           var txt = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(er);
-          @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('error - ' + txt);
+          @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('error - ' + txt);
         });
       }
       this.executeSql(sqlStatement, arguments, jsCallback, jsErrorCallback);
@@ -442,7 +442,7 @@ public abstract class WebSQLDao {
   }
   
   private void doMigrations(final MigratorCallback migrationCallbacks[]) {
-    OnsUtils.log("WebSQLDao::do migrations");
+    CdvUtils.log("WebSQLDao::do migrations");
     new Migrator(WebSQLDao.this, migrationCallbacks);
   }
 
@@ -456,7 +456,7 @@ public abstract class WebSQLDao {
       this.dao = dao;
       db.getVersionAsync(0, new Delegate<Integer>() {
         public void execute(Integer currentVersion) {
-          OnsUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
+          CdvUtils.log(">>> CURRENT DB VERSION = " + currentVersion);
           doMigration(currentVersion);
         }
       });
@@ -482,7 +482,7 @@ public abstract class WebSQLDao {
           }
         });
       } else {
-        OnsUtils.log("db is ready");
+        CdvUtils.log("db is ready");
         dao.ready = true;
       }
     }

@@ -1,12 +1,12 @@
 package com.google.gwt.dom.client;
 
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 public class DOMImplWebkitPatched extends DOMImplWebkit {
   
   public DOMImplWebkitPatched() {
     super();
-    OnsUtils.log("Using DOMImplWebkitPatched");
+    CdvUtils.log("Using DOMImplWebkitPatched");
   }
 
   @Override
