@@ -1,0 +1,13 @@
+
+@external gwt*, phg*, app*;
+
+@eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
+
+@eval windowHeight it.mate.protoph.client.ui.theme.CustomTheme.getWindowHeight();
+
+.app-home-lbl {
+  position: absolute;
+  bottom: 0em;
+  width: 100%;
+  text-align: center;
+}

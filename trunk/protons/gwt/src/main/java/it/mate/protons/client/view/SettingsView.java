@@ -3,7 +3,7 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.ui.OnsButton;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 import it.mate.protons.client.view.SettingsView.Presenter;
 
@@ -43,7 +43,7 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     
     btnPop.onClickTest(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
-        OnsUtils.log("btnPop touched");
+        CdvUtils.log("btnPop touched");
 //      getPresenter().goToHomeView();
         getPresenter().goToPrevious();
       }
@@ -53,11 +53,9 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    
     if (model instanceof String) {
       counterLbl.setText((String)model);
     }
-    
   }
 
 }

@@ -7,7 +7,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.protons.client.factories.AppClientFactory;
 import it.mate.protons.client.places.MainPlace;
@@ -42,13 +42,13 @@ public class MainActivity extends OnsAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
     if (place.getToken().equals(MainPlace.HOME)) {
-      OnsUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+      CdvUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
     }
 
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
-          OnsUtils.log("devInfoId is " + devInfoId);
+          CdvUtils.log("devInfoId is " + devInfoId);
         }
       });
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
@@ -68,12 +68,17 @@ public class MainActivity extends OnsAbstractActivity implements
     
   }
   
-  private static int counter = 0;
+  private static int settingsCounter = 0;
+  private static int homeCounter = 0;
   
   private void retrieveModel() {
+    if (place.getToken().equals(MainPlace.HOME)) {
+      homeCounter++;
+      view.setModel("Counter "+homeCounter, "counter");
+    }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
-      counter++;
-      view.setModel(""+counter, "counter");
+      settingsCounter++;
+      view.setModel("Counter "+settingsCounter, "counter");
     }
   }
   
@@ -99,7 +104,7 @@ public class MainActivity extends OnsAbstractActivity implements
       popupTitle = "Error";
     }
     if (logMsg != null)
-      OnsUtils.log(logMsg);
+      CdvUtils.log(logMsg);
     if (popupMsg != null) {
 //    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
     }
@@ -153,15 +158,15 @@ public class MainActivity extends OnsAbstractActivity implements
     
 //  String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
     String os = "unknown";
-    String layout = OnsUtils.getLayoutInfo();
-    String devName = OnsUtils.getDeviceName();
-    String phgVersion = OnsUtils.getDevicePhonegap();
-    String platform = OnsUtils.getDevicePlatform();
-    String devUuid = OnsUtils.getDeviceUuid();
-    String devVersion = OnsUtils.getDeviceVersion();
+    String layout = CdvUtils.getLayoutInfo();
+    String devName = CdvUtils.getDeviceName();
+    String phgVersion = CdvUtils.getDevicePhonegap();
+    String platform = CdvUtils.getDevicePlatform();
+    String devUuid = CdvUtils.getDeviceUuid();
+    String devVersion = CdvUtils.getDeviceVersion();
     
     if (REMOTE_CALLS_DISABLED) {
-      OnsUtils.log("REMOTE CALLS DISABLED!");
+      CdvUtils.log("REMOTE CALLS DISABLED!");
     } else {
       AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
           new AsyncCallback<String>() {
@@ -170,7 +175,7 @@ public class MainActivity extends OnsAbstractActivity implements
             }
             public void onSuccess(String devInfoId) {
               if (devInfoId != null) {
-                OnsUtils.log("received devInfoId "+ devInfoId +" from remote facade");
+                CdvUtils.log("received devInfoId "+ devInfoId +" from remote facade");
                 setDevInfoIdInLocalStorage(devInfoId);
                 GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
               }
@@ -202,11 +207,11 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   protected String getDevInfoIdFromLocalStorage() {
-    return OnsUtils.getLocalStorageItem("devInfoId");
+    return CdvUtils.getLocalStorageItem("devInfoId");
   }
 
   protected void setDevInfoIdInLocalStorage(String devInfoId) {
-    OnsUtils.setLocalStorageItem("devInfoId", devInfoId);
+    CdvUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
 
   @Override

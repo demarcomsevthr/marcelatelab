@@ -3,7 +3,7 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.ui.OnsButton;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.view.HomeView.Presenter;
@@ -32,6 +32,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Label homeLbl;
   @UiField OnsButton btnSettings;
+  @UiField Label counterLbl;
   
   public HomeView() {
     initUI();
@@ -48,7 +49,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
     
     btnSettings.onClickTest(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
-        OnsUtils.log("btnSettings touched");
+        CdvUtils.log("btnSettings touched");
         getPresenter().goToSettingsView();
       }
     });
@@ -57,13 +58,15 @@ public class HomeView extends AbstractBaseView<Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    
+    if (model instanceof String) {
+      counterLbl.setText((String)model);
+    }
   }
 
   /*
   @UiHandler("btnSettings")
   public void onBtnSettings(TouchEndEvent event) {
-    OnsUtils.log("btnSettings touched");
+    CdvUtils.log("btnSettings touched");
     getPresenter().goToSettingsView();
   }
   */

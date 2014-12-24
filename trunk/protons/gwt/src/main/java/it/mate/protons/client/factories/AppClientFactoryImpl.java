@@ -8,12 +8,13 @@ import it.mate.onscommons.client.mvp.OnsActivityMapper;
 import it.mate.onscommons.client.mvp.OnsNavigationDisplay;
 import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.onscommons.client.utils.callbacks.VoidCallback;
 import it.mate.protons.client.activities.mapper.MainActivityMapper;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.places.MainPlaceHistoryMapper;
+import it.mate.protons.client.ui.theme.CustomTheme;
 import it.mate.protons.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
@@ -29,7 +30,6 @@ import com.googlecode.gwtphonegap.client.PhoneGapAvailableEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapAvailableHandler;
 import com.googlecode.gwtphonegap.client.PhoneGapTimeoutEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
-//import com.google.gwt.event.shared.EventBus;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
 
@@ -38,12 +38,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   private PlaceController placeController;
   
   private PhoneGap phoneGap;
-  
-  private static int TABLET_IOS_WRAPPER_PCT = 70;
-  
-  private static int TABLET_AND_WRAPPER_PCT = 80;
-  
-  private static int HEADER_PANEL_HEIGHT = 40;
   
   private Map<String, String> nativeProperties;
 
@@ -57,7 +51,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     phoneGap.addHandler(new PhoneGapAvailableHandler() {
       @Override
       public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
-        OnsUtils.log("PHONEGAP AVAILABLE EVENT");
+        CdvUtils.log("PHONEGAP AVAILABLE EVENT");
         initDisplay(modulePanel);
       }
     });
@@ -102,25 +96,26 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     DefaultTheme.Impl.get().css().ensureInjected();
     
-//  CustomTheme.Instance.get().css().ensureInjected();
+    CustomTheme.Instance.get().css().ensureInjected();
 
-    // 07/07/2014: bug fix 
-    if (OnsUtils.getAppLocalLanguageImpl() == null) {
+    /*
+    if (CdvUtils.getAppLocalLanguageImpl() == null) {
       if (Window.Location.getHref().contains("index.html")) {
-        if ("it".equals(OnsUtils.getLocaleLanguageFromLocaleInfo())) {
-//        OnsUtils.setAppLocalLanguageAndReload("it");
+        if ("it".equals(CdvUtils.getLocaleLanguageFromLocaleInfo())) {
+          CdvUtils.setAppLocalLanguageAndReload("it");
           return;
         }
       }
     }
+    */
     
-    OnsUtils.commonInitializations();
+    CdvUtils.commonInitializations();
 
     if (OsDetectionUtils.isIOs()) {
-      OnsUtils.log("setting resize handler");
-      OnsUtils.addResizeHandler(new VoidCallback() {
+      CdvUtils.log("setting resize handler");
+      CdvUtils.addResizeHandler(new VoidCallback() {
         public void handle() {
-          OnsUtils.reloadApp();
+          CdvUtils.reloadApp();
         }
       });
     }
@@ -140,16 +135,6 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     OnsNavigationDisplay display = new OnsNavigationDisplay(onsMapper);
     MainPlace defaultPlace = new MainPlace();
     MvpUtils.initOnsMvp(this, display, onsMapper, defaultPlace);
-    
-    /** COSI FUNZIONA LA PRIMA VOLTA:
-    OnsenUi.initializeOnsen(new OnsenReadyHandler() {
-      public void onReady() {
-        OnsUtils.log("ONSEN READY");
-      }
-    });
-    OnsenUi.pushPage(defaultPlace.getToken());
-    **/
-    
   }
   
   @Override
@@ -189,7 +174,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   public String getNativeProperty(String name, String defValue) {
     String value = null;
     if (value == null) {
-      value = OnsUtils.getWindowSetting(name);
+      value = CdvUtils.getWindowSetting(name);
     }
     if (value == null && nativeProperties != null) {
       value = nativeProperties.get(name);
