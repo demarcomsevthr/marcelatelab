@@ -90,10 +90,15 @@ public class OnsActivityManager extends ActivityManager {
       pageChangedHandlerInitialized = true;
       OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
         public void execute(JavaScriptObject event) {
-          JavaScriptObject enterPage = GwtUtils.getJsPropertyJso(event, "enterPage");
-          if (enterPage != null) {
-            String enterPageName = GwtUtils.getJsPropertyString(enterPage, "name");
-            CdvUtils.log("ENTER PAGE NAME = " + enterPageName);
+          JavaScriptObject enteringPage = GwtUtils.getJsPropertyJso(event, "enterPage");
+          if (enteringPage != null) {
+            String enteringPageName = GwtUtils.getJsPropertyString(enteringPage, "name");
+            CdvUtils.log("ENTER PAGE NAME = " + enteringPageName);
+            
+            if (!enteringPageName.equals(activeTemplate.getId())) {
+              
+            }
+            
           }
         }
       });
