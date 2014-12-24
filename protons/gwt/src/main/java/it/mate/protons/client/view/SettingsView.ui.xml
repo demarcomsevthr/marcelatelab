@@ -4,11 +4,15 @@
        ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
-  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="ui-wrapper-panel">
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
 
     <o:OnsPage>
     
+    
       <o:OnsToolbar>
+        <div class="left">
+          <o:OnsBackButton text="Back"/>
+        </div>
         <div class="center">Second Toolbar</div>
       </o:OnsToolbar>
   
