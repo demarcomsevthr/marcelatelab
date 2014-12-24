@@ -2,7 +2,7 @@ package it.mate.onscommons.client.plugins;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.onscommons.client.utils.JSONUtils;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,13 +41,13 @@ public class LocalNotificationsPlugin {
   
   public static void createEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
-    OnsUtils.log("creating event " + event);
+    CdvUtils.log("creating event " + event);
     if (!isInstalled()) {
       return;
     }
     createEventImpl(event.getNotificationId(), event.getStartDate().getTime(), event.getNotes(), event.getTitle(), new JSOCallback() {
       public void handleEvent(JavaScriptObject jso) {
-        OnsUtils.log("LocalNotificationsPlugin - Success");
+        CdvUtils.log("LocalNotificationsPlugin - Success");
       }
     });
   }
@@ -73,13 +73,13 @@ public class LocalNotificationsPlugin {
   
   public static void deleteEvent(CalendarEvent event) {
     JSONUtils.ensureStringify();
-    OnsUtils.log("deleting event " + event);
+    CdvUtils.log("deleting event " + event);
     if (!isInstalled()) {
       return;
     }
     deleteEventImpl(event.getNotificationId(), new JSOCallback() {
       public void handleEvent(JavaScriptObject jso) {
-        OnsUtils.log("LocalNotificationsPlugin - Success");
+        CdvUtils.log("LocalNotificationsPlugin - Success");
       }
     });
   }
@@ -93,13 +93,13 @@ public class LocalNotificationsPlugin {
 
   public static void getScheduledIds(final Delegate<List<String>> delegate) {
     JSONUtils.ensureStringify();
-    OnsUtils.log("getting scheduled ids");
+    CdvUtils.log("getting scheduled ids");
     if (!isInstalled()) {
       return;
     }
     getScheduledIdsImpl(new JSOCallback() {
       public void handleEvent(JavaScriptObject ids) {
-        OnsUtils.log("LocalNotificationsPlugin - Scheduled Ids = " + JSONUtils.stringify(ids));
+        CdvUtils.log("LocalNotificationsPlugin - Scheduled Ids = " + JSONUtils.stringify(ids));
         if (ids != null) {
           JsArrayString jsa = ids.cast();
           List<String> results = new ArrayList<String>();

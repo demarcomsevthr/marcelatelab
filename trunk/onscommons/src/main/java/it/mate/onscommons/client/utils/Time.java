@@ -116,7 +116,7 @@ public class Time {
       }
     }
     if (res == null) {
-      OnsUtils.log("ALERT: cannot create Time from string " + text);
+      CdvUtils.log("ALERT: cannot create Time from string " + text);
     }
     return res;
     
@@ -124,41 +124,41 @@ public class Time {
     /*
     Date temp = null;
     try {
-      OnsUtils.log("Time.fromString.2");
+      CdvUtils.log("Time.fromString.2");
       temp = fmt.parse(text);
     } catch (IllegalArgumentException ex) {
       // provo a fare il parsing con il formato inverso
       if (is12HFormat()) {
         try {
-          OnsUtils.log("Time.fromString.3");
+          CdvUtils.log("Time.fromString.3");
           temp = fmt24.parse(text);
         } catch (IllegalArgumentException ex1) {
           try {
-            OnsUtils.log("Time.fromString.4");
+            CdvUtils.log("Time.fromString.4");
             temp = fmt12.parse(text);
           } catch (IllegalArgumentException ex2) {
-            OnsUtils.log("Time.fromString.5");
-            OnsUtils.log("ERROR PARSING TIME FROM STRING " + text);
+            CdvUtils.log("Time.fromString.5");
+            CdvUtils.log("ERROR PARSING TIME FROM STRING " + text);
             return null;
           }
         }
       } else {
         try {
-          OnsUtils.log("Time.fromString.4");
+          CdvUtils.log("Time.fromString.4");
           temp = fmt12.parse(text);
         } catch (IllegalArgumentException ex1) {
           try {
-            OnsUtils.log("Time.fromString.4");
+            CdvUtils.log("Time.fromString.4");
             temp = fmt24.parse(text);
           } catch (IllegalArgumentException ex2) {
-            OnsUtils.log("Time.fromString.5");
-            OnsUtils.log("ERROR PARSING TIME FROM STRING " + text);
+            CdvUtils.log("Time.fromString.5");
+            CdvUtils.log("ERROR PARSING TIME FROM STRING " + text);
             return null;
           }
         }
       }
     }
-    OnsUtils.log("Time.fromString.6");
+    CdvUtils.log("Time.fromString.6");
     return new Time(temp);
     */
   }

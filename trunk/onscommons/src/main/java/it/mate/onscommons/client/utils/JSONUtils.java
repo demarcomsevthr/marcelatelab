@@ -26,6 +26,7 @@ public class JSONUtils {
   public static String stringify(JavaScriptObject jso) {
     ensureStringify();
     return stringifyImpl(jso);
+//  return stringifyAvoidCircularReferencesImpl(jso);
   }
   
   public static JavaScriptObject parse(String json) {
@@ -37,6 +38,23 @@ public class JSONUtils {
     return JSON.stringify(jso);
   }-*/;
   
+  protected static native String stringifyAvoidCircularReferencesImpl(JavaScriptObject jso) /*-{
+    var cache = [];
+    var result = JSON.stringify(jso, function(key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+          // Circular reference found, discard key
+          return;
+        }
+        // Store value in our collection
+        cache.push(value);
+      }
+      return value;
+    });
+    cache = null;
+    return result;
+  }-*/;
+
   protected static native JavaScriptObject parseImpl(String json) /*-{
     return JSON.parse(json);
   }-*/;

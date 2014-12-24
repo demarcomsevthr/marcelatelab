@@ -1,12 +1,15 @@
 package it.mate.onscommons.client.mvp;
 
 import it.mate.gwtcommons.client.places.HasToken;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsTemplate;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -21,6 +24,10 @@ public class OnsActivityManager extends ActivityManager {
   EventBus eventBus;
 
   private static OnsTemplate activeTemplate;
+  
+  private boolean pageChangingHandlerInitialized = false;
+
+  private boolean pageChangedHandlerInitialized = false;
 
   public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
@@ -48,7 +55,7 @@ public class OnsActivityManager extends ActivityManager {
 
     final Place newPlace = event.getNewPlace();
     
-    OnsUtils.log("onPlaceChange: newPlace = " + newPlace);
+    CdvUtils.log("onPlaceChange: newPlace = " + newPlace);
     
     if (newPlace instanceof HasToken) {
       HasToken hasToken = (HasToken)newPlace;
@@ -59,12 +66,41 @@ public class OnsActivityManager extends ActivityManager {
     
     OnsenUi.initializeOnsen(new OnsenReadyHandler() {
       public void onReady() {
-        OnsUtils.log("ONSEN READY");
+        CdvUtils.log("ONSEN READY");
       }
     });
+
+    /*
+    if (!pageChangingHandlerInitialized) {
+      pageChangingHandlerInitialized = true;
+      OnsenUi.onPageChanging(new Delegate<JavaScriptObject>() {
+        public void execute(JavaScriptObject event) {
+          JavaScriptObject currentPage = GwtUtils.getJsPropertyJso(event, "currentPage");
+          String changingPageName = GwtUtils.getJsPropertyString(currentPage, "name");
+          CdvUtils.log("CHANGING PAGE NAME = " + changingPageName);
+        }
+      });
+    }
+    */
     
-    OnsUtils.log("activeTemplate " + activeTemplate.getId() + " attached = " + isReallyAttached(activeTemplate.getId()));
-    OnsUtils.log("activeTemplate " + activeTemplate);
+    //TODO: controllare se l'enter page e' diversa dal tempate attivo
+    //      ==> gestire il cambio place (anche se non ce l'ho il place in mano!!!)
+    
+    if (!pageChangedHandlerInitialized) {
+      pageChangedHandlerInitialized = true;
+      OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
+        public void execute(JavaScriptObject event) {
+          JavaScriptObject enterPage = GwtUtils.getJsPropertyJso(event, "enterPage");
+          if (enterPage != null) {
+            String enterPageName = GwtUtils.getJsPropertyString(enterPage, "name");
+            CdvUtils.log("ENTER PAGE NAME = " + enterPageName);
+          }
+        }
+      });
+    }
+    
+    CdvUtils.log("activeTemplate " + activeTemplate.getId() + " attached = " + isReallyAttached(activeTemplate.getId()));
+    CdvUtils.log("activeTemplate " + activeTemplate);
     
     if (!isReallyAttached(activeTemplate.getId())) {
       try {
@@ -75,7 +111,7 @@ public class OnsActivityManager extends ActivityManager {
 
     if (isReallyAttached(activeTemplate.getId())) {
       Element templateElem = activeTemplate.getElement();
-      OnsUtils.log("compiling element " + templateElem);
+      CdvUtils.log("compiling element " + templateElem);
       if (templateElem != null) {
         OnsenUi.compile(templateElem);
       }

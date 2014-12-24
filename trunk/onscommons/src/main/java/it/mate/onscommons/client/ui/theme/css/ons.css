@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, mgwt*;
+@external ons*, gwt*, ons*;
 
 @url calendarImageUrl calendarImage;
 
@@ -9,19 +9,6 @@
   border: none;
   padding: 0;
   background: white;
-}
-
-.mgwt-TextBox .mgwt-InputBox-box, .mgwt-PasswordTextBox .mgwt-InputBox-box, .mgwt-TextArea .mgwt-InputBox-box {
-  -webkit-user-modify: initial;
-}
-
-.mgwt-TextBox .mgwt-InputBox-box {
-  margin: -10px -13px;
-}
-
-.mgwt-TextArea .mgwt-InputBox-box {
-  color: black;
-  margin: -10px -13px;
 }
 
 .ons-PopupPanelGlass {
@@ -442,19 +429,6 @@
 
 .ons-BasicDatepicker-spinControl {
   padding: 0.5em;
-}
-
-.ons-BasicDatepicker .mgwt-TextBox .mgwt-InputBox-box {
-  width: 3em;
-  background-color: white;
-  color: black;
-  margin: 0.2em;
-  text-align: center;
-  height: 1.5em;
-}
-
-.ons-BasicDatepicker .mgwt-TextBox .mgwt-InputBox-box:focus {
-  background-color: white;
 }
 
 .ons-BasicDatepicker-header {

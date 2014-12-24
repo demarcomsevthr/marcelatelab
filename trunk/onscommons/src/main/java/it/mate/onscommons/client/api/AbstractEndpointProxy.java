@@ -3,7 +3,7 @@ package it.mate.onscommons.client.api;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.utils.JSONUtils;
-import it.mate.onscommons.client.utils.OnsUtils;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
@@ -65,7 +65,7 @@ public abstract class AbstractEndpointProxy {
     this.initDelegate = initDelegate;
     this.useAuthentication = useAuthentication;
     this.authDelegate = authDelegate;
-    OnsUtils.log("initializing endpoint proxy " + apiName + "...");
+    CdvUtils.log("initializing endpoint proxy " + apiName + "...");
     JSONUtils.ensureStringify();
     initClientApi();
   }
@@ -109,15 +109,15 @@ public abstract class AbstractEndpointProxy {
   }-*/;
 
   protected void initEndpointApi() {
-    OnsUtils.log("calling initEndpointImpl");
-    OnsUtils.log("apiRoot = " + apiRoot);
-    OnsUtils.log("apiName = " + apiName);
-    OnsUtils.log("apiKey = " + getApiKey());
-    OnsUtils.log("proxyBuildNm = " + PROXY_BUILD_NUMBER);
+    CdvUtils.log("calling initEndpointImpl");
+    CdvUtils.log("apiRoot = " + apiRoot);
+    CdvUtils.log("apiName = " + apiName);
+    CdvUtils.log("apiKey = " + getApiKey());
+    CdvUtils.log("proxyBuildNm = " + PROXY_BUILD_NUMBER);
     initEndpointApiImpl(apiRoot, apiName, getApiKey(), useAuthentication, new Callback() {
       public void execute(JavaScriptObject proxyRef) {
         if (proxyRef == null) {
-          OnsUtils.log("initEndpointApi.callback: ALERT: proxyRef is null!");
+          CdvUtils.log("initEndpointApi.callback: ALERT: proxyRef is null!");
         }
         initialized = true;
         onInit();
@@ -137,10 +137,10 @@ public abstract class AbstractEndpointProxy {
         $wnd.glbDebugHook($wnd.gapi.client[apiName]);
         var msg = "initEndpointApiImpl: gapi.client = ";
         msg += @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client);
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)(msg);
         msg = "initEndpointApiImpl: gapi.client["+apiName+"] = ";
         msg += @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)(msg);
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)(msg);
         pCallback.@it.mate.onscommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)($wnd.gapi.client[apiName]);
       }
     }
@@ -164,20 +164,20 @@ public abstract class AbstractEndpointProxy {
   
   private void signIn(final boolean immediate) {
     
-    OnsUtils.log("called signIn " + immediate);
+    CdvUtils.log("called signIn " + immediate);
     
     final Callback failure = new Callback() {
       public void execute(JavaScriptObject jso) {
-        OnsUtils.log("authorization failure");
+        CdvUtils.log("authorization failure");
       }
     };
     
     if (Window.Navigator.getUserAgent().toLowerCase().contains("windows nt")) {
       
-      OnsUtils.log("calling signInDesktopImpl");
-      OnsUtils.log("clientId " + getDesktopClientId());
-      OnsUtils.log("scopes " + AUTH_SCOPES);
-      OnsUtils.log("immediate " + immediate);
+      CdvUtils.log("calling signInDesktopImpl");
+      CdvUtils.log("clientId " + getDesktopClientId());
+      CdvUtils.log("scopes " + AUTH_SCOPES);
+      CdvUtils.log("immediate " + immediate);
       signInDesktopImpl(immediate, getDesktopClientId(), null, AUTH_SCOPES, new Callback() {
         public void execute(JavaScriptObject jso) {
           userAuthedLightImpl(new Callback() {
@@ -193,16 +193,16 @@ public abstract class AbstractEndpointProxy {
       
     } else {
       
-      OnsUtils.log("calling signInMobileImpl");
-      OnsUtils.log("clientId " + getMobileClientId());
-      OnsUtils.log("scopes " + AUTH_SCOPES);
-      OnsUtils.log("immediate " + immediate);
+      CdvUtils.log("calling signInMobileImpl");
+      CdvUtils.log("clientId " + getMobileClientId());
+      CdvUtils.log("scopes " + AUTH_SCOPES);
+      CdvUtils.log("immediate " + immediate);
       
       final Delegate<Token> validTokenDelegate = new Delegate<Token>() {
         public void execute(Token token) {
-          OnsUtils.log("setting gapi auth token");
+          CdvUtils.log("setting gapi auth token");
           setTokenInApiImpl(token);
-          OnsUtils.log("calling user authed");
+          CdvUtils.log("calling user authed");
           userAuthedLightImpl(new Callback() {
             public void execute(JavaScriptObject jso) {
               signedIn = true;
@@ -224,7 +224,7 @@ public abstract class AbstractEndpointProxy {
         signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
           public void execute(JavaScriptObject jso) {
             Token token = jso.cast();
-            OnsUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+            CdvUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
             validTokenDelegate.execute(token);
           }
         }, failure);
@@ -235,10 +235,10 @@ public abstract class AbstractEndpointProxy {
           // ON SUCCESS
           public void execute(JavaScriptObject jso) {
             Token token = null;
-            OnsUtils.log("FOUND VALID TOKEN IN LOCAL STORAGE");
+            CdvUtils.log("FOUND VALID TOKEN IN LOCAL STORAGE");
             token = jso.cast();
-            OnsUtils.log("found token '" + JSONUtils.stringify(token) + "'");
-            OnsUtils.log("calling valid token delegate");
+            CdvUtils.log("found token '" + JSONUtils.stringify(token) + "'");
+            CdvUtils.log("calling valid token delegate");
             validTokenDelegate.execute(token);
           }
         }, new Callback() {
@@ -247,12 +247,12 @@ public abstract class AbstractEndpointProxy {
             signInMobileImpl(immediate, getMobileClientId(), getMobileClientSecret(), AUTH_SCOPES, new Callback() {
               public void execute(JavaScriptObject data) {
                 Token token = data.cast();
-                OnsUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
+                CdvUtils.log("authorization success with token '" + JSONUtils.stringify(token) + "'");
                 
-                OnsUtils.log("setting token in local storage");
+                CdvUtils.log("setting token in local storage");
                 setTokenInStorageImpl(data);
                 
-                OnsUtils.log("calling valid token delegate");
+                CdvUtils.log("calling valid token delegate");
                 validTokenDelegate.execute(token);
 
               }
@@ -278,7 +278,7 @@ public abstract class AbstractEndpointProxy {
    */
   private native void getTokenFromStorageImpl(String clientId, String clientSecret, Callback success, Callback failure) /*-{
     if (localStorage.refresh_token) {
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('refreshing token');
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('refreshing token');
       $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
         refresh_token: localStorage.refresh_token,
         client_id: clientId,
@@ -332,7 +332,7 @@ public abstract class AbstractEndpointProxy {
     var loadstartHandler = function(e) {
         $wnd.glbDebugHook();
         var url = e.originalEvent.url;
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('received loadstart event with ' + url);
         
         var code = /\?code=(.+)$/.exec(url);
         var error = /\?error=(.+)$/.exec(url);
@@ -344,7 +344,7 @@ public abstract class AbstractEndpointProxy {
   
         if (code) {
             code = @it.mate.onscommons.client.api.AbstractEndpointProxy::purgeBlanks(Ljava/lang/String;)(code[1]);
-            @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("received auth code '" + code + "'");
+            @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("received auth code '" + code + "'");
             //Exchange the authorization code for an access token
             $wnd.$.post('https://accounts.google.com/o/oauth2/token', {
                 code: code,
@@ -363,7 +363,7 @@ public abstract class AbstractEndpointProxy {
         
     };
   
-    @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('setting loadstart handler');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('setting loadstart handler');
     $wnd.$(authWindow).on('loadstart', loadstartHandler);
     
   }-*/;
@@ -377,9 +377,9 @@ public abstract class AbstractEndpointProxy {
       if (!resp.code) {
         callback.@it.mate.onscommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
       } else {
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("received userinfo error code '" + resp.code + "'");
         var msg = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-        @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
+        @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)("full resp is '" + msg + "'");
       }
     });
   }-*/;
@@ -406,7 +406,7 @@ public abstract class AbstractEndpointProxy {
   }
   
   private void signOut() {
-    OnsUtils.log("AbstractEndpointProxy: signing out...");
+    CdvUtils.log("AbstractEndpointProxy: signing out...");
     signOutImpl();
     signedIn = false;
     if (authDelegate != null) {
@@ -422,7 +422,7 @@ public abstract class AbstractEndpointProxy {
       success.@it.mate.onscommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
     }).fail(function(resp) {
       var msg = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(resp);
-      @it.mate.onscommons.client.utils.OnsUtils::log(Ljava/lang/String;)('revoking token failure - ' + msg);
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('revoking token failure - ' + msg);
       // chiamo ugualmente la success per andare avanti
       success.@it.mate.onscommons.client.api.AbstractEndpointProxy.Callback::execute(Lcom/google/gwt/core/client/JavaScriptObject;)();
     });
@@ -481,7 +481,7 @@ public abstract class AbstractEndpointProxy {
     if ((pos = code.indexOf(' ')) > -1) {
       code = code.substring(pos);
     }
-    OnsUtils.log("purged code = '" + code + "'");
+    CdvUtils.log("purged code = '" + code + "'");
     return code;
   }
   
