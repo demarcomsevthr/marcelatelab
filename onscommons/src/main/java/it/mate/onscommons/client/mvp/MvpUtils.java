@@ -15,16 +15,15 @@ public class MvpUtils {
 
   
   public static void initOnsMvp (BaseClientFactory<? extends CommonGinjector> clientFactory, 
-      OnsNavigationDisplay display, OnsActivityMapper activityMapper, Place defaultPlace) {
+      OnsNavigationDisplay display, OnsActivityMapper activityMapper, OnsActivityManager activityManager, Place defaultPlace) {
     
     CdvUtils.log("Initializing MVP with in ONS history manager (defaultPlace="+defaultPlace.toString()+")");
     
     CommonGinjector ginjector = clientFactory.getGinjector();
     
-//  EventBus eventBus = ginjector.getEventBus();
     EventBus eventBus = ginjector.getBinderyEventBus();
     
-    OnsActivityManager activityManager = new OnsActivityManager(activityMapper, eventBus);
+//  OnsActivityManager activityManager = new OnsActivityManager(activityMapper, eventBus);
     
     activityManager.setOnsDisplay(display, (HasToken)defaultPlace);
     
