@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class OnsActivityManager extends ActivityManager {
+public abstract class OnsActivityManager extends ActivityManager {
   
   OnsNavigationDisplay onsDisplay;
   
@@ -33,6 +33,8 @@ public class OnsActivityManager extends ActivityManager {
     super(mapper, eventBus);
     this.eventBus = eventBus;
   }
+  
+  public abstract Place getPlaceFromTepmplateId(String id);
   
   public void setOnsDisplay(OnsNavigationDisplay onsDisplay, HasToken initialPlace) {
     this.onsDisplay = onsDisplay;
@@ -97,6 +99,12 @@ public class OnsActivityManager extends ActivityManager {
             
             if (!enteringPageName.equals(activeTemplate.getId())) {
               
+              Place newPlace = getPlaceFromTepmplateId(enteringPageName);
+              
+              CdvUtils.log("FIRING NEW PLACE CHANGE EVENT WITH " + newPlace);
+              
+              eventBus.fireEvent(new PlaceChangeEvent(newPlace));
+              
             }
             
           }
@@ -124,7 +132,20 @@ public class OnsActivityManager extends ActivityManager {
     
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
-    OnsenUi.pushPage(newToken);
+    if (newToken != null) {
+      boolean pagePushed = false;
+      JavaScriptObject currentPage = OnsenUi.getCurrentPage();
+      if (currentPage != null) {
+        String currentPageName = GwtUtils.getJsPropertyString(currentPage, "name");
+        if (!newToken.equals(currentPageName)) {
+          OnsenUi.pushPage(newToken);
+          pagePushed = true;
+        }
+      }
+      if (!pagePushed) {
+        OnsenUi.resetToPage(newToken);
+      }
+    }
     
   }
   

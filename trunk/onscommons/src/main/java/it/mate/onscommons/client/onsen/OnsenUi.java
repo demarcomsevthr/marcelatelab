@@ -97,5 +97,22 @@ public class OnsenUi {
     $wnd.ons.navigator.on('postpush', jsCallback);    
     $wnd.ons.navigator.on('postpop', jsCallback);    
   }-*/;
+  
+  public static JavaScriptObject getCurrentPage() {
+    return getCurrentPageImpl();
+  }
+
+  protected static native JavaScriptObject getCurrentPageImpl() /*-{
+    return $wnd.ons.navigator.getCurrentPage();    
+  }-*/;
+
+  public static void resetToPage(String pageId) {
+    JsOnsOptions options = JsOnsOptions.create();
+    resetToPageImpl(pageId, options);
+  }
+
+  protected static native void resetToPageImpl(String pageId, JsOnsOptions options) /*-{
+    $wnd.ons.navigator.resetToPage(pageId, options);    
+  }-*/;
 
 }
