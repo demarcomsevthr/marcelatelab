@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.mvp.MvpUtils;
+import it.mate.onscommons.client.mvp.OnsActivityManager;
 import it.mate.onscommons.client.mvp.OnsActivityMapper;
 import it.mate.onscommons.client.mvp.OnsNavigationDisplay;
 import it.mate.onscommons.client.place.PlaceControllerWithHistory;
@@ -20,11 +21,13 @@ import it.mate.protons.shared.service.RemoteFacadeAsync;
 import java.util.Map;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.web.bindery.event.shared.EventBus;
 import com.googlecode.gwtphonegap.client.PhoneGap;
 import com.googlecode.gwtphonegap.client.PhoneGapAvailableEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapAvailableHandler;
@@ -133,8 +136,14 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     OnsActivityMapper onsMapper = (OnsActivityMapper)activityMapper;
     OnsNavigationDisplay display = new OnsNavigationDisplay(onsMapper);
+    EventBus eventBus = ginjector.getBinderyEventBus();
+    OnsActivityManager activityManager = new OnsActivityManager(onsMapper, eventBus) {
+      public Place getPlaceFromTepmplateId(String id) {
+        return new MainPlace(id);
+      }
+    };
     MainPlace defaultPlace = new MainPlace();
-    MvpUtils.initOnsMvp(this, display, onsMapper, defaultPlace);
+    MvpUtils.initOnsMvp(this, display, onsMapper, activityManager, defaultPlace);
   }
   
   @Override
