@@ -6,7 +6,7 @@ import com.google.gwt.place.shared.PlaceController;
 
 public interface CommonGinjector extends Ginjector {
 
-  @Deprecated
+//@Deprecated
 //public com.google.gwt.event.shared.EventBus getEventBus();
   
   public PlaceController getPlaceController();
