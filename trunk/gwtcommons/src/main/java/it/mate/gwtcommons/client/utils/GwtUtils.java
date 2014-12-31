@@ -376,15 +376,23 @@ public class GwtUtils {
   }
   
   public static void onAvailable (final String id, final Delegate<Element> delegate) {
+    onAvailable(id, 10000, delegate);
+  }
+  
+  public static void onAvailable (final String id, final long maxWait, final Delegate<Element> delegate) {
+    final long t0 = System.currentTimeMillis();
     new Timer() {
       public void run() {
+        long t1 = System.currentTimeMillis();
         Element elem = DOM.getElementById(id);
         if (elem != null) {
           this.cancel();
           delegate.execute(elem);
+        } else if (t1 - t0 > maxWait) {
+          this.cancel();
         }
       }
-    }.scheduleRepeating(10);
+    }.scheduleRepeating(100);
   }
   
   protected abstract static class MobileTimerAnimationSchedulerImpl extends Timer {
