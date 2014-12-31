@@ -12,18 +12,19 @@ import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.protons.client.factories.AppClientFactory;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
+import it.mate.protons.client.view.SubSettingsView;
 import it.mate.protons.shared.model.Account;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
-  HomeView.Presenter, SettingsView.Presenter
+  HomeView.Presenter, SettingsView.Presenter, SearchView.Presenter, SubSettingsView.Presenter
   {
   
   private MainPlace place;
@@ -64,6 +65,20 @@ public class MainActivity extends OnsAbstractActivity implements
       panel.setWidget(view.asWidget());
     }
     
+    if (place.getToken().equals(MainPlace.SUB_SETTINGS)) {
+      SubSettingsView view = AppClientFactory.IMPL.getGinjector().getSubSettingsView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
+    if (place.getToken().equals(MainPlace.SEARCH)) {
+      SearchView view = AppClientFactory.IMPL.getGinjector().getSearchView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
     retrieveModel();
     
   }
@@ -73,41 +88,22 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private void retrieveModel() {
     if (place.getToken().equals(MainPlace.HOME)) {
-      homeCounter++;
-      view.setModel("Counter "+homeCounter, "counter");
+      incHomeCounter();
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
-      settingsCounter++;
-      view.setModel("Counter "+settingsCounter, "counter");
+      incSettingsCounter();
     }
   }
   
-  private void processFailure(String message, Throwable caught) {
-    String popupTitle = "Alert";
-    String popupMsg = "Failure";
-    String logMsg = null;
-    if (message != null) {
-      popupMsg = message;
-    } else if (caught != null) {
-      caught.printStackTrace();
-      logMsg = caught.getClass().getName()+" - "+caught.getMessage();
-      if (caught instanceof InvocationException) {
-//      popupMsg = "Maybe data connection is not active";
-        popupMsg = null;
-      } else {
-        if (caught.getMessage() != null) {
-          popupMsg = caught.getMessage();
-        } else {
-          popupMsg = caught.getClass().getName();
-        }
-      }
-      popupTitle = "Error";
-    }
-    if (logMsg != null)
-      CdvUtils.log(logMsg);
-    if (popupMsg != null) {
-//    PhgDialogUtils.showMessageDialog(popupMsg, popupTitle, PhgDialogUtils.BUTTONS_OK);
-    }
+  public void incHomeCounter() {
+    homeCounter++;
+    view.setModel("Counter "+homeCounter, "counter");
+  }
+  
+  public void incSettingsCounter() {
+    settingsCounter++;
+    CdvUtils.log("settings counter = " + settingsCounter);
+    view.setModel("Counter "+settingsCounter, "counter");
   }
   
   @Override
@@ -117,14 +113,6 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    /*
-    if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
-      PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
-      placeController.goBack(new MainPlace());
-      return;
-    }
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
-    */
     OnsenUi.popPage();
   }
 
@@ -139,9 +127,15 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   @Override
-  public void goToApplicationListView() {
-
+  public void goToSubSettingsView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.SUB_SETTINGS));
   }
+
+  @Override
+  public void goToSearchView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.SEARCH));
+  }
+
 
   private void ensureDevInfoId() {
     String devInfoId = getDevInfoIdFromLocalStorage();
@@ -212,18 +206,6 @@ public class MainActivity extends OnsAbstractActivity implements
 
   protected void setDevInfoIdInLocalStorage(String devInfoId) {
     CdvUtils.setLocalStorageItem("devInfoId", devInfoId);
-  }
-
-  @Override
-  public void doTestFile() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  @Override
-  public void goToTestView() {
-    // TODO Auto-generated method stub
-    
   }
 
 }
