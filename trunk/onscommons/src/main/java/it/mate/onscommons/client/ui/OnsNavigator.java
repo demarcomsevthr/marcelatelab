@@ -14,7 +14,6 @@ public class OnsNavigator extends ComplexPanel implements HasWidgets {
   
   protected OnsNavigator(Element elem) {
     setElement(elem);
-//  addStyleName("ons-Navigator");
   }
   
   @Override

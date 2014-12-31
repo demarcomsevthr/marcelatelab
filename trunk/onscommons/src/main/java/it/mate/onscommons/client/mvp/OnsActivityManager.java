@@ -10,11 +10,17 @@ import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public abstract class OnsActivityManager extends ActivityManager {
@@ -23,12 +29,10 @@ public abstract class OnsActivityManager extends ActivityManager {
   
   EventBus eventBus;
 
-  private static OnsTemplate activeTemplate;
+  private static Panel activePanel;
   
-  private boolean pageChangingHandlerInitialized = false;
-
-  private boolean pageChangedHandlerInitialized = false;
-
+  private static String activePanelId = "";
+  
   public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
     this.eventBus = eventBus;
@@ -38,18 +42,20 @@ public abstract class OnsActivityManager extends ActivityManager {
   
   public void setOnsDisplay(OnsNavigationDisplay onsDisplay, HasToken initialPlace) {
     this.onsDisplay = onsDisplay;
-    setActiveTemplate(initialPlace);
     super.setDisplay(new SimplePanel());
   }
   
-  private void setActiveTemplate(HasToken place) {
-    OnsTemplate template = onsDisplay.getTemplateByPlace(place);
-    template.clear();
-    activeTemplate = template;
+  public static AcceptsOneWidget getActivePanel() {
+    return (AcceptsOneWidget)activePanel;
   }
   
-  public static OnsTemplate getActiveTemplate() {
-    return activeTemplate;
+  private static void setActivePanel(Panel panel, String id) {
+    activePanel = panel;
+    activePanelId = id;
+  }
+  
+  public static String getActivePanelId() {
+    return activePanelId;
   }
   
   @Override
@@ -57,53 +63,112 @@ public abstract class OnsActivityManager extends ActivityManager {
 
     final Place newPlace = event.getNewPlace();
     
-    CdvUtils.log("onPlaceChange: newPlace = " + newPlace);
+    CdvUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     
-    if (newPlace instanceof HasToken) {
-      HasToken hasToken = (HasToken)newPlace;
-      setActiveTemplate(hasToken);
+    boolean preventPush = false;
+    
+    if (MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER) {
+      preventPush = setActivePanelFromTemplate(newPlace);
+    } else {
+      setActivePanelFromCurrentPage(newPlace);
+      preventPush = true;
     }
     
+    CdvUtils.log("STARTING ACTIVITY FOR " + newPlace);
     super.onPlaceChange(event);
     
-    OnsenUi.initializeOnsen(new OnsenReadyHandler() {
-      public void onReady() {
-        CdvUtils.log("ONSEN READY");
+    if (MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER && !preventPush) {
+      
+      boolean insertPageFirst = false;
+      if (event instanceof OnsPlaceChangeEvent) {
+        OnsPlaceChangeEvent onsEvent = (OnsPlaceChangeEvent)event;
+        insertPageFirst = onsEvent.isInsertPageFirst();
       }
-    });
+      
+      pushPageAfterPlaceChange(newPlace, insertPageFirst);
+    } else {
+      Element onsPageElement = OnsenUi.getCurrentPageElement();
+      OnsenUi.compile(onsPageElement);
+    }
+    
+    setPagePopingHandler();
+    
+  }
+  
+  private boolean setActivePanelFromTemplate(Place newPlace) {
+    boolean preventPush = false;
+    HasToken hasToken = (HasToken)newPlace;
+    String newToken = hasToken.getToken();
+    String currentPageName = OnsenUi.getCurrentPageName();
+    if (newToken.equals(currentPageName)) {
+      setActivePanelFromCurrentPage(newPlace);
+      preventPush = true;
+    } else {
+      OnsTemplate template = OnsNavigationDisplay.getTemplateByPlace(hasToken);
+      template.clear();
+      setActivePanel(template, newToken);
+    }
+    return preventPush;
+  }
+  
+  private void setActivePanelFromCurrentPage(Place newPlace) {
+    HasToken hasToken = (HasToken)newPlace;
+    String newToken = hasToken.getToken();
+    Element pageElement = OnsenUi.getCurrentPageElement();
+    Element innerElem = OnsenUi.getInnerPageElement(pageElement);
+    ElementWrapperPanel wrapper = new ElementWrapperPanel(innerElem);
+    String currentPageName = OnsenUi.getCurrentPageName();
+    CdvUtils.log("WRAPPING CURRENT PAGE " + currentPageName);
+    setActivePanel(wrapper, newToken);
+  }
+  
+  public static class ElementWrapperPanel extends ComplexPanel implements AcceptsOneWidget {
+    protected ElementWrapperPanel(Element elem) {
+      setElement(elem);
+    }
+    @Override
+    public void setWidget(IsWidget w) {
+      add(w);
+    }
+    @Override
+    public void add(Widget child) {
+      add(child, getElement());
+    }
+  }
+  
+  private boolean pageChangedHandlerInitialized = false;
 
-    /*
-    if (!pageChangingHandlerInitialized) {
-      pageChangingHandlerInitialized = true;
-      OnsenUi.onPageChanging(new Delegate<JavaScriptObject>() {
-        public void execute(JavaScriptObject event) {
-          JavaScriptObject currentPage = GwtUtils.getJsPropertyJso(event, "currentPage");
-          String changingPageName = GwtUtils.getJsPropertyString(currentPage, "name");
-          CdvUtils.log("CHANGING PAGE NAME = " + changingPageName);
+  private void pushPageAfterPlaceChange(Place newPlace, boolean insertPageFirst) {
+    
+    if (!OnsenUi.isInitialized()) {
+      OnsenUi.initializeOnsen(new OnsenReadyHandler() {
+        public void onReady() {
+          CdvUtils.log("ONSEN READY");
         }
       });
     }
-    */
-    
-    //TODO: controllare se l'enter page e' diversa dal tempate attivo
-    //      ==> gestire il cambio place (anche se non ce l'ho il place in mano!!!)
-    
+
     if (!pageChangedHandlerInitialized) {
       pageChangedHandlerInitialized = true;
       OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
         public void execute(JavaScriptObject event) {
           JavaScriptObject enteringPage = GwtUtils.getJsPropertyJso(event, "enterPage");
           if (enteringPage != null) {
-            String enteringPageName = GwtUtils.getJsPropertyString(enteringPage, "name");
-            CdvUtils.log("ENTER PAGE NAME = " + enteringPageName);
             
-            if (!enteringPageName.equals(activeTemplate.getId())) {
+            OnsenUi.destroyPage("");
+            
+            String enteringPageName = GwtUtils.getJsPropertyString(enteringPage, "name");
+            CdvUtils.log("AFTER PUSH PAGE NAME = " + enteringPageName);
+            
+            OnsenUi.logNavigator("NAVIGATOR PAGE");
+            
+            if (!enteringPageName.equals(activePanelId)) {
               
               Place newPlace = getPlaceFromTepmplateId(enteringPageName);
               
               CdvUtils.log("FIRING NEW PLACE CHANGE EVENT WITH " + newPlace);
               
-              eventBus.fireEvent(new PlaceChangeEvent(newPlace));
+//            eventBus.fireEvent(new PlaceChangeEvent(newPlace));
               
             }
             
@@ -112,23 +177,7 @@ public abstract class OnsActivityManager extends ActivityManager {
       });
     }
     
-    CdvUtils.log("activeTemplate " + activeTemplate.getId() + " attached = " + isReallyAttached(activeTemplate.getId()));
-    CdvUtils.log("activeTemplate " + activeTemplate);
-    
-    if (!isReallyAttached(activeTemplate.getId())) {
-      try {
-        RootPanel.get().remove(activeTemplate);
-      } catch (Exception ex) { }
-      RootPanel.get().add(activeTemplate);
-    }
-
-    if (isReallyAttached(activeTemplate.getId())) {
-      Element templateElem = activeTemplate.getElement();
-      CdvUtils.log("compiling element " + templateElem);
-      if (templateElem != null) {
-        OnsenUi.compile(templateElem);
-      }
-    }
+    compileActivePanel();
     
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
@@ -138,9 +187,32 @@ public abstract class OnsActivityManager extends ActivityManager {
       if (currentPage != null) {
         String currentPageName = GwtUtils.getJsPropertyString(currentPage, "name");
         if (!newToken.equals(currentPageName)) {
-          OnsenUi.pushPage(newToken);
+          if (insertPageFirst) {
+            
+            OnsenUi.logNavigator("BEFORE INSERT PAGE");
+            
+            JsArray<JavaScriptObject> pages = OnsenUi.getPages();
+            int index = pages.length() - 1;
+            OnsenUi.insertPage(index, newToken);
+//          OnsenUi.insertPage(-1, newToken);
+            
+            GwtUtils.deferredExecution(new Delegate<Void>() {
+              public void execute(Void element) {
+                allowPagePoping = true;
+                OnsenUi.popPage();
+              }
+            });
+
+            CdvUtils.log("CURRENT PAGE NAME IS " + OnsenUi.getCurrentPageName());
+            
+          } else {
+            OnsenUi.pushPage(newToken);
+          }
           pagePushed = true;
         }
+      } else {
+        OnsenUi.pushPage(newToken);
+        pagePushed = true;
       }
       if (!pagePushed) {
         OnsenUi.resetToPage(newToken);
@@ -149,10 +221,80 @@ public abstract class OnsActivityManager extends ActivityManager {
     
   }
   
-  protected static native boolean isReallyAttached(String elemId) /*-{
-    return $doc.getElementById(elemId) != null;
-  }-*/;
+  private void compileActivePanel() {
+    if (!CdvUtils.isReallyAttached(activePanelId)) {
+      try {
+        RootPanel.get().remove(activePanel);
+      } catch (Exception ex) { }
+      Element templateElem = activePanel.getElement();
+      CdvUtils.log("ADDING PANEL TO DOCUMENT - " + templateElem);
+      RootPanel.get().add(activePanel);
+    }
+    if (CdvUtils.isReallyAttached(activePanelId)) {
+      Element templateElem = activePanel.getElement();
+      if (templateElem != null) {
+        OnsenUi.compile(templateElem);
+      }
+    }
+  }
   
+  private boolean allowPagePoping = false;
   
+  private boolean pagePopingHandlerInitialized = false;
   
+  private void setPagePopingHandler() {
+    if (!pagePopingHandlerInitialized) {
+      pagePopingHandlerInitialized = true;
+      OnsenUi.onPagePoping(new Delegate<JavaScriptObject>() {
+        public void execute(JavaScriptObject event) {
+          
+//        OnsenUi.logNavigator("BEFORE PAGE POP");
+          
+          if (allowPagePoping) {
+            allowPagePoping = false;
+            CdvUtils.log("CONTINUE POPING");
+            return;
+          }
+          
+          JsArray<JavaScriptObject> pages = OnsenUi.getPages();
+          
+          String prevPageName = "home";
+          if (pages.length() > 1) {
+            int lastPageIt = pages.length() - 2;
+            JavaScriptObject page = pages.get(lastPageIt);
+            prevPageName = GwtUtils.getJsPropertyString(page, "name");
+          }
+          CdvUtils.log("PREV PAGE NAME = " + prevPageName);
+          
+          OnsenUi.destroyPage("");
+          OnsenUi.destroyPage(prevPageName);
+          
+          CdvUtils.log("CANCELING POP EVENT");
+          OnsenUi.cancelEvent(event);
+          
+          Place prevPlace = getPlaceFromTepmplateId(prevPageName);
+          CdvUtils.log("GOING TO PLACE " + prevPlace);
+          eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, true));
+          
+        }
+      });
+    }
+  }
+  
+  public static class OnsPlaceChangeEvent extends PlaceChangeEvent {
+    
+    private boolean insertPageFirst = false;
+
+    public OnsPlaceChangeEvent(Place newPlace, boolean insertPageFirst) {
+      super(newPlace);
+      this.insertPageFirst = insertPageFirst;
+    }
+    
+    public boolean isInsertPageFirst() {
+      return insertPageFirst;
+    }
+    
+  }
+  
+
 }

@@ -14,7 +14,7 @@ public class OnsNavigationDisplay extends Composite {
   
   OnsActivityMapper mapper;
   
-  List<OnsTemplate> templates;
+  private static List<OnsTemplate> templates;
   
   public OnsNavigationDisplay(OnsActivityMapper mapper) {
     this.mapper = mapper;
@@ -45,7 +45,7 @@ public class OnsNavigationDisplay extends Composite {
     }
   }
   
-  public OnsTemplate getTemplateByPlace(HasToken place) {
+  public static OnsTemplate getTemplateByPlace(HasToken place) {
     String token = place.getToken();
     for (OnsTemplate template : templates) {
       if (template.getToken().equals(token)) {

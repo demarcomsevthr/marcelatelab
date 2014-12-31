@@ -12,6 +12,8 @@ public class OnsTemplate extends ComplexPanel implements HasWidgets, AcceptsOneW
 
   private String token;
   
+  private boolean compiled = false;
+  
   public OnsTemplate(String token) {
     this(DOM.createElement("ons-template"), token);
     this.token = token;
@@ -39,6 +41,14 @@ public class OnsTemplate extends ComplexPanel implements HasWidgets, AcceptsOneW
   @Override
   public void setWidget(IsWidget w) {
     add(w);
+  }
+  
+  public boolean isCompiled() {
+    return compiled;
+  }
+  
+  public void setCompiled(boolean compiled) {
+    this.compiled = compiled;
   }
 
 }
