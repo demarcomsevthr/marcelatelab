@@ -11,9 +11,6 @@ public class OnsBackButton extends Widget {
   }
 
   protected OnsBackButton(Element element) {
-    if (element.getId() == null || "".equals(element.getId())) {
-      element.setId(DOM.createUniqueId());
-    }
     element.addClassName("ons-back-button");
     setElement(element);
   }

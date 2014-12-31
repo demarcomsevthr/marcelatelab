@@ -3,7 +3,6 @@ package it.mate.onscommons.client.mvp;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
 import it.mate.gwtcommons.client.places.HasToken;
-import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -12,18 +11,19 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MvpUtils {
-
+  
+  /**
+   * con TRUE le transizioni hanno una resa visiva migliore, ma dopo il push l'activity perde il reference alla view
+   * con FALSE l'activity mantiene il corretto reference alla view anche dopo il push, ma le transizioni hanno una resa visiva peggiore
+   */
+  public static boolean PUSH_PAGE_IN_ACTIVITY_MANAGER = true;
   
   public static void initOnsMvp (BaseClientFactory<? extends CommonGinjector> clientFactory, 
       OnsNavigationDisplay display, OnsActivityMapper activityMapper, OnsActivityManager activityManager, Place defaultPlace) {
     
-    CdvUtils.log("Initializing MVP with in ONS history manager (defaultPlace="+defaultPlace.toString()+")");
-    
     CommonGinjector ginjector = clientFactory.getGinjector();
     
     EventBus eventBus = ginjector.getBinderyEventBus();
-    
-//  OnsActivityManager activityManager = new OnsActivityManager(activityMapper, eventBus);
     
     activityManager.setOnsDisplay(display, (HasToken)defaultPlace);
     
@@ -31,7 +31,7 @@ public class MvpUtils {
     
     PlaceController placeController = ginjector.getPlaceController();
     
-    PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+    PlaceHistoryHandler historyHandler = new OnsPlaceHistoryHandler(historyMapper, defaultPlace);
     
     historyHandler.register(placeController, eventBus, defaultPlace);
     
