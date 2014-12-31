@@ -11,3 +11,9 @@
   width: 100%;
   text-align: center;
 }
+
+.app-toolbar-search-box {
+  margin-top: 0.2em;
+  height: 2.4em;
+  width: 150%;
+}

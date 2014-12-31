@@ -3,33 +3,28 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
-import it.mate.protons.client.constants.AppProperties;
-import it.mate.protons.client.view.HomeView.Presenter;
+import it.mate.protons.client.view.SubSettingsView.Presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HomeView extends AbstractBaseView<Presenter> {
+public class SubSettingsView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void goToSettingsView();
-    public void goToSearchView();
+
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, SubSettingsView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField Label homeLbl;
-  @UiField Label counterLbl;
   
-  public HomeView() {
+  public SubSettingsView() {
     initUI();
   }
 
@@ -40,24 +35,16 @@ public class HomeView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
   }
   
   @Override
   public void setModel(Object model, String tag) {
-    if (model instanceof String) {
-      counterLbl.setText((String)model);
-    }
+
   }
 
-  @UiHandler("btnSettings")
+  @UiHandler("btnPop")
   public void onBtnSettings(TapEvent event) {
-    getPresenter().goToSettingsView();
-  }
-  
-  @UiHandler("btnSearch")
-  public void onBtnSearch(TapEvent event) {
-    getPresenter().goToSearchView();
+    getPresenter().goToPrevious();
   }
   
 }

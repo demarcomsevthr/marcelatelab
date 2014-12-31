@@ -7,7 +7,6 @@ import it.mate.onscommons.client.mvp.MvpUtils;
 import it.mate.onscommons.client.mvp.OnsActivityManager;
 import it.mate.onscommons.client.mvp.OnsActivityMapper;
 import it.mate.onscommons.client.mvp.OnsNavigationDisplay;
-import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
@@ -169,8 +168,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public PlaceController getPlaceController() {
-    if (placeController == null)
-      placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+    if (placeController == null) {
+//    placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+      placeController = getGinjector().getPlaceController();
+    }
     return placeController;
   }
   

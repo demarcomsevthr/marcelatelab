@@ -2,15 +2,13 @@ package it.mate.protons.client.view;
 
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
-import it.mate.onscommons.client.ui.OnsButton;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.callbacks.JSOCallback;
+import it.mate.onscommons.client.event.TapEvent;
 import it.mate.protons.client.view.SettingsView.Presenter;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,6 +17,8 @@ public class SettingsView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToHomeView();
+    public void incSettingsCounter();
+    public void goToSubSettingsView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -26,7 +26,6 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField OnsButton btnPop;
   @UiField Label counterLbl;
   
   public SettingsView() {
@@ -40,15 +39,6 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
-    btnPop.onClickTest(new JSOCallback() {
-      public void handle(JavaScriptObject jso) {
-        CdvUtils.log("btnPop touched");
-//      getPresenter().goToHomeView();
-        getPresenter().goToPrevious();
-      }
-    });
-    
   }
   
   @Override
@@ -58,4 +48,19 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     }
   }
 
+  @UiHandler("btnPop")
+  public void onBtnSettings(TapEvent event) {
+    getPresenter().goToPrevious();
+  }
+  
+  @UiHandler("btnRight")
+  public void onBtnRight(TapEvent event) {
+    getPresenter().incSettingsCounter();
+  }
+  
+  @UiHandler("btnSubSettings")
+  public void onBtnSubSettings(TapEvent event) {
+    getPresenter().goToSubSettingsView();
+  }
+  
 }

@@ -5,20 +5,21 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-     
+
     <o:OnsPage>
     
       <o:OnsToolbar>
-        <div class="center">First Toolbar</div>
+        <div class="left">
+          <o:OnsBackButton text="Back"/>
+        </div>
+        <div class="center">
+          <o:OnsSearchBox ui:field="boxSearch" placeholder="Cerca un oggetto" addStyleNames="app-toolbar-search-box"/>
+        </div>
       </o:OnsToolbar>
   
-      <g:VerticalPanel width="100%" horizontalAlignment="center">
-        <o:OnsButton text="Search" ui:field="btnSearch"/>
-        <o:OnsButton text="Settings" ui:field="btnSettings"/>
-        <g:Label ui:field="counterLbl"/>
-      </g:VerticalPanel>
+      <div>Search view!</div>  
       
-      <g:Label ui:field="homeLbl" addStyleNames="app-home-lbl"/>
+      <o:OnsButton text="Search" ui:field="btnSearch"/>
       
     </o:OnsPage>
     
