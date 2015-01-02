@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
 import it.mate.onscommons.client.onsen.dom.Page;
+import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -60,22 +61,16 @@ public class OnsPlaceHistoryHandler extends PlaceHistoryHandler {
           public void execute(NavigatorEvent event) {
             Page enteringPage = event.getEnterPage();
             if (enteringPage != null) {
-              
-//            Element enteringPageContext = enteringPage.getPageElement();
-//            CdvUtils.log("ENTERING PAGE PARENT " + enteringPageContext.getParentElement().getNodeName());
-              
               String enteringPageName = enteringPage.getName();
-//            CdvUtils.log("ENTERING PAGE NAME = " + enteringPageName);
               if (!enteringPageName.equals(OnsActivityManager.getActivePanelId())) {
+                CdvUtils.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
                 newItem(defaultPlaceClassName+ ":"+enteringPageName, true);
               }
-              
             }
           }
         });
       }
     }
-    
 
     public String getToken() {
       return token;
@@ -89,7 +84,5 @@ public class OnsPlaceHistoryHandler extends PlaceHistoryHandler {
     }
     
   }
-  
-  
 
 }

@@ -7,8 +7,12 @@ import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
 import it.mate.onscommons.client.onsen.dom.Page;
+import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsTemplate;
 import it.mate.onscommons.client.utils.CdvUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -27,7 +31,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public abstract class OnsActivityManager extends ActivityManager {
   
-  OnsNavigationDisplay onsDisplay;
+//OnsNavigatorDisplay onsDisplay;
   
   EventBus eventBus;
 
@@ -40,6 +44,8 @@ public abstract class OnsActivityManager extends ActivityManager {
   private boolean pagePopingHandlerInitialized = false;
   
   private boolean pagePushedHandlerInitialized = false;
+  
+  private List<OnsTemplate> templates;
 
   public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
@@ -51,19 +57,44 @@ public abstract class OnsActivityManager extends ActivityManager {
         }
       });
     }
+    initNavigator();
     setPagePushedHandler();
     setPagePopingHandler();
+    setDisplay(new SimplePanel());
   }
   
   public abstract Place getPlaceFromTepmplateId(String id);
-  
-  public void setOnsDisplay(OnsNavigationDisplay onsDisplay, HasToken initialPlace) {
+
+  /*
+  public void setOnsDisplay(OnsNavigatorDisplay onsDisplay, HasToken initialPlace) {
     this.onsDisplay = onsDisplay;
     super.setDisplay(new SimplePanel());
   }
+  */
   
   public static AcceptsOneWidget getActivePanel() {
     return (AcceptsOneWidget)activePanel;
+  }
+  
+  private void initNavigator() {
+    OnsNavigator navigator = new OnsNavigator();
+    RootPanel.get().add(navigator);
+    OnsenUi.compile(navigator.getElement());
+  }
+  
+  private OnsTemplate getTemplateByPlace(HasToken place) {
+    if (templates == null) {
+      templates = new ArrayList<OnsTemplate>();
+    }
+    String token = place.getToken();
+    for (OnsTemplate template : templates) {
+      if (template.getToken().equals(token)) {
+        return template;
+      }
+    }
+    OnsTemplate template = new OnsTemplate(token);
+    templates.add(template);
+    return template;
   }
   
   private static void setActivePanel(Panel panel, String id) {
@@ -104,7 +135,7 @@ public abstract class OnsActivityManager extends ActivityManager {
       setActivePanelFromCurrentPage(newPlace);
       preventPush = true;
     } else {
-      OnsTemplate template = OnsNavigationDisplay.getTemplateByPlace(hasToken);
+      OnsTemplate template = getTemplateByPlace(hasToken);
       template.clear();
       setActivePanel(template, newToken);
     }
@@ -174,8 +205,7 @@ public abstract class OnsActivityManager extends ActivityManager {
       try {
         RootPanel.get().remove(activePanel);
       } catch (Exception ex) { }
-      Element templateElem = activePanel.getElement();
-      CdvUtils.log("ADDING PANEL TO DOCUMENT - " + templateElem);
+      CdvUtils.log("ADDING PANEL TO DOCUMENT - " + activePanel.getElement());
       RootPanel.get().add(activePanel);
     }
     if (CdvUtils.isReallyAttached(activePanelId)) {
