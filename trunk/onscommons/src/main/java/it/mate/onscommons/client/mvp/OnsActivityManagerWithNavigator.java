@@ -9,7 +9,6 @@ import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -52,34 +51,32 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
     compileActivePanel();
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
-    if (newToken != null) {
-      putPlace(newPlace);
-      boolean pagePushed = false;
-      JavaScriptObject currentPage = OnsenUi.getNavigator().getCurrentPage();
-      if (currentPage != null) {
-        String currentPageName = GwtUtils.getJsPropertyString(currentPage, "name");
-        if (!newToken.equals(currentPageName)) {
-          if (insertIndex != null) {
-            OnsenUi.getNavigator().log("BEFORE INSERT PAGE");
-            OnsenUi.getNavigator().insertPage(insertIndex, newToken);
-            GwtUtils.deferredExecution(new Delegate<Void>() {
-              public void execute(Void element) {
-                allowPagePoping = true;
-                OnsenUi.getNavigator().popPage();
-              }
-            });
-          } else {
-            OnsenUi.getNavigator().pushPage(newToken);
-          }
-          pagePushed = true;
+    putPlace(newPlace);
+    boolean pagePushed = false;
+    Page currentPage = OnsenUi.getNavigator().getCurrentPage();
+    if (currentPage != null) {
+      String currentPageName = currentPage.getName();
+      if (!newToken.equals(currentPageName)) {
+        if (insertIndex != null) {
+          OnsenUi.getNavigator().log("BEFORE INSERT PAGE");
+          OnsenUi.getNavigator().insertPage(insertIndex, newToken);
+          GwtUtils.deferredExecution(new Delegate<Void>() {
+            public void execute(Void element) {
+              allowPagePoping = true;
+              OnsenUi.getNavigator().popPage();
+            }
+          });
+        } else {
+          OnsenUi.getNavigator().pushPage(newToken);
         }
-      } else {
-        OnsenUi.getNavigator().pushPage(newToken);
         pagePushed = true;
       }
-      if (!pagePushed) {
-        OnsenUi.getNavigator().resetToPage(newToken);
-      }
+    } else {
+      OnsenUi.getNavigator().pushPage(newToken);
+      pagePushed = true;
+    }
+    if (!pagePushed) {
+      OnsenUi.getNavigator().resetToPage(newToken);
     }
   }
   
