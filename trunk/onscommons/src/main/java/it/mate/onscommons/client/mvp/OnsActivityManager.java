@@ -12,9 +12,12 @@ import it.mate.onscommons.client.ui.OnsTemplate;
 import it.mate.onscommons.client.utils.CdvUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -29,11 +32,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-public abstract class OnsActivityManager extends ActivityManager {
+public class OnsActivityManager extends ActivityManager {
   
-//OnsNavigatorDisplay onsDisplay;
-  
-  EventBus eventBus;
+  private EventBus eventBus;
 
   private static Panel activePanel;
   
@@ -46,8 +47,10 @@ public abstract class OnsActivityManager extends ActivityManager {
   private boolean pagePushedHandlerInitialized = false;
   
   private List<OnsTemplate> templates;
+  
+  private Map<String, Place> placesMap = new HashMap<String, Place>();
 
-  public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
+  public OnsActivityManager(ActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
     this.eventBus = eventBus;
     if (!OnsenUi.isInitialized()) {
@@ -62,15 +65,6 @@ public abstract class OnsActivityManager extends ActivityManager {
     setPagePopingHandler();
     setDisplay(new SimplePanel());
   }
-  
-  public abstract Place getPlaceFromTepmplateId(String id);
-
-  /*
-  public void setOnsDisplay(OnsNavigatorDisplay onsDisplay, HasToken initialPlace) {
-    this.onsDisplay = onsDisplay;
-    super.setDisplay(new SimplePanel());
-  }
-  */
   
   public static AcceptsOneWidget getActivePanel() {
     return (AcceptsOneWidget)activePanel;
@@ -171,6 +165,7 @@ public abstract class OnsActivityManager extends ActivityManager {
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
     if (newToken != null) {
+      placesMap.put(newToken, newPlace);
       boolean pagePushed = false;
       JavaScriptObject currentPage = OnsenUi.getCurrentPage();
       if (currentPage != null) {
@@ -223,7 +218,7 @@ public abstract class OnsActivityManager extends ActivityManager {
         public void execute(NavigatorEvent event) {
           Page enteringPage = event.getEnterPage();
           if (enteringPage != null) {
-            OnsenUi.destroyPage("");
+//          OnsenUi.destroyPage("");
             String enteringPageName = enteringPage.getName();
             CdvUtils.log("AFTER PUSH PAGE " + enteringPageName);
             OnsenUi.logNavigator("NAVIGATOR PAGE");
@@ -252,12 +247,12 @@ public abstract class OnsActivityManager extends ActivityManager {
             prevPageName = page.getName();
           }
           CdvUtils.log("PREV PAGE NAME = " + prevPageName);
-          OnsenUi.destroyPage("");
+//        OnsenUi.destroyPage("");
           OnsenUi.destroyPage(prevPageName);
           CdvUtils.log("CANCELING POP EVENT");
           OnsenUi.cancelEvent(event);
           OnsenUi.logNavigator("AFTER DESTROY PAGE");
-          Place prevPlace = getPlaceFromTepmplateId(prevPageName);
+          Place prevPlace = placesMap.get(prevPageName);
           CdvUtils.log("GOING TO PLACE " + prevPlace);
           eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, pages.length() - 1));
         }
