@@ -35,7 +35,8 @@ public class Page extends JavaScriptObject {
   }
   
   public final Integer getIndex() {
-    JsArray<Page> pages = OnsenUi.getPages();
+//  JsArray<Page> pages = OnsenUi.getPages();
+    JsArray<Page> pages = OnsenUi.getNavigator().getPages();
     for (int it = 0; it < pages.length(); it++) {
       Page page = pages.get(it);
       if (page.getName().equals(this.getName())) {
@@ -45,5 +46,8 @@ public class Page extends JavaScriptObject {
     return null;
   }
   
+  public final native void destroy() /*-{
+    this.destroy();    
+  }-*/;
   
 }
