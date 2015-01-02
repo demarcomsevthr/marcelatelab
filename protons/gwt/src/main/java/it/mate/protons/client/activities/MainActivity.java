@@ -113,7 +113,8 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    OnsenUi.popPage();
+//  OnsenUi.popPage();
+    OnsenUi.getNavigator().popPage();
   }
 
   @Override
