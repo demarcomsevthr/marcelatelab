@@ -25,36 +25,6 @@ public class Navigator extends JavaScriptObject {
     this.pushPage(pageId, options);    
   }-*/;
   
-  public final void onPagePushed(final Delegate<NavigatorEvent> delegate) {
-    onPagePushedImpl(new JSOCallback() {
-      public void handle(JavaScriptObject jso) {
-        delegate.execute((NavigatorEvent)jso.cast());
-      }
-    });
-  }
-  
-  protected final native void onPagePushedImpl(JSOCallback callback) /*-{
-    var jsCallback = $entry(function(event) {
-      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
-    });
-    this.on('postpush', jsCallback);    
-  }-*/;
-
-  public final void onPagePoping(final Delegate<NavigatorEvent> delegate) {
-    onPagePopingImpl(new JSOCallback() {
-      public void handle(JavaScriptObject jso) {
-        delegate.execute((NavigatorEvent)jso.cast());
-      }
-    });
-  }
-  
-  protected final native void onPagePopingImpl(JSOCallback callback) /*-{
-    var jsCallback = $entry(function(event) {
-      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
-    });
-    this.on('prepop', jsCallback);    
-  }-*/;
-  
   public final void insertPage(int index, String pageId) {
     Options options = Options.create();
     options.setHoge("hoge");
@@ -98,6 +68,36 @@ public class Navigator extends JavaScriptObject {
 
   protected final native JavaScriptObject getPagesImpl() /*-{
     return this.getPages();    
+  }-*/;
+  
+  public final void onAfterPagePush(final Delegate<NavigatorEvent> delegate) {
+    onAfterPagePushImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((NavigatorEvent)jso.cast());
+      }
+    });
+  }
+  
+  protected final native void onAfterPagePushImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    this.on('postpush', jsCallback);    
+  }-*/;
+
+  public final void onBeforePagePop(final Delegate<NavigatorEvent> delegate) {
+    onBeforePagePopImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((NavigatorEvent)jso.cast());
+      }
+    });
+  }
+  
+  protected final native void onBeforePagePopImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    this.on('prepop', jsCallback);    
   }-*/;
   
   public final void log(String prompt) {
