@@ -6,7 +6,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.mvp.MvpUtils;
 import it.mate.onscommons.client.mvp.OnsActivityManager;
 import it.mate.onscommons.client.mvp.OnsActivityMapper;
-import it.mate.onscommons.client.mvp.OnsNavigationDisplay;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
@@ -134,7 +133,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
     OnsActivityMapper onsMapper = (OnsActivityMapper)activityMapper;
-    OnsNavigationDisplay display = new OnsNavigationDisplay(onsMapper);
+//  OnsNavigatorDisplay display = new OnsNavigatorDisplay(onsMapper);
     EventBus eventBus = ginjector.getBinderyEventBus();
     OnsActivityManager activityManager = new OnsActivityManager(onsMapper, eventBus) {
       public Place getPlaceFromTepmplateId(String id) {
@@ -142,7 +141,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       }
     };
     MainPlace defaultPlace = new MainPlace();
-    MvpUtils.initOnsMvp(this, display, onsMapper, activityManager, defaultPlace);
+    MvpUtils.initOnsMvp(this, /* display, */ onsMapper, activityManager, defaultPlace);
   }
   
   @Override
