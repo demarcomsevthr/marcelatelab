@@ -17,13 +17,10 @@ public class MvpUtils {
     
     EventBus eventBus = ginjector.getBinderyEventBus();
     
-//  activityManager.setOnsDisplay(display, (HasToken)defaultPlace);
-    
     PlaceHistoryMapper historyMapper = clientFactory.getPlaceHistoryMapper();
     
     PlaceController placeController = ginjector.getPlaceController();
     
-//  PlaceHistoryHandler historyHandler = new OnsPlaceHistoryHandler(historyMapper, defaultPlace);
     PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
     
     historyHandler.register(placeController, eventBus, defaultPlace);
