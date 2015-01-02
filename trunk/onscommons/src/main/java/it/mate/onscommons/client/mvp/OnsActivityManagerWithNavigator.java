@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class OnsActivityManager extends ActivityManager {
+public class OnsActivityManagerWithNavigator extends ActivityManager {
   
   private EventBus eventBus;
 
@@ -48,7 +48,7 @@ public class OnsActivityManager extends ActivityManager {
   
   private Map<String, Place> placesMap = new HashMap<String, Place>();
 
-  public OnsActivityManager(ActivityMapper mapper, EventBus eventBus) {
+  public OnsActivityManagerWithNavigator(ActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
     this.eventBus = eventBus;
     if (!OnsenUi.isInitialized()) {
@@ -58,7 +58,6 @@ public class OnsActivityManager extends ActivityManager {
         }
       });
     }
-    initNavigator();
     setPagePushedHandler();
     setPagePopingHandler();
     setDisplay(new SimplePanel());
@@ -66,14 +65,6 @@ public class OnsActivityManager extends ActivityManager {
   
   public static AcceptsOneWidget getActivePanel() {
     return (AcceptsOneWidget)activePanel;
-  }
-  
-  private void initNavigator() {
-    /*
-    OnsNavigator navigator = new OnsNavigator();
-    RootPanel.get().add(navigator);
-    OnsenUi.compile(navigator.getElement());
-    */
   }
   
   private OnsTemplate getTemplateByPlace(HasToken place) {
@@ -115,7 +106,6 @@ public class OnsActivityManager extends ActivityManager {
       }
       pushPage(newPlace, insertIndex);
     } else {
-//    Element pageElement = OnsenUi.getCurrentPage().getPageElement();
       Element pageElement = OnsenUi.getNavigator().getCurrentPage().getPageElement();
       OnsenUi.compileElement(pageElement);
     }
@@ -125,7 +115,6 @@ public class OnsActivityManager extends ActivityManager {
     boolean preventPush = false;
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
-//  String currentPageName = OnsenUi.getCurrentPage().getName();
     String currentPageName = OnsenUi.getNavigator().getCurrentPage().getName();
     if (newToken.equals(currentPageName)) {
       setActivePanelFromCurrentPage(newPlace);
@@ -141,11 +130,9 @@ public class OnsActivityManager extends ActivityManager {
   private void setActivePanelFromCurrentPage(Place newPlace) {
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
-//  Element innerElem = OnsenUi.getCurrentPage().getInnerPageElement();
     Element innerElem = OnsenUi.getNavigator().getCurrentPage().getInnerPageElement();
     ElementWrapperPanel wrapper = new ElementWrapperPanel(innerElem);
     String currentPageName = OnsenUi.getNavigator().getCurrentPage().getName();
-//  String currentPageName = OnsenUi.getCurrentPage().getName();
     CdvUtils.log("WRAPPING CURRENT PAGE " + currentPageName);
     setActivePanel(wrapper, newToken);
   }
@@ -171,36 +158,29 @@ public class OnsActivityManager extends ActivityManager {
     if (newToken != null) {
       placesMap.put(newToken, newPlace);
       boolean pagePushed = false;
-//    JavaScriptObject currentPage = OnsenUi.getCurrentPage();
       JavaScriptObject currentPage = OnsenUi.getNavigator().getCurrentPage();
       if (currentPage != null) {
         String currentPageName = GwtUtils.getJsPropertyString(currentPage, "name");
         if (!newToken.equals(currentPageName)) {
           if (insertIndex != null) {
-//          OnsenUi.logNavigator("BEFORE INSERT PAGE");
             OnsenUi.getNavigator().log("BEFORE INSERT PAGE");
-//          OnsenUi.insertPage(insertIndex, newToken);
             OnsenUi.getNavigator().insertPage(insertIndex, newToken);
             GwtUtils.deferredExecution(new Delegate<Void>() {
               public void execute(Void element) {
                 allowPagePoping = true;
-//              OnsenUi.popPage();
                 OnsenUi.getNavigator().popPage();
               }
             });
           } else {
-//          OnsenUi.pushPage(newToken);
             OnsenUi.getNavigator().pushPage(newToken);
           }
           pagePushed = true;
         }
       } else {
-//      OnsenUi.pushPage(newToken);
         OnsenUi.getNavigator().pushPage(newToken);
         pagePushed = true;
       }
       if (!pagePushed) {
-//      OnsenUi.resetToPage(newToken);
         OnsenUi.getNavigator().resetToPage(newToken);
       }
     }
@@ -227,13 +207,11 @@ public class OnsActivityManager extends ActivityManager {
       pagePushedHandlerInitialized = true;
       
       OnsenUi.getNavigator().onPagePushed(new Delegate<NavigatorEvent>() {
-//    OnsenUi.onPagePushed(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           Page enteringPage = event.getEnterPage();
           if (enteringPage != null) {
             String enteringPageName = enteringPage.getName();
             CdvUtils.log("AFTER PUSH PAGE " + enteringPageName);
-//          OnsenUi.logNavigator("NAVIGATOR PAGE");
             OnsenUi.getNavigator().log("NAVIGATOR PAGE");
           }
         }
@@ -247,19 +225,15 @@ public class OnsActivityManager extends ActivityManager {
       pagePopingHandlerInitialized = true;
       
       OnsenUi.getNavigator().onPagePoping(new Delegate<NavigatorEvent>() {
-//    OnsenUi.onPagePoping(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           if (allowPagePoping) {
             allowPagePoping = false;
             CdvUtils.log("CONTINUE POPING");
-//          OnsenUi.logNavigator("BEFORE POPING");
             OnsenUi.getNavigator().log("BEFORE POPING");
             return;
           }
           
-//        int index = OnsenUi.getCurrentPage().getIndex() - 1;
           int index = OnsenUi.getNavigator().getCurrentPage().getIndex() - 1;
-//        Page prevPage = OnsenUi.getPages().get(index);
           Page prevPage = OnsenUi.getNavigator().getPages().get(index);
           String prevPageName = prevPage.getName();
           CdvUtils.log("PREV PAGE NAME = " + prevPageName);
@@ -267,9 +241,7 @@ public class OnsActivityManager extends ActivityManager {
           prevPage.destroy();
 
           CdvUtils.log("CANCELING POP EVENT");
-//        OnsenUi.cancelEvent(event);
           event.cancel();
-//        OnsenUi.logNavigator("AFTER DESTROY PAGE");
           OnsenUi.getNavigator().log("AFTER DESTROY PAGE");
           Place prevPlace = placesMap.get(prevPageName);
           CdvUtils.log("GOING TO PLACE " + prevPlace);
