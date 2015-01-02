@@ -1,7 +1,7 @@
 package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.onsen.dom.Navigator;
+import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -10,13 +10,14 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OnsNavigator extends ComplexPanel implements HasWidgets {
+public class OnsSlidingMenu extends ComplexPanel implements HasWidgets {
 
-  public OnsNavigator() {
-    this(DOM.createElement("ons-navigator"));
+  public OnsSlidingMenu() {
+    this(DOM.createElement("ons-sliding-menu"));
+    getElement().setAttribute("var", "app.menu");
   }
   
-  protected OnsNavigator(Element elem) {
+  protected OnsSlidingMenu(Element elem) {
     setElement(elem);
   }
   
@@ -24,14 +25,14 @@ public class OnsNavigator extends ComplexPanel implements HasWidgets {
   public void add(Widget widget) {
     super.add(widget, getElement());
   }
-  
+
   public void attachToBody() {
     RootPanel.get().add(this);
     OnsenUi.compileElement(getElement());
   }
 
-  public final native Navigator getController() /*-{
-    return $wnd.ons.navigator;
+  public final native SlidingMenu getController() /*-{
+    return $wnd.app.menu;
   }-*/;
-  
+
 }

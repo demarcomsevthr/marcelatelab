@@ -2,14 +2,15 @@ package it.mate.onscommons.client.onsen;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.onscommons.client.onsen.dom.Navigator;
+import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 import it.mate.onscommons.client.ui.OnsNavigator;
+import it.mate.onscommons.client.ui.OnsSlidingMenu;
 import it.mate.onscommons.client.utils.CdvUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class OnsenUi {
@@ -19,6 +20,8 @@ public class OnsenUi {
   private static List<Delegate<Void>> initializationHandlers = new ArrayList<Delegate<Void>>();
   
   private static Navigator navigator;
+  
+  private static SlidingMenu slidingMenu;
   
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
@@ -39,33 +42,33 @@ public class OnsenUi {
   }
   
   protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAPING');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAP');
     $wnd.ons.bootstrap();
     var jsHandler = $entry(function() {
-      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN JS READY');
+      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN READY HANDLER');
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN HOOKING READY');
+    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN READY');
     $wnd.ons.ready(jsHandler);
   }-*/;
   
-  private static void ensureNavigator() {
+  public static Navigator getNavigator() {
     if (navigator == null) {
       OnsNavigator navigator = new OnsNavigator();
-      RootPanel.get().add(navigator);
-      OnsenUi.compileElement(navigator.getElement());
-      OnsenUi.navigator = getNavigatorImpl();
+      navigator.attachToBody();
+      OnsenUi.navigator = navigator.getController();
     }
-  }
-  
-  public static Navigator getNavigator() {
-    ensureNavigator();
     return navigator;
   }
   
-  protected static native Navigator getNavigatorImpl() /*-{
-    return $wnd.ons.navigator;
-  }-*/;
+  public static SlidingMenu getSlidingMenu() {
+    if (slidingMenu == null) {
+      OnsSlidingMenu slidingMenu = new OnsSlidingMenu();
+      slidingMenu.attachToBody();
+      OnsenUi.slidingMenu = slidingMenu.getController();
+    }
+    return slidingMenu;
+  }
   
   public static void compileElement(Element element) {
     CdvUtils.log("COMPILING ELEMENT " + element);
