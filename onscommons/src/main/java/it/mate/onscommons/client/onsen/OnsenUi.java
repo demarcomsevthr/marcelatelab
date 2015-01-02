@@ -1,7 +1,9 @@
 package it.mate.onscommons.client.onsen;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
+import it.mate.onscommons.client.onsen.dom.Options;
+import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.callbacks.JSOCallback;
 
@@ -11,7 +13,6 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
 
 
 public class OnsenUi {
@@ -50,36 +51,29 @@ public class OnsenUi {
   }-*/;
   
   public static void pushPage(String pageId) {
-    JsOnsOptions options = JsOnsOptions.create();
+    Options options = Options.create();
     pushPage(pageId, options);
   }
   
-  protected static void pushPage(String pageId, JsOnsOptions options) {
+  protected static void pushPage(String pageId, Options options) {
     CdvUtils.log("PUSHING PAGE " + pageId);
     pushPageImpl(pageId, options);
   }
   
-  public static void insertPage(int index, String pageId) {
-    JsOnsOptions options = JsOnsOptions.create();
-    GwtUtils.setJsPropertyString(options, "hoge", "hoge");
-    CdvUtils.log("INSERTING PAGE " + pageId + " AT " + index);
-    insertPageImpl(0, pageId, options);
-  }
-  
-  protected static native void pushPageImpl(String pageId, JsOnsOptions options) /*-{
+  protected static native void pushPageImpl(String pageId, Options options) /*-{
     $wnd.ons.navigator.pushPage(pageId, options);    
   }-*/;
   
-  protected static native void insertPageImpl(int index, String pageId, JsOnsOptions options) /*-{
+  public static void insertPage(int index, String pageId) {
+    Options options = Options.create();
+    options.setHoge("hoge");
+    CdvUtils.log("INSERTING PAGE " + pageId + " AT " + index);
+    insertPageImpl(index, pageId, options);
+  }
+  
+  protected static native void insertPageImpl(int index, String pageId, Options options) /*-{
     $wnd.ons.navigator.insertPage(index, pageId, options);    
   }-*/;
-
-  protected static class JsOnsOptions extends JavaScriptObject {
-    protected JsOnsOptions() { }
-    protected static JsOnsOptions create() {
-      return JavaScriptObject.createObject().cast();
-    }
-  }
 
   public static void compile(Element element) {
     CdvUtils.log("COMPILING ELEMENT " + element);
@@ -98,10 +92,10 @@ public class OnsenUi {
     $wnd.ons.navigator.popPage();    
   }-*/;
 
-  public static void onPageChanging(final Delegate<JavaScriptObject> delegate) {
+  public static void onPageChanging(final Delegate<NavigatorEvent> delegate) {
     onPageChangingImpl(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
-        delegate.execute(jso);
+        delegate.execute((NavigatorEvent)jso.cast());
       }
     });
   }
@@ -115,15 +109,15 @@ public class OnsenUi {
     $wnd.ons.navigator.on('prepop', jsCallback);    
   }-*/;
 
-  public static void onPageChanged(final Delegate<JavaScriptObject> delegate) {
-    onPageChangedImpl(new JSOCallback() {
+  public static void onPagePushed(final Delegate<NavigatorEvent> delegate) {
+    onPagePushedImpl(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
-        delegate.execute(jso);
+        delegate.execute((NavigatorEvent)jso.cast());
       }
     });
   }
   
-  protected static native void onPageChangedImpl(JSOCallback callback) /*-{
+  protected static native void onPagePushedImpl(JSOCallback callback) /*-{
     var jsCallback = $entry(function(event) {
       callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
       $wnd.glbDebugHook(event);
@@ -132,8 +126,9 @@ public class OnsenUi {
 //  $wnd.ons.navigator.on('postpop', jsCallback);    
   }-*/;
   
+  /*
   public static Element getCurrentPageElement() {
-    JavaScriptObject currentPage = getCurrentPageImpl();
+    Page currentPage = getCurrentPageImpl();
     return getPageElement(currentPage);
   }
   
@@ -162,26 +157,27 @@ public class OnsenUi {
     String name = GwtUtils.getJsPropertyString(page, "name");
     return name;
   }
+  */
 
-  public static JavaScriptObject getCurrentPage() {
+  public static Page getCurrentPage() {
     return getCurrentPageImpl();
   }
 
-  protected static native JavaScriptObject getCurrentPageImpl() /*-{
+  protected static native Page getCurrentPageImpl() /*-{
     return $wnd.ons.navigator.getCurrentPage();    
   }-*/;
 
   public static void resetToPage(String pageId) {
     CdvUtils.log("RESET TO PAGE " + pageId);
-    JsOnsOptions options = JsOnsOptions.create();
+    Options options = Options.create();
     resetToPageImpl(pageId, options);
   }
 
-  protected static native void resetToPageImpl(String pageId, JsOnsOptions options) /*-{
+  protected static native void resetToPageImpl(String pageId, Options options) /*-{
     $wnd.ons.navigator.resetToPage(pageId, options);    
   }-*/;
 
-  public static JsArray<JavaScriptObject> getPages() {
+  public static JsArray<Page> getPages() {
     return getPagesImpl().cast();
   }
 
@@ -189,10 +185,10 @@ public class OnsenUi {
     return $wnd.ons.navigator.getPages();    
   }-*/;
 
-  public static void onPagePoping(final Delegate<JavaScriptObject> delegate) {
+  public static void onPagePoping(final Delegate<NavigatorEvent> delegate) {
     onPagePopingImpl(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
-        delegate.execute(jso);
+        delegate.execute((NavigatorEvent)jso.cast());
       }
     });
   }
@@ -204,37 +200,38 @@ public class OnsenUi {
     $wnd.ons.navigator.on('prepop', jsCallback);    
   }-*/;
   
-  public static void cancelEvent(JavaScriptObject event) {
+  public static void cancelEvent(NavigatorEvent event) {
     cancelEventImpl(event);
   }
   
-  protected static native void cancelEventImpl(JavaScriptObject event) /*-{
+  protected static native void cancelEventImpl(NavigatorEvent event) /*-{
     event.cancel();
   }-*/;
 
-  public static void destroyPage(JavaScriptObject page) {
+  public static void destroyPage(Page page) {
     destroyPageImpl(page);
   }
 
-  protected static native void destroyPageImpl(JavaScriptObject page) /*-{
+  protected static native void destroyPageImpl(Page page) /*-{
     page.destroy();    
   }-*/;
   
   public static void logNavigator(String prompt) {
-    JsArray<JavaScriptObject> pages = OnsenUi.getPages();
+    JsArray<Page> pages = OnsenUi.getPages();
     for (int it = 0; it < pages.length(); it++) {
-      JavaScriptObject page = pages.get(it);
-      String pageName = GwtUtils.getJsPropertyString(page, "name");
+      Page page = pages.get(it);
+      String pageName = page.getName();
       CdvUtils.log( prompt + " - " + it + " - " + pageName);
     }
-    CdvUtils.log("CURRENT PAGE NAME = " + getCurrentPageName());
+    CdvUtils.log("CURRENT PAGE NAME = " + OnsenUi.getCurrentPage().getName());
+    CdvUtils.log("CURRENT PAGE INDEX = " + OnsenUi.getCurrentPage().getIndex());
   }
   
   public static void destroyPage(String name) {
-    JsArray<JavaScriptObject> pages = getPages();
+    JsArray<Page> pages = getPages();
     for (int it = 0; it < pages.length(); it++) {
-      JavaScriptObject page = pages.get(it);
-      String pageName = GwtUtils.getJsPropertyString(page, "name");
+      Page page = pages.get(it);
+      String pageName = page.getName();
       if (name.equals(pageName)) {
         CdvUtils.log("DESTROYED PAGE " + pageName);
         OnsenUi.destroyPage(page);

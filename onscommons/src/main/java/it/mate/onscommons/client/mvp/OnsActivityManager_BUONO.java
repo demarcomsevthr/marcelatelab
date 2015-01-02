@@ -5,6 +5,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
+import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.ui.OnsTemplate;
 import it.mate.onscommons.client.utils.CdvUtils;
 
@@ -80,10 +82,10 @@ public abstract class OnsActivityManager_BUONO extends ActivityManager {
 
     if (!pageChangingHandlerInitialized) {
       pageChangingHandlerInitialized = true;
-      OnsenUi.onPageChanging(new Delegate<JavaScriptObject>() {
-        public void execute(JavaScriptObject event) {
-          JavaScriptObject currentPage = GwtUtils.getJsPropertyJso(event, "currentPage");
-          String changingPageName = GwtUtils.getJsPropertyString(currentPage, "name");
+      OnsenUi.onPageChanging(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
+          Page currentPage = event.getCurrentPage();
+          String changingPageName = currentPage.getName();
           CdvUtils.log("CHANGING PAGE NAME = " + changingPageName);
           /*
           if (activeTemplate != null && !"".equals(changingPageName)) {
@@ -97,8 +99,8 @@ public abstract class OnsActivityManager_BUONO extends ActivityManager {
     
     if (!pageChangedHandlerInitialized) {
       pageChangedHandlerInitialized = true;
-      OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
-        public void execute(JavaScriptObject event) {
+      OnsenUi.onPagePushed(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
           JavaScriptObject enteringPage = GwtUtils.getJsPropertyJso(event, "enterPage");
           if (enteringPage != null) {
             
