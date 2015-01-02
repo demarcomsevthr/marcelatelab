@@ -19,10 +19,6 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String TEST = "test";
   
-  public static String[] getTokenList() {
-    return new String[] {HOME, SETTINGS, SUB_SETTINGS, SEARCH, ABOUT, TEST};
-  }
-  
   private String token;
   
   private Object model;

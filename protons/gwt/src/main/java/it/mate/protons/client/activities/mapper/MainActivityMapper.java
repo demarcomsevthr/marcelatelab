@@ -1,14 +1,14 @@
 package it.mate.protons.client.activities.mapper;
 
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
-import it.mate.onscommons.client.mvp.OnsActivityMapper;
+import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.protons.client.activities.MainActivity;
 import it.mate.protons.client.places.MainPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
 
-public class MainActivityMapper extends OnsActivityMapper {
+public class MainActivityMapper extends BaseActivityMapper {
   
   @SuppressWarnings("rawtypes")
   public MainActivityMapper(BaseClientFactory clientFactory) {
@@ -25,7 +25,6 @@ public class MainActivityMapper extends OnsActivityMapper {
 
   @Override
   public Place getDefaultPlace() {
-//  return new MainPlace();
     return null;
   }
 
@@ -34,9 +33,4 @@ public class MainActivityMapper extends OnsActivityMapper {
     return "main";
   }
 
-  @Override
-  public String[] getTokenList() {
-    return MainPlace.getTokenList();
-  }
-  
 }
