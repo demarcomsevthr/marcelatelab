@@ -3,7 +3,7 @@ package it.mate.protons.client.factories;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.mvp.MvpUtils;
+import it.mate.onscommons.client.mvp.OnsMvpUtils;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
@@ -128,7 +128,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
-    MvpUtils.initOnsMvp(this, activityMapper, new MainPlace());
+    OnsMvpUtils.initMvpWithNavigator(this, activityMapper, new MainPlace());
   }
   
   @Override
