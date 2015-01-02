@@ -12,12 +12,6 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class MvpUtils {
   
-  /**
-   * con TRUE le transizioni hanno una resa visiva migliore, ma dopo il push l'activity perde il reference alla view
-   * con FALSE l'activity mantiene il corretto reference alla view anche dopo il push, ma le transizioni hanno una resa visiva peggiore
-   */
-  public static boolean PUSH_PAGE_IN_ACTIVITY_MANAGER = true;
-  
   public static void initOnsMvp (BaseClientFactory<? extends CommonGinjector> clientFactory, 
       OnsNavigationDisplay display, OnsActivityMapper activityMapper, OnsActivityManager activityManager, Place defaultPlace) {
     

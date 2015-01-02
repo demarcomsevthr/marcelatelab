@@ -5,6 +5,8 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
+import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.ui.OnsTemplate;
 import it.mate.onscommons.client.utils.CdvUtils;
 
@@ -33,9 +35,24 @@ public abstract class OnsActivityManager extends ActivityManager {
   
   private static String activePanelId = "";
   
+  private boolean allowPagePoping = false;
+  
+  private boolean pagePopingHandlerInitialized = false;
+  
+  private boolean pagePushedHandlerInitialized = false;
+
   public OnsActivityManager(OnsActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
     this.eventBus = eventBus;
+    if (!OnsenUi.isInitialized()) {
+      OnsenUi.initializeOnsen(new OnsenReadyHandler() {
+        public void onReady() {
+          CdvUtils.log("ONSEN READY");
+        }
+      });
+    }
+    setPagePushedHandler();
+    setPagePopingHandler();
   }
   
   public abstract Place getPlaceFromTepmplateId(String id);
@@ -60,46 +77,29 @@ public abstract class OnsActivityManager extends ActivityManager {
   
   @Override
   public void onPlaceChange(PlaceChangeEvent event) {
-
-    final Place newPlace = event.getNewPlace();
-    
+    Place newPlace = event.getNewPlace();
     CdvUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
-    
-    boolean preventPush = false;
-    
-    if (MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER) {
-      preventPush = setActivePanelFromTemplate(newPlace);
-    } else {
-      setActivePanelFromCurrentPage(newPlace);
-      preventPush = true;
-    }
-    
+    boolean preventPush = setActivePanelFromTemplate(newPlace);
     CdvUtils.log("STARTING ACTIVITY FOR " + newPlace);
     super.onPlaceChange(event);
-    
-    if (MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER && !preventPush) {
-      
-      boolean insertPageFirst = false;
+    if (!preventPush) {
+      Integer insertIndex = null;
       if (event instanceof OnsPlaceChangeEvent) {
         OnsPlaceChangeEvent onsEvent = (OnsPlaceChangeEvent)event;
-        insertPageFirst = onsEvent.isInsertPageFirst();
+        insertIndex = onsEvent.getInsertIndex();
       }
-      
-      pushPageAfterPlaceChange(newPlace, insertPageFirst);
+      pushPage(newPlace, insertIndex);
     } else {
-      Element onsPageElement = OnsenUi.getCurrentPageElement();
-      OnsenUi.compile(onsPageElement);
+      Element pageElement = OnsenUi.getCurrentPage().getPageElement();
+      OnsenUi.compile(pageElement);
     }
-    
-    setPagePopingHandler();
-    
   }
   
   private boolean setActivePanelFromTemplate(Place newPlace) {
     boolean preventPush = false;
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
-    String currentPageName = OnsenUi.getCurrentPageName();
+    String currentPageName = OnsenUi.getCurrentPage().getName();
     if (newToken.equals(currentPageName)) {
       setActivePanelFromCurrentPage(newPlace);
       preventPush = true;
@@ -114,10 +114,9 @@ public abstract class OnsActivityManager extends ActivityManager {
   private void setActivePanelFromCurrentPage(Place newPlace) {
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
-    Element pageElement = OnsenUi.getCurrentPageElement();
-    Element innerElem = OnsenUi.getInnerPageElement(pageElement);
+    Element innerElem = OnsenUi.getCurrentPage().getInnerPageElement();
     ElementWrapperPanel wrapper = new ElementWrapperPanel(innerElem);
-    String currentPageName = OnsenUi.getCurrentPageName();
+    String currentPageName = OnsenUi.getCurrentPage().getName();
     CdvUtils.log("WRAPPING CURRENT PAGE " + currentPageName);
     setActivePanel(wrapper, newToken);
   }
@@ -136,49 +135,8 @@ public abstract class OnsActivityManager extends ActivityManager {
     }
   }
   
-  private boolean pageChangedHandlerInitialized = false;
-
-  private void pushPageAfterPlaceChange(Place newPlace, boolean insertPageFirst) {
-    
-    if (!OnsenUi.isInitialized()) {
-      OnsenUi.initializeOnsen(new OnsenReadyHandler() {
-        public void onReady() {
-          CdvUtils.log("ONSEN READY");
-        }
-      });
-    }
-
-    if (!pageChangedHandlerInitialized) {
-      pageChangedHandlerInitialized = true;
-      OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
-        public void execute(JavaScriptObject event) {
-          JavaScriptObject enteringPage = GwtUtils.getJsPropertyJso(event, "enterPage");
-          if (enteringPage != null) {
-            
-            OnsenUi.destroyPage("");
-            
-            String enteringPageName = GwtUtils.getJsPropertyString(enteringPage, "name");
-            CdvUtils.log("AFTER PUSH PAGE NAME = " + enteringPageName);
-            
-            OnsenUi.logNavigator("NAVIGATOR PAGE");
-            
-            if (!enteringPageName.equals(activePanelId)) {
-              
-              Place newPlace = getPlaceFromTepmplateId(enteringPageName);
-              
-              CdvUtils.log("FIRING NEW PLACE CHANGE EVENT WITH " + newPlace);
-              
-//            eventBus.fireEvent(new PlaceChangeEvent(newPlace));
-              
-            }
-            
-          }
-        }
-      });
-    }
-    
+  private void pushPage(Place newPlace, Integer insertIndex) {
     compileActivePanel();
-    
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
     if (newToken != null) {
@@ -187,24 +145,15 @@ public abstract class OnsActivityManager extends ActivityManager {
       if (currentPage != null) {
         String currentPageName = GwtUtils.getJsPropertyString(currentPage, "name");
         if (!newToken.equals(currentPageName)) {
-          if (insertPageFirst) {
-            
+          if (insertIndex != null) {
             OnsenUi.logNavigator("BEFORE INSERT PAGE");
-            
-            JsArray<JavaScriptObject> pages = OnsenUi.getPages();
-            int index = pages.length() - 1;
-            OnsenUi.insertPage(index, newToken);
-//          OnsenUi.insertPage(-1, newToken);
-            
+            OnsenUi.insertPage(insertIndex, newToken);
             GwtUtils.deferredExecution(new Delegate<Void>() {
               public void execute(Void element) {
                 allowPagePoping = true;
                 OnsenUi.popPage();
               }
             });
-
-            CdvUtils.log("CURRENT PAGE NAME IS " + OnsenUi.getCurrentPageName());
-            
           } else {
             OnsenUi.pushPage(newToken);
           }
@@ -218,7 +167,6 @@ public abstract class OnsActivityManager extends ActivityManager {
         OnsenUi.resetToPage(newToken);
       }
     }
-    
   }
   
   private void compileActivePanel() {
@@ -238,63 +186,64 @@ public abstract class OnsActivityManager extends ActivityManager {
     }
   }
   
-  private boolean allowPagePoping = false;
-  
-  private boolean pagePopingHandlerInitialized = false;
+  private void setPagePushedHandler() {
+    if (!pagePushedHandlerInitialized) {
+      pagePushedHandlerInitialized = true;
+      OnsenUi.onPagePushed(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
+          Page enteringPage = event.getEnterPage();
+          if (enteringPage != null) {
+            OnsenUi.destroyPage("");
+            String enteringPageName = enteringPage.getName();
+            CdvUtils.log("AFTER PUSH PAGE " + enteringPageName);
+            OnsenUi.logNavigator("NAVIGATOR PAGE");
+          }
+        }
+      });
+    }
+  }
   
   private void setPagePopingHandler() {
     if (!pagePopingHandlerInitialized) {
       pagePopingHandlerInitialized = true;
-      OnsenUi.onPagePoping(new Delegate<JavaScriptObject>() {
-        public void execute(JavaScriptObject event) {
-          
-//        OnsenUi.logNavigator("BEFORE PAGE POP");
-          
+      OnsenUi.onPagePoping(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
           if (allowPagePoping) {
             allowPagePoping = false;
             CdvUtils.log("CONTINUE POPING");
+            OnsenUi.logNavigator("BEFORE POPING");
             return;
           }
-          
-          JsArray<JavaScriptObject> pages = OnsenUi.getPages();
-          
+          JsArray<Page> pages = OnsenUi.getPages();
           String prevPageName = "home";
           if (pages.length() > 1) {
             int lastPageIt = pages.length() - 2;
-            JavaScriptObject page = pages.get(lastPageIt);
-            prevPageName = GwtUtils.getJsPropertyString(page, "name");
+            Page page = pages.get(lastPageIt);
+            prevPageName = page.getName();
           }
           CdvUtils.log("PREV PAGE NAME = " + prevPageName);
-          
           OnsenUi.destroyPage("");
           OnsenUi.destroyPage(prevPageName);
-          
           CdvUtils.log("CANCELING POP EVENT");
           OnsenUi.cancelEvent(event);
-          
+          OnsenUi.logNavigator("AFTER DESTROY PAGE");
           Place prevPlace = getPlaceFromTepmplateId(prevPageName);
           CdvUtils.log("GOING TO PLACE " + prevPlace);
-          eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, true));
-          
+          eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, pages.length() - 1));
         }
       });
     }
   }
   
   public static class OnsPlaceChangeEvent extends PlaceChangeEvent {
-    
-    private boolean insertPageFirst = false;
-
-    public OnsPlaceChangeEvent(Place newPlace, boolean insertPageFirst) {
+    private Integer insertIndex = null;
+    public OnsPlaceChangeEvent(Place newPlace, Integer insertIndex) {
       super(newPlace);
-      this.insertPageFirst = insertPageFirst;
+      this.insertIndex = insertIndex;
     }
-    
-    public boolean isInsertPageFirst() {
-      return insertPageFirst;
+    public Integer getInsertIndex() {
+      return insertIndex;
     }
-    
   }
-  
 
 }

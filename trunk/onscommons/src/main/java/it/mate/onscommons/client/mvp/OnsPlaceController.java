@@ -1,17 +1,11 @@
 package it.mate.onscommons.client.mvp;
 
-import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.ui.OnsTemplate;
-import it.mate.onscommons.client.utils.CdvUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -24,7 +18,10 @@ public class OnsPlaceController extends PlaceController {
   
   @Override
   public void goTo(Place newPlace) {
+    
+    super.goTo(newPlace);
 
+    /*
     HasToken hasToken = (HasToken)newPlace;
     final String newToken = hasToken.getToken();
     
@@ -36,7 +33,7 @@ public class OnsPlaceController extends PlaceController {
       });
     }
     
-    if (OnsenUi.isInitialized() && !MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER && !newToken.equals(OnsenUi.getCurrentPageName())) {
+    if (OnsenUi.isInitialized() && !MvpUtils.PUSH_PAGE_IN_ACTIVITY_MANAGER && !newToken.equals(OnsenUi.getCurrentPage().getName())) {
       OnsTemplate template = OnsNavigationDisplay.getTemplateByPlace(hasToken);
       String activeTemplateId = template.getId();
       
@@ -64,6 +61,8 @@ public class OnsPlaceController extends PlaceController {
     } else {
       super.goTo(newPlace);
     }
+    
+    */
     
   }
   

@@ -1,11 +1,10 @@
 package it.mate.onscommons.client.mvp;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
+import it.mate.onscommons.client.onsen.dom.Page;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -57,23 +56,18 @@ public class OnsPlaceHistoryHandler extends PlaceHistoryHandler {
     private void addPageChangeHandler() {
       if (!pageChangedHandlerInitialized) {
         pageChangedHandlerInitialized = true;
-        OnsenUi.onPageChanged(new Delegate<JavaScriptObject>() {
-          public void execute(JavaScriptObject event) {
-            JavaScriptObject enteringPage = GwtUtils.getJsPropertyJso(event, "enterPage");
+        OnsenUi.onPagePushed(new Delegate<NavigatorEvent>() {
+          public void execute(NavigatorEvent event) {
+            Page enteringPage = event.getEnterPage();
             if (enteringPage != null) {
               
-              //TODO
-              JavaScriptObject enteringPageElement = GwtUtils.getJsPropertyJso(enteringPage, "element");
-              Element enteringPageContext = GwtUtils.getJsPropertyJso(enteringPageElement, "context").cast();
+//            Element enteringPageContext = enteringPage.getPageElement();
 //            CdvUtils.log("ENTERING PAGE PARENT " + enteringPageContext.getParentElement().getNodeName());
               
-              String enteringPageName = GwtUtils.getJsPropertyString(enteringPage, "name");
+              String enteringPageName = enteringPage.getName();
 //            CdvUtils.log("ENTERING PAGE NAME = " + enteringPageName);
-              
               if (!enteringPageName.equals(OnsActivityManager.getActivePanelId())) {
-                
                 newItem(defaultPlaceClassName+ ":"+enteringPageName, true);
-                
               }
               
             }
