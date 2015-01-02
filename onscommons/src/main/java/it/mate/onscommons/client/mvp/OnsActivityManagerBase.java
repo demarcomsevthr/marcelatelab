@@ -71,8 +71,7 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
     boolean preventPush = false;
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
-    String currentPageName = getCurrentPage().getName();
-    if (newToken.equals(currentPageName)) {
+    if (getCurrentPage() != null && newToken.equals(getCurrentPage().getName())) {
       setActivePanelFromCurrentPage(newPlace);
       preventPush = true;
     } else {
@@ -101,6 +100,9 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
   private void setActivePanelFromCurrentPage(Place newPlace) {
     HasToken hasToken = (HasToken)newPlace;
     String newToken = hasToken.getToken();
+    if (getCurrentPage() == null) {
+      return;
+    }
     Element innerElem = getCurrentPage().getInnerPageElement();
     ElementWrapperPanel wrapper = new ElementWrapperPanel(innerElem);
     String currentPageName = getCurrentPage().getName();
