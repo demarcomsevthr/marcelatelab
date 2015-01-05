@@ -12,10 +12,10 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class OnsMvpUtils {
   
-  public static void initMvpWithNavigator (BaseClientFactory<? extends CommonGinjector> clientFactory, ActivityMapper activityMapper, Place defaultPlace) {
-    CommonGinjector ginjector = clientFactory.getGinjector();
-    EventBus eventBus = ginjector.getBinderyEventBus();
-    new OnsActivityManagerWithNavigator(activityMapper, eventBus);
+  public static void initMvp (BaseClientFactory<? extends CommonGinjector> clientFactory, ActivityMapper activityMapper, Place defaultPlace) {
+//  CommonGinjector ginjector = clientFactory.getGinjector();
+//  EventBus eventBus = ginjector.getBinderyEventBus();
+//  new OnsActivityManagerWithNavigator(activityMapper, eventBus);
     initHistoryHandler(clientFactory, activityMapper, defaultPlace);
   }
   

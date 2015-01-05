@@ -6,25 +6,36 @@ import it.mate.onscommons.client.utils.CdvUtils;
 import java.util.LinkedList;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class PlaceControllerWithHistory extends PlaceController {
   
+  private EventBus eventBus;
+  
   LinkedList<Place> history = new LinkedList<Place>();
   
   public PlaceControllerWithHistory(EventBus eventBus, Delegate delegate) {
     super(eventBus, delegate);
+    this.eventBus = eventBus;
   }
   
   @Override
-  public void goTo(final Place newPlace) {
+  public void goTo(Place newPlace) {
     super.goTo(newPlace);
-    
+    checkPlaceAgainstHistory(newPlace);
+  }
+  
+  public void goToWithEvent(PlaceChangeEvent event) {
+    eventBus.fireEvent(event);
+    checkPlaceAgainstHistory(event.getNewPlace());
+  }
+  
+  private void checkPlaceAgainstHistory(Place newPlace) {
     if (!(newPlace instanceof HasToken)) {
       CdvUtils.log("ERROR: " + getClass() + " can be used only with place implementing HasToken interface!");
     }
-    
     if (history.size() > 0) {
       for (int it = 0; it < history.size(); it++) {
         HasToken placeInHistory = (HasToken)history.get(it);
@@ -36,7 +47,6 @@ public class PlaceControllerWithHistory extends PlaceController {
       
     }
     history.add(newPlace);
-    
     String logMsg = " history = {";
     for (int it = 0; it < history.size(); it++) {
       Place placeInHistory = history.get(it);
@@ -46,7 +56,6 @@ public class PlaceControllerWithHistory extends PlaceController {
     }
     logMsg += "}";
     CdvUtils.log(logMsg);
-    
   }
   
   private LinkedList<Place> truncate(int index) {
