@@ -22,6 +22,15 @@ public class ApplicazioneTx implements Applicazione, IsMappable {
   
   private List<PrincipioAttivo> principiAttivi = new ArrayList<PrincipioAttivo>();
   
+  public ApplicazioneTx() {
+
+  }
+  
+  public ApplicazioneTx(String nome) {
+    super();
+    this.nome = nome;
+  }
+
   @Override
   public String toString() {
     return "ApplicazioneTx [id=" + id + ", nome=" + nome + ", dataInizio=" + dataInizio + ", dataFine=" + dataFine + ", principiAttivi=" + principiAttivi + "]";
