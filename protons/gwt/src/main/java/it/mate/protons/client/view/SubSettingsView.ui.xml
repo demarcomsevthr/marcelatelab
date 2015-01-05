@@ -20,8 +20,6 @@
         </div>
       </o:OnsToolbar>
   
-      <div>Sub Settings view!</div>  
-      
       <o:OnsButton text="Pop" ui:field="btnPop"></o:OnsButton>
       
     </o:OnsPage>

@@ -14,18 +14,14 @@
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center">Second Toolbar</div>
+        <div class="center">Settings</div>
         <div class="right">
-          <o:OnsToolbarButton ui:field="btnRight"><o:OnsIcon icon="fa-bars"/></o:OnsToolbarButton>
+          <o:OnsToolbarButton ui:field="btnPlus"><o:OnsIcon icon="fa-plus"/></o:OnsToolbarButton>
         </div>
       </o:OnsToolbar>
   
-      <div>Settings view!</div>  
-      
       <o:OnsButton text="Pop" ui:field="btnPop"></o:OnsButton>
-      
       <o:OnsButton text="Sub settings" ui:field="btnSubSettings"></o:OnsButton>
-      
       <o:OnsLabel ui:field="counterLbl"/>
       
     </o:OnsPage>

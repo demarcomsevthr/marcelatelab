@@ -3,7 +3,10 @@ package it.mate.protons.client.factories;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.mvp.OnsActivityManagerWithNavigator;
+import it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingMenu;
 import it.mate.onscommons.client.mvp.OnsMvpUtils;
+import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
@@ -29,6 +32,8 @@ import com.googlecode.gwtphonegap.client.PhoneGapTimeoutEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
+  
+  private static boolean USE_SLIDE_MENU_LAYOUT = true;
 
   private PlaceHistoryMapper placeHistoryMapper;
   
@@ -63,49 +68,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private void initDisplay(Panel modulePanel) {
     
-    // SuperDevModeUtil.showDevMode();
-
     GwtUtils.setMobileOptimizations(true);
     GwtUtils.setEnableLogInProductionMode(true);
-    
-    /*
-    ViewPort viewPort = new MGWTSettings.ViewPort();
-    viewPort.setTargetDensity(DENSITY.MEDIUM);
-    viewPort.setUserScaleAble(false).setMinimumScale(1.0).setMinimumScale(1.0).setMaximumScale(1.0);
-    */
-
-    /*
-    MGWTSettings settings = new MGWTSettings();
-    settings.setViewPort(viewPort);
-    settings.setIconUrl("logo.png");
-    settings.setAddGlosToIcon(true);
-    settings.setFullscreen(true);
-    settings.setPreventScrolling(true);
-    MGWT.applySettings(settings);
-    */
-
-    /*
-    MGWTStyle.getTheme().getMGWTClientBundle().getHeaderCss().ensureInjected();
-    MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
-    MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss().ensureInjected();
-    MGWTStyle.getTheme().getMGWTClientBundle().getInputCss().ensureInjected();
-    */
     
     DefaultTheme.Impl.get().css().ensureInjected();
     
     CustomTheme.Instance.get().css().ensureInjected();
 
-    /*
-    if (CdvUtils.getAppLocalLanguageImpl() == null) {
-      if (Window.Location.getHref().contains("index.html")) {
-        if ("it".equals(CdvUtils.getLocaleLanguageFromLocaleInfo())) {
-          CdvUtils.setAppLocalLanguageAndReload("it");
-          return;
-        }
-      }
-    }
-    */
-    
     CdvUtils.commonInitializations();
 
     if (OsDetectionUtils.isIOs()) {
@@ -122,13 +91,20 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
 
   private void createDisplay() {
-    MainActivityMapper activityMapper = new MainActivityMapper(this);
-    initMvp(null, activityMapper);
+    initMvp(null, new MainActivityMapper(this));
   }
   
   @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
-    OnsMvpUtils.initMvpWithNavigator(this, activityMapper, new MainPlace());
+  
+    if (USE_SLIDE_MENU_LAYOUT) {
+      new OnsActivityManagerWithSlidingMenu(activityMapper, getBinderyEventBus(), new MainPlace(MainPlace.MENU));
+    } else {
+      new OnsActivityManagerWithNavigator(activityMapper, getBinderyEventBus());
+    }
+    
+    OnsMvpUtils.initMvp(this, activityMapper, new MainPlace());
+    
   }
   
   @Override
@@ -155,8 +131,8 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   @Override
   public PlaceController getPlaceController() {
     if (placeController == null) {
-//    placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
-      placeController = getGinjector().getPlaceController();
+      placeController = new PlaceControllerWithHistory(getGinjector().getBinderyEventBus(), new PlaceController.DefaultDelegate());
+//    placeController = getGinjector().getPlaceController();
     }
     return placeController;
   }

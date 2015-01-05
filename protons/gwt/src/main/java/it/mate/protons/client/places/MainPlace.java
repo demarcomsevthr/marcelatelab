@@ -7,6 +7,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 public class MainPlace extends Place implements HasToken {
   
+  public static final String MENU = "menu";
+  
   public static final String HOME = "home";
   
   public static final String SETTINGS = "settings";
@@ -16,6 +18,10 @@ public class MainPlace extends Place implements HasToken {
   public static final String SEARCH = "search";
   
   public static final String ABOUT = "about";
+  
+  public static final String APPLICATION_LIST = "appList";
+  
+  public static final String APPLICATION_EDIT = "appEdit";
   
   public static final String TEST = "test";
   
