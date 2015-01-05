@@ -1221,6 +1221,9 @@ public class GwtUtils {
   public native static void setJsPropertyDouble(JavaScriptObject obj, String name, double value) /*-{
     obj[name] = value;
   }-*/;
+  public native static void setJsPropertyJso(JavaScriptObject obj, String name, JavaScriptObject value) /*-{
+    obj[name] = value;
+  }-*/;
   
   public native static JavaScriptObject getJsPropertyJso(JavaScriptObject obj, String name) /*-{
     if (obj[name]===undefined) {
