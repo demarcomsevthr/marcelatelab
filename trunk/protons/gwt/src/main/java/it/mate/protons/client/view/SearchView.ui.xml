@@ -17,8 +17,6 @@
         </div>
       </o:OnsToolbar>
   
-      <div>Search view!</div>  
-      
       <o:OnsButton text="Search" ui:field="btnSearch"/>
       
     </o:OnsPage>

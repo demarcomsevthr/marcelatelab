@@ -3,6 +3,8 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.ui.OnsToolbarButton;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.view.HomeView.Presenter;
 
@@ -19,6 +21,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToSettingsView();
     public void goToSearchView();
+    public void showMenu();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -28,6 +31,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
   @UiField Panel wrapperPanel;
   @UiField Label homeLbl;
   @UiField Label counterLbl;
+  @UiField OnsToolbarButton btnMenu;
   
   public HomeView() {
     initUI();
@@ -41,6 +45,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
+    btnMenu.setVisible(OnsenUi.isSlidingMenuLayout());
   }
   
   @Override
@@ -58,6 +63,11 @@ public class HomeView extends AbstractBaseView<Presenter> {
   @UiHandler("btnSearch")
   public void onBtnSearch(TapEvent event) {
     getPresenter().goToSearchView();
+  }
+  
+  @UiHandler("btnMenu")
+  public void onBtnMenu(TapEvent event) {
+    getPresenter().showMenu();
   }
   
 }

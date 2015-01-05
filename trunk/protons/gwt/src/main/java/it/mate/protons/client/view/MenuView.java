@@ -3,32 +3,31 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
-import it.mate.protons.client.view.SettingsView.Presenter;
+import it.mate.protons.client.view.MenuView.Presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SettingsView extends AbstractBaseView<Presenter> {
+public class MenuView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToHomeView();
-    public void incSettingsCounter();
-    public void goToSubSettingsView();
+    public void goToSettingsView();
+    public void goToSearchView();
+    public void goToApplicationListView();
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, MenuView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField Label counterLbl;
   
-  public SettingsView() {
+  public MenuView() {
     initUI();
   }
 
@@ -43,24 +42,27 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    if (model instanceof String) {
-      counterLbl.setText((String)model);
-    }
+
   }
 
-  @UiHandler("btnPop")
+  @UiHandler("btnHome")
+  public void onBtnHome(TapEvent event) {
+    getPresenter().goToHomeView();
+  }
+  
+  @UiHandler("btnSettings")
   public void onBtnSettings(TapEvent event) {
-    getPresenter().goToPrevious();
+    getPresenter().goToSettingsView();
   }
   
-  @UiHandler("btnPlus")
-  public void onBtnRight(TapEvent event) {
-    getPresenter().incSettingsCounter();
+  @UiHandler("btnSearch")
+  public void onBtnSearch(TapEvent event) {
+    getPresenter().goToSearchView();
   }
   
-  @UiHandler("btnSubSettings")
-  public void onBtnSubSettings(TapEvent event) {
-    getPresenter().goToSubSettingsView();
+  @UiHandler("btnApplications")
+  public void onBtnApplications(TapEvent event) {
+    getPresenter().goToApplicationListView();
   }
   
 }

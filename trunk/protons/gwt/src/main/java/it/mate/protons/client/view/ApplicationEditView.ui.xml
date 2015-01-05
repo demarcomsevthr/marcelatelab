@@ -5,23 +5,23 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-     
+
     <o:OnsPage>
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsToolbarButton ui:field="btnMenu" visible="false"><o:OnsIcon icon="fa-bars"/></o:OnsToolbarButton>
+          <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center">Home</div>
+        <div class="center"><g:Label ui:field="lblTitle"/></div>
       </o:OnsToolbar>
-  
-      <g:VerticalPanel width="100%" horizontalAlignment="center">
-        <o:OnsButton text="Search" ui:field="btnSearch"/>
-        <o:OnsButton text="Settings" ui:field="btnSettings"/>
-        <g:Label ui:field="counterLbl"/>
-      </g:VerticalPanel>
       
-      <g:Label ui:field="homeLbl" addStyleNames="app-home-lbl"/>
+      <g:HorizontalPanel>
+        <g:Label text="Name:"/>
+        <o:OnsTextBox ui:field="boxName" addStyleNames="app-box-name"/>
+      </g:HorizontalPanel>
+    
+      <o:OnsButton text="Save" ui:field="btnSave"/>
+      <o:OnsButton text="Delete" ui:field="btnDelete"/>
       
     </o:OnsPage>
     

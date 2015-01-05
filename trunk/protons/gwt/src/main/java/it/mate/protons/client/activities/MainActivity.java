@@ -5,33 +5,47 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.utils.CdvUtils;
 import it.mate.onscommons.client.utils.OsDetectionUtils;
 import it.mate.protons.client.factories.AppClientFactory;
+import it.mate.protons.client.logic.MainDao;
 import it.mate.protons.client.places.MainPlace;
+import it.mate.protons.client.view.ApplicationEditView;
+import it.mate.protons.client.view.ApplicationListView;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.MenuView;
 import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
 import it.mate.protons.client.view.SubSettingsView;
 import it.mate.protons.shared.model.Account;
+import it.mate.protons.shared.model.Applicazione;
+import it.mate.protons.shared.model.impl.ApplicazioneTx;
 
+import java.util.List;
+
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
-  HomeView.Presenter, SettingsView.Presenter, SearchView.Presenter, SubSettingsView.Presenter
+  MenuView.Presenter,
+  HomeView.Presenter, SettingsView.Presenter, SearchView.Presenter, SubSettingsView.Presenter,
+  ApplicationListView.Presenter, ApplicationEditView.Presenter
   {
   
   private MainPlace place;
   
   private BaseView view;
   
-//private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
+  private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private final static boolean REMOTE_CALLS_DISABLED = true;
   
@@ -58,6 +72,13 @@ public class MainActivity extends OnsAbstractActivity implements
       panel.setWidget(view.asWidget());
     }
     
+    if (place.getToken().equals(MainPlace.MENU)) {
+      MenuView view = AppClientFactory.IMPL.getGinjector().getMenuView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
     if (place.getToken().equals(MainPlace.SETTINGS)) {
       SettingsView view = AppClientFactory.IMPL.getGinjector().getSettingsView();
       this.view = view;
@@ -79,6 +100,20 @@ public class MainActivity extends OnsAbstractActivity implements
       panel.setWidget(view.asWidget());
     }
     
+    if (place.getToken().equals(MainPlace.APPLICATION_LIST)) {
+      ApplicationListView view = AppClientFactory.IMPL.getGinjector().getApplicationListView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
+    if (place.getToken().equals(MainPlace.APPLICATION_EDIT)) {
+      ApplicationEditView view = AppClientFactory.IMPL.getGinjector().getApplicationEditView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
     retrieveModel();
     
   }
@@ -92,6 +127,16 @@ public class MainActivity extends OnsAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.SETTINGS)) {
       incSettingsCounter();
+    }
+    if (place.getToken().equals(MainPlace.APPLICATION_LIST)) {
+      dao.findAllApplicazioni(new Delegate<List<Applicazione>>() {
+        public void execute(List<Applicazione> results) {
+          view.setModel(results, "applications");
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.APPLICATION_EDIT)) {
+      view.setModel(place.getModel(), "application");
     }
   }
   
@@ -113,8 +158,22 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-//  OnsenUi.popPage();
-    OnsenUi.getNavigator().popPage();
+    if (OnsenUi.isNavigatorLayout()) {
+      OnsenUi.getNavigator().popPage();
+    } else {
+      if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
+        PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
+//      placeController.goBack(new MainPlace());
+        Place prevPlace = placeController.getPreviousPlace();
+        if (prevPlace == null) {
+          prevPlace = new MainPlace();
+        }
+//      placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_REVERSE_SLIDE));
+        placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_PUSH));
+        return;
+      }
+      AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
+    }
   }
 
   @Override
@@ -137,6 +196,24 @@ public class MainActivity extends OnsAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.SEARCH));
   }
 
+  @Override
+  public void goToApplicationListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_LIST));
+  }
+  
+  @Override
+  public void goToApplicationEditView(Applicazione applicazione) {
+    if (applicazione == null) {
+      applicazione = new ApplicazioneTx();
+    }
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_EDIT, applicazione));
+  }
+  
+
+  @Override
+  public void showMenu() {
+    OnsenUi.getSlidingMenu().toggleMenu();
+  }
 
   private void ensureDevInfoId() {
     String devInfoId = getDevInfoIdFromLocalStorage();
@@ -208,5 +285,16 @@ public class MainActivity extends OnsAbstractActivity implements
   protected void setDevInfoIdInLocalStorage(String devInfoId) {
     CdvUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
+  
+  public void saveApplicazione(Applicazione applicazione) {
+//  setHeaderWaiting(true);
+    dao.saveApplicazione(applicazione, new Delegate<Applicazione>() {
+      public void execute(Applicazione savedApplicazione) {
+//      setHeaderWaiting(false);
+        Window.alert("Saved");
+      }
+    });
+  }
+  
 
 }

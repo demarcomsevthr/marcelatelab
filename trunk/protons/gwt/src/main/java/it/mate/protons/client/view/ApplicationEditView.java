@@ -3,7 +3,9 @@ package it.mate.protons.client.view;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
-import it.mate.protons.client.view.SettingsView.Presenter;
+import it.mate.onscommons.client.ui.OnsTextBox;
+import it.mate.protons.client.view.ApplicationEditView.Presenter;
+import it.mate.protons.shared.model.Applicazione;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -13,22 +15,25 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SettingsView extends AbstractBaseView<Presenter> {
+public class ApplicationEditView extends AbstractBaseView<Presenter> {
 
+  private Applicazione applicazione;
+  
   public interface Presenter extends BasePresenter {
     public void goToHomeView();
-    public void incSettingsCounter();
-    public void goToSubSettingsView();
+    public void saveApplicazione(Applicazione applicazione);
+    public void goToApplicationEditView(Applicazione applicazione);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, ApplicationEditView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField Label counterLbl;
+  @UiField Label lblTitle;
+  @UiField OnsTextBox boxName;
   
-  public SettingsView() {
+  public ApplicationEditView() {
     initUI();
   }
 
@@ -43,24 +48,18 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   
   @Override
   public void setModel(Object model, String tag) {
-    if (model instanceof String) {
-      counterLbl.setText((String)model);
+    if (model instanceof Applicazione) {
+      applicazione = (Applicazione)model;
+      lblTitle.setText("Edit: " + applicazione.getNome());
+      boxName.setValue(applicazione.getNome());
     }
   }
-
-  @UiHandler("btnPop")
-  public void onBtnSettings(TapEvent event) {
-    getPresenter().goToPrevious();
-  }
   
-  @UiHandler("btnPlus")
-  public void onBtnRight(TapEvent event) {
-    getPresenter().incSettingsCounter();
-  }
-  
-  @UiHandler("btnSubSettings")
-  public void onBtnSubSettings(TapEvent event) {
-    getPresenter().goToSubSettingsView();
+  @UiHandler("btnSave")
+  public void onBtnSave(TapEvent event) {
+    applicazione.setNome(boxName.getValue());
+    getPresenter().saveApplicazione(applicazione);
+    getPresenter().goToApplicationEditView(applicazione);
   }
   
 }
