@@ -5,6 +5,7 @@ public class OnsTextBox extends OnsTextBoxBase {
   
   public OnsTextBox() {
     super("text");
+    addStyleName("text-input");
   }
 
 }

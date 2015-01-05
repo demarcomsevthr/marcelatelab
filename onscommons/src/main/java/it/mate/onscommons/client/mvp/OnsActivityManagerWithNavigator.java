@@ -3,6 +3,7 @@ package it.mate.onscommons.client.mvp;
 import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
 import it.mate.onscommons.client.onsen.dom.Page;
@@ -120,15 +121,4 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
     });
   }
   
-  public static class OnsPlaceChangeEvent extends PlaceChangeEvent {
-    private Integer insertIndex = null;
-    public OnsPlaceChangeEvent(Place newPlace, Integer insertIndex) {
-      super(newPlace);
-      this.insertIndex = insertIndex;
-    }
-    public Integer getInsertIndex() {
-      return insertIndex;
-    }
-  }
-
 }

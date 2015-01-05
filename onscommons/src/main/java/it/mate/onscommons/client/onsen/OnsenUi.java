@@ -23,6 +23,20 @@ public class OnsenUi {
   
   private static SlidingMenu slidingMenu;
   
+  public final static String ANIMATION_SLIDE = "slide";
+  
+  public final static String ANIMATION_REVERSE_SLIDE = "reverseSlide";
+  
+  public final static String ANIMATION_LIFT = "lift";
+  
+  public final static String ANIMATION_FADE = "fade";
+  
+  public final static String ANIMATION_NONE = "none";
+  
+  public final static String ANIMATION_REVEAL = "reveal";
+  
+  public final static String ANIMATION_PUSH = "push";
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -61,6 +75,10 @@ public class OnsenUi {
     return navigator;
   }
   
+  public static boolean isNavigatorLayout() {
+    return navigator != null;
+  }
+  
   public static SlidingMenu getSlidingMenu() {
     if (slidingMenu == null) {
       OnsSlidingMenu slidingMenu = new OnsSlidingMenu();
@@ -68,6 +86,10 @@ public class OnsenUi {
       OnsenUi.slidingMenu = slidingMenu.getController();
     }
     return slidingMenu;
+  }
+  
+  public static boolean isSlidingMenuLayout() {
+    return slidingMenu != null;
   }
   
   public static void compileElement(Element element) {

@@ -1,6 +1,5 @@
 package it.mate.onscommons.client.ui;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -16,11 +15,7 @@ public class OnsToolbar extends HTMLPanel {
     this(TAG_NAME, html);
   }
   
-  public OnsToolbar(SafeHtml html) {
-    this(TAG_NAME, html.asString());
-  }
-  
-  public OnsToolbar(String tag, String html) {
+  protected OnsToolbar(String tag, String html) {
     super(tag, html);
     getElement().addClassName("ons-toolbar");
   }
