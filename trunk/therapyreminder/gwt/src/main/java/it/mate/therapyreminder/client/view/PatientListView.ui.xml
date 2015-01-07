@@ -18,6 +18,12 @@
       </p:TouchButton>
     </g:HorizontalPanel>
     
+    <g:HorizontalPanel addStyleNames="ui-top-button-bar" spacing="0">
+      <g:HTML HTML="" addStyleNames="ui-patient-list-header-2">
+        <ui:attribute name="HTML" description="text" key="header2.html"/>
+      </g:HTML>
+    </g:HorizontalPanel>
+    
     <m:ScrollPanel ui:field="resultsPanel" addStyleNames="ui-results-panel"/>
     
   </g:HTMLPanel>
