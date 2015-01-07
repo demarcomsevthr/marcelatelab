@@ -7,21 +7,21 @@
 	
 > Provisioning profile = THR ADHoc 2014
 	
-> Save As THR-1.1.0-RC1
+> Save As THR-1.1.0-RC2
 	
 > Application url =
 	
-https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-1.1.0-RC1.ipa
+https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-1.1.0-RC2.ipa
 		
-> Title = THR 1.1.0-RC1
+> Title = THR 1.1.0-RC2
 	
 > Download url da mandare al tester:
 	
-itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-1.1.0-RC1.plist
+itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.com/svn/trunk/therapyreminder/extras/deploy/THR-1.1.0-RC2.plist
 	
 > se non funziona gph:	
 
-itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/THR/THR-1.1.0-RC1.plist
+itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/THR/THR-1.1.0-RC2.plist
 
 
 
