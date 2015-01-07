@@ -39,23 +39,29 @@ public class KeyboardUtils {
   private static int lastTop, lastLeft;
   
   
+  private static boolean isDoneButtonAddonApplicable() {
+    if ("en".equals(PhgUtils.getAppLocalLanguage())) {
+      return false;
+    }
+    if (OsDetectionUtils.isIOs() && PhgUtils.getDeviceVersion().startsWith("6")) {
+      return true;
+    }
+    if (OsDetectionUtils.isDesktop()) {
+      return true;
+    }
+    return false;
+  }
+  
   
   public static void enableDoneButtonAddon() {
     
-    if ((OsDetectionUtils.isIOs() || OsDetectionUtils.isDesktop()) && !"en".equals(PhgUtils.getAppLocalLanguage())) {
+    if (isDoneButtonAddonApplicable()) {
       // continue
     } else {
       return;
     }
-    /*
-    if (!OsDetectionUtils.isIOs() || !KeyboardPlugin.isInstalled()) {
-      return;
-    }
-    */
     
     PhgUtils.log("enabling keyboard done button surrogate");
-    
-//  KeyboardPlugin.hideFormAccessoryBar();
     
     if (doneBtnFocusDelegate == null) {
       
@@ -88,7 +94,6 @@ public class KeyboardUtils {
                 if (lastTop != top || lastLeft != left) {
                   lastTop = top;
                   lastLeft = left;
-//                PhgUtils.log("focusedElement position " + left + " " + top);
                 }
                 doneButton.getElement().getStyle().setTop(top, Unit.PX);
                 doneButton.getElement().getStyle().setLeft(left, Unit.PX);
