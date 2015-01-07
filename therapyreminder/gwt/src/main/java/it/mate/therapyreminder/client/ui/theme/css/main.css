@@ -620,3 +620,8 @@ input.gwt-TextBox.mgwt-InputBox-box {
   height: 1.2em;
 }
 
+.ui-patient-list-header-2 {
+  font-size: 0.8em;
+  color: rgb(0, 0, 255);
+  margin-left: 0.5em;
+}

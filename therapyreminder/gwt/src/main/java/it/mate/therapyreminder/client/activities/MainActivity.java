@@ -873,7 +873,9 @@ public class MainActivity extends MGWTAbstractActivity implements
                     procedi = false;
                     break;
                   }
-                  if (contattoInDb.getTelefono() != null && contattoInDb.getTelefono().trim().equalsIgnoreCase(contatto.getTelefono().trim())) {
+                  if (contatto.getTelefono() != null && !"".equals(contatto.getTelefono().trim()) &&
+                      contattoInDb.getTelefono() != null && !"".equals(contattoInDb.getTelefono().trim()) && 
+                      contattoInDb.getTelefono().trim().equalsIgnoreCase(contatto.getTelefono().trim())) {
                     PhgDialogUtils.showMessageDialog(AppMessages.IMPL.MainActivity_saveContatto_msg4());
                     procedi = false;
                     break;
