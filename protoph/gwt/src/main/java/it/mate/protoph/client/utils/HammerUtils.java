@@ -122,4 +122,15 @@ public class HammerUtils {
     public void handle(Element element);
   }
   
+  public static native void addDragHandlerImpl(Element element, String eventName, JSOCallback callback) /*-{
+    var dragHandler = $entry(function(event) {
+      var touchX = event.pointers[0].pageX;
+      var touchY = event.pointers[0].pageY;
+      var touch = event.pointers[0];
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(touch);
+    });
+    var hammertime = new $wnd.Hammer(element);
+    hammertime.on(eventName, dragHandler);
+  }-*/;
+  
 }

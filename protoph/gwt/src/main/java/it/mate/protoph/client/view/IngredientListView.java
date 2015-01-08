@@ -9,6 +9,7 @@ import it.mate.phgcommons.client.ui.ph.PhCheckBox;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.TouchUtils;
 import it.mate.phgcommons.client.view.BaseMgwtView;
+import it.mate.protoph.client.utils.MgwtUtils;
 import it.mate.protoph.client.view.IngredientListView.Presenter;
 import it.mate.protoph.shared.model.Applicazione;
 import it.mate.protoph.shared.model.PrincipioAttivo;
@@ -68,7 +69,7 @@ public class IngredientListView extends BaseMgwtView <Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     
     disableMainScrolling();
-    PhgUtils.prepareInnerScrollPanel(resultsPanel, new Delegate<Boolean>() {
+    MgwtUtils.prepareInnerScrollPanel(resultsPanel, new Delegate<Boolean>() {
       public void execute(Boolean value) {
         scrollInProgress = value;
       }
