@@ -2,8 +2,8 @@ package it.mate.onscommons.client.onsen.dom;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.JSONUtils;
+import it.mate.phgcommons.client.utils.JSONUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -34,7 +34,7 @@ public class SlidingMenu extends JavaScriptObject {
   }-*/;
   
   protected final void setMainPage(String pageId, Options options) {
-    CdvUtils.log("PUSHING PAGE " + pageId + " " + JSONUtils.stringify(options));
+    PhgUtils.log("PUSHING PAGE " + pageId + " " + JSONUtils.stringify(options));
     setMainPageImpl(pageId, options);
   }
   
@@ -44,7 +44,7 @@ public class SlidingMenu extends JavaScriptObject {
   
   public final void setMenuPage(String pageId) {
     Options options = Options.create();
-    CdvUtils.log("MENU PAGE " + pageId);
+    PhgUtils.log("MENU PAGE " + pageId);
     setMenuPageImpl(pageId, options);
   }
   
@@ -58,6 +58,14 @@ public class SlidingMenu extends JavaScriptObject {
   
   protected final native void toggleMenuImpl() /*-{
     this.toggleMenu();    
+  }-*/;
+
+  public final void setSwipeable(boolean value) {
+    setSwipeableImpl(value);
+  }
+  
+  protected final native void setSwipeableImpl(boolean value) /*-{
+    this.setSwipeable(value);    
   }-*/;
 
 }
