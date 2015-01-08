@@ -22,7 +22,7 @@ public class OnsBackButton extends Widget implements HasTapHandler {
   protected OnsBackButton(Element element) {
     element.addClassName("ons-back-button");
     setElement(element);
-    if (OnsenUi.isSlidingMenuLayout()) {
+    if (OnsenUi.isSlidingMenuLayoutPattern()) {
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
           goToPrevious();

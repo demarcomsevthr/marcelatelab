@@ -1,6 +1,6 @@
 package it.mate.onscommons.client.ui.theme;
 
-import it.mate.onscommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundle;
