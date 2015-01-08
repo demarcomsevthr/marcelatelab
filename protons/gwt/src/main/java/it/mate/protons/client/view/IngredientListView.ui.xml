@@ -5,25 +5,30 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-
+  
+  
     <o:OnsPage>
     
       <o:OnsToolbar>
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center"><g:Label ui:field="lblTitle"/></div>
+        <div class="center">Ingredients</div>
       </o:OnsToolbar>
       
-      <g:HorizontalPanel>
-        <g:Label text="Name:"/>
-        <o:OnsTextBox ui:field="boxName" addStyleNames="app-box-name"/>
-      </g:HorizontalPanel>
-    
-      <o:OnsButton text="Save" ui:field="btnSave"/>
-      <o:OnsButton text="Delete" ui:field="btnDelete"/>
-      
-      <o:OnsButton text="Ingredients" ui:field="btnIngredients"/>
+        <o:OnsCarousel addStyleNames="app-ingredients-carousel" autoscroll="true" draggable="true" ui:field="carousel">
+          <!-- 
+          <o:OnsCarouselItem>
+            <div class="app-carousel-item-inner">Item 1</div>
+          </o:OnsCarouselItem>
+          <o:OnsCarouselItem>
+            <div class="app-carousel-item-inner">Item 2</div>
+          </o:OnsCarouselItem>
+          <o:OnsCarouselItem>
+            <div class="app-carousel-item-inner">Item 3</div>
+          </o:OnsCarouselItem>
+           -->
+        </o:OnsCarousel>
       
     </o:OnsPage>
     

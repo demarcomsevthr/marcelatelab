@@ -6,11 +6,11 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.mvp.OnsActivityManagerWithNavigator;
 import it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingMenu;
 import it.mate.onscommons.client.mvp.OnsMvpUtils;
-import it.mate.onscommons.client.place.PlaceControllerWithHistory;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.OsDetectionUtils;
-import it.mate.onscommons.client.utils.callbacks.VoidCallback;
+import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import it.mate.protons.client.activities.mapper.MainActivityMapper;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.places.MainPlaceHistoryMapper;
@@ -53,7 +53,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     phoneGap.addHandler(new PhoneGapAvailableHandler() {
       @Override
       public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
-        CdvUtils.log("PHONEGAP AVAILABLE EVENT");
+        PhgUtils.log("PHONEGAP AVAILABLE EVENT");
         initDisplay(modulePanel);
       }
     });
@@ -75,13 +75,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
     
     CustomTheme.Instance.get().css().ensureInjected();
 
-    CdvUtils.commonInitializations();
+//  PhgUtils.commonInitializations();
 
     if (OsDetectionUtils.isIOs()) {
-      CdvUtils.log("setting resize handler");
-      CdvUtils.addResizeHandler(new VoidCallback() {
+      PhgUtils.log("setting resize handler");
+      PhgUtils.addResizeHandler(new VoidCallback() {
         public void handle() {
-          CdvUtils.reloadApp();
+//        PhgUtils.reloadApp();
         }
       });
     }
@@ -146,7 +146,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   public String getNativeProperty(String name, String defValue) {
     String value = null;
     if (value == null) {
-      value = CdvUtils.getWindowSetting(name);
+      value = PhgUtils.getWindowSetting(name);
     }
     if (value == null && nativeProperties != null) {
       value = nativeProperties.get(name);

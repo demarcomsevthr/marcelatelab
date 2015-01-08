@@ -23,6 +23,8 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String APPLICATION_EDIT = "appEdit";
   
+  public static final String INGREDIENT_LIST = "ingList";
+  
   public static final String TEST = "test";
   
   private String token;

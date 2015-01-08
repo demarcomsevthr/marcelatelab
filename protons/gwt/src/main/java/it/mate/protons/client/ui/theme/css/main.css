@@ -17,3 +17,23 @@
   height: 2.4em;
   width: 150%;
 }
+
+.app-ingredients-carousel {
+  width: 50%;
+  height: 30%;
+  background-color: rgba(122, 255, 0, 0.4);
+  margin-left: 25%;
+  margin-top: 2em;
+}
+
+.app-ingredients-carousel ons-carousel-item {
+  background-color: grey;
+}
+
+.app-carousel-item-inner {
+  margin: 5%;
+  background-color: red;
+  height: 65%;
+  border-radius: 5%;
+  padding: 10%;
+}

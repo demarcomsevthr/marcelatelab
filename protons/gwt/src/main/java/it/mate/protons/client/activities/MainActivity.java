@@ -8,15 +8,16 @@ import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.place.PlaceControllerWithHistory;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.factories.AppClientFactory;
 import it.mate.protons.client.logic.MainDao;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.view.ApplicationEditView;
 import it.mate.protons.client.view.ApplicationListView;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.IngredientListView;
 import it.mate.protons.client.view.MenuView;
 import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
@@ -38,7 +39,8 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MainActivity extends OnsAbstractActivity implements 
   MenuView.Presenter,
   HomeView.Presenter, SettingsView.Presenter, SearchView.Presenter, SubSettingsView.Presenter,
-  ApplicationListView.Presenter, ApplicationEditView.Presenter
+  ApplicationListView.Presenter, ApplicationEditView.Presenter,
+  IngredientListView.Presenter
   {
   
   private MainPlace place;
@@ -57,13 +59,17 @@ public class MainActivity extends OnsAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
     if (place.getToken().equals(MainPlace.HOME)) {
-      CdvUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+      PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
     }
 
+    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+      OnsenUi.getSlidingMenu().setSwipeable(true);
+    }
+    
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
-          CdvUtils.log("devInfoId is " + devInfoId);
+          PhgUtils.log("devInfoId is " + devInfoId);
         }
       });
       HomeView view = AppClientFactory.IMPL.getGinjector().getHomeView();
@@ -114,6 +120,13 @@ public class MainActivity extends OnsAbstractActivity implements
       panel.setWidget(view.asWidget());
     }
     
+    if (place.getToken().equals(MainPlace.INGREDIENT_LIST)) {
+      IngredientListView view = AppClientFactory.IMPL.getGinjector().getIngredientListView();
+      this.view = view;
+      view.setPresenter(this);
+      panel.setWidget(view.asWidget());
+    }
+    
     retrieveModel();
     
   }
@@ -138,6 +151,11 @@ public class MainActivity extends OnsAbstractActivity implements
     if (place.getToken().equals(MainPlace.APPLICATION_EDIT)) {
       view.setModel(place.getModel(), "application");
     }
+    
+    if (place.getToken().equals(MainPlace.INGREDIENT_LIST)) {
+      view.setModel("init", "ingredients");
+    }
+    
   }
   
   public void incHomeCounter() {
@@ -147,7 +165,7 @@ public class MainActivity extends OnsAbstractActivity implements
   
   public void incSettingsCounter() {
     settingsCounter++;
-    CdvUtils.log("settings counter = " + settingsCounter);
+    PhgUtils.log("settings counter = " + settingsCounter);
     view.setModel("Counter "+settingsCounter, "counter");
   }
   
@@ -158,7 +176,7 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    if (OnsenUi.isNavigatorLayout()) {
+    if (OnsenUi.isNavigatorLayoutPattern()) {
       OnsenUi.getNavigator().popPage();
     } else {
       if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
@@ -209,6 +227,10 @@ public class MainActivity extends OnsAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.APPLICATION_EDIT, applicazione));
   }
   
+  @Override
+  public void goToIngredientListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.INGREDIENT_LIST));
+  }
 
   @Override
   public void showMenu() {
@@ -230,15 +252,15 @@ public class MainActivity extends OnsAbstractActivity implements
     
 //  String os = (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other");
     String os = "unknown";
-    String layout = CdvUtils.getLayoutInfo();
-    String devName = CdvUtils.getDeviceName();
-    String phgVersion = CdvUtils.getDevicePhonegap();
-    String platform = CdvUtils.getDevicePlatform();
-    String devUuid = CdvUtils.getDeviceUuid();
-    String devVersion = CdvUtils.getDeviceVersion();
+    String layout = PhgUtils.getLayoutInfo();
+    String devName = PhgUtils.getDeviceName();
+    String phgVersion = PhgUtils.getDevicePhonegap();
+    String platform = PhgUtils.getDevicePlatform();
+    String devUuid = PhgUtils.getDeviceUuid();
+    String devVersion = PhgUtils.getDeviceVersion();
     
     if (REMOTE_CALLS_DISABLED) {
-      CdvUtils.log("REMOTE CALLS DISABLED!");
+      PhgUtils.log("REMOTE CALLS DISABLED!");
     } else {
       AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
           new AsyncCallback<String>() {
@@ -247,7 +269,7 @@ public class MainActivity extends OnsAbstractActivity implements
             }
             public void onSuccess(String devInfoId) {
               if (devInfoId != null) {
-                CdvUtils.log("received devInfoId "+ devInfoId +" from remote facade");
+                PhgUtils.log("received devInfoId "+ devInfoId +" from remote facade");
                 setDevInfoIdInLocalStorage(devInfoId);
                 GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
               }
@@ -279,11 +301,11 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   protected String getDevInfoIdFromLocalStorage() {
-    return CdvUtils.getLocalStorageItem("devInfoId");
+    return PhgUtils.getLocalStorageItem("devInfoId");
   }
 
   protected void setDevInfoIdInLocalStorage(String devInfoId) {
-    CdvUtils.setLocalStorageItem("devInfoId", devInfoId);
+    PhgUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
   
   public void saveApplicazione(Applicazione applicazione) {

@@ -23,6 +23,7 @@ public class ApplicationEditView extends AbstractBaseView<Presenter> {
     public void goToHomeView();
     public void saveApplicazione(Applicazione applicazione);
     public void goToApplicationEditView(Applicazione applicazione);
+    public void goToIngredientListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, ApplicationEditView> { }
@@ -60,6 +61,11 @@ public class ApplicationEditView extends AbstractBaseView<Presenter> {
     applicazione.setNome(boxName.getValue());
     getPresenter().saveApplicazione(applicazione);
     getPresenter().goToApplicationEditView(applicazione);
+  }
+  
+  @UiHandler("btnIngredients")
+  public void onBtnIngredients(TapEvent event) {
+    getPresenter().goToIngredientListView();
   }
   
 }

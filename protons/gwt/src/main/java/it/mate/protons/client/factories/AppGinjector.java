@@ -7,6 +7,7 @@ import it.mate.protons.client.logic.MainDao;
 import it.mate.protons.client.view.ApplicationEditView;
 import it.mate.protons.client.view.ApplicationListView;
 import it.mate.protons.client.view.HomeView;
+import it.mate.protons.client.view.IngredientListView;
 import it.mate.protons.client.view.MenuView;
 import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
@@ -37,5 +38,7 @@ public interface AppGinjector extends CommonGinjector {
   public ApplicationListView getApplicationListView();
   
   public ApplicationEditView getApplicationEditView();
+  
+  public IngredientListView getIngredientListView();
   
 }

@@ -2,9 +2,9 @@ package it.mate.protons.client.logic;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.PhonegapLog;
-import it.mate.onscommons.client.utils.WebSQLDao;
+import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.PhonegapLog;
+import it.mate.phgcommons.client.utils.WebSQLDao;
 import it.mate.protons.shared.model.Applicazione;
 import it.mate.protons.shared.model.PrincipioAttivo;
 import it.mate.protons.shared.model.impl.ApplicazioneTx;
@@ -177,7 +177,7 @@ public class MainDao extends WebSQLDao {
         }
       }
       
-      CdvUtils.log("flushed " + result);
+      PhgUtils.log("flushed " + result);
       
       return result;
     }
@@ -185,7 +185,7 @@ public class MainDao extends WebSQLDao {
   
   public void saveApplicazione(final Applicazione entity, final Delegate<Applicazione> delegate) {
     
-    CdvUtils.log("updating " + entity);
+    PhgUtils.log("updating " + entity);
     
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {

@@ -6,7 +6,7 @@ import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.view.ApplicationListView.Presenter;
 import it.mate.protons.shared.model.Applicazione;
 import it.mate.protons.shared.model.impl.ApplicazioneTx;
@@ -53,7 +53,7 @@ public class ApplicationListView extends AbstractBaseView<Presenter> {
       List<Applicazione> applicazioni = (List<Applicazione>)model;
       for (final Applicazione applicazione : applicazioni) {
         OnsListItem item = new OnsListItem(applicazione.getNome());
-        CdvUtils.log("adding " + applicazione);
+        PhgUtils.log("adding " + applicazione);
         listPanel.add(item);
         item.addTapHandler(new TapHandler() {
           public void onTap(TapEvent event) {
