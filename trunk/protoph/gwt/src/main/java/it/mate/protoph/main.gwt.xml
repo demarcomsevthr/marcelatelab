@@ -31,6 +31,8 @@
   
   <inherits name="it.mate.phgcommons.phgcommons" />
   
+  <inherits name="it.mate.phgcommons.mgwcommons" />
+  
   <inherits name="it.mate.protoph.Adapter" />
   
   <replace-with class="it.mate.protoph.client.factories.AppClientFactoryImpl">
