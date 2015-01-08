@@ -5,7 +5,7 @@ import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +56,13 @@ public class OnsenUi {
   }
   
   protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAP');
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAP');
     $wnd.ons.bootstrap();
     var jsHandler = $entry(function() {
-      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN READY HANDLER');
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN READY HANDLER');
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('ONSEN READY');
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN READY HOOK');
     $wnd.ons.ready(jsHandler);
   }-*/;
   
@@ -75,7 +75,7 @@ public class OnsenUi {
     return navigator;
   }
   
-  public static boolean isNavigatorLayout() {
+  public static boolean isNavigatorLayoutPattern() {
     return navigator != null;
   }
   
@@ -88,12 +88,12 @@ public class OnsenUi {
     return slidingMenu;
   }
   
-  public static boolean isSlidingMenuLayout() {
+  public static boolean isSlidingMenuLayoutPattern() {
     return slidingMenu != null;
   }
   
   public static void compileElement(Element element) {
-    CdvUtils.log("COMPILING ELEMENT " + element);
+    PhgUtils.log("COMPILING ELEMENT " + element);
     compileElementImpl(element);
   }
   
@@ -101,4 +101,13 @@ public class OnsenUi {
     $wnd.ons.compile(element);
   }-*/;
 
+  public static native boolean isContained(final Element elem, String containerId) /*-{
+    do {
+      if (elem.id == containerId) {
+        return true;
+      }
+    } while(elem = elem.parentElement );
+    return false;
+  }-*/;
+  
 }

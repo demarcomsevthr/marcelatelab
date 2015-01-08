@@ -1,8 +1,8 @@
 package it.mate.onscommons.client.onsen.dom;
 
 import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.callbacks.JSOCallback;
+import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -17,7 +17,7 @@ public class Navigator extends JavaScriptObject {
   }
   
   protected final void pushPage(String pageId, Options options) {
-    CdvUtils.log("PUSHING PAGE " + pageId);
+    PhgUtils.log("PUSHING PAGE " + pageId);
     pushPageImpl(pageId, options);
   }
   
@@ -28,7 +28,7 @@ public class Navigator extends JavaScriptObject {
   public final void insertPage(int index, String pageId) {
     Options options = Options.create();
     options.setHoge("hoge");
-    CdvUtils.log("INSERTING PAGE " + pageId + " AT " + index);
+    PhgUtils.log("INSERTING PAGE " + pageId + " AT " + index);
     insertPageImpl(index, pageId, options);
   }
   
@@ -53,7 +53,7 @@ public class Navigator extends JavaScriptObject {
   }-*/;
   
   public final void resetToPage(String pageId) {
-    CdvUtils.log("RESET TO PAGE " + pageId);
+    PhgUtils.log("RESET TO PAGE " + pageId);
     Options options = Options.create();
     resetToPageImpl(pageId, options);
   }
@@ -80,7 +80,7 @@ public class Navigator extends JavaScriptObject {
   
   protected final native void onAfterPagePushImpl(JSOCallback callback) /*-{
     var jsCallback = $entry(function(event) {
-      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
     });
     this.on('postpush', jsCallback);    
   }-*/;
@@ -95,7 +95,7 @@ public class Navigator extends JavaScriptObject {
   
   protected final native void onBeforePagePopImpl(JSOCallback callback) /*-{
     var jsCallback = $entry(function(event) {
-      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
     });
     this.on('prepop', jsCallback);    
   }-*/;
@@ -105,9 +105,9 @@ public class Navigator extends JavaScriptObject {
     for (int it = 0; it < pages.length(); it++) {
       Page page = pages.get(it);
       String pageName = page.getName();
-      CdvUtils.log( prompt + " - " + it + " - " + pageName);
+      PhgUtils.log( prompt + " - " + it + " - " + pageName);
     }
-    CdvUtils.log("CURRENT PAGE NAME = " + getCurrentPage().getName());
-    CdvUtils.log("CURRENT PAGE INDEX = " + getCurrentPage().getIndex());
+    PhgUtils.log("CURRENT PAGE NAME = " + getCurrentPage().getName());
+    PhgUtils.log("CURRENT PAGE INDEX = " + getCurrentPage().getIndex());
   }
 }
