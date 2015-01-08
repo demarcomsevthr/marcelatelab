@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayMixed;
+import com.google.gwt.user.client.Window;
 
 
 /**
@@ -314,7 +315,9 @@ public abstract class WebSQLDao {
             if (WebSQLDao.errorDelegate != null) {
               WebSQLDao.errorDelegate.execute(error.getMessage());
             }
-            PhgDialogUtils.showMessageDialog("Internal error executing query " + StringUtils.truncate(sqlStatement, 80) );
+            // 07/01/2015
+//          PhgDialogUtils.showMessageDialog("Internal error executing query " + StringUtils.truncate(sqlStatement, 80) );
+            Window.alert("Internal error executing query " + StringUtils.truncate(sqlStatement, 80));
           }
         };
       }
