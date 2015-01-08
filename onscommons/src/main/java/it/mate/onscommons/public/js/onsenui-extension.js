@@ -1,7 +1,9 @@
 
-/*
 
-*/
+window.onsSelect = function(selector) {
+  return window.$(selector);
+}
+
 
 (function() {
   'use strict;';
