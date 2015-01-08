@@ -1,7 +1,7 @@
 package it.mate.protons.client;
 
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.factories.AppClientFactory;
 
@@ -14,20 +14,20 @@ public class MainEntryPoint implements EntryPoint {
   @Override
   public void onModuleLoad() {
     
-    String traceActive = CdvUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
+    String traceActive = PhgUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
     if ("true".equals(traceActive)) {
-      CdvUtils.log("***********    TRACE ENABLED   *************");
-      CdvUtils.startTrace();
+      PhgUtils.log("***********    TRACE ENABLED   *************");
+      PhgUtils.startTrace();
     }
     
-    CdvUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
-    CdvUtils.logEnvironment();
+    PhgUtils.logEnvironment();
     
-    CdvUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
-    CdvUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
+    PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhgUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
 
-    CdvUtils.setDefaultExceptionHandler(Logger.getLogger(getClass().getName()));
+    PhgUtils.setDefaultExceptionHandler(Logger.getLogger(getClass().getName()));
     startApp();
     
   }

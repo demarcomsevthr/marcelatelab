@@ -1,7 +1,7 @@
 package it.mate.protons.client.factories;
 
-import it.mate.onscommons.client.utils.CdvUtils;
-import it.mate.onscommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.activities.mapper.MainActivityMapper;
 import it.mate.protons.shared.service.RemoteFacade;
 import it.mate.protons.shared.service.RemoteFacadeAsync;
@@ -31,7 +31,7 @@ public class AppGinModule extends AbstractGinModule {
   
   @Provides
   public RemoteFacadeAsync getRemoteFacade() {
-    CdvUtils.log("preparing remote facade...");
+    PhgUtils.log("preparing remote facade...");
     RemoteFacadeAsync facade = GWT.create(RemoteFacade.class);
     ServiceDefTarget service = (ServiceDefTarget)facade;
     if (OsDetectionUtils.isDesktop()) {
@@ -41,7 +41,7 @@ public class AppGinModule extends AbstractGinModule {
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_MODULE_URL, DEFAULT_FACADE_MODULE_URL), 
           AppClientFactory.IMPL.getNativeProperty(NAT_PROP_FACADE_RELATIVE_PATH, DEFAULT_FACADE_RELATIVE_PATH));
     }
-    CdvUtils.log("remote facade set on " + service.getServiceEntryPoint());
+    PhgUtils.log("remote facade set on " + service.getServiceEntryPoint());
     return facade;
   }
   

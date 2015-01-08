@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.ui.OnsSearchBox;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.view.SearchView.Presenter;
 
 import com.google.gwt.core.client.GWT;
@@ -47,7 +47,7 @@ public class SearchView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnSearch")
   public void onSearchBtn(TapEvent event) {
-    CdvUtils.log("text = " + boxSearch.getValue());
+    PhgUtils.log("text = " + boxSearch.getValue());
   }
 
 }
