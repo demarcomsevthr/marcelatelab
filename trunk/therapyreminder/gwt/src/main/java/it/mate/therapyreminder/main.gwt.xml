@@ -31,6 +31,8 @@
   
   <inherits name="it.mate.phgcommons.phgcommons" />
   
+  <inherits name="it.mate.phgcommons.mgwcommons" />
+  
   <inherits name="it.mate.therapyreminder.Adapter" />
   
   <inherits name="com.google.web.bindery.autobean.AutoBean"/>
