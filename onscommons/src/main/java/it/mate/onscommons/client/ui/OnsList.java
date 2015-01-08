@@ -1,7 +1,7 @@
 package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -23,7 +23,7 @@ public class OnsList extends HTMLPanel {
   protected OnsList(String tag, String html) {
     super(tag, html);
     getElement().addClassName(TAG_NAME);
-    CdvUtils.ensureId(getElement());
+    PhgUtils.ensureId(getElement());
   }
 
   @Override

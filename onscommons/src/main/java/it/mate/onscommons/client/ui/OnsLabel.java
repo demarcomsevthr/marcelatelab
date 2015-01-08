@@ -2,7 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Label;
@@ -15,7 +15,7 @@ public class OnsLabel extends Label {
 
   public OnsLabel(String text) {
     super(text);
-    CdvUtils.ensureId(getElement());
+    PhgUtils.ensureId(getElement());
     addStyleName("ons-label");
   }
   
