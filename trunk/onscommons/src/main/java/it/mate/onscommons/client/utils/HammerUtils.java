@@ -2,7 +2,7 @@ package it.mate.onscommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.utils.callbacks.JSOCallback;
+import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
@@ -36,7 +36,6 @@ public class HammerUtils {
   }
   
   private static native void jsMakeDraggableImpl(Element element, JSOCallback callback) /*-{
-//  var offset = @it.mate.protoph.client.utils.HammerUtils::getOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(element, 0.5);
     var offset = @it.mate.onscommons.client.utils.HammerUtils::getOffsetImpl(Lcom/google/gwt/dom/client/Element;D)(element, 0.5);
     var dragHandler = $entry(function(event) {
 //    @it.mate.protoph.client.utils.HammerUtils::log(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)('event = ', event);
@@ -45,7 +44,7 @@ public class HammerUtils {
       element.style.left = (touchX - offset.left) + 'px';
       element.style.top = (touchY - offset.top) + 'px';
       var touch = event.pointers[0];
-      callback.@it.mate.onscommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(touch);
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(touch);
     });
     var hammertime = new $wnd.Hammer(element);
     hammertime.on("pan", dragHandler);
@@ -53,8 +52,8 @@ public class HammerUtils {
   }-*/;
   
   private static native void log(String prompt, JavaScriptObject jso) /*-{
-    var str = @it.mate.onscommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(jso);
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)(prompt+str);
+    var str = @it.mate.phgcommons.client.utils.JSONUtils::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)(jso);
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(prompt+str);
   }-*/;
 
   public static class DragEvent {
@@ -123,24 +122,15 @@ public class HammerUtils {
     public void handle(Element element);
   }
   
-  public static void onPress(final Element element, final Delegate<Element> delegate) {
-    jsOnPressImpl(element, new ElementCallback() {
-      public void handle(Element element) {
-        delegate.execute(element);
-      }
-    });
-  }
-  
-  private static native void jsOnPressImpl(Element element, ElementCallback callback) /*-{
-    var jsHandler = $entry(function(event) {
-      @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('received hammer handler');
-      callback.@it.mate.onscommons.client.utils.HammerUtils.ElementCallback::handle(Lcom/google/gwt/dom/client/Element;)(element);
+  public static native void addDragHandlerImpl(Element element, String eventName, JSOCallback callback) /*-{
+    var dragHandler = $entry(function(event) {
+      var touchX = event.pointers[0].pageX;
+      var touchY = event.pointers[0].pageY;
+      var touch = event.pointers[0];
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(touch);
     });
     var hammertime = new $wnd.Hammer(element);
-    @it.mate.onscommons.client.utils.CdvUtils::log(Ljava/lang/String;)('setting hammer handler');
-//  hammertime.on("press", jsHandler);
-    hammertime.on("tap", jsHandler);
+    hammertime.on(eventName, dragHandler);
   }-*/;
-  
   
 }

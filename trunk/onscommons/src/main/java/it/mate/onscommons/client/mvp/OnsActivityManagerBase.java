@@ -5,7 +5,7 @@ import it.mate.onscommons.client.onsen.OnsenReadyHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.ui.OnsTemplate;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
     if (!OnsenUi.isInitialized()) {
       OnsenUi.initializeOnsen(new OnsenReadyHandler() {
         public void onReady() {
-          CdvUtils.log("ONSEN READY");
+          PhgUtils.log("ONSEN READY");
         }
       });
     }
@@ -106,7 +106,7 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
     Element innerElem = getCurrentPage().getInnerPageElement();
     ElementWrapperPanel wrapper = new ElementWrapperPanel(innerElem);
     String currentPageName = getCurrentPage().getName();
-    CdvUtils.log("WRAPPING CURRENT PAGE " + currentPageName);
+    PhgUtils.log("WRAPPING CURRENT PAGE " + currentPageName);
     setActivePanel(wrapper, newToken);
   }
   
@@ -125,14 +125,14 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
   }
   
   protected void compileActivePanel() {
-    if (!CdvUtils.isReallyAttached(activePanelId)) {
+    if (!PhgUtils.isReallyAttached(activePanelId)) {
       try {
         RootPanel.get().remove(activePanel);
       } catch (Exception ex) { }
-      CdvUtils.log("ADDING PANEL TO DOCUMENT - " + activePanel.getElement());
+      PhgUtils.log("ADDING PANEL TO DOCUMENT - " + activePanel.getElement());
       RootPanel.get().add(activePanel);
     }
-    if (CdvUtils.isReallyAttached(activePanelId)) {
+    if (PhgUtils.isReallyAttached(activePanelId)) {
       Element templateElem = activePanel.getElement();
       if (templateElem != null) {
         OnsenUi.compileElement(templateElem);

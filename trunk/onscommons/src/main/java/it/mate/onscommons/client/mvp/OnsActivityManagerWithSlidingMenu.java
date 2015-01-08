@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Page;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -21,7 +21,7 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
   @Override
   public void onPlaceChange(PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
-    CdvUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
+    PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     setActivePanelFromTemplate(newPlace);
     super.onPlaceChange(event);
     compileActivePanel();

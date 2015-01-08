@@ -7,7 +7,7 @@ import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
 import it.mate.onscommons.client.onsen.dom.Page;
-import it.mate.onscommons.client.utils.CdvUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Element;
@@ -26,9 +26,9 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
   @Override
   public void onPlaceChange(PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
-    CdvUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
+    PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     boolean preventPush = setActivePanelFromTemplate(newPlace);
-    CdvUtils.log("STARTING ACTIVITY FOR " + newPlace);
+    PhgUtils.log("STARTING ACTIVITY FOR " + newPlace);
     super.onPlaceChange(event);
     if (!preventPush) {
       Integer insertIndex = null;
@@ -87,7 +87,7 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
         Page enteringPage = event.getEnterPage();
         if (enteringPage != null) {
           String enteringPageName = enteringPage.getName();
-          CdvUtils.log("AFTER PUSH PAGE " + enteringPageName);
+          PhgUtils.log("AFTER PUSH PAGE " + enteringPageName);
           OnsenUi.getNavigator().log("NAVIGATOR PAGE");
         }
       }
@@ -99,7 +99,7 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
       public void execute(NavigatorEvent event) {
         if (allowPagePoping) {
           allowPagePoping = false;
-          CdvUtils.log("CONTINUE POPING");
+          PhgUtils.log("CONTINUE POPING");
           OnsenUi.getNavigator().log("BEFORE POPING");
           return;
         }
@@ -107,15 +107,15 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
         int index = OnsenUi.getNavigator().getCurrentPage().getIndex() - 1;
         Page prevPage = OnsenUi.getNavigator().getPages().get(index);
         String prevPageName = prevPage.getName();
-        CdvUtils.log("PREV PAGE NAME = " + prevPageName);
-        CdvUtils.log("DESTROYING PAGE " + prevPage);
+        PhgUtils.log("PREV PAGE NAME = " + prevPageName);
+        PhgUtils.log("DESTROYING PAGE " + prevPage);
         prevPage.destroy();
 
-        CdvUtils.log("CANCELING POP EVENT");
+        PhgUtils.log("CANCELING POP EVENT");
         event.cancel();
         OnsenUi.getNavigator().log("AFTER DESTROY PAGE");
         Place prevPlace = getPlace(prevPageName);
-        CdvUtils.log("GOING TO PLACE " + prevPlace);
+        PhgUtils.log("GOING TO PLACE " + prevPlace);
         eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, index));
       }
     });

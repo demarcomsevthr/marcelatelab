@@ -2,9 +2,11 @@ package it.mate.onscommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.onscommons.client.plugins.GlobalizationPlugin;
-import it.mate.onscommons.client.utils.callbacks.StringCallback;
-import it.mate.onscommons.client.utils.callbacks.VoidCallback;
+import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
+import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
+import it.mate.phgcommons.client.utils.LogPlugin;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.Time;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +28,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class CdvUtils {
+public class CdvUtils2 {
   
   private static int tabletWrapperPct = 80;
   
@@ -76,19 +78,19 @@ public class CdvUtils {
     Delegate<String> datePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
         if (pattern == null) {
-          CdvUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = CdvUtils.getLocalStorageItem("debug-date-pattern");
+          CdvUtils2.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = CdvUtils2.getLocalStorageItem("debug-date-pattern");
           if (pattern == null) {
             if ("it".equals(getAppLocalLanguage())) {
               pattern = "dd/MM/yyyy";
             } else {
               pattern = "MM/dd/yyyy";
             }
-            CdvUtils.setLocalStorageItem("debug-date-pattern", pattern);
+            CdvUtils2.setLocalStorageItem("debug-date-pattern", pattern);
           }
         }
         defaultDatePattern = pattern;
-        CdvUtils.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
+        CdvUtils2.log("DEFAULT DATE PATTERN = " + defaultDatePattern);
       }
     };
     if (initialDatePattern != null) {
@@ -101,25 +103,25 @@ public class CdvUtils {
     Delegate<String> timePatternInitializer = new Delegate<String>() {
       public void execute(String pattern) {
         if (pattern == null) {
-          CdvUtils.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
-          pattern = CdvUtils.getLocalStorageItem("debug-time-pattern");
+          CdvUtils2.log("MAYBE MISSING GLOBALIZATION PLUGIN (cordova plugin add org.apache.cordova.globalization)?");
+          pattern = CdvUtils2.getLocalStorageItem("debug-time-pattern");
           if (pattern == null) {
             if ("it".equals(getAppLocalLanguage())) {
               pattern = "HH:mm";
             } else {
               pattern = "h:mm a";
             }
-            CdvUtils.setLocalStorageItem("debug-time-pattern", pattern);
+            CdvUtils2.setLocalStorageItem("debug-time-pattern", pattern);
           }
         }
         defaultTimePattern = pattern;
-        CdvUtils.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
+        CdvUtils2.log("DEFAULT TIME PATTERN = " + defaultTimePattern);
         if (pattern.contains("HH")) {
           Time.set24HFormat();
         } else {
           Time.set12HFormat();
         }
-        CdvUtils.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
+        CdvUtils2.log("CURRENT TIME FORMAT IS " + Time.getCurrentFormat().getPattern());
       }
     };
     if (initialTimePattern != null) {
@@ -243,18 +245,18 @@ public class CdvUtils {
   }-*/;
 
   public static void adaptWrapperPanel(final Panel wrapperPanel, String id, final boolean adaptVerMargin, final int headerPanelHeight, final Delegate<Element> delegate) {
-    CdvUtils.log("adaptWrapperPanel.1");
+    CdvUtils2.log("adaptWrapperPanel.1");
     wrapperPanel.getElement().setId(id);
-    CdvUtils.log("adaptWrapperPanel.2");
+    CdvUtils2.log("adaptWrapperPanel.2");
     if (OsDetectionUtils.isTablet()) {
-      CdvUtils.log("adaptWrapperPanel.3");
+      CdvUtils2.log("adaptWrapperPanel.3");
       GwtUtils.onAvailable(id, new Delegate<Element>() {
         public void execute(final Element wrapperPanelElem) {
           GwtUtils.deferredExecution(new Delegate<Void>() {
             public void execute(Void element) {
-              CdvUtils.log("adaptWrapperPanel.4");
+              CdvUtils2.log("adaptWrapperPanel.4");
               int height = getTabletWrapperHeight();
-              CdvUtils.log("applying wrapperPanel height = " + height);
+              CdvUtils2.log("applying wrapperPanel height = " + height);
               wrapperPanelElem.getStyle().setHeight(height, Unit.PX);
               if (adaptVerMargin) {
                 int verMargin = ( Window.getClientHeight() - height ) / 2 - headerPanelHeight;
@@ -285,13 +287,13 @@ public class CdvUtils {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
             int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
-            CdvUtils.log("setting wrapperPanel height to " + actualHeight);
+            CdvUtils2.log("setting wrapperPanel height to " + actualHeight);
             wrapperPanel.setHeight(actualHeight + "px");
             wrapperPanel.setWidth(Window.getClientWidth() + "px");
           }
         });
       } else {
-        CdvUtils.log("setting wrapperPanel height to " + actualHeight);
+        CdvUtils2.log("setting wrapperPanel height to " + actualHeight);
         wrapperPanel.setHeight(actualHeight + "px");
         wrapperPanel.setWidth(Window.getClientWidth() + "px");
       }
@@ -310,7 +312,7 @@ public class CdvUtils {
   }
   
   public static void setTabletWrapperPct(int tabletWrapperPct) {
-    CdvUtils.tabletWrapperPct = tabletWrapperPct;
+    CdvUtils2.tabletWrapperPct = tabletWrapperPct;
   }
   
   public static native String getDeviceName() /*-{
@@ -349,7 +351,7 @@ public class CdvUtils {
   }-*/;
 
   public static void setUseLogPlugin(boolean useLogPlugin) {
-    CdvUtils.useLogPlugin = useLogPlugin;
+    CdvUtils2.useLogPlugin = useLogPlugin;
   }
   
   public static String dateToString(Date date) {
@@ -368,7 +370,7 @@ public class CdvUtils {
   }
   
   public static void startTrace() {
-    CdvUtils.trace = new ArrayList<String>();
+    CdvUtils2.trace = new ArrayList<String>();
   }
   
   public static List<String> getTrace() {
@@ -376,7 +378,7 @@ public class CdvUtils {
   }
   
   public static void clearTrace() {
-    CdvUtils.trace = null;
+    CdvUtils2.trace = null;
   }
   
   public static void callDebugHook(JavaScriptObject jso) {
@@ -400,17 +402,12 @@ public class CdvUtils {
     $wnd.glbDebugHook(jso);
   }-*/;
 
+  /*
   public static void getLocaleLanguageFromDevice(final Delegate<String> delegate) {
     GlobalizationPlugin.getLocaleName(new StringCallback() {
       @SuppressWarnings("unused")
       public void handle(String language) {
 
-        // TODO: DA SISTEMARE
-        /**
-         * 15/10/2014 - FORZO L'UTILIZZO DEL CURRENT LOCALE PERCHE' HO RISCONTRATO
-         *              CHE IL GLOBALIZATION PLUGIN NON RILEVA CORRETTAMENTE IL
-         *              LANGUAGE IMPOSTATO SUL DEVICE!
-         */
         language = null;
         ////////////////////////////////////////////////////////////////////////////
         
@@ -422,6 +419,7 @@ public class CdvUtils {
       }
     });
   }
+  */
   
   public static String getLocaleLanguageFromLocaleInfo() {
     String language = LocaleInfo.getCurrentLocale().getLocaleName();
@@ -524,7 +522,7 @@ public class CdvUtils {
     if (callback != null) {
       var jsCallback = null;
       jsCallback = $entry(function() {
-        callback.@it.mate.onscommons.client.utils.callbacks.VoidCallback::handle()();
+        callback.@it.mate.phgcommons.client.utils.callbacks.VoidCallback::handle()();
       });
       $wnd.addEventListener(eventName, jsCallback, false);
     }
@@ -532,7 +530,7 @@ public class CdvUtils {
   
   public static void setDesktopDebugBorder(int width, int height) {
     if (OsDetectionUtils.isDesktop()) {
-      CdvUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
+      CdvUtils2.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
       RootPanel.getBodyElement().getStyle().setWidth(width, Unit.PX);
       RootPanel.getBodyElement().getStyle().setHeight(height, Unit.PX);
       RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
@@ -549,7 +547,7 @@ public class CdvUtils {
           log.log(Level.SEVERE, "uncaught exception", ex);
         }
         ex.printStackTrace();
-        if (!CdvUtils.isSuspendUncaughtExceptionAlerts()) {
+        if (!CdvUtils2.isSuspendUncaughtExceptionAlerts()) {
 //        Window.alert("uncaught: " + ex.getClass().getName() + " - " + ex.getMessage());
         }
         StackTraceElement stea[] = ex.getStackTrace();
