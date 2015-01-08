@@ -27,6 +27,9 @@ call %MVN2CMD% %DEP_CLEAN% install
 cd %BASEAPPDIR%\..\phgcommons
 call %MVN2CMD% %DEP_CLEAN% install
 
+cd %BASEAPPDIR%\..\mgwcommons
+call %MVN2CMD% %DEP_CLEAN% install
+
 :NO_GWT_DEPENDENCIES
 
 if "%USE_GAE_DEPENDENCIES%"=="" GOTO NO_GAE_DEPENDENCIES
