@@ -3,7 +3,6 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
-import it.mate.phgcommons.client.ui.CalendarDialog;
 import it.mate.phgcommons.client.utils.callbacks.StringCallback;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 
@@ -22,13 +21,17 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+//import it.mate.phgcommons.client.ui.CalendarDialog;
+/*
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
 import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
+*/
 
 public class PhgUtils {
   
@@ -46,7 +49,8 @@ public class PhgUtils {
   
 
   public static void logEnvironment() {
-    log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
+//  log("os detection = " + (MGWT.getOsDetection().isAndroid() ? "android" : MGWT.getOsDetection().isIOs() ? "ios" : "other"));
+    log("os detection = " + (OsDetectionUtils.isAndroid() ? "android" : OsDetectionUtils.isIOs() ? "ios" : "other"));
     log("CURRENT LAYOUT = " + getLayoutInfo());
     if (OsDetectionUtils.isIOs()) {
       log("IOs phone layout is " + OsDetectionUtils.IPHONE_WIDTH + " x " + OsDetectionUtils.IPHONE_HEIGHT);
@@ -76,7 +80,9 @@ public class PhgUtils {
     if (initialLanguage != null) {
       setAppLocalLanguageImpl(initialLanguage);
     }
-    CalendarDialog.setLanguage(PhgUtils.getAppLocalLanguage());
+    
+    // 07/01/2015 - SPOSTATO NEL COSTRUTTORE
+//  CalendarDialog.setLanguage(PhgUtils.getAppLocalLanguage());
     
     log("Date format initialization...");
     Delegate<String> datePatternInitializer = new Delegate<String>() {
@@ -482,7 +488,7 @@ public class PhgUtils {
     Window.Location.reload();
   }
   
-  private static native void setAppLocalLanguageImpl(String language) /*-{
+  public static native void setAppLocalLanguageImpl(String language) /*-{
     if ($wnd.setAppLocalLanguage === undefined) {
       $wnd.localStorage.setItem("app-local-language", language);
     } else {
@@ -568,6 +574,7 @@ public class PhgUtils {
     });
   }
   
+  /*
   public static void prepareInnerScrollPanel(final ScrollPanel scrollPanel, final Delegate<Boolean> scrollDelegate) {
     scrollPanel.setScrollingEnabledY(true);
     GwtUtils.deferredExecution(new Delegate<Void>() {
@@ -587,6 +594,21 @@ public class PhgUtils {
           scrollDelegate.execute(false);
         }
       });
+    }
+  }
+  */
+  
+  public static String elementToString(Element element) {
+    return GwtUtils.getJsPropertyString(element, "outerHTML");
+  }
+  
+  public static native boolean isReallyAttached(String elemId) /*-{
+    return $doc.getElementById(elemId) != null;
+  }-*/;
+  
+  public static void ensureId(Element element) {
+    if (element.getId() == null || "".equals(element.getId())) {
+      element.setId(DOM.createUniqueId());
     }
   }
   

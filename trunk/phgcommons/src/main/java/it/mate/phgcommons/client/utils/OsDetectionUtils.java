@@ -1,7 +1,7 @@
 package it.mate.phgcommons.client.utils;
 
 import com.google.gwt.user.client.Window;
-import com.googlecode.mgwt.ui.client.MGWT;
+//import com.googlecode.mgwt.ui.client.MGWT;
 
 public class OsDetectionUtils {
   
@@ -39,11 +39,13 @@ public class OsDetectionUtils {
   }
   
   public static boolean isIOs() {
-    return MGWT.getOsDetection().isIOs();
+//  return MGWT.getOsDetection().isIOs();
+    return PhgUtils.getDevicePlatform().toLowerCase().contains("ios") || PhgUtils.getDevicePlatform().toLowerCase().contains("desktop");
   }
 
   public static boolean isAndroid() {
-    return MGWT.getOsDetection().isAndroid();
+//  return MGWT.getOsDetection().isAndroid();
+    return PhgUtils.getDevicePlatform().toLowerCase().contains("android");
   }
   
   public static boolean is3Inch() {
@@ -70,20 +72,24 @@ public class OsDetectionUtils {
    */
   
   public static boolean isTabletLandscape() {
-    if (MGWT.getOsDetection().isIOs()) {
+//  if (MGWT.getOsDetection().isIOs()) {
+    if (isIOs()) {
       return (getDisplayWidth() >= IPAD_LAND_WIDTH && getDisplayHeight() >= IPAD_LAND_HEIGHT);
     }
-    if (MGWT.getOsDetection().isAndroid()) {
+//  if (MGWT.getOsDetection().isAndroid()) {
+    if (isAndroid()) {
       return (getDisplayWidth() >= APAD_LAND_WIDTH && getDisplayHeight() >= APAD_LAND_HEIGHT);
     }
     return false;
   }
   
   public static boolean isTabletPortrait() {
-    if (MGWT.getOsDetection().isIOs()) {
+//  if (MGWT.getOsDetection().isIOs()) {
+    if (isIOs()) {
       return (getDisplayWidth() >= IPAD_PORT_WIDTH && getDisplayHeight() >= IPAD_PORT_HEIGHT);
     }
-    if (MGWT.getOsDetection().isAndroid()) {
+//  if (MGWT.getOsDetection().isAndroid()) {
+    if (isAndroid()) {
       return (getDisplayWidth() >= APAD_PORT_WIDTH && getDisplayHeight() >= APAD_PORT_HEIGHT);
     }
     return false;
