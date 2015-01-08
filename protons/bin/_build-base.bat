@@ -24,6 +24,9 @@ if "%SKIP_GWT_DEPENDENCIES%"=="true" GOTO NO_GWT_DEPENDENCIES
 cd %BASEAPPDIR%\..\gwtcommons
 call %MVN2CMD% %DEP_CLEAN% install
 
+cd %BASEAPPDIR%\..\phgcommons
+call %MVN2CMD% %DEP_CLEAN% install
+
 cd %BASEAPPDIR%\..\onscommons
 call %MVN2CMD% %DEP_CLEAN% install
 
