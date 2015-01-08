@@ -34,6 +34,8 @@
   
   <inherits name="it.mate.phgcommons.phgcommons" />
   
+  <inherits name="it.mate.phgcommons.mgwcommons" />
+  
   <replace-with class="it.mate.ckd.client.factories.AppClientFactoryImpl">
     <when-type-is class="it.mate.ckd.client.factories.AppClientFactory"/>
   </replace-with>
