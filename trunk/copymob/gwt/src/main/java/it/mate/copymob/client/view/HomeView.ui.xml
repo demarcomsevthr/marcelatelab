@@ -1,0 +1,41 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
+  
+  
+    <o:OnsPage>
+    
+      <o:OnsToolbar>
+        <div class="left">
+          <o:OnsToolbarButton ui:field="btnMenu" visible="false"><o:OnsIcon icon="fa-bars"/></o:OnsToolbarButton>
+        </div>
+        <div class="center">Home</div>
+      </o:OnsToolbar>
+  
+      <g:HTML addStyleNames="app-home-presentation">
+        <i>Presentazione servizio qui</i>
+      </g:HTML>
+  
+      <g:VerticalPanel horizontalAlignment="left" addStyleNames="app-home-buttonbar">
+        <o:OnsButtonPanel ui:field="btnTimbri">
+          <o:OnsIcon icon="fa-book"/>Timbri
+        </o:OnsButtonPanel>
+        <o:OnsButtonPanel ui:field="btnOrdini">
+          <o:OnsIcon icon="fa-shopping-cart"/>I miei ordini
+        </o:OnsButtonPanel>
+        <o:OnsButtonPanel ui:field="btnSettings">
+          <o:OnsIcon icon="fa-cog"/>Settings
+        </o:OnsButtonPanel>
+      </g:VerticalPanel>
+      
+      <g:Label ui:field="homeLbl" addStyleNames="app-home-lbl"/>
+      
+    </o:OnsPage>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

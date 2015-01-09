@@ -1,0 +1,14 @@
+<html>
+<body>
+Upload page.
+
+<form action="/upload.uploadServlet" method="post" enctype="multipart/form-data">
+  Select a file to upload:
+  <input type="hidden" name="op" value="FILE_UPLOAD"/>
+  <input type="text" name="fileName" id="fileName"/>
+  <input type="file" name="fileContent" id="fileContent"/>
+  <input type="submit" value="Upload File" name="submit"/>
+</form>
+
+</body>
+</html>
