@@ -1,0 +1,59 @@
+
+@external gwt*, phg*, app*, ons*;
+
+@eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
+
+@eval windowHeight it.mate.protoph.client.ui.theme.CustomTheme.getWindowHeight();
+
+.app-home-presentation {
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  top: 4em;
+}
+
+.app-home-buttonbar {
+  position: fixed;
+  bottom: 2em;
+  width: 100%;
+}
+
+.app-home-buttonbar .ons-button {
+  text-align: left;
+  height: 3em;
+  padding-top: 0.5em;
+  padding-left: 1.5em;
+}
+	
+.app-home-lbl {
+  position: absolute;
+  bottom: 0.5em;
+  width: 100%;
+  text-align: center;
+}
+
+.app-toolbar-search-box {
+  margin-top: 0.2em;
+  height: 2.4em;
+  width: 150%;
+}
+
+.app-ingredients-carousel {
+  width: 50%;
+  height: 30%;
+  background-color: rgba(122, 255, 0, 0.4);
+  margin-left: 25%;
+  margin-top: 2em;
+}
+
+.app-ingredients-carousel ons-carousel-item {
+  background-color: grey;
+}
+
+.app-carousel-item-inner {
+  margin: 5%;
+  background-color: red;
+  height: 65%;
+  border-radius: 5%;
+  padding: 10%;
+}
