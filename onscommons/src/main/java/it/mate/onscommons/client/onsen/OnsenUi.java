@@ -75,6 +75,10 @@ public class OnsenUi {
     return navigator;
   }
   
+  public static void setNavigator(Navigator navigator) {
+    OnsenUi.navigator = navigator;
+  }
+  
   public static boolean isNavigatorLayoutPattern() {
     return navigator != null;
   }
