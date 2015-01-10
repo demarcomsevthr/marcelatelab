@@ -6,6 +6,7 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -13,14 +14,24 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
   
+  ActivityMapper mapper;  
+  
   public OnsActivityManagerWithSlidingMenu(ActivityMapper mapper, EventBus eventBus, Place menuPlace) {
     super(mapper, eventBus);
+    this.mapper = mapper;
     eventBus.fireEvent(new OnsPlaceChangeEvent(menuPlace, true));
   }
   
   @Override
   public void onPlaceChange(PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
+    
+    Activity act = mapper.getActivity(newPlace);
+    if (act == null) {
+      PhgUtils.log("ACTIVITY NULL >> SKIP");
+      return;
+    }
+    
     PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     setActivePanelFromTemplate(newPlace);
     super.onPlaceChange(event);
