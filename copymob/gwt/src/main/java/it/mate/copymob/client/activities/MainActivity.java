@@ -67,10 +67,6 @@ public class MainActivity extends OnsAbstractActivity implements
       }
     });
 
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
-      OnsenUi.getSlidingMenu().setSwipeable(true);
-    }
-    
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
@@ -112,10 +108,10 @@ public class MainActivity extends OnsAbstractActivity implements
       });
     }
   }
-  
+
   @Override
   public BaseView getView() {
-    return null;
+    return this.view;
   }
 
   @Override
