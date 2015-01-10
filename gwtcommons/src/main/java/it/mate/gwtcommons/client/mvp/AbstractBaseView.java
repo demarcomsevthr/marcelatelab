@@ -18,4 +18,8 @@ public abstract class AbstractBaseView <A extends BasePresenter> extends Composi
     setModel(model, null);
   }
   
+  public void onDetachView() {
+    
+  }
+  
 }
