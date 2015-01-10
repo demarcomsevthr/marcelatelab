@@ -171,7 +171,7 @@ public class MainActivity extends OnsAbstractActivity implements
   
   @Override
   public BaseView getView() {
-    return null;
+    return view;
   }
 
   @Override

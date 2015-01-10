@@ -6,10 +6,16 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.mvp.OnsActivityManagerWithNavigator;
+import it.mate.onscommons.client.mvp.OnsMvpUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.ui.OnsCarousel;
 import it.mate.onscommons.client.ui.OnsCarouselItem;
+import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.protons.client.activities.mapper.IngredientActivityMapper;
+import it.mate.protons.client.factories.AppClientFactory;
+import it.mate.protons.client.places.IngredientPlace;
+import it.mate.protons.client.places.IngredientPlaceHistoryMapper;
 import it.mate.protons.client.view.IngredientListView.Presenter;
 
 import com.google.gwt.core.client.GWT;
@@ -29,7 +35,8 @@ public class IngredientListView extends AbstractBaseView<Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField OnsCarousel carousel;
+//@UiField OnsCarousel carousel;
+  @UiField OnsNavigator ingNavigator;
   
   public IngredientListView() {
     initUI();
@@ -42,21 +49,34 @@ public class IngredientListView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
     if (OnsenUi.isSlidingMenuLayoutPattern()) {
       OnsenUi.getSlidingMenu().setSwipeable(false);
     }
-
-    
   }
-
-  /*
+  
   @Override
-  protected void onUnload() {
-    PhgUtils.log("UNLOAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    super.onUnload();
+  protected void onAttach() {
+    super.onAttach();
+    initIngredientMvc();
   }
-  */
+  
+  private OnsActivityManagerWithNavigator activityManager = null;
+  
+  private void initIngredientMvc() {
+    OnsenUi.compileElement(ingNavigator.getElement());
+    OnsenUi.setNavigator(ingNavigator.getController());
+    IngredientActivityMapper activityMapper = new IngredientActivityMapper(AppClientFactory.IMPL);
+    activityManager = new OnsActivityManagerWithNavigator(activityMapper, AppClientFactory.IMPL.getBinderyEventBus());
+    IngredientPlaceHistoryMapper historyMapper = GWT.create(IngredientPlaceHistoryMapper.class);
+    OnsMvpUtils.initMvpMapped(activityMapper.getHistoryName(), AppClientFactory.IMPL, activityMapper, historyMapper, new IngredientPlace());
+  }
+  
+  @Override
+  public void onDetachView() {
+    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+      OnsenUi.getSlidingMenu().setSwipeable(true);
+    }
+  }
   
   @Override
   public void setModel(Object model, String tag) {
@@ -72,28 +92,14 @@ public class IngredientListView extends AbstractBaseView<Presenter> {
       final int n = it+1;
       String divId = "swipeArea" + it;
       String html = "<div id=\""+divId+"\" class=\"app-carousel-item-inner\">Item " + n + "</div>";
-//    OnsGestureDetector gesture = new OnsGestureDetector(html);
-//    OnsCarouselItem item = new OnsCarouselItem(gesture);
       OnsCarouselItem item = new OnsCarouselItem(html);
-
       item.addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
           PhgUtils.log("tapped " + n);
         }
       });
-
-      /*
-      GwtUtils.onAvailable(divId, new Delegate<Element>() {
-        public void execute(Element element) {
-//        TouchEventUtils.test(element);
-          
-        }
-      });
-      */
-      
-      carousel.add(item);
+//    carousel.add(item);
     }
-    
   }
   
 }
