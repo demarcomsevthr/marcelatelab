@@ -5,8 +5,7 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-  
-  
+
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -16,9 +15,9 @@
         <div class="center">Ingredients</div>
       </o:OnsToolbar>
       
-        <o:OnsCarousel addStyleNames="app-ingredients-carousel" autoscroll="true" draggable="true" ui:field="carousel">
-        
-        </o:OnsCarousel>
+      <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" draggable="true" ui:field="carousel"/>
+      
+      <o:OnsButton text="Ordina" ui:field="btnChoose" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>
     

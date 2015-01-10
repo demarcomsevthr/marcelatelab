@@ -38,22 +38,35 @@
   width: 150%;
 }
 
-.app-ingredients-carousel {
-  width: 50%;
-  height: 30%;
-  background-color: rgba(122, 255, 0, 0.4);
-  margin-left: 25%;
-  margin-top: 2em;
+.app-timbri-carousel {
+  width: 100%;
+  height: 100%;
 }
 
-.app-ingredients-carousel ons-carousel-item {
-  background-color: grey;
+.app-timbri-carousel ons-carousel-item {
+  background-color: rgb(228, 241, 255);
+  padding: 0.5em;
 }
 
 .app-carousel-item-inner {
-  margin: 5%;
-  background-color: red;
-  height: 65%;
+  height: 100%;
+}
+
+.app-carousel-item-inner img {
   border-radius: 5%;
-  padding: 10%;
+  width: 95%;
+}
+
+.app-carousel-item-name {
+  margin-left: 5%;
+  font-size: 1.2em;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.app-timbri-choose-btn {
+  position: fixed;
+  bottom: 0.5em;
 }
