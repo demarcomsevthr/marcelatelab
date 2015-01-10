@@ -12,14 +12,8 @@
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center">Ingredients</div>
+        <div class="center">Ingredients / Sub 1</div>
       </o:OnsToolbar>
-
-      <!--       
-      <o:OnsCarousel addStyleNames="app-ingredients-carousel" autoscroll="true" draggable="true" ui:field="carousel"/>
-       -->
-       
-      <o:OnsNavigator ui:field="ingNavigator"/>
       
     </o:OnsPage>
     

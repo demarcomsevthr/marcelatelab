@@ -8,6 +8,8 @@ import it.mate.protons.client.view.ApplicationEditView;
 import it.mate.protons.client.view.ApplicationListView;
 import it.mate.protons.client.view.HomeView;
 import it.mate.protons.client.view.IngredientListView;
+import it.mate.protons.client.view.IngredientSub1View;
+import it.mate.protons.client.view.IngredientSub2View;
 import it.mate.protons.client.view.MenuView;
 import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
@@ -40,5 +42,9 @@ public interface AppGinjector extends CommonGinjector {
   public ApplicationEditView getApplicationEditView();
   
   public IngredientListView getIngredientListView();
+  
+  public IngredientSub1View getIngredientSub1View();
+  
+  public IngredientSub2View getIngredientSub2View();
   
 }
