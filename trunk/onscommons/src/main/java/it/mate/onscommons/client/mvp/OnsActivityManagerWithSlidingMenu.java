@@ -27,6 +27,7 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
   @Override
   public void onPlaceChange(final PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
+    PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     
     Activity act = mapper.getActivity(newPlace);
     if (act == null) {
@@ -44,7 +45,6 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
       return;
     }
     
-    PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
     setActivePanelFromTemplate(newPlace);
     super.onPlaceChange(event);
     compileActivePanel();
