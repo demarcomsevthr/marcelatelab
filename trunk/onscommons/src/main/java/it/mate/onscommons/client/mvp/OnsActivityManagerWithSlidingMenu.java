@@ -1,6 +1,8 @@
 package it.mate.onscommons.client.mvp;
 
 import it.mate.gwtcommons.client.places.HasToken;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Page;
@@ -23,12 +25,22 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
   }
   
   @Override
-  public void onPlaceChange(PlaceChangeEvent event) {
+  public void onPlaceChange(final PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
     
     Activity act = mapper.getActivity(newPlace);
     if (act == null) {
       PhgUtils.log("ACTIVITY NULL >> SKIP");
+      
+      //TODO: CON QUESTO VA IN LOOP
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          if (OnsActivityManagerWithNavigator.instance != null) {
+            OnsActivityManagerWithNavigator.instance.onPlaceChange(event);
+          }
+        }
+      });
+      
       return;
     }
     
