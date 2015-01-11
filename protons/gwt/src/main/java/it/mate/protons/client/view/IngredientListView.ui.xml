@@ -8,14 +8,13 @@
   
     <o:OnsPage>
     
+      <!--       
       <o:OnsToolbar>
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
         <div class="center">Ingredients</div>
       </o:OnsToolbar>
-
-      <!--       
       <o:OnsCarousel addStyleNames="app-ingredients-carousel" autoscroll="true" draggable="true" ui:field="carousel"/>
        -->
        
