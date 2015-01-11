@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsToolbarButton;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.protons.client.constants.AppProperties;
 import it.mate.protons.client.view.HomeView.Presenter;
 
@@ -57,6 +58,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
 
   @UiHandler("btnSettings")
   public void onBtnSettings(TapEvent event) {
+    PhgUtils.log("tapped");
     getPresenter().goToSettingsView();
   }
   
