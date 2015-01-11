@@ -33,7 +33,7 @@ public class IngredientActivity extends OnsAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
     if (place.getToken().equals(IngredientPlace.SUB1)) {
-      this.view = AppClientFactory.IMPL.getGinjector().getIngredientListView();
+      this.view = AppClientFactory.IMPL.getGinjector().getIngredientSub1View();
     }
     
     view.setPresenter(this);
