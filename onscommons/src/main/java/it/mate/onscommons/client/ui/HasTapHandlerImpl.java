@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
@@ -17,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HasTapHandlerImpl {
   
-  private final static String EVENT_NAME = "tap"; 
+  private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "tap"; 
   
   private List<TapHandler> tapHandlers = new ArrayList<TapHandler>();
   
