@@ -376,5 +376,65 @@ public class FileSystemPlugin {
     }, failure);
   }
   
+  public static void readApplicationFileAsEncodedData (final String sourceFile, final Delegate<String> delegate) {
+    PhgUtils.log("READING " + sourceFile);
+    final JSOStringCallback failure = new JSOStringCallback() {
+      public void handle(String errorCode) {
+        PhgUtils.log("COPYING ERROR CODE = " + errorCode);
+        delegate.execute(null);
+      }
+    };
+    getApplicationFileImpl(sourceFile, new JSOSuccess() {
+      public void handle(JavaScriptObject sourceFileEntry) {
+        
+        PhgUtils.log("getting file from file entry " + sourceFileEntry);
+        
+        getFileFromFileEntryImpl(sourceFileEntry, new JSOSuccess() {
+          public void handle(JavaScriptObject file) {
+            
+            PhgUtils.log("reading file " + file);
+            
+            readFileAsEncodedDataImpl(file, new JSOSuccess() {
+              public void handle(JavaScriptObject evt) {
+                JavaScriptObject target = GwtUtils.getJsPropertyJso(evt, "target");
+                String result = GwtUtils.getJsPropertyString(target, "result");
+                delegate.execute(result);
+              }
+            }, failure);
+            
+            
+          }
+        }, failure);
+        
+      }
+    }, failure);
+  }
+  
+  private static native void getFileFromFileEntryImpl (JavaScriptObject fileEntry, JSOSuccess success, JSOStringCallback failure) /*-{
+    var jsSuccess = $entry(function(file) {
+      success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(file);
+    });
+    var jsFailure = $entry(function(error) {
+      failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
+    });
+    fileEntry.file(jsSuccess, jsFailure);
+  }-*/;
+  
+  private static native void readFileAsEncodedDataImpl (JavaScriptObject fileEntry, JSOSuccess success, JSOStringCallback failure) /*-{
+    var jsSuccess = $entry(function(evt) {
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('READ SUCCESS!');
+      success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(evt);
+    });
+    var jsFailure = $entry(function(error) {
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('READ FAILURE!');
+      failure.@it.mate.phgcommons.client.utils.callbacks.JSOStringCallback::handle(Ljava/lang/String;)(error.code);
+    });
+    
+    var reader = new $wnd.FileReader();
+    reader.onload = (jsSuccess);
+    reader.onerror = (jsFailure);
+    reader.readAsDataURL(fileEntry);
+    
+  }-*/;
   
 }
