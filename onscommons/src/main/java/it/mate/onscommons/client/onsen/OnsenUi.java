@@ -1,16 +1,20 @@
 package it.mate.onscommons.client.onsen;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
+import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
 
 
 public class OnsenUi {
@@ -36,6 +40,10 @@ public class OnsenUi {
   public final static String ANIMATION_REVEAL = "reveal";
   
   public final static String ANIMATION_PUSH = "push";
+  
+  public final static String ANIMATION_NATIVE_PUSH = "nativePush";
+  
+  public final static String ANIMATION_NATIVE_POP = "nativePop";
   
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
@@ -113,5 +121,23 @@ public class OnsenUi {
     } while(elem = elem.parentElement );
     return false;
   }-*/;
+  
+  public static void goToPreviousPlace(PlaceController placeController, Place initialPlace) {
+    if (OnsenUi.isNavigatorLayoutPattern()) {
+      OnsenUi.getNavigator().popPage();
+    } else {
+      if (placeController instanceof PlaceControllerWithHistory) {
+        PlaceControllerWithHistory placeControllerHistory = (PlaceControllerWithHistory)placeController;
+        Place prevPlace = placeControllerHistory.getPreviousPlace();
+        if (prevPlace == null) {
+          prevPlace = initialPlace;
+        }
+        placeControllerHistory.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_NATIVE_POP));
+        return;
+      } else {
+        placeController.goTo(initialPlace);
+      }
+    }
+  }
   
 }

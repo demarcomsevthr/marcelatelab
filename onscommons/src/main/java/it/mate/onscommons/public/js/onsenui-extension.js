@@ -1,12 +1,9 @@
 
 
-window.onsSelect = function(selector) {
-  return window.$(selector);
-}
-
-
+/*
 (function() {
   'use strict;';
+  */
 
   var module = angular.module('onsen');
 
@@ -174,8 +171,8 @@ window.onsSelect = function(selector) {
   });
   
   angular.module('onsen').controller('OnsenCustomCtrl', ['$scope', 'ReverseSlideTransitionAnimator', function($scope, ReverseSlideTransitionAnimator) {
-	console.log('*******************  ONSEN CUSTOM CTRL  *******************');
-	window.ReverseSlideTransitionAnimator = ReverseSlideTransitionAnimator;
+  console.log('*******************  ONSEN CUSTOM: INIT ReverseSlideTransitionAnimator  *******************');
+  window.ReverseSlideTransitionAnimator = ReverseSlideTransitionAnimator;
   }]);  
   
   angular.element(document).ready(function() {
@@ -184,4 +181,6 @@ window.onsSelect = function(selector) {
     document.body.appendChild(elem);
   });
 
+/*
 })();
+*/

@@ -2,7 +2,6 @@ package it.mate.onscommons.client.mvp;
 
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
-import it.mate.gwtcommons.client.history.MappedPlaceHistoryHandler;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -18,16 +17,6 @@ public class OnsMvpUtils {
     EventBus eventBus = ginjector.getBinderyEventBus();
     PlaceHistoryMapper historyMapper = clientFactory.getPlaceHistoryMapper();
     PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-    PlaceController placeController = ginjector.getPlaceController();
-    historyHandler.register(placeController, eventBus, defaultPlace);
-    historyHandler.handleCurrentHistory();
-  }
-  
-  public static void initMvpMapped (String historyName, BaseClientFactory<? extends CommonGinjector> clientFactory, ActivityMapper activityMapper, PlaceHistoryMapper historyMapper, Place defaultPlace) {
-    CommonGinjector ginjector = clientFactory.getGinjector();
-    EventBus eventBus = ginjector.getBinderyEventBus();
-//  PlaceHistoryMapper historyMapper = clientFactory.getPlaceHistoryMapper();
-    MappedPlaceHistoryHandler historyHandler = new MappedPlaceHistoryHandler(historyName, historyMapper);
     PlaceController placeController = ginjector.getPlaceController();
     historyHandler.register(placeController, eventBus, defaultPlace);
     historyHandler.handleCurrentHistory();
