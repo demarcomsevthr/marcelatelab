@@ -14,11 +14,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OnsCarouselItem extends HTMLPanel implements HasTapHandler {
   
+  private static final boolean SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS = false;
+  
   private HasTapHandlerImpl hasTapHandlerImpl;
   
   private HandlerRegistration dragStartHandlerReg;
-  
-  private HandlerRegistration dragEndHandlerReg;
   
   private boolean duringDragOperation = false;
   
@@ -44,30 +44,23 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler {
   @Override
   public HandlerRegistration addTapHandler(final TapHandler handler) {
 
-    if (dragStartHandlerReg == null) {
-      dragStartHandlerReg = TouchEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
-        public void on(NativeGestureEvent event) {
-          duringDragOperation = true;
-        }
-      });
+    if (SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS) {
+      if (dragStartHandlerReg == null) {
+        dragStartHandlerReg = TouchEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
+          public void on(NativeGestureEvent event) {
+            duringDragOperation = true;
+          }
+        });
+      }
     }
-    
-    /*
-    if (dragEndHandlerReg == null) {
-      dragEndHandlerReg = TouchEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
-        public void on(NativeGestureEvent event) {
-          duringDragOperation = false;
-        }
-      });
-    }
-    */
     
     return hasTapHandlerImpl.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        if (!duringDragOperation) {
-          handler.onTap(event);
+        if (duringDragOperation) {
+          duringDragOperation = false;
+          return;
         }
-        duringDragOperation = false;
+        handler.onTap(event);
       }
     });
     

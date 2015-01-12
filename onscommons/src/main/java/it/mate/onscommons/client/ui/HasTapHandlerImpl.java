@@ -18,7 +18,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HasTapHandlerImpl {
   
-  private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "tap"; 
+//private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "tap"; 
+  private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "touchend"; 
   
   private List<TapHandler> tapHandlers = new ArrayList<TapHandler>();
   
