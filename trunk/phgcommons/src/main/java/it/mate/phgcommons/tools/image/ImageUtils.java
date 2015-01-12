@@ -17,9 +17,9 @@ public class ImageUtils {
     ImageUtils utils = new ImageUtils();
     try {
 //    utils.invertColors("file1.bmp", "bmp");
-//    utils.invertColors("file2.png", "png");
+      utils.invertColors("file2.png", "png");
 //    utils.invertColors("file3.png", "png");
-      utils.invertColors("file4.png", "png");
+//    utils.invertColors("file4.png", "png");
     } catch (Exception ex) {
       ex.printStackTrace();
     }
