@@ -181,13 +181,11 @@ public class MainActivity extends OnsAbstractActivity implements
     } else {
       if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
         PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
-//      placeController.goBack(new MainPlace());
         Place prevPlace = placeController.getPreviousPlace();
         if (prevPlace == null) {
           prevPlace = new MainPlace();
         }
-//      placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_REVERSE_SLIDE));
-        placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_PUSH));
+        placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_NATIVE_POP));
         return;
       }
       AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
