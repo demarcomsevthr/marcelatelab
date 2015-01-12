@@ -19,10 +19,11 @@
 
 package it.mate.copymob;
 
-import android.os.Bundle;
-import org.apache.cordova.*;
+import org.apache.cordova.CordovaActivity;
 
-public class copymob extends CordovaActivity
+import android.os.Bundle;
+
+public class Copymob extends CordovaActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
