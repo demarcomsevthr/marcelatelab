@@ -21,8 +21,8 @@
       </g:HTML>
   
       <g:VerticalPanel horizontalAlignment="left" addStyleNames="app-home-buttonbar">
-        <o:OnsButtonPanel ui:field="btnTimbri">
-          <o:OnsIcon icon="fa-book"/>Timbri
+        <o:OnsButtonPanel ui:field="btnTimbri" addStyleNames="app-home-btnpanel">
+          <div class="app-btn-img"></div>Timbri
         </o:OnsButtonPanel>
         <o:OnsButtonPanel ui:field="btnOrdini">
           <o:OnsIcon icon="fa-shopping-cart"/>I miei ordini

@@ -70,3 +70,12 @@
   position: fixed;
   bottom: 0.5em;
 }
+
+.app-home-btnpanel .app-btn-img {
+  background: url('main/images/stamp-64w.png') no-repeat;
+  background-size: 1.6em;
+  width: 1.6em;
+  height: 1.6em;
+  float: left;
+  padding-right: 0.2em;
+}
