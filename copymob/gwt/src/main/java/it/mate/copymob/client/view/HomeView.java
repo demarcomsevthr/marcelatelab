@@ -62,7 +62,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
     getPresenter().showMenu();
   }
   
-  @UiHandler("btnTimbri")
+  @UiHandler({"btnTimbri", "btnTimbri2"})
   public void onBtnTimbri(TapEvent event) {
     getPresenter().goToTimbriListView();
   }

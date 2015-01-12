@@ -65,7 +65,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
     carousel.getElement().getStyle().setOpacity(0);
     for (Timbro timbro : timbri) {
       String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>Timbro " + timbro.getId() +"</p>";
-      html += "<img src='data:image/jpeg;base64,"+ timbro.getImage() +"'/>";
+      html += "<img src='"+ timbro.getImageData() +"'/>";
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       carousel.add(item);
