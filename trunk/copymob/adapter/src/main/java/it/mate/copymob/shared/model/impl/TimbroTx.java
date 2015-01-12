@@ -54,6 +54,10 @@ public class TimbroTx implements Timbro, IsMappable {
   public String getImage() {
     return image;
   }
+  
+  public String getImageData() {
+    return !image.startsWith("data:") ? ("data:image/jpeg;base64," + image) : image;
+  }
 
   public void setImage(String image) {
     this.image = image;
