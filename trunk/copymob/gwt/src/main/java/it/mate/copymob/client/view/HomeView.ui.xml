@@ -5,8 +5,7 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-  
-  
+
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -24,6 +23,7 @@
         <o:OnsButtonPanel ui:field="btnTimbri" addStyleNames="app-home-btnpanel">
           <div class="app-btn-img"></div>Timbri
         </o:OnsButtonPanel>
+        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2"/>  
         <o:OnsButtonPanel ui:field="btnOrdini">
           <o:OnsIcon icon="fa-shopping-cart"/>I miei ordini
         </o:OnsButtonPanel>
