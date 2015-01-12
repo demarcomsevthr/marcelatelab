@@ -1,46 +1,60 @@
 package it.mate.onscommons.client.onsen.dom;
 
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
 
 public class SlidingMenu extends JavaScriptObject {
+  
+  protected static final double DURATION = 0.21;
 
   protected SlidingMenu() { }
-  
-  public final void setMainPage(String pageId) {
-    String animation = null;
-    setMainPage(pageId, animation);
-  }
   
   public final void setMainPage(String pageId, String animation) {
     Options options = Options.create();
     options.setCloseMenu(true);
+    JavaScriptObject jsAnimation = null;
+    String msg = "";
     if (animation != null) {
-      if (OnsenUi.ANIMATION_REVERSE_SLIDE.equals(animation)) {
-        GwtUtils.setJsPropertyJso(options, "animation", getReverseSlideAnimationImpl());
-      } else {
-        options.setAnimation(animation);
+      if (OnsenUi.ANIMATION_NATIVE_PUSH.equals(animation)) {
+        jsAnimation = getPushAnimationImpl();
+        msg = " WITH NATIVE PUSH ANIMATION";
+      } else if (OnsenUi.ANIMATION_NATIVE_POP.equals(animation)) {
+        jsAnimation = getPopAnimationImpl();
+        msg = " WITH NATIVE POP ANIMATION";
       }
     }
-    setMainPage(pageId, options);
+    PhgUtils.log("PUSHING PAGE " + pageId + " " + msg + " " + JSONUtils.stringify(options));
+    setMainPageImpl(pageId, options, jsAnimation);
   }
   
-  protected final native JavaScriptObject getReverseSlideAnimationImpl() /*-{
-    return new $wnd.ReverseSlideTransitionAnimator();    
-  }-*/;
-  
-  protected final void setMainPage(String pageId, Options options) {
-    PhgUtils.log("PUSHING PAGE " + pageId + " " + JSONUtils.stringify(options));
-    setMainPageImpl(pageId, options);
-  }
-  
-  protected final native void setMainPageImpl(String pageId, Options options) /*-{
+  protected final native void setMainPageImpl(String pageId, Options options, JavaScriptObject animation) /*-{
+    if (animation != null) {
+      options.callback = animation;
+      @it.mate.onscommons.client.onsen.dom.SlidingMenu::hideBlackMask(Lcom/google/gwt/dom/client/Element;)(this._mainPage[0]);
+    }
     this.setMainPage(pageId, options);    
   }-*/;
+  
+  protected static void hideBlackMask(Element mainPageElem) {
+    if (mainPageElem == null) {
+      return;
+    }
+    Element menuElem = mainPageElem.getParentElement();
+    if (menuElem == null) {
+      return;
+    }
+    for (int it = 0; it < menuElem.getChildCount(); it++) {
+      Element menuChildElem = menuElem.getChild(it).cast();
+      String color = menuChildElem.getStyle().getBackgroundColor();
+      if ("black".equalsIgnoreCase(color)) {
+        menuChildElem.getStyle().setBackgroundColor("transparent");
+      }
+    }
+  }
   
   public final void setMenuPage(String pageId) {
     Options options = Options.create();
@@ -66,6 +80,48 @@ public class SlidingMenu extends JavaScriptObject {
   
   protected final native void setSwipeableImpl(boolean value) /*-{
     this.setSwipeable(value);    
+  }-*/;
+  
+  protected final native JavaScriptObject getPushAnimationImpl() /*-{
+    var menu = this;
+    var animation = function() {
+      $wnd.animit(menu._mainPage[0])
+        .queue({
+          css: {
+            transform: 'translate3D(100%, 0, 0)',
+          },
+          duration: 0
+        })
+        .queue({
+          css: {
+            transform: 'translate3D(0, 0, 0)',
+          },
+          duration: @it.mate.onscommons.client.onsen.dom.SlidingMenu::DURATION
+        })
+        .play();
+    }
+    return animation;
+  }-*/;
+
+  protected final native JavaScriptObject getPopAnimationImpl() /*-{
+    var menu = this;
+    var animation = function() {
+      $wnd.animit(menu._mainPage[0])
+        .queue({
+          css: {
+            transform: 'translate3D(-100%, 0, 0)',
+          },
+          duration: 0
+        })
+        .queue({
+          css: {
+            transform: 'translate3D(0, 0, 0)',
+          },
+          duration: @it.mate.onscommons.client.onsen.dom.SlidingMenu::DURATION
+        })
+        .play();
+    }
+    return animation;
   }-*/;
 
 }

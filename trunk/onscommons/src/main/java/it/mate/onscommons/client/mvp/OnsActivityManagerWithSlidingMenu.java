@@ -1,14 +1,11 @@
 package it.mate.onscommons.client.mvp;
 
 import it.mate.gwtcommons.client.places.HasToken;
-import it.mate.gwtcommons.client.utils.Delegate;
-import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
-import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -28,22 +25,14 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
   public void onPlaceChange(final PlaceChangeEvent event) {
     Place newPlace = event.getNewPlace();
     PhgUtils.log("ON PLACE CHANGE: newPlace = " + newPlace);
-    
+
+    /*
     Activity act = mapper.getActivity(newPlace);
     if (act == null) {
       PhgUtils.log("ACTIVITY NULL >> SKIP");
-      
-      //TODO: CON QUESTO VA IN LOOP
-      GwtUtils.deferredExecution(new Delegate<Void>() {
-        public void execute(Void element) {
-          if (OnsActivityManagerWithNavigator.instance != null) {
-            OnsActivityManagerWithNavigator.instance.onPlaceChange(event);
-          }
-        }
-      });
-      
       return;
     }
+    */
     
     setActivePanelFromTemplate(newPlace);
     super.onPlaceChange(event);
@@ -57,6 +46,9 @@ public class OnsActivityManagerWithSlidingMenu extends OnsActivityManagerBase {
       String animation = null;
       if (event instanceof OnsPlaceChangeEvent) {
         animation = ((OnsPlaceChangeEvent)event).getAnimation();
+      }
+      if (animation == null) {
+        animation = OnsenUi.ANIMATION_NATIVE_PUSH;
       }
       OnsenUi.getSlidingMenu().setMainPage(newToken, animation);
     }

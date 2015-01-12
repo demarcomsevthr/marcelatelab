@@ -19,15 +19,8 @@ public class OnsActivityManagerWithNavigator extends OnsActivityManagerBase {
   
   private boolean allowPagePoping = false;
   
-  protected static OnsActivityManagerWithNavigator instance;
-  
   public OnsActivityManagerWithNavigator(ActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
-    OnsActivityManagerWithNavigator.instance = this;
-  }
-  
-  public void dispose() {
-    OnsActivityManagerWithNavigator.instance = null;
   }
   
   @Override
