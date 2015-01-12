@@ -7,6 +7,8 @@ public interface Timbro extends Serializable {
   public void setImage(String image);
 
   public String getImage();
+  
+  public String getImageData();
 
   public void setCodice(String codice);
 
