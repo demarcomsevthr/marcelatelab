@@ -25,7 +25,10 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   public void setText(String text) {
-    getElement().setInnerText(text);
+    String innerHtml = getElement().getInnerHTML();
+    innerHtml = innerHtml + text;
+    getElement().setInnerHTML(innerHtml);
+//  getElement().setInnerText(text);
   }
   
   public HandlerRegistration addTapHandler(final TapHandler handler) {
