@@ -11,6 +11,7 @@ import it.mate.onscommons.client.ui.OnsCarouselItem;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Panel;
@@ -40,12 +41,9 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    
     if (OnsenUi.isSlidingMenuLayoutPattern()) {
       OnsenUi.getSlidingMenu().setSwipeable(false);
     }
-
-    
   }
 
   @Override
@@ -64,6 +62,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
   }
   
   private void populateCarousel(List<Timbro> timbri) {
+    carousel.getElement().getStyle().setOpacity(0);
     for (Timbro timbro : timbri) {
       String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>Timbro " + timbro.getId() +"</p>";
       html += "<img src='data:image/jpeg;base64,"+ timbro.getImage() +"'/>";
@@ -71,6 +70,24 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
       OnsCarouselItem item = new OnsCarouselItem(html);
       carousel.add(item);
     }
+    showImpl(carousel.getElement());
   }
+  
+  protected static native void showImpl(Element elem) /*-{
+    $wnd.animit(elem)
+      .queue({
+        css: {
+          opacity: 0
+        },
+        duration: 0
+      })
+      .queue({
+        css: {
+          opacity: 1
+        },
+        duration: 5
+      })
+      .play();
+  }-*/;
   
 }

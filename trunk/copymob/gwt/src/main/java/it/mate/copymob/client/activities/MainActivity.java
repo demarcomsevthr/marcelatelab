@@ -15,16 +15,13 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
-import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -116,20 +113,7 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    if (OnsenUi.isNavigatorLayoutPattern()) {
-      OnsenUi.getNavigator().popPage();
-    } else {
-      if (AppClientFactory.IMPL.getPlaceController() instanceof PlaceControllerWithHistory) {
-        PlaceControllerWithHistory placeController = (PlaceControllerWithHistory)AppClientFactory.IMPL.getPlaceController();
-        Place prevPlace = placeController.getPreviousPlace();
-        if (prevPlace == null) {
-          prevPlace = new MainPlace();
-        }
-        placeController.goToWithEvent(new OnsPlaceChangeEvent(prevPlace).setAnimation(OnsenUi.ANIMATION_PUSH));
-        return;
-      }
-      AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace());
-    }
+    OnsenUi.goToPreviousPlace(AppClientFactory.IMPL.getPlaceController(), new MainPlace());
   }
 
   @Override

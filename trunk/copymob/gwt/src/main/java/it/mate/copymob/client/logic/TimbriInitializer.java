@@ -4,6 +4,7 @@ import it.mate.copymob.client.factories.AppClientFactory;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.plugins.FileSystemPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -21,6 +22,8 @@ public class TimbriInitializer {
   private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private final static int NUMBER_OF_ITEMS = 5;
+  
+  private final static String dataPath = "www/main/data";
   
   public static void doRun() {
     new TimbriInitializer().run();
@@ -59,7 +62,6 @@ public class TimbriInitializer {
   private void iterateDataFiles(final int it, final List<Timbro> results, final Delegate<List<Timbro>> endDelegate) {
     if (it < NUMBER_OF_ITEMS) {
       if (OsDetectionUtils.isDesktop()) {
-//      readFromLocalhost("http://127.0.0.1:8888/main/data/timbro"+it+".jpg", new Delegate<String>() {
         readFromLocalhost("http://127.0.0.1:8888/.image?name=timbro"+it+".jpg", new Delegate<String>() {
           public void execute(String imgData) {
             Timbro result = new TimbroTx();
@@ -74,6 +76,39 @@ public class TimbriInitializer {
         });
       } else {
         //TODO: READ ON DEVICE
+        
+        if (FileSystemPlugin.isInstalled()) {
+          
+          String fileName = "timbro" + it + ".jpg";
+          
+          FileSystemPlugin.readApplicationFileAsEncodedData(dataPath + "/" + fileName, new Delegate<String>() {
+            public void execute(String imgData) {
+              
+              if (imgData == null) {
+                PhgUtils.log("RESULT NULL");
+              } else {
+                PhgUtils.log("READ: " + imgData.substring(0, 200));
+              }
+              
+              Timbro result = new TimbroTx();
+              
+              result.setCodice("T" + it);
+              result.setNome("NOME " + it);
+              result.setImage(imgData);
+              
+              results.add(result);
+              iterateDataFiles(it + 1, results, endDelegate);
+
+            }
+          });
+          
+          
+        } else {
+          PhgUtils.log("FILE SYSTEM PLUGIN NOT INSTALLED!");
+        }
+        
+        
+        
       }
     } else {
       endDelegate.execute(results);
