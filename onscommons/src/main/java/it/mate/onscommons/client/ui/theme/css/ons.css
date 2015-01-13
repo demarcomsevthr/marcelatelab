@@ -11,3 +11,8 @@
 .ons-button .ons-icon {
   margin-right: 0.5em;
 }
+
+.ons-inline-label {
+  display: inline;
+}
+

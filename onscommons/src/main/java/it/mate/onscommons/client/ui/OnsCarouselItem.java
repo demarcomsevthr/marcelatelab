@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class OnsCarouselItem extends HTMLPanel implements HasTapHandler {
+public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasModel {
   
   private static final boolean SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS = false;
   
@@ -21,6 +21,8 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler {
   private HandlerRegistration dragStartHandlerReg;
   
   private boolean duringDragOperation = false;
+  
+  private Object model;
   
   public OnsCarouselItem() {
     this("");
@@ -68,6 +70,14 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler {
   
   public void setModifier(String modifier) {
     getElement().setAttribute("modifier", modifier);
+  }
+
+  public Object getModel() {
+    return model;
+  }
+
+  public void setModel(Object model) {
+    this.model = model;
   }
   
 }
