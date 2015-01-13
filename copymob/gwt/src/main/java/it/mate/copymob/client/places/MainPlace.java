@@ -19,6 +19,12 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String TIMBRI_LIST = "timbriList";
   
+  public static final String TIMBRO_DETAIL = "timbroDetail";
+  
+  public static final String TIMBRO_PREVIEW = "timbroPreview";
+  
+  public static final String TIMBRO_EDIT = "timbroEdit";
+  
   private String token;
   
   private Object model;

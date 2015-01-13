@@ -8,6 +8,9 @@ import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
+import it.mate.copymob.client.view.TimbroDetailView;
+import it.mate.copymob.client.view.TimbroEditView;
+import it.mate.copymob.client.view.TimbroPreviewView;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
@@ -30,7 +33,8 @@ import com.google.web.bindery.event.shared.EventBus;
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
-  TimbriListView.Presenter
+  TimbriListView.Presenter,
+  TimbroDetailView.Presenter, TimbroPreviewView.Presenter, TimbroEditView.Presenter
   {
   
   private MainPlace place;
@@ -85,6 +89,18 @@ public class MainActivity extends OnsAbstractActivity implements
       this.view = AppClientFactory.IMPL.getGinjector().getTimbriListView();
     }
     
+    if (place.getToken().equals(MainPlace.TIMBRO_DETAIL)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getTimbroDetailView();
+    }
+    
+    if (place.getToken().equals(MainPlace.TIMBRO_PREVIEW)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getTimbroPreviewView();
+    }
+    
+    if (place.getToken().equals(MainPlace.TIMBRO_EDIT)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getTimbroEditView();
+    }
+    
     view.setPresenter(this);
     panel.setWidget(view.asWidget());
 
@@ -103,6 +119,9 @@ public class MainActivity extends OnsAbstractActivity implements
           view.setModel(timbri, "timbri");
         }
       });
+    }
+    if (place.getToken().equals(MainPlace.TIMBRO_DETAIL)) {
+      view.setModel(place.getModel());
     }
   }
 
@@ -129,6 +148,11 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToTimbriListView() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRI_LIST));
+  }
+
+  @Override
+  public void goToTimbroDetailView(Timbro timbro) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_DETAIL, timbro));
   }
 
   @Override
