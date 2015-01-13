@@ -21,4 +21,12 @@ public class Carousel extends JavaScriptObject {
     this.refresh();    
   }-*/;
   
+  public final int getActiveCarouselItemIndex() {
+    return getActiveCarouselItemIndexImpl();
+  }
+  
+  protected final native int getActiveCarouselItemIndexImpl() /*-{
+    return this.getActiveCarouselItemIndex();    
+  }-*/;
+
 }
