@@ -4,6 +4,8 @@ import it.mate.copymob.client.view.TimbriListView.Presenter;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsCarousel;
 import it.mate.onscommons.client.ui.OnsCarouselItem;
@@ -14,13 +16,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TimbriListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-
+    public void goToTimbroDetailView(Timbro timbro);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbriListView> { }
@@ -68,6 +71,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
       html += "<img src='"+ timbro.getImageData() +"'/>";
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
+      item.setModel(timbro);
       carousel.add(item);
     }
     showImpl(carousel.getElement());
@@ -89,5 +93,15 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
       })
       .play();
   }-*/;
+
+  @UiHandler("btnBuy")
+  public void onBtnBuy(TapEvent event) {
+    carousel.getActiveItem(new Delegate<OnsCarouselItem>() {
+      public void execute(OnsCarouselItem item) {
+        Timbro timbro = (Timbro)item.getModel();
+        getPresenter().goToTimbroDetailView(timbro);
+      }
+    });
+  }
   
 }

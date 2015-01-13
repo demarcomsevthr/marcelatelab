@@ -59,56 +59,41 @@ public class TimbriInitializer {
     
   }
   
+  private Timbro createTimbro(int index, String imgData) {
+    int n = index + 1;
+    Timbro result = new TimbroTx();
+    result.setCodice("T" + n);
+    result.setNome("TIMBRO " + n);
+    result.setImage(imgData);
+    return result;
+  }
+  
   private void iterateDataFiles(final int it, final List<Timbro> results, final Delegate<List<Timbro>> endDelegate) {
     if (it < NUMBER_OF_ITEMS) {
       if (OsDetectionUtils.isDesktop()) {
         readFromLocalhost("http://127.0.0.1:8888/.image?name=timbro"+it+".jpg", new Delegate<String>() {
           public void execute(String imgData) {
-            Timbro result = new TimbroTx();
-            
-            result.setCodice("T" + it);
-            result.setNome("NOME " + it);
-            result.setImage(imgData);
-            
-            results.add(result);
+            results.add(createTimbro(it, imgData));
             iterateDataFiles(it + 1, results, endDelegate);
           }
         });
       } else {
-        //TODO: READ ON DEVICE
-        
         if (FileSystemPlugin.isInstalled()) {
-          
           String fileName = "timbro" + it + ".jpg";
-          
           FileSystemPlugin.readApplicationFileAsEncodedData(dataPath + "/" + fileName, new Delegate<String>() {
             public void execute(String imgData) {
-              
               if (imgData == null) {
                 PhgUtils.log("RESULT NULL");
               } else {
                 PhgUtils.log("READ: " + imgData.substring(0, 200));
               }
-              
-              Timbro result = new TimbroTx();
-              
-              result.setCodice("T" + it);
-              result.setNome("NOME " + it);
-              result.setImage(imgData);
-              
-              results.add(result);
+              results.add(createTimbro(it, imgData));
               iterateDataFiles(it + 1, results, endDelegate);
-
             }
           });
-          
-          
         } else {
           PhgUtils.log("FILE SYSTEM PLUGIN NOT INSTALLED!");
         }
-        
-        
-        
       }
     } else {
       endDelegate.execute(results);

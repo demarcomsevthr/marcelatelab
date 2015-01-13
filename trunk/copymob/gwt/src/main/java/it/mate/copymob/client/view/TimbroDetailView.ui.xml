@@ -12,12 +12,14 @@
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center">Elenco Timbri</div>
+        <div class="center">Dettaglio <o:OnsLabel ui:field="headerLbl" addStyleNames="ons-inline-label"/></div>
       </o:OnsToolbar>
       
-      <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" draggable="true" ui:field="carousel"/>
+      <g:HTML addStyleNames="app-home-presentation">
+        <i>Dettagli del timbro selezionato qui</i>
+      </g:HTML>
       
-      <o:OnsButton text="Acquista" ui:field="btnBuy" addStyleNames="app-timbri-choose-btn"/>
+      <o:OnsButton text="Componi" ui:field="btnCompose" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>
     
