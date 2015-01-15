@@ -21,9 +21,11 @@ import it.mate.therapyreminder.client.constants.AppMessages;
 import it.mate.therapyreminder.client.factories.AppClientFactory;
 import it.mate.therapyreminder.shared.model.Account;
 import it.mate.therapyreminder.shared.model.Dosaggio;
+import it.mate.therapyreminder.shared.model.Paziente;
 import it.mate.therapyreminder.shared.model.Prescrizione;
 import it.mate.therapyreminder.shared.model.Somministrazione;
 import it.mate.therapyreminder.shared.model.impl.AccountTx;
+import it.mate.therapyreminder.shared.model.impl.PazienteTx;
 import it.mate.therapyreminder.shared.model.impl.PrescrizioneTx;
 import it.mate.therapyreminder.shared.model.impl.SomministrazioneTx;
 
@@ -92,8 +94,8 @@ public class MainController {
     return dao != null && dao.isReady();
   }
   
-  public void createPrescrizioneWithDefaults(Delegate<Prescrizione> delegate) {
-    Prescrizione prescrizione = new PrescrizioneTx();
+  public void createPrescrizioneWithDefaults(final Delegate<Prescrizione> delegate) {
+    final Prescrizione prescrizione = new PrescrizioneTx();
     prescrizione.setDataInizio(new Date());
     prescrizione.setQuantita(1d);
     prescrizione.setTipoRicorrenza(Prescrizione.TIPO_RICORRENZA_OGNI_GIORNO);
@@ -101,7 +103,33 @@ public class MainController {
     prescrizione.setCodUdM("01");
     prescrizione.setTipoRicorrenzaOraria(Prescrizione.TIPO_ORARI_FISSI);
     prescrizione.setIntervalloOrario(1);
-    delegate.execute(prescrizione);
+    
+    //TODO: 15/01/2015
+    dao.findAllPazienti(new Delegate<List<Paziente>>() {
+      public void execute(List<Paziente> pazienti) {
+        boolean executeDelegate = true;
+        if (pazienti == null || pazienti.size() == 0) {
+          Account account = getAccountFromLocalStorage();
+          if (account != null) {
+            Paziente paziente = new PazienteTx();
+            paziente.setNome(account.getName());
+            executeDelegate = false;
+            dao.savePaziente(paziente, new Delegate<Paziente>() {
+              public void execute(Paziente paziente) {
+                prescrizione.setPaziente(paziente);
+                delegate.execute(prescrizione);
+              }
+            });
+          }
+        } else if (pazienti != null || pazienti.size() == 1) {
+          prescrizione.setPaziente(pazienti.get(0));
+        }
+        if (executeDelegate) {
+          delegate.execute(prescrizione);
+        }
+      }
+    });
+    
   }
   
   public void findSomministrazioniScadute(final Delegate<List<Somministrazione>> delegate) {
@@ -213,7 +241,6 @@ public class MainController {
     });
   }
   
-  //TODO: 28/07/2014
   public void findSomministrazioniAnnullate(final Delegate<List<Somministrazione>> resultsDelegate) {
     Date today = new Date();
     dao.findAllPrescrizioniAttive(today, new Delegate<List<Prescrizione>>() {
@@ -410,7 +437,6 @@ public class MainController {
         incrementoOrario.set(prescrizione.getIntervalloOrario());
       }
       
-      //TODO: 28/07/2014
       IterationUtilSimple.create(numeroSoministrazioniPerGiorno, new IterationUtilSimple.ItemDelegate<Integer>() {
         public void handleItem(Integer item, final IterationUtil<Integer> iteration) {
           
@@ -563,7 +589,6 @@ public class MainController {
     }
   }
   
-  //TODO: 28/07/2014
   public static String validatePrescrizione(Prescrizione prescrizione) {
     if (prescrizione.getNome() == null || prescrizione.getNome().trim().length() == 0) {
       return AppMessages.IMPL.MainController_validatePrescrizione_msg1();
