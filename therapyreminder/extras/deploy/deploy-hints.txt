@@ -24,6 +24,3 @@ itms-services://?action=download-manifest&url=https://marcelatelab.googlecode.co
 itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/u/82136682/THR/THR-1.1.0-RC3.plist
 
 
-
-
-
