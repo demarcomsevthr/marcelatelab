@@ -304,6 +304,9 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       
       if (prescrizione.getPaziente() != null) {
         pazienteBox.setText(prescrizione.getPaziente().getNome());
+        if (selectedPaziente == null) {
+          selectedPaziente = prescrizione.getPaziente();
+        }
       }
       
     }
@@ -665,7 +668,7 @@ public class TherapyEditView extends BaseMgwtView <Presenter> implements HasClos
       return;
     }
     
-    if (prescrizione.equals(oldPrescrizione)) {
+    if (prescrizione.getId() != null && prescrizione.equals(oldPrescrizione)) {
       if (successDelegate != null)
         successDelegate.execute(prescrizione);
       return;

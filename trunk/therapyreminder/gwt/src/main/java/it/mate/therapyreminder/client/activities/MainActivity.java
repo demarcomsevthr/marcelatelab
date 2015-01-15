@@ -314,10 +314,13 @@ public class MainActivity extends MGWTAbstractActivity implements
       Paziente pazienteSelected = (Paziente)GwtUtils.getClientAttribute(PAZIENTE_SELECTED_KEY);
       if (pazienteSelected != null) {
         GwtUtils.setClientAttribute(PAZIENTE_SELECTED_KEY, null);
-        view.setModel(pazienteSelected, TherapyEditView.TAG_PAZIENTE_SELECTED);
+//      view.setModel(pazienteSelected, TherapyEditView.TAG_PAZIENTE_SELECTED);
       }
       Prescrizione prescrizioneInEditing = (Prescrizione)GwtUtils.getClientAttribute(PRESCRIZIONE_IN_EDITING_KEY);
       if (prescrizioneInEditing != null) {
+        if (pazienteSelected != null) {
+          prescrizioneInEditing.setPaziente(pazienteSelected);
+        }
         GwtUtils.setClientAttribute(PRESCRIZIONE_IN_EDITING_KEY, null);
         view.setModel(prescrizioneInEditing, TherapyEditView.TAG_PRESCRIZIONE);
       } else if (place.getModel() != null) {

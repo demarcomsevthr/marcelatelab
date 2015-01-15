@@ -190,7 +190,11 @@ public class ReminderListView extends BaseMgwtView <Presenter> {
       html += "</span>";
       html += "</p>";
     }
-    html += "<p class='ui-row-reminder-subject'>" + somministrazione.getPrescrizione().getNome() + "</p>";
+    String patientName = "";
+    if (somministrazione.getPrescrizione().getPaziente() != null) {
+      patientName = somministrazione.getPrescrizione().getPaziente().getNome() + ": ";
+    }
+    html += "<p class='ui-row-reminder-subject'>" + patientName + somministrazione.getPrescrizione().getNome() + "</p>";
     
     String cssAnnullata = "";
     if (somministrazione.isAnnullata()) {
