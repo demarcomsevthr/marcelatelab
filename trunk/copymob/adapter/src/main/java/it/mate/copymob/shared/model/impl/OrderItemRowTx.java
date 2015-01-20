@@ -35,5 +35,20 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.id = id;
   }
 
+  public Integer getOrderItemId() {
+    return orderItemId;
+  }
+
+  public void setOrderItemId(Integer orderItemId) {
+    this.orderItemId = orderItemId;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
 
 }
