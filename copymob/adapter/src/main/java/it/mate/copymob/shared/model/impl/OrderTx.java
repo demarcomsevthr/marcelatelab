@@ -18,6 +18,8 @@ public class OrderTx implements Order, IsMappable {
   
   private List<OrderItem> items;
   
+  private int state;
+  
   @Override
   public RpcMap toRpcMap() {
     // TODO Auto-generated method stub
@@ -60,6 +62,14 @@ public class OrderTx implements Order, IsMappable {
 
   public void setItems(List<OrderItem> items) {
     this.items = items;
+  }
+
+  public int getState() {
+    return state;
+  }
+
+  public void setState(int state) {
+    this.state = state;
   }
 
 }

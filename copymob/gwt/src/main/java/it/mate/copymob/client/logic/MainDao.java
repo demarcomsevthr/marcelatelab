@@ -13,6 +13,7 @@ import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**************************************************
@@ -41,7 +42,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
-  private final static String ORDER_FIELDS_0 = "codice, accountId ";
+  private final static String ORDER_FIELDS_0 = "codice, accountId, state ";
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
@@ -362,5 +363,107 @@ public class MainDao extends WebSQLDao {
       return results;
     }
   }
+  
+  
+  public void saveOrder(final Order entity, final Delegate<Order> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        if (entity.getId() == null) {
+          tr.doExecuteSql("INSERT INTO order (" + ORDER_FIELDS + ") VALUES (?, ?, ?)", 
+              new Object[] {
+                entity.getCodice(), 
+                entity.getAccountId(),
+                entity.getState()
+              }, new SQLStatementCallback() {
+                public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                  entity.setId(rs.getInsertId());
+                  iterateOrderItemsForUpdate(tr, entity.getItems().iterator(), new Delegate<Void>() {
+                    public void execute(Void element) {
+                      PhonegapLog.log("Inserted " + entity);
+                      delegate.execute(entity);
+                    }
+                  });
+                }
+              });
+        } else {
+          String sql = "UPDATE order SET ";
+          sql += "  codice = ?";
+          sql += " ,accountId = ?";
+          sql += " ,state = ?";
+          sql += " WHERE id = ?";
+          tr.doExecuteSql(sql, new Object[] {
+              entity.getCodice(), 
+              entity.getAccountId(),
+              entity.getState(),
+              entity.getId()
+            }, new SQLStatementCallback() {
+              public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+                iterateOrderItemsForUpdate(tr, entity.getItems().iterator(), new Delegate<Void>() {
+                  public void execute(Void element) {
+                    PhonegapLog.log("Updated " + entity);
+                    delegate.execute(entity);
+                  }
+                });
+              }
+            });
+        }
+      }
+    });
+  }
+  
+  protected void iterateOrderItemsForUpdate(final SQLTransaction tr, final Iterator<OrderItem> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      final OrderItem item = it.next();
+      updateOrderItem(tr, item, new Delegate<OrderItem>() {
+        public void execute(OrderItem item) {
+          iterateOrderItemsForUpdate(tr, it, delegate);
+        }
+      });
+    } else {
+      PhonegapLog.log("calling finish delegate");
+      delegate.execute(null);
+    }
+  }
+
+  protected void updateOrderItem(SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
+    if (entity.getId() == null) {
+      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?)", 
+          new Object[] {
+            entity.getOrderId(), 
+            entity.getTimbroId(),
+            entity.getQuantity()
+          }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              entity.setId(rs.getInsertId());
+              
+              //TODO: iterate rows for update
+              
+              PhonegapLog.log("Inserted " + entity);
+              delegate.execute(entity);
+            }
+          });
+    } else {
+      String sql = "UPDATE orderItem SET ";
+      sql += "  orderId = ?";
+      sql += " ,timbroId = ?";
+      sql += " ,quantity = ?";
+      sql += " WHERE id = ?";
+      tr.doExecuteSql(sql, new Object[] {
+          entity.getOrderId(), 
+          entity.getTimbroId(),
+          entity.getQuantity(),
+          entity.getId()
+        }, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            
+            //TODO: iterate rows for update
+            
+            PhonegapLog.log("Updated " + entity);
+            delegate.execute(entity);
+          }
+        });
+    }
+  }
+  
   
 }
