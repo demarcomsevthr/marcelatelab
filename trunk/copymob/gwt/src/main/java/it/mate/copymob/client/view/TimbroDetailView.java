@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TimbroDetailView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-
+    public void goToTimbroPreviewView(Timbro timbro);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbroDetailView> { }
@@ -26,6 +26,8 @@ public class TimbroDetailView extends AbstractBaseView<Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField OnsLabel headerLbl;
+  
+  Timbro timbro;
   
   public TimbroDetailView() {
     initUI();
@@ -43,14 +45,14 @@ public class TimbroDetailView extends AbstractBaseView<Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (model instanceof Timbro) {
-      Timbro timbro = (Timbro)model;
+      this.timbro = (Timbro)model;
       headerLbl.setText(timbro.getNome());
     }
   }
 
   @UiHandler("btnCompose")
   public void onBtnCompose(TapEvent event) {
-    
+    getPresenter().goToTimbroPreviewView(timbro);
   }
   
 }
