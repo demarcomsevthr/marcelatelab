@@ -5,6 +5,7 @@ import it.mate.copymob.shared.model.OrderItem;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -16,7 +17,7 @@ public class OrderTx implements Order, IsMappable {
   
   private Integer accountId;
   
-  private List<OrderItem> items;
+  private List<OrderItem> items = new ArrayList<OrderItem>();
   
   private int state;
   
@@ -38,6 +39,9 @@ public class OrderTx implements Order, IsMappable {
 
   public void setId(Integer id) {
     this.id = id;
+    for (OrderItem item : items) {
+      item.setOrderId(id);
+    }
   }
 
   public String getCodice() {

@@ -8,5 +8,12 @@ public interface OrderItemRow extends Serializable {
 
   public void setId(Integer id);
 
+  public void setText(String text);
+
+  public String getText();
+
+  public void setOrderItemId(Integer orderItemId);
+
+  public Integer getOrderItemId();
 
 }

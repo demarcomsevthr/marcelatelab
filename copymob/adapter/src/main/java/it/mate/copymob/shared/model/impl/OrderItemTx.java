@@ -2,9 +2,11 @@ package it.mate.copymob.shared.model.impl;
 
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
+import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -14,11 +16,13 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private Integer orderId;
   
-  private Integer timbroId;
+//private Integer timbroId;
   
   private Double quantity;
   
-  private List<OrderItemRow> rows;
+  private List<OrderItemRow> rows = new ArrayList<OrderItemRow>();
+  
+  private Timbro timbro;
   
   
   @Override
@@ -39,14 +43,17 @@ public class OrderItemTx implements OrderItem, IsMappable {
 
   public void setId(Integer id) {
     this.id = id;
+    for (OrderItemRow row : rows) {
+      row.setOrderItemId(id);
+    }
   }
 
   public Integer getTimbroId() {
-    return timbroId;
+    return timbro != null ? timbro.getId() : null;
   }
 
   public void setTimbroId(Integer timbroId) {
-    this.timbroId = timbroId;
+//  this.timbroId = timbroId;
   }
 
   public Double getQuantity() {
@@ -73,4 +80,12 @@ public class OrderItemTx implements OrderItem, IsMappable {
     this.rows = rows;
   }
 
+  public Timbro getTimbro() {
+    return timbro;
+  }
+
+  public void setTimbro(Timbro timbro) {
+    this.timbro = timbro;
+  }
+  
 }

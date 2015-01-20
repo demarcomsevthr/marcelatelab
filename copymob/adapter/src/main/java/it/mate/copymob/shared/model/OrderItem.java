@@ -25,4 +25,8 @@ public interface OrderItem extends Serializable {
 
   public void setRows(List<OrderItemRow> rows);
 
+  public void setTimbro(Timbro timbro);
+
+  public Timbro getTimbro();
+
 }

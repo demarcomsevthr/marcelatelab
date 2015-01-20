@@ -106,7 +106,7 @@ public class MainDao extends WebSQLDao {
   
   private final static MigratorCallback MIGRATION_CALLBACK_0 = new MigratorCallback() {
     public void doMigration(int number, SQLTransaction tr) {
-      PhonegapLog.log("updating db protoph to version " + number);
+      PhonegapLog.log("updating db copymob to version " + number);
 
       PhonegapLog.log("creating table timbri");
       tr.doExecuteSql("CREATE TABLE timbri (id "+SERIAL_ID+", " + TIMBRI_FIELDS_0 + " BLOB )");
@@ -156,6 +156,32 @@ public class MainDao extends WebSQLDao {
         }
       });
     }
+  }
+  
+  public void findTimbro(final Integer id, final Delegate<Timbro> delegate) {
+    if (this.cacheTimbri != null) {
+      for (Timbro timbro : cacheTimbri) {
+        if (timbro.getId().equals(id)) {
+          delegate.execute(timbro);
+          return;
+        }
+      }
+    }
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE id = ?", 
+            new Object[]{id}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                Timbro timbro = flushRSToTimbro(rs, it);
+                delegate.execute(timbro);
+              }
+            }
+          }
+        });
+      }
+    });
   }
   
   private <T> List<T> cloneList(List<T> items) {
@@ -237,6 +263,23 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void findOpenOrder(final Delegate<List<Order>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM order WHERE order.state = ?", 
+            new Object[]{Order.STATE_OPEN}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
+              public void execute(List<Order> results) {
+                delegate.execute(results);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
   protected class RSToOrderIterator {
     SQLResultSet rs;
     SQLTransaction tr;
@@ -266,6 +309,9 @@ public class MainDao extends WebSQLDao {
       SQLResultSetRowList rows = rs.getRows();
       Order result = new OrderTx();
       result.setId(rows.getValueInt(it, "id"));
+      result.setCodice(rows.getValueString(it, "codice"));
+      result.setAccountId(rows.getValueInt(it, "accountId"));
+      result.setState(rows.getValueInt(it, "state"));
       return result;
     }
     protected List<Order> getResults() {
@@ -300,12 +346,19 @@ public class MainDao extends WebSQLDao {
       if (it < rs.getRows().getLength()) {
         final OrderItem result = flushRS(rs, it);
         results.add(result);
-        findOrderItemRows(tr, result.getId(), new Delegate<List<OrderItemRow>>() {
-          public void execute(List<OrderItemRow> rows) {
-            result.setRows(rows);
-            iterate(it + 1);
+        
+        findTimbro(result.getTimbroId(), new Delegate<Timbro>() {
+          public void execute(Timbro timbro) {
+            result.setTimbro(timbro);
+            findOrderItemRows(tr, result.getId(), new Delegate<List<OrderItemRow>>() {
+              public void execute(List<OrderItemRow> rows) {
+                result.setRows(rows);
+                iterate(it + 1);
+              }
+            });
           }
         });
+        
       } else {
         delegate.execute(results);
       }
@@ -314,6 +367,9 @@ public class MainDao extends WebSQLDao {
       SQLResultSetRowList rows = rs.getRows();
       OrderItem result = new OrderItemTx();
       result.setId(rows.getValueInt(it, "id"));
+      result.setOrderId(rows.getValueInt(it, "orderId"));
+      result.setTimbroId(rows.getValueInt(it, "timbroId"));
+      result.setQuantity(rows.getValueDouble(it, "quantity"));
       return result;
     }
     protected List<OrderItem> getResults() {
@@ -357,6 +413,8 @@ public class MainDao extends WebSQLDao {
       SQLResultSetRowList rows = rs.getRows();
       OrderItemRow result = new OrderItemRowTx();
       result.setId(rows.getValueInt(it, "id"));
+      result.setOrderItemId(rows.getValueInt(it, "orderItemId"));
+      result.setText(rows.getValueString(it, "text"));
       return result;
     }
     protected List<OrderItemRow> getResults() {
@@ -420,7 +478,6 @@ public class MainDao extends WebSQLDao {
         }
       });
     } else {
-      PhonegapLog.log("calling finish delegate");
       delegate.execute(null);
     }
   }
@@ -435,11 +492,12 @@ public class MainDao extends WebSQLDao {
           }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
-              
-              //TODO: iterate rows for update
-              
-              PhonegapLog.log("Inserted " + entity);
-              delegate.execute(entity);
+              iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+                public void execute(Void element) {
+                  PhonegapLog.log("Inserted " + entity);
+                  delegate.execute(entity);
+                }
+              });
             }
           });
     } else {
@@ -455,15 +513,59 @@ public class MainDao extends WebSQLDao {
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            
-            //TODO: iterate rows for update
-            
+            iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+              public void execute(Void element) {
+                PhonegapLog.log("Updated " + entity);
+                delegate.execute(entity);
+              }
+            });
+          }
+        });
+    }
+  }
+  
+  protected void iterateOrderItemRowsForUpdate(final SQLTransaction tr, final Iterator<OrderItemRow> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      final OrderItemRow item = it.next();
+      updateOrderItemRow(tr, item, new Delegate<OrderItemRow>() {
+        public void execute(OrderItemRow item) {
+          iterateOrderItemRowsForUpdate(tr, it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
+  }
+
+  protected void updateOrderItemRow(SQLTransaction tr, final OrderItemRow entity, final Delegate<OrderItemRow> delegate) {
+    if (entity.getId() == null) {
+      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?)", 
+          new Object[] {
+            entity.getOrderItemId(), 
+            entity.getText()
+          }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              entity.setId(rs.getInsertId());
+              PhonegapLog.log("Inserted " + entity);
+              delegate.execute(entity);
+            }
+          });
+    } else {
+      String sql = "UPDATE orderItemRow SET ";
+      sql += "  orderItemId = ?";
+      sql += " ,text = ?";
+      sql += " WHERE id = ?";
+      tr.doExecuteSql(sql, new Object[] {
+          entity.getOrderItemId(), 
+          entity.getText(),
+          entity.getId()
+        }, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             PhonegapLog.log("Updated " + entity);
             delegate.execute(entity);
           }
         });
     }
   }
-  
   
 }

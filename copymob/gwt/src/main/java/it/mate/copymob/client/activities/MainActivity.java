@@ -12,7 +12,11 @@ import it.mate.copymob.client.view.TimbroDetailView;
 import it.mate.copymob.client.view.TimbroEditView;
 import it.mate.copymob.client.view.TimbroPreviewView;
 import it.mate.copymob.shared.model.Account;
+import it.mate.copymob.shared.model.Order;
+import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.copymob.shared.model.impl.OrderItemTx;
+import it.mate.copymob.shared.model.impl.OrderTx;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
 import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -171,6 +175,74 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void showMenu() {
     OnsenUi.getSlidingMenu().toggleMenu();
+  }
+
+  //TODO: WORK IN PROGRESS
+  public void orderTimbro(final Timbro timbro) {
+
+    dao.findOpenOrder(new Delegate<List<Order>>() {
+      public void execute(List<Order> results) {
+        
+        if (results == null || results.size() == 0) {
+          Order order = new OrderTx();
+          order.setCodice("ORDERTEST");
+          order.setState(Order.STATE_OPEN);
+          order.getItems().add(createOrderItem(timbro, 1d));
+          dao.saveOrder(order, new Delegate<Order>() {
+            public void execute(Order order) {
+              orderTimbro(timbro);
+            }
+          });
+          return;
+        }
+        
+        Order order = results.get(0);
+        setCurrentOrder(order);
+        
+        for (OrderItem item : order.getItems()) {
+          if (item.getRows() == null || item.getRows().size() == 0) {
+            setCurrentOrderItem(item);
+            goToTimbroDetailView(timbro);
+            return;
+          }
+        }
+
+        OrderItem item = createOrderItem(timbro, 1d);
+        order.getItems().add(item);
+        setCurrentOrderItem(item);
+        goToTimbroDetailView(timbro);
+        return;
+        
+      }
+    });
+    
+  }
+  
+  private OrderItem createOrderItem(Timbro timbro, double qty) {
+    OrderItem item = new OrderItemTx();
+    item.setQuantity(1d);
+    item.setTimbro(timbro);
+    return item;
+  }
+
+  private Order currentOrder;
+  
+  private OrderItem currentOrderItem;
+
+  public Order getCurrentOrder() {
+    return currentOrder;
+  }
+
+  protected void setCurrentOrder(Order currentOrder) {
+    this.currentOrder = currentOrder;
+  }
+
+  public OrderItem getCurrentOrderItem() {
+    return currentOrderItem;
+  }
+
+  protected void setCurrentOrderItem(OrderItem currentOrderItem) {
+    this.currentOrderItem = currentOrderItem;
   }
 
   private void ensureDevInfoId() {
