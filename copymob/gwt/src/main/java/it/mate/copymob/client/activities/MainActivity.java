@@ -123,6 +123,9 @@ public class MainActivity extends OnsAbstractActivity implements
     if (place.getToken().equals(MainPlace.TIMBRO_DETAIL)) {
       view.setModel(place.getModel());
     }
+    if (place.getToken().equals(MainPlace.TIMBRO_EDIT)) {
+      view.setModel(place.getModel());
+    }
   }
 
   @Override
@@ -153,6 +156,16 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToTimbroDetailView(Timbro timbro) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_DETAIL, timbro));
+  }
+
+  @Override
+  public void goToTimbroPreviewView(Timbro timbro) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_PREVIEW, timbro));
+  }
+
+  @Override
+  public void goToTimbroEditView(Timbro timbro) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_EDIT, timbro));
   }
 
   @Override
