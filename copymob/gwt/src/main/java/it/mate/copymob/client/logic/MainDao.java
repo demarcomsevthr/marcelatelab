@@ -38,7 +38,7 @@ public class MainDao extends WebSQLDao {
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
   // ATTENZIONE: LASCIARE IL CAMPO IMAGE IN FONDO (NELLA CREATE VIENE ACCODATO IL DATATYPE BLOB)
-  private final static String TIMBRI_FIELDS_0 = "nome, codice, image ";
+  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, image ";
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
@@ -202,6 +202,9 @@ public class MainDao extends WebSQLDao {
     result.setNome(rows.getValueString(it, "nome"));
     result.setCodice(rows.getValueString(it, "codice"));
     result.setImage(rows.getValueString(it, "image"));
+    result.setWidth(rows.getValueDouble(it, "width"));
+    result.setHeight(rows.getValueDouble(it, "height"));
+    result.setOvalInt(rows.getValueInt(it, "oval"));
     return result;
   }
   
@@ -209,10 +212,13 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getNome(), 
                 entity.getCodice(),
+                entity.getWidth(),
+                entity.getHeight(),
+                entity.getOvalInt(),
                 entity.getImage()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -226,11 +232,17 @@ public class MainDao extends WebSQLDao {
           sql += " nome = ?";
           sql += " ,codice = ?";
           sql += " ,image = ?";
+          sql += " ,width = ?";
+          sql += " ,height = ?";
+          sql += " ,oval = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getNome(), 
               entity.getCodice(),
               entity.getImage(),
+              entity.getWidth(),
+              entity.getHeight(),
+              entity.getOvalInt(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

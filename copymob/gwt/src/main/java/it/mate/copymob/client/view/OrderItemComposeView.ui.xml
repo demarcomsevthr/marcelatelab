@@ -1,0 +1,41 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
+  
+    <o:OnsPage>
+    
+      <o:OnsToolbar>
+        <div class="left">
+          <o:OnsBackButton text="Back"/>
+        </div>
+        <div class="center">Composizione Timbro</div>
+      </o:OnsToolbar>
+      
+      <g:VerticalPanel width="100%" horizontalAlignment="center">
+        <g:HTML>
+          <i>Composizione del timbro qui</i>
+        </g:HTML>
+        <g:HorizontalPanel>
+          <o:OnsTextBox ui:field="row0"/>
+          <o:OnsButton ui:field="btnCfg0" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
+        </g:HorizontalPanel>
+        <g:HorizontalPanel>
+          <o:OnsTextBox ui:field="row1"/>
+          <o:OnsButton ui:field="btnCfg1" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
+        </g:HorizontalPanel>
+        <g:HorizontalPanel>
+          <o:OnsTextBox ui:field="row2"/>
+          <o:OnsButton ui:field="btnCfg2" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+      <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
+      
+    </o:OnsPage>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>

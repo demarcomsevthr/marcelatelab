@@ -15,6 +15,12 @@ public class TimbroTx implements Timbro, IsMappable {
   
   private String image;
   
+  private Double width;
+  
+  private Double height;
+  
+  private int oval;
+  
   @Override
   public String toString() {
     return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + "]";
@@ -74,6 +80,38 @@ public class TimbroTx implements Timbro, IsMappable {
 
   public void setImage(String image) {
     this.image = image;
+  }
+
+  public Double getWidth() {
+    return width;
+  }
+
+  public void setWidth(Double width) {
+    this.width = width;
+  }
+
+  public Double getHeight() {
+    return height;
+  }
+
+  public void setHeight(Double height) {
+    this.height = height;
+  }
+
+  public boolean isOval() {
+    return 1 == oval;
+  }
+
+  public void setOval(boolean oval) {
+    this.oval = oval ? 1 : 0;
+  }
+
+  public Integer getOvalInt() {
+    return oval;
+  }
+
+  public void setOvalInt(Integer oval) {
+    this.oval = oval != null ? oval : 0;
   }
 
 }

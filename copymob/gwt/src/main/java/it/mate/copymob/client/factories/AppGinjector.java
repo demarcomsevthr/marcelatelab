@@ -7,8 +7,8 @@ import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
-import it.mate.copymob.client.view.TimbroEditView;
-import it.mate.copymob.client.view.TimbroPreviewView;
+import it.mate.copymob.client.view.OrderItemComposeView;
+import it.mate.copymob.client.view.OrderItemEditView;
 import it.mate.copymob.shared.service.RemoteFacadeAsync;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
@@ -34,8 +34,8 @@ public interface AppGinjector extends CommonGinjector {
   
   public TimbroDetailView getTimbroDetailView();
   
-  public TimbroPreviewView getTimbroPreviewView();
+  public OrderItemEditView getOrderItemEditView();
   
-  public TimbroEditView getTimbroEditView();
+  public OrderItemComposeView getOrderItemComposeView();
   
 }

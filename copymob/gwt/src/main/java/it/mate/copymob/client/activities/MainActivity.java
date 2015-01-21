@@ -6,11 +6,11 @@ import it.mate.copymob.client.logic.TimbriInitializer;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
+import it.mate.copymob.client.view.OrderItemComposeView;
+import it.mate.copymob.client.view.OrderItemEditView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
-import it.mate.copymob.client.view.TimbroEditView;
-import it.mate.copymob.client.view.TimbroPreviewView;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
@@ -38,7 +38,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MainActivity extends OnsAbstractActivity implements 
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
   TimbriListView.Presenter,
-  TimbroDetailView.Presenter, TimbroPreviewView.Presenter, TimbroEditView.Presenter
+  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter
   {
   
   private MainPlace place;
@@ -101,12 +101,12 @@ public class MainActivity extends OnsAbstractActivity implements
       this.view = AppClientFactory.IMPL.getGinjector().getTimbroDetailView();
     }
     
-    if (place.getToken().equals(MainPlace.TIMBRO_PREVIEW)) {
-      this.view = AppClientFactory.IMPL.getGinjector().getTimbroPreviewView();
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_EDIT)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getOrderItemEditView();
     }
     
-    if (place.getToken().equals(MainPlace.TIMBRO_EDIT)) {
-      this.view = AppClientFactory.IMPL.getGinjector().getTimbroEditView();
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getOrderItemComposeView();
     }
     
     view.setPresenter(this);
@@ -131,7 +131,10 @@ public class MainActivity extends OnsAbstractActivity implements
     if (place.getToken().equals(MainPlace.TIMBRO_DETAIL)) {
       view.setModel(place.getModel());
     }
-    if (place.getToken().equals(MainPlace.TIMBRO_EDIT)) {
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_EDIT)) {
+      view.setModel(getCurrentOrderItem());
+    }
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       view.setModel(getCurrentOrderItem());
     }
   }
@@ -168,12 +171,12 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToTimbroPreviewView(Timbro timbro) {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_PREVIEW, timbro));
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_EDIT, timbro));
   }
 
   @Override
   public void goToTimbroEditView(Timbro timbro) {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRO_EDIT, timbro));
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, timbro));
   }
 
   @Override
