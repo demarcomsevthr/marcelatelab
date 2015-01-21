@@ -384,7 +384,8 @@ public class GwtUtils {
     new Timer() {
       public void run() {
         long t1 = System.currentTimeMillis();
-        Element elem = DOM.getElementById(id);
+//      Element elem = DOM.getElementById(id);
+        Element elem = getElementByIdImpl(id);
         if (elem != null) {
           this.cancel();
           delegate.execute(elem);
@@ -394,6 +395,10 @@ public class GwtUtils {
       }
     }.scheduleRepeating(100);
   }
+  
+  public static native Element getElementByIdImpl(String elementId) /*-{
+    return $doc.getElementById(elementId);
+  }-*/;
   
   protected abstract static class MobileTimerAnimationSchedulerImpl extends Timer {
     
@@ -1303,5 +1308,33 @@ public class GwtUtils {
       }
     });
   }
+  
+  public static native int getElementOffsetLeft(Element elem) /*-{
+    var offsetLeft = 0;
+    do {
+      if (!isNaN(elem.offsetLeft)) {
+          offsetLeft += elem.offsetLeft;
+      }
+    } while(elem = elem.offsetParent );
+    return offsetLeft;
+  }-*/;
+  
+  public static native int getElementOffsetTop(Element elem) /*-{
+    var offsetTop = 0;
+    do {
+      if (!isNaN(elem.offsetTop)) {
+          offsetTop += elem.offsetTop;
+      }   
+    } while(elem = elem.offsetParent );
+    return offsetTop;
+  }-*/;
+
+  public static native int getElementOffsetWidth(Element elem) /*-{
+    return elem.offsetWidth;
+  }-*/;
+
+  public static native int getElementOffsetHeight(Element elem) /*-{
+    return elem.offsetHeight;
+  }-*/;
 
 }
