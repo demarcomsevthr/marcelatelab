@@ -94,7 +94,7 @@ public class MainDao extends WebSQLDao {
     tr.doExecuteSql("DROP TABLE IF EXISTS timbri");
     
     PhonegapLog.log("dropping table order");
-    tr.doExecuteSql("DROP TABLE IF EXISTS order");
+    tr.doExecuteSql("DROP TABLE IF EXISTS orderHeader");
     
     PhonegapLog.log("dropping table orderItem");
     tr.doExecuteSql("DROP TABLE IF EXISTS orderItem");
@@ -112,7 +112,7 @@ public class MainDao extends WebSQLDao {
       tr.doExecuteSql("CREATE TABLE timbri (id "+SERIAL_ID+", " + TIMBRI_FIELDS_0 + " BLOB )");
 
       PhonegapLog.log("creating table order");
-      tr.doExecuteSql("CREATE TABLE order (id "+SERIAL_ID+", " + ORDER_FIELDS_0 + " )");
+      tr.doExecuteSql("CREATE TABLE orderHeader (id "+SERIAL_ID+", " + ORDER_FIELDS_0 + " )");
 
       PhonegapLog.log("creating table orderItem");
       tr.doExecuteSql("CREATE TABLE orderItem (id "+SERIAL_ID+", " + ORDER_ITEM_FIELDS_0 + " )");
@@ -250,7 +250,7 @@ public class MainDao extends WebSQLDao {
   public void findAllOrders(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM order ORDER BY id", null, new SQLStatementCallback() {
+        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader ORDER BY id", null, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
               public void execute(List<Order> results) {
@@ -266,7 +266,7 @@ public class MainDao extends WebSQLDao {
   public void findOpenOrder(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM order WHERE order.state = ?", 
+        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.state = ?", 
             new Object[]{Order.STATE_OPEN}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
@@ -427,7 +427,7 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO order (" + ORDER_FIELDS + ") VALUES (?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?)", 
               new Object[] {
                 entity.getCodice(), 
                 entity.getAccountId(),
@@ -438,13 +438,15 @@ public class MainDao extends WebSQLDao {
                   iterateOrderItemsForUpdate(tr, entity.getItems().iterator(), new Delegate<Void>() {
                     public void execute(Void element) {
                       PhonegapLog.log("Inserted " + entity);
-                      delegate.execute(entity);
+                      if (delegate != null) {
+                        delegate.execute(entity);
+                      }
                     }
                   });
                 }
               });
         } else {
-          String sql = "UPDATE order SET ";
+          String sql = "UPDATE orderHeader SET ";
           sql += "  codice = ?";
           sql += " ,accountId = ?";
           sql += " ,state = ?";
@@ -459,7 +461,9 @@ public class MainDao extends WebSQLDao {
                 iterateOrderItemsForUpdate(tr, entity.getItems().iterator(), new Delegate<Void>() {
                   public void execute(Void element) {
                     PhonegapLog.log("Updated " + entity);
-                    delegate.execute(entity);
+                    if (delegate != null) {
+                      delegate.execute(entity);
+                    }
                   }
                 });
               }

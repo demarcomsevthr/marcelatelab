@@ -19,6 +19,14 @@ public class TimbroTx implements Timbro, IsMappable {
   public String toString() {
     return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + "]";
   }
+  
+  public TimbroTx() {
+
+  }
+
+  protected TimbroTx(Integer id) {
+    this.id = id;
+  }
 
   @Override
   public RpcMap toRpcMap() {

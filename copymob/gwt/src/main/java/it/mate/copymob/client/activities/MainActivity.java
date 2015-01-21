@@ -51,6 +51,10 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private Timer daoTimer;
   
+  private static Order currentOrder;
+  
+  private static OrderItem currentOrderItem;
+
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
   }
@@ -128,7 +132,7 @@ public class MainActivity extends OnsAbstractActivity implements
       view.setModel(place.getModel());
     }
     if (place.getToken().equals(MainPlace.TIMBRO_EDIT)) {
-      view.setModel(place.getModel());
+      view.setModel(getCurrentOrderItem());
     }
   }
 
@@ -200,10 +204,18 @@ public class MainActivity extends OnsAbstractActivity implements
         setCurrentOrder(order);
         
         for (OrderItem item : order.getItems()) {
-          if (item.getRows() == null || item.getRows().size() == 0) {
+          if (item.getTimbro().getId().equals(timbro.getId())) {
+            if (item.getRows() == null || item.getRows().size() == 0) {
+              setCurrentOrderItem(item);
+              goToTimbroDetailView(timbro);
+              return;
+            }
+
+            //TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
             setCurrentOrderItem(item);
             goToTimbroDetailView(timbro);
             return;
+            
           }
         }
 
@@ -225,16 +237,12 @@ public class MainActivity extends OnsAbstractActivity implements
     return item;
   }
 
-  private Order currentOrder;
-  
-  private OrderItem currentOrderItem;
-
   public Order getCurrentOrder() {
     return currentOrder;
   }
 
   protected void setCurrentOrder(Order currentOrder) {
-    this.currentOrder = currentOrder;
+    MainActivity.currentOrder = currentOrder;
   }
 
   public OrderItem getCurrentOrderItem() {
@@ -242,7 +250,19 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   protected void setCurrentOrderItem(OrderItem currentOrderItem) {
-    this.currentOrderItem = currentOrderItem;
+    MainActivity.currentOrderItem = currentOrderItem;
+  }
+  
+  public void saveCurrentOrderItem(OrderItem item, Delegate<Order> delegate) {
+    currentOrderItem = item;
+    if (currentOrder != null) {
+      for (int it = 0; it < currentOrder.getItems().size(); it++) {
+        if (currentOrder.getItems().get(it).getId().equals(item.getId())) {
+          currentOrder.getItems().set(it, item);
+        }
+      }
+      dao.saveOrder(currentOrder, delegate);
+    }
   }
 
   private void ensureDevInfoId() {
