@@ -21,9 +21,9 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String TIMBRO_DETAIL = "timbroDetail";
   
-  public static final String TIMBRO_PREVIEW = "timbroPreview";
+  public static final String ORDER_ITEM_EDIT = "ordItemEdit";
   
-  public static final String TIMBRO_EDIT = "timbroEdit";
+  public static final String ORDER_ITEM_COMPOSE = "ordItemCompose";
   
   private String token;
   

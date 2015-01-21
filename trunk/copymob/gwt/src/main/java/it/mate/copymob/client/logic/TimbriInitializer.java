@@ -65,6 +65,9 @@ public class TimbriInitializer {
     result.setCodice("T" + n);
     result.setNome("TIMBRO " + n);
     result.setImage(imgData);
+    result.setWidth(1200d);
+    result.setHeight(800d);
+    result.setOval(false);
     return result;
   }
   

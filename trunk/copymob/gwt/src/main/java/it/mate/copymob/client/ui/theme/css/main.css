@@ -79,3 +79,17 @@
   float: left;
   padding-right: 0.2em;
 }
+
+.app-item-preview {
+  border: 1px solid red;
+  margin: 5px;
+}
+
+.app-edit-btn-cfg {
+  background-color: transparent;
+  color: rgba(24,103,194,0.81);
+  height: 2em;
+  padding: 0;
+  padding-left: 0.5em;
+}
+

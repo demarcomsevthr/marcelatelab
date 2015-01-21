@@ -1,6 +1,6 @@
 package it.mate.copymob.client.view;
 
-import it.mate.copymob.client.view.TimbroEditView.Presenter;
+import it.mate.copymob.client.view.OrderItemComposeView.Presenter;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
@@ -18,13 +18,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TimbroEditView extends AbstractBaseView<Presenter> {
+public class OrderItemComposeView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void saveCurrentOrderItem(OrderItem item, Delegate<Order> delegate);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, TimbroEditView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, OrderItemComposeView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -35,7 +35,7 @@ public class TimbroEditView extends AbstractBaseView<Presenter> {
   
   private OrderItem item;
   
-  public TimbroEditView() {
+  public OrderItemComposeView() {
     initUI();
   }
 
@@ -76,7 +76,11 @@ public class TimbroEditView extends AbstractBaseView<Presenter> {
 
   @UiHandler("btnSave")
   public void onBtnSave(TapEvent event) {
-    getPresenter().saveCurrentOrderItem(flushModel(), null);
+    getPresenter().saveCurrentOrderItem(flushModel(), new Delegate<Order>() {
+      public void execute(Order element) {
+        getPresenter().goToPrevious();
+      }
+    });
   }
   
 }

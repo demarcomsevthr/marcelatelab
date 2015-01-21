@@ -5,26 +5,21 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-  
-  
+
     <o:OnsPage>
     
       <o:OnsToolbar>
         <div class="left">
           <o:OnsBackButton text="Back"/>
         </div>
-        <div class="center">Composizione Timbro</div>
+        <div class="center">Preview Timbro</div>
       </o:OnsToolbar>
       
-      <g:VerticalPanel width="100%" horizontalAlignment="center">
-        <g:HTML>
-          <i>Composizione del timbro qui</i>
-        </g:HTML>
-        <o:OnsTextBox ui:field="row0"/>
-        <o:OnsTextBox ui:field="row1"/>
-        <o:OnsTextBox ui:field="row2"/>
-      </g:VerticalPanel>
-      <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
+      <g:HTML addStyleNames="app-item-preview" ui:field="previewPanel">
+        <i>Preview del timbro qui</i>
+      </g:HTML>
+      
+      <o:OnsButton text="Edit" ui:field="btnEdit" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>
     

@@ -22,4 +22,20 @@ public interface Timbro extends Serializable {
 
   public Integer getId();
 
+  public void setOval(boolean oval);
+
+  public boolean isOval();
+
+  public Integer getOvalInt();
+  
+  public void setOvalInt(Integer oval);
+
+  public void setHeight(Double height);
+
+  public Double getHeight();
+
+  public void setWidth(Double width);
+
+  public Double getWidth();
+
 }
