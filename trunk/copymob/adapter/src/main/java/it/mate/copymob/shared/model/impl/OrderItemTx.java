@@ -53,7 +53,7 @@ public class OrderItemTx implements OrderItem, IsMappable {
   }
 
   public void setTimbroId(Integer timbroId) {
-//  this.timbroId = timbroId;
+    this.timbro = new TimbroTx(timbroId);
   }
 
   public Double getQuantity() {
@@ -73,6 +73,11 @@ public class OrderItemTx implements OrderItem, IsMappable {
   }
 
   public List<OrderItemRow> getRows() {
+    if (rows != null) {
+      for (OrderItemRow row : rows) {
+        row.setOrderItemId(this.id);
+      }
+    }
     return rows;
   }
 

@@ -1,10 +1,10 @@
 package it.mate.copymob.client.factories;
 
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
-import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.copymob.client.activities.mapper.MainActivityMapper;
 import it.mate.copymob.shared.service.RemoteFacade;
 import it.mate.copymob.shared.service.RemoteFacadeAsync;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.AbstractGinModule;
@@ -21,7 +21,7 @@ public class AppGinModule extends AbstractGinModule {
   
   @Override
   protected void configure() {
-    
+//  bind(MainActivity.class).to(MainActivity.class).in(Singleton.class);
   }
   
   @Provides

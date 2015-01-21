@@ -61,6 +61,11 @@ public class OrderTx implements Order, IsMappable {
   }
 
   public List<OrderItem> getItems() {
+    if (items != null) {
+      for (OrderItem item : items) {
+        item.setOrderId(this.id);
+      }
+    }
     return items;
   }
 

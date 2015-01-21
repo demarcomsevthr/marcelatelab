@@ -1,9 +1,9 @@
 package it.mate.copymob.client.activities.mapper;
 
-import it.mate.gwtcommons.client.factories.BaseClientFactory;
-import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.copymob.client.activities.MainActivity;
 import it.mate.copymob.client.places.MainPlace;
+import it.mate.gwtcommons.client.factories.BaseClientFactory;
+import it.mate.gwtcommons.client.history.BaseActivityMapper;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
