@@ -6,6 +6,7 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
   
+  
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -15,7 +16,14 @@
         <div class="center">Composizione Timbro</div>
       </o:OnsToolbar>
       
-      <g:VerticalPanel width="100%" horizontalAlignment="center">
+      <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel">
+        <g:HTML>
+          <i>Composizione del timbro qui</i>
+        </g:HTML>
+      </o:OnsVerticalPanel>
+      
+      <!-- 
+      <g:VerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel">
         <g:HTML>
           <i>Composizione del timbro qui</i>
         </g:HTML>
@@ -32,7 +40,13 @@
           <o:OnsButton ui:field="btnCfg2" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
         </g:HorizontalPanel>
       </g:VerticalPanel>
+       -->
+      
       <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
+      
+      <g:HTML ui:field="controlbar" addStyleNames="app-edit-controlbar">
+        <i>Barra controlli editing</i>
+      </g:HTML>
       
     </o:OnsPage>
     

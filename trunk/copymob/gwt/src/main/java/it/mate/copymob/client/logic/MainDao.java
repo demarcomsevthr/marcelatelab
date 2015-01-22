@@ -506,12 +506,16 @@ public class MainDao extends WebSQLDao {
             entity.getTimbroId(),
             entity.getQuantity()
           }, new SQLStatementCallback() {
-            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
-              iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+              purgeOrderItemRows(tr, entity, new Delegate<Void>() {
                 public void execute(Void element) {
-                  PhonegapLog.log("Inserted " + entity);
-                  delegate.execute(entity);
+                  iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+                    public void execute(Void element) {
+                      PhonegapLog.log("Inserted " + entity);
+                      delegate.execute(entity);
+                    }
+                  });
                 }
               });
             }
@@ -528,16 +532,42 @@ public class MainDao extends WebSQLDao {
           entity.getQuantity(),
           entity.getId()
         }, new SQLStatementCallback() {
-          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+          public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+            purgeOrderItemRows(tr, entity, new Delegate<Void>() {
               public void execute(Void element) {
-                PhonegapLog.log("Updated " + entity);
-                delegate.execute(entity);
+                iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+                  public void execute(Void element) {
+                    PhonegapLog.log("Updated " + entity);
+                    delegate.execute(entity);
+                  }
+                });
               }
             });
           }
         });
     }
+  }
+  
+  protected void purgeOrderItemRows(SQLTransaction tr, OrderItem item, final Delegate<Void> delegate) {
+    if (item.getId() == null) {
+      delegate.execute(null);
+      return;
+    }
+    String idsList = "";
+    for (OrderItemRow row : item.getRows()) {
+      if (idsList.length() > 0) {
+        idsList += ",";
+      }
+      idsList += "" + row.getId();
+    }
+    tr.doExecuteSql("DELETE FROM orderItemRow WHERE orderItemId = ? AND id NOT IN (" + idsList + ")", 
+        new Object[] {
+          item.getId()
+        }, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            delegate.execute(null);
+          }
+        });
   }
   
   protected void iterateOrderItemRowsForUpdate(final SQLTransaction tr, final Iterator<OrderItemRow> it, final Delegate<Void> delegate) {
