@@ -75,6 +75,8 @@ public class MainActivity extends OnsAbstractActivity implements
         }
       }
     });
+    
+    boolean deferred = true;
 
     if (place.getToken().equals(MainPlace.HOME)) {
       getDevInfoId(new Delegate<String>() {
@@ -107,16 +109,21 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       this.view = AppClientFactory.IMPL.getGinjector().getOrderItemComposeView();
+//    deferred = false;
     }
     
     view.setPresenter(this);
     panel.setWidget(view.asWidget());
 
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        retrieveModel();
-      }
-    });
+    if (deferred) {
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          retrieveModel();
+        }
+      });
+    } else {
+      retrieveModel();
+    }
     
   }
   

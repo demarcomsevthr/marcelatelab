@@ -93,3 +93,14 @@
   padding-left: 0.5em;
 }
 
+.app-edit-controlbar {
+  display: none;
+  position: absolute;
+  background-color: #8aeacf;
+  padding: 0.5em;
+  border-radius: 0.3em;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+}
+
