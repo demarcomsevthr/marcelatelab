@@ -2,6 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -21,6 +22,7 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
       element.addClassName(className);
     }
     setElement(element);
+    PhgUtils.ensureId(element);
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
   
