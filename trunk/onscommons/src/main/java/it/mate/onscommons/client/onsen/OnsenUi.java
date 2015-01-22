@@ -140,4 +140,15 @@ public class OnsenUi {
     }
   }
   
+  public static Element getParentPageElement(Element childElement) {
+    Element parentElement = childElement.getParentElement();
+    while (parentElement != null) {
+      if (parentElement.getTagName().equalsIgnoreCase("ons-page")) {
+        return parentElement;
+      }
+      parentElement = parentElement.getParentElement();
+    }
+    return null;
+  }
+  
 }
