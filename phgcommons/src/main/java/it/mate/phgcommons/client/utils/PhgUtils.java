@@ -231,6 +231,10 @@ public class PhgUtils {
     }
   }
   
+  public static void log(JavaScriptObject elem) {
+    PhgUtils.log(JSONUtils.stringify(elem));
+  }
+  
   public static native void logImpl(String text) /*-{
     $wnd.console.log(text);
   }-*/;
