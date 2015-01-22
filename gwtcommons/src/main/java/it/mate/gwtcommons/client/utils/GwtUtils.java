@@ -385,7 +385,7 @@ public class GwtUtils {
       public void run() {
         long t1 = System.currentTimeMillis();
 //      Element elem = DOM.getElementById(id);
-        Element elem = getElementByIdImpl(id);
+        Element elem = getElementById(id);
         if (elem != null) {
           this.cancel();
           delegate.execute(elem);
@@ -396,9 +396,19 @@ public class GwtUtils {
     }.scheduleRepeating(100);
   }
   
-  public static native Element getElementByIdImpl(String elementId) /*-{
+  public static native Element getElementById(String elementId) /*-{
     return $doc.getElementById(elementId);
   }-*/;
+  
+  public static Element getElement(Widget widget) {
+    String id = widget.getElement().getId();
+    if (id != null && !"".equals(id.trim())) {
+      return getElementById(id);
+    }
+    return null;
+  }
+  
+  
   
   protected abstract static class MobileTimerAnimationSchedulerImpl extends Timer {
     
@@ -1335,6 +1345,14 @@ public class GwtUtils {
 
   public static native int getElementOffsetHeight(Element elem) /*-{
     return elem.offsetHeight;
+  }-*/;
+  
+  public static native JavaScriptObject getElementOffset(Element elem) /*-{
+    var left = @it.mate.gwtcommons.client.utils.GwtUtils::getElementOffsetLeft(Lcom/google/gwt/dom/client/Element;)(elem);
+    var top = @it.mate.gwtcommons.client.utils.GwtUtils::getElementOffsetTop(Lcom/google/gwt/dom/client/Element;)(elem);
+    var width = @it.mate.gwtcommons.client.utils.GwtUtils::getElementOffsetWidth(Lcom/google/gwt/dom/client/Element;)(elem);
+    var height = @it.mate.gwtcommons.client.utils.GwtUtils::getElementOffsetHeight(Lcom/google/gwt/dom/client/Element;)(elem);
+    return {left: left, top: top, width: width, height: height};
   }-*/;
 
 }
