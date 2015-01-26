@@ -6,7 +6,6 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
   
-  
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -16,37 +15,31 @@
         <div class="center">Composizione Timbro</div>
       </o:OnsToolbar>
       
-      <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel">
+      <g:VerticalPanel width="100%" horizontalAlignment="center">
         <g:HTML>
           <i>Composizione del timbro qui</i>
         </g:HTML>
-      </o:OnsVerticalPanel>
-      
-      <!-- 
-      <g:VerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel">
-        <g:HTML>
-          <i>Composizione del timbro qui</i>
-        </g:HTML>
-        <g:HorizontalPanel>
-          <o:OnsTextBox ui:field="row0"/>
-          <o:OnsButton ui:field="btnCfg0" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
-        </g:HorizontalPanel>
-        <g:HorizontalPanel>
-          <o:OnsTextBox ui:field="row1"/>
-          <o:OnsButton ui:field="btnCfg1" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
-        </g:HorizontalPanel>
-        <g:HorizontalPanel>
-          <o:OnsTextBox ui:field="row2"/>
-          <o:OnsButton ui:field="btnCfg2" addStyleNames="app-edit-btn-cfg" icon="fa-cog"/>  
-        </g:HorizontalPanel>
       </g:VerticalPanel>
-       -->
+      
+      <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel"/>
       
       <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
-      
+
+      <g:HorizontalPanel ui:field="controlbar" addStyleNames="app-edit-controlbar">
+        <o:OnsButton ui:field="btnEdtBold" icon="fa-bold" addStyleNames="app-edit-controlbar-btn"/>  
+        <gc:Spacer width="0.1em"/>
+        <o:OnsButton ui:field="btnEdtItalic" icon="fa-italic" addStyleNames="app-edit-controlbar-btn"/>  
+        <gc:Spacer width="0.1em"/>
+        <o:OnsButton ui:field="btnEdtUnderline" icon="fa-underline" addStyleNames="app-edit-controlbar-btn"/>  
+        <gc:Spacer width="0.3em"/>
+        <o:OnsButton ui:field="btnEdtAlignLeft" icon="fa-align-left" addStyleNames="app-edit-controlbar-btn"/>  
+      </g:HorizontalPanel>
+
+      <!--       
       <g:HTML ui:field="controlbar" addStyleNames="app-edit-controlbar">
-        <i>Barra controlli editing</i>
+        <i>Controlli di editing</i>
       </g:HTML>
+       -->
       
     </o:OnsPage>
     
