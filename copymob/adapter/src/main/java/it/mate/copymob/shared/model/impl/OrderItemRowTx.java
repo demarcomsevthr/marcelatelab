@@ -13,6 +13,8 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private String text;
   
+  private boolean bold;
+  
   
   
   @Override
@@ -49,6 +51,14 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  public boolean isBold() {
+    return bold;
+  }
+
+  public void setBold(boolean bold) {
+    this.bold = bold;
   }
 
 }

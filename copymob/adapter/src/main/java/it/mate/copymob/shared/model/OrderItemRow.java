@@ -16,4 +16,8 @@ public interface OrderItemRow extends Serializable {
 
   public Integer getOrderItemId();
 
+  public void setBold(boolean bold);
+
+  public boolean isBold();
+
 }
