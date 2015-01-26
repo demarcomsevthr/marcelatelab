@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.event.TouchEventUtils;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
 import it.mate.onscommons.client.ui.OnsTextBox;
@@ -26,7 +27,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,16 +44,8 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   @UiField Panel wrapperPanel;
   @UiField OnsVerticalPanel rowsPanel;
 
-  /*
-  @UiField OnsTextBox row0;
-  @UiField OnsButton btnCfg0;
-  @UiField OnsTextBox row1;
-  @UiField OnsButton btnCfg1;
-  @UiField OnsTextBox row2;
-  @UiField OnsButton btnCfg2;
-  */
-  
-  @UiField HTML controlbar;
+//@UiField HTML controlbar;
+  @UiField Panel controlbar;
   
   private OrderItem item;
   
@@ -64,6 +56,10 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   protected final static double DURATION = 0.3;
   
   private List<OnsTextBox> textboxes = new ArrayList<OnsTextBox>();
+
+  private int selectedRowIndex;
+  
+  private JavaScriptObject overallEventListener = null;
 
   public OrderItemComposeView() {
     initUI();
@@ -78,15 +74,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     PhgUtils.ensureId(controlbar.getElement());
     PhgUtils.ensureId(rowsPanel.getElement());
-    /*
-    PhgUtils.ensureId(btnCfg0.getElement());
-    PhgUtils.ensureId(btnCfg1.getElement());
-    PhgUtils.ensureId(btnCfg2.getElement());
-    */
-    
-//  rowsPanel.setAddDirect(true);
     rowsPanel.setVisible(false);
-    
   }
 
   @Override
@@ -95,30 +83,19 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       item = (OrderItem)model;
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
-
         rowsPanel.add(createRowPanel(row.getText()));
-        
-        /*
-        if (it == 0) row0.setText(row.getText());
-        if (it == 1) row1.setText(row.getText());
-        if (it == 2) row2.setText(row.getText());
-        */
-        
       }
-      
     }
-  
     rowsPanel.add(createRowPanel(""));
-    
     GwtUtils.deferredExecution(200, new Delegate<Void>() {
       public void execute(Void element) {
         rowsPanel.setVisible(true);
       }
     });
-
   }
   
   private HorizontalPanel createRowPanel(String text) {
+    final int index = textboxes.size();
     OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
     rowpanel.setAddDirect(rowsPanel.isAddDirect());
     OnsTextBox textbox = new OnsTextBox();
@@ -126,10 +103,10 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     rowpanel.add(textbox);
     final OnsButton controlBtn = new OnsButton();
     controlBtn.addStyleName("app-edit-btn-cfg");
-    controlBtn.setIcon("fa-cog");
+    controlBtn.setIcon("fa-bars");
     controlBtn.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        switchControlbar(GwtUtils.getElement(controlBtn));
+        switchControlbar(GwtUtils.getElement(controlBtn), index);
       }
     });
     rowpanel.add(controlBtn);
@@ -156,36 +133,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
     }
     
-    /*
-    if (item.getRows().size() <= 0)
-      item.getRows().add(new OrderItemRowTx());
-    if (item.getRows().size() <= 1)
-      item.getRows().add(new OrderItemRowTx());
-    if (item.getRows().size() <= 2)
-      item.getRows().add(new OrderItemRowTx());
-    item.getRows().get(0).setText(row0.getText());
-    item.getRows().get(1).setText(row1.getText());
-    item.getRows().get(2).setText(row2.getText());
-    */
-    
     return item;
   }
 
-  /*
-  @UiHandler("btnCfg0")
-  public void onBtnCfg0(TapEvent event) {
-    switchControlbar(GwtUtils.getElement(btnCfg0));
-  }
-  @UiHandler("btnCfg1")
-  public void onBtnCfg1(TapEvent event) {
-    switchControlbar(GwtUtils.getElement(btnCfg1));
-  }
-  @UiHandler("btnCfg2")
-  public void onBtnCfg2(TapEvent event) {
-    switchControlbar(GwtUtils.getElement(btnCfg2));
-  }
-  */
-  
   @UiHandler("btnSave")
   public void onBtnSave(TapEvent event) {
     getPresenter().saveCurrentOrderItem(flushModel(), new Delegate<Order>() {
@@ -195,7 +145,19 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     });
   }
 
-  private void switchControlbar(Element tappedElement) {
+  @UiHandler("btnEdtBold")
+  public void onBtnEdtBold(TapEvent event) {
+    PhgUtils.log("bold on row " + selectedRowIndex);
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    row.setBold(!row.isBold());
+    if (row.isBold()) {
+      textboxes.get(selectedRowIndex).getElement().addClassName("app-bold");
+    } else {
+      textboxes.get(selectedRowIndex).getElement().replaceClassName("app-bold", "");
+    }
+  }
+  
+  private void switchControlbar(final Element tappedElement, int index) {
     PhgUtils.log(GwtUtils.getElementOffset(tappedElement));
     int x0 = GwtUtils.getElementOffsetLeft(tappedElement);
     int y0 = GwtUtils.getElementOffsetTop(tappedElement) - 10;
@@ -203,9 +165,21 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     int y1 = y0;
     if (controlbarVisible && isLastTappedElement(tappedElement)) {
       hideControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1);
+      if (overallEventListener != null) {
+        TouchEventUtils.removeEventListener(overallEventListener);
+        overallEventListener = null;
+      }
     } else {
+      selectedRowIndex = index;
       showControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1);
       lastTappedElement = tappedElement;
+      overallEventListener = TouchEventUtils.addOverallEventListener(new Delegate<Element>() {
+        public void execute(Element element) {
+          if (!TouchEventUtils.isContained(element, controlbar.getElement().getId())) {
+            switchControlbar(tappedElement, -1);
+          }
+        }
+      });
     }
     controlbarVisible = !controlbarVisible;
   }
@@ -228,7 +202,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       left: x1+'px',
       top: y1+'px',
       width: '14em',
-      height: '1.5em'
+      height: '1.8em'
     };
   }-*/;
   

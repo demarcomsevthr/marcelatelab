@@ -104,3 +104,18 @@
   width: 0;
 }
 
+.app-edit-controlbar-btn {
+  background-color: gray;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.app-edit-controlbar-btn .ons-icon {
+  width: 32px;
+}
+
+.app-bold {
+  font-weight: bold;
+}
+
