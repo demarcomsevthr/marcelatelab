@@ -1,5 +1,7 @@
 package it.mate.onscommons.client.event;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -8,6 +10,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class TouchEventUtils {
 
+  private final static String TAP_EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "touchend"; 
+  
   public static HandlerRegistration addDragStartHandler(Element element, final NativeGestureHandler handler) {
     return addHandler(element, "dragstart", handler);
   }
@@ -32,7 +36,7 @@ public class TouchEventUtils {
   
   protected static native JavaScriptObject addEventListenerImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      if (@it.mate.onscommons.client.onsen.OnsenUi::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
+      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });
@@ -40,4 +44,40 @@ public class TouchEventUtils {
     return jsEventListener;
   }-*/;
   
+  public static native boolean isContained(Element elem, String containerId) /*-{
+    do {
+      if (typeof elem == 'undefined' || elem == null) {
+        break;
+      }
+      if (elem.id == containerId) {
+        return true;
+      }
+    } while(elem = elem.parentElement );
+    return false;
+  }-*/;
+  
+  public static JavaScriptObject addOverallEventListener (final Delegate<Element> delegate) {
+    return addOverallEventListenerImpl(TAP_EVENT_NAME, new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((Element)jso.cast());
+      }
+    });
+  }
+  
+  public static void removeEventListener (JavaScriptObject jsEventListener) {
+    removeEventListenerImpl(TAP_EVENT_NAME, jsEventListener);
+  }
+  
+  protected static native JavaScriptObject addOverallEventListenerImpl (String eventName, JSOCallback callback) /*-{
+    var jsEventListener = $entry(function(e) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e.target);
+    });
+    $doc.addEventListener(eventName, jsEventListener, false);    
+    return jsEventListener;
+  }-*/;
+  
+  protected static native void removeEventListenerImpl(String eventName, JavaScriptObject jsEventListener) /*-{
+    $doc.removeEventListener(eventName, jsEventListener);    
+  }-*/;
+
 }
