@@ -72,7 +72,7 @@ public class HasTapHandlerImpl {
   
   protected static native JavaScriptObject addEventListenerImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      if (@it.mate.onscommons.client.onsen.OnsenUi::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
+      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });

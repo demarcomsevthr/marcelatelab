@@ -113,6 +113,7 @@ public class OnsenUi {
     $wnd.ons.compile(element);
   }-*/;
 
+  /* SPOSTATO IN TouchEventUtils
   public static native boolean isContained(final Element elem, String containerId) /*-{
     do {
       if (elem.id == containerId) {
