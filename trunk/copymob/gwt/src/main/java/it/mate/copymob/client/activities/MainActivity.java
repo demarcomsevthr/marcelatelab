@@ -267,7 +267,8 @@ public class MainActivity extends OnsAbstractActivity implements
     currentOrderItem = item;
     if (currentOrder != null) {
       for (int it = 0; it < currentOrder.getItems().size(); it++) {
-        if (currentOrder.getItems().get(it).getId().equals(item.getId())) {
+        if (currentOrder.getItems().get(it).equals(item)) {
+//      if (currentOrder.getItems().get(it).getId().equals(item.getId())) {
           currentOrder.getItems().set(it, item);
         }
       }

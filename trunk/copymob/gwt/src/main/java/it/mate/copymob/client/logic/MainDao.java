@@ -9,6 +9,7 @@ import it.mate.copymob.shared.model.impl.OrderItemTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
 import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.PhonegapLog;
 import it.mate.phgcommons.client.utils.WebSQLDao;
 
@@ -436,6 +437,9 @@ public class MainDao extends WebSQLDao {
   
   
   public void saveOrder(final Order entity, final Delegate<Order> delegate) {
+    
+    PhgUtils.log("saving " + entity);
+    
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
@@ -555,19 +559,25 @@ public class MainDao extends WebSQLDao {
     }
     String idsList = "";
     for (OrderItemRow row : item.getRows()) {
-      if (idsList.length() > 0) {
-        idsList += ",";
+      if (row.getId() != null) {
+        if (idsList.length() > 0) {
+          idsList += ",";
+        }
+        idsList += "" + row.getId();
       }
-      idsList += "" + row.getId();
     }
-    tr.doExecuteSql("DELETE FROM orderItemRow WHERE orderItemId = ? AND id NOT IN (" + idsList + ")", 
-        new Object[] {
-          item.getId()
-        }, new SQLStatementCallback() {
-          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            delegate.execute(null);
-          }
-        });
+    if (idsList.length() > 0) {
+      tr.doExecuteSql("DELETE FROM orderItemRow WHERE orderItemId = ? AND id NOT IN (" + idsList + ")", 
+          new Object[] {
+            item.getId()
+          }, new SQLStatementCallback() {
+            public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+              delegate.execute(null);
+            }
+          });
+    } else {
+      delegate.execute(null);
+    }
   }
   
   protected void iterateOrderItemRowsForUpdate(final SQLTransaction tr, final Iterator<OrderItemRow> it, final Delegate<Void> delegate) {
