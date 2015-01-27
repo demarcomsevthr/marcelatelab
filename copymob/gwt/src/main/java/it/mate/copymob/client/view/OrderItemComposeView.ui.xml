@@ -18,7 +18,7 @@
       
       <g:VerticalPanel width="100%" horizontalAlignment="center">
         <g:HTML>
-          <i>Composizione del timbro qui</i>
+          <i>Composizioni il test del timbro</i>
         </g:HTML>
       </g:VerticalPanel>
       
@@ -42,12 +42,6 @@
         <o:OnsButton ui:field="btnEdtAlignLeft" icon="fa-align-left" addStyleNames="app-edit-controlbar-btn"/>  
       </g:HorizontalPanel>
 
-      <!--       
-      <g:HTML ui:field="controlbar" addStyleNames="app-edit-controlbar">
-        <i>Controlli di editing</i>
-      </g:HTML>
-       -->
-      
     </o:OnsPage>
     
   </g:HTMLPanel>

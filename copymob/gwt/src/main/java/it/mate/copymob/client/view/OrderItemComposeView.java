@@ -45,7 +45,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   @UiField Panel wrapperPanel;
   
-  //TODO
 //@UiField OnsVerticalPanel rowsPanel;
   @UiField OnsList rowsPanel;
   @UiField OnsScroller scroller;
@@ -75,17 +74,10 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   }
 
   private void initUI() {
-    /*
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
-      PhgUtils.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-      OnsenUi.getSlidingMenu().setSwipeable(false);
-    }
-    */
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     PhgUtils.ensureId(controlbar.getElement());
     PhgUtils.ensureId(rowsPanel.getElement());
-//  rowsPanel.setVisible(false);
   }
 
   @Override
@@ -98,17 +90,22 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
     }
     
+    rowsPanel.add(createRowItem(""));
+    
     // TODO: PER DEBUG
+    /*
     for (int it = 0; it < 20; it++) {
       rowsPanel.add(createRowItem(""));
     }
-    
+    */
+
+    /*
     GwtUtils.deferredExecution(200, new Delegate<Void>() {
       public void execute(Void element) {
         rowsPanel.setVisible(true);
       }
     });
-    //TODO
+    */
     /*
     GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {

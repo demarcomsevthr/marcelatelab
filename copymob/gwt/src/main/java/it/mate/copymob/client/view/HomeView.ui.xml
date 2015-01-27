@@ -23,7 +23,7 @@
         <o:OnsButtonPanel ui:field="btnTimbri" addStyleNames="app-home-btnpanel">
           <div class="app-btn-img"></div>Timbri
         </o:OnsButtonPanel>
-        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2"/>  
+        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2" visible="false"/>
         <o:OnsButtonPanel ui:field="btnOrdini">
           <o:OnsIcon icon="fa-shopping-cart"/>I miei ordini
         </o:OnsButtonPanel>
