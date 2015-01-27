@@ -14,8 +14,10 @@ import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
+import it.mate.onscommons.client.ui.OnsList;
+import it.mate.onscommons.client.ui.OnsListItem;
+import it.mate.onscommons.client.ui.OnsScroller;
 import it.mate.onscommons.client.ui.OnsTextBox;
-import it.mate.onscommons.client.ui.OnsVerticalPanel;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
@@ -42,9 +44,12 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
   @UiField Panel wrapperPanel;
-  @UiField OnsVerticalPanel rowsPanel;
+  
+  //TODO
+//@UiField OnsVerticalPanel rowsPanel;
+  @UiField OnsList rowsPanel;
+  @UiField OnsScroller scroller;
 
-//@UiField HTML controlbar;
   @UiField Panel controlbar;
   
   private OrderItem item;
@@ -70,11 +75,17 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   }
 
   private void initUI() {
+    /*
+    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+      PhgUtils.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+      OnsenUi.getSlidingMenu().setSwipeable(false);
+    }
+    */
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
     PhgUtils.ensureId(controlbar.getElement());
     PhgUtils.ensureId(rowsPanel.getElement());
-    rowsPanel.setVisible(false);
+//  rowsPanel.setVisible(false);
   }
 
   @Override
@@ -83,21 +94,57 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       item = (OrderItem)model;
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
-        rowsPanel.add(createRowPanel(row.getText()));
+        rowsPanel.add(createRowItem(row.getText()));
       }
     }
-    rowsPanel.add(createRowPanel(""));
+    
+    // TODO: PER DEBUG
+    for (int it = 0; it < 20; it++) {
+      rowsPanel.add(createRowItem(""));
+    }
+    
     GwtUtils.deferredExecution(200, new Delegate<Void>() {
       public void execute(Void element) {
         rowsPanel.setVisible(true);
       }
     });
+    //TODO
+    /*
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void element) {
+        scroller.compile();
+      }
+    });
+    */
   }
   
-  private HorizontalPanel createRowPanel(String text) {
+  private OnsListItem createRowItem(String text) {
     final int index = textboxes.size();
     OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
-    rowpanel.setAddDirect(rowsPanel.isAddDirect());
+//  HorizontalPanel rowpanel = new HorizontalPanel();
+    rowpanel.setWidth("100%");
+    OnsTextBox textbox = new OnsTextBox();
+    textbox.setText(text);
+    rowpanel.add(textbox);
+    final OnsButton controlBtn = new OnsButton();
+    controlBtn.addStyleName("app-edit-btn-cfg");
+    controlBtn.setIcon("fa-bars");
+    controlBtn.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        switchControlbar(GwtUtils.getElement(controlBtn), index);
+      }
+    });
+    rowpanel.add(controlBtn);
+    textboxes.add(textbox);
+    OnsListItem listItem = new OnsListItem();
+    listItem.add(rowpanel);
+    return listItem;
+  }
+  
+  private HorizontalPanel createRowItem__OLD_(String text) {
+    final int index = textboxes.size();
+    OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
+//  rowpanel.setAddDirect(rowsPanel.isAddDirect());
     OnsTextBox textbox = new OnsTextBox();
     textbox.setText(text);
     rowpanel.add(textbox);

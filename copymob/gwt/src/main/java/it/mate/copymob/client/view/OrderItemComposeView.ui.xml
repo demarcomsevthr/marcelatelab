@@ -5,6 +5,7 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
+
   
     <o:OnsPage>
     
@@ -21,7 +22,13 @@
         </g:HTML>
       </g:VerticalPanel>
       
-      <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel"/>
+      <o:OnsScroller height="80%" width="100%" ui:field="scroller">
+        <o:OnsList ui:field="rowsPanel"/>
+        <!-- 
+        <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel"/>
+         -->
+      </o:OnsScroller>
+      
       
       <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
 
