@@ -17,10 +17,15 @@ public class OrderTx implements Order, IsMappable {
   
   private Integer accountId;
   
-  private List<OrderItem> items = new ArrayList<OrderItem>();
-  
   private int state;
   
+  private List<OrderItem> items = new ArrayList<OrderItem>();
+  
+  @Override
+  public String toString() {
+    return "OrderTx [id=" + id + ", codice=" + codice + ", accountId=" + accountId + ", state=" + state + ", items=" + items + "]";
+  }
+
   @Override
   public RpcMap toRpcMap() {
     // TODO Auto-generated method stub
