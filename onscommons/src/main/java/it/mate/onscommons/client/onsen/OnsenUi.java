@@ -105,9 +105,35 @@ public class OnsenUi {
   }
   
   public static void compileElement(Element element) {
+    if (element == null) {
+      return;
+    }
+    if (element.getNodeName() == null) {
+      return;
+    }
     PhgUtils.log("COMPILING ELEMENT " + element);
     compileElementImpl(element);
+//  traverseAndCompileChildElements(element);
   }
+  
+  /* provato per l'insert di elementi nella setModel (OrderItemComposeView))
+  protected static void traverseAndCompileChildElements(Element element) {
+    if (element == null) {
+      return;
+    }
+    if (element.getChildNodes() == null || element.getChildNodes().getLength() == 0) {
+      return;
+    }
+    for (int it = 0; it < element.getChildNodes().getLength(); it++) {
+      Element childElem = (com.google.gwt.user.client.Element)element.getChildNodes().getItem(it);
+      if (childElem.getNodeName().toLowerCase().startsWith("ons")) {
+        PhgUtils.log("COMPILING ELEMENT " + childElem);
+        compileElementImpl(childElem);
+      }
+      traverseAndCompileChildElements(childElem);
+    }
+  }
+  */
   
   protected static native void compileElementImpl(Element element) /*-{
     $wnd.ons.compile(element);
