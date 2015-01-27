@@ -1,5 +1,7 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.onscommons.client.onsen.OnsenUi;
+
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -20,6 +22,9 @@ public class OnsPage extends HTMLPanel implements AcceptsOneWidget {
   @Override
   public void add(Widget widget) {
     super.add(widget, getElement());
+    if (widget.getElement().getNodeName().toLowerCase().startsWith("ons")) {
+      OnsenUi.compileElement(widget.getElement());
+    }
   }
 
   @Override
