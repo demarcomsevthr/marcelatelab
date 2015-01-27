@@ -13,19 +13,19 @@ public class TimbroTx implements Timbro, IsMappable {
   
   private String codice;
   
-  private String image;
-  
   private Double width;
   
   private Double height;
   
   private int oval;
-  
+
+  private String image;
+
   @Override
   public String toString() {
-    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + "]";
+    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + "]";
   }
-  
+
   public TimbroTx() {
 
   }

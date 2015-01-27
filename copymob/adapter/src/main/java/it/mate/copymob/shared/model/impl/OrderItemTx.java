@@ -20,15 +20,31 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private Double quantity;
   
-  private List<OrderItemRow> rows = new ArrayList<OrderItemRow>();
-  
   private Timbro timbro;
   
+  private List<OrderItemRow> rows = new ArrayList<OrderItemRow>();
   
+  @Override
+  public String toString() {
+    return "OrderItemTx [id=" + id + ", orderId=" + orderId + ", quantity=" + quantity + ", timbro=" + timbro + ", rows=" + rows + "]";
+  }
+
   @Override
   public RpcMap toRpcMap() {
     // TODO Auto-generated method stub
     return null;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof OrderItemTx) {
+      OrderItemTx that = (OrderItemTx)obj;
+      if (this.id != null && that.id != null && this.id.equals(that.id)) {
+        return true;
+      }
+      return (this.id == null && that.id == null);
+    }
+    return super.equals(obj);
   }
 
   @Override
