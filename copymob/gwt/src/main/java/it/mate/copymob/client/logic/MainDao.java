@@ -333,7 +333,8 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItems(SQLTransaction tr, Integer orderId, final Delegate<List<OrderItem>> delegate) {
-    tr.doExecuteSql("SELECT id, " + ORDER_ITEM_FIELDS + " FROM orderItem ORDER BY id", null, new SQLStatementCallback() {
+    tr.doExecuteSql("SELECT id, " + ORDER_ITEM_FIELDS + " FROM orderItem WHERE orderId = ? ORDER BY id", 
+        new Object[]{orderId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
         new RSToOrderItemIterator(tr, rs, new Delegate<List<OrderItem>>() {
           public void execute(List<OrderItem> results) {
@@ -391,7 +392,8 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItemRows(SQLTransaction tr, Integer orderItemId, final Delegate<List<OrderItemRow>> delegate) {
-    tr.doExecuteSql("SELECT id, " + ORDER_ITEM_ROW_FIELDS + " FROM orderItemRow ORDER BY id", null, new SQLStatementCallback() {
+    tr.doExecuteSql("SELECT id, " + ORDER_ITEM_ROW_FIELDS + " FROM orderItemRow WHERE orderItemId = ? ORDER BY id", 
+        new Object[]{orderItemId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
         new RSToOrderItemRowIterator(tr, rs, new Delegate<List<OrderItemRow>>() {
           public void execute(List<OrderItemRow> results) {

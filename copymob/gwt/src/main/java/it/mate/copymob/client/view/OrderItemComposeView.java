@@ -29,7 +29,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,7 +44,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   @UiField Panel wrapperPanel;
   
-//@UiField OnsVerticalPanel rowsPanel;
   @UiField OnsList rowsPanel;
   @UiField OnsScroller scroller;
 
@@ -92,33 +90,11 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     
     rowsPanel.add(createRowItem(""));
     
-    // TODO: PER DEBUG
-    /*
-    for (int it = 0; it < 20; it++) {
-      rowsPanel.add(createRowItem(""));
-    }
-    */
-
-    /*
-    GwtUtils.deferredExecution(200, new Delegate<Void>() {
-      public void execute(Void element) {
-        rowsPanel.setVisible(true);
-      }
-    });
-    */
-    /*
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void element) {
-        scroller.compile();
-      }
-    });
-    */
   }
   
   private OnsListItem createRowItem(String text) {
     final int index = textboxes.size();
     OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
-//  HorizontalPanel rowpanel = new HorizontalPanel();
     rowpanel.setWidth("100%");
     OnsTextBox textbox = new OnsTextBox();
     textbox.setText(text);
@@ -136,26 +112,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     OnsListItem listItem = new OnsListItem();
     listItem.add(rowpanel);
     return listItem;
-  }
-  
-  private HorizontalPanel createRowItem__OLD_(String text) {
-    final int index = textboxes.size();
-    OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
-//  rowpanel.setAddDirect(rowsPanel.isAddDirect());
-    OnsTextBox textbox = new OnsTextBox();
-    textbox.setText(text);
-    rowpanel.add(textbox);
-    final OnsButton controlBtn = new OnsButton();
-    controlBtn.addStyleName("app-edit-btn-cfg");
-    controlBtn.setIcon("fa-bars");
-    controlBtn.addTapHandler(new TapHandler() {
-      public void onTap(TapEvent event) {
-        switchControlbar(GwtUtils.getElement(controlBtn), index);
-      }
-    });
-    rowpanel.add(controlBtn);
-    textboxes.add(textbox);
-    return rowpanel;
   }
   
   private OrderItem flushModel() {
