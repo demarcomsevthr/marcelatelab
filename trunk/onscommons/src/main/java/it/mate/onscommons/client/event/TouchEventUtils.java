@@ -16,12 +16,20 @@ public class TouchEventUtils {
     return addHandler(element, "dragstart", handler);
   }
   
+  public static HandlerRegistration addDragOverHandler(Element element, final NativeGestureHandler handler) {
+    return addHandler(element, "dragover", handler);
+  }
+  
   public static HandlerRegistration addDragEndHandler(Element element, final NativeGestureHandler handler) {
     return addHandler(element, "dragend", handler);
   }
   
+  public static HandlerRegistration addMouseMoveHandler(Element element, final NativeGestureHandler handler) {
+    return addHandler(element, "mousemove", handler);
+  }
+  
   protected static HandlerRegistration addHandler(Element element, String eventName, final NativeGestureHandler handler) {
-    addEventListenerImpl(element.getId(), "dragstart", new JSOCallback() {
+    addEventListenerImpl(element.getId(), eventName, new JSOCallback() {
       public void handle(JavaScriptObject jso) {
         handler.on(new NativeGestureEvent((NativeGesture)jso.cast()));
       }
