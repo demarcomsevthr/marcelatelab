@@ -6,6 +6,7 @@ import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -14,15 +15,21 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasModel {
   
-  private static final boolean SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS = false;
+  private static final boolean SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS = true;
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
   private HandlerRegistration dragStartHandlerReg;
   
+  private HandlerRegistration dragOverHandlerReg;
+  
+  private HandlerRegistration mouseMoveHandlerReg;
+  
   private boolean duringDragOperation = false;
   
   private Object model;
+  
+  private long lastMovementTime = -1;
   
   public OnsCarouselItem() {
     this("");
@@ -50,10 +57,29 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
       if (dragStartHandlerReg == null) {
         dragStartHandlerReg = TouchEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
           public void on(NativeGestureEvent event) {
-            duringDragOperation = true;
+            PhgUtils.log("drag start event");
+            setLastMovementTime(System.currentTimeMillis());
           }
         });
       }
+      /*
+      if (dragOverHandlerReg == null) {
+        dragOverHandlerReg = TouchEventUtils.addDragOverHandler(getElement(), new NativeGestureHandler() {
+          public void on(NativeGestureEvent event) {
+            PhgUtils.log("drag over event");
+            setLastMovementTime(System.currentTimeMillis());
+          }
+        });
+      }
+      if (mouseMoveHandlerReg == null) {
+        mouseMoveHandlerReg = TouchEventUtils.addMouseMoveHandler(getElement(), new NativeGestureHandler() {
+          public void on(NativeGestureEvent event) {
+            PhgUtils.log("mouse move event");
+            setLastMovementTime(System.currentTimeMillis());
+          }
+        });
+      }
+      */
     }
     
     return hasTapHandlerImpl.addTapHandler(new TapHandler() {
@@ -61,6 +87,11 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
         if (duringDragOperation) {
           duringDragOperation = false;
           return;
+        }
+        if (lastMovementTime > -1) {
+          if (System.currentTimeMillis() < lastMovementTime + 1000) {
+            return;
+          }
         }
         handler.onTap(event);
       }
@@ -78,6 +109,10 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
 
   public void setModel(Object model) {
     this.model = model;
+  }
+  
+  protected void setLastMovementTime(long lastMovementTime) {
+    this.lastMovementTime = lastMovementTime;
   }
   
 }

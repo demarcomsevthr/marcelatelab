@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
@@ -36,8 +37,31 @@ public class HasTapHandlerImpl {
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     this.tapHandlers.add(handler);
     if (jsEventListener == null) {
-      final Element element = ((Widget)target).getElement();
+      
+      Element element = ((Widget)target).getElement();
       PhgUtils.ensureId(element);
+
+      // 03/02/2015 (And4.0 compatibility)
+      GwtUtils.onAvailable(element.getId(), new Delegate<Element>() {
+        public void execute(final Element element) {
+          
+          jsEventListener = addEventListenerImpl(element.getId(), EVENT_NAME, new JSOCallback() {
+            public void handle(JavaScriptObject jsEvent) {
+              Element target = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
+              if (!PhgUtils.isReallyAttached(element.getId())) {
+                removeAllHandlers();
+                return;
+              }
+              for (TapHandler tapHandler : tapHandlers) {
+                tapHandler.onTap(new TapEvent(target, element, 0, 0));
+              }
+            }
+          });
+          
+        }
+      });
+
+      /*
       jsEventListener = addEventListenerImpl(element.getId(), EVENT_NAME, new JSOCallback() {
         public void handle(JavaScriptObject jsEvent) {
           Element target = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
@@ -50,6 +74,8 @@ public class HasTapHandlerImpl {
           }
         }
       });
+      */
+      
     }
     HandlerRegistration registration = new HandlerRegistration() {
       public void removeHandler() {

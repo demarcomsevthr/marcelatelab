@@ -2,6 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.MoveHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Carousel;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -51,7 +52,25 @@ public class OnsCarousel extends HTMLPanel {
         }
         
         if (widget instanceof OnsCarouselItem) {
-          items.add((OnsCarouselItem)widget);
+          OnsCarouselItem item = (OnsCarouselItem)widget;
+          items.add(item);
+
+          // 03/02/2015
+          if (items.size() == 1) {
+            GwtUtils.onAvailable(item.getElement().getId(), new Delegate<Element>() {
+              public void execute(Element itemElement) {
+                GwtUtils.addMoveHandler(itemElement, new MoveHandler() {
+                  public void onMove(Element element, int top, int left) {
+                    PhgUtils.log("moving element to " + top + " " + left);
+                    for (OnsCarouselItem item : items) {
+                      item.setLastMovementTime(System.currentTimeMillis());
+                    }
+                  }
+                });
+              }
+            });
+          }
+          
         }
         
         /*
