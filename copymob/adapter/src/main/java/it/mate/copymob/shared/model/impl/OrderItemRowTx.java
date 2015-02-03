@@ -15,6 +15,14 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private boolean bold;
   
+  public OrderItemRowTx() {
+
+  }
+  
+  public OrderItemRowTx(String text) {
+    this.text = text;
+  }
+
   @Override
   public String toString() {
     return "OrderItemRowTx [id=" + id + ", orderItemId=" + orderItemId + ", text=" + text + ", bold=" + bold + "]";
