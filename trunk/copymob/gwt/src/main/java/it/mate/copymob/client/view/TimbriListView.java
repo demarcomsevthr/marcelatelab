@@ -6,6 +6,7 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsCarousel;
 import it.mate.onscommons.client.ui.OnsCarouselItem;
@@ -67,15 +68,43 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
   
   private void populateCarousel(List<Timbro> timbri) {
     carousel.getElement().getStyle().setOpacity(0);
+    OnsCarouselItem firstItem = null;
     for (Timbro timbro : timbri) {
       String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>Timbro " + timbro.getId() +"</p>";
       html += "<img src='"+ timbro.getImageData() +"'/>";
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       item.setModel(timbro);
+      item.addTapHandler(new TapHandler() {
+        public void onTap(TapEvent event) {
+          /*
+          if (System.currentTimeMillis() > lastMovement + 1000) {
+            onBtnBuy(event);
+          }
+          */
+          onBtnBuy(event);
+        }
+      });
       carousel.add(item);
+      if (firstItem == null) {
+        firstItem = item;
+      }
     }
     showImpl(carousel.getElement());
+
+    /*
+    GwtUtils.onAvailable(firstItem.getElement().getId(), new Delegate<Element>() {
+      public void execute(Element itemElement) {
+        GwtUtils.addMoveHandler(itemElement, new MoveHandler() {
+          public void onMove(Element element, int top, int left) {
+            PhgUtils.log("moving element to " + top + " " + left);
+            lastMovement = System.currentTimeMillis();
+          }
+        });
+      }
+    });
+    */
+
   }
   
   protected static native void showImpl(Element elem) /*-{
