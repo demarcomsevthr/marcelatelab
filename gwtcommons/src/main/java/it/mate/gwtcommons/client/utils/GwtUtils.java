@@ -1355,4 +1355,26 @@ public class GwtUtils {
     return {left: left, top: top, width: width, height: height};
   }-*/;
 
+  public static void addMoveHandler(final Element element, final MoveHandler handler) {
+    element.setPropertyObject("_moveHelper", new MoveHelper());
+    GwtUtils.createTimerDelegate(200, false, new Delegate<Timer>() {
+      public void execute(Timer timer) {
+        if (element.getOwnerDocument() == null) {
+          timer.cancel();
+          return;
+        }
+        MoveHelper helper = (MoveHelper)element.getPropertyObject("_moveHelper");
+        Integer currentTop = element.getAbsoluteTop();
+        Integer currentLeft = element.getAbsoluteLeft();
+        if (helper.getTop() != null && helper.getLeft() != null) {
+          if (!helper.getTop().equals(currentTop) || !helper.getLeft().equals(currentLeft)) {
+            handler.onMove(element, currentTop, currentLeft);
+          }
+        }
+        helper.setTop(currentTop);
+        helper.setLeft(currentLeft);
+      }
+    });
+  }
+  
 }
