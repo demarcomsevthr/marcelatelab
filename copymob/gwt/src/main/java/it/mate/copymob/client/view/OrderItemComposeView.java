@@ -82,13 +82,15 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   public void setModel(Object model, String tag) {
     if (model instanceof OrderItem) {
       item = (OrderItem)model;
+      item.getRows().add(new OrderItemRowTx(""));
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
         rowsPanel.add(createRowItem(row.getText()));
       }
+    } else {
+      rowsPanel.add(createRowItem(""));
     }
     
-    rowsPanel.add(createRowItem(""));
     
   }
   
@@ -128,7 +130,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     
     for (int it = item.getRows().size() - 1; it > 0; it--) {
       OrderItemRow row = item.getRows().get(it);
-      if (row.getText().trim().length() == 0) {
+      if (row.getText().trim().length() > 0) {
+        break;
+      } else {
         item.getRows().remove(it);
       }
     }
