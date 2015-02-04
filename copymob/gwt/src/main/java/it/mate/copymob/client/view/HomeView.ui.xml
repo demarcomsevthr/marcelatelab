@@ -20,16 +20,21 @@
       </g:HTML>
   
       <g:VerticalPanel horizontalAlignment="left" addStyleNames="app-home-buttonbar">
+        <!-- 
         <o:OnsButtonPanel ui:field="btnTimbri" addStyleNames="app-home-btnpanel">
           <div class="app-btn-img"></div>Timbri
         </o:OnsButtonPanel>
-        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2" visible="false"/>
         <o:OnsButtonPanel ui:field="btnOrdini">
           <o:OnsIcon icon="fa-shopping-cart"/>I miei ordini
         </o:OnsButtonPanel>
         <o:OnsButtonPanel ui:field="btnSettings">
           <o:OnsIcon icon="fa-cog"/>Settings
         </o:OnsButtonPanel>
+         -->
+        <o:OnsButton ui:field="btnTimbri" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri1" visible="true"/>
+        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2" visible="true"/>
+        <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Ordini"/>
+        <o:OnsButton ui:field="btnSettings" addStyleNames="app-home-btnpanel" icon="fa-cog" text="Settings"/>
       </g:VerticalPanel>
       
       <g:Label ui:field="homeLbl" addStyleNames="app-home-lbl"/>
