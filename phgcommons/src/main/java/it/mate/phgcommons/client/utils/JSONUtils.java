@@ -41,4 +41,26 @@ public class JSONUtils {
     return JSON.parse(json);
   }-*/;
 
+  public static String stringifyAvoidCircularRef(JavaScriptObject jso) {
+    ensureStringify();
+    return stringifyAvoidCircularRefImpl(jso);
+  }
+  
+  protected static native String stringifyAvoidCircularRefImpl(JavaScriptObject jso) /*-{
+    var cache = [];
+    var str = JSON.stringify(jso, function(key, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Circular reference found, discard key
+                return;
+            }
+            // Store value in our collection
+            cache.push(value);
+        }
+        return value;
+    } );
+    cache = null;
+    return str;
+  }-*/;
+
 }
