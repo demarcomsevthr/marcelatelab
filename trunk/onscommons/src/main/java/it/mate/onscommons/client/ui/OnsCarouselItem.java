@@ -17,6 +17,8 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
   
   private static final boolean SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS = true;
   
+  private static final int TAP_DELAY = 600;
+  
   private HasTapHandlerImpl hasTapHandlerImpl;
   
   private HandlerRegistration dragStartHandlerReg;
@@ -89,7 +91,7 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
           return;
         }
         if (lastMovementTime > -1) {
-          if (System.currentTimeMillis() < lastMovementTime + 1000) {
+          if (System.currentTimeMillis() < lastMovementTime + TAP_DELAY) {
             return;
           }
         }
