@@ -20,7 +20,17 @@ import com.google.gwt.user.client.ui.Widget;
 public class HasTapHandlerImpl {
   
 //private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "tap"; 
-  private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "touchend"; 
+  private final static String EVENT_NAME = getTapEventName(); 
+  
+  private static final String getTapEventName() {
+    if (OsDetectionUtils.isDesktop()) {
+      return "click";
+    }
+    if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("4.0")) {
+      return "touchend";
+    }
+    return "touchend";
+  }
   
   private List<TapHandler> tapHandlers = new ArrayList<TapHandler>();
   
@@ -33,27 +43,32 @@ public class HasTapHandlerImpl {
   public HasTapHandlerImpl(HasTapHandler target) {
     this.target = target;
   }
-
+  
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     this.tapHandlers.add(handler);
+    
+//  applyOldAndroidPatch();
+    
     if (jsEventListener == null) {
       
-      Element element = ((Widget)target).getElement();
-      PhgUtils.ensureId(element);
+      Element targetElement = ((Widget)target).getElement();
+      PhgUtils.ensureId(targetElement);
 
-      // 03/02/2015 (And4.0 compatibility)
-      GwtUtils.onAvailable(element.getId(), new Delegate<Element>() {
-        public void execute(final Element element) {
+      // 03/02/2015
+      GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
+        public void execute(final Element availableElement) {
           
-          jsEventListener = addEventListenerImpl(element.getId(), EVENT_NAME, new JSOCallback() {
+          // 04/02/2015
+          jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, new JSOCallback() {
+//        jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, new JSOCallback() {
             public void handle(JavaScriptObject jsEvent) {
-              Element target = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
-              if (!PhgUtils.isReallyAttached(element.getId())) {
+              Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
+              if (!PhgUtils.isReallyAttached(availableElement.getId())) {
                 removeAllHandlers();
                 return;
               }
               for (TapHandler tapHandler : tapHandlers) {
-                tapHandler.onTap(new TapEvent(target, element, 0, 0));
+                tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0));
               }
             }
           });
@@ -61,21 +76,6 @@ public class HasTapHandlerImpl {
         }
       });
 
-      /*
-      jsEventListener = addEventListenerImpl(element.getId(), EVENT_NAME, new JSOCallback() {
-        public void handle(JavaScriptObject jsEvent) {
-          Element target = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
-          if (!PhgUtils.isReallyAttached(element.getId())) {
-            removeAllHandlers();
-            return;
-          }
-          for (TapHandler tapHandler : tapHandlers) {
-            tapHandler.onTap(new TapEvent(target, element, 0, 0));
-          }
-        }
-      });
-      */
-      
     }
     HandlerRegistration registration = new HandlerRegistration() {
       public void removeHandler() {
@@ -96,8 +96,9 @@ public class HasTapHandlerImpl {
     }
   }
   
-  protected static native JavaScriptObject addEventListenerImpl (String elemId, String eventName, JSOCallback callback) /*-{
+  protected static native JavaScriptObject addEventListenerDocImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
       if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
@@ -106,8 +107,49 @@ public class HasTapHandlerImpl {
     return jsEventListener;
   }-*/;
   
+  /* 04/02/2015 */
+  /*
+  var jsPreventEventListener = $entry(function(e) {
+    e.preventDefault();
+    return false;
+  });
+  elem.addEventListener("touchstart", jsPreventEventListener, false);    
+  elem.addEventListener("touchmove", jsPreventEventListener, false);    
+  */
+  protected static native JavaScriptObject addEventListenerElemImpl (Element elem, String eventName, JSOCallback callback) /*-{
+    var jsEventListener = $entry(function(e) {
+//    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
+      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
+        callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
+      }
+    });
+    elem.addEventListener(eventName, jsEventListener, false);
+    return jsEventListener;
+  }-*/;
+  
   protected static native void removeEventListenerImpl(String eventName, JavaScriptObject jsEventListener) /*-{
     $doc.removeEventListener(eventName, jsEventListener);    
+  }-*/;
+  
+  private void applyOldAndroidPatch() {
+    if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("4.0")) {
+      Boolean patched = (Boolean)GwtUtils.getClientAttribute("HasTapHandlerImpl_OldAndroidPatch");
+      if (patched == null) {
+        GwtUtils.setClientAttribute("HasTapHandlerImpl_OldAndroidPatch", true);
+        preventTouchEventDefaultImpl();
+      }
+    }
+  }
+
+  protected static native void preventTouchEventDefaultImpl () /*-{
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(">>>>>>>>> PREVENT DEFAULT ON TOUCH EVENTS");
+    var jsEventListener = $entry(function(e) {
+      e.preventDefault();
+      return false;
+    });
+    $doc.addEventListener("touchstart", jsEventListener, false);    
+    $doc.addEventListener("touchmove", jsEventListener, false);    
+    $doc.addEventListener("touchend", jsEventListener, false);    
   }-*/;
   
 }
