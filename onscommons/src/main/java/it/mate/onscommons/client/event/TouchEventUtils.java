@@ -55,12 +55,14 @@ public class TouchEventUtils {
   public static native boolean isContained(Element elem, String containerId) /*-{
     do {
       if (typeof elem == 'undefined' || elem == null) {
+//      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("elem is undefined or null");
         break;
       }
+//    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("checking elem " + elem.id + " contained in " + containerId);
       if (elem.id == containerId) {
         return true;
       }
-    } while(elem = elem.parentElement );
+    } while(elem = elem.parentElement);
     return false;
   }-*/;
   
