@@ -13,7 +13,8 @@
 }
 
 .app-home-buttonbar {
-  position: fixed;
+  /* position: fixed;  ATTENZIONE: NON FUNZIONA SU AND 4.0 */ 
+  position: absolute;
   bottom: 2em;
   width: 100%;
 }
@@ -67,7 +68,7 @@
 }
 
 .app-timbri-choose-btn {
-  position: fixed;
+  position: absolute;
   bottom: 0.5em;
 }
 
@@ -78,6 +79,13 @@
   height: 1.6em;
   float: left;
   padding-right: 0.2em;
+}
+
+.app-home-buttonbar .ons-button.app-btn-img2 {
+  background: url(main/images/stamp-64w.png) no-repeat 1.4em 0.75em;
+  background-color: rgba(24,103,194,0.81);
+  background-size: 1.6em;
+  padding-left: 3.3em;
 }
 
 .app-item-preview {
