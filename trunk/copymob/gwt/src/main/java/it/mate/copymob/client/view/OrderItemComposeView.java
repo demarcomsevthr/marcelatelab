@@ -168,6 +168,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     int x1 = 20;
     int y1 = y0;
     if (controlbarVisible && isLastTappedElement(tappedElement)) {
+      PhgUtils.log("hiding crontrolbar");
       hideControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1);
       if (overallEventListener != null) {
         TouchEventUtils.removeEventListener(overallEventListener);
@@ -175,13 +176,18 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
     } else {
       selectedRowIndex = index;
+      PhgUtils.log("showing crontrolbar");
       showControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1);
       lastTappedElement = tappedElement;
-      overallEventListener = TouchEventUtils.addOverallEventListener(new Delegate<Element>() {
-        public void execute(Element element) {
-          if (!TouchEventUtils.isContained(element, controlbar.getElement().getId())) {
-            switchControlbar(tappedElement, -1);
-          }
+      GwtUtils.deferredExecution(new Delegate<Void>() {
+        public void execute(Void element) {
+          overallEventListener = TouchEventUtils.addOverallEventListener(new Delegate<Element>() {
+            public void execute(Element element) {
+              if (!TouchEventUtils.isContained(element, controlbar.getElement().getId())) {
+                switchControlbar(tappedElement, -1);
+              }
+            }
+          });
         }
       });
     }
