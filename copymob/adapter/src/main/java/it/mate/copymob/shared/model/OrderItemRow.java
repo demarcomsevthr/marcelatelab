@@ -20,4 +20,8 @@ public interface OrderItemRow extends Serializable {
 
   public boolean isBold();
 
+  public void setSize(int size);
+
+  public int getSize();
+
 }
