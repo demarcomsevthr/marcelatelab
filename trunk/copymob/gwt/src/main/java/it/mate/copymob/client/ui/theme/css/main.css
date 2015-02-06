@@ -101,11 +101,21 @@
   padding-left: 0.5em;
 }
 
+.app-edit-text {
+  width: 100%;
+  height: 100%;
+  margin-top: 1%;
+  margin-left: -2%;
+}
+
 .app-edit-controlbar {
   display: none;
   position: absolute;
-  background-color: #8aeacf;
-  padding: 0.5em;
+  /* background-color: #8aeacf; */
+  background-color: #88b131;
+  padding: 0.3em;
+  padding-top: 0.2em;
+  padding-bottom: 0.45em;
   border-radius: 0.3em;
   overflow: hidden;
   height: 0;
@@ -127,3 +137,46 @@
   font-weight: bold;
 }
 
+.app-viewfinder {
+  position: absolute;
+  background-color: red;
+  width: 4px;
+  height: 4px;
+}
+
+.app-edit-fontsizebar {
+  display: none;
+  position: absolute;
+  /* background-color: #8aeacf; */
+  background-color: #88b131;
+  padding: 0.1em;
+  border-radius: 0.3em;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+  margin-top: -0.5em;
+}
+
+.app-edit-fontsizebar-btn {
+  background-color: rgb(220, 230, 246);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: rgb(0, 0, 0);
+}
+
+.app-edit-fontsizebar-btn-8 {
+  font-size: 1em;
+}
+.app-edit-fontsizebar-btn-9 {
+  font-size: 1.1em;
+}
+.app-edit-fontsizebar-btn-10 {
+  font-size: 1.2em;
+}
+.app-edit-fontsizebar-btn-11 {
+  font-size: 1.3em;
+}
+.app-edit-fontsizebar-btn-12 {
+  font-size: 1.4em;
+}

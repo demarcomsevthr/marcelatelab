@@ -1,5 +1,10 @@
 package it.mate.copymob.client.factories;
 
+import it.mate.copymob.client.activities.mapper.MainActivityMapper;
+import it.mate.copymob.client.places.MainPlace;
+import it.mate.copymob.client.places.MainPlaceHistoryMapper;
+import it.mate.copymob.client.ui.theme.CustomTheme;
+import it.mate.copymob.shared.service.RemoteFacadeAsync;
 import it.mate.gwtcommons.client.factories.BaseClientFactoryImpl;
 import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -11,11 +16,6 @@ import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
-import it.mate.copymob.client.activities.mapper.MainActivityMapper;
-import it.mate.copymob.client.places.MainPlace;
-import it.mate.copymob.client.places.MainPlaceHistoryMapper;
-import it.mate.copymob.client.ui.theme.CustomTheme;
-import it.mate.copymob.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
 
@@ -96,7 +96,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   @Override
   public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
-  
+    
     if (USE_SLIDE_MENU_LAYOUT) {
       new OnsActivityManagerWithSlidingMenu(activityMapper, getBinderyEventBus(), new MainPlace(MainPlace.MENU));
     } else {
