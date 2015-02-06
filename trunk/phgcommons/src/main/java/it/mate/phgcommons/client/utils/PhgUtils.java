@@ -2,7 +2,6 @@ package it.mate.phgcommons.client.utils;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
 import it.mate.phgcommons.client.utils.callbacks.StringCallback;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
