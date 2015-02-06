@@ -15,6 +15,8 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private boolean bold;
   
+  private int size;
+  
   public OrderItemRowTx() {
 
   }
@@ -70,6 +72,14 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
 
   public void setBold(boolean bold) {
     this.bold = bold;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
   }
 
 }
