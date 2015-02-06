@@ -13,6 +13,8 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
+  private String text;
+  
   protected OnsButtonBase(String tagName) {
     this(DOM.createElement(tagName), tagName);
   }
@@ -31,8 +33,13 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
     innerHtml = innerHtml + text;
     getElement().setInnerHTML(innerHtml);
 //  getElement().setInnerText(text);
+    this.text = text;
   }
   
+  public String getText() {
+    return text;
+  }
+
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     return hasTapHandlerImpl.addTapHandler(handler);
   }
