@@ -51,7 +51,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
-  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text ";
+  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size ";
 
   private final static String ORDER_ITEM_ROW_FIELDS = ORDER_ITEM_ROW_FIELDS_0;
   
@@ -430,6 +430,8 @@ public class MainDao extends WebSQLDao {
       result.setId(rows.getValueInt(it, "id"));
       result.setOrderItemId(rows.getValueInt(it, "orderItemId"));
       result.setText(rows.getValueString(it, "text"));
+      ((OrderItemRowTx)result).setBoldInt(rows.getValueInt(it, "bold"));
+      result.setSize(rows.getValueInt(it, "size"));
       return result;
     }
     protected List<OrderItemRow> getResults() {
@@ -597,10 +599,12 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItemRow(SQLTransaction tr, final OrderItemRow entity, final Delegate<OrderItemRow> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderItemId(), 
-            entity.getText()
+            entity.getText(),
+            ((OrderItemRowTx)entity).getBoldInt(),
+            entity.getSize()
           }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -612,10 +616,14 @@ public class MainDao extends WebSQLDao {
       String sql = "UPDATE orderItemRow SET ";
       sql += "  orderItemId = ?";
       sql += " ,text = ?";
+      sql += " ,bold = ?";
+      sql += " ,size = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderItemId(), 
           entity.getText(),
+          ((OrderItemRowTx)entity).getBoldInt(),
+          entity.getSize(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
