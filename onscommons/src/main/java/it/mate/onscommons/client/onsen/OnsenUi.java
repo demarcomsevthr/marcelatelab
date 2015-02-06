@@ -8,6 +8,7 @@ import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.callbacks.ElementCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class OnsenUi {
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
+      createEnsureUniqueIdCallback();
       initOnsenImpl(handler);
       for (Delegate<Void> initHandler : initializationHandlers) {
         initHandler.execute(null);
@@ -178,4 +180,26 @@ public class OnsenUi {
     return null;
   }
   
+  protected static native void setBeforeAppendChildCallback(ElementCallback callback) /*-{
+    var defAppendChild = $wnd.Element.prototype.appendChild;
+    $wnd.Element.prototype.appendChild = function(){
+      callback.@it.mate.phgcommons.client.utils.callbacks.ElementCallback::handle(Lcom/google/gwt/dom/client/Element;)(arguments[0]);
+      defAppendChild.apply(this, arguments);
+    };
+  }-*/;
+
+  // LO TOLGO PERCHE' NON SERVE, L'ID DEVE ESSERE ASSICURATO DENTRO I WIDGET GWT
+  public static void createEnsureUniqueIdCallback() {
+    /*
+    setBeforeAppendChildCallback(new ElementCallback() {
+      public void handle(Element element) {
+        if (element != null) {
+          PhgUtils.ensureId(element);
+//        PhgUtils.log("before append child " + element);
+        }
+      }
+    });
+    */
+  }
+
 }
