@@ -16,11 +16,13 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchWidget;
 
-public class TouchHTML extends TouchWidget implements HasClickHandlers, HasModel {
+public class TouchHTML extends TouchWidget implements HasClickHandlers, HasModel, HasTag {
   
   private String tooltip;
   
   private Object model;
+  
+  private String tag;
   
   public TouchHTML() {
     this("");
@@ -87,6 +89,16 @@ public class TouchHTML extends TouchWidget implements HasClickHandlers, HasModel
   public HasModel setModel(Object model) {
     this.model = model;
     return this;
+  }
+
+  @Override
+  public String getTag() {
+    return tag;
+  }
+
+  @Override
+  public void setTag(String tag) {
+    this.tag = tag;
   }
 
 }
