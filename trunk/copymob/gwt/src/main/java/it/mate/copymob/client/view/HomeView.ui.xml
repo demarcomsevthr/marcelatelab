@@ -12,7 +12,7 @@
         <div class="left">
           <o:OnsToolbarButton ui:field="btnMenu" visible="false"><o:OnsIcon icon="fa-bars"/></o:OnsToolbarButton>
         </div>
-        <div class="center">Home</div>
+        <div class="center">TIMBRI COPYCART</div>
       </o:OnsToolbar>
   
       <g:HTML addStyleNames="app-home-presentation">
@@ -31,8 +31,10 @@
           <o:OnsIcon icon="fa-cog"/>Settings
         </o:OnsButtonPanel>
          -->
-        <o:OnsButton ui:field="btnTimbri" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri1" visible="true"/>
+        <o:OnsButton ui:field="btnTimbri" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri" visible="true"/>
+        <!-- 
         <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2" visible="true"/>
+         -->
         <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Ordini"/>
         <o:OnsButton ui:field="btnSettings" addStyleNames="app-home-btnpanel" icon="fa-cog" text="Settings"/>
       </g:VerticalPanel>
