@@ -15,7 +15,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private boolean bold;
   
-  private int size;
+  private int size = 10;
   
   public OrderItemRowTx() {
 
