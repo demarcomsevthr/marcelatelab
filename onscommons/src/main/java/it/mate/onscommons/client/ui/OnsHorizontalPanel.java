@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -14,6 +15,10 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   private boolean addDirect = false;
   
   private Element actualTableElement;
+  
+  private HorizontalAlignmentConstant horzAlign = ALIGN_DEFAULT;
+
+  private VerticalAlignmentConstant vertAlign = ALIGN_TOP;
   
   public OnsHorizontalPanel() {
     super();
@@ -43,17 +48,33 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   }
   
   private void internalAdd(Widget w) {
+    PhgUtils.log("adding " + w.getElement());
+    PhgUtils.log("  to " + actualTableElement);
     super.add(w);
-//  PhgUtils.log("added " + w.getElement());
+    
+    /** DEVO RIPETERE QUELLO CHE FA IL PARENT **/
+    Element td = createAlignedTd();
+    DOM.appendChild(getActualTableRow(), td);
+    DOM.appendChild(td, w.getElement());
+    
     String childId = w.getElement().getId();
     if (childId != null && !"".equals(childId)) {
       GwtUtils.onAvailable(childId, new Delegate<com.google.gwt.dom.client.Element>() {
         public void execute(com.google.gwt.dom.client.Element element) {
+          PhgUtils.log("child elem available: " + element);
           OnsenUi.compileElement(element);
         }
       });
     }
-      
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        PhgUtils.log("after add: " + actualTableElement);
+      }
+    });
+  }
+  
+  private Element getActualTableRow() {
+    return (Element)actualTableElement.getElementsByTagName("tr").getItem(0);
   }
 
   @Override
@@ -74,4 +95,20 @@ public class OnsHorizontalPanel extends HorizontalPanel {
     });
   }
   
+  public void setHorizontalAlignment(HorizontalAlignmentConstant align) {
+    horzAlign = align;
+    super.setHorizontalAlignment(align);
+  }
+
+  public void setVerticalAlignment(VerticalAlignmentConstant align) {
+    vertAlign = align;
+    super.setVerticalAlignment(align);
+  }
+  
+  private Element createAlignedTd() {
+    Element td = DOM.createTD();
+    setCellHorizontalAlignment(td, horzAlign);
+    setCellVerticalAlignment(td, vertAlign);
+    return td;
+  }
 }

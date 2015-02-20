@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -29,11 +30,24 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   public void setText(String text) {
+    Element element = GwtUtils.getElementById(getElement().getId());
+    if (element == null) {
+      String innerHtml = getElement().getInnerHTML();
+      innerHtml = innerHtml + text;
+      getElement().setInnerHTML(innerHtml);
+      this.text = text;
+    } else {
+      element.setInnerHTML(text);
+      this.text = text;
+    }
+  
+    /*
     String innerHtml = getElement().getInnerHTML();
     innerHtml = innerHtml + text;
     getElement().setInnerHTML(innerHtml);
-//  getElement().setInnerText(text);
     this.text = text;
+    */
+    
   }
   
   public String getText() {

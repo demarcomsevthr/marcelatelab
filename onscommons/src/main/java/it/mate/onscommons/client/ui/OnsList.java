@@ -6,12 +6,15 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OnsList extends HTMLPanel {
 
   private final static String TAG_NAME = "ons-list";
+  
+  private Element listElement;
   
   public OnsList() {
     this(TAG_NAME, "");
@@ -30,10 +33,11 @@ public class OnsList extends HTMLPanel {
   @Override
   public void add(final Widget widget) {
     super.add(widget, getElement());
-    String id = getElement().getId();
     
+    String id = getElement().getId();
     GwtUtils.onAvailable(id, new Delegate<Element>() {
       public void execute(Element listElem) {
+        listElement = listElem;
         Element itemElem = widget.getElement();
         listElem.appendChild(itemElem);
         OnsenUi.compileElement(listElem);
@@ -47,6 +51,25 @@ public class OnsList extends HTMLPanel {
     listElem.appendChild(itemElem);
     OnsenUi.compileElement(listElem);
     */
+    
+  }
+  
+  public void insert(final Widget widget, final int beforeIndex) {
+    String id = getElement().getId();
+    GwtUtils.onAvailable(id, new Delegate<Element>() {
+      public void execute(Element listElem) {
+        listElement = listElem;
+        Element itemElem = widget.getElement();
+        Node beforeChild = listElem.getChild(beforeIndex);
+        listElem.insertBefore(itemElem, beforeChild);
+        OnsenUi.compileElement(listElem);
+        OnsenUi.compileElement(itemElem);
+      }
+    });
+  }
+  
+  public int getItemCount() {
+    return listElement.getChildCount();
   }
 
 }
