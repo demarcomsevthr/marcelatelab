@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -14,6 +15,10 @@ public class OnsVerticalPanel extends VerticalPanel {
   private boolean addDirect = false;
   
   private Element actualTableElement;
+  
+  private HorizontalAlignmentConstant horzAlign = ALIGN_DEFAULT;
+
+  private VerticalAlignmentConstant vertAlign = ALIGN_TOP;
   
   public OnsVerticalPanel() {
     super();
@@ -44,7 +49,14 @@ public class OnsVerticalPanel extends VerticalPanel {
   
   private void internalAdd(Widget w) {
     super.add(w);
-//  PhgUtils.log("added " + w.getElement());
+    
+    /** DEVO RIPETERE QUELLO CHE FA IL PARENT ???
+    Element tr = DOM.createTR();
+    Element td = createAlignedTd();
+    DOM.appendChild(tr, td);
+    DOM.appendChild(getBody(), tr);
+    **/
+
     String childId = w.getElement().getId();
     if (childId != null && !"".equals(childId)) {
       GwtUtils.onAvailable(childId, new Delegate<com.google.gwt.dom.client.Element>() {
@@ -83,4 +95,20 @@ public class OnsVerticalPanel extends VerticalPanel {
     });
   }
   
+  public void setHorizontalAlignment(HorizontalAlignmentConstant align) {
+    horzAlign = align;
+    super.setHorizontalAlignment(align);
+  }
+
+  public void setVerticalAlignment(VerticalAlignmentConstant align) {
+    vertAlign = align;
+    super.setVerticalAlignment(align);
+  }
+  
+  private Element createAlignedTd() {
+    Element td = DOM.createTD();
+    setCellHorizontalAlignment(td, horzAlign);
+    setCellVerticalAlignment(td, vertAlign);
+    return td;
+  }
 }

@@ -42,6 +42,8 @@ public class OnsCarousel extends HTMLPanel {
 
   @Override
   public void add(final Widget widget) {
+    PhgUtils.log("before adding item " + widget.getElement());
+    PhgUtils.log("  to carousel " + getElement());
     GwtUtils.onAvailable(getElement().getId(), new Delegate<Element>() {
       public void execute(Element element) {
         PhgUtils.log("adding item to carousel " + element);
