@@ -14,6 +14,7 @@ import it.mate.copymob.client.view.TimbroDetailView;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
+import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.OrderItemTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
@@ -264,6 +265,10 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   public void saveCurrentOrderItem(OrderItem item, Delegate<Order> delegate) {
+    PhgUtils.log("saving item " + item);
+    for (OrderItemRow row : item.getRows()) {
+      PhgUtils.log("   with row " + row);
+    }
     currentOrderItem = item;
     if (currentOrder != null) {
       for (int it = 0; it < currentOrder.getItems().size(); it++) {

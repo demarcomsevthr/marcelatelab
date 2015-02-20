@@ -119,7 +119,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
         css: {
           opacity: 1
         },
-        duration: 5
+        duration: 1
       })
       .play();
   }-*/;
