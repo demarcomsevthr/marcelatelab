@@ -213,3 +213,39 @@
   font-size: 1.4em;
 }
 */
+
+
+
+
+.app-edit-controlbar-2 {
+  display: none;
+  position: absolute;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+  background: rgb(248, 248, 248);
+}
+
+.app-edit-controlbar-2-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  line-height: 2.0em;
+  padding-top: 0.2em;
+  font-size: 0.76em;
+  background: rgb(248, 248, 248);
+  color: black;
+  border: 1px solid rgb(214, 214, 214);
+  box-shadow: none;
+  border-radius: 0;
+  padding-left: 0.5em;
+}
+
+.app-edit-fontsizebar-2 {
+  display: none;
+  position: absolute;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+}
+

@@ -1,6 +1,6 @@
 package it.mate.copymob.client.view;
 
-import it.mate.copymob.client.view.OrderItemComposeView.Presenter;
+import it.mate.copymob.client.view.OrderItemComposeView_OK_1.Presenter;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
@@ -14,9 +14,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
-import it.mate.onscommons.client.onsen.dom.Dialog;
 import it.mate.onscommons.client.ui.OnsButton;
-import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
 import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
@@ -30,7 +28,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -39,13 +37,13 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OrderItemComposeView extends AbstractBaseView<Presenter> {
+public class OrderItemComposeView_OK_1 extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void saveCurrentOrderItem(OrderItem item, Delegate<Order> delegate);
   }
 
-  public interface ViewUiBinder extends UiBinder<Widget, OrderItemComposeView> { }
+  public interface ViewUiBinder extends UiBinder<Widget, OrderItemComposeView_OK_1> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
@@ -54,9 +52,15 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   @UiField OnsList rowsPanel;
   @UiField OnsScroller scroller;
   @UiField Panel controlbar;
+  @UiField Panel fontsizebar;
   @UiField Spacer viewfinder;
-  @UiField OnsDialog fontSizeDialog;
-  @UiField OnsDialog fontFamilyDialog;
+//@UiField OnsButton btnEdtSizeText;
+  
+  @UiField OnsButton btnFntSize8;
+  @UiField OnsButton btnFntSize9;
+  @UiField OnsButton btnFntSize10;
+  @UiField OnsButton btnFntSize11;
+  @UiField OnsButton btnFntSize12;
   
   private OrderItem item;
   
@@ -73,12 +77,10 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private JavaScriptObject overallEventListener = null;
   
   private static final String CONTROLBAR_VISIBLE_WIDTH = "17.6em";
-  private static final String CONTROLBAR_VISIBLE_HEIGHT =  "2.2em";
+  private static final String CONTROLBAR_VISIBLE_HEIGHT =  "1.7em";
   private static final int CONTROLBAR_VISIBLE_MARGIN_TOP =  4;
-  
-  private Dialog dialog;
 
-  public OrderItemComposeView() {
+  public OrderItemComposeView_OK_1() {
     initUI();
   }
 
@@ -91,6 +93,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     initWidget(uiBinder.createAndBindUi(this));
     PhgUtils.ensureId(controlbar.getElement());
     PhgUtils.ensureId(rowsPanel.getElement());
+    PhgUtils.ensureId(fontsizebar.getElement());
     PhgUtils.ensureId(viewfinder.getElement());
   }
 
@@ -151,6 +154,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     addBtn.setText("add");
     addBtn.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
+        PhgUtils.log("TAPPED");
         item.getRows().add(new OrderItemRowTx(""));
         rowsPanel.insert(createRowItem(""), rowsPanel.getItemCount() - 1);
       }
@@ -205,97 +209,24 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnEdtSize")
   public void onBtnEdtSize(TapEvent event) {
-    fontSizeDialog.show();
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        setItemSizeChecked();
-      }
-    });
-  }
-  
-  private void setItemSizeChecked() {
-    OrderItemRow row = item.getRows().get(selectedRowIndex);
-    int size = row.getSize();
-    if (size >= 8) {
-      String btnFontSizeId = "btnFntSize" + size;
-      setRadioChecked(btnFontSizeId);
-    } else {
-      setRadioChecked("");
-    }
-  }
-  
-  private void setRadioChecked(String id) {
-    NodeList<Element> elements = GwtUtils.getElementsByTagName("input");
-    for (int it = 0; it < elements.getLength(); it++) {
-      Element inputElem = elements.getItem(it);
-      if ("radio".equalsIgnoreCase(inputElem.getAttribute("type"))) {
-        if (id.equals(inputElem.getId())) {
-          inputElem.setAttribute("checked", "true");
-        } else {
-          inputElem.removeAttribute("checked");
-        }
-      }
-    }
-  }
-  
-  @UiHandler("fontSizeCancelBtn")
-  public void onFontSizeCancelBtn(TapEvent event) {
-    fontSizeDialog.hide();
+    showTargetPosition(event.getTargetElement());
+    showControlbar(GwtUtils.getElement(fontsizebar), 
+        getTargetX(event), getTargetY(event), getTargetX(event), getTargetY(event), "2.05em", "10em");
   }
   
   @UiHandler({"btnFntSize8", "btnFntSize9", "btnFntSize10", "btnFntSize11", "btnFntSize12"})
   public void onBtnFntSize(TapEvent event) {
-    setItemSize(Integer.parseInt(((OnsListItem)event.getTargetWidget()).getValue()));
-    fontSizeDialog.hide();
+    setItemSize(Integer.parseInt(event.getTargetElement().getInnerText().trim()));
   }
-  
   private void setItemSize(double size) {
     OrderItemRow row = item.getRows().get(selectedRowIndex);
     row.setSize((int)size);
     textboxes.get(selectedRowIndex).getElement().getStyle().setFontSize(size / 10, Unit.EM);
-  }
-  
-  @UiHandler("btnEdtFont")
-  public void onBtnEdtFont(TapEvent event) {
-    fontFamilyDialog.show();
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        setFontFamilyChecked();
-      }
-    });
-  }
-  
-  private void setFontFamilyChecked() {
-    OrderItemRow row = item.getRows().get(selectedRowIndex);
-    String family = row.getFontFamily();
-    if (family == null) {
-      setRadioChecked("");
-    } else if (family.toLowerCase().contains("georgia")) {
-      setRadioChecked("btnFntFamGeorgia");
-    } else if (family.toLowerCase().contains("palatino")) {
-      setRadioChecked("btnFntFamPalatino");
-    } else if (family.toLowerCase().contains("times")) {
-      setRadioChecked("btnFntFamTimes");
-    } else if (family.toLowerCase().contains("arial")) {
-      setRadioChecked("btnFntFamArial");
-    }
-  }
-  
-  @UiHandler("fontFamCancelBtn")
-  public void onFontFamCancelBtn(TapEvent event) {
-    fontFamilyDialog.hide();
-  }
-  
-  @UiHandler({"btnFntFamGeorgia", "btnFntFamPalatino", "btnFntFamTimes"})
-  public void onBtnFntFamily(TapEvent event) {
-    setFontFamily(((OnsListItem)event.getTargetWidget()).getValue());
-    fontFamilyDialog.hide();
-  }
-  
-  private void setFontFamily(String value) {
-    OrderItemRow row = item.getRows().get(selectedRowIndex);
-    row.setFontFamily(value);
-    GwtUtils.setJsPropertyString(textboxes.get(selectedRowIndex).getElement().getStyle(), "fontFamily", value);
+//  btnEdtSizeText.setText(""+((int)size));
+    /*
+    btnFntSize8.addStyleName("");
+    btnFntSize8.removeStyleName("");
+    */
   }
   
   private int getTargetX(TapEvent event) {
@@ -306,6 +237,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     return event.getTargetElement().getAbsoluteTop();
   }
   
+  
   private void showTargetPosition(Element targetElement) {
     int tx = targetElement.getAbsoluteLeft();
     int ty = targetElement.getAbsoluteTop();
@@ -313,6 +245,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     GwtUtils.getElement(viewfinder).getStyle().setLeft(tx, Unit.PX);
     GwtUtils.getElement(viewfinder).getStyle().setTop(ty, Unit.PX);
     GwtUtils.getElement(viewfinder).getStyle().setZIndex(99);
+//  viewfinder.setVisible(true);
   }
   
   private void switchControlbar(final Element tappedElement, int index) {
@@ -323,6 +256,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     int y1 = y0;
     if (controlbarVisible && isLastTappedElement(tappedElement)) {
       PhgUtils.log("hiding crontrolbar");
+      GwtUtils.getElement(fontsizebar).getStyle().setDisplay(Display.NONE);
       hideControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
       if (overallEventListener != null) {
         TouchEventUtils.removeEventListener(overallEventListener);
@@ -339,6 +273,8 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
             public void execute(Element element) {
               if (TouchEventUtils.isContained(element, controlbar.getElement().getId())) {
                 //nothing
+              } else if (TouchEventUtils.isContained(element, fontsizebar.getElement().getId())) {
+                GwtUtils.getElement(fontsizebar).getStyle().setDisplay(Display.NONE);
               } else {
                 switchControlbar(tappedElement, -1);
               }
@@ -394,6 +330,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   protected final native void hideControlbar(Element elem, int x0, int y0, int x1, int y1, String width, String height) /*-{
     $wnd.animit(elem)
       .queue({
+//      css: @it.mate.copymob.client.view.OrderItemComposeView::visibleStyle(II)(x1, y1),
         css: @it.mate.copymob.client.view.OrderItemComposeView::visibleStyle(IILjava/lang/String;Ljava/lang/String;)(x1, y1, width, height),
         duration: 0
       })
