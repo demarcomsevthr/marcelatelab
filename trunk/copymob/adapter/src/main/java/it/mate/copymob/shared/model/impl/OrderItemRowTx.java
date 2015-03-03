@@ -17,6 +17,8 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private int size = 10;
   
+  private String fontFamily;
+  
   public OrderItemRowTx() {
 
   }
@@ -90,4 +92,12 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.size = size;
   }
 
+  public String getFontFamily() {
+    return fontFamily;
+  }
+
+  public void setFontFamily(String fontFamily) {
+    this.fontFamily = fontFamily;
+  }
+  
 }
