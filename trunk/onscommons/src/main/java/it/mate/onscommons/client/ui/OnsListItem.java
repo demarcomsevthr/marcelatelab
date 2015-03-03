@@ -12,6 +12,8 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
+  private String value;
+  
   public OnsListItem() {
     this("");
   }
@@ -33,6 +35,14 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
   
   public void setModifier(String modifier) {
     getElement().setAttribute("modifier", modifier);
+  }
+  
+  public void setValue(String value) {
+    this.value = value;
+  }
+  
+  public String getValue() {
+    return value;
   }
   
 }

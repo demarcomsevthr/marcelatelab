@@ -202,4 +202,46 @@ public class OnsenUi {
     */
   }
 
+  /*
+  public static void createDialog (final OnsDialog dialog, final Delegate<Dialog> delegate) {
+    final String dialogId = dialog.getElement().getId();
+    GwtUtils.onAvailable(dialogId, new Delegate<Element>() {
+      public void execute(Element dialogElem) {
+        String templateId = dialogId + "Template";
+        OnsTemplate template = new OnsTemplate(templateId);
+        template.add(dialog);
+        RootPanel.get().add(template);
+        templateId = template.getElement().getId();
+        PhgUtils.log("finding template " + templateId);
+        GwtUtils.onAvailable(templateId, new Delegate<Element>() {
+          public void execute(Element templateElem) {
+            OnsenUi.compileElement(templateElem);
+            PhgUtils.log("creating dialog " + templateElem.getId());
+            createDialogImpl(templateElem.getId(), dialog.getVarName(), new JSOCallback() {
+              public void handle(JavaScriptObject jso) {
+                Dialog dialog = jso.cast();
+                PhgUtils.log("returning dialog " + dialog);
+                delegate.execute(dialog);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  */
+
+  /**
+   * NB: nella callback il reference dlg e' undefined!
+   */
+  /*
+  protected static native void createDialogImpl(String templateId, String varName, JSOCallback callback) /*-{
+    $wnd.ons.createDialog(templateId).then(function(dlg) {
+      var dialog = $wnd[varName];
+      dialog.show();
+      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('showing dialog ' + dialog);
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(dialog);
+    });
+  }-*/;
+
 }

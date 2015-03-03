@@ -2,6 +2,7 @@ package it.mate.onscommons.client.event;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.ui.Widget;
 
 public class TapEvent extends GwtEvent<TapHandler> {
 
@@ -10,10 +11,13 @@ public class TapEvent extends GwtEvent<TapHandler> {
   private final int startY;
   private final Element targetElement;
   
-  public TapEvent(Object source, Element targetElement, int startX, int startY) {
+  private Widget targetWidget;
+  
+  public TapEvent(Object source, Element targetElement, int startX, int startY, Widget targetWidget) {
     this.targetElement = targetElement;
     this.startX = startX;
     this.startY = startY;
+    this.targetWidget = targetWidget;
     setSource(source);
   }
   
@@ -62,6 +66,10 @@ public class TapEvent extends GwtEvent<TapHandler> {
    */
   public Element getTargetElement() {
     return targetElement;
+  }
+  
+  public Widget getTargetWidget() {
+    return targetWidget;
   }
   
 }

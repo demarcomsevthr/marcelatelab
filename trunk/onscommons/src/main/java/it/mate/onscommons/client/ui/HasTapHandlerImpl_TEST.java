@@ -83,7 +83,7 @@ public class HasTapHandlerImpl_TEST {
                     return;
                   }
                   for (TapHandler tapHandler : tapHandlers) {
-                    tapHandler.onTap(new TapEvent(target, targetElement, 0, 0));
+                    tapHandler.onTap(new TapEvent(target, targetElement, 0, 0, (Widget)target));
                   }
                 }
               });

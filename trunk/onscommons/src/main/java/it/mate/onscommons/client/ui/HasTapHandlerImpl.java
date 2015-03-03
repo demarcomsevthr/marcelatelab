@@ -44,7 +44,20 @@ public class HasTapHandlerImpl {
     this.target = target;
   }
   
+  private boolean isChildOfDialog(Widget parent) {
+    if (parent == null) {
+      return false;
+    }
+    if (parent instanceof OnsDialog) {
+      return true;
+    }
+    return isChildOfDialog(parent.getParent());
+  }
+  
   public HandlerRegistration addTapHandler(final TapHandler handler) {
+    
+//  setUseDocEventListener(isChildOfDialog(((Widget)target).getParent()));
+    
     this.tapHandlers.add(handler);
     
 //  applyOldAndroidPatch();
@@ -58,9 +71,30 @@ public class HasTapHandlerImpl {
       GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
         public void execute(final Element availableElement) {
           
+          JSOCallback callback = new JSOCallback() {
+            public void handle(JavaScriptObject jsEvent) {
+              Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
+              if (!PhgUtils.isReallyAttached(availableElement.getId())) {
+                removeAllHandlers();
+                return;
+              }
+              for (TapHandler tapHandler : tapHandlers) {
+                tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (Widget)target));
+              }
+            }
+          };
+          
           // 04/02/2015
+          
+          boolean useDocEventListener = isChildOfDialog(((Widget)target).getParent());
+          
+          if (useDocEventListener) {
+            jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, callback);
+          } else {
+            jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, callback);
+          }
+          /*
           jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, new JSOCallback() {
-//        jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, new JSOCallback() {
             public void handle(JavaScriptObject jsEvent) {
               Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
               if (!PhgUtils.isReallyAttached(availableElement.getId())) {
@@ -72,6 +106,7 @@ public class HasTapHandlerImpl {
               }
             }
           });
+          */
           
         }
       });
