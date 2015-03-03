@@ -400,6 +400,11 @@ public class GwtUtils {
     return $doc.getElementById(elementId);
   }-*/;
   
+  public static native NodeList<Element> getElementsByTagName(String tagName) /*-{
+    return $doc.getElementsByTagName(tagName);
+  }-*/;
+  
+  
   public static Element getElement(Widget widget) {
     String id = widget.getElement().getId();
     if (id != null && !"".equals(id.trim())) {
@@ -407,7 +412,6 @@ public class GwtUtils {
     }
     return null;
   }
-  
   
   
   protected abstract static class MobileTimerAnimationSchedulerImpl extends Timer {
