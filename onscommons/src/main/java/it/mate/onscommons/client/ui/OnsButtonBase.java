@@ -40,14 +40,6 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
       element.setInnerHTML(text);
       this.text = text;
     }
-  
-    /*
-    String innerHtml = getElement().getInnerHTML();
-    innerHtml = innerHtml + text;
-    getElement().setInnerHTML(innerHtml);
-    this.text = text;
-    */
-    
   }
   
   public String getText() {
