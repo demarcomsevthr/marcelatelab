@@ -24,4 +24,8 @@ public interface OrderItemRow extends Serializable {
 
   public int getSize();
 
+  public void setFontFamily(String fontFamily);
+
+  public String getFontFamily();
+
 }
