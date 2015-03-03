@@ -1,0 +1,63 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+       xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+       xmlns:gc="urn:import:it.mate.gwtcommons.client.ui" 
+       ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+       ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
+       
+  <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
+
+  
+    <o:OnsPage>
+    
+      <o:OnsToolbar>
+        <div class="left">
+          <o:OnsBackButton text="Back"/>
+        </div>
+        <div class="center">Composizione Timbro</div>
+      </o:OnsToolbar>
+      
+      <g:VerticalPanel width="100%" horizontalAlignment="center">
+        <g:HTML>
+          <i>Componi qui il test del timbro</i>
+        </g:HTML>
+      </g:VerticalPanel>
+      
+      <o:OnsScroller height="80%" width="100%" ui:field="scroller">
+        <o:OnsList ui:field="rowsPanel"/>
+        <!-- 
+        <o:OnsVerticalPanel width="100%" horizontalAlignment="center" ui:field="rowsPanel"/>
+         -->
+      </o:OnsScroller>
+      
+      
+      <o:OnsButton text="Save" ui:field="btnSave" addStyleNames="app-timbri-choose-btn"/>
+
+      <g:HorizontalPanel ui:field="controlbar" addStyleNames="app-edit-controlbar">
+        <o:OnsButton ui:field="btnEdtSize" icon="fa-text-height" addStyleNames="app-edit-controlbar-btn"/>
+        <!-- 
+        <o:OnsButton ui:field="btnEdtSizeText" text="12" addStyleNames="app-edit-controlbar-btn app-edit-controlbar-btn-size-text"/>
+         -->
+        <o:OnsButton ui:field="btnEdtFont" icon="fa-font" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtBold" icon="fa-bold" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtItalic" icon="fa-italic" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtUnderline" icon="fa-underline" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtAlignLeft" icon="fa-align-left" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtAlignCenter" icon="fa-align-center" addStyleNames="app-edit-controlbar-btn"/>
+        <o:OnsButton ui:field="btnEdtAlignRight" icon="fa-align-right" addStyleNames="app-edit-controlbar-btn"/>
+      </g:HorizontalPanel>
+      
+      <g:VerticalPanel ui:field="fontsizebar" addStyleNames="app-edit-fontsizebar">
+        <o:OnsButton ui:field="btnFntSize8" addStyleNames="app-edit-fontsizebar-btn app-edit-fontsizebar-btn-8" text="8"/>
+        <o:OnsButton ui:field="btnFntSize9" addStyleNames="app-edit-fontsizebar-btn app-edit-fontsizebar-btn-9" text="9"/>
+        <o:OnsButton ui:field="btnFntSize10" addStyleNames="app-edit-fontsizebar-btn app-edit-fontsizebar-btn-10" text="10"/>
+        <o:OnsButton ui:field="btnFntSize11" addStyleNames="app-edit-fontsizebar-btn app-edit-fontsizebar-btn-11" text="11"/>
+        <o:OnsButton ui:field="btnFntSize12" addStyleNames="app-edit-fontsizebar-btn app-edit-fontsizebar-btn-12" text="12"/>
+      </g:VerticalPanel>
+      
+      <gc:Spacer ui:field="viewfinder" addStyleNames="app-viewfinder" visible="false" width="4px" height="4px"/>
+      
+    </o:OnsPage>
+    
+  </g:HTMLPanel>
+  
+</ui:UiBinder>
