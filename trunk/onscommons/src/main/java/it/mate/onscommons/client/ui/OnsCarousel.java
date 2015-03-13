@@ -45,23 +45,31 @@ public class OnsCarousel extends HTMLPanel {
     PhgUtils.log("before adding item " + widget.getElement());
     PhgUtils.log("  to carousel " + getElement());
     GwtUtils.onAvailable(getElement().getId(), new Delegate<Element>() {
-      public void execute(Element element) {
-        PhgUtils.log("adding item to carousel " + element);
-        addItem(widget, element);
-        OnsenUi.compileElement(element);
+      public void execute(Element carouselElem) {
+        PhgUtils.log("adding item to carousel " + carouselElem);
+        addItem(widget, carouselElem);
+        OnsenUi.compileElement(carouselElem);
+        
         if (getController() != null) {
           getController().refresh();
         }
         
         if (widget instanceof OnsCarouselItem) {
+          
           OnsCarouselItem item = (OnsCarouselItem)widget;
+          
+//        PhgUtils.log("ADDING ITEM -- " + item.getElement().getId() + " -- " + item);
+          
           items.add(item);
 
           // 03/02/2015
           if (items.size() == 1) {
             GwtUtils.onAvailable(item.getElement().getId(), new Delegate<Element>() {
-              public void execute(Element itemElement) {
-                GwtUtils.addMoveHandler(itemElement, new MoveHandler() {
+              public void execute(Element itemElem) {
+                
+//              OnsenUi.compileElement(itemElem);
+
+                GwtUtils.addMoveHandler(itemElem, new MoveHandler() {
                   public void onMove(Element element, int top, int left) {
                     PhgUtils.log("moving element to " + top + " " + left);
                     for (OnsCarouselItem item : items) {
@@ -69,42 +77,16 @@ public class OnsCarousel extends HTMLPanel {
                     }
                   }
                 });
+                
               }
             });
           }
-          
         }
         
-        /*
-        HammerUtils.addDragHandlerImpl(widget.getElement(), "swipe", new JSOCallback() {
-          public void handle(JavaScriptObject jso) {
-            PhgUtils.log("oh");
-          }
-        });
-        */
       }
     });
   }
 
-  /*
-  public void addDragHandlerTest() {
-    onControllerAvailable(new Delegate<Carousel>() {
-      public void execute(Carousel controller) {
-        PhgUtils.log("adding drag handler");
-        
-        HammerUtils.addDragHandlerImpl(getElement(), "swipe", new JSOCallback() {
-          public void handle(JavaScriptObject touch) {
-            int pageX = GwtUtils.getJsPropertyInt(touch, "pageX");
-            int pageY = GwtUtils.getJsPropertyInt(touch, "pageY");
-            PhgUtils.log("drag at " + pageX + "," + pageY);
-          }
-        });
-        
-      }
-    });
-  }
-  */
-  
   public void getActiveItem(final Delegate<OnsCarouselItem> delegate) {
     onControllerAvailable(new Delegate<Carousel>() {
       public void execute(Carousel carousel) {
@@ -115,11 +97,19 @@ public class OnsCarousel extends HTMLPanel {
   }
   
   public void setAutoscroll(String value) {
-    getElement().setAttribute("auto-scroll", value);
+    getElement().setAttribute("auto-scroll", "");
   }
 
   public void setDraggable(String value) {
-    getElement().setAttribute("draggable", value);
+    getElement().setAttribute("draggable", "");
+  }
+  
+  public void setOverscrollable(String value) {
+    getElement().setAttribute("overscrollable", "");
+  }
+  
+  public void setSwipeable(String value) {
+    getElement().setAttribute("swipeable", "");
   }
   
   public final native Carousel getController() /*-{

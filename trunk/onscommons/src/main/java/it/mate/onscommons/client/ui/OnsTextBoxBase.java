@@ -20,11 +20,12 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   protected OnsTextBoxBase(Element element, String type, String className) {
     super(element, PassthroughRenderer.instance(), PassthroughParser.instance());
     PhgUtils.ensureId(element);
-    element.setAttribute("type", type);
+    if (type != null) {
+      element.setAttribute("type", type);
+    }
     if (className != null) {
       element.addClassName(className);
     }
-//  setElement(element);
   }
   
   public void setPlaceholder(String placeholder) {
@@ -48,7 +49,6 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   @Override
   public void setText(final String text) {
     String id = getElement().getId();
-//  Element elem = DOM.getElementById(id);
     Element elem = getElementByIdImpl(id);
     GwtUtils.onAvailable(id, new Delegate<Element>() {
       public void execute(Element elem) {
@@ -56,12 +56,6 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
         OnsenUi.compileElement(elem);
       }
     });
-    /*
-    if (elem != null) {
-      elem.setPropertyString("value", text);
-      OnsenUi.compileElement(elem);
-    }
-    */
   }
 
   protected static native Element getElementByIdImpl(String elementId) /*-{

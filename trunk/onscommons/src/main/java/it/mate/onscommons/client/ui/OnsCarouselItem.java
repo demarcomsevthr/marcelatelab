@@ -44,6 +44,7 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
 
   public OnsCarouselItem(String html) {
     super("ons-carousel-item", html);
+    PhgUtils.ensureId(getElement());
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
 
@@ -64,24 +65,6 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
           }
         });
       }
-      /*
-      if (dragOverHandlerReg == null) {
-        dragOverHandlerReg = TouchEventUtils.addDragOverHandler(getElement(), new NativeGestureHandler() {
-          public void on(NativeGestureEvent event) {
-            PhgUtils.log("drag over event");
-            setLastMovementTime(System.currentTimeMillis());
-          }
-        });
-      }
-      if (mouseMoveHandlerReg == null) {
-        mouseMoveHandlerReg = TouchEventUtils.addMouseMoveHandler(getElement(), new NativeGestureHandler() {
-          public void on(NativeGestureEvent event) {
-            PhgUtils.log("mouse move event");
-            setLastMovementTime(System.currentTimeMillis());
-          }
-        });
-      }
-      */
     }
     
     return hasTapHandlerImpl.addTapHandler(new TapHandler() {
