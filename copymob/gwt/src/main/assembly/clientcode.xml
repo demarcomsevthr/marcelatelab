@@ -17,6 +17,9 @@
         <include>**/app*.js</include>
         <include>**/jquery*.*</include>
       </includes>
+      <excludes>
+        <exclude>main/js/onsen-1.2.1</exclude>
+      </excludes>
       <outputDirectory>../../../android/assets/www</outputDirectory>
     </fileSet>
     <fileSet>

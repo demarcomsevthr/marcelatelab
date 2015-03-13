@@ -1,9 +1,11 @@
 package it.mate.copymob.client.logic;
 
+import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.copymob.shared.model.impl.MessageTx;
 import it.mate.copymob.shared.model.impl.OrderItemRowTx;
 import it.mate.copymob.shared.model.impl.OrderItemTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
@@ -51,9 +53,13 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
-  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size ";
+  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size, fontFamily ";
 
   private final static String ORDER_ITEM_ROW_FIELDS = ORDER_ITEM_ROW_FIELDS_0;
+  
+  private final static String MESSAGE_FIELDS_0 = "data, text, orderId ";
+
+  private final static String MESSAGE_FIELDS = MESSAGE_FIELDS_0;
   
   private List<Timbro> cacheTimbri;
   
@@ -103,6 +109,9 @@ public class MainDao extends WebSQLDao {
     PhonegapLog.log("dropping table orderItemRow");
     tr.doExecuteSql("DROP TABLE IF EXISTS orderItemRow");
     
+    PhonegapLog.log("dropping table messages");
+    tr.doExecuteSql("DROP TABLE IF EXISTS messages");
+    
   }
   
   private final static MigratorCallback MIGRATION_CALLBACK_0 = new MigratorCallback() {
@@ -120,6 +129,9 @@ public class MainDao extends WebSQLDao {
 
       PhonegapLog.log("creating table orderItemRow");
       tr.doExecuteSql("CREATE TABLE orderItemRow (id "+SERIAL_ID+", " + ORDER_ITEM_ROW_FIELDS_0 + " )");
+
+      PhonegapLog.log("creating table messages");
+      tr.doExecuteSql("CREATE TABLE messages (id "+SERIAL_ID+", " + MESSAGE_FIELDS_0 + " )");
 
     }
   };
@@ -293,6 +305,27 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  protected void findOrder(SQLTransaction tr, final Integer id, final Delegate<Order> delegate) {
+    if (id == null) {
+      delegate.execute(null);
+    } else {
+      tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.id = ?", 
+          new Object[]{id}, new SQLStatementCallback() {
+        public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+          new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
+            public void execute(List<Order> results) {
+              if (results != null && results.size() == 1) {
+                delegate.execute(results.get(0));
+              } else {
+                delegate.execute(null);
+              }
+            }
+          });
+        }
+      });
+    }
+  }
+  
   protected class RSToOrderIterator {
     SQLResultSet rs;
     SQLTransaction tr;
@@ -432,6 +465,7 @@ public class MainDao extends WebSQLDao {
       result.setText(rows.getValueString(it, "text"));
       ((OrderItemRowTx)result).setBoldInt(rows.getValueInt(it, "bold"));
       result.setSize(rows.getValueInt(it, "size"));
+      result.setFontFamily(rows.getValueString(it, "fontFamily"));
       return result;
     }
     protected List<OrderItemRow> getResults() {
@@ -599,12 +633,13 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItemRow(SQLTransaction tr, final OrderItemRow entity, final Delegate<OrderItemRow> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderItemId(), 
             entity.getText(),
             ((OrderItemRowTx)entity).getBoldInt(),
-            entity.getSize()
+            entity.getSize(),
+            entity.getFontFamily()
           }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -618,15 +653,117 @@ public class MainDao extends WebSQLDao {
       sql += " ,text = ?";
       sql += " ,bold = ?";
       sql += " ,size = ?";
+      sql += " ,fontFamily = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderItemId(), 
           entity.getText(),
           ((OrderItemRowTx)entity).getBoldInt(),
           entity.getSize(),
+          entity.getFontFamily(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            PhonegapLog.log("Updated " + entity);
+            delegate.execute(entity);
+          }
+        });
+    }
+  }
+  
+  /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  
+  public void findAllMessages(final Delegate<List<Message>> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + MESSAGE_FIELDS + " FROM messages ORDER BY id", 
+            new Object[]{}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            new RSToMessageIterator(tr, rs, new Delegate<List<Message>>() {
+              public void execute(List<Message> results) {
+                delegate.execute(results);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  protected class RSToMessageIterator {
+    SQLResultSet rs;
+    SQLTransaction tr;
+    Delegate<List<Message>> delegate;
+    List<Message> results = new ArrayList<Message>();
+    public RSToMessageIterator(SQLTransaction tr, SQLResultSet rs, Delegate<List<Message>> delegate) {
+      this.tr = tr;
+      this.rs = rs;
+      this.delegate = delegate;
+      iterate(0);
+    }
+    private void iterate(final int it) {
+      if (it < rs.getRows().getLength()) {
+        final Message result = flushRS(rs, it);
+        results.add(result);
+        findOrder(tr, result.getOrderId(), new Delegate<Order>() {
+          public void execute(Order order) {
+            result.setOrder(order);
+            iterate(it + 1);
+          }
+        });
+      } else {
+        delegate.execute(results);
+      }
+    }
+    private Message flushRS(SQLResultSet rs, int it) {
+      SQLResultSetRowList rows = rs.getRows();
+      Message result = new MessageTx();
+      result.setId(rows.getValueInt(it, "id"));
+      ((MessageTx)result).setOrderId(rows.getValueInt(it, "orderId"));
+      result.setData(longAsDate(rows.getValueLong(it, "data")));
+      result.setText(rows.getValueString(it, "text"));
+      return result;
+    }
+    protected List<Message> getResults() {
+      return results;
+    }
+  }
+  
+  public void saveMessage(final Message entity, final Delegate<Message> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        saveMessage(tr, entity, delegate);
+      }
+    });
+  }
+  
+  protected void saveMessage(SQLTransaction tr, final Message entity, final Delegate<Message> delegate) {
+    if (entity.getId() == null) {
+      tr.doExecuteSql("INSERT INTO messages (" + MESSAGE_FIELDS + ") VALUES (?, ?, ?)", 
+          new Object[] {
+            dateAsLong(entity.getData()), 
+            entity.getText(),
+            entity.getOrderId()
+          }, new SQLStatementCallback() {
+            public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+              entity.setId(rs.getInsertId());
+              PhonegapLog.log("Inserted " + entity);
+              delegate.execute(entity);
+            }
+          });
+    } else {
+      String sql = "UPDATE messages SET ";
+      sql += "  data = ?";
+      sql += " ,text = ?";
+      sql += " ,orderId = ?";
+      sql += " WHERE id = ?";
+      tr.doExecuteSql(sql, new Object[] {
+          dateAsLong(entity.getData()), 
+          entity.getText(),
+          entity.getOrderId(),
+          entity.getId()
+        }, new SQLStatementCallback() {
+          public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
             PhonegapLog.log("Updated " + entity);
             delegate.execute(entity);
           }
