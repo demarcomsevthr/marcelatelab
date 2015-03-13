@@ -6,6 +6,7 @@ import it.mate.copymob.client.logic.TimbriInitializer;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
+import it.mate.copymob.client.view.MessageListView;
 import it.mate.copymob.client.view.OrderItemComposeView;
 import it.mate.copymob.client.view.OrderItemEditView;
 import it.mate.copymob.client.view.SettingsView;
@@ -39,7 +40,8 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MainActivity extends OnsAbstractActivity implements 
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
   TimbriListView.Presenter,
-  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter
+  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter,
+  MessageListView.Presenter
   {
   
   private MainPlace place;
@@ -111,6 +113,10 @@ public class MainActivity extends OnsAbstractActivity implements
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       this.view = AppClientFactory.IMPL.getGinjector().getOrderItemComposeView();
 //    deferred = false;
+    }
+    
+    if (place.getToken().equals(MainPlace.MESSAGE_LIST)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getMessageListView();
     }
     
     view.setPresenter(this);
@@ -185,6 +191,11 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToTimbroEditView(Timbro timbro) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, timbro));
+  }
+
+  @Override
+  public void goToMessageListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.MESSAGE_LIST));
   }
 
   @Override

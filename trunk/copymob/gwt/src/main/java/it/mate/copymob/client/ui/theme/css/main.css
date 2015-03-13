@@ -249,3 +249,8 @@
   width: 0;
 }
 
+.app-msg-bottombar {
+  position: absolute;
+  bottom: 0.2em;
+}
+

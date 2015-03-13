@@ -10,20 +10,17 @@
     
       <o:OnsToolbar>
         <div class="left">
+          <!-- 
           <o:OnsBackButton text="Back"/>
+           -->
         </div>
         <div class="center">Elenco Timbri</div>
       </o:OnsToolbar>
       
       <o:OnsHorizontalPanel width="100%" height="100%" horizontalAlignment="center" addStyleNames="app-timbri-carousel-panel">
-        <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" draggable="true" ui:field="carousel"/>
-      </o:OnsHorizontalPanel> 
-      
-      <!-- 
-      <g:HorizontalPanel width="100%" horizontalAlignment="center">
-      </g:HorizontalPanel>
-       -->
-      
+        <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" ui:field="carousel" swipeable="true"/>
+      </o:OnsHorizontalPanel>
+
       <o:OnsButton text="Acquista" ui:field="btnBuy" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>

@@ -4,6 +4,7 @@ import it.mate.copymob.client.view.OrderItemEditView.Presenter;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.copymob.shared.utils.RenderUtils;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
@@ -13,12 +14,10 @@ import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -75,12 +74,24 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
         int rowTop = top;
         for (OrderItemRow row : orderItem.getRows()) {
+          
+          // TODO: estrapolare il rendering in un metodo a parte in modo da poterlo riutilizzare anche lato server
+
+          /*
           Element span = DOM.createSpan();
           span.getStyle().setPosition(Position.FIXED);
           span.getStyle().setTop(rowTop, Unit.PX);
           span.getStyle().setLeft(left, Unit.PX);
           span.setInnerHTML(row.getText());
-          rowTop += 20;
+          span.getStyle().setFontSize(row.getSize(), Unit.PX); 
+          GwtUtils.setJsPropertyString(span.getStyle(), "fontFamily", row.getFontFamily()); 
+          span.getStyle().setFontWeight(row.isBold() ? FontWeight.BOLD : FontWeight.NORMAL);
+          rowTop += row.getSize() + 10;
+          */
+          
+          Element span = RenderUtils.renderAsSpan(row, rowTop, left, 1.4);
+          rowTop += span.getPropertyInt("height");
+          
           previewElement.appendChild(span);
         }
         

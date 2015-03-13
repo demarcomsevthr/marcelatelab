@@ -75,16 +75,13 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       item.setModel(timbro);
+      
       item.addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          /*
-          if (System.currentTimeMillis() > lastMovement + 1000) {
-            onBtnBuy(event);
-          }
-          */
           onBtnBuy(event);
         }
       });
+      
       carousel.add(item);
       if (firstItem == null) {
         firstItem = item;
