@@ -21,6 +21,14 @@ public class OrderTx implements Order, IsMappable {
   
   private List<OrderItem> items = new ArrayList<OrderItem>();
   
+  public OrderTx() {
+
+  }
+  
+  protected OrderTx(Integer id) {
+    this.id = id;
+  }
+
   @Override
   public String toString() {
     return "OrderTx [id=" + id + ", codice=" + codice + ", accountId=" + accountId + ", state=" + state + ", items=" + items + "]";
