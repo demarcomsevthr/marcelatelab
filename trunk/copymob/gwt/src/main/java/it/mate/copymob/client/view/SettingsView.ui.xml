@@ -12,7 +12,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsBackButton text="Back"/>
+          <o:OnsBackButton/>
         </div>
         <div class="center">Settings</div>
         <div class="right">

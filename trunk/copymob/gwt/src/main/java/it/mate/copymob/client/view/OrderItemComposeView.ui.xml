@@ -11,7 +11,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsBackButton text="Back"/>
+          <o:OnsBackButton/>
         </div>
         <div class="center">Composizione Timbro</div>
       </o:OnsToolbar>

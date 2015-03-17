@@ -122,13 +122,14 @@
               </includes>
             </fileset>
             <!-- LE VECCHIE INTERFACCIE VANNO MANTENUTE SUL SERVER
+                 [17/03/2015] SE SI UTILIZZA SEMPRE RPCMAP SI PUO' ANCHE CANCELLARE LE VECCHIE INTERFACCE
+                 -->
             <fileset>
               <directory>../server/src/main/webapp/main</directory>
               <includes>
                 <include>*.gwt.rpc</include>
               </includes>
             </fileset>
-            -->
           </filesets>
         </configuration>
       </plugin>      

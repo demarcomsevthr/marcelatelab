@@ -4,6 +4,7 @@ import it.mate.copymob.client.factories.AppClientFactory;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.phgcommons.client.plugins.FileSystemPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -16,6 +17,7 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TimbriInitializer {
 
@@ -24,6 +26,8 @@ public class TimbriInitializer {
   private final static int NUMBER_OF_ITEMS = 5;
   
   private final static String dataPath = "www/main/data";
+  
+  private final static boolean LOAD_TIMBRI_FROM_CLOUD = true;
   
   public static void doRun() {
     new TimbriInitializer().run();
@@ -37,27 +41,60 @@ public class TimbriInitializer {
       public void execute(List<Timbro> timbri) {
         if (timbri == null || timbri.size() == 0) {
           
-          iterateDataFiles(0, new ArrayList<Timbro>(), new Delegate<List<Timbro>>() {
-            public void execute(List<Timbro> results) {
-              
-              for (Timbro timbro : results) {
-                
-                dao.saveTimbro(timbro, new Delegate<Timbro>() {
-                  public void execute(Timbro element) {
-                    
-                  }
-                });
-                
+          if (LOAD_TIMBRI_FROM_CLOUD) {
+            PhgUtils.log("REALOADING TIMBRI FROM SERVER...");
+            loadTimbriFromCloudServer(new Delegate<List<Timbro>>() {
+              public void execute(List<Timbro> timbri) {
+                for (Timbro timbro : timbri) {
+                  dao.saveTimbro(timbro, new Delegate<Timbro>() {
+                    public void execute(Timbro element) {
+                      
+                    }
+                  });
+                }
               }
-              
-            }
-          });
+            });
+          } else {
+            iterateDataFiles(0, new ArrayList<Timbro>(), new Delegate<List<Timbro>>() {
+              public void execute(List<Timbro> results) {
+                for (Timbro timbro : results) {
+                  dao.saveTimbro(timbro, new Delegate<Timbro>() {
+                    public void execute(Timbro element) {
+                      
+                    }
+                  });
+                }
+              }
+            });
+          }
           
         }
       }
     });
     
   }
+  
+  
+  private void loadTimbriFromCloudServer(final Delegate<List<Timbro>> delegate) {
+    AppClientFactory.IMPL.getRemoteFacade().getTimbri(new AsyncCallback<List<RpcMap>>() {
+      public void onSuccess(List<RpcMap> results) {
+        if (results != null) {
+          List<Timbro> timbri = new ArrayList<Timbro>();
+          for (RpcMap map : results) {
+            TimbroTx timbro = new TimbroTx().fromRpcMap(map);
+            timbri.add(timbro);
+          }
+          delegate.execute(timbri);
+        } else {
+          PhgUtils.log("GET TIMBRI FROM CLOUD EMPTY RESULTS!");
+        }
+      }
+      public void onFailure(Throwable caught) {
+        PhgUtils.log("GET TIMBRI FROM CLOUD FAILURE!");
+      }
+    });
+  }
+  
   
   private Timbro createTimbro(int index, String imgData) {
     int n = index + 1;
