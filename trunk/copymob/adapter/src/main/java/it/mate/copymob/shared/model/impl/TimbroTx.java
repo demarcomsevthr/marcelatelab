@@ -17,13 +17,18 @@ public class TimbroTx implements Timbro, IsMappable {
   
   private Double height;
   
-  private int oval;
+  private Boolean oval;
 
   private String image;
+  
+  private String remoteId;
+
+  private Double prezzo;
 
   @Override
   public String toString() {
-    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + "]";
+    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + ", remoteId="
+        + remoteId + ", prezzo=" + prezzo + "]";
   }
 
   public TimbroTx() {
@@ -36,14 +41,31 @@ public class TimbroTx implements Timbro, IsMappable {
 
   @Override
   public RpcMap toRpcMap() {
-    // TODO Auto-generated method stub
-    return null;
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("nome", nome);
+    map.put("codice", codice);
+    map.put("width", width);
+    map.put("height", height);
+    map.put("oval", oval);
+    map.put("image", image);
+    map.put("remoteId", remoteId);
+    map.put("prezzo", prezzo);
+    return map;
   }
 
   @Override
-  public IsMappable fromRpcMap(RpcMap map) {
-    // TODO Auto-generated method stub
-    return null;
+  public TimbroTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.nome = (String)map.get("nome");
+    this.codice = (String)map.get("codice");
+    this.width = (Double)map.get("width");
+    this.height = (Double)map.get("height");
+    this.oval = (Boolean)map.get("oval");
+    this.image = (String)map.get("image");
+    this.remoteId = (String)map.get("remoteId");
+    this.prezzo = (Double)map.get("prezzo");
+    return this;
   }
 
   public Integer getId() {
@@ -98,20 +120,28 @@ public class TimbroTx implements Timbro, IsMappable {
     this.height = height;
   }
 
-  public boolean isOval() {
-    return 1 == oval;
+  public String getRemoteId() {
+    return remoteId;
   }
 
-  public void setOval(boolean oval) {
-    this.oval = oval ? 1 : 0;
+  public void setRemoteId(String remoteId) {
+    this.remoteId = remoteId;
   }
 
-  public Integer getOvalInt() {
+  public Boolean getOval() {
     return oval;
   }
 
-  public void setOvalInt(Integer oval) {
-    this.oval = oval != null ? oval : 0;
+  public void setOval(Boolean oval) {
+    this.oval = oval;
   }
 
+  public Double getPrezzo() {
+    return prezzo;
+  }
+
+  public void setPrezzo(Double prezzo) {
+    this.prezzo = prezzo;
+  }
+  
 }
