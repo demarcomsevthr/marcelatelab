@@ -42,7 +42,7 @@ public class TimbroDs implements Timbro, HasKey {
   @Override
   public String toString() {
     return "TimbroDs [remoteId=" + remoteId + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval
-        + ", image=" + image + "]";
+        + ", prezzo=" + prezzo + "]";
   }
 
   public Integer getId() {
