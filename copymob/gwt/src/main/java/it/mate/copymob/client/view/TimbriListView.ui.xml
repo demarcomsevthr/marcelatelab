@@ -10,9 +10,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <!-- 
-          <o:OnsBackButton text="Back"/>
-           -->
+          <o:OnsBackButton/>
         </div>
         <div class="center">Elenco Timbri</div>
       </o:OnsToolbar>

@@ -41,7 +41,7 @@ public class MainDao extends WebSQLDao {
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
   // ATTENZIONE: LASCIARE IL CAMPO IMAGE IN FONDO (NELLA CREATE VIENE ACCODATO IL DATATYPE BLOB)
-  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, image ";
+  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, image ";
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
@@ -217,7 +217,8 @@ public class MainDao extends WebSQLDao {
     result.setImage(rows.getValueString(it, "image"));
     result.setWidth(rows.getValueDouble(it, "width"));
     result.setHeight(rows.getValueDouble(it, "height"));
-    result.setOvalInt(rows.getValueInt(it, "oval"));
+    result.setOval(rows.getValueInt(it, "oval") == 1);
+    result.setPrezzo(rows.getValueDouble(it, "prezzo"));
     return result;
   }
   
@@ -225,13 +226,14 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getNome(), 
                 entity.getCodice(),
                 entity.getWidth(),
                 entity.getHeight(),
-                entity.getOvalInt(),
+                entity.getOval() ? 1 : 0,
+                entity.getPrezzo(),
                 entity.getImage()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -248,6 +250,7 @@ public class MainDao extends WebSQLDao {
           sql += " ,width = ?";
           sql += " ,height = ?";
           sql += " ,oval = ?";
+          sql += " ,prezzo = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getNome(), 
@@ -255,7 +258,8 @@ public class MainDao extends WebSQLDao {
               entity.getImage(),
               entity.getWidth(),
               entity.getHeight(),
-              entity.getOvalInt(),
+              entity.getOval() ? 1 : 0,
+              entity.getPrezzo(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

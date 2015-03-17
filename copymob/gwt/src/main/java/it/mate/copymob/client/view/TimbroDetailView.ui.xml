@@ -10,7 +10,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsBackButton text="Back"/>
+          <o:OnsBackButton/>
         </div>
         <div class="center">Dettaglio <o:OnsLabel ui:field="headerLbl" addStyleNames="ons-inline-label"/></div>
       </o:OnsToolbar>

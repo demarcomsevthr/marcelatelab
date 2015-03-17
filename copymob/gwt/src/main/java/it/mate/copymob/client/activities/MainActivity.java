@@ -29,6 +29,7 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.Timer;
@@ -82,6 +83,7 @@ public class MainActivity extends OnsAbstractActivity implements
     boolean deferred = true;
 
     if (place.getToken().equals(MainPlace.HOME)) {
+      testServerConnection();
       getDevInfoId(new Delegate<String>() {
         public void execute(String devInfoId) {
           PhgUtils.log("devInfoId is " + devInfoId);
@@ -331,6 +333,17 @@ public class MainActivity extends OnsAbstractActivity implements
         });
     }
     
+  }
+  
+  private void testServerConnection() {
+    AppClientFactory.IMPL.getRemoteFacade().getServerTime(new AsyncCallback<Date>() {
+      public void onSuccess(Date result) {
+        PhgUtils.log("SERVER CONNECTION SUCCESS: " + GwtUtils.dateToString(result, "dd/MM/yyyy HH:mm:ss,SSS"));
+      }
+      public void onFailure(Throwable caught) {
+        PhgUtils.log("SERVER CONNECTION FAILURE");
+      }
+    });
   }
 
   public void getDevInfoId(final Delegate<String> delegate) {

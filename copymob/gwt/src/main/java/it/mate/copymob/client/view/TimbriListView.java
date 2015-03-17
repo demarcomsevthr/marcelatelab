@@ -5,6 +5,7 @@ import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
@@ -70,8 +71,9 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
     carousel.getElement().getStyle().setOpacity(0);
     OnsCarouselItem firstItem = null;
     for (Timbro timbro : timbri) {
-      String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>Timbro " + timbro.getId() +"</p>";
+      String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>" + timbro.getNome() +"</p>";
       html += "<img src='"+ timbro.getImageData() +"'/>";
+      html += "<span>Prezzo "+ GwtUtils.formatCurrency(timbro.getPrezzo()) +" euro</span>";
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       item.setModel(timbro);
