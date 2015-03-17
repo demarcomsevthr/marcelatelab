@@ -3,6 +3,7 @@ package it.mate.copymob.shared.service;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -20,5 +21,7 @@ public interface RemoteFacade extends RemoteService {
   RpcMap updateAccount(RpcMap entity);
   
   Boolean checkConnection();
+  
+  public List<RpcMap> getTimbri() throws RemoteFacadeException;
 
 }
