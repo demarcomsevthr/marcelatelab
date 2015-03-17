@@ -5,6 +5,7 @@ import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -20,8 +21,19 @@ public class OnsBackButton extends Widget implements HasTapHandler {
   }
 
   protected OnsBackButton(Element element) {
+    
+    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+      element = DOM.createElement("ons-toolbar-button");
+      Element icon = DOM.createElement("ons-icon");
+      icon.setAttribute("icon", "fa-chevron-left");
+      element.appendChild(icon);
+    }
+    
+    PhgUtils.ensureId(element);
+    
     element.addClassName("ons-back-button");
     setElement(element);
+    
     if (OnsenUi.isSlidingMenuLayoutPattern()) {
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
@@ -32,7 +44,8 @@ public class OnsBackButton extends Widget implements HasTapHandler {
   }
   
   public void setText(String text) {
-    getElement().setInnerText(text);
+//  getElement().setInnerText(text);
+    OnsButtonBase.addElementText(getElement(), text);
   }
   
   @SuppressWarnings("rawtypes")
