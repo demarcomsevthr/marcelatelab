@@ -32,4 +32,9 @@ public class AdapterUtil {
     return context.getBean(MailAdapter.class);
   }
   
+  public static InitAdapterBean getInitAdapterBean() {
+    assertContext();
+    return context.getBean(InitAdapterBean.class);
+  }
+  
 }

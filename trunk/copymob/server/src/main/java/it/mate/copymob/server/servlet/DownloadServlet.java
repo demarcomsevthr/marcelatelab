@@ -1,7 +1,6 @@
 package it.mate.copymob.server.servlet;
 
 import it.mate.commons.server.utils.LoggingUtils;
-import it.mate.copymob.server.model.PrincipioAttivoDs;
 import it.mate.copymob.server.services.RemoteAdapter;
 
 import java.io.IOException;
@@ -35,21 +34,6 @@ public class DownloadServlet extends HttpServlet {
 
     try {
       String name = request.getParameter("name");
-      
-      LoggingUtils.debug(getClass(), String.format("downloading name=%s", name));
-      PrincipioAttivoDs principio = adapter.findPrincipioAttivoByName(name);
-      if (principio == null) {
-        LoggingUtils.error(getClass(), "NOT FOUND");
-        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
-      } else {
-        
-        LoggingUtils.debug(getClass(), String.format("downloading %s", principio));
-        
-//      response.setContentType("image/png");
-        response.setContentType("application/octet-stream");
-        response.getOutputStream().write(principio.getContent().getBytes());
-        
-      }
       
     } catch (Exception ex) {
       LoggingUtils.error(getClass(), ex.getMessage());

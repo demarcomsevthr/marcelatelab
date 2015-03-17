@@ -1,7 +1,9 @@
 package it.mate.copymob.server.services;
 
-import it.mate.copymob.server.model.PrincipioAttivoDs;
 import it.mate.copymob.shared.model.Account;
+import it.mate.copymob.shared.model.Timbro;
+
+import java.util.List;
 
 
 public interface RemoteAdapter {
@@ -14,8 +16,6 @@ public interface RemoteAdapter {
   
   public Account updateAccount(Account entity);
   
-  public PrincipioAttivoDs findPrincipioAttivoByName (String name);
-  
-  public PrincipioAttivoDs savePrincipioAttivoDs(PrincipioAttivoDs entity);
+  public List<Timbro> getTimbri() throws Exception;
   
 }
