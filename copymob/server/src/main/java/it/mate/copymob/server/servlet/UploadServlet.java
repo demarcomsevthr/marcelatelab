@@ -2,7 +2,6 @@ package it.mate.copymob.server.servlet;
 
 import it.mate.commons.server.utils.BlobUtils;
 import it.mate.commons.server.utils.LoggingUtils;
-import it.mate.copymob.server.model.PrincipioAttivoDs;
 import it.mate.copymob.server.services.RemoteAdapter;
 
 import java.io.IOException;
@@ -61,13 +60,6 @@ public class UploadServlet extends HttpServlet {
       
       if ("FILE_UPLOAD".equals(op)) {
         LoggingUtils.debug(getClass(), String.format("received name=%s lenght=%s", fileName, fileBlob.getBytes().length));
-        PrincipioAttivoDs principio = adapter.findPrincipioAttivoByName(fileName);
-        if (principio == null) {
-          principio = new PrincipioAttivoDs();
-          principio.setName(fileName);
-        }
-        principio.setContent(fileBlob);
-        adapter.savePrincipioAttivoDs(principio);
         LoggingUtils.debug(getClass(), "UPLOAD DONE");
         response.getOutputStream().print("UPLOAD DONE");
       }

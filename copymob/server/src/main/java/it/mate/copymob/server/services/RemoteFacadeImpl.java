@@ -1,10 +1,16 @@
 package it.mate.copymob.server.services;
 
-import it.mate.gwtcommons.shared.rpc.RpcMap;
+import it.mate.commons.server.utils.CloneUtils;
+import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
+import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.copymob.shared.service.RemoteFacade;
+import it.mate.copymob.shared.service.RemoteFacadeException;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -54,6 +60,19 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   @Override
   public Boolean checkConnection() {
     return true;
+  }
+  
+  public List<RpcMap> getTimbri() throws RemoteFacadeException {
+    try {
+      List<RpcMap> results = new ArrayList<RpcMap>();
+      List<Timbro> timbri = adapter.getTimbri();
+      for (Timbro timbro : timbri) {
+        results.add(CloneUtils.clone(timbro, TimbroTx.class).toRpcMap());
+      }
+      return results;
+    } catch (Exception ex) {
+      throw new RemoteFacadeException(ex.getMessage());
+    }
   }
 
 }

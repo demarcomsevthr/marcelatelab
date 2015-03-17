@@ -42,4 +42,6 @@
     </property>
   </bean>
   
+  <import resource="classpath:META-INF/setup-data/copymob-initializer-context.xml"/>
+  
 </beans>
