@@ -30,6 +30,7 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   public void setText(String text) {
+    /* 17/03/2015
     Element element = GwtUtils.getElementById(getElement().getId());
     if (element == null) {
       String innerHtml = getElement().getInnerHTML();
@@ -39,6 +40,22 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
     } else {
       element.setInnerHTML(text);
       this.text = text;
+    }
+    */
+    addElementText(getElement(), text);
+    this.text = text;
+  }
+  
+  protected static void addElementText(Element widgetElement, String text) {
+    Element attachedElement = GwtUtils.getElementById(widgetElement.getId());
+    if (attachedElement == null) {
+      String innerHtml = widgetElement.getInnerHTML();
+      innerHtml = innerHtml + text;
+      widgetElement.setInnerHTML(innerHtml);
+//    this.text = text;
+    } else {
+      attachedElement.setInnerHTML(text);
+//    this.text = text;
     }
   }
   
