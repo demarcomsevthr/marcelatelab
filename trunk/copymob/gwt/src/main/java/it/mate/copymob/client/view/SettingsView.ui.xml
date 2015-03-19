@@ -6,8 +6,6 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
   
-    
-
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -15,14 +13,12 @@
           <o:OnsBackButton/>
         </div>
         <div class="center">Settings</div>
-        <div class="right">
-          <o:OnsToolbarButton ui:field="btnPlus"><o:OnsIcon icon="fa-plus"/></o:OnsToolbarButton>
-        </div>
       </o:OnsToolbar>
   
       <o:OnsButton text="Reset DB" ui:field="btnReset"></o:OnsButton>
-      <o:OnsButton text="Pop" ui:field="btnPop"></o:OnsButton>
-      <o:OnsButton text="Sub settings" ui:field="btnSubSettings"></o:OnsButton>
+      <o:OnsButton text="Account" ui:field="btnAccount"></o:OnsButton>
+      <o:OnsButton text="Waiting" ui:field="btnWaiting"></o:OnsButton>
+      
       <o:OnsLabel ui:field="counterLbl"/>
       
     </o:OnsPage>

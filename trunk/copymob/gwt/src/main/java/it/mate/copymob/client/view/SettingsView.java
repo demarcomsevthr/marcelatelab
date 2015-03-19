@@ -18,6 +18,8 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   public interface Presenter extends BasePresenter {
     public void goToHomeView();
     public void resetDB();
+    public void goToAccountEditView();
+    public void testWaitingState(boolean flag);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -47,14 +49,22 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     }
   }
 
-  @UiHandler("btnPop")
-  public void onBtnSettings(TapEvent event) {
-    getPresenter().goToPrevious();
-  }
-  
   @UiHandler("btnReset")
   public void onBtnReset(TapEvent event) {
     getPresenter().resetDB();
+  }
+  
+  @UiHandler("btnAccount")
+  public void onBtnAccount(TapEvent event) {
+    getPresenter().goToAccountEditView();
+  }
+  
+  boolean waiting = false;
+  
+  @UiHandler("btnWaiting")
+  public void onBtnWaiting(TapEvent event) {
+    waiting = !waiting;
+    getPresenter().testWaitingState(waiting);
   }
   
 }

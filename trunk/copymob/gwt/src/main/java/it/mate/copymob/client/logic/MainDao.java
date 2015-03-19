@@ -1,10 +1,12 @@
 package it.mate.copymob.client.logic;
 
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.MessageTx;
 import it.mate.copymob.shared.model.impl.OrderItemRowTx;
 import it.mate.copymob.shared.model.impl.OrderItemTx;
@@ -61,6 +63,10 @@ public class MainDao extends WebSQLDao {
 
   private final static String MESSAGE_FIELDS = MESSAGE_FIELDS_0;
   
+  private final static String ACCOUNT_FIELDS_0 = "id, email, name, password, devInfoId";
+
+  private final static String ACCOUNT_FIELDS = ACCOUNT_FIELDS_0;
+  
   private List<Timbro> cacheTimbri;
   
   
@@ -112,6 +118,9 @@ public class MainDao extends WebSQLDao {
     PhonegapLog.log("dropping table messages");
     tr.doExecuteSql("DROP TABLE IF EXISTS messages");
     
+    PhonegapLog.log("dropping table account");
+    tr.doExecuteSql("DROP TABLE IF EXISTS account");
+    
   }
   
   private final static MigratorCallback MIGRATION_CALLBACK_0 = new MigratorCallback() {
@@ -132,6 +141,9 @@ public class MainDao extends WebSQLDao {
 
       PhonegapLog.log("creating table messages");
       tr.doExecuteSql("CREATE TABLE messages (id "+SERIAL_ID+", " + MESSAGE_FIELDS_0 + " )");
+
+      PhonegapLog.log("creating table account");
+      tr.doExecuteSql("CREATE TABLE account (" + ACCOUNT_FIELDS_0 + " )");
 
     }
   };
@@ -676,6 +688,7 @@ public class MainDao extends WebSQLDao {
   }
   
   /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  /* MESSAGES */
   
   public void findAllMessages(final Delegate<List<Message>> delegate) {
     db.doTransaction(new SQLTransactionCallback() {
@@ -772,6 +785,158 @@ public class MainDao extends WebSQLDao {
             delegate.execute(entity);
           }
         });
+    }
+  }
+  
+  /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  /* ACCOUNT */
+  
+  public void findAllAccounts(final Delegate<List<Account>> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT " + ACCOUNT_FIELDS + " FROM account", 
+            new Object[]{}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            new RSToAccountIterator(tr, rs, new Delegate<List<Account>>() {
+              public void execute(List<Account> results) {
+                delegate.execute(results);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  public void findAccount(final Delegate<Account> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT " + ACCOUNT_FIELDS + " FROM account", 
+            new Object[]{}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            new RSToAccountIterator(tr, rs, new Delegate<List<Account>>() {
+              public void execute(List<Account> results) {
+                if (results != null && results.size() > 0) {
+                  delegate.execute(results.get(0));
+                } else{
+                  delegate.execute(null);
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  protected void findAccountById(SQLTransaction tr, String id, final Delegate<Account> delegate) {
+    tr.doExecuteSql("SELECT " + ACCOUNT_FIELDS + " FROM account WHERE id = ?", 
+        new Object[]{id}, new SQLStatementCallback() {
+      public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+        new RSToAccountIterator(tr, rs, new Delegate<List<Account>>() {
+          public void execute(List<Account> results) {
+            if (results != null && results.size() > 0) {
+              delegate.execute(results.get(0));
+            } else{
+              delegate.execute(null);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  protected class RSToAccountIterator {
+    SQLResultSet rs;
+    SQLTransaction tr;
+    Delegate<List<Account>> delegate;
+    List<Account> results = new ArrayList<Account>();
+    public RSToAccountIterator(SQLTransaction tr, SQLResultSet rs, Delegate<List<Account>> delegate) {
+      this.tr = tr;
+      this.rs = rs;
+      this.delegate = delegate;
+      iterate(0);
+    }
+    private void iterate(final int it) {
+      if (it < rs.getRows().getLength()) {
+        final Account result = flushRS(rs, it);
+        results.add(result);
+        iterate(it + 1);
+      } else {
+        delegate.execute(results);
+      }
+    }
+    private Account flushRS(SQLResultSet rs, int it) {
+      SQLResultSetRowList rows = rs.getRows();
+      Account result = new AccountTx();
+      result.setId(rows.getValueString(it, "id"));
+      result.setEmail(rows.getValueString(it, "email"));
+      result.setName(rows.getValueString(it, "name"));
+      result.setPassword(rows.getValueString(it, "password"));
+      result.setDevInfoId(rows.getValueString(it, "devInfoId"));
+      return result;
+    }
+    protected List<Account> getResults() {
+      return results;
+    }
+  }
+  
+  public void saveAccount(final Account entity, final Delegate<Account> delegate) {
+    db.doTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        saveAccount(tr, entity, delegate);
+      }
+    });
+  }
+  
+  protected void saveAccount(final SQLTransaction tr, final Account entity, final Delegate<Account> delegate) {
+    if (entity.getId() == null) {
+      PhgUtils.log("SAVE ACCOUNT LOCAL ERROR (id = null!)");
+    } else {
+      
+      findAccountById(tr, entity.getId(), new Delegate<Account>() {
+        public void execute(Account account) {
+          if (account == null) {
+            
+            tr.doExecuteSql("INSERT INTO account (" + ACCOUNT_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+                new Object[] {
+                  entity.getId(),
+                  entity.getEmail(),
+                  entity.getName(),
+                  entity.getPassword(),
+                  entity.getDevInfoId()
+                }, new SQLStatementCallback() {
+                  public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+                    PhonegapLog.log("Inserted " + entity);
+                    delegate.execute(entity);
+                  }
+                });
+            
+          } else {
+            
+            String sql = "UPDATE account SET ";
+            sql += " email = ?";
+            sql += " ,name = ?";
+            sql += " ,password = ?";
+            sql += " ,devInfoId = ?";
+            sql += " WHERE id = ?";
+            tr.doExecuteSql(sql, new Object[] {
+                entity.getEmail(),
+                entity.getName(),
+                entity.getPassword(),
+                entity.getDevInfoId(),
+                entity.getId()
+              }, new SQLStatementCallback() {
+                public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+                  PhonegapLog.log("Updated " + entity);
+                  delegate.execute(entity);
+                }
+              });
+            
+          }
+        }
+      });
+      
     }
   }
   
