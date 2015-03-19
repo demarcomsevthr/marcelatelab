@@ -404,6 +404,13 @@ public class GwtUtils {
     return $doc.getElementsByTagName(tagName);
   }-*/;
   
+  public static Element getFirstElementByTagName(String tagName) {
+    NodeList<Element> nodes = getElementsByTagName(tagName);
+    if (nodes != null && nodes.getLength() > 0) {
+      return nodes.getItem(0);
+    }
+    return null;
+  }
   
   public static Element getElement(Widget widget) {
     String id = widget.getElement().getId();
