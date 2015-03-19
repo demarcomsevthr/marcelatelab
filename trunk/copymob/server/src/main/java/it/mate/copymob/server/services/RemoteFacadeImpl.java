@@ -3,6 +3,7 @@ package it.mate.copymob.server.services;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
+import it.mate.copymob.shared.model.impl.DevInfoTx;
 import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.copymob.shared.service.RemoteFacade;
 import it.mate.copymob.shared.service.RemoteFacadeException;
@@ -40,20 +41,16 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   }
   
   @Override
-  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
-    String devIp = getThreadLocalRequest().getRemoteAddr();
-    return adapter.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, devIp);
+  public RpcMap sendDevInfo(RpcMap map) {
+    DevInfoTx devInfo = new DevInfoTx().fromRpcMap(map);
+    devInfo.setDevIp(getThreadLocalRequest().getRemoteAddr());
+    devInfo = (DevInfoTx)adapter.sendDevInfo(devInfo);
+    return devInfo.toRpcMap();
   }
 
-  public RpcMap createAccount(RpcMap entity) {
+  public RpcMap saveAccount(RpcMap entity) {
     AccountTx tx = new AccountTx().fromRpcMap(entity);
-    tx = (AccountTx)adapter.createAccount(tx);
-    return tx.toRpcMap();
-  }
-  
-  public RpcMap updateAccount(RpcMap entity) {
-    AccountTx tx = new AccountTx().fromRpcMap(entity);
-    tx = (AccountTx)adapter.updateAccount(tx);
+    tx = (AccountTx)adapter.saveAccount(tx);
     return tx.toRpcMap();
   }
   

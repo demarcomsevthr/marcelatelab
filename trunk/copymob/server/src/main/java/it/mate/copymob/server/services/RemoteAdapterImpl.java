@@ -7,15 +7,16 @@ import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.copymob.server.model.AccountDs;
 import it.mate.copymob.server.model.DevInfoDs;
 import it.mate.copymob.shared.model.Account;
+import it.mate.copymob.shared.model.DevInfo;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
+import it.mate.copymob.shared.model.impl.DevInfoTx;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -50,68 +51,47 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   }
 
   @Override
-  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion, String devIp) {
+  public DevInfo sendDevInfo(DevInfo devInfo) {
     DevInfoDs ds = null;
-    if (devUuid != null) {
+    if (devInfo.getDevUuid() != null) {
       ds = dao.findSingle(DevInfoDs.class, "devUuid == devUuidParam" ,
           Dao.Utils.buildParameters(new ParameterDefinition[] {
               new ParameterDefinition(String.class, "devUuidParam")
-          }) , null, devUuid);
+          }) , null, devInfo.getDevUuid());
     }
     if (ds == null) {
-      ds = new DevInfoDs();
-      ds.setOs(os);
-      ds.setLayout(layout);
-      ds.setDevName(devName);
-      ds.setPhgVersion(phgVersion);
-      ds.setPlatform(platform);
-      ds.setDevUuid(devUuid);
-      ds.setDevVersion(devVersion);
-      ds.setCreated(new Date());
-      ds.setDevIp(devIp);
+      ds = CloneUtils.clone(devInfo, DevInfoDs.class);
       LoggingUtils.debug(getClass(), "creating " + ds);
       ds = dao.create(ds);
     }
-    if (ds != null) {
-      return ds.getId();
-    } else {
-      return null;
-    }
+    return CloneUtils.clone(ds, DevInfoTx.class);
   }
 
   @Override
-  public Account createAccount(Account entity) {
-    AccountDs ds = null;
-    // controllo se per errore arrivano due create dallo stesso device
-    if (entity.getDevInfoId() != null) {
-      Key devInfoKey = KeyFactory.stringToKey(entity.getDevInfoId());
-      ds = dao.findSingle(AccountDs.class, "devInfoId == devInfoIdParam", 
+  public Account saveAccount(Account tx) {
+    // controllo se arriva una create doppia dallo stesso device
+    if (tx.getId() == null && tx.getDevInfoId() != null) {
+      Key devInfoKey = KeyFactory.stringToKey(tx.getDevInfoId());
+      AccountDs ds = dao.findSingle(AccountDs.class, "devInfoId == devInfoIdParam", 
           Dao.Utils.buildParameters(new ParameterDefinition[] {
               new ParameterDefinition(Key.class, "devInfoIdParam")
           }), 
         null, devInfoKey );
       if (ds != null) {
-        ds.setName(entity.getName());
-        ds.setEmail(entity.getEmail());
-        ds = dao.update(ds);
+        tx.setId(ds.getId());
       }
     }
-    if (ds == null) {
-      ds = CloneUtils.clone(entity, AccountDs.class);
+    AccountDs ds = CloneUtils.clone(tx, AccountDs.class);
+    if (tx.getId() == null) {
       ds = dao.create(ds);
       LoggingUtils.debug(getClass(), "created account " + ds);
+    } else {
+      ds = dao.update(ds);
+      LoggingUtils.debug(getClass(), "updated account " + ds);
     }
     return CloneUtils.clone (ds, AccountTx.class);
   }
 
-  @Override
-  public Account updateAccount(Account entity) {
-    AccountDs ds = CloneUtils.clone(entity, AccountDs.class);
-    ds = dao.update(ds);
-    return CloneUtils.clone (ds, AccountTx.class);
-  }
-  
-  
   public List<Timbro> getTimbri() throws Exception {
     List<Timbro> timbri = AdapterUtil.getInitAdapterBean().getTimbri();
     
