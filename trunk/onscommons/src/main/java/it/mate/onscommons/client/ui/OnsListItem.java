@@ -1,8 +1,11 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,8 +36,12 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
     return hasTapHandlerImpl.addTapHandler(handler);
   }
   
-  public void setModifier(String modifier) {
-    getElement().setAttribute("modifier", modifier);
+  public void setModifier(final String modifier) {
+    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("modifier", modifier);
+      }
+    });
   }
   
   public void setValue(String value) {

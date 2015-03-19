@@ -71,5 +71,13 @@ public class OnsList extends HTMLPanel {
   public int getItemCount() {
     return listElement.getChildCount();
   }
+  
+  public void setModifier(final String modifier) {
+    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("modifier", modifier);
+      }
+    });
+  }
 
 }
