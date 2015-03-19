@@ -1,6 +1,7 @@
 package it.mate.copymob.server.model;
 
 import it.mate.commons.server.model.HasKey;
+import it.mate.copymob.shared.model.DevInfo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +16,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
-public class DevInfoDs implements HasKey, Serializable {
+public class DevInfoDs implements DevInfo, HasKey, Serializable {
   
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
