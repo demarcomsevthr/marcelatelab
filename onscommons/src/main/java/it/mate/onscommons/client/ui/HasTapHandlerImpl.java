@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HasTapHandlerImpl {
   
-//private final static String EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "tap"; 
   private final static String EVENT_NAME = getTapEventName(); 
   
   private static final String getTapEventName() {
@@ -40,6 +39,8 @@ public class HasTapHandlerImpl {
   
   private HasTapHandler target;
   
+  private static boolean allHandlersDisabled = false;
+  
   public HasTapHandlerImpl(HasTapHandler target) {
     this.target = target;
   }
@@ -56,11 +57,7 @@ public class HasTapHandlerImpl {
   
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     
-//  setUseDocEventListener(isChildOfDialog(((Widget)target).getParent()));
-    
     this.tapHandlers.add(handler);
-    
-//  applyOldAndroidPatch();
     
     if (jsEventListener == null) {
       
@@ -78,6 +75,9 @@ public class HasTapHandlerImpl {
                 removeAllHandlers();
                 return;
               }
+              if (allHandlersDisabled) {
+                PhgUtils.log("ALL HANDLERS DISABLED");
+              }
               for (TapHandler tapHandler : tapHandlers) {
                 tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (Widget)target));
               }
@@ -85,7 +85,6 @@ public class HasTapHandlerImpl {
           };
           
           // 04/02/2015
-          
           boolean useDocEventListener = isChildOfDialog(((Widget)target).getParent());
           
           if (useDocEventListener) {
@@ -93,20 +92,6 @@ public class HasTapHandlerImpl {
           } else {
             jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, callback);
           }
-          /*
-          jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, new JSOCallback() {
-            public void handle(JavaScriptObject jsEvent) {
-              Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
-              if (!PhgUtils.isReallyAttached(availableElement.getId())) {
-                removeAllHandlers();
-                return;
-              }
-              for (TapHandler tapHandler : tapHandlers) {
-                tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0));
-              }
-            }
-          });
-          */
           
         }
       });
@@ -153,7 +138,6 @@ public class HasTapHandlerImpl {
   */
   protected static native JavaScriptObject addEventListenerElemImpl (Element elem, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-//    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
       if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
@@ -186,5 +170,9 @@ public class HasTapHandlerImpl {
     $doc.addEventListener("touchmove", jsEventListener, false);    
     $doc.addEventListener("touchend", jsEventListener, false);    
   }-*/;
+  
+  public static void setAllHandlersDisabled(boolean allHandlersDisabled) {
+    HasTapHandlerImpl.allHandlersDisabled = allHandlersDisabled;
+  }
   
 }

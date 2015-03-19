@@ -1,5 +1,8 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.onsen.OnsenUi;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,6 +46,14 @@ public class OnsIcon extends Widget {
   
   public void setSpin(String spin) {
     getElement().setAttribute("spin", spin);
+  }
+  
+  public void setOpacity(final String opacity) {
+    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.getStyle().setOpacity(Double.parseDouble(opacity));
+      }
+    });
   }
   
 }

@@ -1,6 +1,7 @@
 package it.mate.onscommons.client.onsen;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
@@ -16,6 +17,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.ui.Widget;
 
 
 public class OnsenUi {
@@ -115,42 +117,12 @@ public class OnsenUi {
     }
     PhgUtils.log("COMPILING ELEMENT " + element);
     compileElementImpl(element);
-//  traverseAndCompileChildElements(element);
   }
-  
-  /* provato per l'insert di elementi nella setModel (OrderItemComposeView))
-  protected static void traverseAndCompileChildElements(Element element) {
-    if (element == null) {
-      return;
-    }
-    if (element.getChildNodes() == null || element.getChildNodes().getLength() == 0) {
-      return;
-    }
-    for (int it = 0; it < element.getChildNodes().getLength(); it++) {
-      Element childElem = (com.google.gwt.user.client.Element)element.getChildNodes().getItem(it);
-      if (childElem.getNodeName().toLowerCase().startsWith("ons")) {
-        PhgUtils.log("COMPILING ELEMENT " + childElem);
-        compileElementImpl(childElem);
-      }
-      traverseAndCompileChildElements(childElem);
-    }
-  }
-  */
   
   protected static native void compileElementImpl(Element element) /*-{
     $wnd.ons.compile(element);
   }-*/;
 
-  /* SPOSTATO IN TouchEventUtils
-  public static native boolean isContained(final Element elem, String containerId) /*-{
-    do {
-      if (elem.id == containerId) {
-        return true;
-      }
-    } while(elem = elem.parentElement );
-    return false;
-  }-*/;
-  
   public static void goToPreviousPlace(PlaceController placeController, Place initialPlace) {
     if (OnsenUi.isNavigatorLayoutPattern()) {
       OnsenUi.getNavigator().popPage();
@@ -195,53 +167,31 @@ public class OnsenUi {
       public void handle(Element element) {
         if (element != null) {
           PhgUtils.ensureId(element);
-//        PhgUtils.log("before append child " + element);
         }
       }
     });
     */
   }
 
-  /*
-  public static void createDialog (final OnsDialog dialog, final Delegate<Dialog> delegate) {
-    final String dialogId = dialog.getElement().getId();
-    GwtUtils.onAvailable(dialogId, new Delegate<Element>() {
-      public void execute(Element dialogElem) {
-        String templateId = dialogId + "Template";
-        OnsTemplate template = new OnsTemplate(templateId);
-        template.add(dialog);
-        RootPanel.get().add(template);
-        templateId = template.getElement().getId();
-        PhgUtils.log("finding template " + templateId);
-        GwtUtils.onAvailable(templateId, new Delegate<Element>() {
-          public void execute(Element templateElem) {
-            OnsenUi.compileElement(templateElem);
-            PhgUtils.log("creating dialog " + templateElem.getId());
-            createDialogImpl(templateElem.getId(), dialog.getVarName(), new JSOCallback() {
-              public void handle(JavaScriptObject jso) {
-                Dialog dialog = jso.cast();
-                PhgUtils.log("returning dialog " + dialog);
-                delegate.execute(dialog);
-              }
-            });
-          }
-        });
-      }
-    });
+  public static void onAttachedElement(Widget widget, Delegate<Element> delegate) {
+    Element attachedElement = GwtUtils.getElementById(widget.getElement().getId());
+    if (attachedElement != null) {
+      delegate.execute(attachedElement);
+    } else {
+      delegate.execute(widget.getElement());
+    }
   }
-  */
 
-  /**
-   * NB: nella callback il reference dlg e' undefined!
-   */
-  /*
-  protected static native void createDialogImpl(String templateId, String varName, JSOCallback callback) /*-{
-    $wnd.ons.createDialog(templateId).then(function(dlg) {
-      var dialog = $wnd[varName];
-      dialog.show();
-      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('showing dialog ' + dialog);
-      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(dialog);
-    });
-  }-*/;
+  public static void onAvailableElement(Widget widget, Delegate<Element> delegate) {
+    onAvailableElement(widget.getElement(), delegate);
+  }
+  
+  public static void onAvailableElement(Element element, Delegate<Element> delegate) {
+    onAvailableElement(element.getId(), delegate);
+  }
+
+  public static void onAvailableElement(String id, Delegate<Element> delegate) {
+    GwtUtils.onAvailable(id, delegate);
+  }
 
 }

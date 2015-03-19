@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, navigation*;
+@external ons*, gwt*, navigation*, span;
 
 .ons-toolbar .navigation-bar__title {
   font-weight: 800;
@@ -35,3 +35,6 @@
   display: inline;
 }
 
+.ons-toolbar-button-waiting span {
+  opacity: 0.9 !important;
+}
