@@ -27,6 +27,8 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String MESSAGE_LIST = "messageList";
   
+  public static final String ACCOUNT_EDIT = "accountEdit";
+  
   private String token;
   
   private Object model;

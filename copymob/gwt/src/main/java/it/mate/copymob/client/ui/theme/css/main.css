@@ -254,3 +254,9 @@
   bottom: 0.2em;
 }
 
+.app-setting-label {
+  font-size: 0.8em;
+  opacity: 0.9;
+  display: inline;
+  padding-left: 1em;
+}

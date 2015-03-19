@@ -4,6 +4,7 @@ import it.mate.copymob.client.factories.AppClientFactory;
 import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.logic.TimbriInitializer;
 import it.mate.copymob.client.places.MainPlace;
+import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
@@ -17,6 +18,8 @@ import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.copymob.shared.model.impl.AccountTx;
+import it.mate.copymob.shared.model.impl.DevInfoTx;
 import it.mate.copymob.shared.model.impl.OrderItemTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
 import it.mate.gwtcommons.client.factories.BaseClientFactory;
@@ -24,8 +27,11 @@ import it.mate.gwtcommons.client.mvp.BaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
+import it.mate.gwtcommons.shared.rpc.RpcMap;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.ui.HasTapHandlerImpl;
+import it.mate.onscommons.client.ui.OnsToolbar;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -42,7 +48,7 @@ public class MainActivity extends OnsAbstractActivity implements
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
   TimbriListView.Presenter,
   TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter,
-  MessageListView.Presenter
+  MessageListView.Presenter, AccountEditView.Presenter
   {
   
   private MainPlace place;
@@ -50,8 +56,6 @@ public class MainActivity extends OnsAbstractActivity implements
   private BaseView view;
   
   private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
-  
-  private final static boolean REMOTE_CALLS_DISABLED = true;
   
   private Timer daoTimer;
   
@@ -114,11 +118,14 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       this.view = AppClientFactory.IMPL.getGinjector().getOrderItemComposeView();
-//    deferred = false;
     }
     
     if (place.getToken().equals(MainPlace.MESSAGE_LIST)) {
       this.view = AppClientFactory.IMPL.getGinjector().getMessageListView();
+    }
+    
+    if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getAccountEditView();
     }
     
     view.setPresenter(this);
@@ -152,6 +159,13 @@ public class MainActivity extends OnsAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       view.setModel(getCurrentOrderItem());
+    }
+    if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
+      dao.findAccount(new Delegate<Account>() {
+        public void execute(Account account) {
+          view.setModel(account);
+        }
+      });
     }
   }
 
@@ -198,6 +212,11 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToMessageListView() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.MESSAGE_LIST));
+  }
+
+  @Override
+  public void goToAccountEditView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ACCOUNT_EDIT));
   }
 
   @Override
@@ -315,23 +334,31 @@ public class MainActivity extends OnsAbstractActivity implements
     String devUuid = PhgUtils.getDeviceUuid();
     String devVersion = PhgUtils.getDeviceVersion();
     
-    if (REMOTE_CALLS_DISABLED) {
-      PhgUtils.log("REMOTE CALLS DISABLED!");
-    } else {
-      AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion, 
-          new AsyncCallback<String>() {
-            public void onFailure(Throwable caught) {
-              GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
-            }
-            public void onSuccess(String devInfoId) {
-              if (devInfoId != null) {
-                PhgUtils.log("received devInfoId "+ devInfoId +" from remote facade");
-                setDevInfoIdInLocalStorage(devInfoId);
+    DevInfoTx devInfo = new DevInfoTx();
+    devInfo.setOs(os);
+    devInfo.setLayout(layout);
+    devInfo.setDevName(devName);
+    devInfo.setPhgVersion(phgVersion);
+    devInfo.setPlatform(platform);
+    devInfo.setDevUuid(devUuid);
+    devInfo.setDevVersion(devVersion);
+    
+    AppClientFactory.IMPL.getRemoteFacade().sendDevInfo(devInfo.toRpcMap(), 
+        new AsyncCallback<RpcMap>() {
+          public void onFailure(Throwable caught) {
+            GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
+          }
+          public void onSuccess(RpcMap map) {
+            if (map != null) {
+              DevInfoTx devInfo = new DevInfoTx().fromRpcMap(map);
+              if (devInfo.getId() != null) {
+                PhgUtils.log("received devInfoId "+ devInfo.getId() +" from remote facade");
+                setDevInfoIdInLocalStorage(devInfo.getId());
                 GwtUtils.removeClientAttribute(duringGenerateDevInfoSemaphore);
               }
             }
-        });
-    }
+          }
+      });
     
   }
   
@@ -381,6 +408,43 @@ public class MainActivity extends OnsAbstractActivity implements
         PhgUtils.reloadApp();
       }
     });
+  }
+  
+  public void saveAccount(Account account, final Delegate<Account> delegate) {
+    AccountTx tx = (AccountTx)account;
+    String devInfoId = getDevInfoIdFromLocalStorage();
+    tx.setDevInfoId(devInfoId);
+    setWaitingState(true);
+    AppClientFactory.IMPL.getRemoteFacade().saveAccount(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
+      public void onSuccess(RpcMap rpc) {
+        if (rpc == null) {
+          PhgUtils.log("SAVE ACCOUNT SERVER ERROR");
+          setWaitingState(false);
+          //TODO: DIALOG
+        } else {
+          dao.saveAccount(new AccountTx().fromRpcMap(rpc), new Delegate<Account>() {
+            public void execute(Account account) {
+              setWaitingState(false);
+              delegate.execute(account);
+            }
+          });
+        }
+      }
+      public void onFailure(Throwable caught) {
+        PhgUtils.log("SAVE ACCOUNT SERVER ERROR");
+        setWaitingState(false);
+        //TODO: DIALOG
+      }
+    });
+  }
+  
+  public void testWaitingState(boolean flag) {
+    setWaitingState(flag);
+  }
+  
+  private void setWaitingState(boolean waiting) {
+    OnsToolbar.setWaitingButtonVisible(waiting);
+    HasTapHandlerImpl.setAllHandlersDisabled(waiting);
   }
   
 }

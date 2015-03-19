@@ -31,14 +31,10 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
-    
     moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "https://copymobsrv.appspot.com/main/"; 
     remoteFacade = (RemoteFacade)SyncProxy.newProxyInstance(RemoteFacade.class, moduleBaseUrl, REMOTE_SERVICE_RELATIVE_PATH);
     logger.debug("initialized " + this);
     logger.debug("moduleBaseUrl = " + moduleBaseUrl);
-    
-//  logger.debug("ATTENZIONE: RemoteFacadeTest DISABLED ");
-    
   }
   
   @Override
@@ -48,23 +44,17 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   }
   
   @Override
-  public String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion) {
+  public RpcMap sendDevInfo(RpcMap map) {
     logger.debug("calling " + moduleBaseUrl);
-    return remoteFacade.sendDevInfo(os, layout, devName, phgVersion, platform, devUuid, devVersion);
+    return remoteFacade.sendDevInfo(map);
   }
 
   @Override
-  public RpcMap createAccount(RpcMap entity) {
+  public RpcMap saveAccount(RpcMap entity) {
     logger.debug("calling " + moduleBaseUrl);
-    return remoteFacade.createAccount(entity);
+    return remoteFacade.saveAccount(entity);
   }
   
-  @Override
-  public RpcMap updateAccount(RpcMap entity) {
-    logger.debug("calling " + moduleBaseUrl);
-    return remoteFacade.updateAccount(entity);
-  }
-
   @Override
   public Boolean checkConnection() {
     logger.debug("calling " + moduleBaseUrl);
