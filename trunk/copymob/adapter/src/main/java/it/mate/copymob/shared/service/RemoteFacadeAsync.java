@@ -11,15 +11,12 @@ public interface RemoteFacadeAsync {
 
   void getServerTime(AsyncCallback<Date> callback);
 
-  void sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion,
-      AsyncCallback<String> callback);
-
-  void createAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
-
-  void updateAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
+  void sendDevInfo(RpcMap map, AsyncCallback<RpcMap> callback);
 
   void checkConnection(AsyncCallback<Boolean> callback);
 
   void getTimbri(AsyncCallback<List<RpcMap>> callback);
+
+  void saveAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
 
 }

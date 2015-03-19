@@ -14,11 +14,9 @@ public interface RemoteFacade extends RemoteService {
   
   Date getServerTime();
   
-  String sendDevInfo(String os, String layout, String devName, String phgVersion, String platform, String devUuid, String devVersion);
+  RpcMap sendDevInfo(RpcMap map);
 
-  RpcMap createAccount(RpcMap entity);
-  
-  RpcMap updateAccount(RpcMap entity);
+  public RpcMap saveAccount(RpcMap entity);
   
   Boolean checkConnection();
   
