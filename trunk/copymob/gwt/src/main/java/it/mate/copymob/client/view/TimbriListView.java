@@ -73,7 +73,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
     for (Timbro timbro : timbri) {
       String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>" + timbro.getNome() +"</p>";
       html += "<img src='"+ timbro.getImageData() +"'/>";
-      html += "<span>Prezzo "+ GwtUtils.formatCurrency(timbro.getPrezzo()) +" euro</span>";
+      html += "<span class='app-carousel-item-price'>Prezzo "+ GwtUtils.formatCurrency(timbro.getPrezzo()) +" euro</span>";
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       item.setModel(timbro);

@@ -72,7 +72,9 @@ public class MainActivity extends OnsAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
     if (place.getToken().equals(MainPlace.HOME)) {
-      PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+//    PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+      PhgUtils.setDesktopDebugBorder(384, 682); // LG G3 5,5' RATIO (1440x2560)
+//    PhgUtils.setDesktopDebugBorder(384, 610); // NEXUS 4 4,7' RATIO ()
     }
     
     daoTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
