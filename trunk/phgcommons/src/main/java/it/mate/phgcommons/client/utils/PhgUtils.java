@@ -554,7 +554,7 @@ public class PhgUtils {
       RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
       RootPanel.getBodyElement().getStyle().setBorderStyle(BorderStyle.SOLID);
       RootPanel.getBodyElement().getStyle().setBorderColor("red");
-      RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
+//    RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
     }
   }
   
