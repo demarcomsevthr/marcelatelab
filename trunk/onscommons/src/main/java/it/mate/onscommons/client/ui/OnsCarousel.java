@@ -15,6 +15,19 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * 
+ * CHANGE LOG
+ *
+ *  [13/03/2015] 
+ *      (agg. onsenui 1.2.2)
+ *       se non si specifica swipeable non funziona
+ *               
+ *  [20/03/2015]             
+ *      su AND4.4 funziona solo se si mette dentro uno scroller e se si imposta width = 100%
+ *
+ */
+
 public class OnsCarousel extends HTMLPanel {
 
   private final static String TAG_NAME = "ons-carousel";
@@ -71,7 +84,7 @@ public class OnsCarousel extends HTMLPanel {
 
                 GwtUtils.addMoveHandler(itemElem, new MoveHandler() {
                   public void onMove(Element element, int top, int left) {
-                    PhgUtils.log("moving element to " + top + " " + left);
+//                  PhgUtils.log("moving element to " + top + " " + left);
                     for (OnsCarouselItem item : items) {
                       item.setLastMovementTime(System.currentTimeMillis());
                     }
@@ -100,6 +113,10 @@ public class OnsCarousel extends HTMLPanel {
     getElement().setAttribute("auto-scroll", "");
   }
 
+  public void setAutoscrollRatio(String value) {
+    getElement().setAttribute("auto-scroll-ratio", value);
+  }
+  
   public void setDraggable(String value) {
     getElement().setAttribute("draggable", "");
   }
@@ -110,6 +127,14 @@ public class OnsCarousel extends HTMLPanel {
   
   public void setSwipeable(String value) {
     getElement().setAttribute("swipeable", "");
+  }
+  
+  public void setItemWidth(String value) {
+    getElement().setAttribute("item-width", value);
+  }
+  
+  public void setItemHeight(String value) {
+    getElement().setAttribute("item-height", value);
   }
   
   public final native Carousel getController() /*-{
