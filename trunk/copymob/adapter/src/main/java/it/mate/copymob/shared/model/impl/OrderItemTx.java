@@ -24,6 +24,9 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private List<OrderItemRow> rows = new ArrayList<OrderItemRow>();
   
+  private Boolean inCart;
+  
+  
   @Override
   public String toString() {
     return "OrderItemTx [id=" + id + ", orderId=" + orderId + ", quantity=" + quantity + ", timbro=" + timbro + ", rows=" + rows + "]";
@@ -108,5 +111,19 @@ public class OrderItemTx implements OrderItem, IsMappable {
   public void setTimbro(Timbro timbro) {
     this.timbro = timbro;
   }
+
+  public Boolean getInCart() {
+    return inCart;
+  }
+
+  public void setInCart(Boolean inCart) {
+    this.inCart = inCart;
+  }
+  
+  public boolean isInCart() {
+    return inCart != null && inCart == true;
+  }
+  
+  
   
 }
