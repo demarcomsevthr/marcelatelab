@@ -29,4 +29,10 @@ public interface OrderItem extends Serializable {
 
   public Timbro getTimbro();
 
+  public boolean isInCart();
+
+  public void setInCart(Boolean inCart);
+
+  public Boolean getInCart();
+
 }
