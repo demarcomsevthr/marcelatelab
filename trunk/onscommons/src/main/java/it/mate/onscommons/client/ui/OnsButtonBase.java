@@ -1,8 +1,10 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
@@ -65,6 +67,22 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
 
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     return hasTapHandlerImpl.addTapHandler(handler);
+  }
+  
+  public void setDisabled(boolean disabled) {
+    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("disabled", "");
+      }
+    });
+  }
+  
+  public void setModifier(final String modifier) {
+    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("modifier", modifier);
+      }
+    });
   }
   
 }

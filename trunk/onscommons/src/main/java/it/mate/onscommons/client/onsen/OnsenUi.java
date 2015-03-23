@@ -173,6 +173,11 @@ public class OnsenUi {
     */
   }
 
+  /**
+   * 
+   * DA UTILIZZARE NEI METODI SET DEI WIDGET ONS
+   * 
+   */
   public static void onAttachedElement(Widget widget, Delegate<Element> delegate) {
     Element attachedElement = GwtUtils.getElementById(widget.getElement().getId());
     if (attachedElement != null) {
