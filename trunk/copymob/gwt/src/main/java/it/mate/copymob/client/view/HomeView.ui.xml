@@ -32,10 +32,8 @@
         </o:OnsButtonPanel>
          -->
         <o:OnsButton ui:field="btnTimbri" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri" visible="true"/>
-        <!-- 
-        <o:OnsButton ui:field="btnTimbri2" addStyleNames="app-home-btnpanel" icon="fa-book" text="Timbri2" visible="true"/>
-         -->
-        <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Ordini"/>
+        <o:OnsButton ui:field="btnCart" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Carrello"/>
+        <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-credit-card" text="Ordini"/>
         <o:OnsButton ui:field="btnSettings" addStyleNames="app-home-btnpanel" icon="fa-cog" text="Settings"/>
       </g:VerticalPanel>
       

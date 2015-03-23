@@ -26,7 +26,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTimbroDetailView(Timbro timbro);
-    public void orderTimbro(final Timbro timbro);
+    public void addTimbroToOrder(Timbro timbro, Delegate<Timbro> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbriListView> { }
@@ -77,33 +77,17 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
       html += "</div>";
       OnsCarouselItem item = new OnsCarouselItem(html);
       item.setModel(timbro);
-      
       item.addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
           onBtnBuy(event);
         }
       });
-      
       carousel.add(item);
       if (firstItem == null) {
         firstItem = item;
       }
     }
     showImpl(carousel.getElement());
-
-    /*
-    GwtUtils.onAvailable(firstItem.getElement().getId(), new Delegate<Element>() {
-      public void execute(Element itemElement) {
-        GwtUtils.addMoveHandler(itemElement, new MoveHandler() {
-          public void onMove(Element element, int top, int left) {
-            PhgUtils.log("moving element to " + top + " " + left);
-            lastMovement = System.currentTimeMillis();
-          }
-        });
-      }
-    });
-    */
-
   }
   
   protected static native void showImpl(Element elem) /*-{
@@ -128,8 +112,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
     carousel.getActiveItem(new Delegate<OnsCarouselItem>() {
       public void execute(OnsCarouselItem item) {
         Timbro timbro = (Timbro)item.getModel();
-//      getPresenter().goToTimbroDetailView(timbro);
-        getPresenter().orderTimbro(timbro);
+        getPresenter().addTimbroToOrder(timbro, null);
       }
     });
   }

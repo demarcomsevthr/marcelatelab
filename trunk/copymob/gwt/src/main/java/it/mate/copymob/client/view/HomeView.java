@@ -22,6 +22,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
     public void goToSettingsView();
     public void showMenu();
     public void goToTimbriListView();
+    public void goToCartListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
@@ -65,6 +66,11 @@ public class HomeView extends AbstractBaseView<Presenter> {
   @UiHandler("btnTimbri")
   public void onBtnTimbri(TapEvent event) {
     getPresenter().goToTimbriListView();
+  }
+  
+  @UiHandler("btnCart")
+  public void onBtnCart(TapEvent event) {
+    getPresenter().goToCartListView();
   }
   
   /*
