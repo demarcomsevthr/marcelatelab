@@ -15,6 +15,7 @@
       <o:OnsList>
         <o:OnsListItem ui:field="btnHome" modifier="chevron">Home</o:OnsListItem>
         <o:OnsListItem ui:field="btnTimbri" modifier="chevron">Timbri</o:OnsListItem>
+        <o:OnsListItem ui:field="btnCart" modifier="chevron">Carrello</o:OnsListItem>
         <o:OnsListItem ui:field="btnOrdini" modifier="chevron">I miei ordini</o:OnsListItem>
         <o:OnsListItem ui:field="btnMessaggi" modifier="chevron">Messaggi</o:OnsListItem>
         <o:OnsListItem ui:field="btnSettings" modifier="chevron">Settings</o:OnsListItem>

@@ -10,6 +10,8 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.ui.OnsButton;
+import it.mate.onscommons.client.ui.OnsLabel;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -25,7 +27,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void goToTimbroEditView(Timbro timbro);
+    public void goToTimbroComposeView(Timbro timbro);
+    public void addItemToCart(OrderItem orderItem);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, OrderItemEditView> { }
@@ -34,6 +37,11 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   
   @UiField Panel wrapperPanel;
   @UiField HTML previewPanel;
+  
+  @UiField OnsLabel lbNome;
+  @UiField OnsLabel lbDimensioni;
+  
+  @UiField OnsButton btnCart;
   
   OrderItem orderItem;
   
@@ -59,17 +67,27 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
     String previewId = previewPanel.getElement().getId();
     GwtUtils.onAvailable(previewId, new Delegate<Element>() {
       public void execute(Element previewElement) {
+        
+        Timbro timbro = orderItem.getTimbro();
+        
         int left = GwtUtils.getElementOffsetLeft(previewElement);
         int top = GwtUtils.getElementOffsetTop(previewElement);
         int width = GwtUtils.getElementOffsetWidth(previewElement);
         int height = GwtUtils.getElementOffsetHeight(previewElement);
         PhgUtils.log("PREVIEW ORIGINAL left = " + left + " top = " + top + " width = " + width + " height = " + height);
-        int newHeight = (int)(width * orderItem.getTimbro().getHeight() / orderItem.getTimbro().getWidth());
-        PhgUtils.log("NEW HEIGHT = " + newHeight);
+        
+        double scaleFactor = width / timbro.getWidth();
+        PhgUtils.log("SCALE FACTOR = " + scaleFactor);
+        
+        int newHeight = (int)(timbro.getHeight() * scaleFactor);
+        PhgUtils.log("PREVIEW WIDTH = " + width);
+        PhgUtils.log("PREVIEW HEIGHT = " + newHeight);
         previewElement.getStyle().setHeight(newHeight, Unit.PX);
         
         if (orderItem.getRows().size() > 0) {
           previewElement.removeAllChildren();
+        } else {
+          btnCart.setDisabled(true);
         }
 
         int rowTop = top;
@@ -95,12 +113,22 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
           previewElement.appendChild(span);
         }
         
+        lbNome.setText(timbro.getNome());
+        lbDimensioni.setText("" + timbro.getWidth() + " x " + timbro.getHeight());
+        
+        
       }
     });
   }
   
   @UiHandler("btnEdit")
   public void onBtnEdit(TapEvent event) {
-    getPresenter().goToTimbroEditView(orderItem.getTimbro());
+    getPresenter().goToTimbroComposeView(orderItem.getTimbro());
   }
+  
+  @UiHandler("btnCart")
+  public void onBtnCart(TapEvent event) {
+    getPresenter().addItemToCart(orderItem);
+  }
+  
 }

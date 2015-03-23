@@ -5,7 +5,7 @@
        ui:generateLocales="default" xmlns:o="urn:import:it.mate.onscommons.client.ui">
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
-
+  
     <o:OnsPage>
     
       <o:OnsToolbar>
@@ -18,8 +18,23 @@
       <g:HTML addStyleNames="app-item-preview" ui:field="previewPanel">
         <i>Preview del timbro qui</i>
       </g:HTML>
+
+      <!--       
+      <o:OnsButton text="Componi" ui:field="btnEdit" addStyleNames="app-timbri-choose-btn"/>
+       -->
+       
+      <o:OnsLabel ui:field="lbNome"/> 
       
-      <o:OnsButton text="Edit" ui:field="btnEdit" addStyleNames="app-timbri-choose-btn"/>
+      <o:OnsLabel ui:field="lbDimensioni"/> 
+      
+      <o:OnsList addStyleNames="app-timbri-bottom-panel" modifier="noborder">
+        <o:OnsListItem>
+          <o:OnsButton text="Componi" ui:field="btnEdit" addStyleNames="app-timbri-bottom-btn"/>
+        </o:OnsListItem>
+        <o:OnsListItem>
+          <o:OnsButton text="Aggiungi al carrello" ui:field="btnCart" addStyleNames="app-timbri-bottom-btn"/>
+        </o:OnsListItem>
+      </o:OnsList>
       
     </o:OnsPage>
     

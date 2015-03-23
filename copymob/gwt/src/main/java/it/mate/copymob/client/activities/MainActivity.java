@@ -5,6 +5,7 @@ import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.logic.TimbriInitializer;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.AccountEditView;
+import it.mate.copymob.client.view.CartListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
@@ -48,7 +49,8 @@ public class MainActivity extends OnsAbstractActivity implements
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
   TimbriListView.Presenter,
   TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter,
-  MessageListView.Presenter, AccountEditView.Presenter
+  MessageListView.Presenter, AccountEditView.Presenter,
+  CartListView.Presenter
   {
   
   private MainPlace place;
@@ -130,6 +132,10 @@ public class MainActivity extends OnsAbstractActivity implements
       this.view = AppClientFactory.IMPL.getGinjector().getAccountEditView();
     }
     
+    if (place.getToken().equals(MainPlace.CART_LIST)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getCartListView();
+    }
+    
     view.setPresenter(this);
     panel.setWidget(view.asWidget());
 
@@ -166,6 +172,18 @@ public class MainActivity extends OnsAbstractActivity implements
       dao.findAccount(new Delegate<Account>() {
         public void execute(Account account) {
           view.setModel(account);
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.CART_LIST)) {
+      PhgUtils.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+      dao.findOpenOrder(new Delegate<List<Order>>() {
+        public void execute(List<Order> results) {
+          if (results != null && results.size() == 1) {
+            view.setModel(results.get(0));
+          } else {
+            view.setModel(null);
+          }
         }
       });
     }
@@ -207,7 +225,7 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   @Override
-  public void goToTimbroEditView(Timbro timbro) {
+  public void goToTimbroComposeView(Timbro timbro) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, timbro));
   }
 
@@ -222,12 +240,27 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   @Override
+  public void goToCartListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CART_LIST));
+  }
+
+  @Override
   public void showMenu() {
     OnsenUi.getSlidingMenu().toggleMenu();
   }
 
-  //TODO: WORK IN PROGRESS
-  public void orderTimbro(final Timbro timbro) {
+  public void addTimbroToOrder(final Timbro timbro, Delegate<Timbro> delegate) {
+    
+    if (delegate == null) {
+      delegate = new Delegate<Timbro>() {
+        public void execute(Timbro timbro) {
+//        goToTimbroDetailView(timbro);
+          goToTimbroPreviewView(timbro);
+        }
+      };
+    }
+    
+    final Delegate<Timbro> fDelegate = delegate;
 
     dao.findOpenOrder(new Delegate<List<Order>>() {
       public void execute(List<Order> results) {
@@ -239,7 +272,7 @@ public class MainActivity extends OnsAbstractActivity implements
           order.getItems().add(createOrderItem(timbro, 1d));
           dao.saveOrder(order, new Delegate<Order>() {
             public void execute(Order order) {
-              orderTimbro(timbro);
+              addTimbroToOrder(timbro, fDelegate);
             }
           });
           return;
@@ -252,13 +285,13 @@ public class MainActivity extends OnsAbstractActivity implements
           if (item.getTimbro().getId().equals(timbro.getId())) {
             if (item.getRows() == null || item.getRows().size() == 0) {
               setCurrentOrderItem(item);
-              goToTimbroDetailView(timbro);
+              fDelegate.execute(timbro);
               return;
             }
 
             //TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
             setCurrentOrderItem(item);
-            goToTimbroDetailView(timbro);
+            fDelegate.execute(timbro);
             return;
             
           }
@@ -267,12 +300,22 @@ public class MainActivity extends OnsAbstractActivity implements
         OrderItem item = createOrderItem(timbro, 1d);
         order.getItems().add(item);
         setCurrentOrderItem(item);
-        goToTimbroDetailView(timbro);
+        fDelegate.execute(timbro);
         return;
         
       }
     });
     
+  }
+  
+  @Override
+  public void addItemToCart(final OrderItem orderItem) {
+    orderItem.setInCart(true);
+    saveCurrentOrderItem(orderItem, new Delegate<Order>() {
+      public void execute(Order element) {
+        goToCartListView();
+      }
+    });
   }
   
   private OrderItem createOrderItem(Timbro timbro, double qty) {

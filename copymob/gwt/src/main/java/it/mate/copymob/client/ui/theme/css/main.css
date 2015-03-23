@@ -112,6 +112,12 @@
   bottom: 0.5em;
 }
 
+.app-timbri-bottom-panel {
+  position: absolute;
+  bottom: 0.5em;
+  width: 100%;
+}
+
 .app-home-btnpanel .app-btn-img {
   background: url('main/images/stamp-64w.png') no-repeat;
   background-size: 1.6em;
@@ -295,4 +301,8 @@
   opacity: 0.9;
   display: inline;
   padding-left: 1em;
+}
+
+.app-cart-item-img {
+  width: 40px
 }

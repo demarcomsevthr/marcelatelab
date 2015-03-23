@@ -51,7 +51,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
-  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity ";
+  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart ";
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
@@ -184,6 +184,14 @@ public class MainDao extends WebSQLDao {
   }
   
   public void findTimbro(final Integer id, final Delegate<Timbro> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        findTimbro(tr, id, delegate);
+      }
+    });
+  }
+  
+  private void findTimbro(SQLTransaction tr, final Integer id, final Delegate<Timbro> delegate) {
     if (this.cacheTimbri != null) {
       for (Timbro timbro : cacheTimbri) {
         if (timbro.getId().equals(id)) {
@@ -192,19 +200,16 @@ public class MainDao extends WebSQLDao {
         }
       }
     }
-    db.doReadTransaction(new SQLTransactionCallback() {
-      public void handleEvent(SQLTransaction tr) {
-        tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE id = ?", 
-            new Object[]{id}, new SQLStatementCallback() {
-          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
-            if (rs.getRows().getLength() > 0) {
-              for (int it = 0; it < rs.getRows().getLength(); it++) {
-                Timbro timbro = flushRSToTimbro(rs, it);
-                delegate.execute(timbro);
-              }
-            }
+    PhgUtils.log(" ----  FOO 3  ----");
+    tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE id = ?", 
+        new Object[]{id}, new SQLStatementCallback() {
+      public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+        if (rs.getRows().getLength() > 0) {
+          for (int it = 0; it < rs.getRows().getLength(); it++) {
+            Timbro timbro = flushRSToTimbro(rs, it);
+            delegate.execute(timbro);
           }
-        });
+        }
       }
     });
   }
@@ -307,6 +312,7 @@ public class MainDao extends WebSQLDao {
   public void findOpenOrder(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
+        PhgUtils.log(" ----  FOO 1  ----");
         tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.state = ?", 
             new Object[]{Order.STATE_OPEN}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -382,6 +388,7 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItems(SQLTransaction tr, Integer orderId, final Delegate<List<OrderItem>> delegate) {
+    PhgUtils.log(" ----  FOO 2  ----");
     tr.doExecuteSql("SELECT id, " + ORDER_ITEM_FIELDS + " FROM orderItem WHERE orderId = ? ORDER BY id", 
         new Object[]{orderId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -410,7 +417,7 @@ public class MainDao extends WebSQLDao {
         final OrderItem result = flushRS(rs, it);
         results.add(result);
         
-        findTimbro(result.getTimbroId(), new Delegate<Timbro>() {
+        findTimbro(tr, result.getTimbroId(), new Delegate<Timbro>() {
           public void execute(Timbro timbro) {
             result.setTimbro(timbro);
             findOrderItemRows(tr, result.getId(), new Delegate<List<OrderItemRow>>() {
@@ -433,6 +440,7 @@ public class MainDao extends WebSQLDao {
       result.setOrderId(rows.getValueInt(it, "orderId"));
       result.setTimbroId(rows.getValueInt(it, "timbroId"));
       result.setQuantity(rows.getValueDouble(it, "quantity"));
+      result.setInCart(rows.getValueInt(it, "inCart") == 1);
       return result;
     }
     protected List<OrderItem> getResults() {
@@ -441,6 +449,7 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItemRows(SQLTransaction tr, Integer orderItemId, final Delegate<List<OrderItemRow>> delegate) {
+    PhgUtils.log(" ----  FOO 4  ----");
     tr.doExecuteSql("SELECT id, " + ORDER_ITEM_ROW_FIELDS + " FROM orderItemRow WHERE orderItemId = ? ORDER BY id", 
         new Object[]{orderItemId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -558,11 +567,12 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItem(SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderId(), 
             entity.getTimbroId(),
-            entity.getQuantity()
+            entity.getQuantity(),
+            (entity.isInCart() ? 1 : 0)
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -583,11 +593,13 @@ public class MainDao extends WebSQLDao {
       sql += "  orderId = ?";
       sql += " ,timbroId = ?";
       sql += " ,quantity = ?";
+      sql += " ,inCart = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderId(), 
           entity.getTimbroId(),
           entity.getQuantity(),
+          (entity.isInCart() ? 1 : 0),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
