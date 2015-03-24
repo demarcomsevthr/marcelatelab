@@ -23,7 +23,7 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   protected OnsButtonBase(Element element, String className) {
-    if (className != null) {
+    if (className != null && className.trim().length() > 0) {
       element.addClassName(className);
     }
     setElement(element);
