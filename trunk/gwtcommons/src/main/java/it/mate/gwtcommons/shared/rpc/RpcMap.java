@@ -16,5 +16,8 @@ public class RpcMap extends HashMap<String, Object> {
   public Long dummyLong; 
   public List<Void> dummyList;
   public ArrayList<Void> dummyArrayList;
+  public Boolean dummyBoolean;
+  public Float dummyFloat;
+  public Short dummyShort;
   
 }
