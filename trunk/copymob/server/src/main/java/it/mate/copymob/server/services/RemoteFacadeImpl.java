@@ -4,6 +4,7 @@ import it.mate.commons.server.utils.CloneUtils;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
+import it.mate.copymob.shared.model.impl.OrderTx;
 import it.mate.copymob.shared.model.impl.TimbroTx;
 import it.mate.copymob.shared.service.RemoteFacade;
 import it.mate.copymob.shared.service.RemoteFacadeException;
@@ -48,6 +49,7 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     return devInfo.toRpcMap();
   }
 
+  @Override
   public RpcMap saveAccount(RpcMap entity) {
     AccountTx tx = new AccountTx().fromRpcMap(entity);
     tx = (AccountTx)adapter.saveAccount(tx);
@@ -59,6 +61,7 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     return true;
   }
   
+  @Override
   public List<RpcMap> getTimbri() throws RemoteFacadeException {
     try {
       List<RpcMap> results = new ArrayList<RpcMap>();
@@ -70,6 +73,13 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     } catch (Exception ex) {
       throw new RemoteFacadeException(ex.getMessage());
     }
+  }
+
+  @Override
+  public RpcMap saveOrder(RpcMap entity) {
+    OrderTx tx = new OrderTx().fromRpcMap(entity);
+    tx = (OrderTx)adapter.saveOrder(tx);
+    return tx.toRpcMap();
   }
 
 }

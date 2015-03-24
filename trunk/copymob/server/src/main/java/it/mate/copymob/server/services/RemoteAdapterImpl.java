@@ -6,11 +6,18 @@ import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.LoggingUtils;
 import it.mate.copymob.server.model.AccountDs;
 import it.mate.copymob.server.model.DevInfoDs;
+import it.mate.copymob.server.model.OrderDs;
+import it.mate.copymob.server.model.OrderItemDs;
+import it.mate.copymob.server.model.OrderItemRowDs;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.DevInfo;
+import it.mate.copymob.shared.model.Order;
+import it.mate.copymob.shared.model.OrderItem;
+import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
+import it.mate.copymob.shared.model.impl.OrderTx;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -168,6 +175,62 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       }
     }
     return new String(content);
+  }
+  
+
+  /** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> **/
+  
+  
+  @Override
+  public Order saveOrder(Order order) {
+    OrderDs orderDs = CloneUtils.clone(order, OrderDs.class);
+    orderDs = createOrUpdateOrderDs(orderDs);
+    return CloneUtils.clone (orderDs, OrderTx.class);
+  }
+  
+  private OrderDs createOrUpdateOrderDs (OrderDs orderDs) {
+    List<OrderItem> items = orderDs.getItems();
+    if (items != null) {
+      for (int it = 0; it < items.size(); it++) {
+        OrderItemDs itemDs = (OrderItemDs)items.get(it);
+        itemDs = createOrUpdateOrderItemDs(itemDs);
+        items.set(it, itemDs);
+      }
+      orderDs.setItems(items);
+    }
+    if (orderDs.getKey() == null) {
+      orderDs = dao.create(orderDs);
+    } else {
+      orderDs = dao.update(orderDs);
+    }
+    return orderDs;
+  }
+  
+  private OrderItemDs createOrUpdateOrderItemDs (OrderItemDs itemDs) {
+    List<OrderItemRow> rows = itemDs.getRows();
+    if (rows != null) {
+      for (int it = 0; it < rows.size(); it++) {
+        OrderItemRowDs rowDs = (OrderItemRowDs)rows.get(it);
+        rowDs = createOrUpdateOrderItemRowDs(rowDs);
+        rows.set(it, rowDs);
+      }
+      itemDs.setRows(rows);
+    }
+    if (itemDs.getKey() == null) {
+      itemDs = dao.create(itemDs);
+    } else {
+      itemDs = dao.update(itemDs);
+    }
+    return itemDs;
+  }
+  
+  private OrderItemRowDs createOrUpdateOrderItemRowDs (OrderItemRowDs rowDs) {
+    if (rowDs.getKey() == null) {
+      rowDs = dao.create(rowDs);
+    } else {
+      rowDs = dao.update(rowDs);
+    }
+    return rowDs;
   }
   
 }
