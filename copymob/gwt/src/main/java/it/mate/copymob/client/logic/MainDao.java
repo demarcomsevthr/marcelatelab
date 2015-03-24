@@ -47,15 +47,15 @@ public class MainDao extends WebSQLDao {
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
-  private final static String ORDER_FIELDS_0 = "codice, accountId, state ";
+  private final static String ORDER_FIELDS_0 = "codice, accountId, state, remoteId ";
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
-  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart ";
+  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart, remoteId ";
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
-  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size, fontFamily ";
+  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size, fontFamily, remoteId ";
 
   private final static String ORDER_ITEM_ROW_FIELDS = ORDER_ITEM_ROW_FIELDS_0;
   
@@ -166,6 +166,7 @@ public class MainDao extends WebSQLDao {
     } else {
       db.doReadTransaction(new SQLTransactionCallback() {
         public void handleEvent(SQLTransaction tr) {
+          PhgUtils.log("select timbri");
           tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri ORDER BY id", null, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               List<Timbro> results = new ArrayList<Timbro>();
@@ -200,7 +201,7 @@ public class MainDao extends WebSQLDao {
         }
       }
     }
-    PhgUtils.log(" ----  FOO 3  ----");
+    PhgUtils.log("select timbro");
     tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE id = ?", 
         new Object[]{id}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -296,6 +297,7 @@ public class MainDao extends WebSQLDao {
   public void findAllOrders(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
+        PhgUtils.log("select all orders");
         tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader ORDER BY id", null, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
@@ -312,7 +314,7 @@ public class MainDao extends WebSQLDao {
   public void findOpenOrder(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        PhgUtils.log(" ----  FOO 1  ----");
+        PhgUtils.log(" ----  select open order  ----");
         tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.state = ?", 
             new Object[]{Order.STATE_OPEN}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -331,6 +333,7 @@ public class MainDao extends WebSQLDao {
     if (id == null) {
       delegate.execute(null);
     } else {
+      PhgUtils.log("select order by id");
       tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.id = ?", 
           new Object[]{id}, new SQLStatementCallback() {
         public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -380,6 +383,7 @@ public class MainDao extends WebSQLDao {
       result.setCodice(rows.getValueString(it, "codice"));
       result.setAccountId(rows.getValueInt(it, "accountId"));
       result.setState(rows.getValueInt(it, "state"));
+      result.setRemoteId(rows.getValueString(it, "remoteId"));
       return result;
     }
     protected List<Order> getResults() {
@@ -388,7 +392,7 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItems(SQLTransaction tr, Integer orderId, final Delegate<List<OrderItem>> delegate) {
-    PhgUtils.log(" ----  FOO 2  ----");
+    PhgUtils.log(" ----  select order items  ----");
     tr.doExecuteSql("SELECT id, " + ORDER_ITEM_FIELDS + " FROM orderItem WHERE orderId = ? ORDER BY id", 
         new Object[]{orderId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -441,6 +445,7 @@ public class MainDao extends WebSQLDao {
       result.setTimbroId(rows.getValueInt(it, "timbroId"));
       result.setQuantity(rows.getValueDouble(it, "quantity"));
       result.setInCart(rows.getValueInt(it, "inCart") == 1);
+      result.setRemoteId(rows.getValueString(it, "remoteId"));
       return result;
     }
     protected List<OrderItem> getResults() {
@@ -449,7 +454,7 @@ public class MainDao extends WebSQLDao {
   }
   
   protected void findOrderItemRows(SQLTransaction tr, Integer orderItemId, final Delegate<List<OrderItemRow>> delegate) {
-    PhgUtils.log(" ----  FOO 4  ----");
+    PhgUtils.log(" ----  select order item rowss  ----");
     tr.doExecuteSql("SELECT id, " + ORDER_ITEM_ROW_FIELDS + " FROM orderItemRow WHERE orderItemId = ? ORDER BY id", 
         new Object[]{orderItemId}, new SQLStatementCallback() {
       public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -488,9 +493,10 @@ public class MainDao extends WebSQLDao {
       result.setId(rows.getValueInt(it, "id"));
       result.setOrderItemId(rows.getValueInt(it, "orderItemId"));
       result.setText(rows.getValueString(it, "text"));
-      ((OrderItemRowTx)result).setBoldInt(rows.getValueInt(it, "bold"));
+      result.setBold(rows.getValueInt(it, "bold") == 1);
       result.setSize(rows.getValueInt(it, "size"));
       result.setFontFamily(rows.getValueString(it, "fontFamily"));
+      result.setRemoteId(rows.getValueString(it, "remoteId"));
       return result;
     }
     protected List<OrderItemRow> getResults() {
@@ -506,11 +512,12 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?, ?)", 
               new Object[] {
                 entity.getCodice(), 
                 entity.getAccountId(),
-                entity.getState()
+                entity.getState(),
+                entity.getRemoteId() 
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   entity.setId(rs.getInsertId());
@@ -529,11 +536,13 @@ public class MainDao extends WebSQLDao {
           sql += "  codice = ?";
           sql += " ,accountId = ?";
           sql += " ,state = ?";
+          sql += " ,remoteId = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getCodice(), 
               entity.getAccountId(),
               entity.getState(),
+              entity.getRemoteId(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -567,12 +576,13 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItem(SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderId(), 
             entity.getTimbroId(),
             entity.getQuantity(),
-            (entity.isInCart() ? 1 : 0)
+            (entity.isInCart() ? 1 : 0),
+            entity.getRemoteId()
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -594,12 +604,14 @@ public class MainDao extends WebSQLDao {
       sql += " ,timbroId = ?";
       sql += " ,quantity = ?";
       sql += " ,inCart = ?";
+      sql += " ,remoteId = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderId(), 
           entity.getTimbroId(),
           entity.getQuantity(),
           (entity.isInCart() ? 1 : 0),
+          entity.getRemoteId(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
@@ -661,13 +673,14 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItemRow(SQLTransaction tr, final OrderItemRow entity, final Delegate<OrderItemRow> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderItemId(), 
             entity.getText(),
-            ((OrderItemRowTx)entity).getBoldInt(),
+            (entity.isBold() ? 1 : 0),
             entity.getSize(),
-            entity.getFontFamily()
+            entity.getFontFamily(),
+            entity.getRemoteId()
           }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -682,13 +695,15 @@ public class MainDao extends WebSQLDao {
       sql += " ,bold = ?";
       sql += " ,size = ?";
       sql += " ,fontFamily = ?";
+      sql += " ,remoteId = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderItemId(), 
           entity.getText(),
-          ((OrderItemRowTx)entity).getBoldInt(),
+          (entity.isBold() ? 1 : 0),
           entity.getSize(),
           entity.getFontFamily(),
+          entity.getRemoteId(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
