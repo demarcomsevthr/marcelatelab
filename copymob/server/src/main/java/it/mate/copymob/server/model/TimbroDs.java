@@ -38,6 +38,8 @@ public class TimbroDs implements Timbro, HasKey {
   private Double prezzo;
   
   private String image;
+  
+  private Integer localId;
 
   @Override
   public String toString() {
@@ -46,11 +48,11 @@ public class TimbroDs implements Timbro, HasKey {
   }
 
   public Integer getId() {
-    return null;
+    return localId;
   }
 
   public void setId(Integer id) {
-
+    localId = id;
   }
 
   public Key getKey() {
