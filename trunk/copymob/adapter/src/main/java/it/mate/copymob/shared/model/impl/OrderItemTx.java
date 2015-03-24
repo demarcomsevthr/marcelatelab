@@ -3,6 +3,8 @@ package it.mate.copymob.shared.model.impl;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
+import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
@@ -14,17 +16,17 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private Integer id;
   
-  private Integer orderId;
+  private String remoteId;
   
-//private Integer timbroId;
+  private Integer orderId;
   
   private Double quantity;
   
-  private Timbro timbro;
-  
-  private List<OrderItemRow> rows = new ArrayList<OrderItemRow>();
+  private TimbroTx timbro;
   
   private Boolean inCart;
+  
+  private List<OrderItemRowTx> rows = new ArrayList<OrderItemRowTx>();
   
   
   @Override
@@ -34,10 +36,46 @@ public class OrderItemTx implements OrderItem, IsMappable {
 
   @Override
   public RpcMap toRpcMap() {
-    // TODO Auto-generated method stub
-    return null;
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("remoteId", remoteId);
+    map.put("orderId", orderId);
+    map.put("quantity", quantity);
+    map.put("inCart", inCart);
+    map.put("timbro", timbro.toRpcMap());
+    List<RpcMap> rowMaps = new ArrayList<RpcMap>();
+    for (OrderItemRow row : rows) {
+      OrderItemRowTx rowTx = (OrderItemRowTx)row;
+      RpcMap rowMap = rowTx.toRpcMap();
+      rowMaps.add(rowMap);
+    }
+    map.put("rowMaps", rowMaps);
+    return map;
   }
   
+  @Override
+  @SuppressWarnings("unchecked")
+  public OrderItemTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.remoteId = (String)map.get("remoteId");
+    this.orderId = (Integer)map.get("orderId");
+    this.quantity = (Double)map.get("quantity");
+    this.inCart = (Boolean)map.get("inCart");
+    RpcMap timbroMap = (RpcMap)map.get("timbro");
+    if (timbroMap != null) {
+      this.timbro = new TimbroTx().fromRpcMap(timbroMap);
+    }
+    this.rows = new ArrayList<OrderItemRowTx>();
+    List<RpcMap> rowMaps = (List<RpcMap>)map.get("rowMaps");
+    if (rowMaps != null) {
+      for (RpcMap rowMap : rowMaps) {
+        OrderItemRowTx rowTx = new OrderItemRowTx().fromRpcMap(rowMap);
+        this.rows.add(rowTx);
+      }
+    }
+    return this;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof OrderItemTx) {
@@ -50,12 +88,6 @@ public class OrderItemTx implements OrderItem, IsMappable {
     return super.equals(obj);
   }
 
-  @Override
-  public IsMappable fromRpcMap(RpcMap map) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public Integer getId() {
     return id;
   }
@@ -66,7 +98,15 @@ public class OrderItemTx implements OrderItem, IsMappable {
       row.setOrderItemId(id);
     }
   }
+  
+  public String getRemoteId() {
+    return remoteId;
+  }
 
+  public void setRemoteId(String remoteId) {
+    this.remoteId = remoteId;
+  }
+  
   public Integer getTimbroId() {
     return timbro != null ? timbro.getId() : null;
   }
@@ -97,19 +137,23 @@ public class OrderItemTx implements OrderItem, IsMappable {
         row.setOrderItemId(this.id);
       }
     }
-    return rows;
+    return CollectionPropertyClientUtil.cast(rows, OrderItemRowTx.class);
+//  return rows;
   }
 
+  @CloneableProperty (targetClass=OrderItemRowTx.class)
   public void setRows(List<OrderItemRow> rows) {
-    this.rows = rows;
+    this.rows = CollectionPropertyClientUtil.clone(rows, OrderItemRowTx.class);
+//  this.rows = rows;
   }
 
   public Timbro getTimbro() {
     return timbro;
   }
 
+  @CloneableProperty (targetClass=TimbroTx.class)
   public void setTimbro(Timbro timbro) {
-    this.timbro = timbro;
+    this.timbro = (TimbroTx)timbro;
   }
 
   public Boolean getInCart() {
@@ -123,7 +167,5 @@ public class OrderItemTx implements OrderItem, IsMappable {
   public boolean isInCart() {
     return inCart != null && inCart == true;
   }
-  
-  
-  
+
 }

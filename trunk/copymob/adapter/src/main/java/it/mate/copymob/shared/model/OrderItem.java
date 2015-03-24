@@ -35,4 +35,8 @@ public interface OrderItem extends Serializable {
 
   public Boolean getInCart();
 
+  public void setRemoteId(String remoteId);
+
+  public String getRemoteId();
+
 }

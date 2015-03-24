@@ -19,4 +19,6 @@ public interface RemoteFacadeAsync {
 
   void saveAccount(RpcMap entity, AsyncCallback<RpcMap> callback);
 
+  void saveOrder(RpcMap entity, AsyncCallback<RpcMap> callback);
+
 }

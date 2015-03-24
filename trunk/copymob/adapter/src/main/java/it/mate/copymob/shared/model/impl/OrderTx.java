@@ -2,6 +2,8 @@ package it.mate.copymob.shared.model.impl;
 
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
+import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
+import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
@@ -13,13 +15,15 @@ public class OrderTx implements Order, IsMappable {
   
   private Integer id;
   
+  private String remoteId;
+  
   private String codice;
   
   private Integer accountId;
   
-  private int state;
+  private Integer state;
   
-  private List<OrderItem> items = new ArrayList<OrderItem>();
+  private List<OrderItemTx> items = new ArrayList<OrderItemTx>();
   
   public OrderTx() {
 
@@ -31,19 +35,42 @@ public class OrderTx implements Order, IsMappable {
 
   @Override
   public String toString() {
-    return "OrderTx [id=" + id + ", codice=" + codice + ", accountId=" + accountId + ", state=" + state + ", items=" + items + "]";
+    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", accountId=" + accountId + ", state=" + state + ", items.size=" + (items != null ? items.size() : "null") + "]";
   }
 
   @Override
   public RpcMap toRpcMap() {
-    // TODO Auto-generated method stub
-    return null;
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("remoteId", remoteId);
+    map.put("codice", codice);
+    map.put("accountId", accountId);
+    map.put("state", state);
+    List<RpcMap> itemMaps = new ArrayList<RpcMap>();
+    for (OrderItem item : items) {
+      OrderItemTx itemTx = (OrderItemTx)item;
+      RpcMap itemMap = itemTx.toRpcMap();
+      itemMaps.add(itemMap);
+    }
+    map.put("itemMaps", itemMaps);
+    return map;
   }
 
   @Override
-  public IsMappable fromRpcMap(RpcMap map) {
-    // TODO Auto-generated method stub
-    return null;
+  @SuppressWarnings("unchecked")
+  public OrderTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.remoteId = (String)map.get("remoteId");
+    this.codice = (String)map.get("codice");
+    this.accountId = (Integer)map.get("accountId");
+    this.state = (Integer)map.get("state");
+    this.items = new ArrayList<OrderItemTx>();
+    List<RpcMap> itemMaps = (List<RpcMap>)map.get("itemMaps");
+    for (RpcMap itemMap : itemMaps) {
+      OrderItemTx itemTx = new OrderItemTx().fromRpcMap(itemMap);
+      this.items.add(itemTx);
+    }
+    return this;
   }
 
   public Integer getId() {
@@ -79,19 +106,34 @@ public class OrderTx implements Order, IsMappable {
         item.setOrderId(this.id);
       }
     }
-    return items;
+    return CollectionPropertyClientUtil.cast(items, OrderItemTx.class);
+    /*
+    return CollectionPropertyClientUtil.cast(discussions, BlogDiscussionTx.class);
+     */
   }
 
+  @CloneableProperty (targetClass=OrderItemTx.class)
   public void setItems(List<OrderItem> items) {
-    this.items = items;
+    this.items = CollectionPropertyClientUtil.clone(items, OrderItemTx.class);
+    /*
+    this.discussions = CollectionPropertyClientUtil.clone(discussions, BlogDiscussionTx.class);
+     */
   }
 
-  public int getState() {
-    return state;
+  public Integer getState() {
+    return state != null ? state : 0;
   }
 
-  public void setState(int state) {
-    this.state = state;
+  public void setState(Integer state) {
+    this.state = state != null ? state : 0;
+  }
+
+  public String getRemoteId() {
+    return remoteId;
+  }
+
+  public void setRemoteId(String remoteId) {
+    this.remoteId = remoteId;
   }
 
 }
