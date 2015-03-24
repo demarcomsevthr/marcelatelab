@@ -16,6 +16,7 @@ import it.mate.onscommons.client.ui.OnsHorizontalPanel;
 import it.mate.onscommons.client.ui.OnsLabel;
 import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.Iterator;
 
@@ -24,6 +25,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,7 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class CartListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-
+    public void saveOrderInCloud(Order order, Delegate<Order> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CartListView> { }
@@ -66,13 +68,15 @@ public class CartListView extends AbstractBaseView<Presenter> {
     } else if (model instanceof Order) {
       
       this.order = (Order)model;
-      populateList(order.getItems().iterator());
+      populateList();
       
     }
 
   }
   
-  private void populateList(final Iterator<OrderItem> it) {
+  private void populateList() {
+    
+    Iterator<OrderItem> it = order.getItems().iterator();
     
     while (it.hasNext()) {
       
@@ -97,8 +101,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
       final OnsLabel qtaFld = new OnsLabel();
       setQtaLbl(qtaFld, orderItem.getQuantity());
       
-      OnsButton plusBtn = new OnsButton();
-      plusBtn.getElement().removeClassName("ons-button");
+      OnsButton plusBtn = new OnsButton("");
       plusBtn.addStyleName("app-cart-btn-plus");
       plusBtn.setIcon("fa-plus-circle");
       plusBtn.setModifier("quiet");
@@ -110,6 +113,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
           setQtaLbl(qtaFld, orderItem.getQuantity());
         }
       });
+      fixButtonRendering(plusBtn.getElement());
       OnsButton minusBtn = new OnsButton();
       minusBtn.getElement().removeClassName("ons-button");
       minusBtn.addStyleName("app-cart-btn-minus");
@@ -136,20 +140,38 @@ public class CartListView extends AbstractBaseView<Presenter> {
       
       cartList.add(listItem);
 
-      // devo fare cosi' altrimenti alcune volte non fa il rendering del bottone!
-      OnsenUi.onAvailableElement(plusBtn.getElement(), new Delegate<Element>() {
-        public void execute(Element element) {
-          populateList(it);
-        }
-      });
-      
     }
     
+  }
+  
+  private void fixButtonRendering(final Element element) {
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
+      public void execute(Void dummy) {
+        OnsenUi.onAvailableElement(element, new Delegate<Element>() {
+          public void execute(Element elem) {
+            PhgUtils.log("CHECK BUTTON RENDERING -- id " + elem.getId() + " w = " + elem.getOffsetWidth() + " h = " + elem.getOffsetHeight());
+            if (elem.getOffsetWidth() < 40 || elem.getOffsetHeight() < 40) {
+              elem.getStyle().setWidth(40, Unit.PX);
+              elem.getStyle().setHeight(40, Unit.PX);
+              fixButtonRendering(elem);
+            }
+          }
+        });
+      }
+    });
   }
   
   private void setQtaLbl(OnsLabel lbl, double qta) {
     lbl.setText(GwtUtils.formatDecimal(qta, 0));
   }
   
+  @UiHandler("btnGo")
+  public void onBtnGo(TapEvent event) {
+    getPresenter().saveOrderInCloud(order, new Delegate<Order>() {
+      public void execute(Order element) {
+        PhgUtils.log("HIP HIP URRA!");
+      }
+    });
+  }
   
 }

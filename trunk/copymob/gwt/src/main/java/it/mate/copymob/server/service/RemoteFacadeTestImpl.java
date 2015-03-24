@@ -67,4 +67,10 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
     return remoteFacade.getTimbri();
   }
 
+  @Override
+  public RpcMap saveOrder(RpcMap entity) {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.saveOrder(entity);
+  }
+
 }

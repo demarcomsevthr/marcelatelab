@@ -492,4 +492,25 @@ public class MainActivity extends OnsAbstractActivity implements
     HasTapHandlerImpl.setAllHandlersDisabled(waiting);
   }
   
+  public void saveOrderInCloud(Order order, final Delegate<Order> delegate) {
+    OrderTx tx = (OrderTx)order;
+    setWaitingState(true);
+    AppClientFactory.IMPL.getRemoteFacade().saveOrder(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
+      public void onSuccess(RpcMap map) {
+        Order result = new OrderTx().fromRpcMap(map);
+        dao.saveOrder(result, new Delegate<Order>() {
+          public void execute(Order result) {
+            setWaitingState(false);
+            PhgUtils.log("SAVE ORDER RESULT >> " + result);
+            delegate.execute(result);
+          }
+        });
+      }
+      public void onFailure(Throwable caught) {
+        setWaitingState(false);
+        PhgUtils.log("SAVE ORDER SERVER ERROR >> TODO: DIALOG");
+      }
+    });
+  }
+  
 }
