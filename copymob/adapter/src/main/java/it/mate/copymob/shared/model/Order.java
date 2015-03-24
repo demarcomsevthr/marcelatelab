@@ -39,8 +39,12 @@ public interface Order extends Serializable {
 
   public List<OrderItem> getItems();
 
-  public int getState();
+  public Integer getState();
 
-  public void setState(int state);
+  public void setState(Integer state);
+
+  public void setRemoteId(String remoteId);
+
+  public String getRemoteId();
   
 }

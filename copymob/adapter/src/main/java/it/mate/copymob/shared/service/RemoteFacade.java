@@ -21,5 +21,7 @@ public interface RemoteFacade extends RemoteService {
   Boolean checkConnection();
   
   public List<RpcMap> getTimbri() throws RemoteFacadeException;
+  
+  public RpcMap saveOrder(RpcMap entity);
 
 }
