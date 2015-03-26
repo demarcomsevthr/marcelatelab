@@ -33,6 +33,7 @@ import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsToolbar;
+import it.mate.onscommons.client.utils.OnsDialogUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -169,15 +170,14 @@ public class MainActivity extends OnsAbstractActivity implements
       view.setModel(getCurrentOrderItem());
     }
     if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
-      dao.findAccount(new Delegate<Account>() {
+      getAccount(new Delegate<Account>() {
         public void execute(Account account) {
           view.setModel(account);
         }
       });
     }
     if (place.getToken().equals(MainPlace.CART_LIST)) {
-      PhgUtils.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-      dao.findOpenOrder(new Delegate<List<Order>>() {
+      dao.findOrderInCart(new Delegate<List<Order>>() {
         public void execute(List<Order> results) {
           if (results != null && results.size() == 1) {
             view.setModel(results.get(0));
@@ -188,7 +188,7 @@ public class MainActivity extends OnsAbstractActivity implements
       });
     }
   }
-
+  
   @Override
   public BaseView getView() {
     return this.view;
@@ -262,13 +262,13 @@ public class MainActivity extends OnsAbstractActivity implements
     
     final Delegate<Timbro> fDelegate = delegate;
 
-    dao.findOpenOrder(new Delegate<List<Order>>() {
+    dao.findOrderInCart(new Delegate<List<Order>>() {
       public void execute(List<Order> results) {
         
         if (results == null || results.size() == 0) {
           Order order = new OrderTx();
-          order.setCodice("ORDERTEST");
-          order.setState(Order.STATE_OPEN);
+          order.setCodice("CARTORDER");
+          order.setState(Order.STATE_IN_CART);
           order.getItems().add(createOrderItem(timbro, 1d));
           dao.saveOrder(order, new Delegate<Order>() {
             public void execute(Order order) {
@@ -435,10 +435,6 @@ public class MainActivity extends OnsAbstractActivity implements
     });
   }
   
-  public void getAccount(final Delegate<Account> delegate) {
-//  delegate.execute(MainController.getInstance().getAccountFromLocalStorage());
-  }
-
   protected String getDevInfoIdFromLocalStorage() {
     return PhgUtils.getLocalStorageItem("devInfoId");
   }
@@ -465,7 +461,7 @@ public class MainActivity extends OnsAbstractActivity implements
         if (rpc == null) {
           PhgUtils.log("SAVE ACCOUNT SERVER ERROR");
           setWaitingState(false);
-          //TODO: DIALOG
+          OnsDialogUtils.alert("Error", "Account saving error!");
         } else {
           dao.saveAccount(new AccountTx().fromRpcMap(rpc), new Delegate<Account>() {
             public void execute(Account account) {
@@ -478,11 +474,15 @@ public class MainActivity extends OnsAbstractActivity implements
       public void onFailure(Throwable caught) {
         PhgUtils.log("SAVE ACCOUNT SERVER ERROR");
         setWaitingState(false);
-        //TODO: DIALOG
+        OnsDialogUtils.alert("Error", "Account saving error ("+ caught.getMessage() +")!");
       }
     });
   }
   
+  private void getAccount(Delegate<Account> delegate) {
+    dao.findAccount(delegate);
+  }
+
   public void testWaitingState(boolean flag) {
     setWaitingState(flag);
   }
@@ -492,25 +492,43 @@ public class MainActivity extends OnsAbstractActivity implements
     HasTapHandlerImpl.setAllHandlersDisabled(waiting);
   }
   
-  public void saveOrderInCloud(Order order, final Delegate<Order> delegate) {
-    OrderTx tx = (OrderTx)order;
-    setWaitingState(true);
-    AppClientFactory.IMPL.getRemoteFacade().saveOrder(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
-      public void onSuccess(RpcMap map) {
-        Order result = new OrderTx().fromRpcMap(map);
-        dao.saveOrder(result, new Delegate<Order>() {
-          public void execute(Order result) {
-            setWaitingState(false);
-            PhgUtils.log("SAVE ORDER RESULT >> " + result);
-            delegate.execute(result);
-          }
-        });
-      }
-      public void onFailure(Throwable caught) {
-        setWaitingState(false);
-        PhgUtils.log("SAVE ORDER SERVER ERROR >> TODO: DIALOG");
+  public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
+    
+    getAccount(new Delegate<Account>() {
+      public void execute(Account account) {
+        
+        if (account == null) {
+          OnsDialogUtils.alert("Attenzione", "Devi registrare un account per proseguire", new Delegate<Void>() {
+            public void execute(Void element) {
+              goToAccountEditView();
+            }
+          });
+        } else {
+          setWaitingState(true);
+          OrderTx tx = (OrderTx)order;
+          AppClientFactory.IMPL.getRemoteFacade().saveOrder(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
+            public void onSuccess(RpcMap map) {
+              Order result = new OrderTx().fromRpcMap(map);
+              dao.saveOrder(result, new Delegate<Order>() {
+                public void execute(Order result) {
+                  setWaitingState(false);
+                  PhgUtils.log("SAVE ORDER RESULT >> " + result);
+                  OnsDialogUtils.alert("Info", "Ordine salvato");
+                  delegate.execute(result);
+                }
+              });
+            }
+            public void onFailure(Throwable caught) {
+              setWaitingState(false);
+              PhgUtils.log("SAVE ORDER SERVER ERROR >> TODO: DIALOG");
+              OnsDialogUtils.alert("Error", "Order saving error ("+ caught.getMessage() +")!");
+            }
+          });
+        }
+        
       }
     });
+    
   }
   
 }

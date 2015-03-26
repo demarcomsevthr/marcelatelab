@@ -311,12 +311,12 @@ public class MainDao extends WebSQLDao {
     });
   }
   
-  public void findOpenOrder(final Delegate<List<Order>> delegate) {
+  public void findOrderInCart(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
-        PhgUtils.log(" ----  select open order  ----");
+        PhgUtils.log(" ----  select order in cart ----");
         tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.state = ?", 
-            new Object[]{Order.STATE_OPEN}, new SQLStatementCallback() {
+            new Object[]{Order.STATE_IN_CART}, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
             new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
               public void execute(List<Order> results) {
