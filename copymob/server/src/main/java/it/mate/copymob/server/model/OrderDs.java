@@ -81,7 +81,7 @@ public class OrderDs implements Order, HasKey {
   }
 
   public Integer getState() {
-    return state;
+    return state != null ? state : Order.STATE_DEFAULT;
   }
 
   public void setState(Integer state) {

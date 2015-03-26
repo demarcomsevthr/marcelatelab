@@ -3,8 +3,11 @@ package it.mate.copymob.server.services;
 import it.mate.commons.server.dao.Dao;
 import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
+import it.mate.commons.server.utils.DateUtils;
 import it.mate.commons.server.utils.LoggingUtils;
+import it.mate.commons.server.utils.StringUtils;
 import it.mate.copymob.server.model.AccountDs;
+import it.mate.copymob.server.model.CounterDs;
 import it.mate.copymob.server.model.DevInfoDs;
 import it.mate.copymob.server.model.OrderDs;
 import it.mate.copymob.server.model.OrderItemDs;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -184,6 +188,14 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   @Override
   public Order saveOrder(Order order) {
     OrderDs orderDs = CloneUtils.clone(order, OrderDs.class);
+    
+    if (orderDs.getState() == Order.STATE_IN_CART) {
+      orderDs.setState(Order.STATE_RECEIVED);
+      String codice = DateUtils.dateToString(new Date(), "yyyy");
+      codice += StringUtils.formatNumber(getNextCounterValue(), 4);
+      orderDs.setCodice(codice);
+    }
+    
     orderDs = createOrUpdateOrderDs(orderDs);
     return CloneUtils.clone (orderDs, OrderTx.class);
   }
@@ -231,6 +243,24 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       rowDs = dao.update(rowDs);
     }
     return rowDs;
+  }
+  
+  protected long getNextCounterValue () {
+    long result = -1;
+    List<CounterDs> results = dao.findAll(CounterDs.class);
+    if (results != null && results.size() > 0) {
+      CounterDs counter = results.get(0);
+      result = counter.getValue();
+      result ++;
+      counter.setValue(result);
+      counter = dao.update(counter);
+    } else {
+      result = 1;
+      CounterDs counter = new CounterDs();
+      counter.setValue(result);
+      counter = dao.create(counter);
+    }
+    return result;
   }
   
 }

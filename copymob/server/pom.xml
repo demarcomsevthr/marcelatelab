@@ -8,7 +8,9 @@
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <webappDirectory>${project.build.directory}/${project.artifactId}-${project.version}</webappDirectory>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <gwt.version>2.6.1</gwt.version>
     <appengine.target.version>1.9.15</appengine.target.version>
     <spring.version>3.2.4.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
@@ -51,6 +53,7 @@
       <version>0.1</version>
     </dependency>
 
+    <!-- 
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
@@ -68,6 +71,7 @@
       <artifactId>twilio-java-sdk</artifactId>
       <version>3.4.1</version>
     </dependency>
+     -->
     
   </dependencies>
 
@@ -75,26 +79,27 @@
 
     <plugins>
 
-      <!-- ENDPOINT PACKAGING SKIPPED
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.1.1</version>
         <configuration>
-          <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>
-          <webResources>
-            <resource>
-              <directory>${project.build.directory}/generated-sources/appengine-endpoints</directory>
-              <includes>
-                <include>WEB-INF/*.discovery</include>
-                <include>WEB-INF/*.api</include>
-              </includes>
-            </resource>
-          </webResources>
+          <webappDirectory>${webappDirectory}</webappDirectory>
         </configuration>
       </plugin>
-       -->
-
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${gwt.version}</version>
+        <configuration>
+          <hostedWebapp>${webappDirectory}</hostedWebapp>
+          <webappDirectory>${webappDirectory}</webappDirectory>
+          <module>it.mate.copymob.admin</module>
+          <extra>target/extra</extra>
+        </configuration>
+      </plugin>
+      
       <plugin>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
