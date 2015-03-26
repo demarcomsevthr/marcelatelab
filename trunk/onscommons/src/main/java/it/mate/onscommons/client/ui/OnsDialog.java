@@ -34,7 +34,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   }
   
   private void initVarName() {
-    varName = GwtUtils.replaceEx(getElement().getId(), "-", "") ;
+    varName = GwtUtils.replaceEx(getElement().getId(), "-", "") + "Dialog" ;
     getElement().setAttribute("var", varName);
   }
   
@@ -84,13 +84,74 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
     });
   }
   
+  public void getRealWidth(final Delegate<Integer> delegate) {
+    GwtUtils.onAvailable(getElement(), new Delegate<Element>() {
+      public void execute(Element dialogElement) {
+        for (int it = 0; it < dialogElement.getChildCount(); it++) {
+          Element child = dialogElement.getChild(it).cast();
+          if (child.getTagName() != null && child.getTagName().toLowerCase().contains("div") && 
+              child.getClassName() != null && child.getClassName().toLowerCase().trim().equals("dialog")) {
+            delegate.execute(child.getOffsetWidth());
+          }
+        }
+      }
+    });
+  }
+  
+  public void show (Widget content, final JavaScriptObject options, final boolean cancelable) {
+    this.add(content);
+    final String templateId = getVarName() + "Template" ;
+    OnsTemplate template = new OnsTemplate(templateId);
+    template.add(this);
+    RootPanel.get().add(template);
+    GwtUtils.onAvailable(templateId, new Delegate<Element>() {
+      public void execute(Element templateElement) {
+        OnsenUi.compileElement(templateElement);
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+            createDialogImpl(templateId);
+            GwtUtils.deferredExecution(new Delegate<Void>() {
+              public void execute(Void element) {
+                showDialogImpl(getVarName(), options);
+                setCancelable(cancelable);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  public void setCancelable(final boolean cancelable) {
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        getDialogObject().setCancelable(cancelable);;
+      }
+    });
+  }
+  
+  protected static native void showDialogImpl(String id, JavaScriptObject options) /*-{
+    $wnd[id].show(options);
+  }-*/;
+  
+  protected static native void setCancelableImpl(String id, boolean cancelable) /*-{
+    $wnd[id].setCancelable(cancelable);
+  }-*/;
+
   private OnsDialog getThis() {
     return this;
   }
   
   public void hide() {
-    getDialogObject().hideDialog();
+    getDialogObject().hide();
   }  
+  
+  protected static native void createDialogImpl(String templateId) /*-{
+    $wnd.ons.createDialog(templateId).then(function(dialog) {
+  
+    });
+  }-*/;
+  
   protected static native void createDialogImpl(String templateId, String varName, JSOCallback callback) /*-{
     $wnd.ons.createDialog(templateId).then(function(dlg) {
       var dialog = $wnd[varName];

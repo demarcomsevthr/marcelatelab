@@ -8,8 +8,7 @@ public class Dialog extends JavaScriptObject {
 
   protected Dialog() { }
   
-  public final void hideDialog() {
-    PhgUtils.log("hiding dialog");
+  public final void hide() {
     hideImpl();
   }
   
@@ -17,4 +16,21 @@ public class Dialog extends JavaScriptObject {
     this.hide();
   }-*/;
   
+  public final void show() {
+    PhgUtils.log("showing dialog");
+    showImpl();
+  }
+  
+  protected final native void showImpl() /*-{
+    this.show();
+  }-*/;
+
+  public final void setCancelable(boolean value) {
+    setCancelableImpl(value);
+  }
+  
+  protected final native void setCancelableImpl(boolean value) /*-{
+    this.setCancelable(value);
+  }-*/;
+
 }
