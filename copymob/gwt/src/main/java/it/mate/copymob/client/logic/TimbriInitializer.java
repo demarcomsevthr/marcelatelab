@@ -91,6 +91,7 @@ public class TimbriInitializer {
       }
       public void onFailure(Throwable caught) {
         PhgUtils.log("GET TIMBRI FROM CLOUD FAILURE!");
+        caught.printStackTrace();
       }
     });
   }
