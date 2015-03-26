@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, navigation*, span;
+@external ons*, gwt*, navigation*, span, dialog;
 
 .ons-toolbar .navigation-bar__title {
   font-weight: 800;
@@ -37,4 +37,17 @@
 
 .ons-toolbar-button-waiting span {
   opacity: 0.9 !important;
+}
+
+.ons-bottom-dialog .dialog {
+  bottom: 1%;
+  top: initial;
+  text-align: center;
+}
+
+.ons-waiting-dialog .dialog {
+  bottom: 1%;
+  top: initial;
+  text-align: center;
+  min-height: initial;
 }
