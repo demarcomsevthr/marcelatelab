@@ -21,7 +21,7 @@ public class OrderTx implements Order, IsMappable {
   
   private Integer accountId;
   
-  private Integer state;
+  private Integer state = Order.STATE_DEFAULT;
   
   private List<OrderItemTx> items = new ArrayList<OrderItemTx>();
   
@@ -121,7 +121,7 @@ public class OrderTx implements Order, IsMappable {
   }
 
   public Integer getState() {
-    return state != null ? state : 0;
+    return state != null ? state : Order.STATE_DEFAULT;
   }
 
   public void setState(Integer state) {

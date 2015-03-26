@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Order extends Serializable {
   
-  public final static int STATE_OPEN = 0;
+  public final static int STATE_IN_CART = 0;
 
   public final static int STATE_SENT = 1;
 
@@ -22,6 +22,9 @@ public interface Order extends Serializable {
   public final static int STATE_CLOSE = 7;
 
   public final static int STATE_SHIPED = 8;
+  
+  public final static int STATE_DEFAULT = STATE_IN_CART;
+  
 
   public Integer getId();
 
