@@ -8,7 +8,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class BaseActivity extends AbstractActivity implements BasePresenter {
 
   private BaseClientFactory clientFactory;
@@ -36,16 +36,6 @@ public abstract class BaseActivity extends AbstractActivity implements BasePrese
     super.onStop();
   }
   
-  /*
-  @Override
-  public boolean equals(Object that) {
-    // trucco per obbligare com.google.gwt.activity.shared.ActivityManager.onPlaceChange riutilizzi la stessa istanza 
-    if (that instanceof BaseActivity)
-      return false;
-    return super.equals(that);
-  }
-  */
-
   protected void goTo (Place place) {
     GwtUtils.log(getClass(), "goTo", "place = " + place + " this = " + this);
     clientFactory.getPlaceController().goTo(place);
@@ -58,7 +48,6 @@ public abstract class BaseActivity extends AbstractActivity implements BasePrese
   }
 
   public BaseView getView() {
-    // 16/10/2012 per evitare che le getView vadano in null pointer exc
     if (view == null) {
       return new BaseView<BasePresenter>() {
         public Widget asWidget() {
@@ -86,5 +75,12 @@ public abstract class BaseActivity extends AbstractActivity implements BasePrese
       }
     }
   }
+  
+  @Override
+  public void start(AcceptsOneWidget panel, com.google.gwt.event.shared.EventBus eventBus) {
+    start(panel, (com.google.web.bindery.event.shared.EventBus) eventBus);
+  }
+
+  public abstract void start(AcceptsOneWidget panel, com.google.web.bindery.event.shared.EventBus eventBus);
   
 }
