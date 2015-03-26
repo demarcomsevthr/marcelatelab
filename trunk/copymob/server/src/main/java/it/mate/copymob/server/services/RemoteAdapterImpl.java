@@ -12,6 +12,7 @@ import it.mate.copymob.server.model.DevInfoDs;
 import it.mate.copymob.server.model.OrderDs;
 import it.mate.copymob.server.model.OrderItemDs;
 import it.mate.copymob.server.model.OrderItemRowDs;
+import it.mate.copymob.server.model.TimbroDs;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.DevInfo;
 import it.mate.copymob.shared.model.Order;
@@ -27,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,8 +106,25 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   }
 
   public List<Timbro> getTimbri() throws Exception {
+    List<Timbro> timbri;
+    List<TimbroDs> timbriDB = dao.findAll(TimbroDs.class);
+    if (timbriDB == null || timbriDB.size() == 0) {
+      timbri = loadTimbri();
+      for (Timbro timbro : timbri) {
+        TimbroDs timbroDs = (TimbroDs)timbro;
+        timbroDs = dao.create(timbroDs);
+        timbriDB.add(timbroDs);
+      }
+    }
+    timbri = new ArrayList<Timbro>();
+    for (TimbroDs timbroDs : timbriDB) {
+      timbri.add(timbroDs);
+    }
+    return timbri;
+  }
+  
+  private List<Timbro> loadTimbri() throws Exception {
     List<Timbro> timbri = AdapterUtil.getInitAdapterBean().getTimbri();
-    
     for (Timbro timbro : timbri) {
       LoggingUtils.debug(getClass(), "found " + timbro);
       String imageFileName = String.format("META-INF/setup-data/images/%s.jpg", timbro.getCodice() );
@@ -115,13 +134,11 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       LoggingUtils.debug(getClass(), "content = " + imageText.substring(0, 200));
       timbro.setImage(imageText);
     }
-    
     for (int ita = 0; ita < nonalfanum.length; ita++) {
       if (nonalfanum[ita] != 0) {
         LoggingUtils.debug(RestController.class, "FOUND NON ALFANUM CAR " + nonalfanum[ita]);
       }
     }
-    
     return timbri;
   }
   
