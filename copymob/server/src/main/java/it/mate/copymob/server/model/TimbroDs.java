@@ -4,6 +4,7 @@ import it.mate.commons.server.model.HasKey;
 import it.mate.copymob.shared.model.Timbro;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -36,9 +37,11 @@ public class TimbroDs implements Timbro, HasKey {
 
   @Persistent
   private Double prezzo;
-  
+
+  @NotPersistent
   private String image;
-  
+
+  @NotPersistent
   private Integer localId;
 
   @Override
