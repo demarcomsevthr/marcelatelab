@@ -375,6 +375,11 @@ public class GwtUtils {
     }
   }
   
+  public static void onAvailable (Element element, final Delegate<Element> delegate) {
+    ensureId(element);
+    onAvailable(element.getId(), 10000, delegate);
+  }
+  
   public static void onAvailable (final String id, final Delegate<Element> delegate) {
     onAvailable(id, 10000, delegate);
   }
@@ -1386,6 +1391,12 @@ public class GwtUtils {
         helper.setLeft(currentLeft);
       }
     });
+  }
+  
+  public static void ensureId(Element element) {
+    if (element.getId() == null || "".equals(element.getId())) {
+      element.setId(DOM.createUniqueId());
+    }
   }
   
 }
