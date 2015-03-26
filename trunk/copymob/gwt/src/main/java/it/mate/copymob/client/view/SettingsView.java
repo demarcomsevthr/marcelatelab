@@ -4,6 +4,7 @@ import it.mate.copymob.client.view.SettingsView.Presenter;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.utils.OnsDialogUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -52,6 +53,25 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   @UiHandler("btnReset")
   public void onBtnReset(TapEvent event) {
     getPresenter().resetDB();
+  }
+  
+  @UiHandler("btnDialog")
+  public void onBtnDialog(TapEvent event) {
+    /*
+    OnsDialogUtils.alert("Attenzione", "Marcello è grande!", null, "OK", null, new Delegate<Void>() {
+      public void execute(Void element) {
+        PhgUtils.log("ma va!");
+      }
+    });
+    */
+    /*
+    OnsDialogUtils.confirm("Attenzione", "Marcello è grande!", null, new String[] {"Ma si", "Ma no"}, null, false, new Delegate<Integer>() {
+      public void execute(Integer index) {
+        PhgUtils.log("index = " + index);
+      }
+    });
+    */
+    OnsDialogUtils.showWaitingDialog();
   }
   
   @UiHandler("btnAccount")

@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class CartListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void saveOrderInCloud(Order order, Delegate<Order> delegate);
+    public void saveOrderOnServer(Order order, Delegate<Order> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CartListView> { }
@@ -167,7 +167,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnGo")
   public void onBtnGo(TapEvent event) {
-    getPresenter().saveOrderInCloud(order, new Delegate<Order>() {
+    getPresenter().saveOrderOnServer(order, new Delegate<Order>() {
       public void execute(Order element) {
         PhgUtils.log("HIP HIP URRA!");
       }
