@@ -1,5 +1,6 @@
 package it.mate.commons.server.utils;
 
+
 public class StringUtils {
 
   public static String substringSlice (String text, String substring) {
@@ -10,6 +11,11 @@ public class StringUtils {
       return null;
     }
     return text.substring(index);
+  }
+  
+  public static String formatNumber(Number value, int digits) {
+    String fmt = "%0"+digits+"d";
+    return String.format(fmt, value);
   }
   
 }
