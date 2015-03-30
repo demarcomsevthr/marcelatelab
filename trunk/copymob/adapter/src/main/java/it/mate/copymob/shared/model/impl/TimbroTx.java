@@ -25,6 +25,10 @@ public class TimbroTx implements Timbro, IsMappable {
 
   private Double prezzo;
 
+  private String codCategoria;
+  
+  private String descCategoria;
+  
   @Override
   public String toString() {
     return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + ", remoteId="
@@ -51,6 +55,8 @@ public class TimbroTx implements Timbro, IsMappable {
     map.put("image", image);
     map.put("remoteId", remoteId);
     map.put("prezzo", prezzo);
+    map.put("codCategoria", codCategoria);
+    map.put("descCategoria", descCategoria);
     return map;
   }
 
@@ -65,6 +71,8 @@ public class TimbroTx implements Timbro, IsMappable {
     this.image = (String)map.get("image");
     this.remoteId = (String)map.get("remoteId");
     this.prezzo = (Double)map.get("prezzo");
+    this.codCategoria = (String)map.get("codCategoria");
+    this.descCategoria = (String)map.get("descCategoria");
     return this;
   }
 
@@ -144,4 +152,20 @@ public class TimbroTx implements Timbro, IsMappable {
     this.prezzo = prezzo;
   }
   
+  public String getCodCategoria() {
+    return codCategoria;
+  }
+
+  public void setCodCategoria(String codCategoria) {
+    this.codCategoria = codCategoria;
+  }
+
+  public String getDescCategoria() {
+    return descCategoria;
+  }
+
+  public void setDescCategoria(String descCategoria) {
+    this.descCategoria = descCategoria;
+  }
+
 }
