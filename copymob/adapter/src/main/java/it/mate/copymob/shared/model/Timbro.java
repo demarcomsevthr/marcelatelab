@@ -22,13 +22,6 @@ public interface Timbro extends Serializable {
 
   public Integer getId();
   
-  /*
-  public void setOval(boolean oval);
-  public boolean isOval();
-  public Integer getOvalInt();
-  public void setOvalInt(Integer oval);
-  */
-
   public void setHeight(Double height);
 
   public Double getHeight();
@@ -48,5 +41,13 @@ public interface Timbro extends Serializable {
   public void setPrezzo(Double prezzo);
 
   public Double getPrezzo();
+
+  public void setDescCategoria(String descCategoria);
+
+  public String getDescCategoria();
+
+  public void setCodCategoria(String codCategoria);
+
+  public String getCodCategoria();
 
 }
