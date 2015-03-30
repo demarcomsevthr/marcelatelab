@@ -1,12 +1,14 @@
 package it.mate.copymob.client.logic;
 
 import it.mate.copymob.shared.model.Account;
+import it.mate.copymob.shared.model.Categoria;
 import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
+import it.mate.copymob.shared.model.impl.CategoriaTx;
 import it.mate.copymob.shared.model.impl.MessageTx;
 import it.mate.copymob.shared.model.impl.OrderItemRowTx;
 import it.mate.copymob.shared.model.impl.OrderItemTx;
@@ -43,7 +45,7 @@ public class MainDao extends WebSQLDao {
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
   // ATTENZIONE: LASCIARE IL CAMPO IMAGE IN FONDO (NELLA CREATE VIENE ACCODATO IL DATATYPE BLOB)
-  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, image ";
+  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, image ";
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
@@ -160,6 +162,48 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void findAllCategorie(final Delegate<List<Categoria>> delegate) {
+    findAllTimbri(new Delegate<List<Timbro>>() {
+      public void execute(List<Timbro> timbri) {
+        List<Categoria> categorie = new ArrayList<Categoria>();
+        if (timbri != null) {
+          for (Timbro timbro : timbri) {
+            boolean found = false;
+            for (Categoria categoria : categorie) {
+              if (categoria.getCodice().equals(timbro.getCodCategoria())) {
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              categorie.add(new CategoriaTx(timbro.getCodCategoria(), timbro.getDescCategoria()));
+            }
+          }
+        }
+        delegate.execute(categorie);
+      }
+    });
+  }
+  
+  public void findTimbriByCategoria(final String codCategoria, final Delegate<List<Timbro>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE codCategoria = ? ORDER BY id", 
+            new Object[] {codCategoria}, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Timbro> results = new ArrayList<Timbro>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                results.add(flushRSToTimbro(rs, it));
+              }
+            }
+            delegate.execute(cloneList(results));
+          }
+        });
+      }
+    });
+  }
+  
   public void findAllTimbri(final Delegate<List<Timbro>> delegate) {
     if (this.cacheTimbri != null) {
       delegate.execute(cloneList(cacheTimbri));
@@ -237,6 +281,8 @@ public class MainDao extends WebSQLDao {
     result.setHeight(rows.getValueDouble(it, "height"));
     result.setOval(rows.getValueInt(it, "oval") == 1);
     result.setPrezzo(rows.getValueDouble(it, "prezzo"));
+    result.setCodCategoria(rows.getValueString(it, "codCategoria"));
+    result.setDescCategoria(rows.getValueString(it, "descCategoria"));
     return result;
   }
   
@@ -244,7 +290,7 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getNome(), 
                 entity.getCodice(),
@@ -252,6 +298,8 @@ public class MainDao extends WebSQLDao {
                 entity.getHeight(),
                 entity.getOval() ? 1 : 0,
                 entity.getPrezzo(),
+                entity.getCodCategoria(),
+                entity.getDescCategoria(),
                 entity.getImage()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -269,6 +317,8 @@ public class MainDao extends WebSQLDao {
           sql += " ,height = ?";
           sql += " ,oval = ?";
           sql += " ,prezzo = ?";
+          sql += " ,codCategoria = ?";
+          sql += " ,descCategoria = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getNome(), 
@@ -278,6 +328,8 @@ public class MainDao extends WebSQLDao {
               entity.getHeight(),
               entity.getOval() ? 1 : 0,
               entity.getPrezzo(),
+              entity.getCodCategoria(),
+              entity.getDescCategoria(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

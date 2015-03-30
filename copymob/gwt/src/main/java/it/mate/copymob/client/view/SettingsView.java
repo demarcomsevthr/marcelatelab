@@ -3,6 +3,8 @@ package it.mate.copymob.client.view;
 import it.mate.copymob.client.view.SettingsView.Presenter;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
 
@@ -52,7 +54,11 @@ public class SettingsView extends AbstractBaseView<Presenter> {
 
   @UiHandler("btnReset")
   public void onBtnReset(TapEvent event) {
-    getPresenter().resetDB();
+    GwtUtils.deferredExecution(200, new Delegate<Void>() {
+      public void execute(Void element) {
+        getPresenter().resetDB();
+      }
+    });
   }
   
   @UiHandler("btnDialog")

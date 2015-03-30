@@ -63,8 +63,17 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
   @Override
   @SuppressWarnings("unchecked")
   public void setModel(Object model, String tag) {
-    List<Timbro> timbri = (List<Timbro>)model;
-    populateCarousel(timbri);
+    if (model instanceof List) {
+      List<Timbro> timbri = (List<Timbro>)model;
+      populateCarousel(timbri);
+    } else if (model instanceof String) {
+      final String titolo = (String)model;
+      OnsenUi.onAvailableElement("onsUidToolbarCenterDiv", new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setInnerText(titolo);
+        }
+      });
+    }
   }
   
   private void populateCarousel(List<Timbro> timbri) {
