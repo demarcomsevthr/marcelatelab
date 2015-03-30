@@ -21,6 +21,8 @@
           <property name="height" value="100.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="9.0"/>
+          <property name="codCategoria" value="VEN"/>
+          <property name="descCategoria" value="I più venduti"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 20"/>
@@ -29,6 +31,8 @@
           <property name="height" value="140.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="10.0"/>
+          <property name="codCategoria" value="VEN"/>
+          <property name="descCategoria" value="I più venduti"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 30"/>
@@ -37,6 +41,8 @@
           <property name="height" value="180.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="11.0"/>
+          <property name="codCategoria" value="VEN"/>
+          <property name="descCategoria" value="I più venduti"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 40"/>
@@ -45,6 +51,8 @@
           <property name="height" value="230.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="12.0"/>
+          <property name="codCategoria" value="VEN"/>
+          <property name="descCategoria" value="I più venduti"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 53"/>
@@ -53,6 +61,8 @@
           <property name="height" value="300.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="15.0"/>
+          <property name="codCategoria" value="RET"/>
+          <property name="descCategoria" value="Rettangolari"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 54"/>
@@ -61,6 +71,8 @@
           <property name="height" value="400.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="16.0"/>
+          <property name="codCategoria" value="RET"/>
+          <property name="descCategoria" value="Rettangolari"/>
         </bean>
         <bean class="it.mate.copymob.server.model.TimbroDs">
           <property name="nome" value="Printer 55"/>
@@ -69,51 +81,10 @@
           <property name="height" value="400.0"/>
           <property name="oval" value="false"/>
           <property name="prezzo" value="16.0"/>
+          <property name="codCategoria" value="RET"/>
+          <property name="descCategoria" value="Rettangolari"/>
         </bean>
 
-        <!--       
-        <bean class="it.mate.copymob.server.model.TimbroDs">
-          <property name="nome" value="Timbro Uno"/>
-          <property name="codice" value="T001"/>
-          <property name="width" value="1200.0"/>
-          <property name="height" value="800.0"/>
-          <property name="oval" value="false"/>
-          <property name="prezzo" value="12.0"/>
-        </bean>
-        <bean class="it.mate.copymob.server.model.TimbroDs">
-          <property name="nome" value="Timbro Due"/>
-          <property name="codice" value="T002"/>
-          <property name="width" value="1200.0"/>
-          <property name="height" value="800.0"/>
-          <property name="oval" value="false"/>
-          <property name="prezzo" value="12.0"/>
-        </bean>
-        <bean class="it.mate.copymob.server.model.TimbroDs">
-          <property name="nome" value="Timbro Tre"/>
-          <property name="codice" value="T003"/>
-          <property name="width" value="1200.0"/>
-          <property name="height" value="800.0"/>
-          <property name="oval" value="false"/>
-          <property name="prezzo" value="12.0"/>
-        </bean>
-        <bean class="it.mate.copymob.server.model.TimbroDs">
-          <property name="nome" value="Timbro Quattro"/>
-          <property name="codice" value="T004"/>
-          <property name="width" value="1200.0"/>
-          <property name="height" value="800.0"/>
-          <property name="oval" value="false"/>
-          <property name="prezzo" value="12.0"/>
-        </bean>
-        <bean class="it.mate.copymob.server.model.TimbroDs">
-          <property name="nome" value="Timbro Cinque"/>
-          <property name="codice" value="T005"/>
-          <property name="width" value="1200.0"/>
-          <property name="height" value="800.0"/>
-          <property name="oval" value="false"/>
-          <property name="prezzo" value="12.0"/>
-        </bean>
-         -->
-         
       </list>
     </property>
   </bean>

@@ -34,7 +34,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -46,15 +45,17 @@ import com.google.gwt.user.server.Base64Utils;
 @Service
 public class RemoteAdapterImpl implements RemoteAdapter {
   
-  private static Logger logger = Logger.getLogger(RemoteFacadeImpl.class);
-  
   @Autowired private Dao dao;
+  
+  private List<Timbro> cacheTimbri;
+  
+  private static byte[] nonalfanum = new byte[48];
   
   @PostConstruct
   public void postConstruct() {
-    logger.debug("initialized " + this);
+    LoggingUtils.debug(getClass(), "initialized " + this);
     if (dao == null) {
-      logger.error("error", new InstantiationException("dao is null!"));
+      LoggingUtils.error(getClass(), "error", new InstantiationException("dao is null!"));
     }
   }
 
@@ -106,25 +107,28 @@ public class RemoteAdapterImpl implements RemoteAdapter {
   }
 
   public List<Timbro> getTimbri() throws Exception {
-    List<Timbro> timbri;
-    List<TimbroDs> timbriDB = dao.findAll(TimbroDs.class);
-    if (timbriDB == null || timbriDB.size() == 0) {
-      timbri = loadTimbri();
-      for (Timbro timbro : timbri) {
-        TimbroDs timbroDs = (TimbroDs)timbro;
-        timbroDs = dao.create(timbroDs);
-        timbriDB.add(timbroDs);
+    if (cacheTimbri == null) {
+      List<Timbro> timbri;
+      List<TimbroDs> timbriDs = dao.findAll(TimbroDs.class);
+      if (timbriDs == null || timbriDs.size() == 0) {
+        timbri = AdapterUtil.getInitAdapterBean().getTimbri();
+        for (Timbro timbro : timbri) {
+          TimbroDs timbroDs = (TimbroDs)timbro;
+          timbroDs = dao.create(timbroDs);
+          timbriDs.add(timbroDs);
+        }
       }
+      timbri = new ArrayList<Timbro>();
+      for (TimbroDs timbroDs : timbriDs) {
+        timbri.add(timbroDs);
+      }
+      timbri = loadTimbriImages(timbri);
+      cacheTimbri = timbri;
     }
-    timbri = new ArrayList<Timbro>();
-    for (TimbroDs timbroDs : timbriDB) {
-      timbri.add(timbroDs);
-    }
-    return timbri;
+    return cacheTimbri;
   }
   
-  private List<Timbro> loadTimbri() throws Exception {
-    List<Timbro> timbri = AdapterUtil.getInitAdapterBean().getTimbri();
+  private List<Timbro> loadTimbriImages(List<Timbro> timbri) throws Exception {
     for (Timbro timbro : timbri) {
       LoggingUtils.debug(getClass(), "found " + timbro);
       String imageFileName = String.format("META-INF/setup-data/images/%s.jpg", timbro.getCodice() );
@@ -154,8 +158,6 @@ public class RemoteAdapterImpl implements RemoteAdapter {
     }
     return resourceFile;
   }
-  
-  private static byte[] nonalfanum = new byte[48];
   
   private static String inputStreamToBase64 (InputStream is) throws IOException {
     byte[] buf = new byte[1024];

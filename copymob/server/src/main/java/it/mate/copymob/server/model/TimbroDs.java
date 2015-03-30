@@ -43,6 +43,13 @@ public class TimbroDs implements Timbro, HasKey {
 
   @NotPersistent
   private Integer localId;
+  
+  @Persistent
+  private String codCategoria;
+  
+  @Persistent
+  private String descCategoria;
+  
 
   @Override
   public String toString() {
@@ -128,6 +135,22 @@ public class TimbroDs implements Timbro, HasKey {
 
   public void setPrezzo(Double prezzo) {
     this.prezzo = prezzo;
+  }
+
+  public String getCodCategoria() {
+    return codCategoria;
+  }
+
+  public void setCodCategoria(String codCategoria) {
+    this.codCategoria = codCategoria;
+  }
+
+  public String getDescCategoria() {
+    return descCategoria;
+  }
+
+  public void setDescCategoria(String descCategoria) {
+    this.descCategoria = descCategoria;
   }
 
 }
