@@ -6,6 +6,7 @@ import it.mate.copymob.client.logic.TimbriInitializer;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.CartListView;
+import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
@@ -15,6 +16,7 @@ import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
 import it.mate.copymob.shared.model.Account;
+import it.mate.copymob.shared.model.Categoria;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
@@ -51,7 +53,7 @@ public class MainActivity extends OnsAbstractActivity implements
   TimbriListView.Presenter,
   TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter,
   MessageListView.Presenter, AccountEditView.Presenter,
-  CartListView.Presenter
+  CartListView.Presenter, CategorieListView.Presenter
   {
   
   private MainPlace place;
@@ -109,6 +111,10 @@ public class MainActivity extends OnsAbstractActivity implements
       this.view = AppClientFactory.IMPL.getGinjector().getSettingsView();
     }
     
+    if (place.getToken().equals(MainPlace.CATEGORIE_LIST)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getCategorieListView();
+    }
+    
     if (place.getToken().equals(MainPlace.TIMBRI_LIST)) {
       this.view = AppClientFactory.IMPL.getGinjector().getTimbriListView();
     }
@@ -153,12 +159,29 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   private void retrieveModel() {
-    if (place.getToken().equals(MainPlace.TIMBRI_LIST)) {
-      dao.findAllTimbri(new Delegate<List<Timbro>>() {
-        public void execute(List<Timbro> timbri) {
-          view.setModel(timbri, "timbri");
+    if (place.getToken().equals(MainPlace.CATEGORIE_LIST)) {
+      dao.findAllCategorie(new Delegate<List<Categoria>>() {
+        public void execute(List<Categoria> categorie) {
+          view.setModel(categorie, "categorie");
         }
       });
+    }
+    if (place.getToken().equals(MainPlace.TIMBRI_LIST)) {
+      if (place.getModel() instanceof Categoria) {
+        final Categoria categoria = (Categoria)place.getModel();
+        dao.findTimbriByCategoria(categoria.getCodice(), new Delegate<List<Timbro>>() {
+          public void execute(List<Timbro> timbri) {
+            view.setModel(categoria.getDescrizione(), "categoria");
+            view.setModel(timbri, "timbri");
+          }
+        });
+      } else {
+        dao.findAllTimbri(new Delegate<List<Timbro>>() {
+          public void execute(List<Timbro> timbri) {
+            view.setModel(timbri, "timbri");
+          }
+        });
+      }
     }
     if (place.getToken().equals(MainPlace.TIMBRO_DETAIL)) {
       view.setModel(place.getModel());
@@ -212,6 +235,16 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToTimbriListView() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRI_LIST));
+  }
+
+  @Override
+  public void goToTimbriListView(Categoria categoria) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.TIMBRI_LIST, categoria));
+  }
+
+  @Override
+  public void goToCategorieListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CATEGORIE_LIST));
   }
 
   @Override
@@ -487,7 +520,7 @@ public class MainActivity extends OnsAbstractActivity implements
     setWaitingState(flag);
   }
   
-  private void setWaitingState(boolean waiting) {
+  public static void setWaitingState(boolean waiting) {
     OnsToolbar.setWaitingButtonVisible(waiting);
     HasTapHandlerImpl.setAllHandlersDisabled(waiting);
   }

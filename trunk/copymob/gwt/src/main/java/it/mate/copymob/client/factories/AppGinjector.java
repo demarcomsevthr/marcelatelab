@@ -4,6 +4,7 @@ import it.mate.copymob.client.activities.mapper.MainActivityMapper;
 import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.CartListView;
+import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
@@ -32,6 +33,8 @@ public interface AppGinjector extends CommonGinjector {
   public HomeView getHomeView();
   
   public SettingsView getSettingsView();
+  
+  public CategorieListView getCategorieListView();
   
   public TimbriListView getTimbriListView();
   

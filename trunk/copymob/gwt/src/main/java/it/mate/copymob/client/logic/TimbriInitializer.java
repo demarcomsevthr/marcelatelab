@@ -1,5 +1,6 @@
 package it.mate.copymob.client.logic;
 
+import it.mate.copymob.client.activities.MainActivity;
 import it.mate.copymob.client.factories.AppClientFactory;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.TimbroTx;
@@ -76,8 +77,10 @@ public class TimbriInitializer {
   
   
   private void loadTimbriFromCloudServer(final Delegate<List<Timbro>> delegate) {
+    MainActivity.setWaitingState(true);
     AppClientFactory.IMPL.getRemoteFacade().getTimbri(new AsyncCallback<List<RpcMap>>() {
       public void onSuccess(List<RpcMap> results) {
+        MainActivity.setWaitingState(false);
         if (results != null) {
           List<Timbro> timbri = new ArrayList<Timbro>();
           for (RpcMap map : results) {
@@ -90,6 +93,7 @@ public class TimbriInitializer {
         }
       }
       public void onFailure(Throwable caught) {
+        MainActivity.setWaitingState(false);
         PhgUtils.log("GET TIMBRI FROM CLOUD FAILURE!");
         caught.printStackTrace();
       }

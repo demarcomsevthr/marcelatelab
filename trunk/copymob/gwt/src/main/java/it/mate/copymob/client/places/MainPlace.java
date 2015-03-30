@@ -17,6 +17,8 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String ABOUT = "about";
   
+  public static final String CATEGORIE_LIST = "categorieList";
+  
   public static final String TIMBRI_LIST = "timbriList";
   
   public static final String TIMBRO_DETAIL = "timbroDetail";

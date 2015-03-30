@@ -14,7 +14,7 @@
         <div class="left">
           <o:OnsBackButton/>
         </div>
-        <div class="center">Elenco Timbri</div>
+        <div class="center" id="onsUidToolbarCenterDiv">Elenco Timbri</div>
       </o:OnsToolbar>
       
         <!-- PROVE FATTE
