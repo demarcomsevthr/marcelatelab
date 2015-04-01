@@ -18,16 +18,29 @@ public class MessageTx implements Message, IsMappable {
   
   private Order order;
   
+  private Integer orderItemId;
+  
+  private String remoteId;
+  
   @Override
   public RpcMap toRpcMap() {
-    // TODO Auto-generated method stub
-    return null;
+    RpcMap map = new RpcMap();
+    map.put("id", id);
+    map.put("data", data);
+    map.put("text", text);
+    map.put("orderItemId", orderItemId);
+    map.put("remoteId", remoteId);
+    return map;
   }
 
   @Override
-  public IsMappable fromRpcMap(RpcMap map) {
-    // TODO Auto-generated method stub
-    return null;
+  public MessageTx fromRpcMap(RpcMap map) {
+    this.id = (Integer)map.get("id");
+    this.data = (Date)map.get("data");
+    this.text = (String)map.get("text");
+    this.orderItemId = (Integer)map.get("orderItemId");
+    this.remoteId = (String)map.get("remoteId");
+    return this;
   }
 
   public Integer getId() {
@@ -68,6 +81,22 @@ public class MessageTx implements Message, IsMappable {
   
   public void setOrderId(Integer id) {
     this.order = id != null ? new OrderTx(id) : null;
+  }
+
+  public Integer getOrderItemId() {
+    return orderItemId;
+  }
+
+  public void setOrderItemId(Integer orderItemId) {
+    this.orderItemId = orderItemId;
+  }
+
+  public String getRemoteId() {
+    return remoteId;
+  }
+
+  public void setRemoteId(String remoteId) {
+    this.remoteId = remoteId;
   }
   
 }
