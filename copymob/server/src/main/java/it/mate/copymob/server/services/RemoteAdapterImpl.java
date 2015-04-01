@@ -9,12 +9,14 @@ import it.mate.commons.server.utils.StringUtils;
 import it.mate.copymob.server.model.AccountDs;
 import it.mate.copymob.server.model.CounterDs;
 import it.mate.copymob.server.model.DevInfoDs;
+import it.mate.copymob.server.model.MessageDs;
 import it.mate.copymob.server.model.OrderDs;
 import it.mate.copymob.server.model.OrderItemDs;
 import it.mate.copymob.server.model.OrderItemRowDs;
 import it.mate.copymob.server.model.TimbroDs;
 import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.DevInfo;
+import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
@@ -247,6 +249,15 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       }
       itemDs.setRows(rows);
     }
+    List<Message> messages = itemDs.getMessages();
+    if (messages != null) {
+      for (int it = 0; it < messages.size(); it++) {
+        MessageDs messageDs = (MessageDs)messages.get(it);
+        messageDs = createOrUpdateMessageDs(messageDs);
+        messages.set(it, messageDs);
+      }
+      itemDs.setMessages(messages);
+    }
     if (itemDs.getKey() == null) {
       itemDs = dao.create(itemDs);
     } else {
@@ -262,6 +273,15 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       rowDs = dao.update(rowDs);
     }
     return rowDs;
+  }
+  
+  private MessageDs createOrUpdateMessageDs (MessageDs messageDs) {
+    if (messageDs.getKey() == null) {
+      messageDs = dao.create(messageDs);
+    } else {
+      messageDs = dao.update(messageDs);
+    }
+    return messageDs;
   }
   
   protected long getNextCounterValue () {
