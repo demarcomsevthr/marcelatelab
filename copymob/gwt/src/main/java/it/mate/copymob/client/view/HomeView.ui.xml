@@ -20,8 +20,7 @@
       </g:HTML>
   
       <g:VerticalPanel horizontalAlignment="left" addStyleNames="app-home-buttonbar">
-        <o:OnsButton ui:field="btnTimbri" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri"/>
-        <o:OnsButton ui:field="btnCategorie" addStyleNames="app-home-btnpanel app-btn-img2" text="Categorie"/>
+        <o:OnsButton ui:field="btnCategorie" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri"/>
         <o:OnsButton ui:field="btnCart" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Carrello"/>
         <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-credit-card" text="Ordini"/>
         <o:OnsButton ui:field="btnSettings" addStyleNames="app-home-btnpanel" icon="fa-cog" text="Settings"/>

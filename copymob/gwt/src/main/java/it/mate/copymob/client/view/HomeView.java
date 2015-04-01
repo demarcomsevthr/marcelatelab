@@ -63,11 +63,13 @@ public class HomeView extends AbstractBaseView<Presenter> {
   public void onBtnMenu(TapEvent event) {
     getPresenter().showMenu();
   }
-  
+
+  /*
   @UiHandler("btnTimbri")
   public void onBtnTimbri(TapEvent event) {
     getPresenter().goToTimbriListView();
   }
+  */
   
   @UiHandler("btnCategorie")
   public void onBtnCategorie(TapEvent event) {
@@ -78,12 +80,5 @@ public class HomeView extends AbstractBaseView<Presenter> {
   public void onBtnCart(TapEvent event) {
     getPresenter().goToCartListView();
   }
-  
-  /*
-  @UiHandler("btnTimbri2")
-  public void onBtnTimbri2(TapEvent event) {
-    getPresenter().goToTimbriListView();
-  }
-  */
   
 }

@@ -6,6 +6,7 @@ import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
+import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
@@ -33,7 +34,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class CartListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void saveOrderOnServer(Order order, Delegate<Order> delegate);
+    public void saveRemoteOrder(Order order, Delegate<Order> delegate);
+    public void goToOrderItemEditView(OrderItem orderItem);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CartListView> { }
@@ -60,18 +62,12 @@ public class CartListView extends AbstractBaseView<Presenter> {
 
   @Override
   public void setModel(Object model, String tag) {
-    
     if (model == null) {
-      
       cartList.add(new OnsLabel("Il carrello è vuoto"));
-      
     } else if (model instanceof Order) {
-      
       this.order = (Order)model;
       populateList();
-      
     }
-
   }
   
   private void populateList() {
@@ -96,10 +92,16 @@ public class CartListView extends AbstractBaseView<Presenter> {
       rowPanel.add(nameLbl);
       
       OnsHorizontalPanel qtaPanel = new OnsHorizontalPanel();
-      qtaPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
+      qtaPanel.add(new Spacer("2em"));
+//    qtaPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 
       final OnsLabel qtaFld = new OnsLabel();
       setQtaLbl(qtaFld, orderItem.getQuantity());
+      
+      OnsButton fillerBtn = new OnsButton("");
+      fillerBtn.addStyleName("app-cart-btn-plus");
+      fillerBtn.setIcon("fa-hando-o-right");
+      fillerBtn.setModifier("quiet");
       
       OnsButton plusBtn = new OnsButton("");
       plusBtn.addStyleName("app-cart-btn-plus");
@@ -130,17 +132,36 @@ public class CartListView extends AbstractBaseView<Presenter> {
         }
       });
       
+      qtaPanel.add(fillerBtn);
       qtaPanel.add(plusBtn);
       qtaPanel.add(qtaFld);
       qtaPanel.add(minusBtn);
       
       rowPanel.add(qtaPanel);
       
+      OnsHorizontalPanel actionsPanel = new OnsHorizontalPanel();
+      OnsButton editBtn = new OnsButton("");
+      editBtn.addStyleName("app-cart-btn-edit");
+      editBtn.setIcon("fa-edit");
+      editBtn.setModifier("quiet");
+      editBtn.addTapHandler(new TapHandler() {
+        public void onTap(TapEvent event) {
+          getPresenter().goToOrderItemEditView(orderItem);
+        }
+      });
+      actionsPanel.add(editBtn);
+      
+      rowPanel.add(actionsPanel);
+      
       listItem.add(rowPanel);
       
       cartList.add(listItem);
 
     }
+    
+  }
+  
+  private void xx() {
     
   }
   
@@ -167,7 +188,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnGo")
   public void onBtnGo(TapEvent event) {
-    getPresenter().saveOrderOnServer(order, new Delegate<Order>() {
+    getPresenter().saveRemoteOrder(order, new Delegate<Order>() {
       public void execute(Order element) {
         PhgUtils.log("HIP HIP URRA!");
       }

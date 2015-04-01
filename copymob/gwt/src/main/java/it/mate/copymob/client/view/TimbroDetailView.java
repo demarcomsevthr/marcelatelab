@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TimbroDetailView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void goToTimbroPreviewView(Timbro timbro);
+    public void goToOrderItemEditView(Timbro timbro);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbroDetailView> { }
@@ -52,7 +52,7 @@ public class TimbroDetailView extends AbstractBaseView<Presenter> {
 
   @UiHandler("btnCompose")
   public void onBtnCompose(TapEvent event) {
-    getPresenter().goToTimbroPreviewView(timbro);
+    getPresenter().goToOrderItemEditView(timbro);
   }
   
 }

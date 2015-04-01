@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class OrderItemComposeView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void saveCurrentOrderItem(OrderItem item, Delegate<Order> delegate);
+    public void saveLocalOrderItem(OrderItem item, Delegate<Order> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, OrderItemComposeView> { }
@@ -184,7 +184,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
 
   @UiHandler("btnSave")
   public void onBtnSave(TapEvent event) {
-    getPresenter().saveCurrentOrderItem(flushModel(), new Delegate<Order>() {
+    getPresenter().saveLocalOrderItem(flushModel(), new Delegate<Order>() {
       public void execute(Order element) {
         getPresenter().goToPrevious();
       }
