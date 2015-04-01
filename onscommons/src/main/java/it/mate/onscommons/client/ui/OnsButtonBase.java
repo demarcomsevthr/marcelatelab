@@ -61,6 +61,14 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
     }
   }
   
+  public void setTextWhenAvailable(final String text) {
+    OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setInnerText(text);
+      }
+    });
+  }
+  
   public String getText() {
     return text;
   }

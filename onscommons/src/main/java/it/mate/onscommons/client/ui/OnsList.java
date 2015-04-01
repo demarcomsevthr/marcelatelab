@@ -80,4 +80,12 @@ public class OnsList extends HTMLPanel {
     });
   }
 
+  public void compile() {
+    GwtUtils.onAvailable(getElement().getId(), new Delegate<Element>() {
+      public void execute(Element listElement) {
+        OnsenUi.compileElement(listElement);
+      }
+    });
+  }
+  
 }
