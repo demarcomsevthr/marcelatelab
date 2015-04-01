@@ -3,6 +3,7 @@ package it.mate.copymob.server.model;
 import it.mate.commons.server.model.CollectionPropertyServerUtil;
 import it.mate.commons.server.model.HasKey;
 import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
@@ -48,6 +49,12 @@ public class OrderItemDs implements OrderItem, HasKey {
   List<Key> rowKeys;
   @UnownedRelationship (key="rowKeys", itemClass=OrderItemRowDs.class)
   transient List<OrderItemRowDs> rows;
+  
+  @Persistent (dependentKey="false", defaultFetchGroup="false")
+  List<Key> messageKeys;
+  @UnownedRelationship (key="messageKeys", itemClass=MessageDs.class)
+  transient List<MessageDs> messages;
+  
   
   public Key getKey() {
     return remoteId;
@@ -131,6 +138,18 @@ public class OrderItemDs implements OrderItem, HasKey {
     CollectionPropertyServerUtil<OrderItemRow, OrderItemRowDs> wrapper = CollectionPropertyServerUtil.clone(rows, OrderItemRowDs.class);
     this.rows = wrapper.getItems();
     this.rowKeys = wrapper.getKeys();
+  }
+  
+  @Override
+  public List<Message> getMessages() {
+    return messages != null ? new ArrayList<Message>(messages) : null;
+  }
+  
+  @CloneableProperty (targetClass=MessageDs.class)
+  public void setMessages(List<Message> messages) {
+    CollectionPropertyServerUtil<Message, MessageDs> wrapper = CollectionPropertyServerUtil.clone(messages, MessageDs.class);
+    this.messages = wrapper.getItems();
+    this.messageKeys = wrapper.getKeys();
   }
   
 }
