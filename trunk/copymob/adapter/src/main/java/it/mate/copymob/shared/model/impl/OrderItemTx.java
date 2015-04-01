@@ -1,5 +1,6 @@
 package it.mate.copymob.shared.model.impl;
 
+import it.mate.copymob.shared.model.Message;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
@@ -28,6 +29,8 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private List<OrderItemRowTx> rows = new ArrayList<OrderItemRowTx>();
   
+  private List<MessageTx> messages = new ArrayList<MessageTx>();
+  
   
   @Override
   public String toString() {
@@ -50,6 +53,13 @@ public class OrderItemTx implements OrderItem, IsMappable {
       rowMaps.add(rowMap);
     }
     map.put("rowMaps", rowMaps);
+    List<RpcMap> messageMaps = new ArrayList<RpcMap>();
+    for (Message message : messages) {
+      MessageTx messageTx = (MessageTx)message;
+      RpcMap messageMap = messageTx.toRpcMap();
+      messageMaps.add(messageMap);
+    }
+    map.put("messageMaps", messageMaps);
     return map;
   }
   
@@ -71,6 +81,14 @@ public class OrderItemTx implements OrderItem, IsMappable {
       for (RpcMap rowMap : rowMaps) {
         OrderItemRowTx rowTx = new OrderItemRowTx().fromRpcMap(rowMap);
         this.rows.add(rowTx);
+      }
+    }
+    this.messages = new ArrayList<MessageTx>();
+    List<RpcMap> messageMaps = (List<RpcMap>)map.get("messageMaps");
+    if (messageMaps != null) {
+      for (RpcMap messageMap : messageMaps) {
+        MessageTx messageTx = new MessageTx().fromRpcMap(messageMap);
+        this.messages.add(messageTx);
       }
     }
     return this;
@@ -138,13 +156,25 @@ public class OrderItemTx implements OrderItem, IsMappable {
       }
     }
     return CollectionPropertyClientUtil.cast(rows, OrderItemRowTx.class);
-//  return rows;
   }
 
   @CloneableProperty (targetClass=OrderItemRowTx.class)
   public void setRows(List<OrderItemRow> rows) {
     this.rows = CollectionPropertyClientUtil.clone(rows, OrderItemRowTx.class);
-//  this.rows = rows;
+  }
+  
+  public List<Message> getMessages() {
+    if (messages != null) {
+      for (Message message : messages) {
+        message.setOrderItemId(getId());
+      }
+    }
+    return CollectionPropertyClientUtil.cast(messages, MessageTx.class);
+  }
+  
+  @CloneableProperty (targetClass=MessageTx.class)
+  public void setMessages(List<Message> messages) {
+    this.messages = CollectionPropertyClientUtil.clone(messages, MessageTx.class);
   }
 
   public Timbro getTimbro() {

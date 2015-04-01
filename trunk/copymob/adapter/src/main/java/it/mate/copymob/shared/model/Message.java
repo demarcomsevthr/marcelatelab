@@ -23,4 +23,12 @@ public interface Message extends Serializable {
 
   public Integer getId();
 
+  public void setOrderItemId(Integer orderItemId);
+
+  public Integer getOrderItemId();
+
+  public void setRemoteId(String remoteId);
+
+  public String getRemoteId();
+
 }

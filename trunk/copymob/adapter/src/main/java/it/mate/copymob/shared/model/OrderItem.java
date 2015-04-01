@@ -39,4 +39,8 @@ public interface OrderItem extends Serializable {
 
   public String getRemoteId();
 
+  public void setMessages(List<Message> messages);
+
+  public List<Message> getMessages();
+
 }
