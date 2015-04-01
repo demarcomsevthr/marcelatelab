@@ -13,21 +13,24 @@
     
       <o:OnsToolbar>
         <div class="left">
+          <!-- 
           <o:OnsToolbarButton ui:field="btnMenu" visible="false"><o:OnsIcon icon="fa-bars"/></o:OnsToolbarButton>
+           -->
+          <o:OnsBackButton/>
         </div>
         <div class="center">Messaggi</div>
       </o:OnsToolbar>
-      
-      <o:OnsScroller height="80%" width="100%" ui:field="scroller">
-        <o:OnsList ui:field="rowsPanel"/>
+
+      <!-- 
+      <o:OnsList ui:field="list" modifier="noborder" height="92%"/>
+       -->
+        
+      <o:OnsScroller height="92%" width="100%" ui:field="scroller">
+        <o:OnsList ui:field="list" modifier="noborder"/>
       </o:OnsScroller>
       
       <g:HorizontalPanel addStyleNames="app-msg-bottombar">
         <o:OnsButton text="All" ui:field="btnAttach" addStyleNames="app-msg-attach-btn"/>
-        <!-- 
-        <o:OnsTextBox ui:field="txtNewMessage" addStyleNames="app-msg-newmsg-box"/>
-         -->
-         <!--  -->
         <o:OnsTextArea ui:field="txtNewMessage" addStyleNames="app-msg-newmsg-box" resizeable="true"/>
         <o:OnsButton text="Send" ui:field="btnSend" addStyleNames="app-msg-send-btn"/>
       </g:HorizontalPanel>

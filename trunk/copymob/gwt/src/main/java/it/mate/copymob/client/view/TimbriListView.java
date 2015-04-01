@@ -26,7 +26,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTimbroDetailView(Timbro timbro);
-    public void addTimbroToOrder(Timbro timbro, Delegate<Timbro> delegate);
+    public void addTimbroToCurrentOrder(Timbro timbro, Delegate<Timbro> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbriListView> { }
@@ -121,7 +121,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
     carousel.getActiveItem(new Delegate<OnsCarouselItem>() {
       public void execute(OnsCarouselItem item) {
         Timbro timbro = (Timbro)item.getModel();
-        getPresenter().addTimbroToOrder(timbro, null);
+        getPresenter().addTimbroToCurrentOrder(timbro, null);
       }
     });
   }

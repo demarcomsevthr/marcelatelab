@@ -19,6 +19,7 @@ public class MenuView extends AbstractBaseView<Presenter> {
     public void goToSettingsView();
     public void goToTimbriListView();
     public void goToMessageListView();
+    public void goToCategorieListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MenuView> { }
@@ -57,7 +58,8 @@ public class MenuView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnTimbri")
   public void onBtnTimbri(TapEvent event) {
-    getPresenter().goToTimbriListView();
+//  getPresenter().goToTimbriListView();
+    getPresenter().goToCategorieListView();
   }
   
   @UiHandler("btnMessaggi")

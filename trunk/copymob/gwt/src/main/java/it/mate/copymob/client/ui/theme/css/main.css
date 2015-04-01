@@ -1,5 +1,5 @@
 
-@external gwt*, phg*, app*, ons*;
+@external gwt*, phg*, app*, ons*, popover;
 
 @eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
 
@@ -294,6 +294,8 @@
 .app-msg-bottombar {
   position: absolute;
   bottom: 0.2em;
+  width: 100%;
+  background-color: lightgray;
 }
 
 .app-setting-label {
@@ -305,4 +307,26 @@
 
 .app-cart-item-img {
   width: 40px
+}
+
+.app-ons-list-item-message {
+  height: 7em;
+  padding-top: 0.5em;
+}
+
+.app-ons-list-item-message .popover {
+  width: 80%;
+}
+
+.app-ons-list-item-message-content {
+  display: -webkit-box;
+  height: 4.8em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.app-msg-newmsg-box {
+  width: 100%;
 }

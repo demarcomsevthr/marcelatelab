@@ -16,11 +16,7 @@
       </o:OnsToolbar>
       
       <o:OnsScroller addStyleNames="app-cart-scroller">
-        
-        <o:OnsList ui:field="cartList">
-        
-        </o:OnsList>
-
+        <o:OnsList ui:field="cartList"/>
       </o:OnsScroller>
 
       <o:OnsButton text="Procedi" ui:field="btnGo" addStyleNames="app-timbri-choose-btn"/>

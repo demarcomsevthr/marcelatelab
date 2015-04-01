@@ -61,7 +61,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_ITEM_ROW_FIELDS = ORDER_ITEM_ROW_FIELDS_0;
   
-  private final static String MESSAGE_FIELDS_0 = "data, text, orderId ";
+  private final static String MESSAGE_FIELDS_0 = "data, text, orderId, orderItemId, remoteId ";
 
   private final static String MESSAGE_FIELDS = MESSAGE_FIELDS_0;
   
@@ -479,7 +479,16 @@ public class MainDao extends WebSQLDao {
             findOrderItemRows(tr, result.getId(), new Delegate<List<OrderItemRow>>() {
               public void execute(List<OrderItemRow> rows) {
                 result.setRows(rows);
-                iterate(it + 1);
+                
+                findMessages(tr, result.getId(), new Delegate<List<Message>>() {
+                  public void execute(List<Message> messages) {
+
+                    result.setMessages(messages);
+                    iterate(it + 1);
+                    
+                  }
+                });
+                
               }
             });
           }
@@ -554,6 +563,20 @@ public class MainDao extends WebSQLDao {
     protected List<OrderItemRow> getResults() {
       return results;
     }
+  }
+  
+  protected void findMessages(SQLTransaction tr, Integer orderItemId, final Delegate<List<Message>> delegate) {
+    PhgUtils.log(" ----  select messages  ----");
+    tr.doExecuteSql("SELECT id, " + MESSAGE_FIELDS + " FROM messages WHERE orderItemId = ? ORDER BY id", 
+        new Object[]{orderItemId}, new SQLStatementCallback() {
+      public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+        new RSToMessageIterator(tr, rs, new Delegate<List<Message>>() {
+          public void execute(List<Message> results) {
+            delegate.execute(results);
+          }
+        });
+      }
+    });
   }
   
   
@@ -671,8 +694,16 @@ public class MainDao extends WebSQLDao {
               public void execute(Void element) {
                 iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
                   public void execute(Void element) {
-                    PhonegapLog.log("Updated " + entity);
-                    delegate.execute(entity);
+                    
+                    iterateMessagesForUpdate(tr, entity.getMessages().iterator(), new Delegate<Void>() {
+                      public void execute(Void element) {
+                        
+                        PhonegapLog.log("Updated " + entity);
+                        delegate.execute(entity);
+                        
+                      }
+                    });
+                    
                   }
                 });
               }
@@ -766,6 +797,19 @@ public class MainDao extends WebSQLDao {
     }
   }
   
+  protected void iterateMessagesForUpdate(final SQLTransaction tr, final Iterator<Message> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      Message message = it.next();
+      saveMessage(tr, message, new Delegate<Message>() {
+        public void execute(Message message) {
+          iterateMessagesForUpdate(tr, it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
+  }
+  
   /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
   /* MESSAGES */
   
@@ -818,6 +862,8 @@ public class MainDao extends WebSQLDao {
       ((MessageTx)result).setOrderId(rows.getValueInt(it, "orderId"));
       result.setData(longAsDate(rows.getValueLong(it, "data")));
       result.setText(rows.getValueString(it, "text"));
+      result.setOrderItemId(rows.getValueInt(it, "orderItemId"));
+      result.setRemoteId(rows.getValueString(it, "remoteId"));
       return result;
     }
     protected List<Message> getResults() {
@@ -835,11 +881,13 @@ public class MainDao extends WebSQLDao {
   
   protected void saveMessage(SQLTransaction tr, final Message entity, final Delegate<Message> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO messages (" + MESSAGE_FIELDS + ") VALUES (?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO messages (" + MESSAGE_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
           new Object[] {
             dateAsLong(entity.getData()), 
             entity.getText(),
-            entity.getOrderId()
+            entity.getOrderId(),
+            entity.getOrderItemId(),
+            entity.getRemoteId()
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -852,11 +900,15 @@ public class MainDao extends WebSQLDao {
       sql += "  data = ?";
       sql += " ,text = ?";
       sql += " ,orderId = ?";
+      sql += " ,orderItemId = ?";
+      sql += " ,remoteId = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           dateAsLong(entity.getData()), 
           entity.getText(),
           entity.getOrderId(),
+          entity.getOrderItemId(),
+          entity.getRemoteId(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
