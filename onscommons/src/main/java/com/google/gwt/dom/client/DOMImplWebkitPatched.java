@@ -1,5 +1,6 @@
 package com.google.gwt.dom.client;
 
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 
@@ -13,10 +14,12 @@ public class DOMImplWebkitPatched extends DOMImplWebkit {
   @Override
   public Element createElement(Document doc, String tag) {
     Element element = super.createElement(doc, tag);
-    ensureId(element);
+//  ensureId(element);
+    OnsenUi.ensureId(element);
     return element;
   }
   
+  /*
   protected void ensureId(Element element) {
     if (element.getId() == null || "".equals(element.getId())) {
       element.setId(createUniqueId());

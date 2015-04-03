@@ -2,7 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
-import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.onscommons.client.onsen.OnsenUi;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -27,7 +27,7 @@ public class OnsButtonPanel_TEST_AND40 extends /* HTMLPanel */ ComplexPanel impl
     setElement(element);
     getElement().setInnerHTML(html);
     getElement().addClassName("ons-button");
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
   

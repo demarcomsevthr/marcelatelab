@@ -3,7 +3,6 @@ package it.mate.onscommons.client.ui;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -22,7 +21,7 @@ public class OnsVerticalPanel extends VerticalPanel {
   
   public OnsVerticalPanel() {
     super();
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
   }
   
   public void setAddDirect(boolean addDirect) {

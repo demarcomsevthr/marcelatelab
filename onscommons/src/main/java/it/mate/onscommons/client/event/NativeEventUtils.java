@@ -2,7 +2,7 @@ package it.mate.onscommons.client.event;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
-import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -13,7 +13,8 @@ public class NativeEventUtils {
 
   
   public static void addEventListenerDelegate(Widget widget, final String eventName, final Delegate<Element> delegate) {
-    PhgUtils.ensureId(widget.getElement());
+//  PhgUtils.ensureId(widget.getElement());
+    OnsenUi.ensureId(widget.getElement());
     GwtUtils.onAvailable(widget.getElement().getId(), new Delegate<Element>() {
       public void execute(Element attachedElement) {
         addEventListenerElemImpl(attachedElement, eventName, new JSOCallback() {

@@ -45,7 +45,7 @@ public class OnsCarousel extends HTMLPanel {
   protected OnsCarousel(String tag, String html) {
     super(tag, html);
     getElement().addClassName(TAG_NAME);
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
     getElement().setAttribute("var", "app.onsCarousel");
   }
   

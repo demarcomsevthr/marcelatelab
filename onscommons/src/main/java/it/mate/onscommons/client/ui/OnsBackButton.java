@@ -5,7 +5,6 @@ import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -29,7 +28,7 @@ public class OnsBackButton extends Widget implements HasTapHandler {
       element.appendChild(icon);
     }
     
-    PhgUtils.ensureId(element);
+    OnsenUi.ensureId(element);
     
     element.addClassName("ons-back-button");
     setElement(element);

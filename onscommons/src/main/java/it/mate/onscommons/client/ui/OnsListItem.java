@@ -52,4 +52,9 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
     return value;
   }
   
+  public void addHtml(String html) {
+    String innerHtml = getElement().getInnerHTML();
+    getElement().setInnerHTML(innerHtml + html);
+  }
+  
 }

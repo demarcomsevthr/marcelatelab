@@ -1,5 +1,9 @@
 package it.mate.onscommons.client.ui;
 
+import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.onsen.OnsenUi;
+
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 
 
@@ -14,10 +18,29 @@ public class OnsButton extends OnsButtonBase {
   }
   
   public void setIcon(String icon) {
+    setIcon(getElement(), icon);
+  }
+
+  public void setIconWhenAvailable(final String icon) {
+    OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
+      public void execute(Element element) {
+        setIcon(element, icon);
+        OnsenUi.compileElement(element);
+      }
+    });
+  }
+  
+  public void setIconDirect(String icon) {
     String iconHtml = "<ons-icon icon='"+icon+"'/>";
-    String innerHtml = getElement().getInnerHTML();
+    getElement().setInnerHTML(iconHtml);
+  }
+
+  private void setIcon(Element element, String icon) {
+    String iconHtml = "<ons-icon icon='"+icon+"' size='24px'/>";
+    //String iconHtml = "<ons-icon icon='"+icon+"' size='1x'></ons-icon>";
+    String innerHtml = element.getInnerHTML();
     innerHtml = iconHtml + innerHtml;
-    getElement().setInnerHTML(innerHtml);
+    element.setInnerHTML(innerHtml);
   }
 
 }
