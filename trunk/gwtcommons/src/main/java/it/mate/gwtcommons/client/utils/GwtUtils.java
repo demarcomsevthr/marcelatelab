@@ -106,6 +106,8 @@ public class GwtUtils {
   private static boolean mobileOptimizations = false;
   
   private static boolean enableLogInProductionMode = false;
+  
+  private static boolean useAvailableElementsCache = false;
 
   
   
@@ -384,16 +386,34 @@ public class GwtUtils {
     onAvailable(id, 10000, delegate);
   }
   
+  //TODO
+  //TODO
+  //TODO
+  
+  private static Map<String, Element> availableElementsCache = new HashMap<String, Element>();
+  
   public static void onAvailable (final String id, final long maxWait, final Delegate<Element> delegate) {
+    
+    if (useAvailableElementsCache) {
+      if (availableElementsCache.containsKey(id)) {
+        GwtUtils.log("-- available element cache: reusing cached element id = " + id);
+        delegate.execute(availableElementsCache.get(id));
+      }
+    }
+    
     final long t0 = System.currentTimeMillis();
     new Timer() {
       public void run() {
         long t1 = System.currentTimeMillis();
-//      Element elem = DOM.getElementById(id);
-        Element elem = getElementById(id);
-        if (elem != null) {
+        Element element = getElementById(id);
+        if (element != null) {
           this.cancel();
-          delegate.execute(elem);
+          
+          if (useAvailableElementsCache) {
+            availableElementsCache.put(id, element);
+          }
+          
+          delegate.execute(element);
         } else if (t1 - t0 > maxWait) {
           this.cancel();
         }
@@ -479,15 +499,32 @@ public class GwtUtils {
     
   }
   
+  protected static int mobileTimerSchedulerImplId = -1;
+  
+  protected final static long MAX_MOBILE_TIMER_SCHEDULER_AUTO_GARBAGE_TIME = 10000;
+  
   protected abstract static class MobileTimerSchedulerImpl extends Timer {
     boolean cancelRequested = false;
+    private int id;
+    private long startTime;
     public MobileTimerSchedulerImpl() { 
-//    GwtUtils.log("creating new mobile timer");
+      mobileTimerSchedulerImplId ++;
+      this.id = mobileTimerSchedulerImplId;
+      this.startTime = System.currentTimeMillis();
+      //GwtUtils.log("-- MobileTimerSchedulerImpl - creating new mobile timer -- id " + this.id + " startTime = " + startTime);
     }
     @Override
     public void scheduleRepeating(int periodMillis) {
       Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
         public boolean execute() {
+          //GwtUtils.log("-- MobileTimerSchedulerImpl - execute repeating -- id " + id);
+          
+          // 02/04/2015
+          if (System.currentTimeMillis() > startTime + MAX_MOBILE_TIMER_SCHEDULER_AUTO_GARBAGE_TIME) {
+            GwtUtils.log("-- MobileTimerSchedulerImpl - execute repeating -- AUTO GARBAGE TIME -- id " + id);
+            return false;
+          }
+          
           if (!cancelRequested) {
             MobileTimerSchedulerImpl.this.run();
           }
@@ -499,7 +536,14 @@ public class GwtUtils {
     public void schedule(int periodMillis) {
       Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
         public boolean execute() {
-//        GwtUtils.log("run mobile timer");
+          //GwtUtils.log("-- MobileTimerSchedulerImpl - execute -- id " + id);
+          
+          // 02/04/2015
+          if (System.currentTimeMillis() > startTime + MAX_MOBILE_TIMER_SCHEDULER_AUTO_GARBAGE_TIME) {
+            GwtUtils.log("-- MobileTimerSchedulerImpl - execute -- AUTO GARBAGE TIME -- id " + id);
+            return false;
+          }
+          
           MobileTimerSchedulerImpl.this.run();
           return true;
         }
@@ -507,7 +551,7 @@ public class GwtUtils {
     }
     @Override
     public void cancel() {
-//    GwtUtils.log("cancel request for mobile timer");
+      //GwtUtils.log("-- MobileTimerSchedulerImpl - cancel requested -- id " + id);
       this.cancelRequested = true;
     }
   }
@@ -515,18 +559,17 @@ public class GwtUtils {
   private static Timer createTimerImpl (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
     Timer timer = null;
     if (mobileOptimizations) {
-//    timer = new MobileTimerSchedulerImpl() {
-//    timer = new MobileTimerAnimationSchedulerImpl() {
-//    timer = new Timer() {
-//    timer = new MobileTimer() {
+      //GwtUtils.log("-- create timer impl - periodMillis = " + periodMillis + " runAndWait = " + runAndWait);
       timer = new MobileTimerSchedulerImpl() {
         public void run() {
+          //GwtUtils.log("-- run timer MobileTimerSchedulerImpl");
           delegate.execute(null);
         }
       };
     } else {
       timer = new Timer() {
         public void run() {
+          //GwtUtils.log("-- run timer createTimerImpl");
           delegate.execute(null);
         }
       };
@@ -542,6 +585,7 @@ public class GwtUtils {
   }
   
   public static Timer createTimer (int periodMillis, boolean runAndWait, final Delegate<Void> delegate) {
+    //GwtUtils.log("-- create timer ");
     Timer timer = createTimerImpl(periodMillis, runAndWait, delegate);
     timer.scheduleRepeating(periodMillis);
     return timer;
@@ -550,7 +594,7 @@ public class GwtUtils {
   protected static class TimerWrapper {
     Timer timer = new Timer() {
       public void run() {
-        //fake timer to avoid NPE
+        //GwtUtils.log("-- run timer TimerWrapper fakeTimer");
       }
     };
     Delegate<Void> voidDelegate = null;
@@ -560,6 +604,7 @@ public class GwtUtils {
           timerDelegate.execute(timer);
         }
       };
+      //GwtUtils.log("-- create timer wrapper ");
       timer = createTimerImpl(periodMillis, runAndWait, voidDelegate);
       timer.scheduleRepeating(periodMillis);
     }
@@ -573,17 +618,19 @@ public class GwtUtils {
     deferredExecution(0, callback);
   }
   
-  public static void deferredExecution (int delayMillis, final Delegate<Void> delegate) {
+  public static void deferredExecution (final int delayMillis, final Delegate<Void> delegate) {
     if (mobileOptimizations) {
       if (delayMillis <= 0) {
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
           public void execute() {
+            //GwtUtils.log("-- run scheduler deferredExecution");
             delegate.execute(null);
           }
         });
       } else {
         Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
           public boolean execute() {
+            //GwtUtils.log("-- run scheduler deferredExecution");
             delegate.execute(null);
             return false;
           }
@@ -593,6 +640,7 @@ public class GwtUtils {
       if (delayMillis > 0) {
         new Timer() {
           public void run() {
+            //GwtUtils.log("-- run timer deferredExecution delayMillis = " + delayMillis);
             deferredExecution(0, delegate);
           }
         }.schedule(delayMillis);
@@ -1020,6 +1068,7 @@ public class GwtUtils {
     if (isDevMode()) {
       System.out.println(logMsg);
     }
+    consoleLogImpl(logMsg);
     return logMsg;
   }
   
@@ -1397,6 +1446,14 @@ public class GwtUtils {
     if (element.getId() == null || "".equals(element.getId())) {
       element.setId(DOM.createUniqueId());
     }
+  }
+  
+  private static native void consoleLogImpl(String text) /*-{
+    $wnd.console.log(text);
+  }-*/;
+  
+  public static void setUseAvailableElementsCache(boolean useAvailableElementsCache) {
+    GwtUtils.useAvailableElementsCache = useAvailableElementsCache;
   }
   
 }
