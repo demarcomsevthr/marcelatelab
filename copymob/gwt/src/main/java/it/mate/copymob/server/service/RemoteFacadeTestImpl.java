@@ -18,7 +18,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings({"serial"})
 public class RemoteFacadeTestImpl extends RemoteServiceServlet implements RemoteFacade {
   
-  private final boolean LOCALTEST = true;
+  private final boolean LOCALTEST = false;
   
   
   private static Logger logger = Logger.getLogger(RemoteFacadeTestImpl.class);

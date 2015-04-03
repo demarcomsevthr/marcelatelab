@@ -11,6 +11,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsLabel;
 import it.mate.onscommons.client.ui.OnsList;
@@ -58,7 +59,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    PhgUtils.ensureId(previewPanel.getElement());
+    OnsenUi.ensureId(previewPanel.getElement());
   }
   
   @Override

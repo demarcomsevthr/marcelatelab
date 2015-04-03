@@ -68,6 +68,11 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   private void initDisplay(Panel modulePanel) {
     
+    // DEBUG 02/04/2015
+    GwtUtils.setEnableLogInProductionMode(true);
+    
+//  GwtUtils.setUseAvailableElementsCache(true);
+    
     GwtUtils.setMobileOptimizations(true);
     GwtUtils.setEnableLogInProductionMode(true);
     

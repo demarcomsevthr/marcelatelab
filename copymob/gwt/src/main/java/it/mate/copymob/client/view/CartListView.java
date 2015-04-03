@@ -12,6 +12,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
 import it.mate.onscommons.client.ui.OnsLabel;
@@ -22,8 +23,6 @@ import it.mate.phgcommons.client.utils.PhgUtils;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -72,6 +71,10 @@ public class CartListView extends AbstractBaseView<Presenter> {
   
   private void populateList() {
     
+    OnsenUi.setCompilationDisabled(true);
+    
+    HasTapHandlerImpl.setUseDocEventListener(true);
+    
     Iterator<OrderItem> it = order.getItems().iterator();
     
     while (it.hasNext()) {
@@ -83,17 +86,19 @@ public class CartListView extends AbstractBaseView<Presenter> {
       OnsListItem listItem = new OnsListItem();
       
       OnsHorizontalPanel rowPanel = new OnsHorizontalPanel();
+      rowPanel.setAddDirect(true);
       
       String html = "<img src='"+ timbro.getImageData() +"' class='app-cart-item-img'/>";
       HTML img = new HTML(html);
       rowPanel.add(img);
       
       OnsLabel nameLbl = new OnsLabel(timbro.getNome());
+      nameLbl.addStyleName("app-cart-item-name");
       rowPanel.add(nameLbl);
       
       OnsHorizontalPanel qtaPanel = new OnsHorizontalPanel();
+      qtaPanel.setAddDirect(true);
       qtaPanel.add(new Spacer("2em"));
-//    qtaPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 
       final OnsLabel qtaFld = new OnsLabel();
       setQtaLbl(qtaFld, orderItem.getQuantity());
@@ -109,13 +114,13 @@ public class CartListView extends AbstractBaseView<Presenter> {
       plusBtn.setModifier("quiet");
       plusBtn.addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
+          PhgUtils.log("plus");
           double qta = orderItem.getQuantity();
           qta ++;
           orderItem.setQuantity(qta);
           setQtaLbl(qtaFld, orderItem.getQuantity());
         }
       });
-      fixButtonRendering(plusBtn.getElement());
       OnsButton minusBtn = new OnsButton();
       minusBtn.getElement().removeClassName("ons-button");
       minusBtn.addStyleName("app-cart-btn-minus");
@@ -140,6 +145,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
       rowPanel.add(qtaPanel);
       
       OnsHorizontalPanel actionsPanel = new OnsHorizontalPanel();
+      actionsPanel.setAddDirect(true);
       OnsButton editBtn = new OnsButton("");
       editBtn.addStyleName("app-cart-btn-edit");
       editBtn.setIcon("fa-edit");
@@ -159,27 +165,14 @@ public class CartListView extends AbstractBaseView<Presenter> {
 
     }
     
-  }
-  
-  private void xx() {
+    OnsenUi.refreshCurrentPage();
     
-  }
-  
-  private void fixButtonRendering(final Element element) {
-    GwtUtils.deferredExecution(500, new Delegate<Void>() {
-      public void execute(Void dummy) {
-        OnsenUi.onAvailableElement(element, new Delegate<Element>() {
-          public void execute(Element elem) {
-            PhgUtils.log("CHECK BUTTON RENDERING -- id " + elem.getId() + " w = " + elem.getOffsetWidth() + " h = " + elem.getOffsetHeight());
-            if (elem.getOffsetWidth() < 40 || elem.getOffsetHeight() < 40) {
-              elem.getStyle().setWidth(40, Unit.PX);
-              elem.getStyle().setHeight(40, Unit.PX);
-              fixButtonRendering(elem);
-            }
-          }
-        });
+    GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+      public void execute(Void element) {
+        HasTapHandlerImpl.setUseDocEventListener(false);
       }
     });
+    
   }
   
   private void setQtaLbl(OnsLabel lbl, double qta) {
