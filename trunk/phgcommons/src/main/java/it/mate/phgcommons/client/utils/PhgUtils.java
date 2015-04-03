@@ -608,9 +608,11 @@ public class PhgUtils {
   public static native boolean isReallyAttached(String elemId) /*-{
     return $doc.getElementById(elemId) != null;
   }-*/;
-  
+
+  /*
   public static void ensureId(Element element) {
     GwtUtils.ensureId(element);
   }
+  */
   
 }
