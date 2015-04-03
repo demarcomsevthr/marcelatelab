@@ -6,6 +6,7 @@ import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 import it.mate.onscommons.client.ui.OnsNavigator;
+import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -108,7 +109,17 @@ public class OnsenUi {
     return slidingMenu != null;
   }
   
+  private static boolean compilationDisabled;
+  
+  public static void setCompilationDisabled(boolean compilationDisabled) {
+    OnsenUi.compilationDisabled = compilationDisabled;
+  }
+  
   public static void compileElement(Element element) {
+    if (compilationDisabled) {
+      PhgUtils.log("COMPILATION DISABLED");
+      return;
+    }
     if (element == null) {
       return;
     }
@@ -117,6 +128,21 @@ public class OnsenUi {
     }
     PhgUtils.log("COMPILING ELEMENT " + element);
     compileElementImpl(element);
+  }
+  
+  public static void refreshCurrentPage() {
+    GwtUtils.deferredExecution(100, new Delegate<Void>() {
+      public void execute(Void element) {
+        PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
+        OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
+          public void execute(Element pageElement) {
+            setCompilationDisabled(false);
+            PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
+            compileElementImpl(pageElement);
+          }
+        });
+      }
+    });
   }
   
   protected static native void compileElementImpl(Element element) /*-{
@@ -199,4 +225,17 @@ public class OnsenUi {
     GwtUtils.onAvailable(id, delegate);
   }
 
+  private static int uniqueId = 0;
+  
+  public static String createUniqueId() {
+    uniqueId ++;
+    return "ons-uid-" + uniqueId;
+  }
+
+  public static void ensureId(Element element) {
+    if (element.getId() == null || "".equals(element.getId())) {
+      element.setId(OnsenUi.createUniqueId());
+    }
+  }
+  
 }

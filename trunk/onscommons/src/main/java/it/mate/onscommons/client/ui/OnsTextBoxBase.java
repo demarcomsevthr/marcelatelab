@@ -3,7 +3,6 @@ package it.mate.onscommons.client.ui;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.text.shared.testing.PassthroughParser;
@@ -19,7 +18,7 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
 
   protected OnsTextBoxBase(Element element, String type, String className) {
     super(element, PassthroughRenderer.instance(), PassthroughParser.instance());
-    PhgUtils.ensureId(element);
+    OnsenUi.ensureId(element);
     if (type != null) {
       element.setAttribute("type", type);
     }

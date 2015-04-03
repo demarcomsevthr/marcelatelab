@@ -5,7 +5,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -27,7 +26,7 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
       element.addClassName(className);
     }
     setElement(element);
-    PhgUtils.ensureId(element);
+    OnsenUi.ensureId(element);
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
   

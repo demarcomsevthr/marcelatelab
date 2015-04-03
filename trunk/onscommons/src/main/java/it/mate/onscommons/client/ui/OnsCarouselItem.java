@@ -6,7 +6,7 @@ import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
-import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.onscommons.client.onsen.OnsenUi;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -44,7 +44,7 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
 
   public OnsCarouselItem(String html) {
     super("ons-carousel-item", html);
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
 

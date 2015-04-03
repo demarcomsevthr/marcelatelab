@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
@@ -52,7 +53,7 @@ public class HasTapHandlerImpl_TEST {
     if (jsEventListener == null) {
       
       targetElement = ((Widget)target).getElement();
-      PhgUtils.ensureId(targetElement);
+      OnsenUi.ensureId(targetElement);
       
       // 03/02/2015 (And4.0 compatibility)
       GwtUtils.deferredExecution(1000, new Delegate<Void>() {

@@ -29,7 +29,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   
   public OnsDialog(String html) {
     super(TAG_NAME, html);
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
     initVarName();
   }
   

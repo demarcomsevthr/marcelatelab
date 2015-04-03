@@ -5,6 +5,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
@@ -41,6 +42,8 @@ public class HasTapHandlerImpl {
   
   private static boolean allHandlersDisabled = false;
   
+  private static boolean useDocEventListener = false;
+  
   public HasTapHandlerImpl(HasTapHandler target) {
     this.target = target;
   }
@@ -55,18 +58,36 @@ public class HasTapHandlerImpl {
     return isChildOfDialog(parent.getParent());
   }
   
+  public static void setUseDocEventListener(boolean useDocEventListener) {
+    HasTapHandlerImpl.useDocEventListener = useDocEventListener;
+  }
+  
+  private String getTargetElementLog() {
+    Element targetElement = ((Widget)target).getElement();
+    return targetElement.getNodeName().toLowerCase() + " " + targetElement.getId();
+  }
+  
   public HandlerRegistration addTapHandler(final TapHandler handler) {
+    
+    Element targetElement = ((Widget)target).getElement();
+    OnsenUi.ensureId(targetElement);
+    
+    PhgUtils.log("--- ADDING TAP HANDLER -- 1 -- ON " + getTargetElementLog());
     
     this.tapHandlers.add(handler);
     
     if (jsEventListener == null) {
       
-      Element targetElement = ((Widget)target).getElement();
-      PhgUtils.ensureId(targetElement);
+      PhgUtils.log("--- ADDING TAP HANDLER -- 2 -- ON " + getTargetElementLog());
+      
+//    Element targetElement = ((Widget)target).getElement();
+//    OnsenUi.ensureId(targetElement);
 
       // 03/02/2015
       GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
         public void execute(final Element availableElement) {
+          
+          PhgUtils.log("--- ADDING TAP HANDLER -- 3 -- ON " + getTargetElementLog());
           
           JSOCallback callback = new JSOCallback() {
             public void handle(JavaScriptObject jsEvent) {
@@ -85,11 +106,13 @@ public class HasTapHandlerImpl {
           };
           
           // 04/02/2015
-          boolean useDocEventListener = isChildOfDialog(((Widget)target).getParent());
+          boolean isInDialog = isChildOfDialog(((Widget)target).getParent());
           
-          if (useDocEventListener) {
+          if (isInDialog || useDocEventListener) {
+            PhgUtils.log("--- ADDING TAP HANDLER -- 4 -- ON " + getTargetElementLog());
             jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, callback);
           } else {
+            PhgUtils.log("--- ADDING TAP HANDLER -- 5 -- ON " + getTargetElementLog());
             jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, callback);
           }
           

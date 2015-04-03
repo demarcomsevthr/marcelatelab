@@ -22,11 +22,13 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   
   public OnsHorizontalPanel() {
     super();
-    PhgUtils.ensureId(getElement());
+    OnsenUi.ensureId(getElement());
+    PhgUtils.log("TABLE ID = " + getElement().getId());
   }
   
   public void setAddDirect(boolean addDirect) {
     this.addDirect = addDirect;
+    actualTableElement = getElement();
   }
   
   public boolean isAddDirect() {
