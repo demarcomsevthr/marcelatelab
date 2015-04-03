@@ -10,6 +10,7 @@ public class TimerUtil {
   public TimerUtil (int periodMillis, final Delegate delegate) {
     this.timer = new Timer() {
       public void run() {
+        //GwtUtils.log("-- run timer TimerUtil");
         if (delegate.canCancel()) {
           timer.cancel();
         }
