@@ -78,8 +78,8 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.HOME)) {
 //    PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
-      PhgUtils.setDesktopDebugBorder(384, 682); // LG G3 5,5' RATIO (1440x2560)
-//    PhgUtils.setDesktopDebugBorder(384, 610); // NEXUS 4 4,7' RATIO ()
+//    PhgUtils.setDesktopDebugBorder(384, 682); // LG G3 5,5' RATIO (1440x2560)
+      PhgUtils.setDesktopDebugBorder(384, 568); // NEXUS 4 4,7' RATIO (768 x 1280)
     }
     
     daoTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
@@ -141,18 +141,23 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.CART_LIST)) {
       this.view = AppClientFactory.IMPL.getGinjector().getCartListView();
+//    deferred = false;
     }
     
+    PhgUtils.log("activity - setting presenter");;
     view.setPresenter(this);
+    PhgUtils.log("activity - setting widget");;
     panel.setWidget(view.asWidget());
 
     if (deferred) {
       GwtUtils.deferredExecution(new Delegate<Void>() {
         public void execute(Void element) {
+          PhgUtils.log("activity - setting model deferred");;
           retrieveModel();
         }
       });
     } else {
+      PhgUtils.log("activity - setting model");;
       retrieveModel();
     }
     
@@ -224,6 +229,7 @@ public class MainActivity extends OnsAbstractActivity implements
 
       }
     }
+//  OnsenUi.refreshCurrentPage();
   }
   
   @Override

@@ -71,6 +71,7 @@
 .app-carousel-item-inner img {
   border-radius: 5%;
   width: 80%;
+  height: 65%;
   margin-left: 10%;
 }
 
@@ -309,6 +310,10 @@
   width: 40px
 }
 
+.app-cart-item-name {
+  font-size: 0.8em;
+}
+
 .app-ons-list-item-message {
   height: 7em;
   padding-top: 0.5em;
@@ -329,4 +334,5 @@
 
 .app-msg-newmsg-box {
   width: 100%;
+  min-height: 2.8em;
 }

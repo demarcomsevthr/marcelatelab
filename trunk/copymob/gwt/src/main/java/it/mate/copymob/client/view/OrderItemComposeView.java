@@ -14,6 +14,7 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Dialog;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsDialog;
@@ -89,9 +90,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    PhgUtils.ensureId(controlbar.getElement());
-    PhgUtils.ensureId(rowsPanel.getElement());
-    PhgUtils.ensureId(viewfinder.getElement());
+    OnsenUi.ensureId(controlbar.getElement());
+    OnsenUi.ensureId(rowsPanel.getElement());
+    OnsenUi.ensureId(viewfinder.getElement());
   }
 
   @Override
