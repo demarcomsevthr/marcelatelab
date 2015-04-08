@@ -43,4 +43,8 @@ public interface OrderItem extends Serializable {
 
   public List<Message> getMessages();
 
+  public void setPreviewImage(String previewImage);
+
+  public String getPreviewImage();
+
 }

@@ -31,6 +31,8 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private List<MessageTx> messages = new ArrayList<MessageTx>();
   
+  private String previewImage;
+
   
   @Override
   public String toString() {
@@ -60,6 +62,7 @@ public class OrderItemTx implements OrderItem, IsMappable {
       messageMaps.add(messageMap);
     }
     map.put("messageMaps", messageMaps);
+    map.put("previewImage", previewImage);
     return map;
   }
   
@@ -91,6 +94,7 @@ public class OrderItemTx implements OrderItem, IsMappable {
         this.messages.add(messageTx);
       }
     }
+    this.previewImage = (String)map.get("previewImage");
     return this;
   }
 
@@ -196,6 +200,14 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   public boolean isInCart() {
     return inCart != null && inCart == true;
+  }
+
+  public String getPreviewImage() {
+    return previewImage;
+  }
+
+  public void setPreviewImage(String previewImage) {
+    this.previewImage = previewImage;
   }
 
 }

@@ -12,7 +12,7 @@ import com.google.gwt.user.client.DOM;
 public class RenderUtils {
   
   
-  public static Element renderAsSpan(OrderItemRow row, int top, int left, double yFactor) {
+  public static Element renderOrderItemAsGwtSpan(OrderItemRow row, int top, int left, double yFactor) {
     
     int actualSizePx = (int)(row.getSize() * yFactor);
     
@@ -29,6 +29,15 @@ public class RenderUtils {
     span.setPropertyInt("height", height);
     
     return span;
+  }
+  
+  public static String imageTextToHtml(String imageText, String imageType) {
+    if (imageText == null) {
+      return null;
+    }
+    imageText = !imageText.startsWith("data:") ? ("data:image/"+ imageType +";base64," + imageText) : imageText;
+    String html = "<img src='"+ imageText +"'/>";
+    return html;
   }
 
 }
