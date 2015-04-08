@@ -1,13 +1,14 @@
 package it.mate.copymob.server.services;
 
 import it.mate.commons.server.utils.CloneUtils;
+import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
 import it.mate.copymob.shared.model.impl.TimbroTx;
+import it.mate.copymob.shared.service.FacadeException;
 import it.mate.copymob.shared.service.RemoteFacade;
-import it.mate.copymob.shared.service.RemoteFacadeException;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.ArrayList;
@@ -26,13 +27,13 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
 
   private static Logger logger = Logger.getLogger(RemoteFacadeImpl.class);
   
-  private RemoteAdapter adapter = null;
+  private MainAdapter adapter = null;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     AdapterUtil.initContext(config.getServletContext());
-    adapter = AdapterUtil.getRemoteAdapter();
+    adapter = AdapterUtil.getMainAdapter();
     logger.debug("initialized " + this);
   }
   
@@ -62,7 +63,7 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   }
   
   @Override
-  public List<RpcMap> getTimbri() throws RemoteFacadeException {
+  public List<RpcMap> getTimbri() throws FacadeException {
     try {
       List<RpcMap> results = new ArrayList<RpcMap>();
       List<Timbro> timbri = adapter.getTimbri();
@@ -71,7 +72,7 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
       }
       return results;
     } catch (Exception ex) {
-      throw new RemoteFacadeException(ex.getMessage());
+      throw new FacadeException(ex.getMessage());
     }
   }
 
@@ -82,4 +83,18 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     return tx.toRpcMap();
   }
 
+  public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException {
+    try {
+      List<RpcMap> results = new ArrayList<RpcMap>();
+      List<Order> orders = adapter.findOrdersByAccount(accountId, lastUpdate);
+      for (Order order : orders) {
+        OrderTx tx = CloneUtils.clone(order, OrderTx.class);
+        results.add(tx.toRpcMap());
+      }
+      return results;
+    } catch (Exception ex) {
+      throw new FacadeException(ex.getMessage());
+    }
+  }
+  
 }

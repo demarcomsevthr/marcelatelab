@@ -43,6 +43,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>adminFacade</servlet-name>
+    <servlet-class>it.mate.copymob.server.services.AdminFacadeImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>adminFacade</servlet-name>
+    <url-pattern>*.adminFacade</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>uploadServlet</servlet-name>
     <servlet-class>it.mate.copymob.server.servlet.UploadServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

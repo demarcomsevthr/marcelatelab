@@ -7,7 +7,9 @@ public class AdminPlace extends Place /* implements ReversiblePlace */ {
   
   public static final String HOME = "home";
   
-  public static final String ORDINI = "ordini";
+  public static final String ORDER_LIST = "orderList";
+  
+  public static final String ORDER_EDIT = "orderEdit";
   
   private String token;
   

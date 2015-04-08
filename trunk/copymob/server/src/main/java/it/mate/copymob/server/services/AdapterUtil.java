@@ -22,9 +22,9 @@ public class AdapterUtil {
     }
   }
   
-  public static RemoteAdapter getRemoteAdapter() {
+  public static MainAdapter getMainAdapter() {
     assertContext();
-    return context.getBean(RemoteAdapter.class);
+    return context.getBean(MainAdapter.class);
   }
   
   public static MailAdapter getMailAdapter() {

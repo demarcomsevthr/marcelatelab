@@ -4,25 +4,29 @@ package it.mate.copymob.client.activities;
 import it.mate.copymob.client.factories.AdminClientFactory;
 import it.mate.copymob.client.places.AdminPlace;
 import it.mate.copymob.client.view.HomeView;
-import it.mate.copymob.client.view.OrdiniView;
-import it.mate.copymob.shared.service.RemoteFacadeAsync;
+import it.mate.copymob.client.view.OrderEditView;
+import it.mate.copymob.client.view.OrderItemView;
+import it.mate.copymob.client.view.OrderListView;
+import it.mate.copymob.shared.model.Order;
+import it.mate.copymob.shared.service.AdminFacadeAsync;
 import it.mate.gwtcommons.client.mvp.SingletonBaseActivity;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class AdminActivity extends SingletonBaseActivity implements HomeView.Presenter, OrdiniView.Presenter
+public class AdminActivity extends SingletonBaseActivity implements HomeView.Presenter, OrderListView.Presenter, OrderEditView.Presenter, OrderItemView.Presenter
   {
   
   protected AdminPlace place;
 
-  protected RemoteFacadeAsync remoteFacade = AdminClientFactory.IMPL.getGinjector().getRemoteFacade();
+  protected AdminFacadeAsync facade = AdminClientFactory.IMPL.getGinjector().getAdminFacade();
   
   private static Map<String, Delegate<AcceptsOneWidget>> startHandlers;
   
@@ -46,9 +50,15 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
           retrieveModel();
         }
       });
-      startHandlers.put(AdminPlace.ORDINI, new Delegate<AcceptsOneWidget>() {
+      startHandlers.put(AdminPlace.ORDER_LIST, new Delegate<AcceptsOneWidget>() {
         public void execute(AcceptsOneWidget panel) {
-          initView(AdminClientFactory.IMPL.getGinjector().getOrdiniView(), panel);
+          initView(AdminClientFactory.IMPL.getGinjector().getOrderListView(), panel);
+          retrieveModel();
+        }
+      });
+      startHandlers.put(AdminPlace.ORDER_EDIT, new Delegate<AcceptsOneWidget>() {
+        public void execute(AcceptsOneWidget panel) {
+          initView(AdminClientFactory.IMPL.getGinjector().getOrderEditView(), panel);
           retrieveModel();
         }
       });
@@ -65,9 +75,33 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
           testServerConnection();
         }
       });
-      retrieveHandlers.put(AdminPlace.ORDINI, new Delegate<AdminPlace>() {
+      retrieveHandlers.put(AdminPlace.ORDER_LIST, new Delegate<AdminPlace>() {
         public void execute(AdminPlace place) { 
-          getView().setModel(place.getModel());
+          facade.findAllOrders(new AsyncCallback<List<Order>>() {
+            public void onSuccess(List<Order> results) {
+              getView().setModel(results);
+            }
+            public void onFailure(Throwable caught) {
+              processRemoteFailure(caught);
+            }
+          });
+        }
+      });
+      retrieveHandlers.put(AdminPlace.ORDER_EDIT, new Delegate<AdminPlace>() {
+        public void execute(AdminPlace place) { 
+          if (place.getModel() instanceof String) {
+            String orderId = (String)place.getModel();
+            facade.findOrderById(orderId, new AsyncCallback<Order>() {
+              public void onSuccess(Order result) {
+                getView().setModel(result);
+              }
+              public void onFailure(Throwable caught) {
+                processRemoteFailure(caught);
+              }
+            });
+          } else {
+            getView().setModel(place.getModel());
+          }
         }
       });
     }
@@ -85,17 +119,44 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
     }
   }
   
+  @Override
+  public void goToOrderEdit(Order order) {
+    AdminClientFactory.IMPL.getPlaceController().goTo(new AdminPlace(AdminPlace.ORDER_EDIT, order));
+  }
+  
+  @Override
+  public void goToOrderEdit(String orderId) {
+    AdminClientFactory.IMPL.getPlaceController().goTo(new AdminPlace(AdminPlace.ORDER_EDIT, orderId));
+  }
+  
   private void retrieveModel() {
     ensureRetrieveHandlers().get(place.getToken()).execute(place);
   }
   
   private void testServerConnection() {
-    remoteFacade.checkConnection(new AsyncCallback<Boolean>() {
+    /*
+    facade.checkConnection(new AsyncCallback<Boolean>() {
       public void onSuccess(Boolean result) {
         GwtUtils.log("TEST SERVER CONNECTION SUCCESS");
       }
       public void onFailure(Throwable caught) {
-        GwtUtils.log("TEST SERVER CONNECTION FAILURE");
+              processFailure(caught);
+      }
+    });
+    */
+  }
+  
+  private void processRemoteFailure(Throwable caught) {
+    GwtUtils.log("FAILURE - " + caught.getMessage());
+  }
+  
+  public void updateOrder(Order order, final Delegate<Order> delegate) {
+    facade.saveOrder(order, new AsyncCallback<Order>() {
+      public void onSuccess(Order result) {
+        delegate.execute(result);
+      }
+      public void onFailure(Throwable caught) {
+        processRemoteFailure(caught);
       }
     });
   }

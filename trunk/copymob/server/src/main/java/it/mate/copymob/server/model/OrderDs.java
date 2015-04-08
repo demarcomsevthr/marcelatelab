@@ -3,11 +3,14 @@ package it.mate.copymob.server.model;
 import it.mate.commons.server.model.CollectionPropertyServerUtil;
 import it.mate.commons.server.model.HasKey;
 import it.mate.commons.server.model.UnownedRelationship;
+import it.mate.commons.server.utils.CollectionUtils;
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -32,9 +35,6 @@ public class OrderDs implements Order, HasKey {
   @Persistent
   private String codice;
 
-  //TODO
-  private Integer accountId;
-  
   @Persistent
   private Integer state;
   
@@ -42,7 +42,21 @@ public class OrderDs implements Order, HasKey {
   List<Key> itemKeys;
   @UnownedRelationship (key="itemKeys", itemClass=OrderItemDs.class)
   transient List<OrderItemDs> items;
-
+  
+  /* server per far funzionare la includedField */
+  public void itemKeysTraverse() {
+    CollectionUtils.traverseCollection(this.itemKeys);
+  }
+  
+  @Persistent (dependentKey="false")
+  Key accountKey;
+  @UnownedRelationship (key="accountKey")
+  transient AccountDs account;
+  
+  @Persistent
+  private Date lastUpdate;
+  
+  
   @Override
   public Key getKey() {
     return remoteId;
@@ -72,14 +86,6 @@ public class OrderDs implements Order, HasKey {
     this.codice = codice;
   }
 
-  public Integer getAccountId() {
-    return accountId;
-  }
-
-  public void setAccountId(Integer accountId) {
-    this.accountId = accountId;
-  }
-
   public Integer getState() {
     return state != null ? state : Order.STATE_DEFAULT;
   }
@@ -97,6 +103,29 @@ public class OrderDs implements Order, HasKey {
     CollectionPropertyServerUtil<OrderItem, OrderItemDs> wrapper = CollectionPropertyServerUtil.clone(items, OrderItemDs.class);
     this.items = wrapper.getItems();
     this.itemKeys = wrapper.getKeys();
+  }
+  
+  @CloneableProperty (targetClass=AccountDs.class)
+  public void setAccount(Account account) {
+    if (account != null) {
+      this.account = (AccountDs)account;
+      this.accountKey = this.account.getKey();
+    } else {
+      this.account = null;
+      this.accountKey = null;
+    }
+  }
+
+  public Account getAccount() {
+    return account;
+  }
+
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
   }
 
 }

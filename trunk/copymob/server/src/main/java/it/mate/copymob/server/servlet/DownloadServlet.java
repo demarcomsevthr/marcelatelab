@@ -1,7 +1,7 @@
 package it.mate.copymob.server.servlet;
 
 import it.mate.commons.server.utils.LoggingUtils;
-import it.mate.copymob.server.services.RemoteAdapter;
+import it.mate.copymob.server.services.MainAdapter;
 
 import java.io.IOException;
 
@@ -17,13 +17,13 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 @SuppressWarnings("serial")
 public class DownloadServlet extends HttpServlet {
   
-  RemoteAdapter adapter;
+  MainAdapter adapter;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-    adapter = context.getBean(RemoteAdapter.class);
+    adapter = context.getBean(MainAdapter.class);
     LoggingUtils.debug(getClass(), "initialized " + this);
     LoggingUtils.debug(getClass(), "adapter = " + adapter);
   }

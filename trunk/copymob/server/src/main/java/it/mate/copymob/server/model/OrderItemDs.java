@@ -20,6 +20,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 @PersistenceCapable (detachable="true")
@@ -45,15 +46,19 @@ public class OrderItemDs implements OrderItem, HasKey {
   @Persistent
   private Boolean inCart;
   
-  @Persistent (dependentKey="false", defaultFetchGroup="false")
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
   List<Key> rowKeys;
   @UnownedRelationship (key="rowKeys", itemClass=OrderItemRowDs.class)
   transient List<OrderItemRowDs> rows;
   
-  @Persistent (dependentKey="false", defaultFetchGroup="false")
+  @Persistent (dependentKey="false", defaultFetchGroup="true")
   List<Key> messageKeys;
   @UnownedRelationship (key="messageKeys", itemClass=MessageDs.class)
   transient List<MessageDs> messages;
+  
+  
+  @Persistent
+  Text previewImage;
   
   
   public Key getKey() {
@@ -150,6 +155,14 @@ public class OrderItemDs implements OrderItem, HasKey {
     CollectionPropertyServerUtil<Message, MessageDs> wrapper = CollectionPropertyServerUtil.clone(messages, MessageDs.class);
     this.messages = wrapper.getItems();
     this.messageKeys = wrapper.getKeys();
+  }
+
+  public String getPreviewImage() {
+    return previewImage != null ? previewImage.getValue() : null;
+  }
+
+  public void setPreviewImage(String previewImage) {
+    this.previewImage = previewImage != null ? new Text(previewImage) : null;
   }
   
 }
