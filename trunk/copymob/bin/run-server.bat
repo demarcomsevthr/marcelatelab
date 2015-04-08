@@ -26,7 +26,7 @@ call %~dp0\_setenv2.bat
 
 set goals=
 :: SE SI VUOLE FARE IL RESET DEL DB AD OGNI AVVIO
-set goals=%goals% clean
+::set goals=%goals% clean
 set goals=%goals% compile
 set goals=%goals% datanucleus:enhance
 ::set goals=%goals% appengine:endpoints_get_discovery_doc

@@ -27,8 +27,8 @@ call %~dp0\_setenv2.bat
 set goals=
 set goals=%goals% clean
 set goals=%goals% compile
+set goals=%goals% gwt:compile
 set goals=%goals% datanucleus:enhance
-::set goals=%goals% appengine:endpoints_get_discovery_doc
 set goals=%goals% war:exploded
 set goals=%goals% appengine:update
 
