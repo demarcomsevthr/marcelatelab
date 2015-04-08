@@ -33,7 +33,7 @@ public class MessageListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void showMenu();
-    public void saveLocalOrderItem(OrderItem orderItem, Delegate<Order> delegate);
+    public void saveOrderItemOnDevice(OrderItem orderItem, Delegate<Order> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MessageListView> { }
@@ -144,7 +144,7 @@ public class MessageListView extends AbstractBaseView<Presenter> {
       List<Message> messages = orderItem.getMessages();
       messages.add(message);
       orderItem.setMessages(messages);
-      getPresenter().saveLocalOrderItem(orderItem, new Delegate<Order>() {
+      getPresenter().saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
         public void execute(Order order) {
           getPresenter().goToPrevious();
         }

@@ -44,16 +44,18 @@ public class MainDao extends WebSQLDao {
   
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
-  // ATTENZIONE: LASCIARE IL CAMPO IMAGE IN FONDO (NELLA CREATE VIENE ACCODATO IL DATATYPE BLOB)
-  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, image ";
+  
+  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image ";
+  private final static String TIMBRI_FIELDS_0_CREATE = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image BLOB ";
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
-  private final static String ORDER_FIELDS_0 = "codice, accountId, state, remoteId ";
+  private final static String ORDER_FIELDS_0 = "codice, state, remoteId, lastUpdate ";
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
-  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart, remoteId ";
+  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart, remoteId, previewImage ";
+  private final static String ORDER_ITEM_FIELDS_0_CREATE = "orderId, timbroId, quantity, inCart, remoteId, previewImage BLOB ";
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
@@ -130,13 +132,13 @@ public class MainDao extends WebSQLDao {
       PhonegapLog.log("updating db copymob to version " + number);
 
       PhonegapLog.log("creating table timbri");
-      tr.doExecuteSql("CREATE TABLE timbri (id "+SERIAL_ID+", " + TIMBRI_FIELDS_0 + " BLOB )");
+      tr.doExecuteSql("CREATE TABLE timbri (id "+SERIAL_ID+", " + TIMBRI_FIELDS_0_CREATE + " )");
 
       PhonegapLog.log("creating table order");
       tr.doExecuteSql("CREATE TABLE orderHeader (id "+SERIAL_ID+", " + ORDER_FIELDS_0 + " )");
 
       PhonegapLog.log("creating table orderItem");
-      tr.doExecuteSql("CREATE TABLE orderItem (id "+SERIAL_ID+", " + ORDER_ITEM_FIELDS_0 + " )");
+      tr.doExecuteSql("CREATE TABLE orderItem (id "+SERIAL_ID+", " + ORDER_ITEM_FIELDS_0_CREATE + " )");
 
       PhonegapLog.log("creating table orderItemRow");
       tr.doExecuteSql("CREATE TABLE orderItemRow (id "+SERIAL_ID+", " + ORDER_ITEM_ROW_FIELDS_0 + " )");
@@ -283,6 +285,7 @@ public class MainDao extends WebSQLDao {
     result.setPrezzo(rows.getValueDouble(it, "prezzo"));
     result.setCodCategoria(rows.getValueString(it, "codCategoria"));
     result.setDescCategoria(rows.getValueString(it, "descCategoria"));
+    result.setRemoteId(rows.getValueString(it, "remoteId"));
     return result;
   }
   
@@ -290,7 +293,7 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getNome(), 
                 entity.getCodice(),
@@ -300,6 +303,7 @@ public class MainDao extends WebSQLDao {
                 entity.getPrezzo(),
                 entity.getCodCategoria(),
                 entity.getDescCategoria(),
+                entity.getRemoteId(),
                 entity.getImage()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -319,6 +323,7 @@ public class MainDao extends WebSQLDao {
           sql += " ,prezzo = ?";
           sql += " ,codCategoria = ?";
           sql += " ,descCategoria = ?";
+          sql += " ,remoteId = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getNome(), 
@@ -330,6 +335,7 @@ public class MainDao extends WebSQLDao {
               entity.getPrezzo(),
               entity.getCodCategoria(),
               entity.getDescCategoria(),
+              entity.getRemoteId(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -433,9 +439,9 @@ public class MainDao extends WebSQLDao {
       Order result = new OrderTx();
       result.setId(rows.getValueInt(it, "id"));
       result.setCodice(rows.getValueString(it, "codice"));
-      result.setAccountId(rows.getValueInt(it, "accountId"));
       result.setState(rows.getValueInt(it, "state"));
       result.setRemoteId(rows.getValueString(it, "remoteId"));
+      result.setLastUpdate(longAsDate(rows.getValueLong(it, "lastUpdate")));
       return result;
     }
     protected List<Order> getResults() {
@@ -507,6 +513,7 @@ public class MainDao extends WebSQLDao {
       result.setQuantity(rows.getValueDouble(it, "quantity"));
       result.setInCart(rows.getValueInt(it, "inCart") == 1);
       result.setRemoteId(rows.getValueString(it, "remoteId"));
+      result.setPreviewImage(rows.getValueString(it, "previewImage"));
       return result;
     }
     protected List<OrderItem> getResults() {
@@ -590,9 +597,9 @@ public class MainDao extends WebSQLDao {
           tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?, ?)", 
               new Object[] {
                 entity.getCodice(), 
-                entity.getAccountId(),
                 entity.getState(),
-                entity.getRemoteId() 
+                entity.getRemoteId(),
+                dateAsLong(entity.getLastUpdate())
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   entity.setId(rs.getInsertId());
@@ -609,15 +616,15 @@ public class MainDao extends WebSQLDao {
         } else {
           String sql = "UPDATE orderHeader SET ";
           sql += "  codice = ?";
-          sql += " ,accountId = ?";
           sql += " ,state = ?";
           sql += " ,remoteId = ?";
+          sql += " ,lastUpdate = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getCodice(), 
-              entity.getAccountId(),
               entity.getState(),
               entity.getRemoteId(),
+              dateAsLong(entity.getLastUpdate()),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -651,16 +658,19 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItem(SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderId(), 
             entity.getTimbroId(),
             entity.getQuantity(),
             (entity.isInCart() ? 1 : 0),
-            entity.getRemoteId()
+            entity.getRemoteId(),
+            entity.getPreviewImage()
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
+              afterOrderItemUpdate(tr, entity, delegate);
+              /*
               purgeOrderItemRows(tr, entity, new Delegate<Void>() {
                 public void execute(Void element) {
                   iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
@@ -671,46 +681,92 @@ public class MainDao extends WebSQLDao {
                   });
                 }
               });
+              */
             }
           });
     } else {
-      String sql = "UPDATE orderItem SET ";
-      sql += "  orderId = ?";
-      sql += " ,timbroId = ?";
-      sql += " ,quantity = ?";
-      sql += " ,inCart = ?";
-      sql += " ,remoteId = ?";
-      sql += " WHERE id = ?";
-      tr.doExecuteSql(sql, new Object[] {
-          entity.getOrderId(), 
-          entity.getTimbroId(),
-          entity.getQuantity(),
-          (entity.isInCart() ? 1 : 0),
-          entity.getRemoteId(),
-          entity.getId()
-        }, new SQLStatementCallback() {
-          public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
-            purgeOrderItemRows(tr, entity, new Delegate<Void>() {
+      
+      if (entity.getTimbroId() != null) {
+        String sql = "UPDATE orderItem SET ";
+        sql += "  orderId = ?";
+        sql += " ,timbroId = ?";
+        sql += " ,quantity = ?";
+        sql += " ,inCart = ?";
+        sql += " ,remoteId = ?";
+        sql += " ,previewImage = ?";
+        sql += " WHERE id = ?";
+        tr.doExecuteSql(sql, new Object[] {
+            entity.getOrderId(), 
+            entity.getTimbroId(),
+            entity.getQuantity(),
+            (entity.isInCart() ? 1 : 0),
+            entity.getRemoteId(),
+            entity.getPreviewImage(),
+            entity.getId()
+          }, new SQLStatementCallback() {
+            public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+              afterOrderItemUpdate(tr, entity, delegate);
+              /*
+              purgeOrderItemRows(tr, entity, new Delegate<Void>() {
+                public void execute(Void element) {
+                  iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+                    public void execute(Void element) {
+                      iterateMessagesForUpdate(tr, entity.getMessages().iterator(), new Delegate<Void>() {
+                        public void execute(Void element) {
+                          PhonegapLog.log("Updated " + entity);
+                          delegate.execute(entity);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+              */
+            }
+          });
+        
+      } else {
+        
+        String sql = "UPDATE orderItem SET ";
+        sql += "  orderId = ?";
+        sql += " ,quantity = ?";
+        sql += " ,inCart = ?";
+        sql += " ,remoteId = ?";
+        sql += " ,previewImage = ?";
+        sql += " WHERE id = ?";
+        tr.doExecuteSql(sql, new Object[] {
+            entity.getOrderId(), 
+            entity.getQuantity(),
+            (entity.isInCart() ? 1 : 0),
+            entity.getRemoteId(),
+            entity.getPreviewImage(),
+            entity.getId()
+          }, new SQLStatementCallback() {
+            public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
+              afterOrderItemUpdate(tr, entity, delegate);
+            }
+          });
+        
+      }
+      
+    }
+  }
+  
+  private void afterOrderItemUpdate(final SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
+    purgeOrderItemRows(tr, entity, new Delegate<Void>() {
+      public void execute(Void element) {
+        iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
+          public void execute(Void element) {
+            iterateMessagesForUpdate(tr, entity.getMessages().iterator(), new Delegate<Void>() {
               public void execute(Void element) {
-                iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
-                  public void execute(Void element) {
-                    
-                    iterateMessagesForUpdate(tr, entity.getMessages().iterator(), new Delegate<Void>() {
-                      public void execute(Void element) {
-                        
-                        PhonegapLog.log("Updated " + entity);
-                        delegate.execute(entity);
-                        
-                      }
-                    });
-                    
-                  }
-                });
+                PhonegapLog.log("Updated " + entity);
+                delegate.execute(entity);
               }
             });
           }
         });
-    }
+      }
+    });
   }
   
   protected void purgeOrderItemRows(SQLTransaction tr, OrderItem item, final Delegate<Void> delegate) {

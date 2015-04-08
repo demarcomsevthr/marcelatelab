@@ -39,7 +39,9 @@ import it.mate.onscommons.client.utils.OnsDialogUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Timer;
@@ -351,7 +353,8 @@ public class MainActivity extends OnsAbstractActivity implements
               return;
             }
 
-            //TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
+            // TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
+            //
             setSelectedOrderItem(item);
             fDelegate.execute(timbro);
             return;
@@ -373,7 +376,7 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void addOrderItemToCart(final OrderItem orderItem) {
     orderItem.setInCart(true);
-    saveLocalOrderItem(orderItem, new Delegate<Order>() {
+    saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
       public void execute(Order element) {
         goToCartListView();
       }
@@ -488,6 +491,7 @@ public class MainActivity extends OnsAbstractActivity implements
     PhgUtils.setLocalStorageItem("devInfoId", devInfoId);
   }
   
+  @Override
   public void resetDB() {
     dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
@@ -496,6 +500,7 @@ public class MainActivity extends OnsAbstractActivity implements
     });
   }
   
+  @Override
   public void saveAccount(Account account, final Delegate<Account> delegate) {
     AccountTx tx = (AccountTx)account;
     String devInfoId = getDevInfoIdFromLocalStorage();
@@ -537,7 +542,8 @@ public class MainActivity extends OnsAbstractActivity implements
     HasTapHandlerImpl.setAllHandlersDisabled(waiting);
   }
   
-  public void saveLocalOrderItem(OrderItem orderItem, Delegate<Order> delegate) {
+  @Override
+  public void saveOrderItemOnDevice(OrderItem orderItem, Delegate<Order> delegate) {
     PhgUtils.log("saving item " + orderItem);
     for (OrderItemRow row : orderItem.getRows()) {
       PhgUtils.log("   with row " + row);
@@ -553,11 +559,10 @@ public class MainActivity extends OnsAbstractActivity implements
     }
   }
 
-  public void saveRemoteOrder(final Order order, final Delegate<Order> delegate) {
-    
+  @Override
+  public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
     getAccount(new Delegate<Account>() {
       public void execute(Account account) {
-        
         if (account == null) {
           OnsDialogUtils.alert("Attenzione", "Devi registrare un account per proseguire", new Delegate<Void>() {
             public void execute(Void element) {
@@ -566,16 +571,20 @@ public class MainActivity extends OnsAbstractActivity implements
           });
         } else {
           setWaitingState(true);
+          order.setAccount(account);
           OrderTx tx = (OrderTx)order;
           AppClientFactory.IMPL.getRemoteFacade().saveOrder(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
             public void onSuccess(RpcMap map) {
               Order result = new OrderTx().fromRpcMap(map);
               dao.saveOrder(result, new Delegate<Order>() {
-                public void execute(Order result) {
+                public void execute(final Order result) {
                   setWaitingState(false);
                   PhgUtils.log("SAVE ORDER RESULT >> " + result);
-                  OnsDialogUtils.alert("Info", "Ordine salvato");
-                  delegate.execute(result);
+                  OnsDialogUtils.alert("Info", "Ordine salvato", new Delegate<Void>() {
+                    public void execute(Void element) {
+                      delegate.execute(result);
+                    }
+                  });
                 }
               });
             }
@@ -586,10 +595,65 @@ public class MainActivity extends OnsAbstractActivity implements
             }
           });
         }
-        
       }
     });
-    
+  }
+  
+  @Override
+  public void updateOrdersFromServer() {
+    dao.findAllOrders(new Delegate<List<Order>>() {
+      public void execute(List<Order> ordiniDevice) {
+        if (ordiniDevice != null && ordiniDevice.size() > 0) {
+          Date minLastUpdate = new Date();
+          for (Order order : ordiniDevice) {
+            if (order.getLastUpdate() != null && order.getLastUpdate().before(minLastUpdate)) {
+              minLastUpdate = order.getLastUpdate();
+            }
+          }
+          final Date fLastUpdate = minLastUpdate;
+          getAccount(new Delegate<Account>() {
+            public void execute(Account account) {
+              setWaitingState(true);
+              AppClientFactory.IMPL.getRemoteFacade().findOrdersByAccount(account.getId(), fLastUpdate, new AsyncCallback<List<RpcMap>>() {
+                public void onSuccess(List<RpcMap> results) {
+                  setWaitingState(false);
+                  if (results != null) {
+                    List<Order> ordiniDaAggiornare = new ArrayList<Order>();
+                    for (RpcMap map : results) {
+                      Order order = new OrderTx().fromRpcMap(map);
+                      ordiniDaAggiornare.add(order);
+                    }
+                    iterateOrdersForUpdate(ordiniDaAggiornare.iterator(), new Delegate<Void>() {
+                      public void execute(Void element) {
+                        PhgUtils.log(">>> UPDATE COMPLETATO");
+                      }
+                    });
+                  }
+                }
+                public void onFailure(Throwable caught) {
+                  setWaitingState(false);
+                  OnsDialogUtils.alert("Error", "Order update error ("+ caught.getMessage() +")!");
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  private void iterateOrdersForUpdate(final Iterator<Order> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      Order order = it.next();
+      PhgUtils.log(">>> UPDATING ORDER " + order);
+      dao.saveOrder(order, new Delegate<Order>() {
+        public void execute(Order updatedOrder) {
+          iterateOrdersForUpdate(it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
   }
   
 }
