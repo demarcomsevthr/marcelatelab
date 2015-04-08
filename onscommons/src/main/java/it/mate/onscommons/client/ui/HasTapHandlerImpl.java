@@ -72,23 +72,18 @@ public class HasTapHandlerImpl {
     Element targetElement = ((Widget)target).getElement();
     OnsenUi.ensureId(targetElement);
     
-    PhgUtils.log("--- ADDING TAP HANDLER -- 1 -- ON " + getTargetElementLog());
-    
     this.tapHandlers.add(handler);
     
     if (jsEventListener == null) {
-      
-      PhgUtils.log("--- ADDING TAP HANDLER -- 2 -- ON " + getTargetElementLog());
       
 //    Element targetElement = ((Widget)target).getElement();
 //    OnsenUi.ensureId(targetElement);
 
       // 03/02/2015
       GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
-        public void execute(final Element availableElement) {
+        public void execute(/* final */ Element availableElement) {
           
-          PhgUtils.log("--- ADDING TAP HANDLER -- 3 -- ON " + getTargetElementLog());
-          
+          /* 07/04/2015
           JSOCallback callback = new JSOCallback() {
             public void handle(JavaScriptObject jsEvent) {
               Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
@@ -104,16 +99,15 @@ public class HasTapHandlerImpl {
               }
             }
           };
+          */
           
           // 04/02/2015
           boolean isInDialog = isChildOfDialog(((Widget)target).getParent());
           
           if (isInDialog || useDocEventListener) {
-            PhgUtils.log("--- ADDING TAP HANDLER -- 4 -- ON " + getTargetElementLog());
-            jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, callback);
+            jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, /* callback */ onTapCallback(availableElement));
           } else {
-            PhgUtils.log("--- ADDING TAP HANDLER -- 5 -- ON " + getTargetElementLog());
-            jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, callback);
+            jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, /* callback */ onTapCallback(availableElement));
           }
           
         }
@@ -133,6 +127,24 @@ public class HasTapHandlerImpl {
     return registration;
   }
   
+  private JSOCallback onTapCallback(final Element availableElement) {
+    return new JSOCallback() {
+      public void handle(JavaScriptObject jsEvent) {
+        Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
+        if (!PhgUtils.isReallyAttached(availableElement.getId())) {
+          removeAllHandlers();
+          return;
+        }
+        if (allHandlersDisabled) {
+          PhgUtils.log("ALL HANDLERS DISABLED");
+        }
+        for (TapHandler tapHandler : tapHandlers) {
+          tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (Widget)target));
+        }
+      }
+    };
+  }
+  
   public void removeAllHandlers() {
     for (HandlerRegistration reg : tapHandlerRegistrations) {
       reg.removeHandler();
@@ -141,7 +153,7 @@ public class HasTapHandlerImpl {
   
   protected static native JavaScriptObject addEventListenerDocImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
+//    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
       if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
