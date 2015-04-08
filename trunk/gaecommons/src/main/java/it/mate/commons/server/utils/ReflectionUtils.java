@@ -1,6 +1,7 @@
 package it.mate.commons.server.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class ReflectionUtils {
     } else {
       return resultFields;
     }
+  }
+  
+  public static Method getMethodByName(Class<?> entityClass, String methodName) throws Exception {
+    return entityClass.getDeclaredMethod(methodName);
   }
 
 }

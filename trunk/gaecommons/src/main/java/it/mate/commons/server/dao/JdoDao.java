@@ -7,6 +7,7 @@ import it.mate.commons.server.utils.ReflectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -301,6 +302,8 @@ public class JdoDao implements Dao {
     for (Field field : entityFields) {
       Persistent persistentAnnotation = field.getAnnotation(Persistent.class);
       if (persistentAnnotation != null) {
+        
+        /* 08/04/2015 (uauuu!)
         if ("false".equals(persistentAnnotation.defaultFetchGroup()) && !context.getIncludedFields().contains(field.getName())) {
           field.setAccessible(true);
           try {
@@ -309,6 +312,43 @@ public class JdoDao implements Dao {
             logger.error("error", ex);
           }
         }
+        */
+        
+        if ("false".equals(persistentAnnotation.defaultFetchGroup())) {
+          //Il field non e' nel default fetch group ma e' negli included fields ed e' una collection: traverse collections
+          if (context.getIncludedFields().contains(field.getName())) {
+            if (Collection.class.isAssignableFrom(field.getType())) {
+              
+              /* NON FUNZIONA (jdo fa una copia della collection)
+              field.setAccessible(true);
+              try {
+                Collection collection = (Collection)field.get(result);
+                CollectionUtils.traverseCollection(collection);
+              } catch (Exception ex) {
+                logger.error("error", ex);
+              }
+              */
+
+              /* PER RISOLVERE LE RELAZIONI AUTOMATICAMENTE OCCORRE DEFINIRE UN METODO <filedName>Traverse() in cui chiamare la traverseCollection() */
+              try {
+                Method traverseMethod = ReflectionUtils.getMethodByName(entityClass, field.getName()+"Traverse");
+                traverseMethod.invoke(result);
+              } catch (Exception ex) {
+                logger.error("error", ex);
+              }
+              
+              
+            }
+          } else {
+            field.setAccessible(true);
+            try {
+              field.set(result, null);
+            } catch (Exception ex) {
+              logger.error("error", ex);
+            }
+          }
+        }
+        
         // 12/01/2013
         if ("true".equals(persistentAnnotation.defaultFetchGroup()) && context.getExcludedFields().contains(field.getName())) {
           field.setAccessible(true);
