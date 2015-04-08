@@ -2,8 +2,8 @@ com.google.gwt.i18n.shared.impl.DateRecord, true, true, true, true, com.google.g
 com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
 com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
 com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
+it.mate.copymob.shared.service.FacadeException, true, true, false, false, it.mate.copymob.shared.service.FacadeException/3588619046, 3588619046
 it.mate.copymob.shared.service.RemoteFacade, false, false, false, false, _, 3869558145
-it.mate.copymob.shared.service.RemoteFacadeException, true, true, false, false, it.mate.copymob.shared.service.RemoteFacadeException/2864202391, 2864202391
 it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil, true, true, false, false, it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil/3491685941, 3491685941
 it.mate.gwtcommons.shared.rpc.RpcMap, true, true, true, true, it.mate.gwtcommons.shared.rpc.RpcMap/4103865278, 4103865278
 [Lit.mate.gwtcommons.shared.rpc.RpcMap;, true, true, false, false, [Lit.mate.gwtcommons.shared.rpc.RpcMap;/2664723229, 2664723229

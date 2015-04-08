@@ -1,7 +1,7 @@
 package it.mate.copymob.server.service;
 
+import it.mate.copymob.shared.service.FacadeException;
 import it.mate.copymob.shared.service.RemoteFacade;
-import it.mate.copymob.shared.service.RemoteFacadeException;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.Date;
@@ -17,6 +17,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings({"serial"})
 public class RemoteFacadeTestImpl extends RemoteServiceServlet implements RemoteFacade {
+
   
   private final boolean LOCALTEST = false;
   
@@ -63,7 +64,7 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   }
 
   @Override
-  public List<RpcMap> getTimbri() throws RemoteFacadeException {
+  public List<RpcMap> getTimbri() throws FacadeException {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.getTimbri();
   }
@@ -72,6 +73,12 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   public RpcMap saveOrder(RpcMap entity) {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.saveOrder(entity);
+  }
+
+  @Override
+  public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.findOrdersByAccount(accountId, lastUpdate);
   }
 
 }

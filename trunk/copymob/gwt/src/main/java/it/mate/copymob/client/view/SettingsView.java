@@ -23,6 +23,7 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     public void resetDB();
     public void goToAccountEditView();
     public void testWaitingState(boolean flag);
+    public void updateOrdersFromServer();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -91,6 +92,11 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   public void onBtnWaiting(TapEvent event) {
     waiting = !waiting;
     getPresenter().testWaitingState(waiting);
+  }
+  
+  @UiHandler("btnUpdate")
+  public void onBtnUpdate(TapEvent event) {
+    getPresenter().updateOrdersFromServer();
   }
   
 }
