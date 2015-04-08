@@ -1,9 +1,9 @@
 package it.mate.copymob.server.servlet;
 
-import it.mate.commons.server.utils.BlobUtils;
 import it.mate.commons.server.utils.LoggingUtils;
-import it.mate.copymob.server.services.RemoteAdapter;
+import it.mate.copymob.server.services.MainAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -19,18 +19,16 @@ import org.apache.commons.fileupload.util.Streams;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.google.appengine.api.datastore.Blob;
-
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
   
-  RemoteAdapter adapter;
+  MainAdapter adapter;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-    adapter = context.getBean(RemoteAdapter.class);
+    adapter = context.getBean(MainAdapter.class);
     LoggingUtils.debug(getClass(), "initialized " + this);
     LoggingUtils.debug(getClass(), "adapter = " + adapter);
   }
@@ -41,7 +39,9 @@ public class UploadServlet extends HttpServlet {
     try {
       String op = null;
       String fileName = null;
-      Blob fileBlob = null;
+      String orderItemId = null;
+//    Blob fileBlob = null;
+      byte[] image = null;
       
       ServletFileUpload fileUpload = new ServletFileUpload();
       FileItemIterator iter = fileUpload.getItemIterator(request);
@@ -52,14 +52,22 @@ public class UploadServlet extends HttpServlet {
             op = Streams.asString(item.openStream());
           } else if ("fileName".equals(item.getFieldName())) {
             fileName = Streams.asString(item.openStream());
+          } else if ("orderItemId".equals(item.getFieldName())) {
+            orderItemId = Streams.asString(item.openStream());
           }
         } else {
-          fileBlob = BlobUtils.inputStreamToBlob(item.openStream());
+//        fileBlob = BlobUtils.inputStreamToBlob(item.openStream());
+//        fileIS = item.openStream();
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          Streams.copy(item.openStream(), baos, true);
+          image = baos.toByteArray();
         }
       }
       
-      if ("FILE_UPLOAD".equals(op)) {
-        LoggingUtils.debug(getClass(), String.format("received name=%s lenght=%s", fileName, fileBlob.getBytes().length));
+      if ("ORDER_ITEM_PREVIEW_UPLOAD".equals(op)) {
+//      LoggingUtils.debug(getClass(), String.format("received name=%s lenght=%s", fileName, fileBlob.getBytes().length));
+        LoggingUtils.debug(getClass(), String.format("received preview for orderItem %s", orderItemId));
+        adapter.uploadOrderItemPreview(orderItemId, image);
         LoggingUtils.debug(getClass(), "UPLOAD DONE");
         response.getOutputStream().print("UPLOAD DONE");
       }

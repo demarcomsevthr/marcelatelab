@@ -23,7 +23,7 @@ import com.google.gwt.user.server.Base64Utils;
 @Controller
 public class RestController {
   
-  @Autowired private RemoteAdapter adapter;
+  @Autowired private MainAdapter adapter;
 
   @PostConstruct
   public void onPostConstruct() {

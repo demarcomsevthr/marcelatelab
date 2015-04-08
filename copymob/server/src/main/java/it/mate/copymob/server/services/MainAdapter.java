@@ -5,10 +5,11 @@ import it.mate.copymob.shared.model.DevInfo;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.Timbro;
 
+import java.util.Date;
 import java.util.List;
 
 
-public interface RemoteAdapter {
+public interface MainAdapter {
   
   public void scheduledChecks();
   
@@ -19,5 +20,13 @@ public interface RemoteAdapter {
   public List<Timbro> getTimbri() throws Exception;
   
   public Order saveOrder(Order order);
+  
+  public List<Order> findAllOrders() throws Exception;
+  
+  public void uploadOrderItemPreview(String orderItemId, byte[] previewImage) throws Exception;
+  
+  public Order findOrderById(String id) throws Exception;  
+  
+  public List<Order> findOrdersByAccount(String accountId, Date lastUpdate) throws Exception;
   
 }

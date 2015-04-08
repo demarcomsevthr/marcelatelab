@@ -48,7 +48,7 @@ public class AdminLayoutView extends Composite /*implements PortalSessionStateCh
   protected void initUI() {
     initWidget(uiBinder.createAndBindUi(this));
 
-    addMenu(menubar, "Ordini", new AdminPlace(AdminPlace.ORDINI), null);
+    addMenu(menubar, "Ordini", new AdminPlace(AdminPlace.ORDER_LIST), null);
     
     /*
     addMenu(menubar, "Generale", new GeneralPlace(), null);

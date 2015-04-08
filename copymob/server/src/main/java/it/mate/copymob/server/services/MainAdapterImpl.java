@@ -1,6 +1,8 @@
 package it.mate.copymob.server.services;
 
 import it.mate.commons.server.dao.Dao;
+import it.mate.commons.server.dao.FindCallback;
+import it.mate.commons.server.dao.FindContext;
 import it.mate.commons.server.dao.ParameterDefinition;
 import it.mate.commons.server.utils.CloneUtils;
 import it.mate.commons.server.utils.DateUtils;
@@ -25,6 +27,7 @@ import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -45,7 +49,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gwt.user.server.Base64Utils;
 
 @Service
-public class RemoteAdapterImpl implements RemoteAdapter {
+public class MainAdapterImpl implements MainAdapter {
   
   @Autowired private Dao dao;
   
@@ -205,18 +209,28 @@ public class RemoteAdapterImpl implements RemoteAdapter {
 
   /** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> **/
   
+  @Override
+  public void uploadOrderItemPreview(String orderItemId, byte[] previewImage) throws Exception {
+    ByteArrayInputStream previewIS = new ByteArrayInputStream(previewImage);
+    String previewB64 = inputStreamToBase64(previewIS);
+    OrderItemDs orderItemDs = dao.findSingle(new FindContext<OrderItemDs>(OrderItemDs.class)
+          .setFilter("remoteId == remoteIdParam")
+          .setParameters(Dao.Utils.buildParameters(new ParameterDefinition[] { new ParameterDefinition(Key.class, "remoteIdParam")}))
+          .setParamValues(new Object[]{KeyFactory.stringToKey(orderItemId)})
+        );
+    orderItemDs.setPreviewImage(previewB64);
+    dao.update(orderItemDs);
+  }
   
   @Override
   public Order saveOrder(Order order) {
     OrderDs orderDs = CloneUtils.clone(order, OrderDs.class);
-    
     if (orderDs.getState() == Order.STATE_IN_CART) {
       orderDs.setState(Order.STATE_RECEIVED);
       String codice = DateUtils.dateToString(new Date(), "yyyy");
       codice += StringUtils.formatNumber(getNextCounterValue(), 4);
       orderDs.setCodice(codice);
     }
-    
     orderDs = createOrUpdateOrderDs(orderDs);
     return CloneUtils.clone (orderDs, OrderTx.class);
   }
@@ -231,6 +245,7 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       }
       orderDs.setItems(items);
     }
+    orderDs.setLastUpdate(new Date());
     if (orderDs.getKey() == null) {
       orderDs = dao.create(orderDs);
     } else {
@@ -300,6 +315,52 @@ public class RemoteAdapterImpl implements RemoteAdapter {
       counter = dao.create(counter);
     }
     return result;
+  }
+  
+  public List<Order> findAllOrders() throws Exception {
+    List<OrderDs> ordersDs = dao.findAll(OrderDs.class, new FindCallback<OrderDs>() {
+      public void processResultsInTransaction(OrderDs entity) {
+        entity.itemKeysTraverse();
+      }
+    });
+    return CloneUtils.clone(ordersDs, OrderTx.class, Order.class);
+  }
+  
+  public Order findOrderById(String id) throws Exception {
+    OrderDs ds = dao.findById(OrderDs.class, id);
+    return CloneUtils.clone(ds, OrderTx.class);
+  }
+  
+  public List<Order> findOrdersByAccount(String accountId, Date lastUpdateOnDevice) throws Exception {
+    
+    List<OrderDs> ordersDs = dao.findList(new FindContext<OrderDs>(OrderDs.class).setResultAsList(true)
+          .setFilter("accountKey == accountKeyParam")
+          .setParameters(Dao.Utils.buildParameters(new ParameterDefinition[] { new ParameterDefinition(Key.class, "accountKeyParam")}))
+          .setParamValues(new Object[]{KeyFactory.stringToKey(accountId)})
+          .includedField("itemKeys")
+        );
+
+    if (lastUpdateOnDevice != null) {
+      
+      String logMessage = "Ricerca ordini da aggiornare sul device\n";
+      
+      for (Iterator<OrderDs> it = ordersDs.iterator(); it.hasNext();) {
+        OrderDs order = it.next();
+        logMessage += String.format("Device lastUpdateTime = %s - Order %s lastUpdateTime = %s - ", lastUpdateOnDevice.getTime(), order.getCodice(), order.getLastUpdate().getTime());
+        if (order.getLastUpdate() != null && (order.getLastUpdate().before(lastUpdateOnDevice) || order.getLastUpdate().equals(lastUpdateOnDevice) )) {
+          it.remove();
+          logMessage += "AGGIORNATO";
+        } else {
+          logMessage += "DA AGGIORNARE";
+        }
+        logMessage += "\n";
+      }
+      
+      LoggingUtils.debug(getClass(), logMessage);
+      
+    }
+    
+    return CloneUtils.clone(ordersDs, OrderTx.class, Order.class);
   }
   
 }
