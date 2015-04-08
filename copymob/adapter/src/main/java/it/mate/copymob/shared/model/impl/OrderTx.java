@@ -1,5 +1,6 @@
 package it.mate.copymob.shared.model.impl;
 
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
@@ -8,6 +9,7 @@ import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -19,11 +21,13 @@ public class OrderTx implements Order, IsMappable {
   
   private String codice;
   
-  private Integer accountId;
-  
   private Integer state = Order.STATE_DEFAULT;
   
   private List<OrderItemTx> items = new ArrayList<OrderItemTx>();
+  
+  private AccountTx account;
+  
+  private Date lastUpdate;
   
   public OrderTx() {
 
@@ -35,7 +39,7 @@ public class OrderTx implements Order, IsMappable {
 
   @Override
   public String toString() {
-    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", accountId=" + accountId + ", state=" + state + ", items.size=" + (items != null ? items.size() : "null") + "]";
+    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", state=" + state + ", items.size=" + (items != null ? items.size() : "null") + "]";
   }
 
   @Override
@@ -44,15 +48,18 @@ public class OrderTx implements Order, IsMappable {
     map.put("id", id);
     map.put("remoteId", remoteId);
     map.put("codice", codice);
-    map.put("accountId", accountId);
     map.put("state", state);
     List<RpcMap> itemMaps = new ArrayList<RpcMap>();
-    for (OrderItem item : items) {
-      OrderItemTx itemTx = (OrderItemTx)item;
-      RpcMap itemMap = itemTx.toRpcMap();
-      itemMaps.add(itemMap);
+    if (items != null) {
+      for (OrderItem item : items) {
+        OrderItemTx itemTx = (OrderItemTx)item;
+        RpcMap itemMap = itemTx.toRpcMap();
+        itemMaps.add(itemMap);
+      }
     }
     map.put("itemMaps", itemMaps);
+    map.put("account", account.toRpcMap());
+    map.put("lastUpdate", lastUpdate);
     return map;
   }
 
@@ -62,7 +69,6 @@ public class OrderTx implements Order, IsMappable {
     this.id = (Integer)map.get("id");
     this.remoteId = (String)map.get("remoteId");
     this.codice = (String)map.get("codice");
-    this.accountId = (Integer)map.get("accountId");
     this.state = (Integer)map.get("state");
     this.items = new ArrayList<OrderItemTx>();
     List<RpcMap> itemMaps = (List<RpcMap>)map.get("itemMaps");
@@ -70,6 +76,11 @@ public class OrderTx implements Order, IsMappable {
       OrderItemTx itemTx = new OrderItemTx().fromRpcMap(itemMap);
       this.items.add(itemTx);
     }
+    RpcMap accountMap = (RpcMap)map.get("account");
+    if (accountMap != null) {
+      this.account = new AccountTx().fromRpcMap(accountMap);
+    }
+    this.lastUpdate = (Date)map.get("lastUpdate");
     return this;
   }
 
@@ -92,14 +103,6 @@ public class OrderTx implements Order, IsMappable {
     this.codice = codice;
   }
 
-  public Integer getAccountId() {
-    return accountId;
-  }
-
-  public void setAccountId(Integer accountId) {
-    this.accountId = accountId;
-  }
-
   public List<OrderItem> getItems() {
     if (items != null) {
       for (OrderItem item : items) {
@@ -107,9 +110,6 @@ public class OrderTx implements Order, IsMappable {
       }
     }
     return CollectionPropertyClientUtil.cast(items, OrderItemTx.class);
-    /*
-    return CollectionPropertyClientUtil.cast(discussions, BlogDiscussionTx.class);
-     */
   }
 
   @CloneableProperty (targetClass=OrderItemTx.class)
@@ -134,6 +134,23 @@ public class OrderTx implements Order, IsMappable {
 
   public void setRemoteId(String remoteId) {
     this.remoteId = remoteId;
+  }
+
+  public Account getAccount() {
+    return account;
+  }
+
+  @CloneableProperty (targetClass=AccountTx.class)
+  public void setAccount(Account account) {
+    this.account = (AccountTx)account;
+  }
+
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
   }
 
 }

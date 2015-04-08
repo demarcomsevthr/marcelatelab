@@ -20,8 +20,10 @@ public interface RemoteFacade extends RemoteService {
   
   Boolean checkConnection();
   
-  public List<RpcMap> getTimbri() throws RemoteFacadeException;
+  public List<RpcMap> getTimbri() throws FacadeException;
   
   public RpcMap saveOrder(RpcMap entity);
+  
+  public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException;
 
 }

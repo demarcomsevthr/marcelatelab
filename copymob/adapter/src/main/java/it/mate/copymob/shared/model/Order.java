@@ -1,6 +1,7 @@
 package it.mate.copymob.shared.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public interface Order extends Serializable {
@@ -34,10 +35,6 @@ public interface Order extends Serializable {
 
   public void setCodice(String codice);
 
-  public Integer getAccountId();
-
-  public void setAccountId(Integer accountId);
-
   public void setItems(List<OrderItem> items);
 
   public List<OrderItem> getItems();
@@ -49,5 +46,13 @@ public interface Order extends Serializable {
   public void setRemoteId(String remoteId);
 
   public String getRemoteId();
+
+  public void setAccount(Account account);
+
+  public Account getAccount();
+
+  public void setLastUpdate(Date lastUpdate);
+
+  public Date getLastUpdate();
   
 }

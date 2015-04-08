@@ -21,4 +21,6 @@ public interface RemoteFacadeAsync {
 
   void saveOrder(RpcMap entity, AsyncCallback<RpcMap> callback);
 
+  void findOrdersByAccount(String accountId, Date lastUpdate, AsyncCallback<List<RpcMap>> callback);
+
 }
