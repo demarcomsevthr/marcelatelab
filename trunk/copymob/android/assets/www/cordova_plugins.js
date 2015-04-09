@@ -189,9 +189,11 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.chariotsolutions.nfc.plugin/www/phonegap-nfc.js",
-        "id": "com.chariotsolutions.nfc.plugin.NFC",
-        "runs": true
+        "file": "plugins/com.phonegap.plugins.PushPlugin/www/PushNotification.js",
+        "id": "com.phonegap.plugins.PushPlugin.PushNotification",
+        "clobbers": [
+            "PushNotification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -203,7 +205,7 @@ module.exports.metadata =
     "org.apache.cordova.globalization": "0.3.2",
     "org.apache.cordova.file": "1.3.1",
     "org.apache.cordova.file-transfer": "0.4.7",
-    "com.chariotsolutions.nfc.plugin": "0.6.0"
+    "com.phonegap.plugins.PushPlugin": "2.4.0"
 }
 // BOTTOM OF METADATA
 });
