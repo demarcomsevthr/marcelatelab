@@ -52,6 +52,7 @@ call %MVN2CMD% %*
 
 :COPY_DEPLOY
 
+if "%SKIP_COPY_DEPLOY%"=="true" GOTO NO_COPY_DEPLOY
 if "%DEPLOY_TARGET%"=="" GOTO NO_COPY_DEPLOY
 set DEPLOY_SOURCE="%BASEAPPDIR%\android\assets\www"
 del /Q /S "%DEPLOY_TARGET%\*" >NUL
