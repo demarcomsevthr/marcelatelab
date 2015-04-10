@@ -67,7 +67,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String MESSAGE_FIELDS = MESSAGE_FIELDS_0;
   
-  private final static String ACCOUNT_FIELDS_0 = "id, email, name, password, devInfoId";
+  private final static String ACCOUNT_FIELDS_0 = "id, email, name, password, devInfoId, pushNotifRegId";
 
   private final static String ACCOUNT_FIELDS = ACCOUNT_FIELDS_0;
   
@@ -1061,6 +1061,7 @@ public class MainDao extends WebSQLDao {
       result.setName(rows.getValueString(it, "name"));
       result.setPassword(rows.getValueString(it, "password"));
       result.setDevInfoId(rows.getValueString(it, "devInfoId"));
+      result.setPushNotifRegId(rows.getValueString(it, "pushNotifRegId"));
       return result;
     }
     protected List<Account> getResults() {
@@ -1085,13 +1086,14 @@ public class MainDao extends WebSQLDao {
         public void execute(Account account) {
           if (account == null) {
             
-            tr.doExecuteSql("INSERT INTO account (" + ACCOUNT_FIELDS + ") VALUES (?, ?, ?, ?, ?)", 
+            tr.doExecuteSql("INSERT INTO account (" + ACCOUNT_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
                 new Object[] {
                   entity.getId(),
                   entity.getEmail(),
                   entity.getName(),
                   entity.getPassword(),
-                  entity.getDevInfoId()
+                  entity.getDevInfoId(),
+                  entity.getPushNotifRegId()
                 }, new SQLStatementCallback() {
                   public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
                     PhonegapLog.log("Inserted " + entity);
@@ -1106,12 +1108,14 @@ public class MainDao extends WebSQLDao {
             sql += " ,name = ?";
             sql += " ,password = ?";
             sql += " ,devInfoId = ?";
+            sql += " ,pushNotifRegId = ?";
             sql += " WHERE id = ?";
             tr.doExecuteSql(sql, new Object[] {
                 entity.getEmail(),
                 entity.getName(),
                 entity.getPassword(),
                 entity.getDevInfoId(),
+                entity.getPushNotifRegId(),
                 entity.getId()
               }, new SQLStatementCallback() {
                 public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {

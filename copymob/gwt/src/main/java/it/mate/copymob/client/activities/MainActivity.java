@@ -36,6 +36,8 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsToolbar;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
+import it.mate.phgcommons.client.plugins.PushPlugin;
+import it.mate.phgcommons.client.plugins.PushPlugin.Notification;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -653,6 +655,56 @@ public class MainActivity extends OnsAbstractActivity implements
       });
     } else {
       delegate.execute(null);
+    }
+  }
+  
+  private static final String DEBUG_REG_ID = "APA91bH9kMBuTNn32SJho3ZqjJlManVvsd8KtM9Tp1jiwYpdQXE8DdM8FXPlVil46HhQiZCP-Rvwf2qp6XeCnD89qHqF3wWo7dfH0VFY5iuuXSm7o0OKMSaLFCvsYVOBo2iPhHMARnWO";
+  
+  @Override
+  public void registerPushNotifications() {
+    getAccount(new Delegate<Account>() {
+      public void execute(final Account account) {
+        if (account != null) {
+          if (PushPlugin.isInstalled()) {
+            PhgUtils.log("Push Plugin installed");
+            PushPlugin.register("106218079007", new Delegate<PushPlugin.Notification>() {
+              public void execute(final Notification notification) {
+                if (notification.isRegisteredEvent()) {
+                  savePushNotificationIdOnAccount(account, notification.getRegId());
+                }
+              }
+            });
+          } else {
+            PhgUtils.log("Push Plugin NOT INSTALLED (saving debug regId)");
+            savePushNotificationIdOnAccount(account, DEBUG_REG_ID);
+          }
+        }
+      }
+    });
+  }
+  
+  private void savePushNotificationIdOnAccount(Account account, final String pushNotifRegId) {
+    PhgUtils.log("received pushNotRegId " + pushNotifRegId);
+    if (!pushNotifRegId.equals(account.getPushNotifRegId())) {
+      PhgUtils.log("registering pushNotRegId " + pushNotifRegId);
+      account.setPushNotifRegId(pushNotifRegId);
+      dao.saveAccount(account, new Delegate<Account>() {
+        public void execute(Account account) {
+          AccountTx atx = (AccountTx)account;
+          setWaitingState(true);
+          AppClientFactory.IMPL.getRemoteFacade().saveAccount(atx.toRpcMap(), new AsyncCallback<RpcMap>() {
+            public void onSuccess(RpcMap result) {
+              setWaitingState(false);
+              PhgUtils.log("registered pushNotRegId " + pushNotifRegId);
+              OnsDialogUtils.alert("Registered push notifications");
+            }
+            public void onFailure(Throwable caught) {
+              setWaitingState(false);
+              OnsDialogUtils.alert("Error", "Order update error ("+ caught.getMessage() +")!");
+            }
+          });
+        }
+      });
     }
   }
   
