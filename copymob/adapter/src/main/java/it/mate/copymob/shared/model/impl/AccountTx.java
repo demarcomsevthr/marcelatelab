@@ -18,6 +18,8 @@ public class AccountTx implements Account, IsMappable {
   
   private String devInfoId;
   
+  private String pushNotifRegId;
+  
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
@@ -26,6 +28,7 @@ public class AccountTx implements Account, IsMappable {
     map.put("name", name);
     map.put("password", password);
     map.put("devInfoId", devInfoId);
+    map.put("pushNotifRegId", pushNotifRegId);
     return map;
   }
 
@@ -36,6 +39,7 @@ public class AccountTx implements Account, IsMappable {
     this.name = (String)map.get("name");
     this.password = (String)map.get("password");
     this.devInfoId = (String)map.get("devInfoId");
+    this.pushNotifRegId = (String)map.get("pushNotifRegId");
     return this;
   }
   
@@ -112,6 +116,14 @@ public class AccountTx implements Account, IsMappable {
 
   public void setDevInfoId(String devInfoId) {
     this.devInfoId = devInfoId;
+  }
+
+  public String getPushNotifRegId() {
+    return pushNotifRegId;
+  }
+
+  public void setPushNotifRegId(String pushNotifRegId) {
+    this.pushNotifRegId = pushNotifRegId;
   }
   
 }

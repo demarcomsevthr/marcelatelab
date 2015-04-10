@@ -1,5 +1,6 @@
 package it.mate.copymob.shared.service;
 
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public interface AdminFacade extends RemoteService {
   public Order findOrderById(String id) throws FacadeException;
   
   public Order saveOrder(Order order) throws FacadeException;
+  
+  public List<Account> findAllAccounts() throws FacadeException;
+  
+  public void sendPushNotification(Account account, String message) throws FacadeException;
   
 }
