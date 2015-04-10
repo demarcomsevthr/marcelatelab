@@ -2,6 +2,7 @@ package it.mate.copymob.client.factories;
 
 import it.mate.copymob.client.activities.AdminActivity;
 import it.mate.copymob.client.activities.AdminActivityMapper;
+import it.mate.copymob.client.view.AccountListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.OrderEditView;
 import it.mate.copymob.client.view.OrderListView;
@@ -25,5 +26,7 @@ public interface AdminGinjector extends CommonGinjector{
   public OrderListView getOrderListView();
   
   public OrderEditView getOrderEditView();
+  
+  public AccountListView getAccountListView();
   
 }

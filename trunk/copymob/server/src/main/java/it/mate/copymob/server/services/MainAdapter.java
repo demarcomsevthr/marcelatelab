@@ -29,4 +29,8 @@ public interface MainAdapter {
   
   public List<Order> findOrdersByAccount(String accountId, Date lastUpdate) throws Exception;
   
+  public List<Account> findAllAccounts() throws Exception;
+  
+  public void sendPushNotification(Account account, String message) throws Exception;
+  
 }

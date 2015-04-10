@@ -11,6 +11,8 @@ public class AdminPlace extends Place /* implements ReversiblePlace */ {
   
   public static final String ORDER_EDIT = "orderEdit";
   
+  public static final String ACCOUNT_LIST = "accountList";
+  
   private String token;
   
   private Object model;

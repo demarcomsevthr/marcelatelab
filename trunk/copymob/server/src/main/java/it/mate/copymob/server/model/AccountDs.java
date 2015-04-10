@@ -37,6 +37,10 @@ public class AccountDs implements HasKey, Account {
   @Persistent
   private String federatedIdentity;
   
+  @Persistent
+  private String pushNotifRegId;
+  
+  
   @Override
   public String toString() {
     return "AccountDs [id=" + id + ", email=" + email + ", name=" + name + ", password=" + password + ", devInfoId=" + devInfoId + ", authDomain=" + authDomain
@@ -102,6 +106,13 @@ public class AccountDs implements HasKey, Account {
   public void setFederatedIdentity(String federatedIdentity) {
     this.federatedIdentity = federatedIdentity;
   }
-  
+
+  public String getPushNotifRegId() {
+    return pushNotifRegId;
+  }
+
+  public void setPushNotifRegId(String pushNotifRegId) {
+    this.pushNotifRegId = pushNotifRegId;
+  }
   
 }

@@ -27,12 +27,17 @@ import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
 import it.mate.copymob.shared.model.impl.OrderTx;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -361,6 +366,58 @@ public class MainAdapterImpl implements MainAdapter {
     }
     
     return CloneUtils.clone(ordersDs, OrderTx.class, Order.class);
+  }
+  
+  @Override
+  public List<Account> findAllAccounts() throws Exception {
+    List<AccountDs> dss = dao.findAll(AccountDs.class);
+    return CloneUtils.clone(dss, AccountTx.class, Account.class);
+  }
+  
+  private static final String PUSH_GCM_SERVER_KEY = "AIzaSyCH7xyFO1K3EmajORN_MVwDj4lA7yPBxp4";
+  
+  public void sendPushNotification(Account account, String message) throws Exception {
+    
+    try {
+      
+      URL url = new URL("https://android.googleapis.com/gcm/send");
+      
+      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+      
+      conn.setInstanceFollowRedirects(false);
+      conn.setDoOutput(true);
+      conn.setRequestMethod("POST");
+      conn.setDoInput(true);
+      
+      conn.setRequestProperty("Authorization", "key=" + PUSH_GCM_SERVER_KEY);
+//    conn.setRequestProperty("Content-Type", "application/json");
+      conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+      
+      OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+      writer.write(String.format("registration_id=%s&data.message=%s", account.getPushNotifRegId(), message));
+      writer.close();
+      
+      if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+        String responseText = "";
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+          responseText += line;
+        }
+        reader.close();
+        
+        LoggingUtils.debug(getClass(), "Received from GCM: " + responseText);
+        
+      } else {
+        LoggingUtils.debug(getClass(), "HTTP ERROR Received from GCM: " + conn.getResponseCode());
+      }
+      
+    } catch (Exception ex) {
+      throw ex;
+    }
+    
   }
   
 }
