@@ -1,6 +1,7 @@
 package it.mate.copymob.server.services;
 
 import it.mate.commons.server.utils.LoggingUtils;
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.service.AdminFacade;
 import it.mate.copymob.shared.service.FacadeException;
@@ -48,6 +49,28 @@ public class AdminFacadeImpl extends RemoteServiceServlet implements AdminFacade
   public Order saveOrder(Order order) throws FacadeException {
     try {
       return adapter.saveOrder(order);
+    } catch (Exception ex) {
+      LoggingUtils.error(getClass(), "errore", ex);
+      throw new FacadeException(ex.getMessage(), ex);
+    }
+  }
+  
+  @Override
+  public List<Account> findAllAccounts() throws FacadeException {
+    try {
+      List<Account> accounts = adapter.findAllAccounts();
+      LoggingUtils.debug(getClass(), "found " + accounts.size() + " accounts");
+      return accounts;
+    } catch (Exception ex) {
+      LoggingUtils.error(getClass(), "errore", ex);
+      throw new FacadeException(ex.getMessage(), ex);
+    }
+  }
+  
+  @Override
+  public void sendPushNotification(Account account, String message) throws FacadeException {
+    try {
+      adapter.sendPushNotification(account, message);
     } catch (Exception ex) {
       LoggingUtils.error(getClass(), "errore", ex);
       throw new FacadeException(ex.getMessage(), ex);

@@ -3,10 +3,12 @@ package it.mate.copymob.client.activities;
 
 import it.mate.copymob.client.factories.AdminClientFactory;
 import it.mate.copymob.client.places.AdminPlace;
+import it.mate.copymob.client.view.AccountListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.OrderEditView;
 import it.mate.copymob.client.view.OrderItemView;
 import it.mate.copymob.client.view.OrderListView;
+import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.service.AdminFacadeAsync;
 import it.mate.gwtcommons.client.mvp.SingletonBaseActivity;
@@ -21,7 +23,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class AdminActivity extends SingletonBaseActivity implements HomeView.Presenter, OrderListView.Presenter, OrderEditView.Presenter, OrderItemView.Presenter
+public class AdminActivity extends SingletonBaseActivity implements 
+    HomeView.Presenter, 
+    OrderListView.Presenter, OrderEditView.Presenter, OrderItemView.Presenter,
+    AccountListView.Presenter
   {
   
   protected AdminPlace place;
@@ -59,6 +64,12 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
       startHandlers.put(AdminPlace.ORDER_EDIT, new Delegate<AcceptsOneWidget>() {
         public void execute(AcceptsOneWidget panel) {
           initView(AdminClientFactory.IMPL.getGinjector().getOrderEditView(), panel);
+          retrieveModel();
+        }
+      });
+      startHandlers.put(AdminPlace.ACCOUNT_LIST, new Delegate<AcceptsOneWidget>() {
+        public void execute(AcceptsOneWidget panel) {
+          initView(AdminClientFactory.IMPL.getGinjector().getAccountListView(), panel);
           retrieveModel();
         }
       });
@@ -102,6 +113,18 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
           } else {
             getView().setModel(place.getModel());
           }
+        }
+      });
+      retrieveHandlers.put(AdminPlace.ACCOUNT_LIST, new Delegate<AdminPlace>() {
+        public void execute(AdminPlace place) {
+          facade.findAllAccounts(new AsyncCallback<List<Account>>() {
+            public void onSuccess(List<Account> results) {
+              getView().setModel(results);
+            }
+            public void onFailure(Throwable caught) {
+              processRemoteFailure(caught);
+            }
+          });
         }
       });
     }
@@ -157,6 +180,18 @@ public class AdminActivity extends SingletonBaseActivity implements HomeView.Pre
       }
       public void onFailure(Throwable caught) {
         processRemoteFailure(caught);
+      }
+    });
+  }
+  
+  public void sendPushNotification(Account account, String message) {
+    GwtUtils.log("sending notification");
+    facade.sendPushNotification(account, message, new AsyncCallback<Void>() {
+      public void onSuccess(Void result) {
+        GwtUtils.log("sending notification success");
+      }
+      public void onFailure(Throwable caught) {
+        GwtUtils.log("sending notification error");
       }
     });
   }
