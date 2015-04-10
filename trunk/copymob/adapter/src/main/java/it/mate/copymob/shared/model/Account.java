@@ -24,4 +24,8 @@ public interface Account extends Serializable {
 
   public String getPassword();
 
+  public void setPushNotifRegId(String pushNotifRegId);
+
+  public String getPushNotifRegId();
+
 }
