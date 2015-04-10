@@ -24,6 +24,7 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     public void goToAccountEditView();
     public void testWaitingState(boolean flag);
     public void updateOrdersFromServer();
+    public void registerPushNotifications();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, SettingsView> { }
@@ -97,6 +98,11 @@ public class SettingsView extends AbstractBaseView<Presenter> {
   @UiHandler("btnUpdate")
   public void onBtnUpdate(TapEvent event) {
     getPresenter().updateOrdersFromServer();
+  }
+  
+  @UiHandler("btnPush")
+  public void onBtnPush(TapEvent event) {
+    getPresenter().registerPushNotifications();
   }
   
 }

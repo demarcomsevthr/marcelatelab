@@ -15,10 +15,12 @@
         <include>main/data/*</include>
         <include>**/*.html</include>
         <include>**/app*.js</include>
-        <include>**/jquery*.*</include>
+        <include>jquery*.js</include>
+        <include>jquery*.map</include>
       </includes>
       <excludes>
         <exclude>main/js/onsen-1.2.1</exclude>
+        <exclude>jquery-1.9.1</exclude>
       </excludes>
       <outputDirectory>../../../android/assets/www</outputDirectory>
     </fileSet>
