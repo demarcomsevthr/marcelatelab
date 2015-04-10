@@ -59,7 +59,7 @@ call cordova plugin add org.apache.cordova.globalization
 call cordova plugin add org.apache.cordova.file
 call cordova plugin add org.apache.cordova.file-transfer
 
-call cordova plugin add https://github.com/chariotsolutions/phonegap-nfc.git
+call cordova plugin add https://github.com/phonegap-build/PushPlugin.git
 
 
 echo.
