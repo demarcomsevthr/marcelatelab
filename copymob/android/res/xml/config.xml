@@ -19,9 +19,8 @@
   <feature name="FileTransfer">
     <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
   </feature>
-  <feature name="NfcPlugin">
-      <param name="android-package" value="com.chariotsolutions.nfc.plugin.NfcPlugin" />
-      <param name="onload" value="true" />
+  <feature name="PushPlugin">
+    <param name="android-package" value="com.plugin.gcm.PushPlugin" />
   </feature>
 
   <name>Copymob</name>
