@@ -59,8 +59,11 @@ call cordova plugin add org.apache.cordova.globalization
 call cordova plugin add org.apache.cordova.file
 call cordova plugin add org.apache.cordova.file-transfer
 
+:: 10/04/2015
 call cordova plugin add https://github.com/phonegap-build/PushPlugin.git
 
+:: 13/04/2015
+call cordova plugin add https://github.com/wymsee/cordova-imagePicker.git
 
 echo.
 echo.
