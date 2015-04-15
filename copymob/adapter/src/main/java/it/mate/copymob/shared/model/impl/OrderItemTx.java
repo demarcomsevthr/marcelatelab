@@ -8,6 +8,7 @@ import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
+import it.mate.gwtcommons.shared.rpc.ValueConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ public class OrderItemTx implements OrderItem, IsMappable {
   
   private String previewImage;
 
+  private String customerImage;
+
   
   @Override
   public String toString() {
@@ -42,6 +45,19 @@ public class OrderItemTx implements OrderItem, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("remoteId", remoteId);
+    map.putField("orderId", orderId);
+    map.putField("quantity", quantity);
+    map.putField("inCart", inCart);
+    map.putField("timbro", timbro);
+    map.putField("rowMaps", rows);
+    map.putField("messageMaps", messages);
+    map.putField("previewImage", previewImage);
+    map.putField("customerImage", customerImage);
+    
+    /*
     map.put("id", id);
     map.put("remoteId", remoteId);
     map.put("orderId", orderId);
@@ -63,12 +79,40 @@ public class OrderItemTx implements OrderItem, IsMappable {
     }
     map.put("messageMaps", messageMaps);
     map.put("previewImage", previewImage);
+    map.put("customerImage", map.longTextToList(customerImage));
+    */
+    
     return map;
   }
   
   @Override
   @SuppressWarnings("unchecked")
   public OrderItemTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.remoteId = map.getField("remoteId");
+    this.orderId = map.getField("orderId");
+    this.quantity = map.getField("quantity");
+    this.inCart = map.getField("inCart");
+    this.timbro = map.getField("timbro", new ValueConstructor<TimbroTx>() {
+      public TimbroTx newInnstance() {
+        return new TimbroTx();
+      }
+    });
+    this.rows = map.getField("rowMaps", new ValueConstructor<OrderItemRowTx>() {
+      public OrderItemRowTx newInnstance() {
+        return new OrderItemRowTx();
+      }
+    });
+    this.messages = map.getField("messageMaps", new ValueConstructor<MessageTx>() {
+      public MessageTx newInnstance() {
+        return new MessageTx();
+      }
+    });
+    this.previewImage = map.getField("previewImage");
+    this.customerImage = map.getField("customerImage");
+    
+    /*
     this.id = (Integer)map.get("id");
     this.remoteId = (String)map.get("remoteId");
     this.orderId = (Integer)map.get("orderId");
@@ -95,6 +139,9 @@ public class OrderItemTx implements OrderItem, IsMappable {
       }
     }
     this.previewImage = (String)map.get("previewImage");
+    this.customerImage = map.listToLongText((List<String>)map.get("customerImage"));
+    */
+    
     return this;
   }
 
@@ -208,6 +255,14 @@ public class OrderItemTx implements OrderItem, IsMappable {
 
   public void setPreviewImage(String previewImage) {
     this.previewImage = previewImage;
+  }
+
+  public String getCustomerImage() {
+    return customerImage;
+  }
+
+  public void setCustomerImage(String customerImage) {
+    this.customerImage = customerImage;
   }
 
 }

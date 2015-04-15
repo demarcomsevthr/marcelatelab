@@ -47,4 +47,8 @@ public interface OrderItem extends Serializable {
 
   public String getPreviewImage();
 
+  public void setCustomerImage(String customerImage);
+
+  public String getCustomerImage();
+
 }

@@ -32,6 +32,19 @@ public class DevInfoTx implements DevInfo, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("os", os);
+    map.putField("layout", layout);
+    map.putField("devName", devName);
+    map.putField("phgVersion", phgVersion);
+    map.putField("platform", platform);
+    map.putField("devUuid", devUuid);
+    map.putField("devVersion", devVersion);
+    map.putField("created", created);
+    map.putField("devIp", devIp);
+    
+    /*
     map.put("id", id);
     map.put("os", os);
     map.put("layout", layout);
@@ -42,11 +55,26 @@ public class DevInfoTx implements DevInfo, IsMappable {
     map.put("devVersion", devVersion);
     map.put("created", created);
     map.put("devIp", devIp);
+    */
+    
     return map;
   }
 
   @Override
   public DevInfoTx fromRpcMap(RpcMap map) {
+
+    this.id = map.getField("id");
+    this.os = map.getField("os");
+    this.layout = map.getField("layout");
+    this.devName = map.getField("devName");
+    this.phgVersion = map.getField("phgVersion");
+    this.platform = map.getField("platform");
+    this.devUuid = map.getField("devUuid");
+    this.devVersion = map.getField("devVersion");
+    this.created = map.getField("created");
+    this.devIp = map.getField("devIp");
+    
+    /*
     this.id = (String)map.get("id");
     this.os = (String)map.get("os");
     this.layout = (String)map.get("layout");
@@ -57,6 +85,8 @@ public class DevInfoTx implements DevInfo, IsMappable {
     this.devVersion = (String)map.get("devVersion");
     this.created = (Date)map.get("created");
     this.devIp = (String)map.get("devIp");
+    */
+    
     return this;
   }
 
