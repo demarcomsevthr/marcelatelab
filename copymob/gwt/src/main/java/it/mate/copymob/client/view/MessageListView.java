@@ -81,6 +81,9 @@ public class MessageListView extends AbstractBaseView<Presenter> {
     } else if (model instanceof OrderItem) { 
       orderItem = (OrderItem)model;
       messages = orderItem.getMessages();
+      
+      PhgUtils.log("MESSAGE LIST VIEW --> " + orderItem);
+      
       populateList();
     }
   }

@@ -16,7 +16,7 @@
       </o:OnsToolbar>
       
       <g:HTML addStyleNames="app-home-presentation">
-        <i>Dettagli del timbro selezionato qui</i>
+        <i>VIEW DA CANCELLARE</i>
       </g:HTML>
       
       <o:OnsButton text="Componi" ui:field="btnCompose" addStyleNames="app-timbri-choose-btn"/>

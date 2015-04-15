@@ -1,6 +1,7 @@
 package it.mate.copymob.client.view;
 
 import it.mate.copymob.client.view.TimbriListView.Presenter;
+import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -26,7 +27,7 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTimbroDetailView(Timbro timbro);
-    public void addTimbroToCurrentOrder(Timbro timbro, Delegate<Timbro> delegate);
+    public void addTimbroToCurrentOrder(Timbro timbro, Delegate<OrderItem> delegate);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, TimbriListView> { }
