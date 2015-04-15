@@ -19,7 +19,7 @@
         <o:OnsList ui:field="cartList"/>
       </o:OnsScroller>
 
-      <o:OnsButton text="Procedi" ui:field="btnGo" addStyleNames="app-timbri-choose-btn"/>
+      <o:OnsButton text="Invia l'ordine" ui:field="btnGo" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>
     

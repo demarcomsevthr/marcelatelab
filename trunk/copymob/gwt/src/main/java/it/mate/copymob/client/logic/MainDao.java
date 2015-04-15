@@ -54,8 +54,8 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
-  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart, remoteId, previewImage ";
-  private final static String ORDER_ITEM_FIELDS_0_CREATE = "orderId, timbroId, quantity, inCart, remoteId, previewImage BLOB ";
+  private final static String ORDER_ITEM_FIELDS_0 = "orderId, timbroId, quantity, inCart, remoteId, previewImage, customerImage ";
+  private final static String ORDER_ITEM_FIELDS_0_CREATE = "orderId, timbroId, quantity, inCart, remoteId, previewImage BLOB, customerImage BLOB ";
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
@@ -155,14 +155,6 @@ public class MainDao extends WebSQLDao {
   private static final MigratorCallback[] migrationCallbacks = new MigratorCallback[] {
     MIGRATION_CALLBACK_0 
   };
-  
-  private void ensureCacheTimbri(final Delegate<Void> delegate) {
-    findAllTimbri(new Delegate<List<Timbro>>() {
-      public void execute(List<Timbro> results) {
-        delegate.execute(null);
-      }
-    });
-  }
   
   public void findAllCategorie(final Delegate<List<Categoria>> delegate) {
     findAllTimbri(new Delegate<List<Timbro>>() {
@@ -514,6 +506,8 @@ public class MainDao extends WebSQLDao {
       result.setInCart(rows.getValueInt(it, "inCart") == 1);
       result.setRemoteId(rows.getValueString(it, "remoteId"));
       result.setPreviewImage(rows.getValueString(it, "previewImage"));
+      String appo = rows.getValueString(it, "customerImage");
+      result.setCustomerImage(rows.getValueString(it, "customerImage"));
       return result;
     }
     protected List<OrderItem> getResults() {
@@ -588,9 +582,7 @@ public class MainDao extends WebSQLDao {
   
   
   public void saveOrder(final Order entity, final Delegate<Order> delegate) {
-    
     PhgUtils.log("saving " + entity);
-    
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
@@ -658,30 +650,19 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItem(SQLTransaction tr, final OrderItem entity, final Delegate<OrderItem> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItem (" + ORDER_ITEM_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderId(), 
             entity.getTimbroId(),
             entity.getQuantity(),
             (entity.isInCart() ? 1 : 0),
             entity.getRemoteId(),
-            entity.getPreviewImage()
+            entity.getPreviewImage(),
+            entity.getCustomerImage()
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
               afterOrderItemUpdate(tr, entity, delegate);
-              /*
-              purgeOrderItemRows(tr, entity, new Delegate<Void>() {
-                public void execute(Void element) {
-                  iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
-                    public void execute(Void element) {
-                      PhonegapLog.log("Inserted " + entity);
-                      delegate.execute(entity);
-                    }
-                  });
-                }
-              });
-              */
             }
           });
     } else {
@@ -694,6 +675,7 @@ public class MainDao extends WebSQLDao {
         sql += " ,inCart = ?";
         sql += " ,remoteId = ?";
         sql += " ,previewImage = ?";
+        sql += " ,customerImage = ?";
         sql += " WHERE id = ?";
         tr.doExecuteSql(sql, new Object[] {
             entity.getOrderId(), 
@@ -702,26 +684,11 @@ public class MainDao extends WebSQLDao {
             (entity.isInCart() ? 1 : 0),
             entity.getRemoteId(),
             entity.getPreviewImage(),
+            entity.getCustomerImage(),
             entity.getId()
           }, new SQLStatementCallback() {
             public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
               afterOrderItemUpdate(tr, entity, delegate);
-              /*
-              purgeOrderItemRows(tr, entity, new Delegate<Void>() {
-                public void execute(Void element) {
-                  iterateOrderItemRowsForUpdate(tr, entity.getRows().iterator(), new Delegate<Void>() {
-                    public void execute(Void element) {
-                      iterateMessagesForUpdate(tr, entity.getMessages().iterator(), new Delegate<Void>() {
-                        public void execute(Void element) {
-                          PhonegapLog.log("Updated " + entity);
-                          delegate.execute(entity);
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-              */
             }
           });
         

@@ -39,7 +39,7 @@
       </o:OnsHorizontalPanel>
        -->
 
-      <o:OnsButton text="Crea il tuo timbro" ui:field="btnBuy" addStyleNames="app-timbri-choose-btn"/>
+      <o:OnsButton text="Ordina il timbro" ui:field="btnBuy" addStyleNames="app-timbri-choose-btn"/>
       
     </o:OnsPage>
     
