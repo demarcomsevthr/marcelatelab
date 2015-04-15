@@ -12,27 +12,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class PushPlugin {
   
-  
-  public static class Notification {
-    private String event;
-    private String regId;
-    public boolean isRegisteredEvent() {
-      return "registered".equalsIgnoreCase(event);
-    }
-    public String getEvent() {
-      return event;
-    }
-    public void setEvent(String event) {
-      this.event = event;
-    }
-    public String getRegId() {
-      return regId;
-    }
-    public void setRegId(String regId) {
-      this.regId = regId;
-    }
-  }
-
   /**
    *  DOCUMENTATION
    *  
@@ -69,6 +48,26 @@ public class PushPlugin {
     return typeof ($wnd.plugins) != 'undefined' && typeof ($wnd.plugins.pushNotification) != 'undefined';
   }-*/;
   
+  public static class Notification {
+    private String event;
+    private String regId;
+    public boolean isRegisteredEvent() {
+      return "registered".equalsIgnoreCase(event);
+    }
+    public String getEvent() {
+      return event;
+    }
+    public void setEvent(String event) {
+      this.event = event;
+    }
+    public String getRegId() {
+      return regId;
+    }
+    public void setRegId(String regId) {
+      this.regId = regId;
+    }
+  }
+
   public static void register(String senderId, final Delegate<Notification> delegate) {
     if (OsDetectionUtils.isAndroid()) {
       PhgUtils.log("Push Plugin - registering android with " + senderId);
