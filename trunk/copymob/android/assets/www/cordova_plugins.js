@@ -194,6 +194,13 @@ module.exports = [
         "clobbers": [
             "PushNotification"
         ]
+    },
+    {
+        "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
+        "id": "com.synconset.imagepicker.ImagePicker",
+        "clobbers": [
+            "plugins.imagePicker"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -205,7 +212,8 @@ module.exports.metadata =
     "org.apache.cordova.globalization": "0.3.2",
     "org.apache.cordova.file": "1.3.1",
     "org.apache.cordova.file-transfer": "0.4.7",
-    "com.phonegap.plugins.PushPlugin": "2.4.0"
+    "com.phonegap.plugins.PushPlugin": "2.4.0",
+    "com.synconset.imagepicker": "1.0.6"
 }
 // BOTTOM OF METADATA
 });
