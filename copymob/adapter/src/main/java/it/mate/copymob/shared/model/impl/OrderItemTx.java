@@ -1,6 +1,7 @@
 package it.mate.copymob.shared.model.impl;
 
 import it.mate.copymob.shared.model.Message;
+import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
@@ -35,11 +36,30 @@ public class OrderItemTx implements OrderItem, IsMappable {
   private String previewImage;
 
   private String customerImage;
-
   
+  transient private Order order;
+  
+  
+
+  public OrderItemTx() {
+
+  }
+  
+  public OrderItemTx(Order order) {
+    this.order = order;
+    this.orderId = order != null ? order.getId() : null;
+  }
+  
+
   @Override
   public String toString() {
-    return "OrderItemTx [id=" + id + ", orderId=" + orderId + ", quantity=" + quantity + ", timbro=" + timbro + ", rows=" + rows + "]";
+    return "OrderItemTx [id=" + id + ", remoteId=" + remoteId + ", orderId=" + orderId + ", quantity=" + quantity 
+        + ", timbro=" + (timbro != null ? timbro.getCodice() : "null") 
+        + ", inCart=" + inCart
+        + ", rows.size=" + rows.size() + ", messages.size=" + messages.size() 
+        + ", previewImage.lenght=" + (previewImage != null ? previewImage.length() : "null") 
+        + ", customerImage.lenght=" + (customerImage != null ? customerImage.length() : "null") 
+        + ", order=" + order + "]";
   }
 
   @Override
@@ -263,6 +283,14 @@ public class OrderItemTx implements OrderItem, IsMappable {
 
   public void setCustomerImage(String customerImage) {
     this.customerImage = customerImage;
+  }
+
+  public Order getOrder() {
+    return order;
+  }
+
+  public void setOrder(Order order) {
+    this.order = order;
   }
 
 }

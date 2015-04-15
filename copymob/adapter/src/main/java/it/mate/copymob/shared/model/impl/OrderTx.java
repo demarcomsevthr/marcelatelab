@@ -38,9 +38,11 @@ public class OrderTx implements Order, IsMappable {
     this.id = id;
   }
 
+  
   @Override
   public String toString() {
-    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", state=" + state + ", items.size=" + (items != null ? items.size() : "null") + "]";
+    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", state=" + state + ", account=" + account + ", lastUpdate=" + lastUpdate
+        + ", items.size=" + items.size() + "]";
   }
 
   @Override
@@ -85,7 +87,7 @@ public class OrderTx implements Order, IsMappable {
     this.state = map.getField("state");
     this.items = map.getField("items", new ValueConstructor<OrderItemTx>() {
       public OrderItemTx newInnstance() {
-        return new OrderItemTx();
+        return new OrderItemTx(OrderTx.this);
       }
     });
     this.account = map.getField("account", new ValueConstructor<AccountTx>() {
@@ -136,20 +138,23 @@ public class OrderTx implements Order, IsMappable {
   }
 
   public List<OrderItem> getItems() {
-    if (items != null) {
-      for (OrderItem item : items) {
-        item.setOrderId(this.id);
-      }
-    }
+    linkItems();
     return CollectionPropertyClientUtil.cast(items, OrderItemTx.class);
   }
 
   @CloneableProperty (targetClass=OrderItemTx.class)
   public void setItems(List<OrderItem> items) {
     this.items = CollectionPropertyClientUtil.clone(items, OrderItemTx.class);
-    /*
-    this.discussions = CollectionPropertyClientUtil.clone(discussions, BlogDiscussionTx.class);
-     */
+    linkItems();
+  }
+  
+  private void linkItems() {
+    if (items != null) {
+      for (OrderItemTx item : items) {
+        item.setOrderId(this.id);
+        item.setOrder(this);
+      }
+    }
   }
 
   public Integer getState() {
