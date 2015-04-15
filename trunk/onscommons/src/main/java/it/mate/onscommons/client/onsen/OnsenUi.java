@@ -109,14 +109,18 @@ public class OnsenUi {
     return slidingMenu != null;
   }
   
-  private static boolean compilationDisabled;
+  private static boolean compilationSuspended;
   
-  public static void setCompilationDisabled(boolean compilationDisabled) {
-    OnsenUi.compilationDisabled = compilationDisabled;
+  public static void suspendCompilations() {
+    OnsenUi.compilationSuspended = true;
+  }
+  
+  public static void resumeCompilations() {
+    OnsenUi.compilationSuspended = false;
   }
   
   public static void compileElement(Element element) {
-    if (compilationDisabled) {
+    if (compilationSuspended) {
       PhgUtils.log("COMPILATION DISABLED");
       return;
     }
@@ -136,7 +140,7 @@ public class OnsenUi {
         PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
         OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
           public void execute(Element pageElement) {
-            setCompilationDisabled(false);
+            resumeCompilations();
             PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
             compileElementImpl(pageElement);
           }
