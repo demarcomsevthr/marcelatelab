@@ -115,7 +115,7 @@ public class SettingsView extends AbstractBaseView<Presenter> {
                 
                 OrderTx order = new OrderTx();
                 List<OrderItem> items = new ArrayList<OrderItem>();
-                items.add(new OrderItemTx());
+                items.add(new OrderItemTx(order));
                 items.get(0).setTimbro(timbro);
                 items.get(0).setCustomerImage(fileContent);
                 order.setItems(items);

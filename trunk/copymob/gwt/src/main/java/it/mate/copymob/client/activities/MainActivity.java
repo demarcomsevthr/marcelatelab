@@ -20,7 +20,6 @@ import it.mate.copymob.shared.model.Account;
 import it.mate.copymob.shared.model.Categoria;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
-import it.mate.copymob.shared.model.OrderItemRow;
 import it.mate.copymob.shared.model.Timbro;
 import it.mate.copymob.shared.model.impl.AccountTx;
 import it.mate.copymob.shared.model.impl.DevInfoTx;
@@ -56,11 +55,10 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
-  MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
-  TimbriListView.Presenter,
-  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
-  MessageListView.Presenter, AccountEditView.Presenter,
-  CartListView.Presenter, CategorieListView.Presenter
+    MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter, TimbriListView.Presenter, TimbroDetailView.Presenter, 
+    OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
+    MessageListView.Presenter, AccountEditView.Presenter,
+    CartListView.Presenter, CategorieListView.Presenter
   {
   
   private MainPlace place;
@@ -70,11 +68,18 @@ public class MainActivity extends OnsAbstractActivity implements
   private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private Timer daoTimer;
-  
-  private static Order selectedOrder;
+
   
   private static OrderItem selectedOrderItem;
-
+  
+  public OrderItem getSelectedOrderItem() {
+    return selectedOrderItem;
+  }
+  protected void setSelectedOrderItem(OrderItem selectedOrderItem) {
+    MainActivity.selectedOrderItem = selectedOrderItem;
+  }
+  
+  
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
   }
@@ -84,9 +89,8 @@ public class MainActivity extends OnsAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
     
     if (place.getToken().equals(MainPlace.HOME)) {
-//    PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
-//    PhgUtils.setDesktopDebugBorder(384, 682); // LG G3 5,5' RATIO (1440x2560)
-      PhgUtils.setDesktopDebugBorder(384, 568); // NEXUS 4 4,7' RATIO (768 x 1280)
+//    PhgUtils.setDesktopDebugBorder(384, 682); // LG G3 5.5' RATIO (1440x2560)
+      PhgUtils.setDesktopDebugBorder(384, 568); // NEXUS 4 4.7' RATIO (768 x 1280)
     }
     
     daoTimer = GwtUtils.createTimer(500, new Delegate<Void>() {
@@ -98,8 +102,6 @@ public class MainActivity extends OnsAbstractActivity implements
       }
     });
     
-    boolean deferred = true;
-
     if (place.getToken().equals(MainPlace.HOME)) {
       testServerConnection();
       getDevInfoId(new Delegate<String>() {
@@ -152,25 +154,18 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.CART_LIST)) {
       this.view = AppClientFactory.IMPL.getGinjector().getCartListView();
-//    deferred = false;
     }
     
-    PhgUtils.log("activity - setting presenter");;
     view.setPresenter(this);
-    PhgUtils.log("activity - setting widget");;
+    
     panel.setWidget(view.asWidget());
 
-    if (deferred) {
-      GwtUtils.deferredExecution(new Delegate<Void>() {
-        public void execute(Void element) {
-          PhgUtils.log("activity - setting model deferred");;
-          retrieveModel();
-        }
-      });
-    } else {
-      PhgUtils.log("activity - setting model");;
-      retrieveModel();
-    }
+    GwtUtils.deferredExecution(new Delegate<Void>() {
+      public void execute(Void element) {
+        PhgUtils.log("activity - setting model deferred");;
+        retrieveModel();
+      }
+    });
     
   }
   
@@ -210,7 +205,11 @@ public class MainActivity extends OnsAbstractActivity implements
       }
     }
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
-      view.setModel(getSelectedOrderItem());
+      if (place.getModel() instanceof OrderItem) {
+        view.setModel(place.getModel());
+      } else {
+        view.setModel(getSelectedOrderItem());
+      }
     }
     if (place.getToken().equals(MainPlace.ORDER_ITEM_IMAGE)) {
       if (place.getModel() instanceof OrderItem) {
@@ -230,7 +229,6 @@ public class MainActivity extends OnsAbstractActivity implements
       dao.findOrderInCart(new Delegate<List<Order>>() {
         public void execute(List<Order> results) {
           if (results != null && results.size() == 1) {
-            setSelectedOrder(results.get(0));
             setSelectedOrderItem(null);
             view.setModel(results.get(0));
           } else {
@@ -247,7 +245,6 @@ public class MainActivity extends OnsAbstractActivity implements
 
       }
     }
-//  OnsenUi.refreshCurrentPage();
   }
   
   @Override
@@ -291,11 +288,6 @@ public class MainActivity extends OnsAbstractActivity implements
   }
 
   @Override
-  public void goToOrderItemEditView(Timbro timbro) {
-    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_EDIT, timbro));
-  }
-
-  @Override
   public void goToOrderItemEditView(OrderItem orderItem) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_EDIT, orderItem));
   }
@@ -335,17 +327,18 @@ public class MainActivity extends OnsAbstractActivity implements
     OnsenUi.getSlidingMenu().toggleMenu();
   }
 
-  public void addTimbroToCurrentOrder(final Timbro timbro, Delegate<Timbro> delegate) {
+  @Override
+  public void addTimbroToCurrentOrder(final Timbro timbro, Delegate<OrderItem> delegate) {
     
     if (delegate == null) {
-      delegate = new Delegate<Timbro>() {
-        public void execute(Timbro timbro) {
-          goToOrderItemEditView(timbro);
+      delegate = new Delegate<OrderItem>() {
+        public void execute(OrderItem orderItem) {
+          goToOrderItemEditView(orderItem);
         }
       };
     }
     
-    final Delegate<Timbro> fDelegate = delegate;
+    final Delegate<OrderItem> fDelegate = delegate;
 
     dao.findOrderInCart(new Delegate<List<Order>>() {
       public void execute(List<Order> results) {
@@ -354,7 +347,7 @@ public class MainActivity extends OnsAbstractActivity implements
           Order order = new OrderTx();
           order.setCodice("CARTORDER");
           order.setState(Order.STATE_IN_CART);
-          order.getItems().add(createOrderItem(timbro, 1d));
+          order.getItems().add(createOrderItem(order, timbro, 1d));
           dao.saveOrder(order, new Delegate<Order>() {
             public void execute(Order order) {
               addTimbroToCurrentOrder(timbro, fDelegate);
@@ -364,29 +357,28 @@ public class MainActivity extends OnsAbstractActivity implements
         }
         
         Order order = results.get(0);
-        setSelectedOrder(order);
         
-        for (OrderItem item : order.getItems()) {
-          if (item.getTimbro().getId().equals(timbro.getId())) {
-            if (item.getRows() == null || item.getRows().size() == 0) {
-              setSelectedOrderItem(item);
-              fDelegate.execute(timbro);
+        for (OrderItem orderItem : order.getItems()) {
+          if (orderItem.getTimbro().getId().equals(timbro.getId())) {
+            if (orderItem.getRows() == null || orderItem.getRows().size() == 0) {
+              setSelectedOrderItem(orderItem);
+              fDelegate.execute(orderItem);
               return;
             }
 
             // TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
             //
-            setSelectedOrderItem(item);
-            fDelegate.execute(timbro);
+            setSelectedOrderItem(orderItem);
+            fDelegate.execute(orderItem);
             return;
             
           }
         }
 
-        OrderItem item = createOrderItem(timbro, 1d);
-        order.getItems().add(item);
-        setSelectedOrderItem(item);
-        fDelegate.execute(timbro);
+        OrderItem orderItem = createOrderItem(order, timbro, 1d);
+        order.getItems().add(orderItem);
+        setSelectedOrderItem(orderItem);
+        fDelegate.execute(orderItem);
         return;
         
       }
@@ -395,7 +387,7 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   @Override
-  public void addOrderItemToCart(final OrderItem orderItem) {
+  public void setOrderItemInCart(final OrderItem orderItem) {
     orderItem.setInCart(true);
     saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
       public void execute(Order element) {
@@ -404,29 +396,13 @@ public class MainActivity extends OnsAbstractActivity implements
     });
   }
   
-  private OrderItem createOrderItem(Timbro timbro, double qty) {
-    OrderItem item = new OrderItemTx();
+  private OrderItem createOrderItem(Order order, Timbro timbro, double qty) {
+    OrderItem item = new OrderItemTx(order);
     item.setQuantity(1d);
     item.setTimbro(timbro);
     return item;
   }
 
-  public Order getSelectedOrder() {
-    return selectedOrder;
-  }
-
-  protected void setSelectedOrder(Order selectedOrder) {
-    MainActivity.selectedOrder = selectedOrder;
-  }
-
-  public OrderItem getSelectedOrderItem() {
-    return selectedOrderItem;
-  }
-
-  protected void setSelectedOrderItem(OrderItem selectedOrderItem) {
-    MainActivity.selectedOrderItem = selectedOrderItem;
-  }
-  
   private void ensureDevInfoId() {
     String devInfoId = getDevInfoIdFromLocalStorage();
     if (devInfoId != null)
@@ -566,26 +542,20 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void saveOrderItemOnDevice(OrderItem orderItem, Delegate<Order> delegate) {
     PhgUtils.log("saving item " + orderItem);
-    for (OrderItemRow row : orderItem.getRows()) {
-      PhgUtils.log("   with row " + row);
+    setSelectedOrderItem(orderItem);
+    OrderItemTx orderItemTx = (OrderItemTx)orderItem;
+    if (orderItemTx.getOrder() == null) {
+      PhgUtils.log("ERRORE FATALE - order non settato!");
+      PhgUtils.log("ERRORE FATALE - order non settato!");
+      PhgUtils.log("ERRORE FATALE - order non settato!");
+      PhgUtils.log("ERRORE FATALE - order non settato!");
+      throw new IllegalArgumentException("Item senza reference all'ordine - " + orderItem);
     }
-    selectedOrderItem = orderItem;
-    if (selectedOrder != null) {
-      for (int it = 0; it < selectedOrder.getItems().size(); it++) {
-        if (selectedOrder.getItems().get(it).equals(orderItem)) {
-          selectedOrder.getItems().set(it, orderItem);
-        }
-      }
-      dao.saveOrder(selectedOrder, delegate);
-    }
+    dao.saveOrder(orderItemTx.getOrder(), delegate);
   }
 
   @Override
   public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
-    
-    if (order.getItems().get(0).getCustomerImage() != null) {
-      PhgUtils.log("CUSTOMER IMAGE SIZE BEFORE SAVE = " + order.getItems().get(0).getCustomerImage().length());
-    }
     
     getAccount(new Delegate<Account>() {
       public void execute(Account account) {
@@ -605,10 +575,6 @@ public class MainActivity extends OnsAbstractActivity implements
           AppClientFactory.IMPL.getRemoteFacade().saveOrder(orderMap, new AsyncCallback<RpcMap>() {
             public void onSuccess(RpcMap map) {
               Order result = new OrderTx().fromRpcMap(map);
-              
-              if (order.getItems().get(0).getCustomerImage() != null) {
-                PhgUtils.log("CUSTOMER IMAGE SIZE AFTER SAVE = " + order.getItems().get(0).getCustomerImage().length());
-              }
               
               dao.saveOrder(result, new Delegate<Order>() {
                 public void execute(final Order result) {
@@ -783,5 +749,5 @@ public class MainActivity extends OnsAbstractActivity implements
       
     }
   }
-  
+
 }

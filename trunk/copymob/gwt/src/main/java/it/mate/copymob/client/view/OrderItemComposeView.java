@@ -112,7 +112,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
     } else {
       // FOR DEBUG
-      item = new OrderItemTx();
+      item = new OrderItemTx(null);
       item.getRows().add(new OrderItemRowTx(""));
       rowsPanel.add(createRowItem(""));
     }

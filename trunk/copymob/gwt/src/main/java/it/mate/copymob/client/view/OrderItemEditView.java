@@ -31,7 +31,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTimbroComposeView(Timbro timbro);
-    public void addOrderItemToCart(OrderItem orderItem);
+    public void setOrderItemInCart(OrderItem orderItem);
     public void goToMessageListView(OrderItem orderItem);
     public void goToCartListView();
     public void goToOrderItemImageView(OrderItem orderItem);
@@ -84,7 +84,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   private void addBtnCart(String text) {
     addBtn(text, new TapHandler() {
       public void onTap(TapEvent event) {
-        getPresenter().addOrderItemToCart(orderItem);
+        getPresenter().setOrderItemInCart(orderItem);
       }
     });
   }
@@ -124,6 +124,8 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
     
     if (model instanceof OrderItem) {
       this.orderItem = (OrderItem)model;
+      
+      PhgUtils.log("ORDER ITEM EDIT VIEW --> " + this.orderItem);
       
       if (!orderItem.isInCart()) {
         addBtnCompose("Componi il tuo timbro");

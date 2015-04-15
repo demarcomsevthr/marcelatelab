@@ -498,7 +498,7 @@ public class MainDao extends WebSQLDao {
     }
     private OrderItem flushRS(SQLResultSet rs, int it) {
       SQLResultSetRowList rows = rs.getRows();
-      OrderItem result = new OrderItemTx();
+      OrderItem result = new OrderItemTx(null);
       result.setId(rows.getValueInt(it, "id"));
       result.setOrderId(rows.getValueInt(it, "orderId"));
       result.setTimbroId(rows.getValueInt(it, "timbroId"));
