@@ -80,7 +80,9 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
   public RpcMap saveOrder(RpcMap entity) {
     OrderTx tx = new OrderTx().fromRpcMap(entity);
     tx = (OrderTx)adapter.saveOrder(tx);
-    return tx.toRpcMap();
+    RpcMap resultMap = tx.toRpcMap();
+    logger.debug("RESULT MAP = " + resultMap);
+    return resultMap;
   }
 
   public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException {
