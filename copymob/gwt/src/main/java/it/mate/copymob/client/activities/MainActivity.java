@@ -2,7 +2,7 @@ package it.mate.copymob.client.activities;
 
 import it.mate.copymob.client.factories.AppClientFactory;
 import it.mate.copymob.client.logic.MainDao;
-import it.mate.copymob.client.logic.TimbriInitializer;
+import it.mate.copymob.client.logic.TimbriUtils;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.CartListView;
@@ -12,6 +12,7 @@ import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
 import it.mate.copymob.client.view.OrderItemComposeView;
 import it.mate.copymob.client.view.OrderItemEditView;
+import it.mate.copymob.client.view.OrderItemImageView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
@@ -36,6 +37,8 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsToolbar;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
+import it.mate.phgcommons.client.plugins.FileSystemPlugin;
+import it.mate.phgcommons.client.plugins.ImagePickerPlugin;
 import it.mate.phgcommons.client.plugins.PushPlugin;
 import it.mate.phgcommons.client.plugins.PushPlugin.Notification;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -55,7 +58,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MainActivity extends OnsAbstractActivity implements 
   MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter,
   TimbriListView.Presenter,
-  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter,
+  TimbroDetailView.Presenter, OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
   MessageListView.Presenter, AccountEditView.Presenter,
   CartListView.Presenter, CategorieListView.Presenter
   {
@@ -90,7 +93,7 @@ public class MainActivity extends OnsAbstractActivity implements
       public void execute(Void element) {
         if (dao.isReady()) {
           daoTimer.cancel();
-          TimbriInitializer.doRun();
+          TimbriUtils.doRun();
         }
       }
     });
@@ -133,6 +136,10 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       this.view = AppClientFactory.IMPL.getGinjector().getOrderItemComposeView();
+    }
+    
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_IMAGE)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getOrderItemImageView();
     }
     
     if (place.getToken().equals(MainPlace.MESSAGE_LIST)) {
@@ -204,6 +211,13 @@ public class MainActivity extends OnsAbstractActivity implements
     }
     if (place.getToken().equals(MainPlace.ORDER_ITEM_COMPOSE)) {
       view.setModel(getSelectedOrderItem());
+    }
+    if (place.getToken().equals(MainPlace.ORDER_ITEM_IMAGE)) {
+      if (place.getModel() instanceof OrderItem) {
+        view.setModel(place.getModel());
+      } else {
+        view.setModel(getSelectedOrderItem());
+      }
     }
     if (place.getToken().equals(MainPlace.ACCOUNT_EDIT)) {
       getAccount(new Delegate<Account>() {
@@ -289,6 +303,11 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToTimbroComposeView(Timbro timbro) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, timbro));
+  }
+
+  @Override
+  public void goToOrderItemImageView(OrderItem orderItem) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_IMAGE, orderItem));
   }
 
   @Override
@@ -563,6 +582,11 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
+    
+    if (order.getItems().get(0).getCustomerImage() != null) {
+      PhgUtils.log("CUSTOMER IMAGE SIZE BEFORE SAVE = " + order.getItems().get(0).getCustomerImage().length());
+    }
+    
     getAccount(new Delegate<Account>() {
       public void execute(Account account) {
         if (account == null) {
@@ -575,9 +599,17 @@ public class MainActivity extends OnsAbstractActivity implements
           setWaitingState(true);
           order.setAccount(account);
           OrderTx tx = (OrderTx)order;
-          AppClientFactory.IMPL.getRemoteFacade().saveOrder(tx.toRpcMap(), new AsyncCallback<RpcMap>() {
+          
+          RpcMap orderMap = tx.toRpcMap();
+          
+          AppClientFactory.IMPL.getRemoteFacade().saveOrder(orderMap, new AsyncCallback<RpcMap>() {
             public void onSuccess(RpcMap map) {
               Order result = new OrderTx().fromRpcMap(map);
+              
+              if (order.getItems().get(0).getCustomerImage() != null) {
+                PhgUtils.log("CUSTOMER IMAGE SIZE AFTER SAVE = " + order.getItems().get(0).getCustomerImage().length());
+              }
+              
               dao.saveOrder(result, new Delegate<Order>() {
                 public void execute(final Order result) {
                   setWaitingState(false);
@@ -705,6 +737,50 @@ public class MainActivity extends OnsAbstractActivity implements
           });
         }
       });
+    }
+  }
+  
+  public void saveCustomerImageOnOrderItem(final OrderItem orderItem, final Delegate<OrderItem> delegate) {
+    if (ImagePickerPlugin.isInstalled()) {
+      ImagePickerPlugin.getPictures(new ImagePickerPlugin.Options(), new Delegate<List<String>>() {
+        public void execute(List<String> results) {
+          if (results != null && results.size() > 0) {
+            String url = results.get(0);
+            String destFile = url.substring(url.lastIndexOf("/"));
+            PhgUtils.log("destFile = " + destFile);
+            FileSystemPlugin.readExternalFileAsEncodedData(url, /* "image.tmp" */ destFile, new Delegate<String>() {
+              public void execute(String fileContent) {
+//              PhgUtils.log("fileContent: " + fileContent);
+                orderItem.setCustomerImage(fileContent);
+                saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
+                  public void execute(Order element) {
+                    delegate.execute(orderItem);
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
+    } else {
+      PhgUtils.log("ImagePickerPlugin NOT INSTALLED");
+      
+      if (OsDetectionUtils.isDesktop()) {
+        TimbriUtils.readFromLocalhost("http://127.0.0.1:8888/.image?name=timbro-test.jpg", new Delegate<String>() {
+          public void execute(String fileContent) {
+            
+            fileContent = TimbriUtils.encodeImageData(fileContent, "jpeg");
+            
+            orderItem.setCustomerImage(fileContent);
+            saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
+              public void execute(Order element) {
+                delegate.execute(orderItem);
+              }
+            });
+          }
+        });
+      }
+      
     }
   }
   

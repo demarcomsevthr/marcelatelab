@@ -20,7 +20,7 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class TimbriInitializer {
+public class TimbriUtils {
 
   private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
   
@@ -31,10 +31,10 @@ public class TimbriInitializer {
   private final static boolean LOAD_TIMBRI_FROM_CLOUD = true;
   
   public static void doRun() {
-    new TimbriInitializer().run();
+    new TimbriUtils().run();
   }
   
-  protected TimbriInitializer() {  }
+  protected TimbriUtils() {  }
 
   protected void run() {
     
@@ -153,7 +153,7 @@ public class TimbriInitializer {
    * 
    */
   
-  private void readFromLocalhost(String uri, final Delegate<String> imageDelegate) {
+  public static void readFromLocalhost(String uri, final Delegate<String> imageDelegate) {
     RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, uri);
     rb.setHeader("Content-Type", "application/base64");
     try {
@@ -183,6 +183,13 @@ public class TimbriInitializer {
     } catch (RequestException ex) {
       PhgUtils.log("request error");
     }
+  }
+  
+  public static String encodeImageData(String fileContent, String type) {
+    if (type == null) {
+      type = "jpeg";
+    }
+    return !fileContent.startsWith("data:") ? ("data:image/"+type+";base64," + fileContent) : fileContent;
   }
   
 }

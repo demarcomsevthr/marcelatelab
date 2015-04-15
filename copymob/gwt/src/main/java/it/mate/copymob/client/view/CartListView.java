@@ -72,7 +72,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
   
   private void populateList() {
     
-    OnsenUi.setCompilationDisabled(true);
+    OnsenUi.suspendCompilations();
     
     HasTapHandlerImpl.setUseDocEventListener(true);
     

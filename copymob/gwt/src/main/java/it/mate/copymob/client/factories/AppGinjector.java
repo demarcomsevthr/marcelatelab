@@ -10,6 +10,7 @@ import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
 import it.mate.copymob.client.view.OrderItemComposeView;
 import it.mate.copymob.client.view.OrderItemEditView;
+import it.mate.copymob.client.view.OrderItemImageView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
@@ -43,6 +44,8 @@ public interface AppGinjector extends CommonGinjector {
   public OrderItemEditView getOrderItemEditView();
   
   public OrderItemComposeView getOrderItemComposeView();
+  
+  public OrderItemImageView getOrderItemImageView();
   
   public MessageListView getMessageListView();
   

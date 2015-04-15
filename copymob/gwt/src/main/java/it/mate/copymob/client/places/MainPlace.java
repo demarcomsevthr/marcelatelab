@@ -27,6 +27,8 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String ORDER_ITEM_COMPOSE = "ordItemCompose";
   
+  public static final String ORDER_ITEM_IMAGE = "ordItemImage";
+  
   public static final String MESSAGE_LIST = "messageList";
   
   public static final String ACCOUNT_EDIT = "accountEdit";
