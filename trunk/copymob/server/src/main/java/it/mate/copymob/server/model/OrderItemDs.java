@@ -56,10 +56,11 @@ public class OrderItemDs implements OrderItem, HasKey {
   @UnownedRelationship (key="messageKeys", itemClass=MessageDs.class)
   transient List<MessageDs> messages;
   
-  
   @Persistent
   Text previewImage;
   
+  @Persistent
+  Text customerImage;
   
   public Key getKey() {
     return remoteId;
@@ -163,6 +164,16 @@ public class OrderItemDs implements OrderItem, HasKey {
 
   public void setPreviewImage(String previewImage) {
     this.previewImage = previewImage != null ? new Text(previewImage) : null;
+  }
+
+  @Override
+  public void setCustomerImage(String customerImage) {
+    this.customerImage = customerImage != null ? new Text(customerImage) : null;
+  }
+
+  @Override
+  public String getCustomerImage() {
+    return customerImage != null ? customerImage.getValue() : null;
   }
   
 }
