@@ -37,6 +37,16 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("orderItemId", orderItemId);
+    map.putField("text", text);
+    map.putField("bold", bold);
+    map.putField("size", size);
+    map.putField("fontFamily", fontFamily);
+    map.putField("remoteId", remoteId);
+    
+    /*
     map.put("id", id);
     map.put("orderItemId", orderItemId);
     map.put("text", text);
@@ -44,11 +54,23 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     map.put("size", size);
     map.put("fontFamily", fontFamily);
     map.put("remoteId", remoteId);
+    */
+    
     return map;
   }
 
   @Override
   public OrderItemRowTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.orderItemId = map.getField("orderItemId");
+    this.text = map.getField("text");
+    this.bold = map.getField("bold");
+    this.size = map.getField("size");
+    this.fontFamily = map.getField("fontFamily");
+    this.remoteId = map.getField("remoteId");
+    
+    /*
     this.id = (Integer)map.get("id");
     this.orderItemId = (Integer)map.get("orderItemId");
     this.text = (String)map.get("text");
@@ -56,6 +78,8 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.size = (Integer)map.get("size");
     this.fontFamily = (String)map.get("fontFamily");
     this.remoteId = (String)map.get("remoteId");
+    */
+    
     return this;
   }
 

@@ -25,21 +25,41 @@ public class MessageTx implements Message, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("data", data);
+    map.putField("text", text);
+    map.putField("orderItemId", orderItemId);
+    map.putField("remoteId", remoteId);
+    
+    /*
     map.put("id", id);
     map.put("data", data);
     map.put("text", text);
     map.put("orderItemId", orderItemId);
     map.put("remoteId", remoteId);
+    */
+    
     return map;
   }
 
   @Override
   public MessageTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.data = map.getField("data");
+    this.text = map.getField("text");
+    this.orderItemId = map.getField("orderItemId");
+    this.remoteId = map.getField("remoteId");
+    
+    /*
     this.id = (Integer)map.get("id");
     this.data = (Date)map.get("data");
     this.text = (String)map.get("text");
     this.orderItemId = (Integer)map.get("orderItemId");
     this.remoteId = (String)map.get("remoteId");
+    */
+    
     return this;
   }
 

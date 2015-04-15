@@ -7,6 +7,7 @@ import it.mate.gwtcommons.client.utils.CollectionPropertyClientUtil;
 import it.mate.gwtcommons.shared.model.CloneableProperty;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
+import it.mate.gwtcommons.shared.rpc.ValueConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +46,16 @@ public class OrderTx implements Order, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("remoteId", remoteId);
+    map.putField("codice", codice);
+    map.putField("state", state);
+    map.putField("items", items);
+    map.putField("account", account);
+    map.putField("lastUpdate", lastUpdate);
+    
+    /*
     map.put("id", id);
     map.put("remoteId", remoteId);
     map.put("codice", codice);
@@ -60,12 +71,31 @@ public class OrderTx implements Order, IsMappable {
     map.put("itemMaps", itemMaps);
     map.put("account", account.toRpcMap());
     map.put("lastUpdate", lastUpdate);
+    */
     return map;
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public OrderTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.remoteId = map.getField("remoteId");
+    this.codice = map.getField("codice");
+    this.state = map.getField("state");
+    this.items = map.getField("items", new ValueConstructor<OrderItemTx>() {
+      public OrderItemTx newInnstance() {
+        return new OrderItemTx();
+      }
+    });
+    this.account = map.getField("account", new ValueConstructor<AccountTx>() {
+      public AccountTx newInnstance() {
+        return new AccountTx();
+      }
+    });
+    this.lastUpdate = map.getField("lastUpdate");
+    
+    /*
     this.id = (Integer)map.get("id");
     this.remoteId = (String)map.get("remoteId");
     this.codice = (String)map.get("codice");
@@ -81,6 +111,8 @@ public class OrderTx implements Order, IsMappable {
       this.account = new AccountTx().fromRpcMap(accountMap);
     }
     this.lastUpdate = (Date)map.get("lastUpdate");
+    */
+    
     return this;
   }
 

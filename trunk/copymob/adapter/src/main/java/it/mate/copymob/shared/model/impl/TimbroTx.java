@@ -46,6 +46,20 @@ public class TimbroTx implements Timbro, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("nome", nome);
+    map.putField("codice", codice);
+    map.putField("width", width);
+    map.putField("height", height);
+    map.putField("oval", oval);
+    map.putField("image", image);
+    map.putField("remoteId", remoteId);
+    map.putField("prezzo", prezzo);
+    map.putField("codCategoria", codCategoria);
+    map.putField("descCategoria", descCategoria);
+    
+    /*
     map.put("id", id);
     map.put("nome", nome);
     map.put("codice", codice);
@@ -57,11 +71,27 @@ public class TimbroTx implements Timbro, IsMappable {
     map.put("prezzo", prezzo);
     map.put("codCategoria", codCategoria);
     map.put("descCategoria", descCategoria);
+    */
+    
     return map;
   }
 
   @Override
   public TimbroTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.nome = map.getField("nome");
+    this.codice = map.getField("codice");
+    this.width = map.getField("width");
+    this.height = map.getField("height");
+    this.oval = map.getField("oval");
+    this.image = map.getField("image");
+    this.remoteId = map.getField("remoteId");
+    this.prezzo = map.getField("prezzo");
+    this.codCategoria = map.getField("codCategoria");
+    this.descCategoria = map.getField("descCategoria");
+    
+    /*
     this.id = (Integer)map.get("id");
     this.nome = (String)map.get("nome");
     this.codice = (String)map.get("codice");
@@ -73,6 +103,7 @@ public class TimbroTx implements Timbro, IsMappable {
     this.prezzo = (Double)map.get("prezzo");
     this.codCategoria = (String)map.get("codCategoria");
     this.descCategoria = (String)map.get("descCategoria");
+    */
     return this;
   }
 

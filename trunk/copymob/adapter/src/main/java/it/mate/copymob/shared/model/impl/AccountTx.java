@@ -23,23 +23,43 @@ public class AccountTx implements Account, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
+    
+    map.putField("id", id);
+    map.putField("email", email);
+    map.putField("name", name);
+    map.putField("password", password);
+    map.putField("devInfoId", devInfoId);
+    map.putField("pushNotifRegId", pushNotifRegId);
+    
+    /*
     map.put("id", id);
     map.put("email", email);
     map.put("name", name);
     map.put("password", password);
     map.put("devInfoId", devInfoId);
     map.put("pushNotifRegId", pushNotifRegId);
+    */
     return map;
   }
 
   @Override
   public AccountTx fromRpcMap(RpcMap map) {
+    
+    this.id = map.getField("id");
+    this.email = map.getField("email");
+    this.name = map.getField("name");
+    this.password = map.getField("password");
+    this.devInfoId = map.getField("devInfoId");
+    this.pushNotifRegId = map.getField("pushNotifRegId");
+    
+    /*
     this.id = (String)map.get("id");
     this.email = (String)map.get("email");
     this.name = (String)map.get("name");
     this.password = (String)map.get("password");
     this.devInfoId = (String)map.get("devInfoId");
     this.pushNotifRegId = (String)map.get("pushNotifRegId");
+    */
     return this;
   }
   
