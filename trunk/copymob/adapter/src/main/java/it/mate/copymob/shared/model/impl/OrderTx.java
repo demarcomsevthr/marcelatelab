@@ -160,6 +160,10 @@ public class OrderTx implements Order, IsMappable {
   public Integer getState() {
     return state != null ? state : Order.STATE_DEFAULT;
   }
+  
+  public boolean isCartOrder() {
+    return new Integer(Order.STATE_IN_CART).equals(state);
+  }
 
   public void setState(Integer state) {
     this.state = state != null ? state : 0;
