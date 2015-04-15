@@ -7,9 +7,7 @@ import it.mate.onscommons.client.event.TapEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MenuView extends AbstractBaseView<Presenter> {
@@ -20,13 +18,12 @@ public class MenuView extends AbstractBaseView<Presenter> {
     public void goToTimbriListView();
     public void goToMessageListView();
     public void goToCategorieListView();
+    public void goToOrderListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MenuView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
-  
-  @UiField Panel wrapperPanel;
   
   public MenuView() {
     initUI();
@@ -58,13 +55,17 @@ public class MenuView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnTimbri")
   public void onBtnTimbri(TapEvent event) {
-//  getPresenter().goToTimbriListView();
     getPresenter().goToCategorieListView();
   }
   
   @UiHandler("btnMessaggi")
   public void onBtnMessaggi(TapEvent event) {
     getPresenter().goToMessageListView();
+  }
+  
+  @UiHandler("btnOrdini")
+  public void onBtnOrdini(TapEvent event) {
+    getPresenter().goToOrderListView();
   }
   
 }

@@ -10,9 +10,11 @@ import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
+import it.mate.copymob.client.view.OrderEditView;
 import it.mate.copymob.client.view.OrderItemComposeView;
 import it.mate.copymob.client.view.OrderItemEditView;
 import it.mate.copymob.client.view.OrderItemImageView;
+import it.mate.copymob.client.view.OrderListView;
 import it.mate.copymob.client.view.SettingsView;
 import it.mate.copymob.client.view.TimbriListView;
 import it.mate.copymob.client.view.TimbroDetailView;
@@ -58,8 +60,10 @@ public class MainActivity extends OnsAbstractActivity implements
     MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter, TimbriListView.Presenter, TimbroDetailView.Presenter, 
     OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
     MessageListView.Presenter, AccountEditView.Presenter,
-    CartListView.Presenter, CategorieListView.Presenter
+    CartListView.Presenter, CategorieListView.Presenter,
+    OrderListView.Presenter, OrderEditView.Presenter
   {
+  
   
   private MainPlace place;
   
@@ -156,6 +160,14 @@ public class MainActivity extends OnsAbstractActivity implements
       this.view = AppClientFactory.IMPL.getGinjector().getCartListView();
     }
     
+    if (place.getToken().equals(MainPlace.ORDER_LIST)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getOrderListView();
+    }
+    
+    if (place.getToken().equals(MainPlace.ORDER_EDIT)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getOrderEditView();
+    }
+    
     view.setPresenter(this);
     
     panel.setWidget(view.asWidget());
@@ -245,6 +257,16 @@ public class MainActivity extends OnsAbstractActivity implements
 
       }
     }
+    if (place.getToken().equals(MainPlace.ORDER_LIST)) {
+      dao.findSentOrders(new Delegate<List<Order>>() {
+        public void execute(List<Order> orders) {
+          view.setModel(orders, "orders");
+        }
+      });
+    }
+    if (place.getToken().equals(MainPlace.ORDER_EDIT)) {
+      view.setModel(place.getModel());
+    }
   }
   
   @Override
@@ -320,6 +342,16 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToCartListView() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CART_LIST));
+  }
+
+  @Override
+  public void goToOrderListView() {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_LIST));
+  }
+
+  @Override
+  public void goToOrderEditView(Order order) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_EDIT, order));
   }
 
   @Override
