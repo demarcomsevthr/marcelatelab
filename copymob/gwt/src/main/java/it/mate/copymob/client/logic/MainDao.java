@@ -343,6 +343,22 @@ public class MainDao extends WebSQLDao {
   /*******************************************************************************
    *   ORDERS
    *******************************************************************************/
+
+  public void findSentOrders(final Delegate<List<Order>> delegate) {
+    findAllOrders(new Delegate<List<Order>>() {
+      public void execute(List<Order> orders) {
+        if (orders != null) {
+          for (Iterator<Order> it = orders.iterator(); it.hasNext();) {
+            Order order = it.next();
+            if (((OrderTx)order).isCartOrder()) {
+              it.remove();
+            }
+          }
+        }
+        delegate.execute(orders);
+      }
+    });
+  }
   
   public void findAllOrders(final Delegate<List<Order>> delegate) {
     db.doReadTransaction(new SQLTransactionCallback() {

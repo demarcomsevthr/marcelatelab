@@ -35,6 +35,10 @@ public class MainPlace extends Place implements HasToken {
   
   public static final String CART_LIST = "cartList";
   
+  public static final String ORDER_LIST = "orderList";
+  
+  public static final String ORDER_EDIT = "orderEdit";
+  
   private String token;
   
   private Object model;
