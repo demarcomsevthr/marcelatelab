@@ -3,8 +3,10 @@ package it.mate.onscommons.client.onsen;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
+import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
+import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
@@ -240,6 +242,11 @@ public class OnsenUi {
     if (element.getId() == null || "".equals(element.getId())) {
       element.setId(OnsenUi.createUniqueId());
     }
+  }
+  
+  public static void addTapHandler(Widget widget, TapHandler handler) {
+    HasTapHandlerImpl impl = new HasTapHandlerImpl(widget.getElement());
+    impl.addTapHandler(handler);
   }
   
 }

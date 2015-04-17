@@ -38,24 +38,39 @@ public class HasTapHandlerImpl {
   
   private JavaScriptObject jsEventListener = null;
   
-  private HasTapHandler target;
+  private HasTapHandler targetWidget;
+  
+  private Element targetElement;
   
   private static boolean allHandlersDisabled = false;
   
   private static boolean useDocEventListener = false;
   
   public HasTapHandlerImpl(HasTapHandler target) {
-    this.target = target;
+    this.targetWidget = target;
+    this.targetElement = ((Widget)targetWidget).getElement();
   }
   
-  private boolean isChildOfDialog(Widget parent) {
-    if (parent == null) {
+  public HasTapHandlerImpl(Element target) {
+    this.targetElement = target;
+  }
+  
+  private boolean isTargetWidgetChildOfDialog() {
+    if (targetWidget == null) {
+      return false;
+    } else {
+      return isChildOfDialog(((Widget)targetWidget).getParent());
+    }
+  }
+  
+  private boolean isChildOfDialog(Widget targetWidget) {
+    if (targetWidget == null) {
       return false;
     }
-    if (parent instanceof OnsDialog) {
+    if (targetWidget instanceof OnsDialog) {
       return true;
     }
-    return isChildOfDialog(parent.getParent());
+    return isChildOfDialog(targetWidget.getParent());
   }
   
   public static void setUseDocEventListener(boolean useDocEventListener) {
@@ -63,51 +78,30 @@ public class HasTapHandlerImpl {
   }
   
   private String getTargetElementLog() {
-    Element targetElement = ((Widget)target).getElement();
+//  Element targetElement = ((Widget)targetWidget).getElement();
     return targetElement.getNodeName().toLowerCase() + " " + targetElement.getId();
   }
   
   public HandlerRegistration addTapHandler(final TapHandler handler) {
     
-    Element targetElement = ((Widget)target).getElement();
+//  Element targetElement = ((Widget)targetWidget).getElement();
     OnsenUi.ensureId(targetElement);
     
     this.tapHandlers.add(handler);
     
     if (jsEventListener == null) {
       
-//    Element targetElement = ((Widget)target).getElement();
-//    OnsenUi.ensureId(targetElement);
-
       // 03/02/2015
       GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
         public void execute(/* final */ Element availableElement) {
           
-          /* 07/04/2015
-          JSOCallback callback = new JSOCallback() {
-            public void handle(JavaScriptObject jsEvent) {
-              Element eventElement = GwtUtils.getJsPropertyJso(jsEvent, "target").cast();
-              if (!PhgUtils.isReallyAttached(availableElement.getId())) {
-                removeAllHandlers();
-                return;
-              }
-              if (allHandlersDisabled) {
-                PhgUtils.log("ALL HANDLERS DISABLED");
-              }
-              for (TapHandler tapHandler : tapHandlers) {
-                tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (Widget)target));
-              }
-            }
-          };
-          */
-          
           // 04/02/2015
-          boolean isInDialog = isChildOfDialog(((Widget)target).getParent());
+          boolean isInDialog = isTargetWidgetChildOfDialog();
           
           if (isInDialog || useDocEventListener) {
-            jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, /* callback */ onTapCallback(availableElement));
+            jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, onTapCallback(availableElement));
           } else {
-            jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, /* callback */ onTapCallback(availableElement));
+            jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, onTapCallback(availableElement));
           }
           
         }
@@ -139,7 +133,7 @@ public class HasTapHandlerImpl {
           PhgUtils.log("ALL HANDLERS DISABLED");
         }
         for (TapHandler tapHandler : tapHandlers) {
-          tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (Widget)target));
+          tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (targetWidget != null ? (Widget)targetWidget : null)));
         }
       }
     };
