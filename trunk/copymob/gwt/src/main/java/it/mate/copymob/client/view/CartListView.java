@@ -82,6 +82,12 @@ public class CartListView extends AbstractBaseView<Presenter> {
       
       final OrderItem orderItem = it.next();
       
+      TapHandler orderItemTapHandler = new TapHandler() {
+        public void onTap(TapEvent event) {
+          getPresenter().goToOrderItemEditView(orderItem);
+        }
+      };
+      
       Timbro timbro = orderItem.getTimbro();
       
       OnsListItem listItem = new OnsListItem();
@@ -90,10 +96,12 @@ public class CartListView extends AbstractBaseView<Presenter> {
       rowPanel.setAddDirect(true);
       
       String html = "<img src='"+ timbro.getImageData() +"' class='app-cart-item-img'/>";
-      HTML img = new HTML(html);
-      rowPanel.add(img);
+      HTML imgHtml = new HTML(html);
+      OnsenUi.addTapHandler(imgHtml, orderItemTapHandler);
+      rowPanel.add(imgHtml);
       
       OnsLabel nameLbl = new OnsLabel(timbro.getNome());
+      OnsenUi.addTapHandler(nameLbl, orderItemTapHandler);
       nameLbl.addStyleName("app-cart-item-name");
       rowPanel.add(nameLbl);
       
@@ -106,7 +114,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
       
       OnsButton fillerBtn = new OnsButton("");
       fillerBtn.addStyleName("app-cart-btn-plus");
-      fillerBtn.setIcon("fa-hando-o-right");
+      fillerBtn.setIcon("fa-hand-o-right");
       fillerBtn.setModifier("quiet");
       
       OnsButton plusBtn = new OnsButton("");
@@ -151,11 +159,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
       editBtn.addStyleName("app-cart-btn-edit");
       editBtn.setIcon("fa-edit");
       editBtn.setModifier("quiet");
-      editBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          getPresenter().goToOrderItemEditView(orderItem);
-        }
-      });
+      editBtn.addTapHandler(orderItemTapHandler);
       actionsPanel.add(editBtn);
       
       rowPanel.add(actionsPanel);

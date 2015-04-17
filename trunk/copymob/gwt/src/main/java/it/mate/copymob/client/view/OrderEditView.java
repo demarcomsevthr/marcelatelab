@@ -22,6 +22,9 @@ import it.mate.onscommons.client.ui.OnsListItem;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTML;
@@ -79,6 +82,12 @@ public class OrderEditView extends AbstractBaseView<Presenter> {
       
       final OrderItem orderItem = it.next();
       
+      TapHandler orderItemTapHandler = new TapHandler() {
+        public void onTap(TapEvent event) {
+          getPresenter().goToOrderItemEditView(orderItem);
+        }
+      };
+      
       Timbro timbro = orderItem.getTimbro();
       
       OnsListItem listItem = new OnsListItem();
@@ -87,42 +96,46 @@ public class OrderEditView extends AbstractBaseView<Presenter> {
       rowPanel.setAddDirect(true);
       
       String html = "<img src='"+ timbro.getImageData() +"' class='app-cart-item-img'/>";
-      HTML img = new HTML(html);
-      rowPanel.add(img);
+      HTML imgHtml = new HTML(html);
+      OnsenUi.addTapHandler(imgHtml, orderItemTapHandler);
+      rowPanel.add(imgHtml);
       
       OnsLabel nameLbl = new OnsLabel(timbro.getNome());
+      OnsenUi.addTapHandler(nameLbl, orderItemTapHandler);
       nameLbl.addStyleName("app-cart-item-name");
       rowPanel.add(nameLbl);
       
+      rowPanel.add(new Spacer("2em"));
+      
       OnsHorizontalPanel qtaPanel = new OnsHorizontalPanel();
       qtaPanel.setAddDirect(true);
-      qtaPanel.add(new Spacer("2em"));
 
       final OnsLabel qtaFld = new OnsLabel();
       setQtaLbl(qtaFld, orderItem.getQuantity());
-      
-      OnsButton fillerBtn = new OnsButton("");
-      fillerBtn.addStyleName("app-cart-btn-plus");
-      fillerBtn.setIcon("fa-hando-o-right");
-      fillerBtn.setModifier("quiet");
-      
-      qtaPanel.add(fillerBtn);
+
       qtaPanel.add(qtaFld);
       
       rowPanel.add(qtaPanel);
       
       OnsHorizontalPanel actionsPanel = new OnsHorizontalPanel();
       actionsPanel.setAddDirect(true);
+      
       OnsButton editBtn = new OnsButton("");
-      editBtn.addStyleName("app-cart-btn-edit");
-      editBtn.setIcon("fa-edit");
+      editBtn.addStyleName("app-order-item-btn-edit");
+      editBtn.setIcon("fa-bars");
       editBtn.setModifier("quiet");
-      editBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          getPresenter().goToOrderItemEditView(orderItem);
+      editBtn.addTapHandler(orderItemTapHandler);
+      actionsPanel.add(editBtn);
+      
+      OnsenUi.onAvailableElement(editBtn, new Delegate<Element>() {
+        public void execute(Element editBtnElement) {
+          Element tdElement = editBtnElement.getParentElement();
+          tdElement.getStyle().setPosition(Position.ABSOLUTE);
+          tdElement.getStyle().setRight(0, Unit.PX);
+          tdElement.getStyle().setPaddingTop(2, Unit.PCT);
+          tdElement.getStyle().setPaddingRight(2, Unit.PCT);
         }
       });
-      actionsPanel.add(editBtn);
       
       rowPanel.add(actionsPanel);
       

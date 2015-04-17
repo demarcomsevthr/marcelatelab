@@ -128,9 +128,9 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
       PhgUtils.log("ORDER ITEM EDIT VIEW --> " + this.orderItem);
       
       if (!orderItem.isInCart()) {
-        addBtnCompose("Componi il tuo timbro");
+        addBtnCompose("Componi il timbro");
       } else {
-        addBtnCompose("Modifica il tuo timbro");
+        addBtnCompose("Modifica il timbro");
       }
       
       if (orderItem.getMessages() == null || orderItem.getMessages().size() == 0) {
@@ -139,7 +139,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
         addBtnMessages("Visualizza messaggi");
       }
       
-      addBtnImage("Invia un'immagine");
+      addBtnImage("Aggiungi un'immagine");
       
       if (!orderItem.isInCart()) {
         if (orderItem.getRows().size() > 0) {

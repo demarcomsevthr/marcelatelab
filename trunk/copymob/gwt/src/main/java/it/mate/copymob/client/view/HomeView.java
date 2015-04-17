@@ -1,6 +1,6 @@
 package it.mate.copymob.client.view;
 
-import it.mate.copymob.client.constants.AppProperties;
+import it.mate.copymob.client.logic.AppEvent;
 import it.mate.copymob.client.view.HomeView.Presenter;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
@@ -12,12 +12,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HomeView extends AbstractBaseView<Presenter> {
-
+  
   public interface Presenter extends BasePresenter {
     public void goToSettingsView();
     public void showMenu();
@@ -25,15 +25,17 @@ public class HomeView extends AbstractBaseView<Presenter> {
     public void goToCartListView();
     public void goToCategorieListView();
     public void goToOrderListView();
+    public void addAppEventHandler(AppEvent.Handler handler);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, HomeView> { }
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
-  @UiField Panel wrapperPanel;
-  @UiField Label homeLbl;
+//@UiField Label homeLbl;
   @UiField OnsToolbarButton btnMenu;
+  @UiField HTML htmlOrderUpdates;
+  @UiField Panel bottomPanel;
   
   public HomeView() {
     initUI();
@@ -42,23 +44,25 @@ public class HomeView extends AbstractBaseView<Presenter> {
   private void initProvidedElements() {
 
   }
-
+  
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
+//  homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
     btnMenu.setVisible(OnsenUi.isSlidingMenuLayoutPattern());
   }
   
   @Override
   public void setModel(Object model, String tag) {
-
+    
   }
 
+  /*
   @UiHandler("btnSettings")
   public void onBtnSettings(TapEvent event) {
     getPresenter().goToSettingsView();
   }
+  */
   
   @UiHandler("btnMenu")
   public void onBtnMenu(TapEvent event) {

@@ -6,16 +6,53 @@
 @eval windowHeight it.mate.protoph.client.ui.theme.CustomTheme.getWindowHeight();
 
 .app-home-presentation {
-  position: fixed;
-  text-align: center;
+  /* position: fixed; */
+  /* top: 4em; */
   width: 100%;
-  top: 4em;
+  text-align: center;
+  padding-top: 1em;
+}
+
+.app-home-updates {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.app-home-updated-orders-link {
+  color: rgba(38,100,171,0.81);
+  padding-left: 1em;
+}
+
+.app-home-alert-title {
+  height: 1.6em;
+  border-bottom: 1px solid rgb(100, 100, 100);
+  padding-top: 0.2em;
+}
+
+.app-home-alert-message {
+  font-size: 0.7em;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.app-home-alert-button {
+  width: 8em;
+  line-height: 1.6em;
+  margin-bottom: 0.5em;
+  /*
+  font-size: 1em;
+  height: 2em;
+  */
 }
 
 .app-home-buttonbar {
   /* position: fixed;  ATTENZIONE: NON FUNZIONA SU AND 4.0 */ 
   position: absolute;
-  bottom: 2em;
+  bottom: 0.5em;
   width: 100%;
 }
 
@@ -312,6 +349,11 @@
 
 .app-cart-item-name {
   font-size: 0.8em;
+  height: 2em;
+}
+
+.app-cart-item-state {
+  font-size: 0.8em;
 }
 
 .app-ons-list-item-message {
@@ -339,4 +381,8 @@
 
 .app-timbri-image-panel {
   width: 100%;
+}
+
+.app-order-item-btn-edit ons-icon {
+  font-size: 1.8em !important;
 }
