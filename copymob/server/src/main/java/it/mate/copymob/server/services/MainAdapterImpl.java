@@ -62,6 +62,8 @@ public class MainAdapterImpl implements MainAdapter {
   
   private static byte[] nonalfanum = new byte[48];
   
+  private static final String PUSH_GCM_SERVER_KEY = "AIzaSyCH7xyFO1K3EmajORN_MVwDj4lA7yPBxp4";
+  
   @PostConstruct
   public void postConstruct() {
     LoggingUtils.debug(getClass(), "initialized " + this);
@@ -117,6 +119,7 @@ public class MainAdapterImpl implements MainAdapter {
     return CloneUtils.clone (ds, AccountTx.class);
   }
 
+  @Override
   public List<Timbro> getTimbri() throws Exception {
     if (cacheTimbri == null) {
       List<Timbro> timbri;
@@ -230,12 +233,31 @@ public class MainAdapterImpl implements MainAdapter {
   @Override
   public Order saveOrder(Order order) {
     OrderDs orderDs = CloneUtils.clone(order, OrderDs.class);
+    
+    // REGISTRAZIONE ORDINE DAL DEVICE
     if (orderDs.getState() == Order.STATE_IN_CART) {
       orderDs.setState(Order.STATE_RECEIVED);
       String codice = DateUtils.dateToString(new Date(), "yyyy");
       codice += StringUtils.formatNumber(getNextCounterValue(), 4);
       orderDs.setCodice(codice);
+
+    // AGGIORNAMENTI EFFETTUATI DA ADMIN
+    } else {
+      orderDs.setUpdateState("N");
+
+      if (order.getAccount() != null) {
+        try {
+          LoggingUtils.debug(getClass(), "Sending push notification");
+          sendPushNotification(order.getAccount(), "L'ordine " + order.getCodice() + " e' stato aggiornato", null);
+        } catch (Exception ex) {
+          LoggingUtils.error(getClass(), "Sending push notification error", ex);
+        }
+      } else {
+        LoggingUtils.error(getClass(), "Cannot send push notification (order.account = null) ");
+      }
+      
     }
+    orderDs.setLastUpdate(new Date());
     orderDs = createOrUpdateOrderDs(orderDs);
     return CloneUtils.clone (orderDs, OrderTx.class);
   }
@@ -250,7 +272,6 @@ public class MainAdapterImpl implements MainAdapter {
       }
       orderDs.setItems(items);
     }
-    orderDs.setLastUpdate(new Date());
     if (orderDs.getKey() == null) {
       orderDs = dao.create(orderDs);
     } else {
@@ -322,6 +343,7 @@ public class MainAdapterImpl implements MainAdapter {
     return result;
   }
   
+  @Override
   public List<Order> findAllOrders() throws Exception {
     List<OrderDs> ordersDs = dao.findAll(OrderDs.class, new FindCallback<OrderDs>() {
       public void processResultsInTransaction(OrderDs entity) {
@@ -331,11 +353,35 @@ public class MainAdapterImpl implements MainAdapter {
     return CloneUtils.clone(ordersDs, OrderTx.class, Order.class);
   }
   
+  @Override
   public Order findOrderById(String id) throws Exception {
     OrderDs ds = dao.findById(OrderDs.class, id);
     return CloneUtils.clone(ds, OrderTx.class);
   }
+
+  @Override
+  public List<Order> findUpdatedOrdersByAccount(String accountId) throws Exception {
+    List<OrderDs> orders = dao.findList(new FindContext<OrderDs>(OrderDs.class).setResultAsList(true)
+        .setFilter("accountKey == accountKeyParam && updateState == updateStateParam")
+        .setParameters(Dao.Utils.buildParameters(new ParameterDefinition[] { new ParameterDefinition(Key.class, "accountKeyParam"), new ParameterDefinition(String.class, "updateStateParam")}))
+        .setParamValues(new Object[]{KeyFactory.stringToKey(accountId), "N"})
+        .includedField("itemKeys")
+      );
+
+    if (orders != null) {
+
+      // NB: non risettare l'ordine nella lista perche il ritorno dell'update non ha le righe
+      for (OrderDs order : orders) {
+        order.setUpdateState("U");
+        order = dao.update(order);
+      }
+      
+    }
+    
+    return CloneUtils.clone(orders, OrderTx.class, Order.class);
+  }
   
+  @Override
   public List<Order> findOrdersByAccount(String accountId, Date lastUpdateOnDevice) throws Exception {
     
     List<OrderDs> ordersDs = dao.findList(new FindContext<OrderDs>(OrderDs.class).setResultAsList(true)
@@ -374,9 +420,14 @@ public class MainAdapterImpl implements MainAdapter {
     return CloneUtils.clone(dss, AccountTx.class, Account.class);
   }
   
-  private static final String PUSH_GCM_SERVER_KEY = "AIzaSyCH7xyFO1K3EmajORN_MVwDj4lA7yPBxp4";
-  
-  public void sendPushNotification(Account account, String message) throws Exception {
+  @Override
+  public void sendPushNotification(Account account, String message, String regId) throws Exception {
+    
+    if (regId != null && regId.trim().length() > 0) {
+      account.setPushNotifRegId(regId);
+      AccountDs ds = CloneUtils.clone(account, AccountDs.class);
+      dao.update(ds);
+    }
     
     try {
       

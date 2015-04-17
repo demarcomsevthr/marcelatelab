@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class AccountListView extends AbstractBaseView<Presenter> {
   
   public interface Presenter extends BasePresenter {
-    public void sendPushNotification(Account account, String message);
+    public void sendPushNotification(Account account, String message, String regId);
   }
   
   public interface ViewUiBinder extends UiBinder<Widget, AccountListView> { }
@@ -65,23 +65,30 @@ public class AccountListView extends AbstractBaseView<Presenter> {
       btPush.addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
           
-          VerticalPanel dialogWidget = new VerticalPanel();
-          dialogWidget.add(new Label("Messaggio"));
+          VerticalPanel dialogPanel = new VerticalPanel();
+          
+          dialogPanel.add(new Label("Reg Id"));
+          final TextBox boxRegId = new TextBox();
+          boxRegId.setWidth("10em");
+          dialogPanel.add(boxRegId);
+          
+          dialogPanel.add(new Label("Messaggio"));
           final TextBox boxMessaggio = new TextBox();
           boxMessaggio.setWidth("10em");
-          dialogWidget.add(boxMessaggio);
+          dialogPanel.add(boxMessaggio);
           
           MessageBox.create(new MessageBox.Configuration()
           .setCaptionText("Inserisci un messaggio")
           .setButtonType(MessageBox.BUTTONS_OKCANCEL)
           .setIconType(MessageBox.ICON_INFO)
-          .setBodyWidget(dialogWidget)
+          .setBodyWidget(dialogPanel)
           .setBodyWidth("400px")
           .setCallbacks(new MessageBox.Callbacks() {
             public void onOk() {
 
+              String regId = boxRegId.getValue();
               String message = boxMessaggio.getValue();
-              getPresenter().sendPushNotification(account, message);
+              getPresenter().sendPushNotification(account, message, regId);
               
             }
           }));

@@ -56,6 +56,13 @@ public class OrderDs implements Order, HasKey {
   @Persistent
   private Date lastUpdate;
   
+  @Persistent
+  private String updateState;
+  
+  @Persistent
+  private Date created;
+  
+  
   
   @Override
   public Key getKey() {
@@ -126,6 +133,22 @@ public class OrderDs implements Order, HasKey {
 
   public void setLastUpdate(Date lastUpdate) {
     this.lastUpdate = lastUpdate;
+  }
+
+  public String getUpdateState() {
+    return updateState;
+  }
+
+  public void setUpdateState(String updateState) {
+    this.updateState = updateState;
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
 
 }

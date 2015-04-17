@@ -46,4 +46,6 @@
   <set-property name="gwt.logging.firebugHandler" value="DISABLED" />
   <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
   
+  <collapse-all-properties />
+  
 </module>

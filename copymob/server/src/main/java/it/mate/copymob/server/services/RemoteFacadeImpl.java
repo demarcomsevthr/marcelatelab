@@ -85,6 +85,7 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
     return resultMap;
   }
 
+  @Override
   public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException {
     try {
       List<RpcMap> results = new ArrayList<RpcMap>();
@@ -93,6 +94,18 @@ public class RemoteFacadeImpl extends RemoteServiceServlet implements RemoteFaca
         OrderTx tx = CloneUtils.clone(order, OrderTx.class);
         results.add(tx.toRpcMap());
       }
+      return results;
+    } catch (Exception ex) {
+      throw new FacadeException(ex.getMessage());
+    }
+  }
+  
+  @Override
+  public RpcMap checkForUpdates(String accountId) throws FacadeException {
+    try {
+      RpcMap results = new RpcMap();
+      List<Order> updatedOrders = adapter.findUpdatedOrdersByAccount(accountId);
+      results.putField("updatedOrders", updatedOrders);
       return results;
     } catch (Exception ex) {
       throw new FacadeException(ex.getMessage());

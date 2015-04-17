@@ -68,9 +68,9 @@ public class AdminFacadeImpl extends RemoteServiceServlet implements AdminFacade
   }
   
   @Override
-  public void sendPushNotification(Account account, String message) throws FacadeException {
+  public void sendPushNotification(Account account, String message, String regId) throws FacadeException {
     try {
-      adapter.sendPushNotification(account, message);
+      adapter.sendPushNotification(account, message, regId);
     } catch (Exception ex) {
       LoggingUtils.error(getClass(), "errore", ex);
       throw new FacadeException(ex.getMessage(), ex);
