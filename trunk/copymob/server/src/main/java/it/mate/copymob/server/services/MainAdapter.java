@@ -31,6 +31,8 @@ public interface MainAdapter {
   
   public List<Account> findAllAccounts() throws Exception;
   
-  public void sendPushNotification(Account account, String message) throws Exception;
+  public void sendPushNotification(Account account, String message, String regId) throws Exception;
+  
+  public List<Order> findUpdatedOrdersByAccount(String accountId) throws Exception;
   
 }

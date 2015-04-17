@@ -184,9 +184,9 @@ public class AdminActivity extends SingletonBaseActivity implements
     });
   }
   
-  public void sendPushNotification(Account account, String message) {
+  public void sendPushNotification(Account account, String message, String regId) {
     GwtUtils.log("sending notification");
-    facade.sendPushNotification(account, message, new AsyncCallback<Void>() {
+    facade.sendPushNotification(account, message, regId, new AsyncCallback<Void>() {
       public void onSuccess(Void result) {
         GwtUtils.log("sending notification success");
       }
