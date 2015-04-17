@@ -3,7 +3,7 @@ package it.mate.copymob.shared.model;
 import java.io.Serializable;
 
 public interface Account extends Serializable {
-
+  
   public void setName(String nickname);
 
   public String getName();

@@ -17,6 +17,6 @@ public interface AdminFacadeAsync {
 
   void findAllAccounts(AsyncCallback<List<Account>> callback);
 
-  void sendPushNotification(Account account, String message, AsyncCallback<Void> callback);
+  void sendPushNotification(Account account, String message, String regId, AsyncCallback<Void> callback);
 
 }

@@ -23,4 +23,6 @@ public interface RemoteFacadeAsync {
 
   void findOrdersByAccount(String accountId, Date lastUpdate, AsyncCallback<List<RpcMap>> callback);
 
+  void checkForUpdates(String accountId, AsyncCallback<RpcMap> callback);
+
 }
