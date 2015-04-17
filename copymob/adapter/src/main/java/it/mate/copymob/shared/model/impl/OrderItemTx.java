@@ -56,7 +56,8 @@ public class OrderItemTx implements OrderItem, IsMappable {
     return "OrderItemTx [id=" + id + ", remoteId=" + remoteId + ", orderId=" + orderId + ", quantity=" + quantity 
         + ", timbro=" + (timbro != null ? timbro.getCodice() : "null") 
         + ", inCart=" + inCart
-        + ", rows.size=" + rows.size() + ", messages.size=" + messages.size() 
+        + ", rows.size=" + ( rows != null ? rows.size() : "0" ) 
+        + ", messages.size=" + ( messages != null ? messages.size() : "0" ) 
         + ", previewImage.lenght=" + (previewImage != null ? previewImage.length() : "null") 
         + ", customerImage.lenght=" + (customerImage != null ? customerImage.length() : "null") 
         + ", order=" + order + "]";

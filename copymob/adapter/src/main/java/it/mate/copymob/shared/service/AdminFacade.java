@@ -20,6 +20,6 @@ public interface AdminFacade extends RemoteService {
   
   public List<Account> findAllAccounts() throws FacadeException;
   
-  public void sendPushNotification(Account account, String message) throws FacadeException;
+  public void sendPushNotification(Account account, String message, String regId) throws FacadeException;
   
 }

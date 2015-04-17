@@ -26,4 +26,6 @@ public interface RemoteFacade extends RemoteService {
   
   public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException;
 
+  public RpcMap checkForUpdates(String accountId) throws FacadeException;
+  
 }

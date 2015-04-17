@@ -54,5 +54,26 @@ public interface Order extends Serializable {
   public void setLastUpdate(Date lastUpdate);
 
   public Date getLastUpdate();
+
+  
+  /** UPDATE STATES
+   * 
+    null >> stato iniziale
+    
+    N >> server.adapter.saveOrder
+    
+    U >> server.adapter.checkForUpdates (legge ordini|messaggi in stato N, li aggiorna a stato U)
+    
+    V >> (solo sul device) l'utente ha visualizzato l'aggiornamento
+    
+  */
+  
+  public void setUpdateState(String updateState);
+
+  public String getUpdateState();
+
+  public void setCreated(Date created);
+
+  public Date getCreated();
   
 }

@@ -29,6 +29,11 @@ public class OrderTx implements Order, IsMappable {
   private AccountTx account;
   
   private Date lastUpdate;
+    
+  private String updateState;
+  
+  private Date created;
+  
   
   public OrderTx() {
 
@@ -37,18 +42,18 @@ public class OrderTx implements Order, IsMappable {
   protected OrderTx(Integer id) {
     this.id = id;
   }
-
   
   @Override
   public String toString() {
-    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", state=" + state + ", account=" + account + ", lastUpdate=" + lastUpdate
-        + ", items.size=" + items.size() + "]";
+    return "OrderTx [id=" + id + ", remoteId=" + remoteId + ", codice=" + codice + ", state=" + state 
+        + ", items.size=" + items.size() 
+        + ", account=" + account
+        + ", lastUpdate=" + lastUpdate + ", updateState=" + updateState + ", created=" + created + "]";
   }
 
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
-    
     map.putField("id", id);
     map.putField("remoteId", remoteId);
     map.putField("codice", codice);
@@ -56,31 +61,13 @@ public class OrderTx implements Order, IsMappable {
     map.putField("items", items);
     map.putField("account", account);
     map.putField("lastUpdate", lastUpdate);
-    
-    /*
-    map.put("id", id);
-    map.put("remoteId", remoteId);
-    map.put("codice", codice);
-    map.put("state", state);
-    List<RpcMap> itemMaps = new ArrayList<RpcMap>();
-    if (items != null) {
-      for (OrderItem item : items) {
-        OrderItemTx itemTx = (OrderItemTx)item;
-        RpcMap itemMap = itemTx.toRpcMap();
-        itemMaps.add(itemMap);
-      }
-    }
-    map.put("itemMaps", itemMaps);
-    map.put("account", account.toRpcMap());
-    map.put("lastUpdate", lastUpdate);
-    */
+    map.putField("updateState", updateState);
+    map.putField("created", created);
     return map;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public OrderTx fromRpcMap(RpcMap map) {
-    
     this.id = map.getField("id");
     this.remoteId = map.getField("remoteId");
     this.codice = map.getField("codice");
@@ -96,25 +83,8 @@ public class OrderTx implements Order, IsMappable {
       }
     });
     this.lastUpdate = map.getField("lastUpdate");
-    
-    /*
-    this.id = (Integer)map.get("id");
-    this.remoteId = (String)map.get("remoteId");
-    this.codice = (String)map.get("codice");
-    this.state = (Integer)map.get("state");
-    this.items = new ArrayList<OrderItemTx>();
-    List<RpcMap> itemMaps = (List<RpcMap>)map.get("itemMaps");
-    for (RpcMap itemMap : itemMaps) {
-      OrderItemTx itemTx = new OrderItemTx().fromRpcMap(itemMap);
-      this.items.add(itemTx);
-    }
-    RpcMap accountMap = (RpcMap)map.get("account");
-    if (accountMap != null) {
-      this.account = new AccountTx().fromRpcMap(accountMap);
-    }
-    this.lastUpdate = (Date)map.get("lastUpdate");
-    */
-    
+    this.updateState = map.getField("updateState");
+    this.created = map.getField("created");
     return this;
   }
 
@@ -192,6 +162,22 @@ public class OrderTx implements Order, IsMappable {
 
   public void setLastUpdate(Date lastUpdate) {
     this.lastUpdate = lastUpdate;
+  }
+
+  public String getUpdateState() {
+    return updateState;
+  }
+
+  public void setUpdateState(String updateState) {
+    this.updateState = updateState;
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
 
 }

@@ -5,6 +5,8 @@ import it.mate.copymob.shared.model.utils.ModelUtils;
 import it.mate.gwtcommons.shared.rpc.IsMappable;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
 
+import java.util.Date;
+
 @SuppressWarnings("serial")
 public class AccountTx implements Account, IsMappable {
 
@@ -19,6 +21,8 @@ public class AccountTx implements Account, IsMappable {
   private String devInfoId;
   
   private String pushNotifRegId;
+  
+  private Date lastCheckForUpdates;
   
   @Override
   public RpcMap toRpcMap() {
@@ -144,6 +148,14 @@ public class AccountTx implements Account, IsMappable {
 
   public void setPushNotifRegId(String pushNotifRegId) {
     this.pushNotifRegId = pushNotifRegId;
+  }
+
+  public Date getLastCheckForUpdates() {
+    return lastCheckForUpdates;
+  }
+
+  public void setLastCheckForUpdates(Date lastCheckForUpdates) {
+    this.lastCheckForUpdates = lastCheckForUpdates;
   }
   
 }
