@@ -23,7 +23,7 @@ import com.google.gwt.user.client.Window;
  *
  */
 
-public abstract class WebSQLDao {
+public abstract class WebSQLDao implements Dao {
   
   protected static WindowDatabase db;
   
@@ -37,7 +37,7 @@ public abstract class WebSQLDao {
   
   protected final static String SERIAL_ID = "INTEGER PRIMARY KEY AUTOINCREMENT"; 
   
-  private boolean ready = false;
+  private boolean readyFlag = false;
   
   private static Delegate<String> errorDelegate = null;
   
@@ -51,6 +51,7 @@ public abstract class WebSQLDao {
     this.afterCreationCallback = afterCreationCallback;
     this.migrationCallbacks = migrationCallbacks;
     this.beforeMigrationCallback = beforeMigrationCallback;
+    this.readyFlag = false;
     initDB();
   }
   
@@ -68,7 +69,8 @@ public abstract class WebSQLDao {
   }
   
   public boolean isReady() {
-    return ready;
+    PhgUtils.log("DAO.isReady = " + readyFlag);
+    return readyFlag;
   }
   
   protected void openDatabase(SQLTransactionCallback afterOpenCallback) {
@@ -485,8 +487,13 @@ public abstract class WebSQLDao {
           }
         });
       } else {
-        PhgUtils.log("db is ready");
-        dao.ready = true;
+        // BUG FIX PER AND5
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            PhgUtils.log("NOW DB IS READY");
+            dao.readyFlag = true;
+          }
+        });
       }
     }
   }

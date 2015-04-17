@@ -47,28 +47,8 @@ public class PushPlugin {
   public static native boolean isInstalled () /*-{
     return typeof ($wnd.plugins) != 'undefined' && typeof ($wnd.plugins.pushNotification) != 'undefined';
   }-*/;
-  
-  public static class Notification {
-    private String event;
-    private String regId;
-    public boolean isRegisteredEvent() {
-      return "registered".equalsIgnoreCase(event);
-    }
-    public String getEvent() {
-      return event;
-    }
-    public void setEvent(String event) {
-      this.event = event;
-    }
-    public String getRegId() {
-      return regId;
-    }
-    public void setRegId(String regId) {
-      this.regId = regId;
-    }
-  }
 
-  public static void register(String senderId, final Delegate<Notification> delegate) {
+  public static void register(String senderId, final Delegate<PushNotification> delegate) {
     if (OsDetectionUtils.isAndroid()) {
       PhgUtils.log("Push Plugin - registering android with " + senderId);
       registerAndroidImpl(senderId, new JSOCallback() {
@@ -91,13 +71,16 @@ public class PushPlugin {
     }
   }
   
-  private static Notification parseNotificationEvent(JavaScriptObject e) {
-    Notification notification = new Notification();
+  private static PushNotification parseNotificationEvent(JavaScriptObject e) {
+    PushNotification notification = new PushNotification();
     String event = GwtUtils.getJsPropertyString(e, "event");
-    notification.setEvent(event);
-    if (event.equalsIgnoreCase("registered")) {
+    notification.setEventName(event);
+    if (notification.isRegistrationEvent()) {
       String regId = GwtUtils.getJsPropertyString(e, "regid");
       notification.setRegId(regId);
+    } else if (notification.isMessageEvent()) {
+      String message = GwtUtils.getJsPropertyString(e, "message");
+      notification.setMessage(message);
     }
     return notification;
   }
