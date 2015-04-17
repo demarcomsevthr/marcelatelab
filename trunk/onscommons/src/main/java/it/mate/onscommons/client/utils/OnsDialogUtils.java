@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsIcon;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 import it.mate.phgcommons.client.utils.callbacks.JSOIntCallback;
 
@@ -163,8 +164,13 @@ public class OnsDialogUtils {
     }-*/;
   }
   
+  private static OnsDialog singletonDialog = null;
+  
   public static OnsDialog createDialog(String html) {
-    return createDialog(new HTML(html));
+    return createDialog(html, false);
+  }
+  public static OnsDialog createDialog(String html, boolean cancelable) {
+    return createDialog(new HTML(html), cancelable);
   }
   public static OnsDialog createDialog(Widget widget) {
     return createDialog(widget, false);
@@ -176,12 +182,21 @@ public class OnsDialogUtils {
     return createDialog(widget, cancelable, animation, null);
   }
   public static OnsDialog createDialog(Widget widget, boolean cancelable, String animation, String stylename) {
-    OnsDialog dialog = new OnsDialog();
-    if (stylename != null) {
-      dialog.addStyleName(stylename);
+    if (singletonDialog != null) {
+      PhgUtils.log("SINGLETON DIALOG ALREADY SHOWN, SKIP CREATION OF NEW ONE");
     }
-    dialog.show(widget, Options.create().setAnimation(animation), cancelable);
-    return dialog;
+    singletonDialog = new OnsDialog();
+    if (stylename != null) {
+      singletonDialog.addStyleName(stylename);
+    }
+    singletonDialog.show(widget, Options.create().setAnimation(animation), cancelable);
+    singletonDialog.addOnHideDelegate(new Delegate<JavaScriptObject>() {
+      public void execute(JavaScriptObject element) {
+        PhgUtils.log("CLOSING DIALOG " + singletonDialog);
+        singletonDialog = null;
+      }
+    });
+    return singletonDialog;
   }
   
   public static void showWaitingDialog() {

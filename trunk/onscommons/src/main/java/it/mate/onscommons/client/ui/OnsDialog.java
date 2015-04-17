@@ -19,7 +19,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
 
   private final static String TAG_NAME = "ons-dialog";
   
-  private String varName;
+  private String controllerId;
   
   private Dialog dialog;
   
@@ -30,16 +30,16 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   public OnsDialog(String html) {
     super(TAG_NAME, html);
     OnsenUi.ensureId(getElement());
-    initVarName();
+    initControllerId();
   }
   
-  private void initVarName() {
-    varName = GwtUtils.replaceEx(getElement().getId(), "-", "") + "Dialog" ;
-    getElement().setAttribute("var", varName);
+  private void initControllerId() {
+    controllerId = GwtUtils.replaceEx(getElement().getId(), "-", "") + "Dialog" ;
+    getElement().setAttribute("var", controllerId);
   }
   
-  public String getVarName() {
-    return varName;
+  public String getControllerId() {
+    return controllerId;
   }
   
   @Override
@@ -73,7 +73,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
           public void execute(Element templateElem) {
             OnsenUi.compileElement(templateElem);
             PhgUtils.log("creating dialog " + templateElem.getId());
-            createDialogImpl(templateElem.getId(), getThis().getVarName(), new JSOCallback() {
+            createDialogImpl(templateElem.getId(), getThis().getControllerId(), new JSOCallback() {
               public void handle(JavaScriptObject jso) {
                 getThis().dialog = jso.cast();
               }
@@ -100,7 +100,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   
   public void show (Widget content, final JavaScriptObject options, final boolean cancelable) {
     this.add(content);
-    final String templateId = getVarName() + "Template" ;
+    final String templateId = getControllerId() + "Template" ;
     OnsTemplate template = new OnsTemplate(templateId);
     template.add(this);
     RootPanel.get().add(template);
@@ -112,7 +112,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
             createDialogImpl(templateId);
             GwtUtils.deferredExecution(new Delegate<Void>() {
               public void execute(Void element) {
-                showDialogImpl(getVarName(), options);
+                showDialogImpl(getControllerId(), options);
                 setCancelable(cancelable);
               }
             });
@@ -134,6 +134,25 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
     $wnd[id].show(options);
   }-*/;
   
+  public void addOnHideDelegate(final Delegate<JavaScriptObject> delegate) {
+    GwtUtils.onAvailable(getElement(), new Delegate<Element>() {
+      public void execute(Element element) {
+        onHideDialogImpl(getControllerId(), new JSOCallback() {
+          public void handle(JavaScriptObject event) {
+            delegate.execute(event);
+          }
+        });
+      }
+    });
+  }
+  
+  protected static native void onHideDialogImpl(String id, JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    $wnd[id].on('posthide', jsCallback);
+  }-*/;
+
   protected static native void setCancelableImpl(String id, boolean cancelable) /*-{
     $wnd[id].setCancelable(cancelable);
   }-*/;
@@ -166,7 +185,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   }-*/;
 
   public Dialog getDialogObject() {
-    return getDialogObjectImpl(varName);
+    return getDialogObjectImpl(controllerId);
   }
 
   protected static native Dialog getDialogObjectImpl(String varName) /*-{
