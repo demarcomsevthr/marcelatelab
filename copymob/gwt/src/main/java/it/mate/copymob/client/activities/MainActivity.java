@@ -1,6 +1,7 @@
 package it.mate.copymob.client.activities;
 
 import it.mate.copymob.client.factories.AppClientFactory;
+import it.mate.copymob.client.logic.AppEvent;
 import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.logic.TimbriUtils;
 import it.mate.copymob.client.places.MainPlace;
@@ -33,15 +34,20 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.gwtcommons.shared.rpc.RpcMap;
+import it.mate.gwtcommons.shared.rpc.ValueConstructor;
+import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.mvp.OnsAbstractActivity;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.HasTapHandlerImpl;
+import it.mate.onscommons.client.ui.OnsButton;
+import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsToolbar;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
 import it.mate.phgcommons.client.plugins.FileSystemPlugin;
 import it.mate.phgcommons.client.plugins.ImagePickerPlugin;
+import it.mate.phgcommons.client.plugins.PushNotification;
 import it.mate.phgcommons.client.plugins.PushPlugin;
-import it.mate.phgcommons.client.plugins.PushPlugin.Notification;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -53,6 +59,10 @@ import java.util.List;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
@@ -69,10 +79,14 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private BaseView view;
   
-  private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
+  private MainDao dao = (MainDao)AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private Timer daoTimer;
 
+  private static final String GCM_DEBUG_REG_ID = "APA91bH9kMBuTNn32SJho3ZqjJlManVvsd8KtM9Tp1jiwYpdQXE8DdM8FXPlVil46HhQiZCP-Rvwf2qp6XeCnD89qHqF3wWo7dfH0VFY5iuuXSm7o0OKMSaLFCvsYVOBo2iPhHMARnWO";
+  
+  private static final String GCM_SENDER_ID = "106218079007";
+  
   
   private static OrderItem selectedOrderItem;
   
@@ -86,6 +100,11 @@ public class MainActivity extends OnsAbstractActivity implements
   
   public MainActivity(BaseClientFactory clientFactory, MainPlace place) {
     this.place = place;
+  }
+  
+  private void initApp() {
+    registerPushNotifications();
+    checkForRemoteUpdates(false);
   }
   
   @Override
@@ -102,9 +121,15 @@ public class MainActivity extends OnsAbstractActivity implements
         if (dao.isReady()) {
           daoTimer.cancel();
           TimbriUtils.doRun();
+          initApp();
+          fireAppStateChangeEvent(new AppEvent(AppEvent.DB_READY));
         }
       }
     });
+    
+    if (dao.isReady()) {
+      initApp();
+    }
     
     if (place.getToken().equals(MainPlace.HOME)) {
       testServerConnection();
@@ -182,6 +207,9 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   private void retrieveModel() {
+    if (place.getToken().equals(MainPlace.HOME)) {
+//    findUpdatedOrders();
+    }
     if (place.getToken().equals(MainPlace.CATEGORIE_LIST)) {
       dao.findAllCategorie(new Delegate<List<Categoria>>() {
         public void execute(List<Categoria> categorie) {
@@ -585,6 +613,11 @@ public class MainActivity extends OnsAbstractActivity implements
     }
     dao.saveOrder(orderItemTx.getOrder(), delegate);
   }
+  
+  @Override
+  public void saveOrderOnDevice(Order order, Delegate<Order> delegate) {
+    dao.saveOrder(order, delegate);
+  }
 
   @Override
   public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
@@ -688,25 +721,36 @@ public class MainActivity extends OnsAbstractActivity implements
     }
   }
   
-  private static final String DEBUG_REG_ID = "APA91bH9kMBuTNn32SJho3ZqjJlManVvsd8KtM9Tp1jiwYpdQXE8DdM8FXPlVil46HhQiZCP-Rvwf2qp6XeCnD89qHqF3wWo7dfH0VFY5iuuXSm7o0OKMSaLFCvsYVOBo2iPhHMARnWO";
+  protected void setPushNotificationsRegistered() {
+    GwtUtils.setClientAttribute("pushNotificationsRegistered", new String("YES"));
+  }
+  
+  protected boolean arePushNotificationsRegistered() {
+    return GwtUtils.getClientAttribute("pushNotificationsRegistered") != null;
+  }
   
   @Override
   public void registerPushNotifications() {
+    if (arePushNotificationsRegistered()) {
+      return;
+    }
     getAccount(new Delegate<Account>() {
       public void execute(final Account account) {
         if (account != null) {
           if (PushPlugin.isInstalled()) {
             PhgUtils.log("Push Plugin installed");
-            PushPlugin.register("106218079007", new Delegate<PushPlugin.Notification>() {
-              public void execute(final Notification notification) {
-                if (notification.isRegisteredEvent()) {
+            PushPlugin.register(GCM_SENDER_ID, new Delegate<PushNotification>() {
+              public void execute(PushNotification notification) {
+                if (notification.isRegistrationEvent()) {
                   savePushNotificationIdOnAccount(account, notification.getRegId());
+                } else if (notification.isMessageEvent()) {
+                  checkForRemoteUpdates(true);
                 }
               }
             });
           } else {
             PhgUtils.log("Push Plugin NOT INSTALLED (saving debug regId)");
-            savePushNotificationIdOnAccount(account, DEBUG_REG_ID);
+            savePushNotificationIdOnAccount(account, GCM_DEBUG_REG_ID);
           }
         }
       }
@@ -714,9 +758,9 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   private void savePushNotificationIdOnAccount(Account account, final String pushNotifRegId) {
-    PhgUtils.log("received pushNotRegId " + pushNotifRegId);
+    setPushNotificationsRegistered();
     if (!pushNotifRegId.equals(account.getPushNotifRegId())) {
-      PhgUtils.log("registering pushNotRegId " + pushNotifRegId);
+      PhgUtils.log("saving pushNotRegId " + pushNotifRegId);
       account.setPushNotifRegId(pushNotifRegId);
       dao.saveAccount(account, new Delegate<Account>() {
         public void execute(Account account) {
@@ -726,7 +770,7 @@ public class MainActivity extends OnsAbstractActivity implements
             public void onSuccess(RpcMap result) {
               setWaitingState(false);
               PhgUtils.log("registered pushNotRegId " + pushNotifRegId);
-              OnsDialogUtils.alert("Registered push notifications");
+//            OnsDialogUtils.alert("Registered push notifications");
             }
             public void onFailure(Throwable caught) {
               setWaitingState(false);
@@ -781,5 +825,142 @@ public class MainActivity extends OnsAbstractActivity implements
       
     }
   }
+  
+  protected void setLastCheckForUpdates() {
+    GwtUtils.setClientAttribute("lastCheckForUpdates", new Date());
+  }
+  
+  protected Date getLastCheckForUpdates() {
+    return (Date)GwtUtils.getClientAttribute("lastCheckForUpdates");
+  }
+  
+  protected void findUpdatedOrders() {
+    dao.findUpdatedOrders(new Delegate<List<Order>>() {
+      public void execute(final List<Order> updatedOrders) {
+        if (updatedOrders != null && updatedOrders.size() > 0) {
+          fireAppStateChangeEvent(new AppEvent(AppEvent.UPDATED_ORDERS_AVAILABLE, updatedOrders));
+          GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+            public void execute(Void element) {
+              showUpdatedOrdersDialog(updatedOrders);
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  @Override
+  public void addAppEventHandler(AppEvent.Handler handler) {
+    AppClientFactory.IMPL.getBinderyEventBus().addHandler(AppEvent.TYPE, handler);
+  }
+  
+  protected void fireAppStateChangeEvent(AppEvent event) {
+    AppClientFactory.IMPL.getBinderyEventBus().fireEvent(event);
+  }
+  
+  private static boolean checkForRemoteUpdatesInProgress = false;
+  
+  protected void checkForRemoteUpdates(final boolean immediately) {
+    PhgUtils.log("checkForRemoteUpdates --1-- checkForRemoteUpdatesInProgress = " + checkForRemoteUpdatesInProgress);
+    if (checkForRemoteUpdatesInProgress) {
+      return;
+    }
+    PhgUtils.log("checkForRemoteUpdates --2--");
+    checkForRemoteUpdatesInProgress = true;
+    getAccount(new Delegate<Account>() {
+      public void execute(Account account) {
+        PhgUtils.log("checkForRemoteUpdates --3--");
+        if (account == null) {
+          return;
+        }
+        PhgUtils.log("checkForRemoteUpdates --4--");
+        Date lastCheckForUpdates = getLastCheckForUpdates();
+        if (immediately) {
+          lastCheckForUpdates = null;
+        }
+        PhgUtils.log("checkForRemoteUpdates --5--");
+        Date now = new Date();
+        // check successivi ogni 10 minuti
+        if (lastCheckForUpdates == null || now.getTime() > (lastCheckForUpdates.getTime() + 600000)) {
+          PhgUtils.log("checkForRemoteUpdates --6--");
+          AppClientFactory.IMPL.getRemoteFacade().checkForUpdates(account.getId(), new AsyncCallback<RpcMap>() {
+            @SuppressWarnings("serial")
+            public void onSuccess(RpcMap results) {
+              PhgUtils.log("checkForRemoteUpdates --7--");
+              setLastCheckForUpdates();
+              List<Order> updatedOrders = results.getField("updatedOrders", new ValueConstructor<OrderTx>() {
+                public OrderTx newInnstance() {
+                  return new OrderTx();
+                }
+              });
+              if (updatedOrders != null && updatedOrders.size() > 0) {
+                PhgUtils.log("checkForRemoteUpdates --8--");
+                iterateOrdersForUpdate(updatedOrders.iterator(), new Delegate<Void>() {
+                  public void execute(Void element) {
+                    PhgUtils.log("checkForRemoteUpdates --9--");
+                    checkForRemoteUpdatesInProgress = false;
+                    PhgUtils.log("FINISH UPDATE ORDERS");
+                    findUpdatedOrders();
+                  }
+                });
+              } else {
+                PhgUtils.log("checkForRemoteUpdates --10--");
+                checkForRemoteUpdatesInProgress = false;
+              }
+            }
+            public void onFailure(Throwable caught) {
+              PhgUtils.log("checkForRemoteUpdates --11--");
+              checkForRemoteUpdatesInProgress = false;
+              OnsDialogUtils.alert("Error", "Order update error ("+ caught.getMessage() +")!");
+            }
+          });
+        } else {
+          PhgUtils.log("checkForRemoteUpdates --12--");
+          checkForRemoteUpdatesInProgress = false;
+        }
+      }
+    });
+  }
+  
+  private void showUpdatedOrdersDialog(final List<Order> updatedOrders) {
+    
+    VerticalPanel dialogPanel = new VerticalPanel();
+    dialogPanel.setWidth("100%");
+    dialogPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    
+    Label title = new Label("Aggiornamenti");
+    title.addStyleName("app-home-alert-title");
+    dialogPanel.add(title);
+    
+    String html = "";
+    if (updatedOrders.size() == 1) {
+      html = "L'ordine " + updatedOrders.get(0).getCodice() + " è stato aggiornato";
+    } else if (updatedOrders.size() > 1) {
+      html = "Ci sono " + updatedOrders.size() + " ordini aggiornati";
+    }
+    HTML messageHtml = new HTML(html);
+    messageHtml.addStyleName("app-home-alert-message");
+    dialogPanel.add(messageHtml);
+    
+    OnsButton button = new OnsButton();
+    button.setText("Visualizza");
+    button.addStyleName("app-home-alert-button");
+    dialogPanel.add(button);
+    
+    final OnsDialog dialog = OnsDialogUtils.createDialog(dialogPanel, true);
+    
+    button.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        dialog.hide();
+        GwtUtils.deferredExecution(400, new Delegate<Void>() {
+          public void execute(Void element) {
+            goToOrderListView();
+          }
+        });
+      }
+    });
+    
+  }
+  
 
 }

@@ -18,9 +18,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings({"serial"})
 public class RemoteFacadeTestImpl extends RemoteServiceServlet implements RemoteFacade {
 
-  
-  private final boolean LOCALTEST = true;
-  
+  private final boolean LOCALTEST = false;
   
   private static Logger logger = Logger.getLogger(RemoteFacadeTestImpl.class);
   
@@ -79,6 +77,12 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   public List<RpcMap> findOrdersByAccount(String accountId, Date lastUpdate) throws FacadeException {
     logger.debug("calling " + moduleBaseUrl);
     return remoteFacade.findOrdersByAccount(accountId, lastUpdate);
+  }
+
+  @Override
+  public RpcMap checkForUpdates(String accountId) throws FacadeException {
+    logger.debug("calling " + moduleBaseUrl);
+    return remoteFacade.checkForUpdates(accountId);
   }
 
 }

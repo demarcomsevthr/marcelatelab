@@ -50,7 +50,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
-  private final static String ORDER_FIELDS_0 = "codice, state, remoteId, lastUpdate ";
+  private final static String ORDER_FIELDS_0 = "codice, state, remoteId, lastUpdate, updateState, created ";
 
   private final static String ORDER_FIELDS = ORDER_FIELDS_0;
   
@@ -67,11 +67,11 @@ public class MainDao extends WebSQLDao {
 
   private final static String MESSAGE_FIELDS = MESSAGE_FIELDS_0;
   
-  private final static String ACCOUNT_FIELDS_0 = "id, email, name, password, devInfoId, pushNotifRegId";
+  private final static String ACCOUNT_FIELDS_0 = "id, email, name, password, devInfoId, pushNotifRegId, lastCheckForUpdates";
 
   private final static String ACCOUNT_FIELDS = ACCOUNT_FIELDS_0;
   
-  private List<Timbro> cacheTimbri;
+//private List<Timbro> cacheTimbri;
   
   
   
@@ -199,6 +199,23 @@ public class MainDao extends WebSQLDao {
   }
   
   public void findAllTimbri(final Delegate<List<Timbro>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        PhgUtils.log("select timbri");
+        tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri ORDER BY id", null, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            List<Timbro> results = new ArrayList<Timbro>();
+            if (rs.getRows().getLength() > 0) {
+              for (int it = 0; it < rs.getRows().getLength(); it++) {
+                results.add(flushRSToTimbro(rs, it));
+              }
+            }
+            delegate.execute(cloneList(results));
+          }
+        });
+      }
+    });
+    /*
     if (this.cacheTimbri != null) {
       delegate.execute(cloneList(cacheTimbri));
     } else {
@@ -220,6 +237,7 @@ public class MainDao extends WebSQLDao {
         }
       });
     }
+    */
   }
   
   public void findTimbro(final Integer id, final Delegate<Timbro> delegate) {
@@ -231,6 +249,7 @@ public class MainDao extends WebSQLDao {
   }
   
   private void findTimbro(SQLTransaction tr, final Integer id, final Delegate<Timbro> delegate) {
+    /*
     if (this.cacheTimbri != null) {
       for (Timbro timbro : cacheTimbri) {
         if (timbro.getId().equals(id)) {
@@ -239,6 +258,7 @@ public class MainDao extends WebSQLDao {
         }
       }
     }
+    */
     PhgUtils.log("select timbro");
     tr.doExecuteSql("SELECT id, " + TIMBRI_FIELDS + " FROM timbri WHERE id = ?", 
         new Object[]{id}, new SQLStatementCallback() {
@@ -395,6 +415,24 @@ public class MainDao extends WebSQLDao {
     });
   }
   
+  public void findUpdatedOrders(final Delegate<List<Order>> delegate) {
+    db.doReadTransaction(new SQLTransactionCallback() {
+      public void handleEvent(SQLTransaction tr) {
+        PhgUtils.log(" ----  select updated orders ----");
+        tr.doExecuteSql("SELECT id, " + ORDER_FIELDS + " FROM orderHeader WHERE orderHeader.updateState = 'U'", 
+            null, new SQLStatementCallback() {
+          public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
+            new RSToOrderIterator(tr, rs, new Delegate<List<Order>>() {
+              public void execute(List<Order> results) {
+                delegate.execute(results);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
   protected void findOrder(SQLTransaction tr, final Integer id, final Delegate<Order> delegate) {
     if (id == null) {
       delegate.execute(null);
@@ -444,13 +482,15 @@ public class MainDao extends WebSQLDao {
     }
     private Order flushRS(SQLResultSet rs, int it) {
       SQLResultSetRowList rows = rs.getRows();
-      Order result = new OrderTx();
-      result.setId(rows.getValueInt(it, "id"));
-      result.setCodice(rows.getValueString(it, "codice"));
-      result.setState(rows.getValueInt(it, "state"));
-      result.setRemoteId(rows.getValueString(it, "remoteId"));
-      result.setLastUpdate(longAsDate(rows.getValueLong(it, "lastUpdate")));
-      return result;
+      Order entity = new OrderTx();
+      entity.setId(rows.getValueInt(it, "id"));
+      entity.setCodice(rows.getValueString(it, "codice"));
+      entity.setState(rows.getValueInt(it, "state"));
+      entity.setRemoteId(rows.getValueString(it, "remoteId"));
+      entity.setLastUpdate(longAsDate(rows.getValueLong(it, "lastUpdate")));
+      entity.setUpdateState(rows.getValueString(it, "updateState"));
+      entity.setCreated(longAsDate(rows.getValueLong(it, "created")));
+      return entity;
     }
     protected List<Order> getResults() {
       return results;
@@ -602,12 +642,14 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO orderHeader (" + ORDER_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getCodice(), 
                 entity.getState(),
                 entity.getRemoteId(),
-                dateAsLong(entity.getLastUpdate())
+                dateAsLong(entity.getLastUpdate()),
+                entity.getUpdateState(),
+                dateAsLong(entity.getCreated())
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   entity.setId(rs.getInsertId());
@@ -627,12 +669,16 @@ public class MainDao extends WebSQLDao {
           sql += " ,state = ?";
           sql += " ,remoteId = ?";
           sql += " ,lastUpdate = ?";
+          sql += " ,updateState = ?";
+          sql += " ,created = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getCodice(), 
               entity.getState(),
               entity.getRemoteId(),
               dateAsLong(entity.getLastUpdate()),
+              entity.getUpdateState(),
+              dateAsLong(entity.getCreated()),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
@@ -1038,14 +1084,15 @@ public class MainDao extends WebSQLDao {
     }
     private Account flushRS(SQLResultSet rs, int it) {
       SQLResultSetRowList rows = rs.getRows();
-      Account result = new AccountTx();
-      result.setId(rows.getValueString(it, "id"));
-      result.setEmail(rows.getValueString(it, "email"));
-      result.setName(rows.getValueString(it, "name"));
-      result.setPassword(rows.getValueString(it, "password"));
-      result.setDevInfoId(rows.getValueString(it, "devInfoId"));
-      result.setPushNotifRegId(rows.getValueString(it, "pushNotifRegId"));
-      return result;
+      Account entity = new AccountTx();
+      entity.setId(rows.getValueString(it, "id"));
+      entity.setEmail(rows.getValueString(it, "email"));
+      entity.setName(rows.getValueString(it, "name"));
+      entity.setPassword(rows.getValueString(it, "password"));
+      entity.setDevInfoId(rows.getValueString(it, "devInfoId"));
+      entity.setPushNotifRegId(rows.getValueString(it, "pushNotifRegId"));
+      ((AccountTx)entity).setLastCheckForUpdates(longAsDate(rows.getValueLong(it, "lastCheckForUpdates")));
+      return entity;
     }
     protected List<Account> getResults() {
       return results;
@@ -1069,14 +1116,15 @@ public class MainDao extends WebSQLDao {
         public void execute(Account account) {
           if (account == null) {
             
-            tr.doExecuteSql("INSERT INTO account (" + ACCOUNT_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?)", 
+            tr.doExecuteSql("INSERT INTO account (" + ACCOUNT_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
                 new Object[] {
                   entity.getId(),
                   entity.getEmail(),
                   entity.getName(),
                   entity.getPassword(),
                   entity.getDevInfoId(),
-                  entity.getPushNotifRegId()
+                  entity.getPushNotifRegId(),
+                  dateAsLong(((AccountTx)entity).getLastCheckForUpdates())
                 }, new SQLStatementCallback() {
                   public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {
                     PhonegapLog.log("Inserted " + entity);
@@ -1092,6 +1140,7 @@ public class MainDao extends WebSQLDao {
             sql += " ,password = ?";
             sql += " ,devInfoId = ?";
             sql += " ,pushNotifRegId = ?";
+            sql += " ,lastCheckForUpdates = ?";
             sql += " WHERE id = ?";
             tr.doExecuteSql(sql, new Object[] {
                 entity.getEmail(),
@@ -1099,6 +1148,7 @@ public class MainDao extends WebSQLDao {
                 entity.getPassword(),
                 entity.getDevInfoId(),
                 entity.getPushNotifRegId(),
+                dateAsLong(((AccountTx)entity).getLastCheckForUpdates()),
                 entity.getId()
               }, new SQLStatementCallback() {
                 public void handleEvent(final SQLTransaction tr, SQLResultSet rs) {

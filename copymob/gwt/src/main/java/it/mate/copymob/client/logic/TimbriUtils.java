@@ -11,6 +11,7 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.http.client.Request;
@@ -22,13 +23,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TimbriUtils {
 
-  private MainDao dao = AppClientFactory.IMPL.getGinjector().getMainDao();
+  private MainDao dao = (MainDao)AppClientFactory.IMPL.getGinjector().getMainDao();
   
   private final static int NUMBER_OF_ITEMS = 5;
   
   private final static String dataPath = "www/main/data";
   
   private final static boolean LOAD_TIMBRI_FROM_CLOUD = true;
+  
+  private static boolean initializationInProgress = false;
   
   public static void doRun() {
     new TimbriUtils().run();
@@ -42,10 +45,26 @@ public class TimbriUtils {
       public void execute(List<Timbro> timbri) {
         if (timbri == null || timbri.size() == 0) {
           
+          if (initializationInProgress) {
+            return;
+          }
+          
+          initializationInProgress = true;
+          
           if (LOAD_TIMBRI_FROM_CLOUD) {
-            PhgUtils.log("REALOADING TIMBRI FROM SERVER...");
+            PhgUtils.log("RELOADING TIMBRI FROM SERVER...");
             loadTimbriFromCloudServer(new Delegate<List<Timbro>>() {
               public void execute(List<Timbro> timbri) {
+                if (timbri != null) {
+                  iterateTimbriForSave(timbri.iterator(), new Delegate<Void>() {
+                    public void execute(Void element) {
+                      initializationInProgress = false;
+                    }
+                  });
+                } else {
+                  initializationInProgress = false;
+                }
+                /*
                 for (Timbro timbro : timbri) {
                   dao.saveTimbro(timbro, new Delegate<Timbro>() {
                     public void execute(Timbro element) {
@@ -53,6 +72,7 @@ public class TimbriUtils {
                     }
                   });
                 }
+                */
               }
             });
           } else {
@@ -67,12 +87,28 @@ public class TimbriUtils {
                 }
               }
             });
+            
+            initializationInProgress = false;
+            
           }
           
         }
       }
     });
     
+  }
+  
+  private void iterateTimbriForSave(final Iterator<Timbro> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      Timbro timbro = it.next();
+      dao.saveTimbro(timbro, new Delegate<Timbro>() {
+        public void execute(Timbro savedTimbro) {
+          iterateTimbriForSave(it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
   }
   
   

@@ -1,7 +1,6 @@
 package it.mate.copymob.client.factories;
 
 import it.mate.copymob.client.activities.mapper.MainActivityMapper;
-import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.CartListView;
 import it.mate.copymob.client.view.CategorieListView;
@@ -19,6 +18,7 @@ import it.mate.copymob.client.view.TimbroDetailView;
 import it.mate.copymob.shared.service.RemoteFacadeAsync;
 import it.mate.gwtcommons.client.factories.CommonGinModule;
 import it.mate.gwtcommons.client.factories.CommonGinjector;
+import it.mate.phgcommons.client.utils.Dao;
 
 import com.google.gwt.inject.client.GinModules;
 
@@ -29,7 +29,7 @@ public interface AppGinjector extends CommonGinjector {
   
   public RemoteFacadeAsync getRemoteFacade();
   
-  public MainDao getMainDao();
+  public Dao getMainDao();
   
   public MenuView getMenuView();
   
