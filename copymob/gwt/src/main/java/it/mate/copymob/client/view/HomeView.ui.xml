@@ -24,7 +24,7 @@
       </g:VerticalPanel>
       
       <g:VerticalPanel horizontalAlignment="left" addStyleNames="app-home-buttonbar" ui:field="bottomPanel">
-        <o:OnsButton ui:field="btnCategorie" addStyleNames="app-home-btnpanel app-btn-img2" text="Timbri"/>
+        <o:OnsButton ui:field="btnCategorie" addStyleNames="app-home-btnpanel app-stamp-img" text="Timbri"/>
         <o:OnsButton ui:field="btnCart" addStyleNames="app-home-btnpanel" icon="fa-shopping-cart" text="Carrello"/>
         <o:OnsButton ui:field="btnOrdini" addStyleNames="app-home-btnpanel" icon="fa-credit-card" text="Ordini"/>
         <!-- 

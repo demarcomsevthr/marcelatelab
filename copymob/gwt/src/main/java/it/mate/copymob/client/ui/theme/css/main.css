@@ -1,9 +1,16 @@
 
-@external gwt*, phg*, app*, ons*, popover;
+@external gwt*, phg*, app*, ons*, popover, fa*, center*, list*;
 
 @eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
 
 @eval windowHeight it.mate.protoph.client.ui.theme.CustomTheme.getWindowHeight();
+
+ons-toolbar {
+  /* background-color: #FFBB33 !important; */ /* ARANCIONE (6) */
+  /* background-color: rgb(198, 226, 108) !important; */ /* VERDE */
+  /* background-color: rgb(212, 232, 146) !important; */ 
+  background-color: rgb(197, 234, 248) !important; 
+}
 
 .app-home-presentation {
   /* position: fixed; */
@@ -165,9 +172,8 @@
   padding-right: 0.2em;
 }
 
-.app-home-buttonbar .ons-button.app-btn-img2 {
+.app-home-buttonbar .ons-button.app-stamp-img {
   background: url(main/images/stamp-64w.png) no-repeat 1.4em 0.75em;
-  /*  background-color: rgba(24,103,194,0.81);  */
   background-color: #14b9d6;
   background-size: 1.6em;
   padding-left: 3.3em;
@@ -350,9 +356,60 @@
 .app-cart-item-name {
   font-size: 0.8em;
   height: 2em;
+  width: 6em;
+  overflow: hidden;
 }
 
 .app-cart-item-state {
+  font-size: 0.8em;
+}
+
+.app-cart-item-label {
+  font-size: 0.8em;
+}
+
+.app-cart-btn-edit {
+  position: absolute;
+  right: 0.2em;
+  top: 0.2em;
+}
+
+.app-cart-btn-edit ons-icon {
+  font-size: 1.8em !important;
+}
+
+.app-cart-empty-lbl {
+  text-align: center;
+  height: 20em;
+  margin-top: 30%;
+  font-size: 1.5em;
+}
+
+.app-order-list-item-icon {
+  font-size: 0.8em;
+  height: 100%;
+  position: absolute;
+  top: 22%;
+  left: 4.5%;
+}
+
+.app-order-list-item-data-panel {
+  padding-left: 1em;
+}
+
+.app-order-list-item-name {
+  font-size: 0.8em;
+  height: 2em;
+}
+
+.app-order-list-item-date {
+  position: absolute;
+  right: 1.5em;
+  font-size: 0.8em;
+  height: 2em;
+}
+
+.app-order-list-item-state {
   font-size: 0.8em;
 }
 
@@ -386,3 +443,61 @@
 .app-order-item-btn-edit ons-icon {
   font-size: 1.8em !important;
 }
+
+.app-menu-toolbar-panel {
+  height: 10em;
+  /* background: url(main/images/dandelion-640.jpg) no-repeat 0em 0em; */
+  background: url(main/images/stamp-640.jpg) no-repeat 0em 0em;
+  background-color: transparent !important;
+  background-size: 100% 100%;
+}
+
+.app-menu-list {
+  padding-top: 7.6em;
+}
+
+.app-menu-list * {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.app-menu-list .list__item:active {
+  background-color: rgb(226, 244, 251) !important;
+}
+
+.app-menu-list span.app-stamp-img {
+  background: url(main/images/stamp-64b.png) no-repeat 0.4em 0.2em;
+  /* background: url(main/images/stamp-fi-64b.png) no-repeat 1.3em 0.2em; */
+  /* opacity: 0.6; */ /* NOTA BENE: deve corrispondere al valore in rgba nella rule sopra */
+  /* background-color: #14b9d6; */
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  background-size: 1.6em;
+}
+
+.app-menu-list span.fa {
+  font-size: 1.6em;
+  height: 1.25em;
+  padding-top: 0.2em;
+  padding-right: 0.2em;
+  padding-left: 0.2em;
+  color: #14b9d6;
+}
+
+.app-menu-item-timbri {
+  line-height: initial;
+}
+
+.app-menu-list span.app-menu-text {
+  font-size: 1.1em;
+  padding-left: 1.1em;
+}
+
+.app-menu-list span.app-menu-text {
+  font-size: 1em;
+  padding-left: 1.1em;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: bold;
+  font-family: arial;
+}
+

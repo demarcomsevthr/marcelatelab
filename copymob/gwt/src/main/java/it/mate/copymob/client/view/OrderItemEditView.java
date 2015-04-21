@@ -31,7 +31,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
     public void goToTimbroComposeView(Timbro timbro);
-    public void setOrderItemInCart(OrderItem orderItem);
+    public void addOrderItemToCart(OrderItem orderItem);
     public void goToMessageListView(OrderItem orderItem);
     public void goToCartListView();
     public void goToOrderItemImageView(OrderItem orderItem);
@@ -84,7 +84,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   private void addBtnCart(String text) {
     addBtn(text, new TapHandler() {
       public void onTap(TapEvent event) {
-        getPresenter().setOrderItemInCart(orderItem);
+        getPresenter().addOrderItemToCart(orderItem);
       }
     });
   }
@@ -142,9 +142,12 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
       addBtnImage("Aggiungi un'immagine");
       
       if (!orderItem.isInCart()) {
+        /*
         if (orderItem.getRows().size() > 0) {
           addBtnCart("Aggiungi al carrello");
         }
+        */
+        addBtnCart("Aggiungi al carrello");
       } else {
         if (orderItem.getRemoteId() == null) {
           addBtnBack("Torna al carrello");
