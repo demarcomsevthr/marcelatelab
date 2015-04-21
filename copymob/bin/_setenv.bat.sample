@@ -7,3 +7,4 @@ SET ANT_HOME=P:\OPT\apache-ant\apache-ant-1.9.2
 
 SET DEPLOY_TARGET="P:\VIRTUAL_MACHINES\OSX\Mac_OS_X_10.9.4\shared\copymob\www"
 
+SET ANDROID_HOME=P:\OPT\android\adt-bundle-windows\sdk
