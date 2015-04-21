@@ -121,7 +121,10 @@ public class OnsenUi {
     OnsenUi.compilationSuspended = false;
   }
   
+  private static long lastElementCompilationTime = -1;
+  
   public static void compileElement(Element element) {
+    lastElementCompilationTime = System.currentTimeMillis();
     if (compilationSuspended) {
       PhgUtils.log("COMPILATION DISABLED");
       return;
@@ -139,10 +142,16 @@ public class OnsenUi {
   public static void refreshCurrentPage() {
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
+        long currentTime = System.currentTimeMillis();
+        if (lastElementCompilationTime > currentTime - 500) {
+          refreshCurrentPage();
+          return;
+        }
         PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
         OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
           public void execute(Element pageElement) {
             resumeCompilations();
+            PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REFRESHING CURRENT PAGE " + pageElement.getId());
             PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
             compileElementImpl(pageElement);
           }
