@@ -17,7 +17,9 @@ public class CustomTheme {
     }
     public static CustomBundle get(boolean forceReset) {
       if (instance == null || forceReset) {
-        if (OsDetectionUtils.isIOs()) {
+        if (OsDetectionUtils.isDesktop()) {
+          instance = GWT.create(CustomBundleDesktop.class);
+        } else if (OsDetectionUtils.isIOs()) {
           if (OsDetectionUtils.isTabletLandscape()) {
             instance = GWT.create(CustomBundleIPadLandscape.class);
           } else if (OsDetectionUtils.isTabletPortrait()) {
@@ -62,33 +64,38 @@ public class CustomTheme {
     
   }
   
+  public interface CustomBundleDesktop extends CustomBundle, ClientBundle {
+    @Source({"css/main.css", "css/desktop.css", "css/android.css"})
+    public CustomMainCss css();
+  }
+  
   public interface CustomBundleAndroid extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/android.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android.css", "css/apad.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/android.css", "css/apad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleAPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/android.css", "css/apad.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/android.css", "css/apad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIOs extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/ios.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadLandscape extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios.css", "css/ipad.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/ios.css", "css/ipad.css"})
     public CustomMainCss css();
   }
   
   public interface CustomBundleIPadPortrait extends CustomBundle, ClientBundle {
-    @Source({"css/main.css", "css/ios.css", "css/ipad.css"})
+    @Source({"css/main.css", "css/mobile.css", "css/ios.css", "css/ipad.css"})
     public CustomMainCss css();
   }
   

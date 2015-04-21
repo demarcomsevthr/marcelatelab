@@ -83,6 +83,8 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private Timer daoTimer;
 
+  private static boolean checkForRemoteUpdatesInProgress = false;
+  
   private static final String GCM_DEBUG_REG_ID = "APA91bH9kMBuTNn32SJho3ZqjJlManVvsd8KtM9Tp1jiwYpdQXE8DdM8FXPlVil46HhQiZCP-Rvwf2qp6XeCnD89qHqF3wWo7dfH0VFY5iuuXSm7o0OKMSaLFCvsYVOBo2iPhHMARnWO";
   
   private static final String GCM_SENDER_ID = "106218079007";
@@ -447,7 +449,7 @@ public class MainActivity extends OnsAbstractActivity implements
   }
   
   @Override
-  public void setOrderItemInCart(final OrderItem orderItem) {
+  public void addOrderItemToCart(final OrderItem orderItem) {
     orderItem.setInCart(true);
     saveOrderItemOnDevice(orderItem, new Delegate<Order>() {
       public void execute(Order element) {
@@ -633,6 +635,11 @@ public class MainActivity extends OnsAbstractActivity implements
         } else {
           setWaitingState(true);
           order.setAccount(account);
+          
+          if (order.getCreated() == null) {
+            order.setCreated(new Date());
+          }
+          
           OrderTx tx = (OrderTx)order;
           
           RpcMap orderMap = tx.toRpcMap();
@@ -839,7 +846,7 @@ public class MainActivity extends OnsAbstractActivity implements
       public void execute(final List<Order> updatedOrders) {
         if (updatedOrders != null && updatedOrders.size() > 0) {
           fireAppStateChangeEvent(new AppEvent(AppEvent.UPDATED_ORDERS_AVAILABLE, updatedOrders));
-          GwtUtils.deferredExecution(1000, new Delegate<Void>() {
+          GwtUtils.deferredExecution(100, new Delegate<Void>() {
             public void execute(Void element) {
               showUpdatedOrdersDialog(updatedOrders);
             }
@@ -858,35 +865,26 @@ public class MainActivity extends OnsAbstractActivity implements
     AppClientFactory.IMPL.getBinderyEventBus().fireEvent(event);
   }
   
-  private static boolean checkForRemoteUpdatesInProgress = false;
-  
   protected void checkForRemoteUpdates(final boolean immediately) {
-    PhgUtils.log("checkForRemoteUpdates --1-- checkForRemoteUpdatesInProgress = " + checkForRemoteUpdatesInProgress);
     if (checkForRemoteUpdatesInProgress) {
       return;
     }
-    PhgUtils.log("checkForRemoteUpdates --2--");
     checkForRemoteUpdatesInProgress = true;
     getAccount(new Delegate<Account>() {
       public void execute(Account account) {
-        PhgUtils.log("checkForRemoteUpdates --3--");
         if (account == null) {
           return;
         }
-        PhgUtils.log("checkForRemoteUpdates --4--");
         Date lastCheckForUpdates = getLastCheckForUpdates();
         if (immediately) {
           lastCheckForUpdates = null;
         }
-        PhgUtils.log("checkForRemoteUpdates --5--");
         Date now = new Date();
         // check successivi ogni 10 minuti
         if (lastCheckForUpdates == null || now.getTime() > (lastCheckForUpdates.getTime() + 600000)) {
-          PhgUtils.log("checkForRemoteUpdates --6--");
           AppClientFactory.IMPL.getRemoteFacade().checkForUpdates(account.getId(), new AsyncCallback<RpcMap>() {
             @SuppressWarnings("serial")
             public void onSuccess(RpcMap results) {
-              PhgUtils.log("checkForRemoteUpdates --7--");
               setLastCheckForUpdates();
               List<Order> updatedOrders = results.getField("updatedOrders", new ValueConstructor<OrderTx>() {
                 public OrderTx newInnstance() {
@@ -894,28 +892,23 @@ public class MainActivity extends OnsAbstractActivity implements
                 }
               });
               if (updatedOrders != null && updatedOrders.size() > 0) {
-                PhgUtils.log("checkForRemoteUpdates --8--");
                 iterateOrdersForUpdate(updatedOrders.iterator(), new Delegate<Void>() {
                   public void execute(Void element) {
-                    PhgUtils.log("checkForRemoteUpdates --9--");
                     checkForRemoteUpdatesInProgress = false;
                     PhgUtils.log("FINISH UPDATE ORDERS");
                     findUpdatedOrders();
                   }
                 });
               } else {
-                PhgUtils.log("checkForRemoteUpdates --10--");
                 checkForRemoteUpdatesInProgress = false;
               }
             }
             public void onFailure(Throwable caught) {
-              PhgUtils.log("checkForRemoteUpdates --11--");
               checkForRemoteUpdatesInProgress = false;
               OnsDialogUtils.alert("Error", "Order update error ("+ caught.getMessage() +")!");
             }
           });
         } else {
-          PhgUtils.log("checkForRemoteUpdates --12--");
           checkForRemoteUpdatesInProgress = false;
         }
       }
@@ -952,7 +945,7 @@ public class MainActivity extends OnsAbstractActivity implements
     button.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         dialog.hide();
-        GwtUtils.deferredExecution(400, new Delegate<Void>() {
+        GwtUtils.deferredExecution(100, new Delegate<Void>() {
           public void execute(Void element) {
             goToOrderListView();
           }
@@ -961,6 +954,5 @@ public class MainActivity extends OnsAbstractActivity implements
     });
     
   }
-  
 
 }

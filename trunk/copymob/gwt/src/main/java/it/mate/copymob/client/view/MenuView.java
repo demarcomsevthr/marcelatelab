@@ -19,6 +19,7 @@ public class MenuView extends AbstractBaseView<Presenter> {
     public void goToMessageListView();
     public void goToCategorieListView();
     public void goToOrderListView();
+    public void goToCartListView();
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, MenuView> { }
@@ -43,11 +44,6 @@ public class MenuView extends AbstractBaseView<Presenter> {
 
   }
 
-  @UiHandler("btnHome")
-  public void onBtnHome(TapEvent event) {
-    getPresenter().goToHomeView();
-  }
-  
   @UiHandler("btnSettings")
   public void onBtnSettings(TapEvent event) {
     getPresenter().goToSettingsView();
@@ -66,6 +62,11 @@ public class MenuView extends AbstractBaseView<Presenter> {
   @UiHandler("btnOrdini")
   public void onBtnOrdini(TapEvent event) {
     getPresenter().goToOrderListView();
+  }
+  
+  @UiHandler("btnCart")
+  public void onBtnCart(TapEvent event) {
+    getPresenter().goToCartListView();
   }
   
 }

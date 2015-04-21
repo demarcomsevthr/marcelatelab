@@ -18,7 +18,6 @@ import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
 import it.mate.onscommons.client.ui.OnsVerticalPanel;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -92,16 +91,19 @@ public class OrderListView extends AbstractBaseView<Presenter> {
       };
       
       OnsListItem listItem = new OnsListItem();
+      listItem.setModifier("chevron");
+      listItem.addTapHandler(orderTapHandler);
       
       OnsHorizontalPanel itemPanel = new OnsHorizontalPanel();
       
       OnsIcon ordIcon = new OnsIcon();
-      OnsenUi.addTapHandler(ordIcon, orderTapHandler);
-      ordIcon.setIcon("fa-hand-o-right");
-      ordIcon.addStyleName("app-cart-item-icon");
+      //OnsenUi.addTapHandler(ordIcon, orderTapHandler);
+      ordIcon.setIcon("fa-circle-o");
+      ordIcon.addStyleName("app-order-list-item-icon");
       itemPanel.add(ordIcon);
       
       OnsVerticalPanel dataPanel = new OnsVerticalPanel();
+      dataPanel.addStyleName("app-order-list-item-data-panel");
       
       OnsHorizontalPanel row1Panel = new OnsHorizontalPanel();
       row1Panel.setAddDirect(true);
@@ -109,14 +111,16 @@ public class OrderListView extends AbstractBaseView<Presenter> {
       row1Panel.add(new Spacer("1em"));
       
       OnsLabel nameLbl = new OnsLabel("Ordine " + order.getCodice());
-      OnsenUi.addTapHandler(nameLbl, orderTapHandler);
-      nameLbl.addStyleName("app-cart-item-name");
+      //OnsenUi.addTapHandler(nameLbl, orderTapHandler);
+      nameLbl.addStyleName("app-order-list-item-name");
       row1Panel.add(nameLbl);
       
-      OnsLabel dateLbl = new OnsLabel("del " + GwtUtils.dateToString(new Date(), "dd/MM/yyyy") );
-      OnsenUi.addTapHandler(dateLbl, orderTapHandler);
-      dateLbl.addStyleName("app-cart-item-name");
-      row1Panel.add(dateLbl);
+      if (order.getCreated() != null) {
+        OnsLabel createdLbl = new OnsLabel(GwtUtils.dateToString(order.getCreated(), "dd/MM/yyyy") );
+        //OnsenUi.addTapHandler(createdLbl, orderTapHandler);
+        createdLbl.addStyleName("app-order-list-item-date");
+        row1Panel.add(createdLbl);
+      }
       
       dataPanel.add(row1Panel);
       
@@ -145,8 +149,8 @@ public class OrderListView extends AbstractBaseView<Presenter> {
       }
       
       OnsLabel stateLbl = new OnsLabel("Stato: " + descStato );
-      OnsenUi.addTapHandler(stateLbl, orderTapHandler);
-      stateLbl.addStyleName("app-cart-item-state");
+      //OnsenUi.addTapHandler(stateLbl, orderTapHandler);
+      stateLbl.addStyleName("app-order-list-item-state");
       if ("U".equals(order.getUpdateState())) {
         stateLbl.getElement().getStyle().setFontWeight(FontWeight.BOLD);
       }

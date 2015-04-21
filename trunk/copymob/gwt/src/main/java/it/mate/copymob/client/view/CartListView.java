@@ -63,7 +63,9 @@ public class CartListView extends AbstractBaseView<Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (model == null) {
-      cartList.add(new OnsLabel("Il carrello è vuoto"));
+      OnsLabel emptyLbl = new OnsLabel("Il carrello è vuoto");
+      emptyLbl.addStyleName("app-cart-empty-lbl");
+      cartList.add(emptyLbl);
     } else if (model instanceof Order) {
       this.order = (Order)model;
       populateList();
@@ -112,10 +114,10 @@ public class CartListView extends AbstractBaseView<Presenter> {
       final OnsLabel qtaFld = new OnsLabel();
       setQtaLbl(qtaFld, orderItem.getQuantity());
       
-      OnsButton fillerBtn = new OnsButton("");
-      fillerBtn.addStyleName("app-cart-btn-plus");
-      fillerBtn.setIcon("fa-hand-o-right");
-      fillerBtn.setModifier("quiet");
+      OnsLabel fillerBtn = new OnsLabel("Qtà:");
+      fillerBtn.addStyleName("app-cart-item-label");
+//    fillerBtn.setIcon("fa-hand-o-right");
+//    fillerBtn.setModifier("quiet");
       
       OnsButton plusBtn = new OnsButton("");
       plusBtn.addStyleName("app-cart-btn-plus");
