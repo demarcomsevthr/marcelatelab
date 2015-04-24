@@ -48,7 +48,7 @@ call %MVN2CMD% %DEP_CLEAN% install
 :NO_DEPENDENCIES
 
 cd %BASEAPPDIR%\%MODULE%
-call %MVN2CMD% %*
+call %MVN2CMD% %MVN_VM_ARGS% %*
 
 :COPY_DEPLOY
 
