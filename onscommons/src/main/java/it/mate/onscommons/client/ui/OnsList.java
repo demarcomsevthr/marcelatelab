@@ -3,6 +3,7 @@ package it.mate.onscommons.client.ui;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.utils.TransitionUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
@@ -85,6 +86,10 @@ public class OnsList extends HTMLPanel {
         OnsenUi.compileElement(listElement);
       }
     });
+  }
+  
+  public void setAnimation(String animation) {
+    TransitionUtils.fadeIn(getElement(), TransitionUtils.parseAttributeValue(animation).setDelay(0));
   }
   
 }

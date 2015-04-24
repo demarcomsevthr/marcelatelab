@@ -51,3 +51,8 @@
   text-align: center;
   min-height: initial;
 }
+
+.ons-fadein {
+  opacity: 0;
+}
+
