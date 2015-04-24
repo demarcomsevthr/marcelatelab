@@ -2,9 +2,13 @@
 <module rename-to='phgcommons'>
     
   <inherits name="com.google.gwt.user.User" />
+  
   <inherits name="com.google.gwt.logging.Logging" />
+  
+  <!-- 
   <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
   <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+   -->
   
   <inherits name="com.google.gwt.inject.Inject"/>
 
