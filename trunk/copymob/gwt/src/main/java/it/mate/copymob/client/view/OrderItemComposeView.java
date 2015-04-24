@@ -1,5 +1,6 @@
 package it.mate.copymob.client.view;
 
+import it.mate.copymob.client.utils.AnimitUtils;
 import it.mate.copymob.client.view.OrderItemComposeView.Presenter;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
@@ -15,7 +16,6 @@ import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.event.TouchEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.onsen.dom.Dialog;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
@@ -65,8 +65,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   private Element lastTappedElement;
   
-  protected final static double DURATION = 0.2;
-  
   private List<OnsTextBox> textboxes = new ArrayList<OnsTextBox>();
 
   private int selectedRowIndex;
@@ -77,8 +75,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private static final String CONTROLBAR_VISIBLE_HEIGHT =  "2.2em";
   private static final int CONTROLBAR_VISIBLE_MARGIN_TOP =  4;
   
-  private Dialog dialog;
-
   public OrderItemComposeView() {
     initUI();
   }
@@ -299,6 +295,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     GwtUtils.setJsPropertyString(textboxes.get(selectedRowIndex).getElement().getStyle(), "fontFamily", value);
   }
   
+  /*
   private int getTargetX(TapEvent event) {
     return event.getTargetElement().getAbsoluteLeft();
   }
@@ -306,6 +303,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private int getTargetY(TapEvent event) {
     return event.getTargetElement().getAbsoluteTop();
   }
+  */
   
   private void showTargetPosition(Element targetElement) {
     int tx = targetElement.getAbsoluteLeft();
@@ -324,7 +322,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     int y1 = y0;
     if (controlbarVisible && isLastTappedElement(tappedElement)) {
       PhgUtils.log("hiding crontrolbar");
-      hideControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
+      AnimitUtils.hideComposeControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
       if (overallEventListener != null) {
         TouchEventUtils.removeEventListener(overallEventListener);
         overallEventListener = null;
@@ -332,7 +330,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     } else {
       selectedRowIndex = index;
       PhgUtils.log("showing crontrolbar");
-      showControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
+      AnimitUtils.showComposeControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
       lastTappedElement = tappedElement;
       GwtUtils.deferredExecution(new Delegate<Void>() {
         public void execute(Void element) {
@@ -354,61 +352,5 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   private boolean isLastTappedElement(Element tappedElement) {
     return lastTappedElement == null || lastTappedElement.getId().equals(tappedElement.getId());
   }
-  
-  protected static native JavaScriptObject hiddenStyle(int x0, int y0) /*-{
-    return { 
-      left: x0+'px',
-      top: y0+'px',
-      width: 0,
-      height: 0
-    };
-  }-*/;
-  
-  protected static native JavaScriptObject visibleStyle(int x1, int y1, String width, String height) /*-{
-    return { 
-      left: x1+'px',
-      top: y1+'px',
-      width: width,
-      height: height
-    };
-  }-*/;
-  
-  protected final native void showControlbar(Element elem, int x0, int y0, int x1, int y1, String width, String height) /*-{
-    $wnd.animit(elem)
-      .queue({
-        css: {
-          display: 'initial'
-        },
-        duration: 0
-      })
-      .queue({
-        css: @it.mate.copymob.client.view.OrderItemComposeView::hiddenStyle(II)(x0, y0) ,
-        duration: 0
-      })
-      .queue({
-        css: @it.mate.copymob.client.view.OrderItemComposeView::visibleStyle(IILjava/lang/String;Ljava/lang/String;)(x1, y1, width, height),
-        duration: @it.mate.copymob.client.view.OrderItemComposeView::DURATION
-      })
-      .play();
-  }-*/;
-  
-  protected final native void hideControlbar(Element elem, int x0, int y0, int x1, int y1, String width, String height) /*-{
-    $wnd.animit(elem)
-      .queue({
-        css: @it.mate.copymob.client.view.OrderItemComposeView::visibleStyle(IILjava/lang/String;Ljava/lang/String;)(x1, y1, width, height),
-        duration: 0
-      })
-      .queue({
-        css: @it.mate.copymob.client.view.OrderItemComposeView::hiddenStyle(II)(x0, y0) ,
-        duration: @it.mate.copymob.client.view.OrderItemComposeView::DURATION
-      })
-      .queue({
-        css: {
-          display: 'none'
-        },
-        duration: 0
-      })
-      .play();
-  }-*/;
 
 }

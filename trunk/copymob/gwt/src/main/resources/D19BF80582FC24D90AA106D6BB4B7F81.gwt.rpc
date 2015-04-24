@@ -1,4 +1,5 @@
-com.google.gwt.i18n.shared.impl.DateRecord, true, true, true, true, com.google.gwt.i18n.shared.impl.DateRecord/3375188634, 3375188634
+@FinalFields, false
+com.google.gwt.i18n.shared.impl.DateRecord, true, true, true, true, com.google.gwt.i18n.shared.impl.DateRecord/3173882066, 3173882066
 com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
 com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
 com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109

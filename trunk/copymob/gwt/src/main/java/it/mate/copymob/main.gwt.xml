@@ -3,11 +3,15 @@
 <module rename-to="main">
 
   <inherits name="com.google.gwt.user.User" />
+  
   <inherits name="com.google.gwt.inject.Inject"/>
   
   <inherits name="com.google.gwt.logging.Logging" />
+  <define-property name="gwt.logging.popupHandler" values="ENABLED, DISABLED" />
+  <!-- 
   <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
   <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+   -->
   
   <!-- PER INIZIALIZZAZIONE TIMBRI IN DESKTOP -->
   <inherits name="com.google.gwt.http.HTTP" />  

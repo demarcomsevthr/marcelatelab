@@ -15,7 +15,8 @@
         <div class="center">Carrello</div>
       </o:OnsToolbar>
       
-      <o:OnsScroller addStyleNames="app-cart-scroller">
+      <!-- animation="fadeIn,100,2" -->
+      <o:OnsScroller addStyleNames="app-cart-scroller ons-fadein">
         <o:OnsList ui:field="cartList"/>
       </o:OnsScroller>
 

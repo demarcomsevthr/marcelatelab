@@ -17,27 +17,7 @@
         <div class="center" id="onsUidToolbarCenterDiv">Elenco Timbri</div>
       </o:OnsToolbar>
       
-        <!-- PROVE FATTE
-             itemWidth="80%"
-             OnsScroller
-         -->
-         
-      <!-- [20/03/2015] UNICA VERSIONE FUNZIONANTE (senza nessun contenitore!) -->
-      <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" ui:field="carousel" swipeable="true" autoscrollRatio="0.2"/>
-
-      <!-- 
-      <o:OnsPage addStyleNames="app-timbri-inner-page">
-        <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" ui:field="carousel" swipeable="true" />
-      </o:OnsPage>
-       -->
-
-      <!--                          
-      <o:OnsHorizontalPanel width="100%" height="100%" horizontalAlignment="center" addStyleNames="app-timbri-carousel-panel">
-        <o:OnsScroller addStyleNames="app-timbri-scroller">
-          <o:OnsCarousel addStyleNames="app-timbri-carousel" autoscroll="true" ui:field="carousel" swipeable="true" />
-        </o:OnsScroller>
-      </o:OnsHorizontalPanel>
-       -->
+      <o:OnsCarousel addStyleNames="app-timbri-carousel ons-fadein" autoscroll="true" ui:field="carousel" swipeable="true" autoscrollRatio="0.2"/>
 
       <o:OnsButton text="Ordina il timbro" ui:field="btnBuy" addStyleNames="app-timbri-choose-btn"/>
       

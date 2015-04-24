@@ -165,7 +165,7 @@ public class OrderListView extends AbstractBaseView<Presenter> {
       orderList.add(listItem);
       
     }
-    
+
     OnsenUi.refreshCurrentPage();
     
     GwtUtils.deferredExecution(1000, new Delegate<Void>() {

@@ -15,7 +15,7 @@
         <div class="center">DETTAGLIO ORDINE</div>
       </o:OnsToolbar>
       
-      <o:OnsScroller addStyleNames="app-order-scroller">
+      <o:OnsScroller addStyleNames="app-order-scroller ons-fadein">
         <o:OnsList ui:field="itemList"/>
       </o:OnsScroller>
 
