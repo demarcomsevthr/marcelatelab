@@ -1,6 +1,6 @@
 [24/11/2014]
 keystore = app.keystore
-keystore password = lacedemone
+keystore password = 111111
 alias = Mdm
-password = lacedemone
+password = 111111
 
