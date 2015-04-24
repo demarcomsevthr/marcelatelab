@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -140,6 +141,14 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     } else {
       PhgUtils.log("ImagePickerPlugin NOT INSTALLED");
     }
+  }
+  
+  @UiHandler("btnSdm")
+  public void onBtnSdm(TapEvent event) {
+    Window.Location.replace("http://10.0.2.2:8888/index.html");
+    /* FA ESATTAMENTE LA STESSA COSA (FUNZIONA IL SDM MA NON VEDE I SORGENTI)
+    Window.Location.replace("file:///android_asset/www/index-sdm.html");
+    */
   }
   
 }

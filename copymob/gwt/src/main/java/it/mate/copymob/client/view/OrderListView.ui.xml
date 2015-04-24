@@ -15,7 +15,7 @@
         <div class="center">Ordini</div>
       </o:OnsToolbar>
       
-      <o:OnsScroller addStyleNames="app-ordini-scroller">
+      <o:OnsScroller addStyleNames="app-ordini-scroller ons-fadein">
         <o:OnsList ui:field="orderList"/>
       </o:OnsScroller>
 

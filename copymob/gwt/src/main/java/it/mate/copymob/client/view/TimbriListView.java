@@ -78,7 +78,11 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
   }
   
   private void populateCarousel(List<Timbro> timbri) {
-    carousel.getElement().getStyle().setOpacity(0);
+    
+    OnsenUi.suspendCompilations();
+    
+//  carousel.getElement().getStyle().setOpacity(0);
+    
     OnsCarouselItem firstItem = null;
     for (Timbro timbro : timbri) {
       String html = "<div id='timbro"+timbro.getId()+"' class='app-carousel-item-inner'><p class='app-carousel-item-name'>" + timbro.getNome() +"</p>";
@@ -97,7 +101,11 @@ public class TimbriListView extends AbstractBaseView<Presenter> {
         firstItem = item;
       }
     }
-    showImpl(carousel.getElement());
+    
+//  showImpl(carousel.getElement());
+    
+    OnsenUi.refreshCurrentPage();
+    
   }
   
   protected static native void showImpl(Element elem) /*-{

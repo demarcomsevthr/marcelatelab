@@ -23,7 +23,8 @@
       
       <o:OnsLabel ui:field="lbDimensioni"/> 
       
-      <o:OnsList addStyleNames="app-timbri-bottom-panel" modifier="noborder" ui:field="list"/>
+      <!-- animation="fadeIn" -->
+      <o:OnsList addStyleNames="app-timbri-bottom-panel ons-fadein" modifier="noborder" ui:field="list" />
       
     </o:OnsPage>
     

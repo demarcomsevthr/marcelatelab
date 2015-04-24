@@ -6,12 +6,6 @@
   </formats>
   <fileSets>
     <fileSet>
-    
-      <!-- 
-      <outputDirectory>${project.build.directory}/../../android/assets/www</outputDirectory>
-       -->
-      <outputDirectory>android/assets/www</outputDirectory>
-      
       <directory>target/${project.artifactId}</directory>
       <includes>
         <include>main/*.*</include>
@@ -28,30 +22,21 @@
         <exclude>main/js/onsen-1.2.1</exclude>
         <exclude>jquery-1.9.1</exclude>
       </excludes>
+      <outputDirectory>../../../android/assets/www</outputDirectory>
     </fileSet>
-    
-    <!-- GWT RPC POLICY FILES
-     -->
     <fileSet>
       <directory>target/${project.artifactId}/main</directory>
       <includes>
         <include>*.gwt.rpc</include>
       </includes>
-      <!-- 
       <outputDirectory>../../../server/src/main/webapp/main</outputDirectory>
-       -->
-      <outputDirectory>server/src/main/webapp/main</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/${project.artifactId}/main</directory>
       <includes>
         <include>*.gwt.rpc</include>
       </includes>
-      <!-- 
       <outputDirectory>../../src/main/resources</outputDirectory>
-       -->
-      <outputDirectory>gwt/src/main/resources</outputDirectory>
     </fileSet>
-     
   </fileSets>
 </assembly>
