@@ -10,13 +10,17 @@ import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
+import it.mate.onscommons.client.utils.TransitionUtils;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.ElementCallback;
+import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -51,14 +55,24 @@ public class OnsenUi {
   
   public final static String ANIMATION_NATIVE_POP = "nativePop";
   
+  private static final int REFRESH_CURRENT_PAGE_DELAY = 0;
+  
+  private static boolean compilationSuspended;
+  
+  private static long lastElementCompilationTime = -1;
+  
+  protected static JavaScriptObject jQueryDocumentSelector = null;
+  
+  private static int uniqueElementId = 0;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
-      createEnsureUniqueIdCallback();
       initOnsenImpl(handler);
       for (Delegate<Void> initHandler : initializationHandlers) {
         initHandler.execute(null);
       }
+      ensureJQueryDocumentSelector();
     }
   }
   
@@ -71,13 +85,12 @@ public class OnsenUi {
   }
   
   protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
-    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN BOOTSTRAP');
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('CALLING ONSEN BOOTSTRAP');
     $wnd.ons.bootstrap();
     var jsHandler = $entry(function() {
       @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN READY HANDLER');
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
-    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN READY HOOK');
     $wnd.ons.ready(jsHandler);
   }-*/;
   
@@ -111,8 +124,6 @@ public class OnsenUi {
     return slidingMenu != null;
   }
   
-  private static boolean compilationSuspended;
-  
   public static void suspendCompilations() {
     OnsenUi.compilationSuspended = true;
   }
@@ -120,8 +131,6 @@ public class OnsenUi {
   public static void resumeCompilations() {
     OnsenUi.compilationSuspended = false;
   }
-  
-  private static long lastElementCompilationTime = -1;
   
   public static void compileElement(Element element) {
     lastElementCompilationTime = System.currentTimeMillis();
@@ -140,19 +149,41 @@ public class OnsenUi {
   }
   
   public static void refreshCurrentPage() {
+    refreshCurrentPage(null);
+  }
+  
+  public static void refreshCurrentPage(final Delegate<JavaScriptObject> delegate) {
     GwtUtils.deferredExecution(100, new Delegate<Void>() {
       public void execute(Void element) {
         long currentTime = System.currentTimeMillis();
-        if (lastElementCompilationTime > currentTime - 500) {
-          refreshCurrentPage();
+        if (lastElementCompilationTime > currentTime - REFRESH_CURRENT_PAGE_DELAY) {
+          refreshCurrentPage(delegate);
           return;
         }
         PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
         OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
           public void execute(Element pageElement) {
             resumeCompilations();
-            PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REFRESHING CURRENT PAGE " + pageElement.getId());
-            PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
+            PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement + " WITH delegate " + delegate);
+
+            addInitCallbackImpl(pageElement, new JSOCallback() {
+              public void handle(JavaScriptObject event) {
+                PhgUtils.log("PAGE IS COMPILED");
+                JavaScriptObject results = queryElements(".ons-fadein");
+                if (results != null) {
+                  JsArray<Element> elements = results.cast();
+                  for (int it = 0; it < elements.length(); it++) {
+                    Element fadingElement = elements.get(it);
+                    PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
+                    TransitionUtils.fadeIn(fadingElement, 1000);
+                  }
+                }
+                if (delegate != null) {
+                  delegate.execute(event);
+                }
+              }
+            });
+            
             compileElementImpl(pageElement);
           }
         });
@@ -160,6 +191,28 @@ public class OnsenUi {
     });
   }
   
+  protected static void ensureJQueryDocumentSelector() {
+    if (jQueryDocumentSelector == null) {
+      initJQueryDocumentSelector();
+    }
+  }
+  
+  protected static native void initJQueryDocumentSelector() /*-{
+    @it.mate.onscommons.client.onsen.OnsenUi::jQueryDocumentSelector = $wnd.$($doc);
+  }-*/;
+  
+  protected static native void addInitCallbackImpl(Element element, JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    var elementId = element.id;
+    @it.mate.onscommons.client.onsen.OnsenUi::jQueryDocumentSelector.on('ons-page:init', '#'+elementId, jsCallback);
+  }-*/;
+    
+  protected static native JavaScriptObject queryElements(String query) /*-{
+    return $wnd.$(query);
+  }-*/;
+
   protected static native void compileElementImpl(Element element) /*-{
     $wnd.ons.compile(element);
   }-*/;
@@ -201,19 +254,6 @@ public class OnsenUi {
     };
   }-*/;
 
-  // LO TOLGO PERCHE' NON SERVE, L'ID DEVE ESSERE ASSICURATO DENTRO I WIDGET GWT
-  public static void createEnsureUniqueIdCallback() {
-    /*
-    setBeforeAppendChildCallback(new ElementCallback() {
-      public void handle(Element element) {
-        if (element != null) {
-          PhgUtils.ensureId(element);
-        }
-      }
-    });
-    */
-  }
-
   /**
    * 
    * DA UTILIZZARE NEI METODI SET DEI WIDGET ONS
@@ -240,16 +280,14 @@ public class OnsenUi {
     GwtUtils.onAvailable(id, delegate);
   }
 
-  private static int uniqueId = 0;
-  
-  public static String createUniqueId() {
-    uniqueId ++;
-    return "ons-uid-" + uniqueId;
+  protected static String createUniqueElementId() {
+    uniqueElementId ++;
+    return "ons-uid-" + uniqueElementId;
   }
 
   public static void ensureId(Element element) {
     if (element.getId() == null || "".equals(element.getId())) {
-      element.setId(OnsenUi.createUniqueId());
+      element.setId(OnsenUi.createUniqueElementId());
     }
   }
   
