@@ -22,7 +22,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 	public GCMIntentService() {
 		super("GCMIntentService");
-    Log.v(TAG, "constructor");
 	}
 
 	@Override
