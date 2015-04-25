@@ -68,8 +68,10 @@ call cordova plugin add https://github.com/wymsee/cordova-imagePicker.git
 :: 25/04/2015
 :: call cordova platform update android@4.0.0
 :: call cordova plugin add https://github.com/apache/cordova-plugin-whitelist.git#r1.0.0
+
+:: PROVA DI CROSSWALK
 :: To install Crosswalk (optional):
-:: cordova plugin add https://github.com/MobileChromeApps/cordova-plugin-crosswalk-webview.git#1.0.0
+::call cordova plugin add https://github.com/MobileChromeApps/cordova-plugin-crosswalk-webview.git#1.0.0
 
 
 echo.
