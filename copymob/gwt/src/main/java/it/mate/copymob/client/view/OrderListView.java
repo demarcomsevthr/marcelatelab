@@ -58,7 +58,10 @@ public class OrderListView extends AbstractBaseView<Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     if (model == null) {
-      orderList.add(new OnsLabel("Nessun ordine presente"));
+      OnsLabel emptyLbl = new OnsLabel("Non ci sono ordini inseriti");
+      emptyLbl.addStyleName("app-cart-empty-lbl");
+      orderList.add(emptyLbl);
+      OnsenUi.refreshCurrentPage();
     } else if (model instanceof List) {
       this.orders = (List)model;
       populateList();

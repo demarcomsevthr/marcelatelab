@@ -104,24 +104,31 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
-        rowsPanel.add(createRowItem(row.getText()));
+        rowsPanel.add(createRowItem(row));
       }
     } else {
       // FOR DEBUG
       item = new OrderItemTx(null);
-      item.getRows().add(new OrderItemRowTx(""));
-      rowsPanel.add(createRowItem(""));
+      OrderItemRow row = new OrderItemRowTx("");
+      item.getRows().add(row);
+      rowsPanel.add(createRowItem(row));
     }
     rowsPanel.add(createLastRowItem());
   }
   
-  private OnsListItem createRowItem(String text) {
+  private OnsListItem createRowItem(OrderItemRow row) {
     final int index = textboxes.size();
     OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
     rowpanel.setWidth("100%");
     OnsTextBox textbox = new OnsTextBox();
     textbox.addStyleName("app-edit-text");
-    textbox.setText(text);
+    textbox.setText(row.getText());
+    if (row.getBold()) {
+      textbox.getElement().addClassName("app-bold");
+    }
+    if (row.getItalic()) {
+      textbox.getElement().addClassName("app-italic");
+    }
     rowpanel.add(textbox);
     final OnsButton controlBtn = new OnsButton();
     controlBtn.addStyleName("app-edit-btn-cfg");
@@ -148,8 +155,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     addBtn.setText("add");
     addBtn.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        item.getRows().add(new OrderItemRowTx(""));
-        rowsPanel.insert(createRowItem(""), rowsPanel.getItemCount() - 1);
+        OrderItemRow row = new OrderItemRowTx("");
+        item.getRows().add(row);
+        rowsPanel.insert(createRowItem(row), rowsPanel.getItemCount() - 1);
       }
     });
     rowpanel.add(addBtn);
@@ -192,11 +200,23 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   public void onBtnEdtBold(TapEvent event) {
     showTargetPosition(event.getTargetElement());
     OrderItemRow row = item.getRows().get(selectedRowIndex);
-    row.setBold(!row.isBold());
-    if (row.isBold()) {
+    row.setBold(!row.getBold());
+    if (row.getBold()) {
       textboxes.get(selectedRowIndex).getElement().addClassName("app-bold");
     } else {
       textboxes.get(selectedRowIndex).getElement().replaceClassName("app-bold", "");
+    }
+  }
+  
+  @UiHandler("btnEdtItalic")
+  public void onBtnEdtItalic(TapEvent event) {
+    showTargetPosition(event.getTargetElement());
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    row.setItalic(!row.getItalic());
+    if (row.getItalic()) {
+      textboxes.get(selectedRowIndex).getElement().addClassName("app-italic");
+    } else {
+      textboxes.get(selectedRowIndex).getElement().replaceClassName("app-italic", "");
     }
   }
   

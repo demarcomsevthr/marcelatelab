@@ -66,6 +66,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
       OnsLabel emptyLbl = new OnsLabel("Il carrello è vuoto");
       emptyLbl.addStyleName("app-cart-empty-lbl");
       cartList.add(emptyLbl);
+      OnsenUi.refreshCurrentPage();
     } else if (model instanceof Order) {
       this.order = (Order)model;
       populateList();

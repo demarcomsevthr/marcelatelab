@@ -190,13 +190,6 @@ ons-toolbar {
 }
 
 .app-edit-btn-cfg {
-  /*
-  background-color: transparent;
-  color: rgba(24,103,194,0.81);
-  height: 2em;
-  padding: 0;
-  padding-left: 0.5em;
-  */
   color: rgba(24, 103, 194, 0.81);
   height: 2em;
   padding: 0;
@@ -206,10 +199,13 @@ ons-toolbar {
   box-shadow: none;
   width: 2em;
   margin-top: -0.2em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
 }
 
 .app-edit-text {
-  width: 100%;
+  width: 92%;
   height: 100%;
   margin-top: 1%;
   margin-left: -2%;
@@ -252,6 +248,10 @@ ons-toolbar {
 
 .app-bold {
   font-weight: bold;
+}
+
+.app-italic {
+  font-style: italic;
 }
 
 .app-viewfinder {
