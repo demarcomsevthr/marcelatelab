@@ -20,8 +20,6 @@ public interface OrderItemRow extends Serializable {
 
   public Boolean getBold();
   
-  public boolean isBold();
-
   public void setSize(Integer size);
 
   public Integer getSize();
@@ -33,5 +31,9 @@ public interface OrderItemRow extends Serializable {
   public void setRemoteId(String remoteId);
 
   public String getRemoteId();
+
+  public void setItalic(Boolean italic);
+
+  public Boolean getItalic();
 
 }
