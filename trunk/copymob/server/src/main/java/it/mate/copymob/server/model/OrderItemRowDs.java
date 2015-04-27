@@ -36,6 +36,10 @@ public class OrderItemRowDs implements OrderItemRow, HasKey {
   @Persistent
   private String fontFamily;
   
+  @Persistent
+  private Boolean italic;
+
+  
   @Override
   public Key getKey() {
     return remoteId;
@@ -99,6 +103,14 @@ public class OrderItemRowDs implements OrderItemRow, HasKey {
 
   public void setFontFamily(String fontFamily) {
     this.fontFamily = fontFamily;
+  }
+
+  public Boolean getItalic() {
+    return italic;
+  }
+
+  public void setItalic(Boolean italic) {
+    this.italic = italic;
   }
 
 }
