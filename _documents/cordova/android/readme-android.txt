@@ -135,3 +135,37 @@
   
   >> IMPORTANTE: UPGRADE A gwtphonegap-3.5.0.0								>> gwt/pom.xml
   
+
+  
+      
+  ________________________________________________________
+  > UPGRADE TO CORDOVA4
+
+	npm update -g cordova
+	
+	C:\Users\marcello\AppData\Roaming\npm\cordova -> C:\Users\marcello\AppData\Roaming\npm\node_modules\cordova\bin\cordova
+	cordova@5.0.0 C:\Users\marcello\AppData\Roaming\npm\node_modules\cordova
+	+-- underscore@1.7.0
+	+-- q@1.0.1
+	+-- nopt@3.0.1 (abbrev@1.0.5)
+	+-- cordova-lib@5.0.0 (valid-identifier@0.0.1, osenv@0.1.0, properties-parser@0.2.3, bplist-parser@0.0.6, 
+	mime@1.2.11, unorm@1.3.3, s0.5.2, dep-graph@1.1.0, npmconf@0.1.16, glob@4.0.6, through2@0.6.3, xcode@0.6.7, 
+	d8@0.4.4, cordova-app-hello-world@3.9.0, request@2.4-registry-mapper@1.1.1, tar@1.0.2, init-package-json@1.4.2, 
+	plist@1.1.0, npm@1.3.4, cordova-js@3.9.0)
+	
+
+    NOTA BENE
+    
+    >> ANDROID 5.1 UPGRADE <<
+    
+        Con la nuova versione serve l'aggiornamento ad android 5.1 (android-22)
+    
+    >> CONTENT SECURITY POLICY <<
+    
+        Con l'update viene utilizzato il nuovo plugin cordova-plugin-whitelist per cui occorre introdurre nel index.html un nuovo meta tag:
+    
+          <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *; connect-src *">
+    
+
+  
+  
