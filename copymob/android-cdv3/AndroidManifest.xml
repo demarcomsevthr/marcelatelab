@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest android:hardwareAccelerated="true" android:versionCode="1" android:versionName="0.4" package="it.mate.copymob" xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:xlargeScreens="true" />
+    
+  <uses-permission android:name="android.permission.INTERNET" />
+  
+  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="21" />
+
+  <!-- 
+  
+      PERFORMANCE TUNING
+  
+      13/01/2015 - PROVATO ANCORA hwA a true, ma su HTC/And4.0.3 risulta ancora notevolmente meglio con hwa a false
+      android:hardwareAccelerated="true" 
+      
+      14/01/2015 - PROVA SU And5 hA = true >> MEGLIO
+      
+   -->
+  <application 
+      android:hardwareAccelerated="true" 
+      android:icon="@drawable/icon" 
+      android:label="@string/app_name">
+    <activity 
+        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" 
+        android:label="@string/activity_name"
+        android:launchMode="singleTop" 
+        android:name="Copymob" 
+        android:theme="@android:style/Theme.Black.NoTitleBar"
+        android:windowSoftInputMode="adjustResize"
+        >
+        
+      <!-- PER PROVARE IL TABLET: android:screenOrientation="reversePortrait" -->
+        
+      <intent-filter android:label="@string/launcher_name">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      
+      <!-- prova launcher from link, see:
+             http://stackoverflow.com/questions/2958701/launch-custom-android-application-from-android-browser
+             http://stackoverflow.com/questions/525063/android-respond-to-url-in-intent
+             http://stackoverflow.com/questions/2448213/how-to-implement-my-very-own-uri-scheme-on-android
+             
+           NON FUNZIONA 
+           
+      <intent-filter android:label="@string/launcher_name">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" android:host="copymobsrv.appspot.com" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="copymob" android:host="copymobsrv.appspot.com/launch" />
+      </intent-filter>
+       -->
+      
+    </activity>
+    
+    
+    <!-- INIZIO Aggiunte da push notification plugin -->
+    <activity android:exported="true" android:name="com.plugin.gcm.PushHandlerActivity" />
+    <receiver android:name="com.plugin.gcm.CordovaGCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            <category android:name="it.mate.copymob" />
+        </intent-filter>
+    </receiver>
+    <service android:name="com.plugin.gcm.GCMIntentService" />
+    <!-- FINE Aggiunte da push notification plugin -->
+
+    <!-- GOOGLE PLAY SERVICE SETUP (for push plugin, see http://developer.android.com/google/play-services/setup.html) -->
+    <meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    
+    <activity android:label="MultiImageChooser" android:name="com.synconset.MultiImageChooserActivity" android:theme="@android:style/Theme.Holo.Light" />
+   
+  </application>
+
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  
+  <!-- INIZIO Aggiunte da push notification plugin -->
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+  <permission android:name="it.mate.copymob.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+  <uses-permission android:name="it.mate.copymob.permission.C2D_MESSAGE" />
+  <!-- FINE Aggiunte da push notification plugin -->
+  
+  
+</manifest>
