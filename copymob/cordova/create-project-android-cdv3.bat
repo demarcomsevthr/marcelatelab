@@ -13,7 +13,7 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=D:\OPT\java\jdk1.7.0_45
+SET JAVA_HOME=P:\OPT\java\jdk1.7.0_17
 
 SET PACKAGE=it.mate.copymob
 
@@ -51,28 +51,19 @@ echo.
 echo.
 echo adding plugins
 pause
-call cordova plugin add cordova-plugin-device
-call cordova plugin add cordova-plugin-inappbrowser
-call cordova plugin add cordova-plugin-console
-call cordova plugin add cordova-plugin-globalization
+call cordova plugin add org.apache.cordova.device
+call cordova plugin add org.apache.cordova.inappbrowser
+call cordova plugin add org.apache.cordova.console
+call cordova plugin add org.apache.cordova.globalization
 
-call cordova plugin add cordova-plugin-file
-call cordova plugin add cordova-plugin-file-transfer
+call cordova plugin add org.apache.cordova.file
+call cordova plugin add org.apache.cordova.file-transfer
 
 :: 10/04/2015
 call cordova plugin add https://github.com/phonegap-build/PushPlugin.git
 
 :: 13/04/2015
 call cordova plugin add https://github.com/wymsee/cordova-imagePicker.git
-
-:: 25/04/2015
-:: call cordova platform update android@4.0.0
-:: call cordova plugin add https://github.com/apache/cordova-plugin-whitelist.git#r1.0.0
-
-:: PROVA DI CROSSWALK
-:: To install Crosswalk (optional):
-::call cordova plugin add https://github.com/MobileChromeApps/cordova-plugin-crosswalk-webview.git#1.0.0
-
 
 echo.
 echo.
