@@ -7,6 +7,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     
+	<!-- 
+         CONTENT SECURITY POLICY FOR cordova-plugin-whitelist 
+         SEE 
+             https://github.com/apache/cordova-plugin-whitelist#content-security-policy
+             http://content-security-policy.com/
+
+	    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+	    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+	    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+	        * Enable inline JS: add 'unsafe-inline' to default-src
+	        * Enable eval(): add 'unsafe-eval' to default-src
+	        
+	-->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *; connect-src *">
+    
     <script type="text/javascript" language="javascript" src="cordova.js"></script>
     
     <!-- NONOSTANTE DIA UN WARNING SU ONSENUI SEMBRA PIU' VELOCE INCLUDERE JQUERY PRIMA DI ONSEN
