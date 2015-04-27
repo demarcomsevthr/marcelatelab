@@ -23,7 +23,7 @@ public class RenderUtils {
     span.setInnerHTML(row.getText());
     span.getStyle().setFontSize(actualSizePx, Unit.PX); 
     GwtUtils.setJsPropertyString(span.getStyle(), "fontFamily", row.getFontFamily()); 
-    span.getStyle().setFontWeight(row.isBold() ? FontWeight.BOLD : FontWeight.NORMAL);
+    span.getStyle().setFontWeight(row.getBold() ? FontWeight.BOLD : FontWeight.NORMAL);
     
     int height = actualSizePx + 6;
     span.setPropertyInt("height", height);

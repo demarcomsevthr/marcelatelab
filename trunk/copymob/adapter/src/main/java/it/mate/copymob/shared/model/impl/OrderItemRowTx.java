@@ -21,6 +21,11 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private String remoteId;
   
+  private Boolean italic;
+  
+  
+  
+  
   public OrderItemRowTx() {
 
   }
@@ -37,7 +42,6 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   @Override
   public RpcMap toRpcMap() {
     RpcMap map = new RpcMap();
-    
     map.putField("id", id);
     map.putField("orderItemId", orderItemId);
     map.putField("text", text);
@@ -45,23 +49,12 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     map.putField("size", size);
     map.putField("fontFamily", fontFamily);
     map.putField("remoteId", remoteId);
-    
-    /*
-    map.put("id", id);
-    map.put("orderItemId", orderItemId);
-    map.put("text", text);
-    map.put("bold", bold);
-    map.put("size", size);
-    map.put("fontFamily", fontFamily);
-    map.put("remoteId", remoteId);
-    */
-    
+    map.putField("italic", italic);
     return map;
   }
 
   @Override
   public OrderItemRowTx fromRpcMap(RpcMap map) {
-    
     this.id = map.getField("id");
     this.orderItemId = map.getField("orderItemId");
     this.text = map.getField("text");
@@ -69,17 +62,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.size = map.getField("size");
     this.fontFamily = map.getField("fontFamily");
     this.remoteId = map.getField("remoteId");
-    
-    /*
-    this.id = (Integer)map.get("id");
-    this.orderItemId = (Integer)map.get("orderItemId");
-    this.text = (String)map.get("text");
-    this.bold = (Boolean)map.get("bold");
-    this.size = (Integer)map.get("size");
-    this.fontFamily = (String)map.get("fontFamily");
-    this.remoteId = (String)map.get("remoteId");
-    */
-    
+    this.italic = map.getField("italic");
     return this;
   }
 
@@ -108,15 +91,11 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   }
 
   public Boolean getBold() {
-    return bold;
+    return bold != null ? bold : false;
   }
 
   public void setBold(Boolean bold) {
     this.bold = bold;
-  }
-
-  public boolean isBold() {
-    return bold != null && bold;
   }
 
   public Integer getSize() {
@@ -141,6 +120,14 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
 
   public void setRemoteId(String remoteId) {
     this.remoteId = remoteId;
+  }
+
+  public Boolean getItalic() {
+    return italic != null ? italic : false;
+  }
+
+  public void setItalic(Boolean italic) {
+    this.italic = italic;
   }
   
 }
