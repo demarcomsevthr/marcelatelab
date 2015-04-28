@@ -55,6 +55,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     map.putField("remoteId", remoteId);
     map.putField("italic", italic);
     map.putField("underline", underline);
+    map.putField("align", align);
     return map;
   }
 
@@ -69,6 +70,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.remoteId = map.getField("remoteId");
     this.italic = map.getField("italic");
     this.underline = map.getField("underline");
+    this.align = map.getField("align");
     return this;
   }
 
