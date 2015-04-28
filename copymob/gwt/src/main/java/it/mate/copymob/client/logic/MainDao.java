@@ -59,7 +59,7 @@ public class MainDao extends WebSQLDao {
 
   private final static String ORDER_ITEM_FIELDS = ORDER_ITEM_FIELDS_0;
   
-  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size, fontFamily, remoteId, italic ";
+  private final static String ORDER_ITEM_ROW_FIELDS_0 = "orderItemId, text, bold, size, fontFamily, remoteId, italic, underline, align ";
 
   private final static String ORDER_ITEM_ROW_FIELDS = ORDER_ITEM_ROW_FIELDS_0;
   
@@ -616,6 +616,8 @@ public class MainDao extends WebSQLDao {
       result.setFontFamily(rows.getValueString(it, "fontFamily"));
       result.setRemoteId(rows.getValueString(it, "remoteId"));
       result.setItalic(rows.getValueInt(it, "italic") == 1);
+      result.setUnderline(rows.getValueInt(it, "underline") == 1);
+      result.setAlign(rows.getValueString(it, "align"));
       return result;
     }
     protected List<OrderItemRow> getResults() {
@@ -842,7 +844,7 @@ public class MainDao extends WebSQLDao {
 
   protected void updateOrderItemRow(SQLTransaction tr, final OrderItemRow entity, final Delegate<OrderItemRow> delegate) {
     if (entity.getId() == null) {
-      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?)", 
+      tr.doExecuteSql("INSERT INTO orderItemRow (" + ORDER_ITEM_ROW_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
           new Object[] {
             entity.getOrderItemId(), 
             entity.getText(),
@@ -850,7 +852,9 @@ public class MainDao extends WebSQLDao {
             entity.getSize(),
             entity.getFontFamily(),
             entity.getRemoteId(),
-            (entity.getItalic() ? 1 : 0)
+            (entity.getItalic() ? 1 : 0),
+            (entity.getUnderline() ? 1 : 0),
+            entity.getAlign()
           }, new SQLStatementCallback() {
             public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
               entity.setId(rs.getInsertId());
@@ -867,6 +871,8 @@ public class MainDao extends WebSQLDao {
       sql += " ,fontFamily = ?";
       sql += " ,remoteId = ?";
       sql += " ,italic = ?";
+      sql += " ,underline = ?";
+      sql += " ,align = ?";
       sql += " WHERE id = ?";
       tr.doExecuteSql(sql, new Object[] {
           entity.getOrderItemId(), 
@@ -876,6 +882,8 @@ public class MainDao extends WebSQLDao {
           entity.getFontFamily(),
           entity.getRemoteId(),
           (entity.getItalic() ? 1 : 0),
+          (entity.getUnderline() ? 1 : 0),
+          entity.getAlign(),
           entity.getId()
         }, new SQLStatementCallback() {
           public void handleEvent(SQLTransaction tr, SQLResultSet rs) {

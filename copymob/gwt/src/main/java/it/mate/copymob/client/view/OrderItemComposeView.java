@@ -129,6 +129,10 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     if (row.getItalic()) {
       textbox.getElement().addClassName("app-italic");
     }
+    if (row.getUnderline()) {
+      textbox.getElement().addClassName("app-underline");
+    }
+    GwtUtils.setJsPropertyString(textbox.getElement().getStyle(), "text-align", row.getAlign()); ;
     rowpanel.add(textbox);
     final OnsButton controlBtn = new OnsButton();
     controlBtn.addStyleName("app-edit-btn-cfg");
@@ -218,6 +222,42 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     } else {
       textboxes.get(selectedRowIndex).getElement().replaceClassName("app-italic", "");
     }
+  }
+  
+  @UiHandler("btnEdtUnderline")
+  public void onBtnEdtUnderline(TapEvent event) {
+    showTargetPosition(event.getTargetElement());
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    row.setUnderline(!row.getUnderline());
+    if (row.getUnderline()) {
+      textboxes.get(selectedRowIndex).getElement().addClassName("app-underline");
+    } else {
+      textboxes.get(selectedRowIndex).getElement().replaceClassName("app-underline", "");
+    }
+  }
+  
+  @UiHandler("btnEdtAlignLeft")
+  public void onBtnEdtAlignLeft(TapEvent event) {
+    showTargetPosition(event.getTargetElement());
+    setItemAlign("left");
+  }
+  
+  @UiHandler("btnEdtAlignCenter")
+  public void onBtnEdtAlignCenter(TapEvent event) {
+    showTargetPosition(event.getTargetElement());
+    setItemAlign("center");
+  }
+  
+  @UiHandler("btnEdtAlignRight")
+  public void onBtnEdtAlignRight(TapEvent event) {
+    showTargetPosition(event.getTargetElement());
+    setItemAlign("right");
+  }
+  
+  private void setItemAlign(String align) {
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    row.setAlign(align);
+    GwtUtils.setJsPropertyString(textboxes.get(selectedRowIndex).getElement().getStyle(), "text-align", align); ;
   }
   
   @UiHandler("btnEdtSize")
