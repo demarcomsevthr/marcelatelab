@@ -52,6 +52,8 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -224,6 +226,13 @@ public class MainActivity extends OnsAbstractActivity implements
         final Categoria categoria = (Categoria)place.getModel();
         dao.findTimbriByCategoria(categoria.getCodice(), new Delegate<List<Timbro>>() {
           public void execute(List<Timbro> timbri) {
+            
+            Collections.sort(timbri, new Comparator<Timbro>() {
+              public int compare(Timbro t1, Timbro t2) {
+                return t1.getNome().compareTo(t2.getNome());
+              }
+            });
+            
             view.setModel(categoria.getDescrizione(), "categoria");
             view.setModel(timbri, "timbri");
           }
