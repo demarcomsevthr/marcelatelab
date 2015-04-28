@@ -45,8 +45,8 @@ public class MainDao extends WebSQLDao {
   private final static long ESTIMATED_SIZE = 5 * 1024 * 1024;
   
   
-  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image ";
-  private final static String TIMBRI_FIELDS_0_CREATE = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image BLOB ";
+  private final static String TIMBRI_FIELDS_0 = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image, componibile, allowImage, maxNumRighe ";
+  private final static String TIMBRI_FIELDS_0_CREATE = "nome, codice, width, height, oval, prezzo, codCategoria, descCategoria, remoteId, image BLOB, componibile, allowImage, maxNumRighe ";
 
   private final static String TIMBRI_FIELDS = TIMBRI_FIELDS_0;
   
@@ -298,6 +298,9 @@ public class MainDao extends WebSQLDao {
     result.setCodCategoria(rows.getValueString(it, "codCategoria"));
     result.setDescCategoria(rows.getValueString(it, "descCategoria"));
     result.setRemoteId(rows.getValueString(it, "remoteId"));
+    result.setComponibile(rows.getValueInt(it, "componibile") == 1);
+    result.setAllowImage(rows.getValueInt(it, "allowImage") == 1);
+    result.setMaxNumRighe(rows.getValueInt(it, "maxNumRighe"));
     return result;
   }
   
@@ -305,7 +308,7 @@ public class MainDao extends WebSQLDao {
     db.doTransaction(new SQLTransactionCallback() {
       public void handleEvent(SQLTransaction tr) {
         if (entity.getId() == null) {
-          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+          tr.doExecuteSql("INSERT INTO timbri (" + TIMBRI_FIELDS + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               new Object[] {
                 entity.getNome(), 
                 entity.getCodice(),
@@ -316,7 +319,10 @@ public class MainDao extends WebSQLDao {
                 entity.getCodCategoria(),
                 entity.getDescCategoria(),
                 entity.getRemoteId(),
-                entity.getImage()
+                entity.getImage(),
+                (entity.getComponibile() ? 1 : 0),
+                (entity.getAllowImage() ? 1 : 0),
+                entity.getMaxNumRighe()
               }, new SQLStatementCallback() {
                 public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
                   entity.setId(rs.getInsertId());
@@ -336,6 +342,9 @@ public class MainDao extends WebSQLDao {
           sql += " ,codCategoria = ?";
           sql += " ,descCategoria = ?";
           sql += " ,remoteId = ?";
+          sql += " ,componibile = ?";
+          sql += " ,allowImage = ?";
+          sql += " ,maxNumRighe = ?";
           sql += " WHERE id = ?";
           tr.doExecuteSql(sql, new Object[] {
               entity.getNome(), 
@@ -348,6 +357,9 @@ public class MainDao extends WebSQLDao {
               entity.getCodCategoria(),
               entity.getDescCategoria(),
               entity.getRemoteId(),
+              (entity.getComponibile() ? 1 : 0),
+              (entity.getAllowImage() ? 1 : 0),
+              entity.getMaxNumRighe(),
               entity.getId()
             }, new SQLStatementCallback() {
               public void handleEvent(SQLTransaction tr, SQLResultSet rs) {
