@@ -50,6 +50,14 @@ public class TimbroDs implements Timbro, HasKey {
   @Persistent
   private String descCategoria;
   
+  @Persistent
+  private Boolean componibile;
+  
+  @Persistent
+  private Boolean allowImage;
+  
+  @Persistent
+  private Integer maxNumRighe;
 
   @Override
   public String toString() {
@@ -153,4 +161,28 @@ public class TimbroDs implements Timbro, HasKey {
     this.descCategoria = descCategoria;
   }
 
+  public Boolean getComponibile() {
+    return componibile;
+  }
+
+  public void setComponibile(Boolean componibile) {
+    this.componibile = componibile;
+  }
+
+  public Boolean getAllowImage() {
+    return allowImage;
+  }
+
+  public void setAllowImage(Boolean allowImage) {
+    this.allowImage = allowImage;
+  }
+
+  public Integer getMaxNumRighe() {
+    return maxNumRighe;
+  }
+
+  public void setMaxNumRighe(Integer maxNumRighe) {
+    this.maxNumRighe = maxNumRighe;
+  }
+  
 }
