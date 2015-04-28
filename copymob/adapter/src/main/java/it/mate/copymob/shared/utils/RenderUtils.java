@@ -17,13 +17,22 @@ public class RenderUtils {
     int actualSizePx = (int)(row.getSize() * yFactor);
     
     Element span = DOM.createSpan();
+    span.setClassName("app-item-row-span");
     span.getStyle().setPosition(Position.FIXED);
     span.getStyle().setTop(top, Unit.PX);
     span.getStyle().setLeft(left, Unit.PX);
+    span.getStyle().setWidth(96, Unit.PCT);
     span.setInnerHTML(row.getText());
     span.getStyle().setFontSize(actualSizePx, Unit.PX); 
     GwtUtils.setJsPropertyString(span.getStyle(), "fontFamily", row.getFontFamily()); 
     span.getStyle().setFontWeight(row.getBold() ? FontWeight.BOLD : FontWeight.NORMAL);
+    if (row.getItalic()) {
+      GwtUtils.setJsPropertyString(span.getStyle(), "fontStyle", "italic"); 
+    }
+    if (row.getUnderline()) {
+      GwtUtils.setJsPropertyString(span.getStyle(), "textDecoration", "underline"); 
+    }
+    GwtUtils.setJsPropertyString(span.getStyle(), "textAlign", row.getAlign()); 
     
     int height = actualSizePx + 6;
     span.setPropertyInt("height", height);

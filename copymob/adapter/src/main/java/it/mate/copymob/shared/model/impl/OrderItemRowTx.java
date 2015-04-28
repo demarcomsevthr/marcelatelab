@@ -23,6 +23,10 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
   
   private Boolean italic;
   
+  private Boolean underline;
+  
+  private String align;
+  
   
   
   
@@ -50,6 +54,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     map.putField("fontFamily", fontFamily);
     map.putField("remoteId", remoteId);
     map.putField("italic", italic);
+    map.putField("underline", underline);
     return map;
   }
 
@@ -63,6 +68,7 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
     this.fontFamily = map.getField("fontFamily");
     this.remoteId = map.getField("remoteId");
     this.italic = map.getField("italic");
+    this.underline = map.getField("underline");
     return this;
   }
 
@@ -128,6 +134,22 @@ public class OrderItemRowTx implements OrderItemRow, IsMappable {
 
   public void setItalic(Boolean italic) {
     this.italic = italic;
+  }
+
+  public Boolean getUnderline() {
+    return underline != null ? underline : false;
+  }
+
+  public void setUnderline(Boolean underline) {
+    this.underline = underline;
+  }
+
+  public String getAlign() {
+    return align != null ? align : "center";
+  }
+
+  public void setAlign(String align) {
+    this.align = align;
   }
   
 }

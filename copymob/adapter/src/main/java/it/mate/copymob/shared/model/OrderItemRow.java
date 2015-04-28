@@ -36,4 +36,12 @@ public interface OrderItemRow extends Serializable {
 
   public Boolean getItalic();
 
+  public void setUnderline(Boolean underline);
+
+  public Boolean getUnderline();
+
+  public void setAlign(String align);
+
+  public String getAlign();
+
 }
