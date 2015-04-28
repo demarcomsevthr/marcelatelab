@@ -50,4 +50,16 @@ public interface Timbro extends Serializable {
 
   public String getCodCategoria();
 
+  public void setMaxNumRighe(Integer maxNumRighe);
+
+  public Integer getMaxNumRighe();
+
+  public void setAllowImage(Boolean allowImage);
+
+  public Boolean getAllowImage();
+
+  public void setComponibile(Boolean componibile);
+
+  public Boolean getComponibile();
+
 }

@@ -29,6 +29,12 @@ public class TimbroTx implements Timbro, IsMappable {
   
   private String descCategoria;
   
+  private Boolean componibile;
+  
+  private Boolean allowImage;
+  
+  private Integer maxNumRighe;
+  
   @Override
   public String toString() {
     return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + ", remoteId="
@@ -58,20 +64,9 @@ public class TimbroTx implements Timbro, IsMappable {
     map.putField("prezzo", prezzo);
     map.putField("codCategoria", codCategoria);
     map.putField("descCategoria", descCategoria);
-    
-    /*
-    map.put("id", id);
-    map.put("nome", nome);
-    map.put("codice", codice);
-    map.put("width", width);
-    map.put("height", height);
-    map.put("oval", oval);
-    map.put("image", image);
-    map.put("remoteId", remoteId);
-    map.put("prezzo", prezzo);
-    map.put("codCategoria", codCategoria);
-    map.put("descCategoria", descCategoria);
-    */
+    map.putField("componibile", componibile);
+    map.putField("allowImage", allowImage);
+    map.putField("maxNumRighe", maxNumRighe);
     
     return map;
   }
@@ -90,20 +85,10 @@ public class TimbroTx implements Timbro, IsMappable {
     this.prezzo = map.getField("prezzo");
     this.codCategoria = map.getField("codCategoria");
     this.descCategoria = map.getField("descCategoria");
+    this.componibile = map.getField("componibile");
+    this.allowImage = map.getField("allowImage");
+    this.maxNumRighe = map.getField("maxNumRighe");
     
-    /*
-    this.id = (Integer)map.get("id");
-    this.nome = (String)map.get("nome");
-    this.codice = (String)map.get("codice");
-    this.width = (Double)map.get("width");
-    this.height = (Double)map.get("height");
-    this.oval = (Boolean)map.get("oval");
-    this.image = (String)map.get("image");
-    this.remoteId = (String)map.get("remoteId");
-    this.prezzo = (Double)map.get("prezzo");
-    this.codCategoria = (String)map.get("codCategoria");
-    this.descCategoria = (String)map.get("descCategoria");
-    */
     return this;
   }
 
@@ -197,6 +182,30 @@ public class TimbroTx implements Timbro, IsMappable {
 
   public void setDescCategoria(String descCategoria) {
     this.descCategoria = descCategoria;
+  }
+
+  public Boolean getComponibile() {
+    return componibile != null ? componibile : false;
+  }
+
+  public void setComponibile(Boolean componibile) {
+    this.componibile = componibile;
+  }
+
+  public Boolean getAllowImage() {
+    return allowImage != null ? allowImage : false;
+  }
+
+  public void setAllowImage(Boolean allowImage) {
+    this.allowImage = allowImage;
+  }
+
+  public Integer getMaxNumRighe() {
+    return maxNumRighe != null ? maxNumRighe : 0;
+  }
+
+  public void setMaxNumRighe(Integer maxNumRighe) {
+    this.maxNumRighe = maxNumRighe;
   }
 
 }
