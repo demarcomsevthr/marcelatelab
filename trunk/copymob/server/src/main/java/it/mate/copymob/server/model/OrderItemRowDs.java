@@ -38,6 +38,12 @@ public class OrderItemRowDs implements OrderItemRow, HasKey {
   
   @Persistent
   private Boolean italic;
+  
+  @Persistent
+  private Boolean underline;
+  
+  @Persistent
+  private String align;
 
   
   @Override
@@ -113,4 +119,20 @@ public class OrderItemRowDs implements OrderItemRow, HasKey {
     this.italic = italic;
   }
 
+  public Boolean getUnderline() {
+    return underline;
+  }
+
+  public void setUnderline(Boolean underline) {
+    this.underline = underline;
+  }
+  
+  public String getAlign() {
+    return align;
+  }
+
+  public void setAlign(String align) {
+    this.align = align;
+  }
+  
 }
