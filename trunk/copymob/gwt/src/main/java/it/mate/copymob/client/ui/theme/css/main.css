@@ -254,6 +254,10 @@ ons-toolbar {
   font-style: italic;
 }
 
+.app-underline {
+  text-decoration: underline;
+}
+
 .app-viewfinder {
   position: absolute;
   background-color: red;

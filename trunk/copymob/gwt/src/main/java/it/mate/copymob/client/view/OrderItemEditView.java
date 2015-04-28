@@ -191,7 +191,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
         int rowTop = top;
         for (OrderItemRow row : orderItem.getRows()) {
-          Element span = RenderUtils.renderOrderItemAsGwtSpan(row, rowTop, left, 1.4);
+          Element span = RenderUtils.renderOrderItemAsGwtSpan(row, rowTop, left, 2.0);
           rowTop += span.getPropertyInt("height");
           previewElement.appendChild(span);
         }
