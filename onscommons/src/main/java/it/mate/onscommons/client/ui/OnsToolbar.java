@@ -56,7 +56,9 @@ public class OnsToolbar extends HTMLPanel {
   }
   
   private static native void setWaitingButtonVisibleImpl (String opacity) /*-{
-    $wnd._onsToolbarButtonWaiting._element[0].style.opacity = opacity;
+    if (typeof $wnd._onsToolbarButtonWaiting != 'undefined') {
+      $wnd._onsToolbarButtonWaiting._element[0].style.opacity = opacity;
+    }
   }-*/;
 
 }
