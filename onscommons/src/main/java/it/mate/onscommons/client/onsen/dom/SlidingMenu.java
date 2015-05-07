@@ -21,7 +21,8 @@ public class SlidingMenu extends JavaScriptObject {
     if (animation != null) {
       if (OnsenUi.ANIMATION_NATIVE_PUSH.equals(animation)) {
         jsAnimation = getPushAnimationImpl();
-        msg = " WITH NATIVE PUSH ANIMATION";
+        msg = " WITH **** NEW **** NATIVE PUSH ANIMATION";
+//      msg = " WITH NATIVE PUSH ANIMATION";
       } else if (OnsenUi.ANIMATION_NATIVE_POP.equals(animation)) {
         jsAnimation = getPopAnimationImpl();
         msg = " WITH NATIVE POP ANIMATION";
@@ -81,6 +82,99 @@ public class SlidingMenu extends JavaScriptObject {
   protected final native void setSwipeableImpl(boolean value) /*-{
     this.setSwipeable(value);    
   }-*/;
+  
+  protected final native JavaScriptObject getPushAnimationImpl__TEST_2__ () /*-{
+    var menu = this;
+    var animation = function() {
+      $wnd.animit(menu._mainPage[0])
+        .queue({
+          css: {
+            transform: 'translate3D(100%, 0, 0)',
+          },
+          duration: 0
+        })
+        .queue({
+          css: {
+            transform: 'translate3D(0, 0, 0)',
+          },
+          duration: @it.mate.onscommons.client.onsen.dom.SlidingMenu::DURATION,
+          timing: 'cubic-bezier(.1, .7, .4, 1)'
+        })
+        .play();
+    }
+    return animation;
+  }-*/;
+
+  protected final native JavaScriptObject getPushAnimationImpl__TEST_1__ () /*-{
+    
+      var menu = this;
+    
+      var backgroundMask = $wnd.angular.element(
+        '<div style="z-index: 2; position: absolute; width: 100%;' +
+        'height: 100%; background-color: black; opacity: 0;"></div>'
+      );
+      
+      var timing = 'cubic-bezier(.1, .7, .4, 1)';
+      var duration = 0.3; 
+      var blackMaskOpacity = 0.4;
+      
+      var mainPage = menu._mainPage[0];
+      
+      var mask = backgroundMask.remove();
+      mainPage.parentNode.insertBefore(mask[0], mainPage.nextSibling);
+      
+      var animation = function() {
+        
+        $wnd.animit.runAll(
+
+          $wnd.animit(mask[0])
+            .queue({
+              opacity: 0,
+              transform: 'translate3d(0, 0, 0)'
+            })
+            .queue({
+              opacity: blackMaskOpacity
+            }, {
+              duration: duration,
+              timing: timing
+            })
+            .resetStyle()
+            .queue(function(done) {
+              mask.remove();
+              done();
+            }),
+
+          $wnd.animit(mainPage)
+            .queue({
+              css: {
+                transform: 'translate3D(100%, 0, 0)',
+              },
+              duration: 0
+            })
+            .queue({
+              css: {
+                transform: 'translate3D(0, 0, 0)',
+              },
+              duration: duration,
+              timing: timing
+            })
+            .resetStyle()
+            .wait(0.2)
+            .queue(function(done) {
+              callback();
+              done();
+            })
+            
+        );
+        
+        
+      }
+      return animation;
+      
+      
+    
+  }-*/;
+  
   
   protected final native JavaScriptObject getPushAnimationImpl() /*-{
     var menu = this;
