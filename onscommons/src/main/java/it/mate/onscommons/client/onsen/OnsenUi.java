@@ -169,15 +169,7 @@ public class OnsenUi {
             addInitCallbackImpl(pageElement, new JSOCallback() {
               public void handle(JavaScriptObject event) {
                 PhgUtils.log("PAGE IS COMPILED");
-                JavaScriptObject results = queryElements(".ons-fadein");
-                if (results != null) {
-                  JsArray<Element> elements = results.cast();
-                  for (int it = 0; it < elements.length(); it++) {
-                    Element fadingElement = elements.get(it);
-                    PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
-                    TransitionUtils.fadeIn(fadingElement, 1000);
-                  }
-                }
+                fadeInCurrentPage();
                 if (delegate != null) {
                   delegate.execute(event);
                 }
@@ -189,6 +181,18 @@ public class OnsenUi {
         });
       }
     });
+  }
+  
+  public static void fadeInCurrentPage() {
+    JavaScriptObject results = queryElements(".ons-fadein");
+    if (results != null) {
+      JsArray<Element> elements = results.cast();
+      for (int it = 0; it < elements.length(); it++) {
+        Element fadingElement = elements.get(it);
+        PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
+        TransitionUtils.fadeIn(fadingElement, 1000);
+      }
+    }
   }
   
   protected static void ensureJQueryDocumentSelector() {
