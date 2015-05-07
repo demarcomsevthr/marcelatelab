@@ -127,7 +127,10 @@ public class OnsDialogUtils {
       if (values == null) {
         values = new String[] {"OK"};
       }
-      JsArrayString jsValues = JsArrayString.createArray(values.length).cast();
+      /* PER RETROCOMPATIBILITA CON GWT 2.5.1    
+      JsArrayString jsValues = JsArrayString.createArray(values.length).cast(); 
+      */
+      JsArrayString jsValues = JsArrayString.createArray().cast();
       for (int it = 0; it < values.length; it++) {
         jsValues.set(it, values[it]);
       }
