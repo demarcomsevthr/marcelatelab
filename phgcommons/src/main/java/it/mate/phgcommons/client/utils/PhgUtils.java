@@ -3,6 +3,7 @@ package it.mate.phgcommons.client.utils;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
+import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 import it.mate.phgcommons.client.utils.callbacks.StringCallback;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 
@@ -24,13 +25,6 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
-//import it.mate.phgcommons.client.ui.CalendarDialog;
-/*
-import com.googlecode.mgwt.ui.client.MGWT;
-import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
-import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollEndEvent;
-import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollMoveEvent;
-*/
 
 public class PhgUtils {
   
@@ -173,6 +167,15 @@ public class PhgUtils {
   public static native Navigator getNavigator() /*-{
     return $wnd.navigator;
   }-*/;
+  
+  public static String getLocalStorageItemForDebug(String name, String defaultValue) {
+    String value = PhgUtils.getLocalStorageItem(name);
+    if (value == null || value.trim().length() == 0) {
+      PhgUtils.setLocalStorageItem(name, defaultValue);
+      value = defaultValue;
+    }
+    return value;
+  }
   
   public static native String getLocalStorageItem(String name) /*-{
     return $wnd.localStorage[name];
@@ -577,30 +580,6 @@ public class PhgUtils {
     });
   }
   
-  /*
-  public static void prepareInnerScrollPanel(final ScrollPanel scrollPanel, final Delegate<Boolean> scrollDelegate) {
-    scrollPanel.setScrollingEnabledY(true);
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
-        int resultsHeight = Window.getClientHeight() - scrollPanel.getAbsoluteTop();
-        scrollPanel.getElement().getStyle().setHeight(resultsHeight, Unit.PX);
-      }
-    });
-    if (scrollDelegate != null) {
-      scrollPanel.addScrollMoveHandler(new ScrollMoveEvent.Handler() {
-        public void onScrollMove(ScrollMoveEvent event) {
-          scrollDelegate.execute(true);
-        }
-      });
-      scrollPanel.addScrollEndHandler(new ScrollEndEvent.Handler() {
-        public void onScrollEnd(ScrollEndEvent event) {
-          scrollDelegate.execute(false);
-        }
-      });
-    }
-  }
-  */
-  
   public static String elementToString(Element element) {
     return GwtUtils.getJsPropertyString(element, "outerHTML");
   }
@@ -609,10 +588,11 @@ public class PhgUtils {
     return $doc.getElementById(elemId) != null;
   }-*/;
 
-  /*
-  public static void ensureId(Element element) {
-    GwtUtils.ensureId(element);
-  }
-  */
+  public static native JavaScriptObject createJsCallback(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(jso) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(jso);
+    });
+    return jsCallback;
+  }-*/;
   
 }
