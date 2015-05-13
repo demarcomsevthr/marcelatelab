@@ -10,7 +10,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsBackButton/>
+          <o:OnsBackButton addStyleNames="ons-back-button-realign"/>
         </div>
         <div class="center">Carrello</div>
       </o:OnsToolbar>
