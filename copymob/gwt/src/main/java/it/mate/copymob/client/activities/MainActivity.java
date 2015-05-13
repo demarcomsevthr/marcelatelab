@@ -9,6 +9,7 @@ import it.mate.copymob.client.view.AccountEditView;
 import it.mate.copymob.client.view.CartListView;
 import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
+import it.mate.copymob.client.view.LayoutView;
 import it.mate.copymob.client.view.MenuView;
 import it.mate.copymob.client.view.MessageListView;
 import it.mate.copymob.client.view.OrderEditView;
@@ -69,7 +70,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings("rawtypes")
 public class MainActivity extends OnsAbstractActivity implements 
-    MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter, TimbriListView.Presenter, TimbroDetailView.Presenter, 
+    LayoutView.Presenter, MenuView.Presenter, HomeView.Presenter, SettingsView.Presenter, TimbriListView.Presenter, TimbroDetailView.Presenter, 
     OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
     MessageListView.Presenter, AccountEditView.Presenter,
     CartListView.Presenter, CategorieListView.Presenter,

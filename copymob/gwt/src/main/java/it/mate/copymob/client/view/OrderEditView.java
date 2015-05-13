@@ -12,7 +12,6 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.onscommons.client.ui.HasTapHandlerImpl;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsHorizontalPanel;
 import it.mate.onscommons.client.ui.OnsLabel;
@@ -73,8 +72,6 @@ public class OrderEditView extends AbstractBaseView<Presenter> {
   private void populateList() {
     
     OnsenUi.suspendCompilations();
-    
-    HasTapHandlerImpl.setUseDocEventListener(true);
     
     Iterator<OrderItem> it = order.getItems().iterator();
     
@@ -146,12 +143,6 @@ public class OrderEditView extends AbstractBaseView<Presenter> {
     }
     
     OnsenUi.refreshCurrentPage();
-    
-    GwtUtils.deferredExecution(1000, new Delegate<Void>() {
-      public void execute(Void element) {
-        HasTapHandlerImpl.setUseDocEventListener(false);
-      }
-    });
     
   }
   

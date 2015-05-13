@@ -12,7 +12,7 @@
     
       <o:OnsToolbar>
         <div class="left">
-          <o:OnsBackButton/>
+          <o:OnsBackButton addStyleNames="ons-back-button-realign"/>
         </div>
         <div class="center" id="onsUidToolbarCenterDiv">Elenco Timbri</div>
       </o:OnsToolbar>
