@@ -92,4 +92,12 @@ public class OnsList extends HTMLPanel {
     TransitionUtils.fadeIn(getElement(), TransitionUtils.parseAttributeValue(animation).setDelay(0));
   }
   
+  public void clear() {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element onsListElement) {
+        onsListElement.removeAllChildren();
+      }
+    });
+  }
+  
 }

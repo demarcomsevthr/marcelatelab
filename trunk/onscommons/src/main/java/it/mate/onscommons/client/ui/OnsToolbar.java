@@ -12,6 +12,8 @@ public class OnsToolbar extends HTMLPanel {
 
   private final static String TAG_NAME = "ons-toolbar";
   
+  private static boolean waitingButtonVisible = false;
+  
   public OnsToolbar() {
     this(TAG_NAME, "");
   }
@@ -52,7 +54,12 @@ public class OnsToolbar extends HTMLPanel {
   }
   
   public static void setWaitingButtonVisible(boolean visible) {
+    waitingButtonVisible = visible;
     setWaitingButtonVisibleImpl(visible ? "1" : "0");
+  }
+  
+  public static boolean isWaitingButtonVisible() {
+    return waitingButtonVisible;
   }
   
   private static native void setWaitingButtonVisibleImpl (String opacity) /*-{

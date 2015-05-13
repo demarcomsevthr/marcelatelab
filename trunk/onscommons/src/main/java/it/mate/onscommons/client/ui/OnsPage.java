@@ -11,18 +11,22 @@ public class OnsPage extends HTMLPanel implements AcceptsOneWidget {
 
   private final static String TAG_NAME = "ons-page";
   
-  private static OnsPage lastCreatedPage;
+  private static OnsPage lastPage;
+  
+  private static OnsPage prevPage;
   
   public OnsPage() {
     super(TAG_NAME, "");
     OnsenUi.ensureId(getElement());
-    lastCreatedPage = this;
+    prevPage = lastPage;
+    lastPage = this;
   }
   
   public OnsPage(String html) {
     super(TAG_NAME, html);
     OnsenUi.ensureId(getElement());
-    lastCreatedPage = this;
+    getElement().addClassName("ons-page");
+    lastPage = this;
   }
   
   @Override
@@ -39,7 +43,11 @@ public class OnsPage extends HTMLPanel implements AcceptsOneWidget {
   }
   
   public static OnsPage getLastCreatedPage() {
-    return lastCreatedPage;
+    return lastPage;
+  }
+  
+  public static OnsPage getPrevPage() {
+    return prevPage;
   }
 
 }

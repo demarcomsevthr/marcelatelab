@@ -1,6 +1,8 @@
 package it.mate.onscommons.client.onsen.dom;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
@@ -9,14 +11,41 @@ import com.google.gwt.core.client.JsArray;
 
 public class Navigator extends JavaScriptObject {
 
+  private static String pushAnimation = PhgUtils.getLocalStorageItemForDebug("debug.Navigator.pushAnimation", "fade");
+  
   protected Navigator() { }
   
-  public final void pushPage(String pageId) {
-    Options options = Options.create();
-    pushPage(pageId, options);
+  public static void setPushAnimation(String pushAnimation) {
+    Navigator.pushAnimation = pushAnimation;
   }
   
-  protected final void pushPage(String pageId, Options options) {
+  public final void pushPage(String pageId) {
+    pushPage(pageId, null, null);
+  }
+  
+  public final void pushPage(String pageId, Delegate<Void> onTransitionEndDelegate) {
+    pushPage(pageId, null, onTransitionEndDelegate);
+  }
+  
+  protected final void pushPage(String pageId, Options options, final Delegate<Void> onTransitionEndDelegate) {
+    if (options == null) {
+      options = Options.create();
+    }
+    if (pushAnimation != null) {
+      options.setAnimation(pushAnimation);
+    }
+    options.setOnTransitionEnd(PhgUtils.createJsCallback(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+            OnsenUi.fadeInCurrentPage();
+          }
+        });
+        if (onTransitionEndDelegate != null) {
+          onTransitionEndDelegate.execute(null);
+        }
+      }
+    }));
     PhgUtils.log("PUSHING PAGE " + pageId);
     pushPageImpl(pageId, options);
   }

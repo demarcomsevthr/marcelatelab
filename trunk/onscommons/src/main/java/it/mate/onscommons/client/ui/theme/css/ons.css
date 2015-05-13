@@ -9,6 +9,21 @@
   font-family: 'Helvetica Neue','Segoe UI',Helvetica,Verdana,san-serif;
 }
 
+.ons-toolbar .navigation-bar__title {
+  position: absolute;
+  left: 14%;
+}
+
+.ons-toolbar .navigation-bar__left {
+  position: absolute;
+  left: 2%;
+}
+
+.ons-toolbar .navigation-bar__right {
+  position: absolute;
+  right: 4%;
+}
+
 .ons-button {
   width: 98%;
   margin-left: 1%;
@@ -55,5 +70,13 @@
 
 .ons-fadein {
   opacity: 0;
+}
+
+.ons-back-button {
+
+}
+
+.ons-back-button-realign {
+  margin-left: -10px;
 }
 

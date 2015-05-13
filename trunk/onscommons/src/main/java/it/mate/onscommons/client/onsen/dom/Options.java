@@ -24,4 +24,8 @@ public class Options extends JavaScriptObject {
     GwtUtils.setJsPropertyString(this, "animation", value);
   }
   
+  public final void setOnTransitionEnd(JavaScriptObject value) {
+    GwtUtils.setJsPropertyJso(this, "onTransitionEnd", value);
+  }
+  
 }
