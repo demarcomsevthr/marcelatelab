@@ -17,6 +17,7 @@ public class OnsNavigator extends ComplexPanel implements HasWidgets {
   }
   
   protected OnsNavigator(Element elem) {
+    elem.setAttribute("var", "app.navigator");
     setElement(elem);
   }
   
@@ -29,9 +30,17 @@ public class OnsNavigator extends ComplexPanel implements HasWidgets {
     RootPanel.get().add(this);
     OnsenUi.compileElement(getElement());
   }
+  
+  public void compileElement() {
+    OnsenUi.compileElement(getElement());
+  }
 
-  public final native Navigator getController() /*-{
+  public final native Navigator getControllerSingleton() /*-{
     return $wnd.ons.navigator;
   }-*/;
-  
+
+  public final native Navigator getController() /*-{
+    return $wnd.app.navigator;
+  }-*/;
+
 }

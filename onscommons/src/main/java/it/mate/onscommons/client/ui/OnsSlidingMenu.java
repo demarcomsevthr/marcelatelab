@@ -11,10 +11,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OnsSlidingMenu extends ComplexPanel implements HasWidgets {
-
+  
   public OnsSlidingMenu() {
     this(DOM.createElement("ons-sliding-menu"));
     getElement().setAttribute("var", "app.menu");
+//  getElement().setAttribute("type", "overlay");
   }
   
   protected OnsSlidingMenu(Element elem) {
@@ -34,5 +35,5 @@ public class OnsSlidingMenu extends ComplexPanel implements HasWidgets {
   public final native SlidingMenu getController() /*-{
     return $wnd.app.menu;
   }-*/;
-
+  
 }

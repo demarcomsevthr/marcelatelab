@@ -5,6 +5,7 @@ import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.utils.TransitionUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -21,7 +22,10 @@ public class OnsBackButton extends Widget implements HasTapHandler {
 
   protected OnsBackButton(Element element) {
     
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+//  boolean actAsSimpleToolbarButton = OnsenUi.isSlidingMenuLayoutPattern();
+    boolean actAsSimpleToolbarButton = true;
+    
+    if (actAsSimpleToolbarButton) {
       element = DOM.createElement("ons-toolbar-button");
       Element icon = DOM.createElement("ons-icon");
       icon.setAttribute("icon", "fa-chevron-left");
@@ -30,10 +34,14 @@ public class OnsBackButton extends Widget implements HasTapHandler {
     
     OnsenUi.ensureId(element);
     
+//  element.addClassName("ons-back-button ons-fadein");
     element.addClassName("ons-back-button");
+    
+    TransitionUtils.fadeIn(element, new TransitionUtils.Options().setDeferring(400).setDelay(400).setDuration(200));
+    
     setElement(element);
     
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+    if (actAsSimpleToolbarButton) {
       addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
           goToPrevious();

@@ -18,11 +18,18 @@ public class TransitionUtils {
     int deferring = 250;
     int delay = 1;
     int duration = 2000;
-    protected Options() { }
+    String startProperty;
+    String endProperty;
+    String timing;
+    String transition;
+    String propertyType;
+
     @Override
     public String toString() {
-      return "Options [type=" + type + ", deferring=" + deferring + ", delay=" + delay + ", duration=" + duration + "]";
+      return "Options [type=" + type + ", deferring=" + deferring + ", delay=" + delay + ", duration=" + duration + ", startProperty=" + startProperty
+          + ", endProperty=" + endProperty + ", timing=" + timing + ", transition=" + transition + ", propertyType=" + propertyType + "]";
     }
+    
     public Options setType(int type) {
       this.type = type;
       return this;
@@ -39,6 +46,26 @@ public class TransitionUtils {
     }
     public Options setDuration(int duration) {
       this.duration = duration;
+      return this;
+    }
+    public Options setStartProperty(String startProperty) {
+      this.startProperty = startProperty;
+      return this;
+    }
+    public Options setEndProperty(String endProperty) {
+      this.endProperty = endProperty;
+      return this;
+    }
+    public Options setTiming(String timing) {
+      this.timing = timing;
+      return this;
+    }
+    public Options setTransition(String transition) {
+      this.transition = transition;
+      return this;
+    }
+    public Options setPropertyType(String propertyType) {
+      this.propertyType = propertyType;
       return this;
     }
   }
@@ -84,8 +111,6 @@ public class TransitionUtils {
       GwtUtils.setJsPropertyString(style, "transition-delay", options.delay+"s");
     }
     GwtUtils.setJsPropertyString(style, "transition", "opacity " + options.duration + "ms");
-    //GwtUtils.setJsPropertyString(style, "-webkit-transition", "opacity 2s");
-    
     GwtUtils.deferredExecution(options.deferring, new Delegate<Void>() {
       public void execute(Void dummy) {
         OnsenUi.onAvailableElement(element, new Delegate<Element>() {
@@ -98,4 +123,27 @@ public class TransitionUtils {
     });
   }
 
+  public static void apply(final Element element, final Options options) {
+    PhgUtils.log("SETTING TRANSITION ON ELEMENT " + element);
+    PhgUtils.log("SETTING TRANSITION WITH OPTIONS " + options);
+    JavaScriptObject style = element.getStyle();
+    GwtUtils.setJsPropertyString(style, options.propertyType, options.startProperty); 
+    if (options.delay > 0) {
+      PhgUtils.log("SETTING TRANSITION DELAY = " + options.delay);
+      GwtUtils.setJsPropertyString(style, "transition-delay", options.delay+"s");
+    }
+    if (options.timing != null) {
+      GwtUtils.setJsPropertyString(style, "transition-timing-function", options.timing);
+    }
+    if (options.transition != null) {
+      GwtUtils.setJsPropertyString(style, "transition", options.transition);
+    }
+    GwtUtils.deferredExecution(options.deferring, new Delegate<Void>() {
+      public void execute(Void dummy) {
+        JavaScriptObject style = element.getStyle();
+        GwtUtils.setJsPropertyString(style, options.propertyType, options.endProperty); 
+      }
+    });
+  }
+  
 }

@@ -65,6 +65,8 @@ public class OnsenUi {
   
   private static int uniqueElementId = 0;
   
+  private static int fadeinDuration = 500;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -98,7 +100,7 @@ public class OnsenUi {
     if (navigator == null) {
       OnsNavigator navigator = new OnsNavigator();
       navigator.attachToBody();
-      OnsenUi.navigator = navigator.getController();
+      OnsenUi.navigator = navigator.getControllerSingleton();
     }
     return navigator;
   }
@@ -126,6 +128,7 @@ public class OnsenUi {
   
   public static void suspendCompilations() {
     OnsenUi.compilationSuspended = true;
+    HasTapHandlerImpl.setUseDocEventListener(true);
   }
   
   public static void resumeCompilations() {
@@ -148,6 +151,14 @@ public class OnsenUi {
     compileElementImpl(element);
   }
   
+  public static void getCurrentPageElement(Delegate<Element> delegate) {
+    if (OnsPage.getLastCreatedPage() == null) {
+      delegate.execute(null);
+    } else {
+      OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), delegate);
+    }
+  }
+  
   public static void refreshCurrentPage() {
     refreshCurrentPage(null);
   }
@@ -163,7 +174,9 @@ public class OnsenUi {
         PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
         OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
           public void execute(Element pageElement) {
+            
             resumeCompilations();
+            
             PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement + " WITH delegate " + delegate);
 
             addInitCallbackImpl(pageElement, new JSOCallback() {
@@ -177,6 +190,13 @@ public class OnsenUi {
             });
             
             compileElementImpl(pageElement);
+            
+            GwtUtils.deferredExecution(500, new Delegate<Void>() {
+              public void execute(Void element) {
+                HasTapHandlerImpl.setUseDocEventListener(false);
+              }
+            });
+           
           }
         });
       }
@@ -190,7 +210,7 @@ public class OnsenUi {
       for (int it = 0; it < elements.length(); it++) {
         Element fadingElement = elements.get(it);
         PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
-        TransitionUtils.fadeIn(fadingElement, 1000);
+        TransitionUtils.fadeIn(fadingElement, fadeinDuration);
       }
     }
   }
@@ -298,6 +318,10 @@ public class OnsenUi {
   public static void addTapHandler(Widget widget, TapHandler handler) {
     HasTapHandlerImpl impl = new HasTapHandlerImpl(widget.getElement());
     impl.addTapHandler(handler);
+  }
+  
+  public static void setFadeinDuration(int fadeinDuration) {
+    OnsenUi.fadeinDuration = fadeinDuration;
   }
   
 }
