@@ -5,16 +5,20 @@ import it.mate.gwtcommons.client.history.BaseActivityMapper;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.mvp.OnsActivityManagerWithNavigator;
 import it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingMenu;
+import it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator;
 import it.mate.onscommons.client.mvp.OnsMvpUtils;
+import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.ui.theme.DefaultTheme;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
+import it.mate.protons.client.activities.MainActivity;
 import it.mate.protons.client.activities.mapper.MainActivityMapper;
 import it.mate.protons.client.places.MainPlace;
 import it.mate.protons.client.places.MainPlaceHistoryMapper;
 import it.mate.protons.client.ui.theme.CustomTheme;
+import it.mate.protons.client.view.LayoutView;
 import it.mate.protons.shared.service.RemoteFacadeAsync;
 
 import java.util.Map;
@@ -33,7 +37,9 @@ import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
 
 public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> implements AppClientFactory {
   
-  private static boolean USE_SLIDE_MENU_LAYOUT = true;
+  private static boolean USE_SLIDE_MENU_LAYOUT = false;
+
+  private static boolean USE_SLIDE_NAVIGATOR_LAYOUT = true;
 
   private PlaceHistoryMapper placeHistoryMapper;
   
@@ -95,15 +101,26 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   @Override
-  public void initMvp(SimplePanel panel, BaseActivityMapper activityMapper) {
+  public void initMvp(SimplePanel panel, final BaseActivityMapper activityMapper) {
   
     if (USE_SLIDE_MENU_LAYOUT) {
       new OnsActivityManagerWithSlidingMenu(activityMapper, getBinderyEventBus(), new MainPlace(MainPlace.MENU));
+      OnsMvpUtils.initMvp(this, activityMapper, new MainPlace());
     } else {
-      new OnsActivityManagerWithNavigator(activityMapper, getBinderyEventBus());
+      if (USE_SLIDE_NAVIGATOR_LAYOUT) {
+        LayoutView layoutView = new LayoutView();
+        layoutView.setPresenter(new MainActivity(this, new MainPlace()));
+        new OnsActivityManagerWithSlidingNavigator(activityMapper, getBinderyEventBus(), layoutView) {
+          public void onNavigatorInitialized(Navigator navigator) {
+            OnsMvpUtils.initMvp(AppClientFactory.IMPL, activityMapper, new MainPlace());
+          }
+        };
+      } else {
+        new OnsActivityManagerWithNavigator(activityMapper, getBinderyEventBus());
+        OnsMvpUtils.initMvp(this, activityMapper, new MainPlace());
+      }
     }
     
-    OnsMvpUtils.initMvp(this, activityMapper, new MainPlace());
     
   }
   

@@ -18,6 +18,7 @@ import it.mate.protons.client.view.ApplicationEditView;
 import it.mate.protons.client.view.ApplicationListView;
 import it.mate.protons.client.view.HomeView;
 import it.mate.protons.client.view.IngredientListView;
+import it.mate.protons.client.view.LayoutView;
 import it.mate.protons.client.view.MenuView;
 import it.mate.protons.client.view.SearchView;
 import it.mate.protons.client.view.SettingsView;
@@ -40,8 +41,10 @@ public class MainActivity extends OnsAbstractActivity implements
   MenuView.Presenter,
   HomeView.Presenter, SettingsView.Presenter, SearchView.Presenter, SubSettingsView.Presenter,
   ApplicationListView.Presenter, ApplicationEditView.Presenter,
-  IngredientListView.Presenter
+  IngredientListView.Presenter,
+  LayoutView.Presenter
   {
+  
   
   private MainPlace place;
   
