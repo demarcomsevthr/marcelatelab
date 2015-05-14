@@ -52,9 +52,9 @@
 	
 	it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator
 	
-		>> NUOVO AXCTIVITY MANAGER COMPOSTO SLIDING MENU / NAVIGATOR
-	    >> it.melograno.extsio.client.factories.AppClientFactoryImpl.initMvp(SimplePanel, BaseActivityMapper)
-	    >> it.melograno.extsio.client.view.LayoutView
+		>> NUOVO ACTIVITY MANAGER COMPOSTO SLIDING MENU / NAVIGATOR
+	    >> usato in it.melograno.extsio.client.factories.AppClientFactoryImpl.initMvp(SimplePanel, BaseActivityMapper)
+	    >> serve una it.melograno.extsio.client.view.LayoutView
     
     ------------------------------------------------------------------------------------------------
     
