@@ -23,7 +23,6 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   public OnsHorizontalPanel() {
     super();
     OnsenUi.ensureId(getElement());
-    PhgUtils.log("TABLE ID = " + getElement().getId());
   }
   
   public void setAddDirect(boolean addDirect) {
@@ -50,8 +49,6 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   }
   
   private void internalAdd(Widget w) {
-    PhgUtils.log("adding " + w.getElement());
-    PhgUtils.log("  to " + actualTableElement);
     super.add(w);
     
     /** DEVO RIPETERE QUELLO CHE FA IL PARENT **/
@@ -63,14 +60,12 @@ public class OnsHorizontalPanel extends HorizontalPanel {
     if (childId != null && !"".equals(childId)) {
       GwtUtils.onAvailable(childId, new Delegate<com.google.gwt.dom.client.Element>() {
         public void execute(com.google.gwt.dom.client.Element element) {
-          PhgUtils.log("child elem available: " + element);
           OnsenUi.compileElement(element);
         }
       });
     }
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
-        PhgUtils.log("after add: " + actualTableElement);
       }
     });
   }

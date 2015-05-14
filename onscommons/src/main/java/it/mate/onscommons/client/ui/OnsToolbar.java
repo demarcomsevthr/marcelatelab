@@ -44,6 +44,7 @@ public class OnsToolbar extends HTMLPanel {
         waitingBtn.setAttribute("var", "_onsToolbarButtonWaiting");
         waitingBtn.getStyle().setOpacity(0);
         Element waitingIco = DOM.createElement("ons-icon");
+        waitingIco.addClassName("ons-toolbar-button-waiting-icon");
         waitingIco.setAttribute("icon", "fa-cog");
         waitingIco.setAttribute("spin", "true");
         waitingBtn.appendChild(waitingIco);

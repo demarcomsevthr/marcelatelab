@@ -31,18 +31,6 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   public void setText(String text) {
-    /* 17/03/2015
-    Element element = GwtUtils.getElementById(getElement().getId());
-    if (element == null) {
-      String innerHtml = getElement().getInnerHTML();
-      innerHtml = innerHtml + text;
-      getElement().setInnerHTML(innerHtml);
-      this.text = text;
-    } else {
-      element.setInnerHTML(text);
-      this.text = text;
-    }
-    */
     addElementText(getElement(), text);
     this.text = text;
   }
@@ -53,10 +41,8 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
       String innerHtml = widgetElement.getInnerHTML();
       innerHtml = innerHtml + text;
       widgetElement.setInnerHTML(innerHtml);
-//    this.text = text;
     } else {
       attachedElement.setInnerHTML(text);
-//    this.text = text;
     }
   }
   

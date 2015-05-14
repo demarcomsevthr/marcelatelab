@@ -1,0 +1,61 @@
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[14/05/2015]
+	
+	it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator.pushPage(Place, Integer)
+	
+		>> se trovo il nuovo token già presente nella history del navigator faccio un reset to page (ottimizzazione del numero di pagine nel navigator)
+
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[13/05/2015]
+	
+	it.mate.onscommons.client.onsen.OnsenUi.refreshCurrentPage(Delegate<JavaScriptObject>)
+	
+		>> rimuovo la toolbar durante la compilazione
+
+	
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[13/05/2015]
+	
+	it.mate.onscommons.client.ui.OnsNavigator.getController()
+	
+		>> reference al controller tramite var attribute
+	
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[13/05/2015]
+	
+	it.mate.onscommons.client.ui.OnsBackButton
+	
+		>> ottimizzazioni varie (fade in proprio, etc..)
+	
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[13/05/2015]
+	
+	it.mate.onscommons.client.onsen.dom.Navigator.pushPage()
+	
+		>> aggiunto transitionEnd delegate (synch con sliding menu)
+	
+
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[13/05/2015]
+	
+	it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator
+	
+		>> NUOVO AXCTIVITY MANAGER COMPOSTO SLIDING MENU / NAVIGATOR
+	    >> it.melograno.extsio.client.factories.AppClientFactoryImpl.initMvp(SimplePanel, BaseActivityMapper)
+	    >> it.melograno.extsio.client.view.LayoutView
+    
+    ------------------------------------------------------------------------------------------------
+    
+	

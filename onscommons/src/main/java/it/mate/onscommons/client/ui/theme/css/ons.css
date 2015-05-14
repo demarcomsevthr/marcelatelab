@@ -30,13 +30,7 @@
   margin-top: 1%;
   text-align: center;
   min-height: 2.6em;
-}
-
-.ons-button .ons-icon {
-  margin-right: 0.5em;
-}
-
-.ons-button {
+  
   border: 1px solid #16a8c2;
   border-radius: 7px;
   background-color: #14b9d6;
@@ -45,6 +39,13 @@
   font-weight: bold;
   font-size: 1.02em;
   line-height: 2.0em;
+  
+  margin-bottom: 0.6%;
+  
+}
+
+.ons-button .ons-icon {
+  margin-right: 0.5em;
 }
 
 .ons-inline-label {
@@ -53,6 +54,14 @@
 
 .ons-toolbar-button-waiting span {
   opacity: 0.9 !important;
+}
+
+.ons-toolbar-button-waiting-icon {
+  width: 23px;
+  height: 23px;
+  padding-top: 2px;
+  padding-right: 3.5px;
+  /* color: white !important; */
 }
 
 .ons-bottom-dialog .dialog {
