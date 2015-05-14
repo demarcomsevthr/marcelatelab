@@ -109,6 +109,14 @@ public class GwtUtils {
   
   private static boolean useAvailableElementsCache = false;
 
+  protected static int mobileTimerSchedulerImplId = -1;
+  
+  protected final static long MAX_MOBILE_TIMER_SCHEDULER_AUTO_GARBAGE_TIME = 30000;
+  
+  protected final static long MAX_WAIT_FOR_AVAILABLE_ELEMENTS = 30000;
+  
+  private static Map<String, Element> availableElementsCache = new HashMap<String, Element>();
+  
   
   
   public static String getPortletContextPath() {
@@ -379,18 +387,16 @@ public class GwtUtils {
   
   public static void onAvailable (Element element, final Delegate<Element> delegate) {
     ensureId(element);
-    onAvailable(element.getId(), 10000, delegate);
+    onAvailable(element.getId(), delegate);
   }
   
   public static void onAvailable (final String id, final Delegate<Element> delegate) {
-    onAvailable(id, 10000, delegate);
+    onAvailable(id, MAX_WAIT_FOR_AVAILABLE_ELEMENTS, delegate);
   }
   
   //TODO
   //TODO
   //TODO
-  
-  private static Map<String, Element> availableElementsCache = new HashMap<String, Element>();
   
   public static void onAvailable (final String id, final long maxWait, final Delegate<Element> delegate) {
     
@@ -498,10 +504,6 @@ public class GwtUtils {
     }
     
   }
-  
-  protected static int mobileTimerSchedulerImplId = -1;
-  
-  protected final static long MAX_MOBILE_TIMER_SCHEDULER_AUTO_GARBAGE_TIME = 10000;
   
   protected abstract static class MobileTimerSchedulerImpl extends Timer {
     boolean cancelRequested = false;
