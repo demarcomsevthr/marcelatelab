@@ -4,7 +4,6 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
-import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.TransitionUtils;
 
 import com.google.gwt.dom.client.Element;
@@ -16,42 +15,34 @@ public class OnsBackButton extends Widget implements HasTapHandler {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
+  
   public OnsBackButton() {
-    this(DOM.createElement("ons-back-button"));
+    this(DOM.createElement("ons-toolbar-button"), true);
   }
 
-  protected OnsBackButton(Element element) {
+  protected OnsBackButton(Element element, boolean doFadeIn) {
     
-//  boolean actAsSimpleToolbarButton = OnsenUi.isSlidingMenuLayoutPattern();
-    boolean actAsSimpleToolbarButton = true;
+    Element icon = DOM.createElement("ons-icon");
+    icon.setAttribute("icon", "fa-chevron-left");
+    element.appendChild(icon);
     
-    if (actAsSimpleToolbarButton) {
-      element = DOM.createElement("ons-toolbar-button");
-      Element icon = DOM.createElement("ons-icon");
-      icon.setAttribute("icon", "fa-chevron-left");
-      element.appendChild(icon);
-    }
-    
-    OnsenUi.ensureId(element);
-    
-//  element.addClassName("ons-back-button ons-fadein");
     element.addClassName("ons-back-button");
     
-    TransitionUtils.fadeIn(element, new TransitionUtils.Options().setDeferring(400).setDelay(400).setDuration(200));
+    if (doFadeIn) {
+      TransitionUtils.fadeIn(element, new TransitionUtils.Options().setDeferring(400).setDelay(400).setDuration(200));
+    }
     
     setElement(element);
     
-    if (actAsSimpleToolbarButton) {
-      addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          goToPrevious();
-        }
-      });
-    }
+    addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        goToPrevious();
+      }
+    });
+    
   }
   
   public void setText(String text) {
-//  getElement().setInnerText(text);
     OnsButtonBase.addElementText(getElement(), text);
   }
   

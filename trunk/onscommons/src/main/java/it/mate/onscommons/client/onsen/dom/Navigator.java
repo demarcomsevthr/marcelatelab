@@ -11,7 +11,7 @@ import com.google.gwt.core.client.JsArray;
 
 public class Navigator extends JavaScriptObject {
 
-  private static String pushAnimation = PhgUtils.getLocalStorageItemForDebug("debug.Navigator.pushAnimation", "fade");
+  private static String pushAnimation = "fade";
   
   protected Navigator() { }
   

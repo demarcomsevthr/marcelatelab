@@ -2,6 +2,7 @@ package it.mate.onscommons.client.onsen;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.onscommons.client.event.OnsPlaceChangeEvent;
 import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.dom.Navigator;
@@ -66,6 +67,10 @@ public class OnsenUi {
   private static int uniqueElementId = 0;
   
   private static int fadeinDuration = 500;
+  
+  private static boolean removeToolbarDuringPageRefresh = true; 
+  
+  private static boolean doLog = false;
   
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
@@ -134,20 +139,28 @@ public class OnsenUi {
   public static void resumeCompilations() {
     OnsenUi.compilationSuspended = false;
   }
+
+  public static void compileElementImmediately(Element element) {
+    compileElementInternal(element);
+  }
   
   public static void compileElement(Element element) {
     lastElementCompilationTime = System.currentTimeMillis();
     if (compilationSuspended) {
-      PhgUtils.log("COMPILATION DISABLED");
+      if (doLog) PhgUtils.log("COMPILATION DISABLED");
       return;
     }
+    compileElementInternal(element);
+  }
+  
+  private static void compileElementInternal(Element element) {
     if (element == null) {
       return;
     }
     if (element.getNodeName() == null) {
       return;
     }
-    PhgUtils.log("COMPILING ELEMENT " + element);
+    if (doLog) PhgUtils.log("COMPILING ELEMENT " + element);
     compileElementImpl(element);
   }
   
@@ -171,17 +184,44 @@ public class OnsenUi {
           refreshCurrentPage(delegate);
           return;
         }
-        PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
+        if (doLog) PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
         OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
-          public void execute(Element pageElement) {
+          public void execute(final Element pageElement) {
             
             resumeCompilations();
             
-            PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement + " WITH delegate " + delegate);
+            //TODO: [13/05/2015]
+            //TODO: ATTENZIONE
+            //TODO: ATTENZIONE
+            //TODO: ATTENZIONE
+            //TODO: 
+            //TODO: INTRODOTTA LA SEGUENTE OTTIMIZZAZIONE:
+            //TODO:     PRIMA DI RICOMPILARE LA PAGE RIMUOVO LA TOOLBAR E LA REINSERISCO DOPO LA COMPILAZIONE (!!!)
+            
+            if (doLog) PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            
+            final ObjectWrapper<Element> toolbarElement = new ObjectWrapper<Element>();
+            
+            if (removeToolbarDuringPageRefresh) {
+              for (int it = 0; it < pageElement.getChildCount(); it++) {
+                Element pageChildElement = pageElement.getChild(it).cast();
+                if (pageChildElement.getNodeName() != null && pageChildElement.getNodeName().equalsIgnoreCase("ons-toolbar")) {
+                  toolbarElement.set(pageChildElement);
+                  if (doLog) PhgUtils.log("REMOVING TOOLBAR ELEMENT " + toolbarElement.get());
+                  toolbarElement.get().getParentElement().removeChild(toolbarElement.get());
+                }
+              }
+            }
 
             addInitCallbackImpl(pageElement, new JSOCallback() {
               public void handle(JavaScriptObject event) {
-                PhgUtils.log("PAGE IS COMPILED");
+                
+                if (toolbarElement.get() != null) {
+                  if (doLog) PhgUtils.log("REINSERTING TOOLBAR ELEMENT " + toolbarElement.get());
+                  pageElement.insertFirst(toolbarElement.get());
+                }
+                
+                if (doLog) PhgUtils.log("PAGE IS COMPILED");
                 fadeInCurrentPage();
                 if (delegate != null) {
                   delegate.execute(event);
@@ -189,7 +229,11 @@ public class OnsenUi {
               }
             });
             
+
+            if (doLog) PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
             compileElementImpl(pageElement);
+            
+            if (doLog) PhgUtils.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
             
             GwtUtils.deferredExecution(500, new Delegate<Void>() {
               public void execute(Void element) {
@@ -209,7 +253,7 @@ public class OnsenUi {
       JsArray<Element> elements = results.cast();
       for (int it = 0; it < elements.length(); it++) {
         Element fadingElement = elements.get(it);
-        PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
+        if (doLog) PhgUtils.log("EXECUTING FADEIN ON ELEMENT " + fadingElement);
         TransitionUtils.fadeIn(fadingElement, fadeinDuration);
       }
     }
@@ -241,10 +285,12 @@ public class OnsenUi {
     $wnd.ons.compile(element);
   }-*/;
 
-  public static void goToPreviousPlace(PlaceController placeController, Place initialPlace) {
-    if (OnsenUi.isNavigatorLayoutPattern()) {
+  public static void goToPreviousPlace(PlaceController placeController, Place initialPlace, boolean usePlaceControllerHistory) {
+    if (OnsenUi.isNavigatorLayoutPattern() && !usePlaceControllerHistory) {
+      if (doLog) PhgUtils.log("GO TO PREVIOUS PLACE USING NAVIGATOR POP");
       OnsenUi.getNavigator().popPage();
     } else {
+      if (doLog) PhgUtils.log("GO TO PREVIOUS PLACE USING PLACE CONTROLLER");
       if (placeController instanceof PlaceControllerWithHistory) {
         PlaceControllerWithHistory placeControllerHistory = (PlaceControllerWithHistory)placeController;
         Place prevPlace = placeControllerHistory.getPreviousPlace();

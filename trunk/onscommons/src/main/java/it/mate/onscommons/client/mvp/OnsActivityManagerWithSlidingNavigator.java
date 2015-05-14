@@ -24,7 +24,10 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private static final boolean CLOSE_MENU_AFTER_PUSH = Boolean.parseBoolean( PhgUtils.getLocalStorageItemForDebug("debug.OnsActivityManagerWithSlidingNavigator.closeMenuAfterPush", "false") );
   
-  private boolean allowPagePoping = false;
+  // 13/05/2015
+  private static boolean defaultAllowPagePoping = false;
+  
+  private boolean allowPagePoping = defaultAllowPagePoping;
   
   private boolean navigatorInitialized = false;
   
@@ -81,12 +84,21 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   }
   
   private void pushPage(Place newPlace, Integer insertIndex) {
+    
+    PhgUtils.log("PUSHING PAGE --1-- " + newPlace + " " + insertIndex);
+    
     compileActivePanel();
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
     putPlace(newPlace);
     
+    PhgUtils.log("------------------------------------");
+    PhgUtils.log("BEFORE PUSH PAGE " + newToken);
+    navigator.log("NAVIGATOR PAGE");
+    PhgUtils.log("------------------------------------");
+    
     boolean pagePushed = false;
+    
     Page currentPage = navigator.getCurrentPage();
     
     Delegate<Void> onPushTransitionEndDelegate = null;
@@ -101,10 +113,21 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
       slidingMenu.getController().closeMenu();
     }
     
+    PhgUtils.log("PUSHING PAGE --2-- " + currentPage);
+    
     if (currentPage != null) {
       String currentPageName = currentPage.getName();
+      
+      PhgUtils.log("PUSHING PAGE --3-- " + currentPageName);
+      
       if (!newToken.equals(currentPageName)) {
+        
+        PhgUtils.log("PUSHING PAGE --4-- " + currentPageName);
+        
         if (insertIndex != null) {
+          
+          PhgUtils.log("PUSHING PAGE --5-- " + currentPageName);
+          
           navigator.log("BEFORE INSERT PAGE");
           navigator.insertPage(insertIndex, newToken);
           GwtUtils.deferredExecution(new Delegate<Void>() {
@@ -114,16 +137,46 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             }
           });
         } else {
-          navigator.pushPage(newToken, onPushTransitionEndDelegate);
+
+          boolean found = false;
+          for (int it = 0; it < navigator.getPages().length(); it++) {
+            Page page = navigator.getPages().get(it);
+            String pageName = page.getName();
+            if (pageName != null && pageName.equals(newToken)) {
+              found = true;
+              PhgUtils.log("PUSHING PAGE --6-- " + it);
+//            navigator.insertPage(it, newToken);
+              navigator.resetToPage(newToken);
+              
+              PhgUtils.log("------------------------------------");
+              PhgUtils.log("AFTER RESET PAGE " + newToken);
+              navigator.log("NAVIGATOR PAGE");
+              PhgUtils.log("------------------------------------");
+              
+            }
+          }
+          
+          if (!found) {
+            PhgUtils.log("PUSHING PAGE --7-- " + currentPageName);
+            navigator.pushPage(newToken, onPushTransitionEndDelegate);
+          }
+          
+          
         }
         pagePushed = true;
       }
     } else {
+      
+      PhgUtils.log("PUSHING PAGE --8-- ");
+      
       navigator.pushPage(newToken, onPushTransitionEndDelegate);
       pagePushed = true;
     }
     
     if (!pagePushed) {
+      
+      PhgUtils.log("PUSHING PAGE --9-- ");
+      
       navigator.resetToPage(newToken);
     }
     
@@ -142,8 +195,10 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
           Page enteringPage = event.getEnterPage();
           if (enteringPage != null) {
             String enteringPageName = enteringPage.getName();
+            PhgUtils.log("------------------------------------");
             PhgUtils.log("AFTER PUSH PAGE " + enteringPageName);
             navigator.log("NAVIGATOR PAGE");
+            PhgUtils.log("------------------------------------");
           }
         }
       });
@@ -161,9 +216,10 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
       navigator.onBeforePagePop(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           if (allowPagePoping) {
-            allowPagePoping = false;
+            allowPagePoping = defaultAllowPagePoping;
             PhgUtils.log("CONTINUE POPING");
             navigator.log("BEFORE POPING");
+            lastProcessedPlace = null;
             return;
           }
           int index = navigator.getCurrentPage().getIndex() - 1;
@@ -209,6 +265,10 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private void setSlidingMenu(OnsSlidingMenu slidingMenu) {
     this.slidingMenu = slidingMenu;
+  }
+  
+  public static void setDefaultAllowPagePoping(boolean defaultAllowPagePoping) {
+    OnsActivityManagerWithSlidingNavigator.defaultAllowPagePoping = defaultAllowPagePoping;
   }
   
 }
