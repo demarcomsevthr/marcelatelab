@@ -24,15 +24,24 @@ public class PlaceControllerWithHistory extends PlaceController {
   @Override
   public void goTo(Place newPlace) {
     super.goTo(newPlace);
-    checkPlaceAgainstHistory(newPlace);
+    insertPlaceInHistory(newPlace);
+    logHistory();
   }
   
   public void goToWithEvent(PlaceChangeEvent event) {
     eventBus.fireEvent(event);
-    checkPlaceAgainstHistory(event.getNewPlace());
+    insertPlaceInHistory(event.getNewPlace());
+    logHistory();
   }
   
-  private void checkPlaceAgainstHistory(Place newPlace) {
+  private void logHistory() {
+    for (int it = 0; it < history.size(); it++) {
+      Place place = history.get(it);
+      PhgUtils.log("PlaceControllerWithHistory.history["+it+"] = " + place);
+    }
+  }
+  
+  private void insertPlaceInHistory(Place newPlace) {
     if (!(newPlace instanceof HasToken)) {
       PhgUtils.log("ERROR: " + getClass() + " can be used only with place implementing HasToken interface!");
     }
