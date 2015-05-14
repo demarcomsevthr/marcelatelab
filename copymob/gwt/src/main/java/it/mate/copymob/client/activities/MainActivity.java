@@ -316,7 +316,7 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    OnsenUi.goToPreviousPlace(AppClientFactory.IMPL.getPlaceController(), new MainPlace());
+    OnsenUi.goToPreviousPlace(AppClientFactory.IMPL.getPlaceController(), new MainPlace(), true);
   }
 
   @Override
