@@ -32,6 +32,8 @@ public class PhgUtils {
   
   private static boolean useLogPlugin = false;
   
+  private static boolean useConsole = false;
+  
   private static List<String> trace = null;
   
   private static String defaultDatePattern;
@@ -218,19 +220,19 @@ public class PhgUtils {
     String logMsg = GwtUtils.log(text);
     
     if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSetting("TraceLogToFile"))) {
-//    logImpl("Ready to write to trace.log > " + logMsg);
-      
       if (trace != null) {
         trace.add(logMsg);
       }
-      
     }
     
     if (useLogPlugin && !OsDetectionUtils.isDesktop() && !OsDetectionUtils.isIOs()) {
       LogPlugin.debug(text);
     } else {
-      logImpl(text);
+      if (useConsole) {
+        logImpl(text);
+      }
     }
+    
   }
   
   public static void log(JavaScriptObject elem) {
@@ -494,6 +496,22 @@ public class PhgUtils {
     Window.Location.reload();
   }
   
+  public static void reloadAppHome() {
+    // se lanciato da una combo da una IllegalStateException su una onDetach
+    // workaround: disabilito l'handler delle eccezioni
+    GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      public void onUncaughtException(Throwable e) {
+        // do nothing
+      }
+    });
+    String url = Window.Location.getHref();
+    if (url.contains("#")) {
+      int pos = url.indexOf("#");
+      url = url.substring(0, pos);
+    }
+    Window.Location.assign(url);
+  }
+  
   public static native void setAppLocalLanguageImpl(String language) /*-{
     if ($wnd.setAppLocalLanguage === undefined) {
       $wnd.localStorage.setItem("app-local-language", language);
@@ -594,5 +612,9 @@ public class PhgUtils {
     });
     return jsCallback;
   }-*/;
+  
+  public static void setUseConsole(boolean useConsole) {
+    PhgUtils.useConsole = useConsole;
+  }
   
 }
