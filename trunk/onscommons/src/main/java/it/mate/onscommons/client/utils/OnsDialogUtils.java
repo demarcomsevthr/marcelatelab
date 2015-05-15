@@ -25,6 +25,10 @@ public class OnsDialogUtils {
     alert(null, message);
   }
   
+  public static void alertHtml(String title, String messageHtml) {
+    alert(title, null, messageHtml);
+  }
+  
   public static void alert(String title, String message) {
     alert(title, message, null, null);
   }
@@ -45,13 +49,22 @@ public class OnsDialogUtils {
     alert(title, message, messageHtml, buttonLabel, animation, null);
   }
   
+  private static boolean modalAlert = false;
+  
   public static void alert(String title, String message, String messageHtml, String buttonLabel, String animation, final Delegate<Void> delegate) {
+    if (modalAlert) {
+      return;
+    }
+    modalAlert = true;
     alertImpl(Options.create().setTitle(title).setMessage(message).setMessageHtml(messageHtml)
-      .setButtonLabel(buttonLabel).setAnimation(animation).setCallback(delegate != null ? new JSOCallback() {
+      .setButtonLabel(buttonLabel).setAnimation(animation).setCallback(new JSOCallback() {
         public void handle(JavaScriptObject jso) {
-          delegate.execute(null);
+          modalAlert = false;
+          if (delegate != null) {
+            delegate.execute(null);
+          }
         }
-      } : null));
+      }));
   }
   
   protected static native void alertImpl(JavaScriptObject options) /*-{

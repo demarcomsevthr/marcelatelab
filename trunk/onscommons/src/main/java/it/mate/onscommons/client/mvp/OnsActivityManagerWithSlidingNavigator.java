@@ -145,7 +145,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             if (pageName != null && pageName.equals(newToken)) {
               found = true;
               PhgUtils.log("PUSHING PAGE --6-- " + it);
-//            navigator.insertPage(it, newToken);
               navigator.resetToPage(newToken);
               
               PhgUtils.log("------------------------------------");
@@ -157,8 +156,17 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
           }
           
           if (!found) {
-            PhgUtils.log("PUSHING PAGE --7-- " + currentPageName);
-            navigator.pushPage(newToken, onPushTransitionEndDelegate);
+            
+            checkAutoReloadApp(null, newToken);
+            
+            if ("home".equalsIgnoreCase(newToken)) {
+              PhgUtils.log("PUSHING PAGE --7-- " + currentPageName);
+              navigator.resetToPage(newToken);
+            } else {
+              PhgUtils.log("PUSHING PAGE --8-- " + currentPageName);
+              navigator.pushPage(newToken, onPushTransitionEndDelegate);
+            }
+            
           }
           
           
@@ -166,17 +174,13 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
         pagePushed = true;
       }
     } else {
-      
-      PhgUtils.log("PUSHING PAGE --8-- ");
-      
+      PhgUtils.log("PUSHING PAGE --9-- ");
       navigator.pushPage(newToken, onPushTransitionEndDelegate);
       pagePushed = true;
     }
     
     if (!pagePushed) {
-      
-      PhgUtils.log("PUSHING PAGE --9-- ");
-      
+      PhgUtils.log("PUSHING PAGE --10-- ");
       navigator.resetToPage(newToken);
     }
     
@@ -205,6 +209,50 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     }
   }
   
+  private static long lastReloadAppTime = -1;
+  
+  private void checkAutoReloadApp(NavigatorEvent event, String newPageName) {
+    boolean enteringHome = false;
+    if ("home".equalsIgnoreCase(newPageName)) {
+      enteringHome = true;
+    } else if (event != null) {
+      Page enteringPage = event.getEnterPage();
+      if (enteringPage != null) {
+        String enteringPageName = enteringPage.getName();
+        if (enteringPageName.equalsIgnoreCase("home")) {
+          enteringHome = true;
+        }
+      } else {
+        if (navigator.getCurrentPage() != null) {
+          int index = navigator.getCurrentPage().getIndex() - 1;
+          if (index >= 0) {
+            Page prevPage = navigator.getPages().get(index);
+            String prevPageName = prevPage.getName();
+            if (prevPageName.equalsIgnoreCase("home")) {
+              enteringHome = true;
+            }
+          }
+        }
+      }
+    }
+    if (enteringHome) {
+      PhgUtils.log(">>>>>>>>>>>>>>>>> ENTERING HOME");
+      if (lastReloadAppTime == -1) {
+        lastReloadAppTime = System.currentTimeMillis();
+      }
+      long currentTime = System.currentTimeMillis();
+      PhgUtils.log(">>>>>>>>>>>>>>>>> CHECK AUTO RELOADING APP ct = " + currentTime + " lr = " + lastReloadAppTime);
+      if (currentTime > (lastReloadAppTime + 60000)) {
+        PhgUtils.log("AUTO RELOADING APP.....................................");
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+            PhgUtils.reloadAppHome();
+          }
+        });
+      }
+    }
+  }
+  
   protected void setBeforePagePopHandler() {
     if (!navigatorInitialized) {
       GwtUtils.deferredExecution(new Delegate<Void>() {
@@ -213,8 +261,16 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
         }
       });
     } else {
+      
+      navigator.onBeforePagePush(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
+          checkAutoReloadApp(event, null);
+        }
+      });
+      
       navigator.onBeforePagePop(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
+          checkAutoReloadApp(event, null);
           if (allowPagePoping) {
             allowPagePoping = defaultAllowPagePoping;
             PhgUtils.log("CONTINUE POPING");
