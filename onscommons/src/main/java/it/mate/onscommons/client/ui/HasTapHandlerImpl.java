@@ -131,6 +131,7 @@ public class HasTapHandlerImpl {
         }
         if (allHandlersDisabled) {
           PhgUtils.log("ALL HANDLERS DISABLED");
+          return;
         }
         for (TapHandler tapHandler : tapHandlers) {
           tapHandler.onTap(new TapEvent(eventElement, availableElement, 0, 0, (targetWidget != null ? (Widget)targetWidget : null)));
@@ -201,6 +202,11 @@ public class HasTapHandlerImpl {
   }-*/;
   
   public static void setAllHandlersDisabled(boolean allHandlersDisabled) {
+    if (allHandlersDisabled) {
+      PhgUtils.log("SETTING ALL TAP HANDLERS DISABLED");
+    } else {
+      PhgUtils.log("SETTING ALL TAP HANDLERS ENABLED");
+    }
     HasTapHandlerImpl.allHandlersDisabled = allHandlersDisabled;
   }
   

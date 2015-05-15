@@ -2,10 +2,16 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.event.NativeGestureEvent;
+import it.mate.onscommons.client.event.NativeGestureHandler;
+import it.mate.onscommons.client.event.TouchEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.TransitionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,7 +33,69 @@ public class OnsScroller extends HTMLPanel {
     super(tag, html);
     getElement().addClassName(TAG_NAME);
     OnsenUi.ensureId(getElement());
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element scrollerElement) {
+        int offsetTop = scrollerElement.getOffsetTop();
+        PhgUtils.log("SCROLLER OFFSET TOP = " + offsetTop);
+        PhgUtils.log("SETTING SCROLLER ABSOLUTE POSITION...");
+        scrollerElement.getStyle().setTop(offsetTop, Unit.PX);
+        scrollerElement.getStyle().setBottom(0, Unit.PX);
+        scrollerElement.getStyle().setWidth(100, Unit.PCT);
+        scrollerElement.getStyle().setPosition(Position.ABSOLUTE);
+        
+        if (OnsenUi.isPreventTapHandlerWherScrollerMoves()) {
+          
+          TouchEventUtils.addGenericHandler(scrollerElement, "touchmove", true, new NativeGestureHandler() {
+            public void on(NativeGestureEvent event) {
+              PhgUtils.log("SCROLLER TOUCH MOVE - PREVENT TAP HANDLERS");
+              globalTapHandlersPreventing(true);
+            }
+          });
+          
+          TouchEventUtils.addGenericHandler(scrollerElement, "touchend", true, new NativeGestureHandler() {
+            public void on(NativeGestureEvent event) {
+              PhgUtils.log("SCROLLER TOUCH END - ALLOW TAP HANDLERS");
+              globalTapHandlersPreventing(false);
+            }
+          });
+          
+          TouchEventUtils.addDragStartHandler(scrollerElement, true, new NativeGestureHandler() {
+            public void on(NativeGestureEvent event) {
+              PhgUtils.log("SCROLLER DRAG START - PREVENT TAP HANDLER");
+              globalTapHandlersPreventing(true);
+            }
+          });
+          
+          TouchEventUtils.addDragEndHandler(scrollerElement, true, new NativeGestureHandler() {
+            public void on(NativeGestureEvent event) {
+              PhgUtils.log("SCROLLER DRAG END - ALLOW TAP HANDLER");
+              globalTapHandlersPreventing(false);
+            }
+          });
+        }
+        
+      }
+    });
   }
+  
+  private void globalTapHandlersPreventing(boolean prevent) {
+    if (prevent) {
+      HasTapHandlerImpl.setAllHandlersDisabled(true);
+      // per sicurezza dopo 10 sec li riabilito
+      GwtUtils.deferredExecution(10000, new Delegate<Void>() {
+        public void execute(Void element) {
+          HasTapHandlerImpl.setAllHandlersDisabled(false);
+        }
+      });
+    } else {
+      GwtUtils.deferredExecution(800, new Delegate<Void>() {
+        public void execute(Void element) {
+          HasTapHandlerImpl.setAllHandlersDisabled(false);
+        }
+      });
+    }
+  }
+  
 
   @Override
   public void add(final Widget widget) {

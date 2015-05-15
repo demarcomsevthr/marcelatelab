@@ -129,6 +129,20 @@ public class Navigator extends JavaScriptObject {
     this.on('prepop', jsCallback);    
   }-*/;
   
+  public final void onBeforePagePush(final Delegate<NavigatorEvent> delegate) {
+    onBeforePagePushImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((NavigatorEvent)jso.cast());
+      }
+    });
+  }
+  protected final native void onBeforePagePushImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    this.on('prepush', jsCallback);    
+  }-*/;
+
   public final void log(String prompt) {
     JsArray<Page> pages = getPages();
     for (int it = 0; it < pages.length(); it++) {

@@ -13,6 +13,7 @@ import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
 import it.mate.onscommons.client.utils.TransitionUtils;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.ElementCallback;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
@@ -72,6 +73,8 @@ public class OnsenUi {
   
   private static boolean doLog = false;
   
+  private static boolean preventTapHandlerWherScrollerMoves = false;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -80,6 +83,15 @@ public class OnsenUi {
         initHandler.execute(null);
       }
       ensureJQueryDocumentSelector();
+      
+      
+      // TODO: dovrebbe servire solo per AND 5+
+      // verificare se da fastidio su altri device
+      if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("5")) {
+        setPreventTapHandlerWherScrollerMoves(true);
+      }
+
+      
     }
   }
   
@@ -368,6 +380,14 @@ public class OnsenUi {
   
   public static void setFadeinDuration(int fadeinDuration) {
     OnsenUi.fadeinDuration = fadeinDuration;
+  }
+  
+  public static void setPreventTapHandlerWherScrollerMoves(boolean preventTapHandlerWherScrollerMoves) {
+    OnsenUi.preventTapHandlerWherScrollerMoves = preventTapHandlerWherScrollerMoves;
+  }
+  
+  public static boolean isPreventTapHandlerWherScrollerMoves() {
+    return preventTapHandlerWherScrollerMoves;
   }
   
 }
