@@ -15,7 +15,9 @@ import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.Window;
@@ -217,11 +219,18 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
       navigator.onBeforePagePop(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           checkAutoRefreshHome(event, null);
+          
           if (allowPagePoping) {
             allowPagePoping = defaultAllowPagePoping;
             PhgUtils.log("CONTINUE POPING");
             navigator.log("BEFORE POPING");
             lastProcessedPlace = null;
+
+            String popinPageId = getPopinPageId(event);
+            if (popinPageId != null && popinPageId.trim().length() > 0) {
+              OnsenUi.setCurrentPageId(popinPageId);
+            }
+            
             return;
           }
           int index = navigator.getCurrentPage().getIndex() - 1;
@@ -240,6 +249,39 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
         }
       });
     }
+  }
+  
+  
+  private String getPopinPageId(NavigatorEvent event) {
+    
+    Navigator navigator = GwtUtils.getJsPropertyJso(event, "navigator").cast();
+    Page currentPage = GwtUtils.getJsPropertyJso(event, "currentPage").cast();
+    String currentPageName = currentPage.getName();
+    Page popinPage = null;
+    JsArray<Page> pages = navigator.getPages();
+    for (int it = 0; it < pages.length(); it++) {
+      Page page = pages.get(it);
+      if (page.getName().equalsIgnoreCase(currentPageName) && it > 0) {
+        popinPage = pages.get(it - 1);
+        break;
+      }
+    }
+
+    Element popinPageElement = popinPage.getPageElement();
+    String popinPageId = popinPageElement.getId();
+    if (popinPageElement.getId() == null || popinPageElement.getId().trim().length() == 0) {
+      NodeList<Element> innerPages = popinPageElement.getElementsByTagName("ons-page");
+      if (innerPages != null) {
+        for (int it = 0; it < innerPages.getLength(); it++) {
+          Element innerPage = innerPages.getItem(it);
+          if (innerPage.getId() != null && innerPage.getId().trim().length() > 0) {
+            popinPageId = innerPage.getId();
+          }
+        }
+      }
+    }
+    
+    return popinPageId;
   }
   
   private void setNavigator(final OnsNavigator onsNavigator) {

@@ -200,6 +200,13 @@ public class OnsenUi {
     refreshCurrentPage(delay, null);
   }
   
+  private static String currentPageId = null;
+  
+  public static void setCurrentPageId(String currentPageId) {
+    PhgUtils.log("CURRENT PAGE ID = " + currentPageId);
+    OnsenUi.currentPageId = currentPageId;
+  }
+  
   public static void refreshCurrentPage(final int delay, final Delegate<JavaScriptObject> delegate) {
     GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
@@ -209,7 +216,14 @@ public class OnsenUi {
           return;
         }
         if (doLog) PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
-        OnsenUi.onAvailableElement(OnsPage.getLastCreatedPage().getElement().getId(), new Delegate<Element>() {
+
+        // 18/05/2015
+//      String actualCurrentPageId = OnsPage.getLastCreatedPage().getElement().getId();
+        String actualCurrentPageId = currentPageId;
+        
+        PhgUtils.log("FINDING PAGE WITH ID " + actualCurrentPageId);
+        
+        OnsenUi.onAvailableElement(actualCurrentPageId, new Delegate<Element>() {
           public void execute(final Element pageElement) {
             
             resumeCompilations();
@@ -420,7 +434,7 @@ public class OnsenUi {
       Element childElement = rootElement.getChild(it).cast();
       if (childElement.getNodeType() != Node.TEXT_NODE) {
         if (childElement.getNodeName() != null && childElement.getAttribute(EXCLUDE_FROM_PAGE_REFRESH_ATTR) != null && childElement.getAttribute(EXCLUDE_FROM_PAGE_REFRESH_ATTR).trim().length() > 0) {
-          PhgUtils.log("FOUND EXCLUDED ELEMENT " + childElement);
+          PhgUtils.log("FOUND EXCLUDED ELEMENT " + childElement.getNodeName()+"#"+childElement.getId());
           ExcludedElement excludedElement = new ExcludedElement();
           excludedElement.element = childElement;
           excludedElement.parentElement = childElement.getParentElement();
@@ -436,7 +450,8 @@ public class OnsenUi {
   
   private static void insertExcludedElements(List<ExcludedElement> excludedElements) {
     for (ExcludedElement excludedElement : excludedElements) {
-      PhgUtils.log("INSERTING EXCLUDED ELEMENT " + excludedElement.element);
+      Element childElement = excludedElement.element;
+      PhgUtils.log("INSERTING EXCLUDED ELEMENT " + childElement.getNodeName()+"#"+childElement.getId());
       if (excludedElement.nextSibling != null) {
         excludedElement.parentElement.insertBefore(excludedElement.element, excludedElement.nextSibling);
       } else {
