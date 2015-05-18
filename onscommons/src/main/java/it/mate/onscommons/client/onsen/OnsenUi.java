@@ -8,6 +8,7 @@ import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.SlidingMenu;
 import it.mate.onscommons.client.ui.HasTapHandlerImpl;
+import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
@@ -24,6 +25,7 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.Widget;
@@ -74,6 +76,8 @@ public class OnsenUi {
   private static boolean doLog = false;
   
   private static boolean preventTapHandlerWherScrollerMoves = false;
+  
+  public static final String EXCLUDE_FROM_PAGE_REFRESH_ATTR = "excludeFromPageRefresh";
   
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
@@ -139,6 +143,10 @@ public class OnsenUi {
     return slidingMenu;
   }
   
+  public static void setSlidingMenu(SlidingMenu slidingMenu) {
+    OnsenUi.slidingMenu = slidingMenu;
+  }
+  
   public static boolean isSlidingMenuLayoutPattern() {
     return slidingMenu != null;
   }
@@ -185,15 +193,19 @@ public class OnsenUi {
   }
   
   public static void refreshCurrentPage() {
-    refreshCurrentPage(null);
+    refreshCurrentPage(100);
   }
   
-  public static void refreshCurrentPage(final Delegate<JavaScriptObject> delegate) {
-    GwtUtils.deferredExecution(100, new Delegate<Void>() {
+  public static void refreshCurrentPage(int delay) {
+    refreshCurrentPage(delay, null);
+  }
+  
+  public static void refreshCurrentPage(final int delay, final Delegate<JavaScriptObject> delegate) {
+    GwtUtils.deferredExecution(delay, new Delegate<Void>() {
       public void execute(Void element) {
         long currentTime = System.currentTimeMillis();
         if (lastElementCompilationTime > currentTime - REFRESH_CURRENT_PAGE_DELAY) {
-          refreshCurrentPage(delegate);
+          refreshCurrentPage(delay, delegate);
           return;
         }
         if (doLog) PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
@@ -224,6 +236,9 @@ public class OnsenUi {
                 }
               }
             }
+            
+            final List<ExcludedElement> excludedElements = new ArrayList<OnsenUi.ExcludedElement>();
+            findAndSaveExcludedElements(pageElement, excludedElements);
 
             addInitCallbackImpl(pageElement, new JSOCallback() {
               public void handle(JavaScriptObject event) {
@@ -231,6 +246,10 @@ public class OnsenUi {
                 if (toolbarElement.get() != null) {
                   if (doLog) PhgUtils.log("REINSERTING TOOLBAR ELEMENT " + toolbarElement.get());
                   pageElement.insertFirst(toolbarElement.get());
+                }
+                
+                if (excludedElements != null) {
+                  insertExcludedElements(excludedElements);
                 }
                 
                 if (doLog) PhgUtils.log("PAGE IS COMPILED");
@@ -388,6 +407,47 @@ public class OnsenUi {
   
   public static boolean isPreventTapHandlerWherScrollerMoves() {
     return preventTapHandlerWherScrollerMoves;
+  }
+  
+  private static class ExcludedElement {
+    private Element parentElement;
+    private Element element;
+    private Node nextSibling;
+  }
+  
+  private static void findAndSaveExcludedElements(Element rootElement, List<ExcludedElement> excludedElements) {
+    for (int it = 0; it < rootElement.getChildCount(); it++) {
+      Element childElement = rootElement.getChild(it).cast();
+      if (childElement.getNodeType() != Node.TEXT_NODE) {
+        if (childElement.getNodeName() != null && childElement.getAttribute(EXCLUDE_FROM_PAGE_REFRESH_ATTR) != null && childElement.getAttribute(EXCLUDE_FROM_PAGE_REFRESH_ATTR).trim().length() > 0) {
+          PhgUtils.log("FOUND EXCLUDED ELEMENT " + childElement);
+          ExcludedElement excludedElement = new ExcludedElement();
+          excludedElement.element = childElement;
+          excludedElement.parentElement = childElement.getParentElement();
+          excludedElement.nextSibling = childElement.getNextSibling();
+          excludedElements.add(excludedElement);
+          childElement.getParentElement().removeChild(childElement);
+        } else {
+          findAndSaveExcludedElements(childElement, excludedElements);
+        }
+      }
+    }
+  }
+  
+  private static void insertExcludedElements(List<ExcludedElement> excludedElements) {
+    for (ExcludedElement excludedElement : excludedElements) {
+      PhgUtils.log("INSERTING EXCLUDED ELEMENT " + excludedElement.element);
+      if (excludedElement.nextSibling != null) {
+        excludedElement.parentElement.insertBefore(excludedElement.element, excludedElement.nextSibling);
+      } else {
+        excludedElement.parentElement.appendChild(excludedElement.element);
+      }
+    }
+  }
+  
+  public static void setDoLog(boolean doLog) {
+    OnsenUi.doLog = doLog;
+    OnsList.setDoLog(doLog);
   }
   
 }

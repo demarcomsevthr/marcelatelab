@@ -1,3 +1,32 @@
+
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[18/05/2015]
+	
+	it.mate.onscommons.client.ui.OnsList.clear(Delegate<Element>)
+	
+		>> IMPORTANTE: serve per sincronizzare la clear con successivi reinserimenti (da utilizzare in tutte le view!)    
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[18/05/2015]
+	
+    it.mate.onscommons.client.onsen.OnsenUi.findAndSaveExcludedElements(Element, List<ExcludedElement>)
+    
+    	>> IMPORTANT: se capita di vedere alcuni elementi che non si comportano bene con il page refresh
+    	   (esmpio: text di bottoni che scompare)
+    	   provare a settare l'attr excludeFromPageRefresh sul widget (per il momento solo OnsBaseButton)
+    	   questo esclude l'elemento dal page refresh (viene tolto prima e rimesso dopo!)
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[18/05/2015]
+	
+	it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator.enableCheckAutoRefreshHome
+	
+		>> messo sotto parametro (default false)
+		>> se attivato utilizzo la funz cordova navigator.app.loadUrl
     
     ------------------------------------------------------------------------------------------------
     

@@ -83,4 +83,8 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
     });
   }
   
+  public void setExcludeFromPageRefresh(String excludeFromPageRefresh) {
+    getElement().setAttribute(OnsenUi.EXCLUDE_FROM_PAGE_REFRESH_ATTR, "true");
+  }
+  
 }

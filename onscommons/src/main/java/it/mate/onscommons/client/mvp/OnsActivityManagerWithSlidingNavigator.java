@@ -11,12 +11,14 @@ import it.mate.onscommons.client.onsen.dom.Page;
 import it.mate.onscommons.client.ui.OnsLayoutView;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -24,7 +26,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private static final boolean CLOSE_MENU_AFTER_PUSH = Boolean.parseBoolean( PhgUtils.getLocalStorageItemForDebug("debug.OnsActivityManagerWithSlidingNavigator.closeMenuAfterPush", "false") );
   
-  // 13/05/2015
   private static boolean defaultAllowPagePoping = false;
   
   private boolean allowPagePoping = defaultAllowPagePoping;
@@ -36,6 +37,10 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   private Navigator navigator;
   
   private OnsSlidingMenu slidingMenu;
+  
+  private static boolean enableCheckAutoRefreshHome = false;
+  
+  private static long lastAutoRefreshHomeTime = -1;
   
   public abstract void onNavigatorInitialized(Navigator navigator);
   
@@ -85,8 +90,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private void pushPage(Place newPlace, Integer insertIndex) {
     
-    PhgUtils.log("PUSHING PAGE --1-- " + newPlace + " " + insertIndex);
-    
     compileActivePanel();
     HasToken hasToken = (HasToken)newPlace;
     String newToken =  hasToken.getToken();
@@ -113,20 +116,12 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
       slidingMenu.getController().closeMenu();
     }
     
-    PhgUtils.log("PUSHING PAGE --2-- " + currentPage);
-    
     if (currentPage != null) {
       String currentPageName = currentPage.getName();
       
-      PhgUtils.log("PUSHING PAGE --3-- " + currentPageName);
-      
       if (!newToken.equals(currentPageName)) {
         
-        PhgUtils.log("PUSHING PAGE --4-- " + currentPageName);
-        
         if (insertIndex != null) {
-          
-          PhgUtils.log("PUSHING PAGE --5-- " + currentPageName);
           
           navigator.log("BEFORE INSERT PAGE");
           navigator.insertPage(insertIndex, newToken);
@@ -144,7 +139,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             String pageName = page.getName();
             if (pageName != null && pageName.equals(newToken)) {
               found = true;
-              PhgUtils.log("PUSHING PAGE --6-- " + it);
               navigator.resetToPage(newToken);
               
               PhgUtils.log("------------------------------------");
@@ -157,13 +151,11 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
           
           if (!found) {
             
-            checkAutoReloadApp(null, newToken);
+            checkAutoRefreshHome(null, newToken);
             
             if ("home".equalsIgnoreCase(newToken)) {
-              PhgUtils.log("PUSHING PAGE --7-- " + currentPageName);
               navigator.resetToPage(newToken);
             } else {
-              PhgUtils.log("PUSHING PAGE --8-- " + currentPageName);
               navigator.pushPage(newToken, onPushTransitionEndDelegate);
             }
             
@@ -174,13 +166,11 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
         pagePushed = true;
       }
     } else {
-      PhgUtils.log("PUSHING PAGE --9-- ");
       navigator.pushPage(newToken, onPushTransitionEndDelegate);
       pagePushed = true;
     }
     
     if (!pagePushed) {
-      PhgUtils.log("PUSHING PAGE --10-- ");
       navigator.resetToPage(newToken);
     }
     
@@ -209,50 +199,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     }
   }
   
-  private static long lastReloadAppTime = -1;
-  
-  private void checkAutoReloadApp(NavigatorEvent event, String newPageName) {
-    boolean enteringHome = false;
-    if ("home".equalsIgnoreCase(newPageName)) {
-      enteringHome = true;
-    } else if (event != null) {
-      Page enteringPage = event.getEnterPage();
-      if (enteringPage != null) {
-        String enteringPageName = enteringPage.getName();
-        if (enteringPageName.equalsIgnoreCase("home")) {
-          enteringHome = true;
-        }
-      } else {
-        if (navigator.getCurrentPage() != null) {
-          int index = navigator.getCurrentPage().getIndex() - 1;
-          if (index >= 0) {
-            Page prevPage = navigator.getPages().get(index);
-            String prevPageName = prevPage.getName();
-            if (prevPageName.equalsIgnoreCase("home")) {
-              enteringHome = true;
-            }
-          }
-        }
-      }
-    }
-    if (enteringHome) {
-      PhgUtils.log(">>>>>>>>>>>>>>>>> ENTERING HOME");
-      if (lastReloadAppTime == -1) {
-        lastReloadAppTime = System.currentTimeMillis();
-      }
-      long currentTime = System.currentTimeMillis();
-      PhgUtils.log(">>>>>>>>>>>>>>>>> CHECK AUTO RELOADING APP ct = " + currentTime + " lr = " + lastReloadAppTime);
-      if (currentTime > (lastReloadAppTime + 60000)) {
-        PhgUtils.log("AUTO RELOADING APP.....................................");
-        GwtUtils.deferredExecution(new Delegate<Void>() {
-          public void execute(Void element) {
-            PhgUtils.reloadAppHome();
-          }
-        });
-      }
-    }
-  }
-  
   protected void setBeforePagePopHandler() {
     if (!navigatorInitialized) {
       GwtUtils.deferredExecution(new Delegate<Void>() {
@@ -264,13 +210,13 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
       
       navigator.onBeforePagePush(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
-          checkAutoReloadApp(event, null);
+          checkAutoRefreshHome(event, null);
         }
       });
       
       navigator.onBeforePagePop(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
-          checkAutoReloadApp(event, null);
+          checkAutoRefreshHome(event, null);
           if (allowPagePoping) {
             allowPagePoping = defaultAllowPagePoping;
             PhgUtils.log("CONTINUE POPING");
@@ -321,10 +267,88 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private void setSlidingMenu(OnsSlidingMenu slidingMenu) {
     this.slidingMenu = slidingMenu;
+    OnsenUi.onAvailableElement(slidingMenu, new Delegate<Element>() {
+      public void execute(Element element) {
+        OnsenUi.setSlidingMenu(OnsActivityManagerWithSlidingNavigator.this.slidingMenu.getController());
+      }
+    });
   }
   
   public static void setDefaultAllowPagePoping(boolean defaultAllowPagePoping) {
     OnsActivityManagerWithSlidingNavigator.defaultAllowPagePoping = defaultAllowPagePoping;
+  }
+  
+  private void checkAutoRefreshHome(NavigatorEvent event, String newPageName) {
+    
+    if (!enableCheckAutoRefreshHome) {
+      return;
+    }
+    
+    if (!OsDetectionUtils.isAndroid()) {
+      return;
+    }
+    
+    boolean enteringHome = false;
+    if ("home".equalsIgnoreCase(newPageName)) {
+      enteringHome = true;
+    } else if (event != null) {
+      Page enteringPage = event.getEnterPage();
+      if (enteringPage != null) {
+        String enteringPageName = enteringPage.getName();
+        if (enteringPageName.equalsIgnoreCase("home")) {
+          enteringHome = true;
+        }
+      } else {
+        if (navigator.getCurrentPage() != null) {
+          int index = navigator.getCurrentPage().getIndex() - 1;
+          if (index >= 0) {
+            Page prevPage = navigator.getPages().get(index);
+            String prevPageName = prevPage.getName();
+            if (prevPageName.equalsIgnoreCase("home")) {
+              enteringHome = true;
+            }
+          }
+        }
+      }
+    }
+    if (enteringHome) {
+      PhgUtils.log(">>>>>>>>>>>>>>>>> ENTERING HOME");
+      if (lastAutoRefreshHomeTime == -1) {
+        lastAutoRefreshHomeTime = System.currentTimeMillis();
+      }
+      long currentTime = System.currentTimeMillis();
+      PhgUtils.log(">>>>>>>>>>>>>>>>> CHECK AUTO REFRESH HOME ct = " + currentTime + " lr = " + lastAutoRefreshHomeTime);
+      if (currentTime > (lastAutoRefreshHomeTime + 60000)) {
+        PhgUtils.log("AUTO RELOADING APP.....................................");
+        GwtUtils.deferredExecution(new Delegate<Void>() {
+          public void execute(Void element) {
+//          PhgUtils.reloadAppHome();
+            reloadAppHome();
+          }
+        });
+      }
+    }
+  }
+  
+  private static void reloadAppHome() {
+    String url = Window.Location.getHref();
+    if (url.contains("#")) {
+      int pos = url.indexOf("#");
+      url = url.substring(0, pos);
+    }
+    reloadAppImpl(url);
+    PhgUtils.log(">>>>>>>>>>>>>>>>> LAUNCHED NAVIGATOR.APP.RELOAD URL " + url);
+  }
+
+  /*
+    $wnd.navigator.app.loadUrl(url, {wait:10, loadingDialog:"Wait please...", loadUrlTimeoutValue:60000, clearHistory:true});
+   */
+  private static native void reloadAppImpl(String url) /*-{
+    $wnd.navigator.app.loadUrl(url);
+  }-*/;
+  
+  public static void setEnableCheckAutoRefreshHome(boolean enableCheckAutoRefreshHome) {
+    OnsActivityManagerWithSlidingNavigator.enableCheckAutoRefreshHome = enableCheckAutoRefreshHome;
   }
   
 }
