@@ -3,6 +3,16 @@
     ------------------------------------------------------------------------------------------------
     
 	[18/05/2015]
+
+	it.mate.onscommons.client.mvp.OnsActivityManagerWithSlidingNavigator.getPopinPageId(NavigatorEvent)
+	
+		>> GREAT BUG FIXED: non referenziava la current page corretta in caso di pop del navigator
+		   (su indicazione di damianate!)
+
+    
+    ------------------------------------------------------------------------------------------------
+    
+	[18/05/2015]
 	
 	it.mate.onscommons.client.ui.OnsList.clear(Delegate<Element>)
 	

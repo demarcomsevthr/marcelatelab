@@ -39,9 +39,6 @@ public class OnsList extends HTMLPanel {
   public void add(final Widget widget) {
     super.add(widget, getElement());
     
-    internalAdd(widget);
-
-    /*
     String id = getElement().getId();
     GwtUtils.onAvailable(id, new Delegate<Element>() {
       public void execute(Element listElem) {
@@ -53,7 +50,6 @@ public class OnsList extends HTMLPanel {
         OnsenUi.compileElement(itemElem);
       }
     });
-    */
     
     /*
     Element listElem = DOM.getElementById(id);
@@ -63,7 +59,8 @@ public class OnsList extends HTMLPanel {
     */
     
   }
-  
+
+  /*
   private void internalAdd(final Widget widget) {
     if (availableElement == null) {
       OnsenUi.onAvailableElement(this, new Delegate<Element>() {
@@ -81,6 +78,7 @@ public class OnsList extends HTMLPanel {
       OnsenUi.compileElement(itemElem);
     }
   }
+  */
   
   public void insert(final Widget widget, final int beforeIndex) {
     String id = getElement().getId();
@@ -118,6 +116,10 @@ public class OnsList extends HTMLPanel {
   
   public void setAnimation(String animation) {
     TransitionUtils.fadeIn(getElement(), TransitionUtils.parseAttributeValue(animation).setDelay(0));
+  }
+  
+  public void clear() {
+    clear(null);
   }
   
   public void clear(final Delegate<Element> delegate) {

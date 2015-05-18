@@ -27,6 +27,7 @@ public class OnsPage extends HTMLPanel implements AcceptsOneWidget {
     OnsenUi.ensureId(getElement());
     getElement().addClassName("ons-page");
     lastPage = this;
+    OnsenUi.setCurrentPageId(getElement().getId());
   }
   
   @Override
