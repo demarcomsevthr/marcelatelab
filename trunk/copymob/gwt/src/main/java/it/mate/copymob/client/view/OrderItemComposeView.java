@@ -14,7 +14,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
-import it.mate.onscommons.client.event.TouchEventUtils;
+import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsDialog;
@@ -384,7 +384,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       PhgUtils.log("hiding crontrolbar");
       AnimitUtils.hideComposeControlbar(GwtUtils.getElement(controlbar), x0, y0, x1, y1, CONTROLBAR_VISIBLE_WIDTH, CONTROLBAR_VISIBLE_HEIGHT);
       if (overallEventListener != null) {
-        TouchEventUtils.removeEventListener(overallEventListener);
+        OnsEventUtils.removeEventListener(overallEventListener);
         overallEventListener = null;
       }
     } else {
@@ -394,9 +394,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       lastTappedElement = tappedElement;
       GwtUtils.deferredExecution(new Delegate<Void>() {
         public void execute(Void element) {
-          overallEventListener = TouchEventUtils.addOverallEventListener(new Delegate<Element>() {
+          overallEventListener = OnsEventUtils.addOverallEventListener(new Delegate<Element>() {
             public void execute(Element element) {
-              if (TouchEventUtils.isContained(element, controlbar.getElement().getId())) {
+              if (OnsEventUtils.isContained(element, controlbar.getElement().getId())) {
                 //nothing
               } else {
                 switchControlbar(tappedElement, -1);
