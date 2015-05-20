@@ -19,7 +19,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OnsDialogUtils {
 
-  private static OnsDialog waitingDialog;
+  private static OnsDialog synchronizedWaitingDialog;
+  
+  private static boolean synchronizedAlert = false;
+  
+  private static OnsDialog synchronizedDialog = null;
+  
+  private static boolean synchronizedConfirm = false;
   
   public static void alert(String message) {
     alert(null, message);
@@ -49,17 +55,15 @@ public class OnsDialogUtils {
     alert(title, message, messageHtml, buttonLabel, animation, null);
   }
   
-  private static boolean modalAlert = false;
-  
   public static void alert(String title, String message, String messageHtml, String buttonLabel, String animation, final Delegate<Void> delegate) {
-    if (modalAlert) {
+    if (synchronizedAlert) {
       return;
     }
-    modalAlert = true;
+    synchronizedAlert = true;
     alertImpl(Options.create().setTitle(title).setMessage(message).setMessageHtml(messageHtml)
       .setButtonLabel(buttonLabel).setAnimation(animation).setCallback(new JSOCallback() {
         public void handle(JavaScriptObject jso) {
-          modalAlert = false;
+          synchronizedAlert = false;
           if (delegate != null) {
             delegate.execute(null);
           }
@@ -92,13 +96,20 @@ public class OnsDialogUtils {
   }
   
   public static void confirm(String title, String message, String messageHtml, String[] buttonLabels, String animation, Boolean cancelable, final Delegate<Integer> delegate) {
+    if (synchronizedConfirm) {
+      return;
+    }
+    synchronizedConfirm = true;
     confirmImpl(Options.create().setTitle(title).setMessage(message).setMessageHtml(messageHtml)
       .setButtonLabels(buttonLabels).setAnimation(animation).setCancelable(cancelable != null ? cancelable : false)
-      .setCallback(delegate != null ? new JSOIntCallback() {
+      .setCallback(new JSOIntCallback() {
         public void handle(int index) {
-          delegate.execute(index);
+          synchronizedConfirm = false;
+          if (delegate != null) {
+            delegate.execute(index);
+          }
         }
-      } : null));
+      }));
   }
   
   protected static native void confirmImpl(JavaScriptObject options) /*-{
@@ -180,8 +191,6 @@ public class OnsDialogUtils {
     }-*/;
   }
   
-  private static OnsDialog singletonDialog = null;
-  
   public static OnsDialog createDialog(String html) {
     return createDialog(html, false);
   }
@@ -198,21 +207,21 @@ public class OnsDialogUtils {
     return createDialog(widget, cancelable, animation, null);
   }
   public static OnsDialog createDialog(Widget widget, boolean cancelable, String animation, String stylename) {
-    if (singletonDialog != null) {
+    if (synchronizedDialog != null) {
       PhgUtils.log("SINGLETON DIALOG ALREADY SHOWN, SKIP CREATION OF NEW ONE");
     }
-    singletonDialog = new OnsDialog();
+    synchronizedDialog = new OnsDialog();
     if (stylename != null) {
-      singletonDialog.addStyleName(stylename);
+      synchronizedDialog.addStyleName(stylename);
     }
-    singletonDialog.show(widget, Options.create().setAnimation(animation), cancelable);
-    singletonDialog.addOnHideDelegate(new Delegate<JavaScriptObject>() {
+    synchronizedDialog.show(widget, Options.create().setAnimation(animation), cancelable);
+    synchronizedDialog.addOnHideDelegate(new Delegate<JavaScriptObject>() {
       public void execute(JavaScriptObject element) {
-        PhgUtils.log("CLOSING DIALOG " + singletonDialog);
-        singletonDialog = null;
+        PhgUtils.log("CLOSING DIALOG " + synchronizedDialog);
+        synchronizedDialog = null;
       }
     });
-    return singletonDialog;
+    return synchronizedDialog;
   }
   
   public static void showWaitingDialog() {
@@ -220,7 +229,7 @@ public class OnsDialogUtils {
   }
   
   public static void showWaitingDialog(String message, Integer maxWait) {
-    if (waitingDialog == null) {
+    if (synchronizedWaitingDialog == null) {
       HorizontalPanel panel = new HorizontalPanel();
       panel.getElement().getStyle().setPadding(5, Unit.PCT);
       panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -231,7 +240,7 @@ public class OnsDialogUtils {
       GwtUtils.ensureId(html.getElement());
       panel.add(icon);
       panel.add(html);
-      waitingDialog = OnsDialogUtils.createDialog(panel, true, null, "ons-waiting-dialog");
+      synchronizedWaitingDialog = OnsDialogUtils.createDialog(panel, true, null, "ons-waiting-dialog");
       if (maxWait != null) {
         GwtUtils.deferredExecution(maxWait, new Delegate<Void>() {
           public void execute(Void element) {
@@ -239,7 +248,7 @@ public class OnsDialogUtils {
           }
         });
       }
-      waitingDialog.getRealWidth(new Delegate<Integer>() {
+      synchronizedWaitingDialog.getRealWidth(new Delegate<Integer>() {
         public void execute(final Integer width) {
           GwtUtils.onAvailable(html.getElement(), new Delegate<Element>() {
             public void execute(Element htmlElement) {
@@ -252,9 +261,9 @@ public class OnsDialogUtils {
   }
   
   public static void hideWaitingDialog() {
-    if (waitingDialog != null) {
-      waitingDialog.hide();
-      waitingDialog = null;
+    if (synchronizedWaitingDialog != null) {
+      synchronizedWaitingDialog.hide();
+      synchronizedWaitingDialog = null;
     }
   }
   

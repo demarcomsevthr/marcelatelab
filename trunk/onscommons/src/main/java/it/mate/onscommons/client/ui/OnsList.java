@@ -59,6 +59,36 @@ public class OnsList extends HTMLPanel {
     */
     
   }
+  
+  
+  private int numberAddRequest = 0;
+  
+  public void add(final Widget widget, final Delegate<Element> delegate) {
+    if (widget == null) {
+      return;
+    }
+    numberAddRequest ++;
+    super.add(widget, getElement());
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element listElement) {
+        OnsList.this.listElement = listElement;
+        Element itemElem = widget.getElement();
+        if (doLog) PhgUtils.log("Adding to OnsList element " + itemElem);
+        listElement.appendChild(itemElem);
+        OnsenUi.compileElement(listElement);
+        OnsenUi.compileElement(itemElem);
+        GwtUtils.deferredExecution(100, new Delegate<Void>() {
+          public void execute(Void element) {
+            numberAddRequest --;
+            if (delegate != null && numberAddRequest <= 0) {
+              delegate.execute(OnsList.this.listElement);
+            }
+          }
+        });
+      }
+    });
+  }
+  
 
   /*
   private void internalAdd(final Widget widget) {

@@ -86,7 +86,9 @@
 }
 
 .ons-back-button-realign {
+  /* NON SERVE PIU
   margin-left: -10px;
+  */
 }
 
 ons-alert-dialog {
