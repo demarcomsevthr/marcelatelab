@@ -57,4 +57,12 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
     getElement().setInnerHTML(innerHtml + html);
   }
   
+  public void setVisible(final boolean visible) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        setVisible(element, visible);
+      }
+    });
+  }
+  
 }

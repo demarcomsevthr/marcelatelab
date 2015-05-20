@@ -46,6 +46,11 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   }
   
   @Override
+  public void setValue(String value) {
+    setText(value);
+  }
+  
+  @Override
   public void setText(final String text) {
     String id = getElement().getId();
     Element elem = getElementByIdImpl(id);
@@ -60,5 +65,33 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   protected static native Element getElementByIdImpl(String elementId) /*-{
     return $doc.getElementById(elementId);
   }-*/;
+  
+  public void setDisabled(String disabled) {
+    if (Boolean.parseBoolean(disabled)) {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setAttribute("disabled", "");
+        }
+      });
+    }
+  }
+  
+  public void setReadonly(String readonly) {
+    if (Boolean.parseBoolean(readonly)) {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setAttribute("readonly", "");
+        }
+      });
+    }
+  }
+  
+  public void setType(final String type) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("type", type);
+      }
+    });
+  }
   
 }
