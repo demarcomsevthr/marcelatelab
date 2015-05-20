@@ -4,7 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.NativeGestureEvent;
 import it.mate.onscommons.client.event.NativeGestureHandler;
-import it.mate.onscommons.client.event.TouchEventUtils;
+import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.TransitionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -45,28 +45,28 @@ public class OnsScroller extends HTMLPanel {
         
         if (OnsenUi.isPreventTapHandlerWherScrollerMoves()) {
           
-          TouchEventUtils.addGenericHandler(scrollerElement, "touchmove", true, new NativeGestureHandler() {
+          OnsEventUtils.addHandler(scrollerElement, "touchmove", true, new NativeGestureHandler() {
             public void on(NativeGestureEvent event) {
               PhgUtils.log("SCROLLER TOUCH MOVE - PREVENT TAP HANDLERS");
               globalTapHandlersPreventing(true);
             }
           });
           
-          TouchEventUtils.addGenericHandler(scrollerElement, "touchend", true, new NativeGestureHandler() {
+          OnsEventUtils.addHandler(scrollerElement, "touchend", true, new NativeGestureHandler() {
             public void on(NativeGestureEvent event) {
               PhgUtils.log("SCROLLER TOUCH END - ALLOW TAP HANDLERS");
               globalTapHandlersPreventing(false);
             }
           });
           
-          TouchEventUtils.addDragStartHandler(scrollerElement, true, new NativeGestureHandler() {
+          OnsEventUtils.addDragStartHandler(scrollerElement, true, new NativeGestureHandler() {
             public void on(NativeGestureEvent event) {
               PhgUtils.log("SCROLLER DRAG START - PREVENT TAP HANDLER");
               globalTapHandlersPreventing(true);
             }
           });
           
-          TouchEventUtils.addDragEndHandler(scrollerElement, true, new NativeGestureHandler() {
+          OnsEventUtils.addDragEndHandler(scrollerElement, true, new NativeGestureHandler() {
             public void on(NativeGestureEvent event) {
               PhgUtils.log("SCROLLER DRAG END - ALLOW TAP HANDLER");
               globalTapHandlersPreventing(false);

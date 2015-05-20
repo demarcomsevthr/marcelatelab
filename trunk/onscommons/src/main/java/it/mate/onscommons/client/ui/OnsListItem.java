@@ -11,11 +11,13 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class OnsListItem extends HTMLPanel implements HasTapHandler {
+public class OnsListItem extends HTMLPanel implements HasTapHandler, HasModel {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
   private String value;
+  
+  private Object model;
   
   public OnsListItem() {
     this("");
@@ -24,6 +26,16 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler {
   public OnsListItem(String html) {
     super("ons-list-item", html);
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
+  }
+  
+  @Override
+  public void setModel(Object model) {
+    this.model = model;
+  }
+
+  @Override
+  public Object getModel() {
+    return model;
   }
 
   @Override

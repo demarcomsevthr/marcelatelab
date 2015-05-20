@@ -1,7 +1,7 @@
 package it.mate.onscommons.client.ui;
 
 
-public class OnsPasswordBox extends OnsTextBoxBase {
+public class OnsPasswordBox extends OnsTextBox {
   
   public OnsPasswordBox() {
     super("password");

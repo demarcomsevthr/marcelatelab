@@ -122,6 +122,12 @@ public class TransitionUtils {
       }
     });
   }
+  
+  public static void resetFadeIn(Element element) {
+    element.removeClassName("ons-fadein");
+    GwtUtils.setJsPropertyString(element.getStyle(), "opacity", ""); 
+    GwtUtils.setJsPropertyString(element.getStyle(), "transition", "");
+  }
 
   public static void apply(final Element element, final Options options) {
     PhgUtils.log("SETTING TRANSITION ON ELEMENT " + element);

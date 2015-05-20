@@ -8,7 +8,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class TouchEventUtils {
+public class OnsEventUtils {
 
   private final static String TAP_EVENT_NAME = OsDetectionUtils.isDesktop() ? "click" : "touchend"; 
   
@@ -17,7 +17,7 @@ public class TouchEventUtils {
   }
   
   public static HandlerRegistration addDragStartHandler(Element element, boolean attachHandlerToElement, final NativeGestureHandler handler) {
-    return addHandler(element, "dragstart", handler, attachHandlerToElement);
+    return internalAddHandler(element, "dragstart", handler, attachHandlerToElement);
   }
   
   public static HandlerRegistration addDragOverHandler(Element element, final NativeGestureHandler handler) {
@@ -25,7 +25,7 @@ public class TouchEventUtils {
   }
   
   public static HandlerRegistration addDragOverHandler(Element element, boolean attachHandlerToElement, final NativeGestureHandler handler) {
-    return addHandler(element, "dragover", handler, attachHandlerToElement);
+    return internalAddHandler(element, "dragover", handler, attachHandlerToElement);
   }
   
   public static HandlerRegistration addDragEndHandler(Element element, final NativeGestureHandler handler) {
@@ -33,7 +33,7 @@ public class TouchEventUtils {
   }
   
   public static HandlerRegistration addDragEndHandler(Element element, boolean attachHandlerToElement, final NativeGestureHandler handler) {
-    return addHandler(element, "dragend", handler, attachHandlerToElement);
+    return internalAddHandler(element, "dragend", handler, attachHandlerToElement);
   }
   
   public static HandlerRegistration addMouseMoveHandler(Element element, final NativeGestureHandler handler) {
@@ -41,14 +41,36 @@ public class TouchEventUtils {
   }
   
   public static HandlerRegistration addMouseMoveHandler(Element element, boolean attachHandlerToElement, final NativeGestureHandler handler) {
-    return addHandler(element, "mousemove", handler, attachHandlerToElement);
+    return internalAddHandler(element, "mousemove", handler, attachHandlerToElement);
   }
   
-  public static HandlerRegistration addGenericHandler(Element element, String eventName, boolean attachHandlerToElement, final NativeGestureHandler handler) {
-    return addHandler(element, eventName, handler, attachHandlerToElement);
+  public static HandlerRegistration addChangeHandler(Element element, final NativeGestureHandler handler) {
+    return addChangeHandler(element, false, handler);
   }
   
-  protected static HandlerRegistration addHandler(Element element, String eventName, final NativeGestureHandler handler, boolean attachHandlerToElement) {
+  public static HandlerRegistration addChangeHandler(Element element, boolean attachHandlerToElement, final NativeGestureHandler handler) {
+    return internalAddHandler(element, "change", handler, attachHandlerToElement);
+  }
+  
+  public static HandlerRegistration addHandler(Element element, String eventName, boolean attachHandlerToElement, final NativeGestureHandler handler) {
+    return internalAddHandler(element, eventName, handler, attachHandlerToElement);
+  }
+  
+  public static HandlerRegistration addHandler(String elementId, String eventName, final NativeGestureHandler handler) {
+    addEventListenerDocImpl(elementId, eventName, new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        handler.on(new NativeGestureEvent((NativeGesture)jso.cast()));
+      }
+    });
+    HandlerRegistration registration = new HandlerRegistration() {
+      public void removeHandler() {
+        
+      }
+    };
+    return registration;
+  }
+  
+  protected static HandlerRegistration internalAddHandler(Element element, String eventName, final NativeGestureHandler handler, boolean attachHandlerToElement) {
     if (attachHandlerToElement) {
       addEventListenerElemImpl(element, eventName, new JSOCallback() {
         public void handle(JavaScriptObject jso) {
@@ -72,7 +94,7 @@ public class TouchEventUtils {
   
   protected static native JavaScriptObject addEventListenerDocImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
+      if (@it.mate.onscommons.client.event.OnsEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });
@@ -94,7 +116,7 @@ public class TouchEventUtils {
   
   protected static native JavaScriptObject addEventListenerElemImpl (Element elem, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
+      if (@it.mate.onscommons.client.event.OnsEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });
