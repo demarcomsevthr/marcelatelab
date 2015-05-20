@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.event;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class NativeGestureEvent extends GwtEvent<NativeGestureHandler> {
@@ -28,6 +29,10 @@ public class NativeGestureEvent extends GwtEvent<NativeGestureHandler> {
 
   public NativeGesture getGesture() {
     return gesture;
+  }
+  
+  public Element getTarget() {
+    return gesture.getTarget();
   }
 
 }

@@ -395,7 +395,7 @@ public class OnsenUi {
     GwtUtils.onAvailable(id, delegate);
   }
 
-  protected static String createUniqueElementId() {
+  public static String createUniqueElementId() {
     uniqueElementId ++;
     return "ons-uid-" + uniqueElementId;
   }
@@ -404,6 +404,11 @@ public class OnsenUi {
     if (element.getId() == null || "".equals(element.getId())) {
       element.setId(OnsenUi.createUniqueElementId());
     }
+  }
+  
+  public static void addTapHandler(String elementId, TapHandler handler) {
+    HasTapHandlerImpl impl = new HasTapHandlerImpl(elementId);
+    impl.addTapHandler(handler);
   }
   
   public static void addTapHandler(Widget widget, TapHandler handler) {
@@ -463,6 +468,15 @@ public class OnsenUi {
   public static void setDoLog(boolean doLog) {
     OnsenUi.doLog = doLog;
     OnsList.setDoLog(doLog);
+  }
+  
+  public static void setFadein(Widget widget) {
+    widget.addStyleName("ons-fadein");
+  }
+  
+  public static void resetFadein(Element element) {
+    TransitionUtils.resetFadeIn(element);
+    element.addClassName("ons-fadein");
   }
   
 }

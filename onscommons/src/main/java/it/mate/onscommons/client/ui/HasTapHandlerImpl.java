@@ -42,6 +42,8 @@ public class HasTapHandlerImpl {
   
   private Element targetElement;
   
+  private String targetElementId = null;
+  
   private static boolean allHandlersDisabled = false;
   
   private static boolean useDocEventListener = false;
@@ -53,6 +55,10 @@ public class HasTapHandlerImpl {
   
   public HasTapHandlerImpl(Element target) {
     this.targetElement = target;
+  }
+  
+  public HasTapHandlerImpl(String elementId) {
+    this.targetElementId = elementId;
   }
   
   private boolean isTargetWidgetChildOfDialog() {
@@ -83,27 +89,27 @@ public class HasTapHandlerImpl {
   }
   
   public HandlerRegistration addTapHandler(final TapHandler handler) {
-    
-//  Element targetElement = ((Widget)targetWidget).getElement();
-    OnsenUi.ensureId(targetElement);
+
+    if (targetElement != null) {
+      OnsenUi.ensureId(targetElement);
+    }
     
     this.tapHandlers.add(handler);
     
     if (jsEventListener == null) {
       
-      // 03/02/2015
-      GwtUtils.onAvailable(targetElement.getId(), new Delegate<Element>() {
+      if (targetElement != null) {
+        targetElementId = targetElement.getId();
+      }
+      
+      GwtUtils.onAvailable(targetElementId, new Delegate<Element>() {
         public void execute(/* final */ Element availableElement) {
-          
-          // 04/02/2015
           boolean isInDialog = isTargetWidgetChildOfDialog();
-          
-          if (isInDialog || useDocEventListener) {
+          if (isInDialog || useDocEventListener || targetElement == null) {
             jsEventListener = addEventListenerDocImpl(availableElement.getId(), EVENT_NAME, onTapCallback(availableElement));
           } else {
             jsEventListener = addEventListenerElemImpl(availableElement, EVENT_NAME, onTapCallback(availableElement));
           }
-          
         }
       });
 
@@ -149,7 +155,7 @@ public class HasTapHandlerImpl {
   protected static native JavaScriptObject addEventListenerDocImpl (String elemId, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
 //    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("FIRED EVENT ON TARGET " + e.target.tagName + " " + e.target.id);
-      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
+      if (@it.mate.onscommons.client.event.OnsEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elemId)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });
@@ -168,7 +174,7 @@ public class HasTapHandlerImpl {
   */
   protected static native JavaScriptObject addEventListenerElemImpl (Element elem, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
-      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
+      if (@it.mate.onscommons.client.event.OnsEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });

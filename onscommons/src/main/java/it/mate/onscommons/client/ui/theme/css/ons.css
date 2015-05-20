@@ -95,3 +95,9 @@ ons-alert-dialog {
   background-color: rgb(255, 255, 255) !important;
   background: rgb(255, 255, 255) !important;
 }
+
+.ons-searchbox:focus {
+  background-color: transparent;
+  border: none;
+}
+

@@ -89,7 +89,6 @@ public class OnsList extends HTMLPanel {
     });
   }
   
-
   /*
   private void internalAdd(final Widget widget) {
     if (availableElement == null) {

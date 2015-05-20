@@ -33,7 +33,7 @@ public class NativeEventUtils {
   protected static native JavaScriptObject addEventListenerElemImpl (Element elem, String eventName, JSOCallback callback) /*-{
     var jsEventListener = $entry(function(e) {
 //    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)("RISED EVENT > TARGET " + e.target.tagName + " " + e.target.id + " " + e.target.innerHTML);
-      if (@it.mate.onscommons.client.event.TouchEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
+      if (@it.mate.onscommons.client.event.OnsEventUtils::isContained(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(e.target, elem.id)) {
         callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
       }
     });

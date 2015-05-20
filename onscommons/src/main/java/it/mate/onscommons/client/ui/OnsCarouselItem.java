@@ -5,7 +5,7 @@ import it.mate.onscommons.client.event.NativeGestureEvent;
 import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
-import it.mate.onscommons.client.event.TouchEventUtils;
+import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -58,7 +58,7 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
 
     if (SUSPEND_TAP_HANDLER_DURING_DRAG_OPERATIONS) {
       if (dragStartHandlerReg == null) {
-        dragStartHandlerReg = TouchEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
+        dragStartHandlerReg = OnsEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
           public void on(NativeGestureEvent event) {
 //          PhgUtils.log("drag start event");
             setLastMovementTime(System.currentTimeMillis());
