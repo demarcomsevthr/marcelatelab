@@ -568,13 +568,17 @@ public class PhgUtils {
   
   public static void setDesktopDebugBorder(int width, int height) {
     if (OsDetectionUtils.isDesktop()) {
-      PhgUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
-      RootPanel.getBodyElement().getStyle().setWidth(width, Unit.PX);
-      RootPanel.getBodyElement().getStyle().setHeight(height, Unit.PX);
-      RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
-      RootPanel.getBodyElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-      RootPanel.getBodyElement().getStyle().setBorderColor("red");
-//    RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
+      String attr = RootPanel.getBodyElement().getAttribute("_debug_body_style");
+      if (attr == null || attr.trim().length() == 0) {
+        PhgUtils.log("SETTING DESKTOP DEBUG BORDER AT " + width + " x " + height);
+        RootPanel.getBodyElement().getStyle().setWidth(width, Unit.PX);
+        RootPanel.getBodyElement().getStyle().setHeight(height, Unit.PX);
+        RootPanel.getBodyElement().getStyle().setBorderWidth(1, Unit.PX);
+        RootPanel.getBodyElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        RootPanel.getBodyElement().getStyle().setBorderColor("red");
+//      RootPanel.getBodyElement().getStyle().setMarginLeft(0.5, Unit.PCT);
+        RootPanel.getBodyElement().setAttribute("_debug_body_style", "true");
+      }
     }
   }
   
