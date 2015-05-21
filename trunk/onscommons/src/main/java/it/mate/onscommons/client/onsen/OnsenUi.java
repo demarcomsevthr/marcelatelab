@@ -12,6 +12,7 @@ import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
+import it.mate.onscommons.client.utils.IOSPatches;
 import it.mate.onscommons.client.utils.TransitionUtils;
 import it.mate.phgcommons.client.place.PlaceControllerWithHistory;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
@@ -88,14 +89,20 @@ public class OnsenUi {
       }
       ensureJQueryDocumentSelector();
       
-      
+
+      // 21/05/2015: serve anche su ios
       // TODO: dovrebbe servire solo per AND 5+
       // verificare se da fastidio su altri device
-      if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("5")) {
+//    if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("5")) {
+      if (!OsDetectionUtils.isDesktop()) {
         setPreventTapHandlerWherScrollerMoves(true);
       }
-
       
+      if (OsDetectionUtils.isIOs()) {
+        PhgUtils.log("APPLYING IOS7 HEADER PATCH");
+        IOSPatches.applyIOS7HeaderBarPatch();
+      }
+     
     }
   }
   

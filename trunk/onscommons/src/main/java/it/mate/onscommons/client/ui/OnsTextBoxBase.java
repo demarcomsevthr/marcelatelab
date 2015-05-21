@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.ValueBoxBase;
 
 public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   
+  private HandlerRegistration onsChangeHandler = null;
+  
   protected OnsTextBoxBase(String type) {
     this(DOM.createInputText(), type, "ons-textbox");
   }
@@ -118,26 +120,8 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
     });
   }
 
-  /*
-  private List<ValueChangeHandler<String>> valueChangeHandlers = new ArrayList<ValueChangeHandler<String>>();
-  */
-  
-  private HandlerRegistration onsChangeHandler = null;
-  
   @Override
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<String> handler) {
-    
-    /*
-    HandlerRegistration registration = new HandlerRegistration() {
-      public void removeHandler() {
-        valueChangeHandlers.remove(handler);
-        if (valueChangeHandlers.size() == 0 && onsChangeHandler != null) {
-          onsChangeHandler.removeHandler();
-        }
-      }
-    };
-    */
-    
     if (onsChangeHandler == null) {
       OnsenUi.onAvailableElement(this, new Delegate<Element>() {
         public void execute(Element element) {
@@ -152,7 +136,6 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
         }
       });
     }
-    
     return super.addValueChangeHandler(handler);
   }
   
