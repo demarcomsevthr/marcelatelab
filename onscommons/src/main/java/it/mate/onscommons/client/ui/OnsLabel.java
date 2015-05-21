@@ -1,13 +1,18 @@
 package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.onscommons.client.event.HasTapHandler;
+import it.mate.onscommons.client.event.TapHandler;
 import it.mate.onscommons.client.onsen.OnsenUi;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Label;
 
-public class OnsLabel extends Label {
+public class OnsLabel extends Label implements HasTapHandler {
 
+  private HasTapHandlerImpl hasTapHandlerImpl;
+  
   public OnsLabel() {
     this("");
   }
@@ -16,6 +21,7 @@ public class OnsLabel extends Label {
     super(text);
     OnsenUi.ensureId(getElement());
     addStyleName("ons-label");
+    hasTapHandlerImpl = new HasTapHandlerImpl(this);
   }
   
   @Override
@@ -25,18 +31,6 @@ public class OnsLabel extends Label {
         element.setInnerText(text);
       }
     });
-    /*
-    String id = getElement().getId();
-    if (id != null && !"".equals(id.trim())) {
-      GwtUtils.onAvailable(id, new Delegate<Element>() {
-        public void execute(Element element) {
-          element.setInnerText(text);
-        }
-      });
-    } else {
-      super.setText(text);
-    }
-    */
   }
   
   public void setHtml(final String html) {
@@ -47,4 +41,8 @@ public class OnsLabel extends Label {
     });
   }
 
+  public HandlerRegistration addTapHandler(final TapHandler handler) {
+    return hasTapHandlerImpl.addTapHandler(handler);
+  }
+  
 }
