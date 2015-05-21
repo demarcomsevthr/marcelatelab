@@ -195,7 +195,13 @@ public class OnsDialogUtils {
     return createDialog(html, false);
   }
   public static OnsDialog createDialog(String html, boolean cancelable) {
-    return createDialog(new HTML(html), cancelable);
+    return createDialog(html, cancelable, null);
+  }
+  public static OnsDialog createDialog(String html, boolean cancelable, String animation) {
+    return createDialog(html, cancelable, animation, null);
+  }
+  public static OnsDialog createDialog(String html, boolean cancelable, String animation, String stylename) {
+    return createDialog(new HTML(html), cancelable, animation, stylename);
   }
   public static OnsDialog createDialog(Widget widget) {
     return createDialog(widget, false);

@@ -14,6 +14,9 @@ public class OnsDateBox extends OnsTextBox {
   
   public Date getValueAsDate() {
     String text = getText();
+    if (text == null || text.trim().length() == 0) {
+      return null;
+    }
     Date result = GwtUtils.stringToDate(text, "yyyy-MM-dd");
     return result;
   }
