@@ -26,19 +26,27 @@ public class OnsLabel extends Label implements HasTapHandler {
   
   @Override
   public void setText(final String text) {
-    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setInnerText(text);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setInnerText(text);
+    } else {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setInnerText(text);
+        }
+      });
+    }
   }
   
   public void setHtml(final String html) {
-    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setInnerHTML(html);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setInnerHTML(html);
+    } else {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setInnerHTML(html);
+        }
+      });
+    }
   }
 
   public HandlerRegistration addTapHandler(final TapHandler handler) {

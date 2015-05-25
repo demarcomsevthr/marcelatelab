@@ -1,5 +1,17 @@
     ------------------------------------------------------------------------------------------------
     
+	[25/05/2015]
+	
+	>> spin icons issue
+	
+	>> ho provate a mettere font awesome ver. 4.3.0 (attenzione!)
+	>> ho modificato un pò il css .ons-toolbar-button-waiting-icon (/onscommons/src/main/java/it/mate/onscommons/client/ui/theme/css/ons.css)
+	>> backup fa: /onscommons/src/main/java/it/mate/onscommons/public/js/onsen/css/font_awesome-4.1.0
+	   (da escludere nel clientcode.xml)
+	
+
+    ------------------------------------------------------------------------------------------------
+    
 	[20/05/2015]
 
 	it.mate.onscommons.client.ui.HasTapHandlerImpl.HasTapHandlerImpl(String)

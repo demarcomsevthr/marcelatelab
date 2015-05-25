@@ -22,12 +22,16 @@ public class OnsButton extends OnsButtonBase {
   }
 
   public void setIconWhenAvailable(final String icon) {
-    OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
-      public void execute(Element element) {
-        setIcon(element, icon);
-        OnsenUi.compileElement(element);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      setIconDirect(icon);
+    } else {
+      OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
+        public void execute(Element element) {
+          setIcon(element, icon);
+          OnsenUi.compileElement(element);
+        }
+      });
+    }
   }
   
   public void setIconDirect(String icon) {
@@ -37,7 +41,6 @@ public class OnsButton extends OnsButtonBase {
 
   private void setIcon(Element element, String icon) {
     String iconHtml = "<ons-icon icon='"+icon+"' size='24px'/>";
-    //String iconHtml = "<ons-icon icon='"+icon+"' size='1x'></ons-icon>";
     String innerHtml = element.getInnerHTML();
     innerHtml = iconHtml + innerHtml;
     element.setInnerHTML(innerHtml);

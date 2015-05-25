@@ -76,16 +76,6 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
         OnsenUi.compileElement(element);
       }
     });
-    /* PREV VERSION:
-    String id = getElement().getId();
-    Element elem = getElementByIdImpl(id);
-    GwtUtils.onAvailable(id, new Delegate<Element>() {
-      public void execute(Element elem) {
-        elem.setPropertyString("value", text);
-        OnsenUi.compileElement(elem);
-      }
-    });
-    */
   }
 
   protected static native Element getElementByIdImpl(String elementId) /*-{

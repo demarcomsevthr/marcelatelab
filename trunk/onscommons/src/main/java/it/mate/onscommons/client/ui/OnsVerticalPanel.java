@@ -24,6 +24,11 @@ public class OnsVerticalPanel extends VerticalPanel {
     OnsenUi.ensureId(getElement());
   }
   
+  /**
+   * NOTA BENE:
+      la setAddDirect da uibinder non funziona (la chiama dopo la add!)
+      occorre utilizzare OnsVerticalPanelDirect
+   */
   public void setAddDirect(boolean addDirect) {
     this.addDirect = addDirect;
   }

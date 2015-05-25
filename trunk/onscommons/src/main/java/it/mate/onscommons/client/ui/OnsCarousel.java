@@ -70,27 +70,18 @@ public class OnsCarousel extends HTMLPanel {
         if (widget instanceof OnsCarouselItem) {
           
           OnsCarouselItem item = (OnsCarouselItem)widget;
-          
-//        PhgUtils.log("ADDING ITEM -- " + item.getElement().getId() + " -- " + item);
-          
           items.add(item);
 
-          // 03/02/2015
           if (items.size() == 1) {
             GwtUtils.onAvailable(item.getElement().getId(), new Delegate<Element>() {
               public void execute(Element itemElem) {
-                
-//              OnsenUi.compileElement(itemElem);
-
                 GwtUtils.addMoveHandler(itemElem, new MoveHandler() {
                   public void onMove(Element element, int top, int left) {
-//                  PhgUtils.log("moving element to " + top + " " + left);
                     for (OnsCarouselItem item : items) {
                       item.setLastMovementTime(System.currentTimeMillis());
                     }
                   }
                 });
-                
               }
             });
           }
