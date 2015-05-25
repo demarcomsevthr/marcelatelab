@@ -18,6 +18,10 @@ import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -49,6 +53,8 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   
   OrderItem orderItem;
   
+  List<OnsListItem> buttonItems = new ArrayList<>();
+  
   public OrderItemEditView() {
     initUI();
   }
@@ -66,11 +72,15 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   
   private void addBtn(String text, TapHandler handler) {
     OnsListItem listItem = new OnsListItem();
+    listItem.addStyleName("ons-fadein");
     OnsButton btn = new OnsButton();
-    btn.setTextWhenAvailable(text);
+//  btn.setTextWhenAvailable(text);
+    btn.setTextDirect(text);
     btn.addTapHandler(handler);
+    btn.addStyleName("ons-fadein");
     listItem.add(btn);
-    list.add(listItem);
+//  list.add(listItem);
+    buttonItems.add(listItem);
   }
   
   private void addBtnCompose(String text) {
@@ -120,51 +130,66 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   @Override
   public void setModel(Object model, String tag) {
     
-    OnsenUi.suspendCompilations();
-    
     if (model instanceof OrderItem) {
       this.orderItem = (OrderItem)model;
       
       PhgUtils.log("ORDER ITEM EDIT VIEW --> " + this.orderItem);
       
-      if (!orderItem.isInCart()) {
-        addBtnCompose("Componi il timbro");
-      } else {
-        addBtnCompose("Modifica il timbro");
-      }
+      OnsenUi.suspendCompilations();
       
-      if (orderItem.getMessages() == null || orderItem.getMessages().size() == 0) {
-        addBtnMessages("Aggiungi un messaggio");
-      } else {
-        addBtnMessages("Visualizza messaggi");
-      }
-      
-      addBtnImage("Aggiungi un'immagine");
-      
-      if (!orderItem.isInCart()) {
-        /*
-        if (orderItem.getRows().size() > 0) {
-          addBtnCart("Aggiungi al carrello");
+      createButtons();
+      iterateButtonsForRendering(buttonItems.iterator(), new Delegate<Void>() {
+        public void execute(Void element) {
+          composePreviewPanel(new Delegate<Void>() {
+            public void execute(Void element) {
+              OnsenUi.refreshCurrentPage();
+            }
+          });
         }
-        */
-        addBtnCart("Aggiungi al carrello");
-      } else {
-        if (orderItem.getRemoteId() == null) {
-          addBtnBack("Torna al carrello");
-        } else {
-          addBtnBack("Indietro");
-        }
-      }
-      
-      composePreviewPanel();
+      });
       
     }
     
-    OnsenUi.refreshCurrentPage();
     
   }
   
-  private void composePreviewPanel() {
+  private void createButtons() {
+    if (!orderItem.isInCart()) {
+      addBtnCompose("Componi il timbro");
+    } else {
+      addBtnCompose("Modifica il timbro");
+    }
+    if (orderItem.getMessages() == null || orderItem.getMessages().size() == 0) {
+      addBtnMessages("Aggiungi un messaggio");
+    } else {
+      addBtnMessages("Visualizza messaggi");
+    }
+    addBtnImage("Aggiungi un'immagine");
+    if (!orderItem.isInCart()) {
+      addBtnCart("Aggiungi al carrello");
+    } else {
+      if (orderItem.getRemoteId() == null) {
+        addBtnBack("Torna al carrello");
+      } else {
+        addBtnBack("Indietro");
+      }
+    }
+  }
+  
+  private void iterateButtonsForRendering(final Iterator<OnsListItem> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      OnsListItem item = it.next();
+      list.add(item, new Delegate<Element>() {
+        public void execute(Element element) {
+          iterateButtonsForRendering(it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
+  }
+  
+  private void composePreviewPanel(final Delegate<Void> delegate) {
     String previewId = previewPanel.getElement().getId();
     GwtUtils.onAvailable(previewId, new Delegate<Element>() {
       public void execute(Element previewElement) {
@@ -199,6 +224,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
         lbNome.setText(timbro.getNome());
         lbDimensioni.setText("" + timbro.getWidth() + " x " + timbro.getHeight());
         
+        delegate.execute(null);
         
       }
     });

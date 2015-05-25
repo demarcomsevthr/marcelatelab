@@ -12,9 +12,9 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
-import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsButton;
 import it.mate.onscommons.client.ui.OnsDialog;
@@ -26,6 +26,7 @@ import it.mate.onscommons.client.ui.OnsTextBox;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -102,23 +103,44 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       if (item.getRows().size() == 0) {
         item.getRows().add(new OrderItemRowTx(""));
       }
+      List<OnsListItem> listItems = new ArrayList<>();
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
-        rowsPanel.add(createRowItem(row));
+        listItems.add(createRowItem(row));
+//      rowsPanel.add(createRowItem(row));
       }
+      iterateListItemsForRendering(listItems.iterator(), new Delegate<Void>() {
+        public void execute(Void element) {
+          rowsPanel.add(createLastRowItem());
+        }
+      });
     } else {
       // FOR DEBUG
       item = new OrderItemTx(null);
       OrderItemRow row = new OrderItemRowTx("");
       item.getRows().add(row);
       rowsPanel.add(createRowItem(row));
+      rowsPanel.add(createLastRowItem());
     }
-    rowsPanel.add(createLastRowItem());
+  }
+  
+  private void iterateListItemsForRendering(final Iterator<OnsListItem> it, final Delegate<Void> delegate) {
+    if (it.hasNext()) {
+      OnsListItem listItem = it.next();
+      rowsPanel.add(listItem, new Delegate<Element>() {
+        public void execute(Element element) {
+          iterateListItemsForRendering(it, delegate);
+        }
+      });
+    } else {
+      delegate.execute(null);
+    }
   }
   
   private OnsListItem createRowItem(OrderItemRow row) {
     final int index = textboxes.size();
     OnsHorizontalPanel rowpanel = new OnsHorizontalPanel();
+    rowpanel.setAddDirect(true);
     rowpanel.setWidth("100%");
     OnsTextBox textbox = new OnsTextBox();
     textbox.addStyleName("app-edit-text");
@@ -136,7 +158,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     rowpanel.add(textbox);
     final OnsButton controlBtn = new OnsButton();
     controlBtn.addStyleName("app-edit-btn-cfg");
-    controlBtn.setIcon("fa-bars");
+    controlBtn.setIconWhenAvailable("fa-bars");
     controlBtn.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         switchControlbar(GwtUtils.getElement(controlBtn), index);
@@ -156,7 +178,7 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     final OnsButton addBtn = new OnsButton();
     addBtn.addStyleName("app-edit-btn-cfg");
     addBtn.setIcon("fa-plus-square");
-    addBtn.setText("add");
+    addBtn.setText("");
     addBtn.addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
         OrderItemRow row = new OrderItemRowTx("");

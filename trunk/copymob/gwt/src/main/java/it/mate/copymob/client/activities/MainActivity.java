@@ -564,7 +564,13 @@ public class MainActivity extends OnsAbstractActivity implements
   public void resetDB() {
     dao.dropDB(new Delegate<Void>() {
       public void execute(Void element) {
-        PhgUtils.reloadApp();
+        PhgUtils.log("Drop finished, realoading app");
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            PhgUtils.reloadAppHome();
+          }
+        });
+//      PhgUtils.reloadApp();
       }
     });
   }
