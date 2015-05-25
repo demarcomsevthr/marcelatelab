@@ -21,6 +21,8 @@ public class OnsList extends HTMLPanel {
   
   private Element availableElement = null;
   
+  private int addRequestsNumber = 0;
+  
   public OnsList() {
     this(TAG_NAME, "");
   }
@@ -39,35 +41,32 @@ public class OnsList extends HTMLPanel {
   public void add(final Widget widget) {
     super.add(widget, getElement());
     
-    String id = getElement().getId();
-    GwtUtils.onAvailable(id, new Delegate<Element>() {
-      public void execute(Element listElem) {
-        listElement = listElem;
-        Element itemElem = widget.getElement();
-        if (doLog) PhgUtils.log("Adding to OnsList element " + itemElem);
-        listElem.appendChild(itemElem);
-        OnsenUi.compileElement(listElem);
-        OnsenUi.compileElement(itemElem);
-      }
-    });
-    
-    /*
-    Element listElem = DOM.getElementById(id);
-    Element itemElem = widget.getElement();
-    listElem.appendChild(itemElem);
-    OnsenUi.compileElement(listElem);
-    */
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      listElement = getElement();
+      Element itemElem = widget.getElement();
+      OnsenUi.appendInnerHtml(getElement(), OnsenUi.getPlainHtml(itemElem));
+    } else {
+      String id = getElement().getId();
+      GwtUtils.onAvailable(id, new Delegate<Element>() {
+        public void execute(Element listElem) {
+          listElement = listElem;
+          Element itemElem = widget.getElement();
+          if (doLog) PhgUtils.log("Adding to OnsList element " + itemElem);
+          listElem.appendChild(itemElem);
+          OnsenUi.compileElement(listElem);
+          OnsenUi.compileElement(itemElem);
+        }
+      });
+    }
     
   }
   
-  
-  private int numberAddRequest = 0;
   
   public void add(final Widget widget, final Delegate<Element> delegate) {
     if (widget == null) {
       return;
     }
-    numberAddRequest ++;
+    addRequestsNumber ++;
     super.add(widget, getElement());
     OnsenUi.onAvailableElement(this, new Delegate<Element>() {
       public void execute(Element listElement) {
@@ -79,8 +78,8 @@ public class OnsList extends HTMLPanel {
         OnsenUi.compileElement(itemElem);
         GwtUtils.deferredExecution(100, new Delegate<Void>() {
           public void execute(Void element) {
-            numberAddRequest --;
-            if (delegate != null && numberAddRequest <= 0) {
+            addRequestsNumber --;
+            if (delegate != null && addRequestsNumber <= 0) {
               delegate.execute(OnsList.this.listElement);
             }
           }
@@ -88,26 +87,6 @@ public class OnsList extends HTMLPanel {
       }
     });
   }
-  
-  /*
-  private void internalAdd(final Widget widget) {
-    if (availableElement == null) {
-      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
-        public void execute(Element element) {
-          OnsList.this.availableElement = element;
-          internalAdd(widget);
-        }
-      });
-    } else {
-      listElement = availableElement;
-      Element itemElem = widget.getElement();
-      if (doLog) PhgUtils.log("Adding to OnsList element " + itemElem);
-      listElement.appendChild(itemElem);
-      OnsenUi.compileElement(listElement);
-      OnsenUi.compileElement(itemElem);
-    }
-  }
-  */
   
   public void insert(final Widget widget, final int beforeIndex) {
     String id = getElement().getId();

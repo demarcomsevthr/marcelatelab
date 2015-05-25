@@ -41,22 +41,30 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   protected static void addElementText(Element widgetElement, String text) {
-    Element attachedElement = GwtUtils.getElementById(widgetElement.getId());
-    if (attachedElement == null) {
-      String innerHtml = widgetElement.getInnerHTML();
-      innerHtml = innerHtml + text;
-      widgetElement.setInnerHTML(innerHtml);
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      OnsenUi.appendInnerHtml(widgetElement, text);
     } else {
-      attachedElement.setInnerHTML(text);
+      Element attachedElement = GwtUtils.getElementById(widgetElement.getId());
+      if (attachedElement == null) {
+        String innerHtml = widgetElement.getInnerHTML();
+        innerHtml = innerHtml + text;
+        widgetElement.setInnerHTML(innerHtml);
+      } else {
+        attachedElement.setInnerHTML(text);
+      }
     }
   }
   
   public void setTextWhenAvailable(final String text) {
-    OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setInnerText(text);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setInnerText(text);
+    } else {
+      OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setInnerText(text);
+        }
+      });
+    }
   }
   
   public String getText() {
@@ -68,19 +76,27 @@ public abstract class OnsButtonBase extends Widget implements HasTapHandler {
   }
   
   public void setDisabled(boolean disabled) {
-    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setAttribute("disabled", "");
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setAttribute("disabled", "");
+    } else {
+      OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setAttribute("disabled", "");
+        }
+      });
+    }
   }
   
   public void setModifier(final String modifier) {
-    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setAttribute("modifier", modifier);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setAttribute("modifier", modifier);
+    } else {
+      OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setAttribute("modifier", modifier);
+        }
+      });
+    }
   }
   
   public void setExcludeFromPageRefresh(String excludeFromPageRefresh) {

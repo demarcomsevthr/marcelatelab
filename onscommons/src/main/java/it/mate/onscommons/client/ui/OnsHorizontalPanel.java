@@ -3,7 +3,6 @@ package it.mate.onscommons.client.ui;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -25,6 +24,11 @@ public class OnsHorizontalPanel extends HorizontalPanel {
     OnsenUi.ensureId(getElement());
   }
   
+  /**
+   * NOTA BENE:
+      la setAddDirect da uibinder non funziona (la chiama dopo la add!)
+      occorre utilizzare OnsHorizontalPanelDirect
+   */
   public void setAddDirect(boolean addDirect) {
     this.addDirect = addDirect;
     actualTableElement = getElement();
@@ -36,7 +40,7 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   
   @Override
   public void add(final Widget w) {
-    if (addDirect || actualTableElement != null) {
+    if (addDirect || actualTableElement != null || OnsenUi.isAddDirectWithPlainHtml()) {
       OnsHorizontalPanel.this.internalAdd(w);
     } else {
       GwtUtils.onAvailable(getElement().getId(), new Delegate<com.google.gwt.dom.client.Element>() {
@@ -54,20 +58,30 @@ public class OnsHorizontalPanel extends HorizontalPanel {
     /** DEVO RIPETERE QUELLO CHE FA IL PARENT **/
     Element td = createAlignedTd();
     DOM.appendChild(getActualTableRow(), td);
-    DOM.appendChild(td, w.getElement());
     
-    String childId = w.getElement().getId();
-    if (childId != null && !"".equals(childId)) {
-      GwtUtils.onAvailable(childId, new Delegate<com.google.gwt.dom.client.Element>() {
-        public void execute(com.google.gwt.dom.client.Element element) {
-          OnsenUi.compileElement(element);
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      
+      td.setInnerHTML(OnsenUi.getPlainHtml(w.getElement()));
+      
+    } else {
+      
+      DOM.appendChild(td, w.getElement());
+      
+      if (addDirect) {
+//      OnsenUi.compileElement(w.getElement());
+      } else {
+        String childId = w.getElement().getId();
+        if (childId != null && !"".equals(childId)) {
+          GwtUtils.onAvailable(childId, new Delegate<com.google.gwt.dom.client.Element>() {
+            public void execute(com.google.gwt.dom.client.Element element) {
+              OnsenUi.compileElement(element);
+            }
+          });
         }
-      });
-    }
-    GwtUtils.deferredExecution(new Delegate<Void>() {
-      public void execute(Void element) {
       }
-    });
+    }
+
+    
   }
   
   private Element getActualTableRow() {
@@ -85,11 +99,15 @@ public class OnsHorizontalPanel extends HorizontalPanel {
   
   @Override
   public void setWidth(final String width) {
-    GwtUtils.onAvailable(getElement().getId(), new Delegate<com.google.gwt.dom.client.Element>() {
-      public void execute(com.google.gwt.dom.client.Element containerElement) {
-        GwtUtils.setJsPropertyString(containerElement.getStyle(), "width", width) ;
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      GwtUtils.setJsPropertyString(getElement().getStyle(), "width", width) ;
+    } else {
+      GwtUtils.onAvailable(getElement().getId(), new Delegate<com.google.gwt.dom.client.Element>() {
+        public void execute(com.google.gwt.dom.client.Element containerElement) {
+          GwtUtils.setJsPropertyString(containerElement.getStyle(), "width", width) ;
+        }
+      });
+    }
   }
   
   public void setHorizontalAlignment(HorizontalAlignmentConstant align) {

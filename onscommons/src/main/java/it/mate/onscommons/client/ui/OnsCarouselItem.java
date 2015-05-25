@@ -60,7 +60,6 @@ public class OnsCarouselItem extends HTMLPanel implements HasTapHandler, HasMode
       if (dragStartHandlerReg == null) {
         dragStartHandlerReg = OnsEventUtils.addDragStartHandler(getElement(), new NativeGestureHandler() {
           public void on(NativeGestureEvent event) {
-//          PhgUtils.log("drag start event");
             setLastMovementTime(System.currentTimeMillis());
           }
         });

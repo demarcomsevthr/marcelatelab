@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.place.shared.Place;
@@ -80,6 +81,8 @@ public class OnsenUi {
   
   public static final String EXCLUDE_FROM_PAGE_REFRESH_ATTR = "excludeFromPageRefresh";
   
+  private static boolean addDirectWithPlainHtml = false;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -89,10 +92,8 @@ public class OnsenUi {
       }
       ensureJQueryDocumentSelector();
       
-
+      // dovrebbe servire solo per AND 5+
       // 21/05/2015: serve anche su ios
-      // TODO: dovrebbe servire solo per AND 5+
-      // verificare se da fastidio su altri device
 //    if (OsDetectionUtils.isAndroid() && PhgUtils.getDeviceVersion().startsWith("5")) {
       if (!OsDetectionUtils.isDesktop()) {
         setPreventTapHandlerWherScrollerMoves(true);
@@ -225,7 +226,6 @@ public class OnsenUi {
         if (doLog) PhgUtils.log("LAST CREATED PAGE ID = " + OnsPage.getLastCreatedPage().getElement().getId());
 
         // 18/05/2015
-//      String actualCurrentPageId = OnsPage.getLastCreatedPage().getElement().getId();
         String actualCurrentPageId = currentPageId;
         
         PhgUtils.log("FINDING PAGE WITH ID " + actualCurrentPageId);
@@ -235,13 +235,9 @@ public class OnsenUi {
             
             resumeCompilations();
             
-            //TODO: [13/05/2015]
-            //TODO: ATTENZIONE
-            //TODO: ATTENZIONE
-            //TODO: ATTENZIONE
-            //TODO: 
-            //TODO: INTRODOTTA LA SEGUENTE OTTIMIZZAZIONE:
-            //TODO:     PRIMA DI RICOMPILARE LA PAGE RIMUOVO LA TOOLBAR E LA REINSERISCO DOPO LA COMPILAZIONE (!!!)
+            // [13/05/2015]
+            // INTRODOTTA LA SEGUENTE OTTIMIZZAZIONE:
+            // PRIMA DI RICOMPILARE LA PAGE RIMUOVO LA TOOLBAR E LA REINSERISCO DOPO LA COMPILAZIONE (!!!)
             
             if (doLog) PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             
@@ -377,8 +373,7 @@ public class OnsenUi {
   }-*/;
 
   /**
-   * 
-   * DA UTILIZZARE NEI METODI SET DEI WIDGET ONS
+   * METODI DA UTILIZZARE NEI METODI SET DEI WIDGET ONS
    * 
    */
   public static void onAttachedElement(Widget widget, Delegate<Element> delegate) {
@@ -486,4 +481,87 @@ public class OnsenUi {
     element.addClassName("ons-fadein");
   }
   
+
+  /**
+   * 
+   * TODO
+   * 
+   * 25/05/2015
+   * 
+   * TORNO INDIETRO PERCHE' NON DOVREBBE FUNZIONARE
+   * 
+   * Quando viene eseguita la ons.compile l'element viene staccato e riattaccato al dom (credo?) quindi tutti gli element reference nei widget vengono tutti invalidati
+   * (questo e' il motivo percui funzionano le varie onavailable...)
+   * 
+   * 
+   */
+  public static boolean isAddDirectWithPlainHtml() {
+    return false;
+  }
+  
+  /*
+  public static void setAddDirectWithPlainHtml(boolean addDirectWithPlainHtml) {
+    OnsenUi.addDirectWithPlainHtml = addDirectWithPlainHtml;
+  }
+  
+  public static boolean isAddDirectWithPlainHtml() {
+    return addDirectWithPlainHtml;
+  }
+   */
+  
+  public static String getPlainHtml(Element element) {
+    String html = "";
+    
+    html += "<" + element.getNodeName().toLowerCase();
+    
+    boolean foundId = false;
+    
+    JsArrayString atts = getAttributeNames(element);
+    for (int it = 0; it < atts.length(); it++) {
+      String name = atts.get(it);
+      String value = element.getAttribute(name);
+      html += " " + name + "='" + value + "'";
+      if ("id".equalsIgnoreCase(name)) {
+        foundId = true;
+      }
+    }
+    
+    if (!foundId) {
+      String id = element.getId();
+      if (id != null && id.trim().length() > 0) {
+        html += " id='" + id + "'";
+      }
+    }
+    
+    html += ">";
+    
+    String innerHtml = element.getInnerHTML();
+    if (innerHtml != null && innerHtml.trim().length() > 0) {
+      html += innerHtml;
+    } else {
+      String innerText = element.getInnerText();
+      if (innerText != null && innerText.trim().length() > 0) {
+        html += innerText;
+      }
+    }
+    
+    html += "</" + element.getNodeName().toLowerCase();
+    html += ">";
+    
+    return html;
+  }
+  
+  private static native JsArrayString getAttributeNames(Element elem) /*-{
+    for (var i = 0, atts = elem.attributes, n = atts.length, res = []; i < n; i++){
+      res.push(atts[i].nodeName);
+    }
+    return res;
+  }-*/;
+  
+  public static void appendInnerHtml(Element element, String newHtml) {
+    String innerHtml = element.getInnerHTML();
+    innerHtml = innerHtml + newHtml;
+    element.setInnerHTML(innerHtml);
+  }
+
 }

@@ -57,11 +57,26 @@
 }
 
 .ons-toolbar-button-waiting-icon {
+  /*
   width: 23px;
   height: 23px;
   padding-top: 2px;
   padding-right: 3.5px;
-  /* color: white !important; */
+  */
+
+  /*  
+  width: 24px;
+  height: 23.5px;
+  padding-right: 3.5px;
+  padding-top: 4px;
+  font-size: 1.2em;
+  */
+  
+  width: 1em;
+  height: 1em;
+  font-size: 1.6em;
+  -webkit-transform-origin: 50% 50%;
+  
 }
 
 .ons-bottom-dialog .dialog {
