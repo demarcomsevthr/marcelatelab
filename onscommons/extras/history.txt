@@ -2,6 +2,14 @@
     
 	[25/05/2015]
 	
+	it.mate.onscommons.client.onsen.OnsenUi.fadeInCurrentPage()
+	
+	>> se le compilazioni sono sospese anche il fade in va rimandato (capitava prima in OrderItemEditView)
+	
+    ------------------------------------------------------------------------------------------------
+    
+	[25/05/2015]
+	
 	>> spin icons issue
 	
 	>> ho provate a mettere font awesome ver. 4.3.0 (attenzione!)
