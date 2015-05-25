@@ -43,10 +43,29 @@ public class OnsToolbar extends HTMLPanel {
         waitingBtn.setAttribute("disabled", "");
         waitingBtn.setAttribute("var", "_onsToolbarButtonWaiting");
         waitingBtn.getStyle().setOpacity(0);
+
+        
+        /*
         Element waitingIco = DOM.createElement("ons-icon");
         waitingIco.addClassName("ons-toolbar-button-waiting-icon");
         waitingIco.setAttribute("icon", "fa-cog");
         waitingIco.setAttribute("spin", "true");
+        */
+        
+        /*
+        Element waitingIco = DOM.createElement("i");
+        waitingIco.addClassName("fa fa-circle-o-notch fa-spin ons-toolbar-button-waiting-icon");
+//      waitingIco.addClassName("fa fa-cog fa-spin ons-toolbar-button-waiting-icon");
+         */
+        
+        
+        Element waitingIco = DOM.createElement("ons-icon");
+        waitingIco.addClassName("ons-toolbar-button-waiting-icon");
+//      waitingIco.setAttribute("icon", "ion-refresh");
+        waitingIco.setAttribute("icon", "fa-circle-o-notch");
+        waitingIco.setAttribute("spin", "true");
+        
+        
         waitingBtn.appendChild(waitingIco);
         waitingDiv.appendChild(waitingBtn);
         toolbarElement.appendChild(waitingDiv);
