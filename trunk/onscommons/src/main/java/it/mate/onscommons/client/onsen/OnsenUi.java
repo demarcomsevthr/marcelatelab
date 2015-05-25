@@ -228,7 +228,7 @@ public class OnsenUi {
         // 18/05/2015
         String actualCurrentPageId = currentPageId;
         
-        PhgUtils.log("FINDING PAGE WITH ID " + actualCurrentPageId);
+        if (doLog) PhgUtils.log("FINDING CURRENT PAGE WITH ID " + actualCurrentPageId);
         
         OnsenUi.onAvailableElement(actualCurrentPageId, new Delegate<Element>() {
           public void execute(final Element pageElement) {
@@ -278,6 +278,8 @@ public class OnsenUi {
             });
             
 
+            PhgUtils.log("REFRESHING CURRENT PAGE WITH ID " + pageElement.getId());
+            
             if (doLog) PhgUtils.log("COMPILING PAGE ELEMENT " + pageElement);
             compileElementImpl(pageElement);
             
@@ -296,6 +298,10 @@ public class OnsenUi {
   }
   
   public static void fadeInCurrentPage() {
+    // 25/05/2015 - se le compilazioni sono sospese anche il fade in va rimandato (capitava prima in OrderItemEditView)
+    if (compilationSuspended) {
+      return;
+    }
     JavaScriptObject results = queryElements(".ons-fadein");
     if (results != null) {
       JsArray<Element> elements = results.cast();
@@ -403,6 +409,9 @@ public class OnsenUi {
   }
 
   public static void ensureId(Element element) {
+    if (element == null) {
+      return;
+    }
     if (element.getId() == null || "".equals(element.getId())) {
       element.setId(OnsenUi.createUniqueElementId());
     }

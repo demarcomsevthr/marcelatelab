@@ -49,11 +49,15 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler, HasModel {
   }
   
   public void setModifier(final String modifier) {
-    OnsenUi.onAttachedElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        element.setAttribute("modifier", modifier);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      getElement().setAttribute("modifier", modifier);
+    } else {
+      OnsenUi.onAttachedElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setAttribute("modifier", modifier);
+        }
+      });
+    }
   }
   
   public void setValue(String value) {
@@ -70,11 +74,15 @@ public class OnsListItem extends HTMLPanel implements HasTapHandler, HasModel {
   }
   
   public void setVisible(final boolean visible) {
-    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        setVisible(element, visible);
-      }
-    });
+    if (OnsenUi.isAddDirectWithPlainHtml()) {
+      setVisible(getElement(), visible);
+    } else {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          setVisible(element, visible);
+        }
+      });
+    }
   }
   
 }
