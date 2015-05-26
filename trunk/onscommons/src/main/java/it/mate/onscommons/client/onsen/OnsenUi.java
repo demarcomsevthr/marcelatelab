@@ -302,7 +302,7 @@ public class OnsenUi {
     if (compilationSuspended) {
       return;
     }
-    JavaScriptObject results = queryElements(".ons-fadein");
+    JavaScriptObject results = queryElementsImpl(".ons-fadein");
     if (results != null) {
       JsArray<Element> elements = results.cast();
       for (int it = 0; it < elements.length(); it++) {
@@ -331,7 +331,20 @@ public class OnsenUi {
     @it.mate.onscommons.client.onsen.OnsenUi::jQueryDocumentSelector.on('ons-page:init', '#'+elementId, jsCallback);
   }-*/;
     
-  protected static native JavaScriptObject queryElements(String query) /*-{
+  public static List<Element> queryElements(String query) {
+    List<Element> results = new ArrayList<Element>();
+    JavaScriptObject jsResults = queryElementsImpl(".ons-fadein");
+    if (jsResults != null) {
+      JsArray<Element> elements = jsResults.cast();
+      for (int it = 0; it < elements.length(); it++) {
+        Element element = elements.get(it);
+        results.add(element);
+      }
+    }
+    return results;
+  }
+  
+  protected static native JavaScriptObject queryElementsImpl(String query) /*-{
     return $wnd.$(query);
   }-*/;
 
