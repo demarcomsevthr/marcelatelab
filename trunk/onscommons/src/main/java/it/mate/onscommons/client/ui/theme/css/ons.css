@@ -1,12 +1,26 @@
 
-@external ons*, gwt*, navigation*, span, dialog;
+@external ons*, gwt*, navigation*, span, dialog*, list*;
+
+@def TOOLBAR_COLOR rgb(255, 255, 255);
+
+@def TOOLBAR_BACKGROUND rgb(22, 122, 198);
+
+
+ons-toolbar, .navigation-bar {
+  background-color: TOOLBAR_BACKGROUND;
+  background: TOOLBAR_BACKGROUND;
+}
+
+ons-toolbar *, .ons-toolbar .navigation-bar__title {
+  color: TOOLBAR_COLOR;
+}
 
 .ons-toolbar .navigation-bar__title {
   font-weight: 800;
   line-height: 44px;
   text-transform: uppercase;
-  color: rgb(50, 58, 69);
   font-family: 'Helvetica Neue','Segoe UI',Helvetica,Verdana,san-serif;
+  margin-top: -2px;
 }
 
 .ons-toolbar .navigation-bar__title {
@@ -42,6 +56,7 @@
   
   margin-bottom: 0.6%;
   
+  padding-bottom: 0.2em;
 }
 
 .ons-button .ons-icon {
@@ -122,5 +137,9 @@ ons-alert-dialog {
 .ons-searchbox:focus {
   background-color: transparent;
   border: none;
+}
+
+.list__item--chevron:active {
+  background-color: rgb(232, 242, 254);
 }
 
