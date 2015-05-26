@@ -73,11 +73,10 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   }
   
   private void initDisplay(Panel modulePanel) {
-    
-    GwtUtils.setEnableLogInProductionMode(true);
+
+    initLog();
     
     GwtUtils.setMobileOptimizations(true);
-    GwtUtils.setEnableLogInProductionMode(true);
     
     DefaultTheme.Impl.get().css().ensureInjected();
     
@@ -96,6 +95,23 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
   
   }
 
+  private void initLog() {
+    // ATTENZIONE: il log in production mode funziona solo dopo questo settaggio
+    GwtUtils.setEnableLogInProductionMode(true);
+    String traceActive = PhgUtils.getLocalStorageItem(AppClientFactory.KEY_TRACE_ACTIVE);
+    if ("true".equals(traceActive)) {
+      PhgUtils.log("***********    TRACE ENABLED   *************");
+      PhgUtils.startTrace();
+    }
+    PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
+    GwtUtils.logEnvironment(getClass(), "onModuleLoad");
+    PhgUtils.logEnvironment();
+    /*
+    PhgUtils.log("AppProperties.extendedVersion = "+AppProperties.IMPL.extendedVersion());
+    PhgUtils.log("AppConstants.versionNumber = "+AppProperties.IMPL.versionNumber());
+    */
+  }
+  
   private void createDisplay() {
     initMvp(null, new MainActivityMapper(this));
   }
@@ -110,6 +126,7 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       if (USE_SLIDE_NAVIGATOR_LAYOUT) {
         LayoutView layoutView = new LayoutView();
         layoutView.setPresenter(new MainActivity(this, new MainPlace()));
+        OnsActivityManagerWithSlidingNavigator.setAllowNavigatorPoping(true);
         new OnsActivityManagerWithSlidingNavigator(activityMapper, getBinderyEventBus(), layoutView) {
           public void onNavigatorInitialized(Navigator navigator) {
             OnsMvpUtils.initMvp(AppClientFactory.IMPL, activityMapper, new MainPlace());
