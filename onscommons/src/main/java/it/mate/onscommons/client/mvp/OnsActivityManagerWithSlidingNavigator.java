@@ -28,9 +28,9 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private static final boolean CLOSE_MENU_AFTER_PUSH = Boolean.parseBoolean( PhgUtils.getLocalStorageItemForDebug("debug.OnsActivityManagerWithSlidingNavigator.closeMenuAfterPush", "false") );
   
-  private static boolean defaultAllowPagePoping = false;
+  private static boolean allowNavigatorPoping = true;
   
-  private boolean allowPagePoping = defaultAllowPagePoping;
+  private boolean allowPagePoping = allowNavigatorPoping;
   
   private boolean navigatorInitialized = false;
   
@@ -221,7 +221,7 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
           checkAutoRefreshHome(event, null);
           
           if (allowPagePoping) {
-            allowPagePoping = defaultAllowPagePoping;
+            allowPagePoping = allowNavigatorPoping;
             PhgUtils.log("CONTINUE POPING");
             navigator.log("BEFORE POPING");
             lastProcessedPlace = null;
@@ -316,8 +316,8 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     });
   }
   
-  public static void setDefaultAllowPagePoping(boolean defaultAllowPagePoping) {
-    OnsActivityManagerWithSlidingNavigator.defaultAllowPagePoping = defaultAllowPagePoping;
+  public static void setAllowNavigatorPoping(boolean allowNavigatorPoping) {
+    OnsActivityManagerWithSlidingNavigator.allowNavigatorPoping = allowNavigatorPoping;
   }
   
   private void checkAutoRefreshHome(NavigatorEvent event, String newPageName) {
