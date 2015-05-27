@@ -42,6 +42,7 @@
 
       <gc:Spacer ui:field="viewfinder" addStyleNames="app-viewfinder" visible="false" width="4px" height="4px"/>
       
+      <!-- 
       <o:OnsDialog ui:field="fontSizeDialog">
         <o:OnsList>
           <o:OnsListItem ui:field="btnFntSize8" value="8"><input type="radio" id="btnFntSize8"/>8 points</o:OnsListItem>
@@ -54,7 +55,9 @@
           </o:OnsListItem>
         </o:OnsList>
       </o:OnsDialog>
+       -->
       
+      <!-- 
       <o:OnsDialog ui:field="fontFamilyDialog">
         <o:OnsList>
           <o:OnsListItem ui:field="btnFntFamGeorgia" value="Georgia, serif"><input type="radio" id="btnFntFamGeorgia"/>Georgia</o:OnsListItem>
@@ -66,6 +69,7 @@
           </o:OnsListItem>
         </o:OnsList>
       </o:OnsDialog>
+       -->
       
     </o:OnsPage>
     

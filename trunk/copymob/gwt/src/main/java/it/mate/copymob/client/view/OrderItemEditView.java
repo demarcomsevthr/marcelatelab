@@ -34,7 +34,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void goToTimbroComposeView(Timbro timbro);
+//  public void goToTimbroComposeView(Timbro timbro);
+    public void goToTimbroComposeView(OrderItem orderItem);
     public void addOrderItemToCart(OrderItem orderItem);
     public void goToMessageListView(OrderItem orderItem);
     public void goToCartListView();
@@ -86,7 +87,8 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
   private void addBtnCompose(String text) {
     addBtn(text, new TapHandler() {
       public void onTap(TapEvent event) {
-        getPresenter().goToTimbroComposeView(orderItem.getTimbro());
+//      getPresenter().goToTimbroComposeView(orderItem.getTimbro());
+        getPresenter().goToTimbroComposeView(orderItem);
       }
     });
   }
@@ -195,6 +197,7 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
       public void execute(Element previewElement) {
         
         Timbro timbro = orderItem.getTimbro();
+        PhgUtils.log("PREVIEW " + timbro);
         
         int left = GwtUtils.getElementOffsetLeft(previewElement);
         int top = GwtUtils.getElementOffsetTop(previewElement);
@@ -216,7 +219,8 @@ public class OrderItemEditView extends AbstractBaseView<Presenter> {
 
         int rowTop = top;
         for (OrderItemRow row : orderItem.getRows()) {
-          Element span = RenderUtils.renderOrderItemAsGwtSpan(row, rowTop, left, 2.0);
+//        Element span = RenderUtils.renderOrderItemAsGwtSpan(row, rowTop, left, 2.0);
+          Element span = RenderUtils.renderOrderItemAsGwtSpan(row, rowTop, left, 4.0);
           rowTop += span.getPropertyInt("height");
           previewElement.appendChild(span);
         }

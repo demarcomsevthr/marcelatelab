@@ -92,6 +92,8 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private static final String GCM_SENDER_ID = "106218079007";
   
+  private static final boolean DO_DEBUG = true;
+  
   
   private static OrderItem selectedOrderItem;
   
@@ -260,7 +262,22 @@ public class MainActivity extends OnsAbstractActivity implements
       if (place.getModel() instanceof OrderItem) {
         view.setModel(place.getModel());
       } else {
-        view.setModel(getSelectedOrderItem());
+        if (getSelectedOrderItem() != null) {
+          view.setModel(getSelectedOrderItem());
+        } else {
+          
+          if (DO_DEBUG) {
+            dao.findOrderInCart(new Delegate<List<Order>>() {
+              public void execute(List<Order> results) {
+                if (results != null && results.size() > 0) {
+                  Order order = results.get(0);
+                  view.setModel(order.getItems().get(0));
+                }
+              }
+            });
+          }
+          
+        }
       }
     }
     if (place.getToken().equals(MainPlace.ORDER_ITEM_IMAGE)) {
@@ -354,9 +371,13 @@ public class MainActivity extends OnsAbstractActivity implements
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_EDIT, orderItem));
   }
 
-  @Override
   public void goToTimbroComposeView(Timbro timbro) {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, timbro));
+  }
+
+  @Override
+  public void goToTimbroComposeView(OrderItem orderItem) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.ORDER_ITEM_COMPOSE, orderItem));
   }
 
   @Override
@@ -432,17 +453,19 @@ public class MainActivity extends OnsAbstractActivity implements
         
         for (OrderItem orderItem : order.getItems()) {
           if (orderItem.getTimbro().getId().equals(timbro.getId())) {
+            
             if (orderItem.getRows() == null || orderItem.getRows().size() == 0) {
               setSelectedOrderItem(orderItem);
               fDelegate.execute(orderItem);
               return;
             }
 
-            // TODO: serve adesso per testarlo, poi va tolto e si va sempre in insert
-            //
-            setSelectedOrderItem(orderItem);
-            fDelegate.execute(orderItem);
-            return;
+            if (DO_DEBUG) {
+              // TODO: serve solo per testarlo, poi va tolto e si va sempre in insert
+              setSelectedOrderItem(orderItem);
+              fDelegate.execute(orderItem);
+              return;
+            }
             
           }
         }

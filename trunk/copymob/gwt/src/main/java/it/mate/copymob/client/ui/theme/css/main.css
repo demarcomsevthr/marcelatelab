@@ -11,6 +11,11 @@
   padding-top: 1em;
 }
 
+.app-home-presentation-panel {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
 .app-home-updates {
   width: 100%;
   text-align: center;

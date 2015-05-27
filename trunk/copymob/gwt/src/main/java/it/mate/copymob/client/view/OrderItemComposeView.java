@@ -12,6 +12,7 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.ObjectWrapper;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
@@ -23,6 +24,7 @@ import it.mate.onscommons.client.ui.OnsList;
 import it.mate.onscommons.client.ui.OnsListItem;
 import it.mate.onscommons.client.ui.OnsScroller;
 import it.mate.onscommons.client.ui.OnsTextBox;
+import it.mate.onscommons.client.utils.OnsDialogUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -57,8 +58,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   @UiField OnsScroller scroller;
   @UiField Panel controlbar;
   @UiField Spacer viewfinder;
-  @UiField OnsDialog fontSizeDialog;
-  @UiField OnsDialog fontFamilyDialog;
+  
+//@UiField OnsDialog fontSizeDialog;
+//@UiField OnsDialog fontFamilyDialog;
   
   private OrderItem item;
   
@@ -107,7 +109,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       for (int it = 0; it < item.getRows().size(); it++) {
         OrderItemRow row = item.getRows().get(it);
         listItems.add(createRowItem(row));
-//      rowsPanel.add(createRowItem(row));
       }
       iterateListItemsForRendering(listItems.iterator(), new Delegate<Void>() {
         public void execute(Void element) {
@@ -145,6 +146,9 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
     OnsTextBox textbox = new OnsTextBox();
     textbox.addStyleName("app-edit-text");
     textbox.setText(row.getText());
+    if (row.getSize() != null && row.getSize() > 0) {
+      textbox.getElement().getStyle().setFontSize(row.getSize() / 10, Unit.EM);
+    }
     if (row.getBold()) {
       textbox.getElement().addClassName("app-bold");
     }
@@ -284,49 +288,76 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnEdtSize")
   public void onBtnEdtSize(TapEvent event) {
+//  showFontSizeDialog();
+    createFontSizeDialog();
+  }
+  
+  private void createFontSizeDialog() {
+    final ObjectWrapper<OnsDialog> dialog = new ObjectWrapper<OnsDialog>();
+    String html = "";
+    html += "<ons-list>";
+    html += createFontSizeDialogItem(8, dialog);
+    html += createFontSizeDialogItem(9, dialog);
+    html += createFontSizeDialogItem(10, dialog);
+    html += createFontSizeDialogItem(11, dialog);
+    html += createFontSizeDialogItem(12, dialog);
+    String id = OnsenUi.createUniqueElementId();
+    html += "<ons-list-item><ons-button id='"+id+"' class='ons-button ng-isolate-scope button effeckt-button slide-left'>Annulla</ons-button></ons-list-item>";
+    OnsenUi.addTapHandler(id, new TapHandler() {
+      public void onTap(TapEvent event) {
+        dialog.get().hide();
+      }
+    });
+    html += "</ons-list>";
+    dialog.set(OnsDialogUtils.createDialog(html));
+  }
+  
+  private String createFontSizeDialogItem(final int size, final ObjectWrapper<OnsDialog> dialog) {
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    int currentRowSize = row.getSize();
+    boolean checked = size == currentRowSize;
+    String id = OnsenUi.createUniqueElementId();
+    String html = "<ons-list-item id='"+id+"'><input type='radio' "+ (checked ? "checked='true'" : "") +" />"+size+" points</ons-list-item>";
+    OnsenUi.addTapHandler(id, new TapHandler() {
+      public void onTap(TapEvent event) {
+        setItemSize(size);
+        dialog.get().hide();
+      }
+    });
+    return html;
+  }
+
+  /*
+  private void showFontSizeDialog() {
     fontSizeDialog.show();
-    GwtUtils.deferredExecution(new Delegate<Void>() {
+    GwtUtils.deferredExecution(500, new Delegate<Void>() {
       public void execute(Void element) {
         setItemSizeChecked();
       }
     });
   }
-  
   private void setItemSizeChecked() {
+    PhgUtils.log("setItemSizeChecked --1--");
     OrderItemRow row = item.getRows().get(selectedRowIndex);
     int size = row.getSize();
     if (size >= 8) {
+      PhgUtils.log("setItemSizeChecked --2--");
       String btnFontSizeId = "btnFntSize" + size;
       setRadioChecked(btnFontSizeId);
     } else {
       setRadioChecked("");
     }
   }
-  
-  private void setRadioChecked(String id) {
-    NodeList<Element> elements = GwtUtils.getElementsByTagName("input");
-    for (int it = 0; it < elements.getLength(); it++) {
-      Element inputElem = elements.getItem(it);
-      if ("radio".equalsIgnoreCase(inputElem.getAttribute("type"))) {
-        if (id.equals(inputElem.getId())) {
-          inputElem.setAttribute("checked", "true");
-        } else {
-          inputElem.removeAttribute("checked");
-        }
-      }
-    }
-  }
-  
   @UiHandler("fontSizeCancelBtn")
   public void onFontSizeCancelBtn(TapEvent event) {
     fontSizeDialog.hide();
   }
-  
   @UiHandler({"btnFntSize8", "btnFntSize9", "btnFntSize10", "btnFntSize11", "btnFntSize12"})
   public void onBtnFntSize(TapEvent event) {
     setItemSize(Integer.parseInt(((OnsListItem)event.getTargetWidget()).getValue()));
     fontSizeDialog.hide();
   }
+  */
   
   private void setItemSize(double size) {
     OrderItemRow row = item.getRows().get(selectedRowIndex);
@@ -336,6 +367,46 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
   
   @UiHandler("btnEdtFont")
   public void onBtnEdtFont(TapEvent event) {
+//  showFontFamilyDialog();
+    createFontFamilyDialog();
+  }
+  
+  private void createFontFamilyDialog() {
+    final ObjectWrapper<OnsDialog> dialog = new ObjectWrapper<OnsDialog>();
+    String html = "";
+    html += "<ons-list>";
+    html += createFontFamilyDialogItem("Georgia, serif", "Georgia", dialog);
+    html += createFontFamilyDialogItem("'Palatino Linotype', 'Book Antiqua', Palatino, serif", "Palatino", dialog);
+    html += createFontFamilyDialogItem("'Times New Roman', Times, serif", "Times New Roman", dialog);
+    html += createFontFamilyDialogItem("Arial, Helvetica, sans-serif", "Arial", dialog);
+    String id = OnsenUi.createUniqueElementId();
+    html += "<ons-list-item><ons-button id='"+id+"' class='ons-button ng-isolate-scope button effeckt-button slide-left'>Annulla</ons-button></ons-list-item>";
+    OnsenUi.addTapHandler(id, new TapHandler() {
+      public void onTap(TapEvent event) {
+        dialog.get().hide();
+      }
+    });
+    html += "</ons-list>";
+    dialog.set(OnsDialogUtils.createDialog(html));
+  }
+  
+  private String createFontFamilyDialogItem(final String fontFamily, final String fontFamilyDesc, final ObjectWrapper<OnsDialog> dialog) {
+    OrderItemRow row = item.getRows().get(selectedRowIndex);
+    String currentRowFontFamily = row.getFontFamily();
+    boolean checked = fontFamily.equals(currentRowFontFamily);
+    String id = OnsenUi.createUniqueElementId();
+    String html = "<ons-list-item id='"+id+"'><input type='radio' "+ (checked ? "checked='true'" : "") +" />"+fontFamilyDesc+"</ons-list-item>";
+    OnsenUi.addTapHandler(id, new TapHandler() {
+      public void onTap(TapEvent event) {
+        setFontFamily(fontFamily);
+        dialog.get().hide();
+      }
+    });
+    return html;
+  }
+  
+  /*
+  private void showFontFamilyDialog() {
     fontFamilyDialog.show();
     GwtUtils.deferredExecution(new Delegate<Void>() {
       public void execute(Void element) {
@@ -343,7 +414,6 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       }
     });
   }
-  
   private void setFontFamilyChecked() {
     OrderItemRow row = item.getRows().get(selectedRowIndex);
     String family = row.getFontFamily();
@@ -359,33 +429,38 @@ public class OrderItemComposeView extends AbstractBaseView<Presenter> {
       setRadioChecked("btnFntFamArial");
     }
   }
-  
   @UiHandler("fontFamCancelBtn")
   public void onFontFamCancelBtn(TapEvent event) {
     fontFamilyDialog.hide();
   }
-  
   @UiHandler({"btnFntFamGeorgia", "btnFntFamPalatino", "btnFntFamTimes"})
   public void onBtnFntFamily(TapEvent event) {
     setFontFamily(((OnsListItem)event.getTargetWidget()).getValue());
     fontFamilyDialog.hide();
   }
+  */
+
+  /*
+  private void setRadioChecked(String id) {
+    NodeList<Element> elements = GwtUtils.getElementsByTagName("input");
+    for (int it = 0; it < elements.getLength(); it++) {
+      Element inputElem = elements.getItem(it);
+      if ("radio".equalsIgnoreCase(inputElem.getAttribute("type"))) {
+        if (id.equals(inputElem.getId())) {
+          inputElem.setAttribute("checked", "true");
+        } else {
+          inputElem.removeAttribute("checked");
+        }
+      }
+    }
+  }
+  */
   
   private void setFontFamily(String value) {
     OrderItemRow row = item.getRows().get(selectedRowIndex);
     row.setFontFamily(value);
     GwtUtils.setJsPropertyString(textboxes.get(selectedRowIndex).getElement().getStyle(), "fontFamily", value);
   }
-  
-  /*
-  private int getTargetX(TapEvent event) {
-    return event.getTargetElement().getAbsoluteLeft();
-  }
-  
-  private int getTargetY(TapEvent event) {
-    return event.getTargetElement().getAbsoluteTop();
-  }
-  */
   
   private void showTargetPosition(Element targetElement) {
     int tx = targetElement.getAbsoluteLeft();
