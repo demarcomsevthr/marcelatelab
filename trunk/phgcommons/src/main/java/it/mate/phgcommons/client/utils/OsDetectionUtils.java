@@ -39,13 +39,15 @@ public class OsDetectionUtils {
   }
   
   public static boolean isIOs() {
-//  return MGWT.getOsDetection().isIOs();
-    return PhgUtils.getDevicePlatform().toLowerCase().contains("ios") || PhgUtils.getDevicePlatform().toLowerCase().contains("desktop");
+    return PhgUtils.getDevicePlatform().toLowerCase().contains("ios");
   }
 
   public static boolean isAndroid() {
-//  return MGWT.getOsDetection().isAndroid();
-    return PhgUtils.getDevicePlatform().toLowerCase().contains("android");
+    return PhgUtils.getDevicePlatform().toLowerCase().contains("android") || isDesktop();
+  }
+  
+  public static boolean isDesktop() {
+    return Window.Navigator.getUserAgent().toLowerCase().contains("windows nt");
   }
   
   public static boolean is3Inch() {
@@ -66,17 +68,14 @@ public class OsDetectionUtils {
 
   /*
    * NOTA BENE
-   * 
    * Utilizzo le condizioni >= per poter debuggare in desktop
    * 
    */
   
   public static boolean isTabletLandscape() {
-//  if (MGWT.getOsDetection().isIOs()) {
     if (isIOs()) {
       return (getDisplayWidth() >= IPAD_LAND_WIDTH && getDisplayHeight() >= IPAD_LAND_HEIGHT);
     }
-//  if (MGWT.getOsDetection().isAndroid()) {
     if (isAndroid()) {
       return (getDisplayWidth() >= APAD_LAND_WIDTH && getDisplayHeight() >= APAD_LAND_HEIGHT);
     }
@@ -84,20 +83,13 @@ public class OsDetectionUtils {
   }
   
   public static boolean isTabletPortrait() {
-//  if (MGWT.getOsDetection().isIOs()) {
     if (isIOs()) {
       return (getDisplayWidth() >= IPAD_PORT_WIDTH && getDisplayHeight() >= IPAD_PORT_HEIGHT);
     }
-//  if (MGWT.getOsDetection().isAndroid()) {
     if (isAndroid()) {
       return (getDisplayWidth() >= APAD_PORT_WIDTH && getDisplayHeight() >= APAD_PORT_HEIGHT);
     }
     return false;
-  }
-  
-  
-  public static boolean isDesktop() {
-    return Window.Navigator.getUserAgent().toLowerCase().contains("windows nt");
   }
   
 }
