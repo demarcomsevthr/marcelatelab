@@ -34,11 +34,12 @@ public class TimbroTx implements Timbro, IsMappable {
   private Boolean allowImage;
   
   private Integer maxNumRighe;
-  
+
   @Override
   public String toString() {
-    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + ", remoteId="
-        + remoteId + ", prezzo=" + prezzo + "]";
+    return "TimbroTx [id=" + id + ", nome=" + nome + ", codice=" + codice + ", width=" + width + ", height=" + height + ", oval=" + oval + ", image.length=" + (image != null ? image.length() : "null")
+        + ", remoteId=" + remoteId + ", prezzo=" + prezzo + ", codCategoria=" + codCategoria + ", descCategoria=" + descCategoria + ", componibile="
+        + componibile + ", allowImage=" + allowImage + ", maxNumRighe=" + maxNumRighe + "]";
   }
 
   public TimbroTx() {
