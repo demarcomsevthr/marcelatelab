@@ -16,7 +16,16 @@
       </o:OnsToolbar>
 
         <g:HTML addStyleNames="app-home-presentation">
-          <i>Presentazione servizio qui</i>
+          <i>Presentazione del servizio</i>
+          
+          <div class='app-home-presentation-panel'>
+          <p>Ciao! Siamo una azienda specializzata nella realizzazione di timbri.</p>
+          <p>Con questa app ti offriamo la possibilità di creare i tuoi timbri personalizzati acquistandoli con un particolare sconto sul prezzo di listino.</p>
+          <p>Per procedere, scegli il timbro che ti occorre, componi il contenuto e inviaci l'ordine.<br/>
+             Ti risponderemo creando un'anteprima in pdf del timbro finale.<br/>
+             Se ti piacerà potrai procedere con il pagamento per ricevere i tuoi timbri tramite il nostro corriere espresso.</p>
+          </div>
+          
         </g:HTML>
         <g:HTML addStyleNames="app-home-updates" ui:field="htmlOrderUpdates"/>
         

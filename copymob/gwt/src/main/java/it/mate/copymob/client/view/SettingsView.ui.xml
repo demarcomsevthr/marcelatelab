@@ -16,13 +16,16 @@
       </o:OnsToolbar>
   
       <o:OnsButton text="Reset DB" ui:field="btnReset"></o:OnsButton>
-      <o:OnsButton text="Update orders" ui:field="btnUpdate"></o:OnsButton>
       <o:OnsButton text="Account" ui:field="btnAccount"></o:OnsButton>
+      
+      <!-- 
+      <o:OnsButton text="Update orders" ui:field="btnUpdate"></o:OnsButton>
       <o:OnsButton text="Waiting" ui:field="btnWaiting"></o:OnsButton>
       <o:OnsButton text="Dialog" ui:field="btnDialog"></o:OnsButton>
       <o:OnsButton text="Test Push" ui:field="btnPush"></o:OnsButton>
       <o:OnsButton text="Test Pick" ui:field="btnPick"></o:OnsButton>
       <o:OnsButton text="Super Dev Mode" ui:field="btnSdm"></o:OnsButton>
+       -->
       
       <o:OnsLabel ui:field="counterLbl"/>
       
