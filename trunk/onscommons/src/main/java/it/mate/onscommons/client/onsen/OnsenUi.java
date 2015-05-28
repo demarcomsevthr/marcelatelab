@@ -83,6 +83,8 @@ public class OnsenUi {
   
   private static boolean addDirectWithPlainHtml = false;
   
+  private static boolean usePlaceControllerHistory = false;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -352,7 +354,11 @@ public class OnsenUi {
     $wnd.ons.compile(element);
   }-*/;
 
-  public static void goToPreviousPlace(PlaceController placeController, Place initialPlace, boolean usePlaceControllerHistory) {
+  public static void setUsePlaceControllerHistory(boolean usePlaceControllerHistory) {
+    OnsenUi.usePlaceControllerHistory = usePlaceControllerHistory;
+  }
+
+  public static void goToPreviousPlace(PlaceController placeController, Place initialPlace) {
     if (OnsenUi.isNavigatorLayoutPattern() && !usePlaceControllerHistory) {
       if (doLog) PhgUtils.log("GO TO PREVIOUS PLACE USING NAVIGATOR POP");
       OnsenUi.getNavigator().popPage();
@@ -505,7 +511,6 @@ public class OnsenUi {
   
 
   /**
-   * 
    * TODO
    * 
    * 25/05/2015
