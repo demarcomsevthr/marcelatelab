@@ -1,9 +1,13 @@
 
-@external gwt*, phg*, app*, ons*, popover, fa*, center*, list*;
+@external gwt*, phg*, app*, ons*, popover, fa*, center*, list*, page*;
 
 @eval windowWidth it.mate.protoph.client.ui.theme.CustomTheme.getWindowWidth();
 
 @eval windowHeight it.mate.protoph.client.ui.theme.CustomTheme.getWindowHeight();
+
+.app-home-page .page__content {
+  background: url('main/images/home-background-1280-bn.jpg') 100% 100% !important;
+}
 
 .app-home-presentation {
   width: 100%;
@@ -135,7 +139,7 @@
   background-color: rgb(228, 241, 255);
 }
 
-.app-timbri-choose-btn {
+.app-timbri-choose-btn, .app-confirm-btn {
   position: absolute;
   bottom: 0.5em;
 }
@@ -328,6 +332,12 @@
   height: 2em;
   width: 6em;
   overflow: hidden;
+  font-weight: bold;
+}
+
+.app-cart-prezzo-label {
+  font-size: 0.9em;
+  margin-top: -0.7em;
 }
 
 .app-cart-item-state {
