@@ -6,21 +6,19 @@
        
   <g:HTMLPanel ui:field="wrapperPanel" addStyleNames="app-page-wrapper-panel">
   
-    <o:OnsPage addStyleNames="app-timbri-page">
+    <o:OnsPage addStyleNames="app-cart-conf-page">
     
       <o:OnsToolbar>
         <div class="left">
           <o:OnsBackButton addStyleNames="ons-back-button-realign"/>
         </div>
-        <div class="center">Carrello</div>
+        <div class="center">Conferma ordine</div>
       </o:OnsToolbar>
       
-      <o:OnsScroller addStyleNames="app-cart-scroller ons-fadein">
-        <o:OnsList ui:field="cartList"/>
+      <o:OnsScroller addStyleNames="app-cart-conf-scroller ons-fadein">
+        <o:OnsList ui:field="list"/>
       </o:OnsScroller>
 
-      <o:OnsButton text="Invia l'ordine" ui:field="btnGo" addStyleNames="app-timbri-choose-btn"/>
-      
     </o:OnsPage>
     
   </g:HTMLPanel>

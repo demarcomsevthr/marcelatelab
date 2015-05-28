@@ -6,6 +6,7 @@ import it.mate.copymob.client.logic.MainDao;
 import it.mate.copymob.client.logic.TimbriUtils;
 import it.mate.copymob.client.places.MainPlace;
 import it.mate.copymob.client.view.AccountEditView;
+import it.mate.copymob.client.view.CartConfView;
 import it.mate.copymob.client.view.CartListView;
 import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
@@ -74,9 +75,9 @@ public class MainActivity extends OnsAbstractActivity implements
     OrderItemEditView.Presenter, OrderItemComposeView.Presenter, OrderItemImageView.Presenter,
     MessageListView.Presenter, AccountEditView.Presenter,
     CartListView.Presenter, CategorieListView.Presenter,
-    OrderListView.Presenter, OrderEditView.Presenter
+    OrderListView.Presenter, OrderEditView.Presenter,
+    CartConfView.Presenter
   {
-  
   
   private MainPlace place;
   
@@ -190,6 +191,10 @@ public class MainActivity extends OnsAbstractActivity implements
     
     if (place.getToken().equals(MainPlace.CART_LIST)) {
       this.view = AppClientFactory.IMPL.getGinjector().getCartListView();
+    }
+    
+    if (place.getToken().equals(MainPlace.CART_CONF)) {
+      this.view = AppClientFactory.IMPL.getGinjector().getCartConfView();
     }
     
     if (place.getToken().equals(MainPlace.ORDER_LIST)) {
@@ -306,6 +311,9 @@ public class MainActivity extends OnsAbstractActivity implements
         }
       });
     }
+    if (place.getToken().equals(MainPlace.CART_CONF)) {
+      view.setModel(place.getModel());
+    }
     if (place.getToken().equals(MainPlace.MESSAGE_LIST)) {
       if (place.getModel() instanceof OrderItem) {
         OrderItem orderItem = (OrderItem)place.getModel();
@@ -333,7 +341,7 @@ public class MainActivity extends OnsAbstractActivity implements
 
   @Override
   public void goToPrevious() {
-    OnsenUi.goToPreviousPlace(AppClientFactory.IMPL.getPlaceController(), new MainPlace(), true);
+    OnsenUi.goToPreviousPlace(AppClientFactory.IMPL.getPlaceController(), new MainPlace());
   }
 
   @Override
@@ -403,6 +411,11 @@ public class MainActivity extends OnsAbstractActivity implements
   @Override
   public void goToCartListView() {
     AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CART_LIST));
+  }
+
+  @Override
+  public void goToCartConfView(Order order) {
+    AppClientFactory.IMPL.getPlaceController().goTo(new MainPlace(MainPlace.CART_CONF, order));
   }
 
   @Override

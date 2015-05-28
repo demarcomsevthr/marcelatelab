@@ -2,6 +2,7 @@ package it.mate.copymob.client.factories;
 
 import it.mate.copymob.client.activities.mapper.MainActivityMapper;
 import it.mate.copymob.client.view.AccountEditView;
+import it.mate.copymob.client.view.CartConfView;
 import it.mate.copymob.client.view.CartListView;
 import it.mate.copymob.client.view.CategorieListView;
 import it.mate.copymob.client.view.HomeView;
@@ -58,5 +59,7 @@ public interface AppGinjector extends CommonGinjector {
   public OrderListView getOrderListView();
   
   public OrderEditView getOrderEditView();
+  
+  public CartConfView getCartConfView();
   
 }

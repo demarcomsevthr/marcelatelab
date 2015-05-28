@@ -7,7 +7,6 @@ import it.mate.copymob.shared.model.Timbro;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.ui.Spacer;
-import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
@@ -27,14 +26,15 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CartListView extends AbstractBaseView<Presenter> {
 
   public interface Presenter extends BasePresenter {
-    public void saveOrderOnServer(Order order, Delegate<Order> delegate);
     public void goToOrderItemEditView(OrderItem orderItem);
     public void goToHomeView();
+    public void goToCartConfView(Order order);
   }
 
   public interface ViewUiBinder extends UiBinder<Widget, CartListView> { }
@@ -50,12 +50,7 @@ public class CartListView extends AbstractBaseView<Presenter> {
     initUI();
   }
 
-  private void initProvidedElements() {
-
-  }
-
   private void initUI() {
-    initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
   }
 
@@ -73,23 +68,16 @@ public class CartListView extends AbstractBaseView<Presenter> {
   }
   
   private void populateList() {
-    
     OnsenUi.suspendCompilations();
-    
     Iterator<OrderItem> it = order.getItems().iterator();
-    
     while (it.hasNext()) {
-      
       final OrderItem orderItem = it.next();
-      
       TapHandler orderItemTapHandler = new TapHandler() {
         public void onTap(TapEvent event) {
           getPresenter().goToOrderItemEditView(orderItem);
         }
       };
-      
       Timbro timbro = orderItem.getTimbro();
-      
       OnsListItem listItem = new OnsListItem();
       
       OnsHorizontalPanel rowPanel = new OnsHorizontalPanel();
@@ -105,53 +93,10 @@ public class CartListView extends AbstractBaseView<Presenter> {
       nameLbl.addStyleName("app-cart-item-name");
       rowPanel.add(nameLbl);
       
-      OnsHorizontalPanel qtaPanel = new OnsHorizontalPanel();
-      qtaPanel.setAddDirect(true);
-      qtaPanel.add(new Spacer("2em"));
-
-      final OnsLabel qtaFld = new OnsLabel();
-      setQtaLbl(qtaFld, orderItem.getQuantity());
+      rowPanel.add(new Spacer("2em"));
       
-      OnsLabel fillerBtn = new OnsLabel("Qtà:");
-      fillerBtn.addStyleName("app-cart-item-label");
-//    fillerBtn.setIcon("fa-hand-o-right");
-//    fillerBtn.setModifier("quiet");
-      
-      OnsButton plusBtn = new OnsButton("");
-      plusBtn.addStyleName("app-cart-btn-plus");
-      plusBtn.setIcon("fa-plus-circle");
-      plusBtn.setModifier("quiet");
-      plusBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          PhgUtils.log("plus");
-          double qta = orderItem.getQuantity();
-          qta ++;
-          orderItem.setQuantity(qta);
-          setQtaLbl(qtaFld, orderItem.getQuantity());
-        }
-      });
-      OnsButton minusBtn = new OnsButton();
-      minusBtn.getElement().removeClassName("ons-button");
-      minusBtn.addStyleName("app-cart-btn-minus");
-      minusBtn.setIcon("fa-minus-circle");
-      minusBtn.setModifier("quiet");
-      minusBtn.addTapHandler(new TapHandler() {
-        public void onTap(TapEvent event) {
-          double qta = orderItem.getQuantity();
-          if (qta > 0) {
-            qta --;
-            orderItem.setQuantity(qta);
-            setQtaLbl(qtaFld, orderItem.getQuantity());
-          }
-        }
-      });
-      
-      qtaPanel.add(fillerBtn);
-      qtaPanel.add(plusBtn);
-      qtaPanel.add(qtaFld);
-      qtaPanel.add(minusBtn);
-      
-      rowPanel.add(qtaPanel);
+      rowPanel.add(createDetailPanel(orderItem));
+//    rowPanel.add(qtaPanel);
       
       OnsHorizontalPanel actionsPanel = new OnsHorizontalPanel();
       actionsPanel.setAddDirect(true);
@@ -174,17 +119,81 @@ public class CartListView extends AbstractBaseView<Presenter> {
     
   }
   
-  private void setQtaLbl(OnsLabel lbl, double qta) {
-    lbl.setText(GwtUtils.formatDecimal(qta, 0));
+  private VerticalPanel createDetailPanel(final OrderItem orderItem) {
+    
+    VerticalPanel detailPanel = new VerticalPanel();
+    detailPanel.addStyleName("app-cart-detail-panel");
+    
+    final OnsLabel prezzoBox = new OnsLabel("Prezzo: ");
+    prezzoBox.addStyleName("app-cart-prezzo-label");
+    
+    OnsHorizontalPanel qtaPanel = new OnsHorizontalPanel();
+    qtaPanel.addStyleName("app-cart-qta-panel");
+    qtaPanel.setAddDirect(true);
+
+    OnsLabel qtaLabel = new OnsLabel("Qtà:");
+    qtaLabel.addStyleName("app-cart-item-label");
+    
+    final OnsLabel qtaBox = new OnsLabel();
+    setQta(qtaBox, prezzoBox, orderItem);
+    
+    OnsButton plusBtn = new OnsButton("");
+    plusBtn.addStyleName("app-cart-btn-plus");
+    plusBtn.setIcon("fa-plus-circle");
+    plusBtn.setModifier("quiet");
+    plusBtn.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        PhgUtils.log("plus");
+        double qta = orderItem.getQuantity();
+        qta ++;
+        orderItem.setQuantity(qta);
+        setQta(qtaBox, prezzoBox, orderItem);
+      }
+    });
+    
+    OnsButton minusBtn = new OnsButton();
+    minusBtn.getElement().removeClassName("ons-button");
+    minusBtn.addStyleName("app-cart-btn-minus");
+    minusBtn.setIcon("fa-minus-circle");
+    minusBtn.setModifier("quiet");
+    minusBtn.addTapHandler(new TapHandler() {
+      public void onTap(TapEvent event) {
+        double qta = orderItem.getQuantity();
+        if (qta > 0) {
+          qta --;
+          orderItem.setQuantity(qta);
+          setQta(qtaBox, prezzoBox, orderItem);
+        }
+      }
+    });
+    
+    qtaPanel.add(qtaLabel);
+    qtaPanel.add(plusBtn);
+    qtaPanel.add(qtaBox);
+    qtaPanel.add(minusBtn);
+    
+    detailPanel.add(qtaPanel);
+    
+    detailPanel.add(prezzoBox);
+    
+    return detailPanel;
+  }
+  
+  private void setQta(OnsLabel qtaBox, OnsLabel prezzoBox, OrderItem orderItem) {
+    qtaBox.setText(GwtUtils.formatDecimal(orderItem.getQuantity(), 0));
+    prezzoBox.setText("Prezzo: " + GwtUtils.formatDecimal(orderItem.getQuantity() * orderItem.getTimbro().getPrezzo(), 2) + "€");
   }
   
   @UiHandler("btnGo")
   public void onBtnGo(TapEvent event) {
+    getPresenter().goToCartConfView(order);
+    /*
     getPresenter().saveOrderOnServer(order, new Delegate<Order>() {
       public void execute(Order element) {
         getPresenter().goToHomeView();
       }
     });
+    */
   }
   
 }
