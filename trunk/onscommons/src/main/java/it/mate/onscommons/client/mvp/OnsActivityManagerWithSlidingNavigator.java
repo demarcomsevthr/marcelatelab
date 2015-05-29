@@ -225,27 +225,26 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             PhgUtils.log("CONTINUE POPING");
             navigator.log("BEFORE POPING");
             lastProcessedPlace = null;
-
             String popinPageId = getPopinPageId(event);
             if (popinPageId != null && popinPageId.trim().length() > 0) {
               OnsenUi.setCurrentPageId(popinPageId);
             }
-            
-            return;
+          } else {
+            int index = navigator.getCurrentPage().getIndex() - 1;
+            Page prevPage = navigator.getPages().get(index);
+            String prevPageName = prevPage.getName();
+            PhgUtils.log("PREV PAGE NAME = " + prevPageName);
+            PhgUtils.log("DESTROYING PAGE " + prevPage);
+            prevPage.destroy();
+            PhgUtils.log("CANCELING POP EVENT");
+            event.cancel();
+            navigator.log("AFTER DESTROY PAGE");
+            Place prevPlace = getPlace(prevPageName);
+            PhgUtils.log("GOING TO PLACE " + prevPlace);
+            lastProcessedPlace = null;
+            eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, index));
           }
-          int index = navigator.getCurrentPage().getIndex() - 1;
-          Page prevPage = navigator.getPages().get(index);
-          String prevPageName = prevPage.getName();
-          PhgUtils.log("PREV PAGE NAME = " + prevPageName);
-          PhgUtils.log("DESTROYING PAGE " + prevPage);
-          prevPage.destroy();
-          PhgUtils.log("CANCELING POP EVENT");
-          event.cancel();
-          navigator.log("AFTER DESTROY PAGE");
-          Place prevPlace = getPlace(prevPageName);
-          PhgUtils.log("GOING TO PLACE " + prevPlace);
-          lastProcessedPlace = null;
-          eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, index));
+          
         }
       });
     }
