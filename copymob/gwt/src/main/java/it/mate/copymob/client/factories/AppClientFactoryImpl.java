@@ -126,7 +126,13 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
       if (USE_SLIDE_NAVIGATOR_LAYOUT) {
         LayoutView layoutView = new LayoutView();
         layoutView.setPresenter(new MainActivity(this, new MainPlace()));
-        OnsActivityManagerWithSlidingNavigator.setAllowNavigatorPoping(true);
+        
+        //TODO [29/05/2015]
+        // sebbene piu' performante devo ritorgliere il navigator poping
+        // perche' in casi come OrderItemEdit --> OrderItemCompose --> OrderItemEdit
+        // non va bene (deve fare un refresh dell'order item modificato)
+        OnsActivityManagerWithSlidingNavigator.setAllowNavigatorPoping(false);
+        
         new OnsActivityManagerWithSlidingNavigator(activityMapper, getBinderyEventBus(), layoutView) {
           public void onNavigatorInitialized(Navigator navigator) {
             OnsMvpUtils.initMvp(AppClientFactory.IMPL, activityMapper, new MainPlace());

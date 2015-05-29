@@ -29,6 +29,8 @@
       
       <o:OnsLabel ui:field="counterLbl"/>
       
+      <o:OnsLabel addStyleNames="app-bottom-ver-lbl" ui:field="verLbl"/>
+      
     </o:OnsPage>
     
   </g:HTMLPanel>
