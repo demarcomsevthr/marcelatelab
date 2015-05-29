@@ -478,3 +478,10 @@
   font-family: arial;
 }
 
+.app-bottom-ver-lbl {
+  font-family: Trebuchet MS;
+  font-size: 14px;
+  position: absolute;
+  left: 6%;
+  bottom: 0.8em;
+}

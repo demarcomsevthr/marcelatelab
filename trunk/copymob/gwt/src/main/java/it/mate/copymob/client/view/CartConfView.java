@@ -1,5 +1,6 @@
 package it.mate.copymob.client.view;
 
+import it.mate.copymob.client.activities.Tags;
 import it.mate.copymob.client.view.CartConfView.Presenter;
 import it.mate.copymob.shared.model.Order;
 import it.mate.copymob.shared.model.OrderItem;
@@ -51,6 +52,8 @@ public class CartConfView extends AbstractBaseView<Presenter> {
     if (model instanceof Order) {
       this.order = (Order)model;
       populateList();
+    } else if (Tags.SAVE_ORDER_ON_PROGRESS.equals(tag)) {
+      saveOrder();
     }
   }
   
@@ -79,11 +82,7 @@ public class CartConfView extends AbstractBaseView<Presenter> {
       confermaBtn.setText("CONFERMA");
       confermaBtn.addTapHandler(new TapHandler() {
         public void onTap(TapEvent event) {
-          getPresenter().saveOrderOnServer(order, new Delegate<Order>() {
-            public void execute(Order element) {
-              getPresenter().goToHomeView();
-            }
-          });
+          saveOrder();
         }
       });
       listItem.add(confermaBtn);
@@ -99,6 +98,17 @@ public class CartConfView extends AbstractBaseView<Presenter> {
       listItem.add(new Spacer("1px", "0.5em"));
     }
     return listItem;
+  }
+  
+  private void saveOrder() {
+    if (order == null) {
+      return;
+    }
+    getPresenter().saveOrderOnServer(order, new Delegate<Order>() {
+      public void execute(Order element) {
+        getPresenter().goToHomeView();
+      }
+    });
   }
   
 }

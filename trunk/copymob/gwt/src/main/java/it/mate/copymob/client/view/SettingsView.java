@@ -1,5 +1,6 @@
 package it.mate.copymob.client.view;
 
+import it.mate.copymob.client.constants.AppProperties;
 import it.mate.copymob.client.view.SettingsView.Presenter;
 import it.mate.copymob.shared.model.OrderItem;
 import it.mate.gwtcommons.client.mvp.AbstractBaseView;
@@ -7,13 +8,13 @@ import it.mate.gwtcommons.client.mvp.BasePresenter;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.TapEvent;
+import it.mate.onscommons.client.ui.OnsLabel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class SettingsView extends AbstractBaseView<Presenter> {
@@ -32,8 +33,8 @@ public class SettingsView extends AbstractBaseView<Presenter> {
 
   private static ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
   
-  @UiField Panel wrapperPanel;
   @UiField Label counterLbl;
+  @UiField OnsLabel verLbl;
   
   boolean waiting = false;
   
@@ -41,13 +42,9 @@ public class SettingsView extends AbstractBaseView<Presenter> {
     initUI();
   }
 
-  private void initProvidedElements() {
-
-  }
-
   private void initUI() {
-    initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
+    verLbl.setText("Version " + AppProperties.IMPL.versionNumber());
   }
   
   @Override

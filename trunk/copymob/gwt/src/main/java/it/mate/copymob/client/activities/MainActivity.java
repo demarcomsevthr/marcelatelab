@@ -95,6 +95,7 @@ public class MainActivity extends OnsAbstractActivity implements
   
   private static final boolean DO_DEBUG = true;
   
+  private static boolean saveOrderInProgress = false;
   
   private static OrderItem selectedOrderItem;
   
@@ -312,7 +313,23 @@ public class MainActivity extends OnsAbstractActivity implements
       });
     }
     if (place.getToken().equals(MainPlace.CART_CONF)) {
-      view.setModel(place.getModel());
+      if (place.getModel() != null) {
+        view.setModel(place.getModel());
+      } else {
+        dao.findOrderInCart(new Delegate<List<Order>>() {
+          public void execute(List<Order> results) {
+            if (results != null && results.size() == 1) {
+              setSelectedOrderItem(null);
+              view.setModel(results.get(0));
+              if (saveOrderInProgress) {
+                view.setModel(saveOrderInProgress, Tags.SAVE_ORDER_ON_PROGRESS);  
+              }
+            } else {
+              view.setModel(null);
+            }
+          }
+        });
+      }
     }
     if (place.getToken().equals(MainPlace.MESSAGE_LIST)) {
       if (place.getModel() instanceof OrderItem) {
@@ -672,7 +689,7 @@ public class MainActivity extends OnsAbstractActivity implements
   public void saveOrderOnDevice(Order order, Delegate<Order> delegate) {
     dao.saveOrder(order, delegate);
   }
-
+  
   @Override
   public void saveOrderOnServer(final Order order, final Delegate<Order> delegate) {
     
@@ -681,6 +698,7 @@ public class MainActivity extends OnsAbstractActivity implements
         if (account == null) {
           OnsDialogUtils.alert("Attenzione", "Devi registrare un account per proseguire", new Delegate<Void>() {
             public void execute(Void element) {
+              saveOrderInProgress = true;
               goToAccountEditView();
             }
           });
