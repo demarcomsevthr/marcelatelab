@@ -1,3 +1,13 @@
+
+    ------------------------------------------------------------------------------------------------
+    
+	[31/05/2015]
+
+	it.mate.onscommons.client.ui.HasTapHandlerImpl.addEventListenerElemImpl(Element, String, JSOCallback)
+
+	>> OTTIMIZZAZIONE DEI TAP HANDLERS (BUTTONS, TOOLBAR-BUTTONS, ...):
+	   RIMOSSO IL TEST isContained (SULL'ELEMENT EVENT LISTENER SIAMO GIA' SICURI CHE SIAMO SULL'ELEMENT GIUSTO!)
+
     ------------------------------------------------------------------------------------------------
     
 	[25/05/2015]
