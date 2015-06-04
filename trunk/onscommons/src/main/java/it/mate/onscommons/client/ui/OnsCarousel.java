@@ -55,6 +55,11 @@ public class OnsCarousel extends HTMLPanel {
 
   @Override
   public void add(final Widget widget) {
+    Delegate<Element> del = null;
+    add(widget, del);
+  }
+  
+  public void add(final Widget widget, final Delegate<Element> delegate) {
     PhgUtils.log("before adding item " + widget.getElement());
     PhgUtils.log("  to carousel " + getElement());
     GwtUtils.onAvailable(getElement().getId(), new Delegate<Element>() {
@@ -71,6 +76,10 @@ public class OnsCarousel extends HTMLPanel {
           
           OnsCarouselItem item = (OnsCarouselItem)widget;
           items.add(item);
+          
+          if (delegate != null) {
+            delegate.execute(carouselElem);
+          }
 
           if (items.size() == 1) {
             GwtUtils.onAvailable(item.getElement().getId(), new Delegate<Element>() {
