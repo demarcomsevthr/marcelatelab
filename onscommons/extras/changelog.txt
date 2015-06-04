@@ -1,6 +1,15 @@
 
     ------------------------------------------------------------------------------------------------
     
+	[04/06/2015]
+
+	it.mate.onscommons.client.ui.OnsCarousel.add(Widget, Delegate<Element>)
+
+	>> AGGIUNTA add CON DELEGATE
+
+
+    ------------------------------------------------------------------------------------------------
+    
 	[31/05/2015]
 
 	it.mate.onscommons.client.ui.HasTapHandlerImpl.addEventListenerElemImpl(Element, String, JSOCallback)
