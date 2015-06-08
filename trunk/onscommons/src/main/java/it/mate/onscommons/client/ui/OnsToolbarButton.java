@@ -2,6 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.onsen.OnsenUi;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -12,6 +13,8 @@ public class OnsToolbarButton extends HTMLPanel implements HasTapHandler {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
+  private String elementId;
+  
   public OnsToolbarButton() {
     this("");
   }
@@ -19,6 +22,7 @@ public class OnsToolbarButton extends HTMLPanel implements HasTapHandler {
   public OnsToolbarButton(String html) {
     super("ons-toolbar-button", html);
     hasTapHandlerImpl = new HasTapHandlerImpl(this);
+    this.elementId = OnsenUi.ensureId(getElement());
   }
 
   @Override
@@ -29,6 +33,10 @@ public class OnsToolbarButton extends HTMLPanel implements HasTapHandler {
   @Override
   public HandlerRegistration addTapHandler(TapHandler handler) {
     return hasTapHandlerImpl.addTapHandler(handler);
+  }
+  
+  public String getElementId() {
+    return elementId;
   }
   
 }
