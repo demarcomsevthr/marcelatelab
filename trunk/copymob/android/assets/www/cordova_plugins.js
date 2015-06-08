@@ -207,6 +207,13 @@ module.exports = [
         "clobbers": [
             "plugins.imagePicker"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "clobbers": [
+            "navigator.splashscreen"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -220,7 +227,8 @@ module.exports.metadata =
     "cordova-plugin-file": "2.0.0",
     "cordova-plugin-file-transfer": "1.0.0",
     "com.phonegap.plugins.PushPlugin": "2.4.0",
-    "com.synconset.imagepicker": "1.0.6"
+    "com.synconset.imagepicker": "1.0.6",
+    "cordova-plugin-splashscreen": "2.0.0"
 }
 // BOTTOM OF METADATA
 });
