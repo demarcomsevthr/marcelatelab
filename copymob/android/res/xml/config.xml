@@ -27,12 +27,6 @@
     <feature name="ImagePicker">
         <param name="android-package" value="com.synconset.ImagePicker" />
     </feature>
-    <!-- 
-    
-    25/04/2015 - PROVA DI CROSSWALK
-    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
-    
-     -->
     <allow-intent href="market:*" />
     <name>Copymob</name>
     <description>
@@ -49,4 +43,17 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
+    <!-- 25/04/2015 - PROVA DI CROSSWALK - FALLITA
+    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
+     -->
+     
+    <!-- 08/06/2015 -->    
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="5000" />
+     
 </widget>
