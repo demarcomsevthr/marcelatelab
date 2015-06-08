@@ -20,6 +20,14 @@
 	    <preference name="SplashScreenDelay" value="5000" />
 	    
 	    /* il valore 'splash' corrisponde al nome del file senza estensione in res/drawable */
+	    
+	    
+	>> RISOLUZIONI DI RIFERIMENTO:
+		xhdpi: 640 x 960
+		hdpi: 480 x 800
+		mdpi: 320 x 480
+		ldpi: 240 x 320
+
   
   ---------------------------------------------------------------------------------------------
   
