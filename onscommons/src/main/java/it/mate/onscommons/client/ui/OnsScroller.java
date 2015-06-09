@@ -21,6 +21,8 @@ public class OnsScroller extends HTMLPanel {
   
   private boolean compiled = false;
   
+  private Delegate<Element> onScrollerAvailableDelegate = null;
+  
   public OnsScroller() {
     this(TAG_NAME, "");
   }
@@ -40,13 +42,17 @@ public class OnsScroller extends HTMLPanel {
         GwtUtils.deferredExecution(200, new Delegate<Void>() {
           public void execute(Void element) {
             
-            int offsetTop = scrollerElement.getOffsetTop();
-            PhgUtils.log("SCROLLER OFFSET TOP = " + offsetTop);
-            PhgUtils.log("SETTING SCROLLER ABSOLUTE POSITION...");
-            scrollerElement.getStyle().setTop(offsetTop, Unit.PX);
-            scrollerElement.getStyle().setBottom(0, Unit.PX);
-            scrollerElement.getStyle().setWidth(100, Unit.PCT);
-            scrollerElement.getStyle().setPosition(Position.ABSOLUTE);
+            if (onScrollerAvailableDelegate != null) {
+              onScrollerAvailableDelegate.execute(scrollerElement);
+            } else {
+              int offsetTop = scrollerElement.getOffsetTop();
+              PhgUtils.log("SCROLLER OFFSET TOP = " + offsetTop);
+              PhgUtils.log("SETTING SCROLLER ABSOLUTE POSITION...");
+              scrollerElement.getStyle().setTop(offsetTop, Unit.PX);
+              scrollerElement.getStyle().setBottom(0, Unit.PX);
+              scrollerElement.getStyle().setWidth(100, Unit.PCT);
+              scrollerElement.getStyle().setPosition(Position.ABSOLUTE);
+            }
             
             if (OnsenUi.isPreventTapHandlerWherScrollerMoves()) {
               
@@ -133,6 +139,10 @@ public class OnsScroller extends HTMLPanel {
   
   public void setAnimation(String animation) {
     TransitionUtils.fadeIn(getElement(), TransitionUtils.parseAttributeValue(animation));
+  }
+  
+  public void setOnScrollerAvailableDelegate(Delegate<Element> onScrollerAvailableDelegate) {
+    this.onScrollerAvailableDelegate = onScrollerAvailableDelegate;
   }
 
 }

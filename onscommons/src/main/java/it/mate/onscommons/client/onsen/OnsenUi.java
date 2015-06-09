@@ -428,15 +428,13 @@ public class OnsenUi {
   }
 
   public static String ensureId(Element element) {
-    String id = null;
     if (element == null) {
-      return id;
+      return null;
     }
     if (element.getId() == null || "".equals(element.getId())) {
-      id = OnsenUi.createUniqueElementId();
-      element.setId(id);
+      element.setId(OnsenUi.createUniqueElementId());
     }
-    return id;
+    return element.getId();
   }
   
   public static void addTapHandler(String elementId, TapHandler handler) {
