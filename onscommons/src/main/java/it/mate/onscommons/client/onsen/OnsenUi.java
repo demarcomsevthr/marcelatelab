@@ -140,7 +140,7 @@ public class OnsenUi {
     OnsenUi.navigator = navigator;
   }
   
-  public static boolean isNavigatorLayoutPattern() {
+  public static boolean isNavigatorPresent() {
     return navigator != null;
   }
   
@@ -157,7 +157,7 @@ public class OnsenUi {
     OnsenUi.slidingMenu = slidingMenu;
   }
   
-  public static boolean isSlidingMenuLayoutPattern() {
+  public static boolean isSlidingMenuPresent() {
     return slidingMenu != null;
   }
   
@@ -359,7 +359,7 @@ public class OnsenUi {
   }
 
   public static void goToPreviousPlace(PlaceController placeController, Place initialPlace) {
-    if (OnsenUi.isNavigatorLayoutPattern() && !usePlaceControllerHistory) {
+    if (OnsenUi.isNavigatorPresent() && !usePlaceControllerHistory) {
       if (doLog) PhgUtils.log("GO TO PREVIOUS PLACE USING NAVIGATOR POP");
       OnsenUi.getNavigator().popPage();
     } else {

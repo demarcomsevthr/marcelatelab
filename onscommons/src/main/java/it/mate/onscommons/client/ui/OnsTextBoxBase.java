@@ -20,6 +20,8 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   
   private HandlerRegistration onsChangeHandler = null;
   
+  private String actualType = "text";
+  
   protected OnsTextBoxBase(String type) {
     this(DOM.createInputText(), type, "ons-textbox");
   }
@@ -29,6 +31,7 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
     OnsenUi.ensureId(element);
     if (type != null) {
       element.setAttribute("type", type);
+      actualType = type;
     }
     if (className != null) {
       element.addClassName(className);
@@ -103,9 +106,52 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   }
   
   public void setType(final String type) {
+    actualType = type;
     OnsenUi.onAvailableElement(this, new Delegate<Element>() {
       public void execute(Element element) {
         element.setAttribute("type", type);
+      }
+    });
+  }
+
+  public void setMaxlength(final String maxlength) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(final Element element) {
+        element.setAttribute("maxlength", maxlength);
+        
+        if ("number".equals(actualType)) {
+          final int maxlen = Integer.parseInt(maxlength);
+          OnsEventUtils.addHandler(element, "input", true, new NativeGestureHandler() {
+            public void on(NativeGestureEvent event) {
+              limitLength(element, maxlen);
+            }
+          });
+          
+        }
+        
+      }
+    });
+  }
+  
+  protected static native void limitLength (Element element, int maxlength) /*-{
+    if (element.value.length > maxlength) {
+      element.value = element.value.slice(0,maxlength); 
+    }
+  }-*/;
+  
+
+  public void setMax(final String max) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("max", max);
+      }
+    });
+  }
+
+  public void setMin(final String min) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        element.setAttribute("min", min);
       }
     });
   }

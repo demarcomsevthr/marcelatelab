@@ -4,7 +4,10 @@ import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.onscommons.client.event.HasTapHandler;
 import it.mate.onscommons.client.event.TapEvent;
 import it.mate.onscommons.client.event.TapHandler;
+import it.mate.onscommons.client.mvp.OnsActivityManagerBase;
+import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.TransitionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -15,6 +18,8 @@ public class OnsBackButton extends Widget implements HasTapHandler {
   
   private HasTapHandlerImpl hasTapHandlerImpl;
   
+  private boolean isSlidingMenuPresentAndIsHome = false;
+  
   
   public OnsBackButton() {
     this(DOM.createElement("ons-toolbar-button"), true);
@@ -22,9 +27,29 @@ public class OnsBackButton extends Widget implements HasTapHandler {
 
   protected OnsBackButton(Element element, boolean doFadeIn) {
     
-    Element icon = DOM.createElement("ons-icon");
-    icon.setAttribute("icon", "fa-chevron-left");
-    element.appendChild(icon);
+    if (OnsenUi.isNavigatorPresent() && OnsenUi.isSlidingMenuPresent()) {
+      
+      int actualPageCount = OnsenUi.getNavigator().getActualPageCount();
+      String activePlace = OnsActivityManagerBase.IMPL.getActivePlace().getToken();
+      
+      PhgUtils.log("OnsBackButton CONSTRUCTOR actual navigator page count = " + actualPageCount + " - ACTIVE PLACE = " + OnsActivityManagerBase.IMPL.getActivePlace().getToken());
+      
+      if (actualPageCount == 0 || "home".equalsIgnoreCase(activePlace) ) {
+        isSlidingMenuPresentAndIsHome = true;
+      }
+      
+      
+    }
+
+    if (isSlidingMenuPresentAndIsHome) {
+      Element icon = DOM.createElement("ons-icon");
+      icon.setAttribute("icon", "fa-bars");
+      element.appendChild(icon);
+    } else {
+      Element icon = DOM.createElement("ons-icon");
+      icon.setAttribute("icon", "fa-chevron-left");
+      element.appendChild(icon);
+    }
     
     element.addClassName("ons-back-button");
     
@@ -36,7 +61,20 @@ public class OnsBackButton extends Widget implements HasTapHandler {
     
     addTapHandler(new TapHandler() {
       public void onTap(TapEvent event) {
-        goToPrevious();
+        if (isSlidingMenuPresentAndIsHome) {
+          OnsenUi.getSlidingMenu().toggleMenu();
+        } else {
+          try {
+            goToPrevious();
+          } catch (Exception ex) {
+            PhgUtils.log(">>>>>>>>>>>>>>>>> EXCEPTION " + ex.getMessage());
+            if (ex.getMessage() != null && ex.getMessage().toLowerCase().contains("page stack is empty")) {
+              if (OnsenUi.isSlidingMenuPresent()) {
+                OnsenUi.getSlidingMenu().toggleMenu();
+              }
+            }
+          }
+        }
       }
     });
     

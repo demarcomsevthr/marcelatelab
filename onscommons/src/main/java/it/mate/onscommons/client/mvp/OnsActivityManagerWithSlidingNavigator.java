@@ -34,8 +34,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   
   private boolean navigatorInitialized = false;
   
-  private HasToken lastProcessedPlace;
-  
   private Navigator navigator;
   
   private OnsSlidingMenu slidingMenu;
@@ -139,7 +137,9 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
           for (int it = 0; it < navigator.getPages().length(); it++) {
             Page page = navigator.getPages().get(it);
             String pageName = page.getName();
-            if (pageName != null && pageName.equals(newToken)) {
+            
+            if (pageName != null && ( pageName.equals(newToken) || pageName.trim().length() == 0)) {
+              
               found = true;
               navigator.resetToPage(newToken);
               

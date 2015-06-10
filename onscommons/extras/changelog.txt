@@ -1,6 +1,27 @@
 
     ------------------------------------------------------------------------------------------------
     
+	[10/06/2015]
+
+	it.mate.onscommons.client.mvp.OnsActivityManagerBase.setLastProcessedPlace(HasToken)
+	  >> new
+	it.mate.onscommons.client.mvp.OnsActivityManagerBase.getActivePlace()
+	  >> new
+	it.mate.onscommons.client.onsen.OnsenUi.isNavigatorPresent()
+	  >> rename
+	it.mate.onscommons.client.onsen.OnsenUi.isSlidingMenuPresent()
+	  >> rename
+	it.mate.onscommons.client.onsen.dom.Navigator.getActualPageCount()
+	  >> new
+	it.mate.onscommons.client.ui.OnsBackButton.OnsBackButton(Element, boolean)
+	  >> se isNavigatorPresent && isSlidingMenuPresent && page count == 0 || active place == home >> disegna fa-bars e chiama toggleMenu()
+	it.mate.onscommons.client.ui.OnsTextBoxBase.setMaxlength(String)
+	it.mate.onscommons.client.ui.OnsTextBoxBase.setMax(String)
+	it.mate.onscommons.client.ui.OnsTextBoxBase.setMin(String)
+	  >> new
+
+    ------------------------------------------------------------------------------------------------
+    
 	[04/06/2015]
 
 	it.mate.onscommons.client.ui.OnsCarousel.add(Widget, Delegate<Element>)
