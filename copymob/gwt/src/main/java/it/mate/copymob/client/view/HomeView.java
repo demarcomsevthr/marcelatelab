@@ -49,7 +49,7 @@ public class HomeView extends AbstractBaseView<Presenter> {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
 //  homeLbl.setText("Version " + AppProperties.IMPL.versionNumber()+ " by " + AppProperties.IMPL.devName());
-    btnMenu.setVisible(OnsenUi.isSlidingMenuLayoutPattern());
+    btnMenu.setVisible(OnsenUi.isSlidingMenuPresent());
   }
   
   @Override

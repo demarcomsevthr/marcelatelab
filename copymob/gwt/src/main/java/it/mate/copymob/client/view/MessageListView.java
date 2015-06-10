@@ -59,7 +59,7 @@ public class MessageListView extends AbstractBaseView<Presenter> {
   private void initUI() {
     initProvidedElements();
     initWidget(uiBinder.createAndBindUi(this));
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+    if (OnsenUi.isSlidingMenuPresent()) {
       OnsenUi.getSlidingMenu().setSwipeable(false);
     }
   }
@@ -67,7 +67,7 @@ public class MessageListView extends AbstractBaseView<Presenter> {
   @Override
   public void onDetachView() {
     super.onDetachView();
-    if (OnsenUi.isSlidingMenuLayoutPattern()) {
+    if (OnsenUi.isSlidingMenuPresent()) {
       OnsenUi.getSlidingMenu().setSwipeable(true);
     }
   }
