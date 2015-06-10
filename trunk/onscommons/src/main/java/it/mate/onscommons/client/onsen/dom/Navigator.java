@@ -91,6 +91,18 @@ public class Navigator extends JavaScriptObject {
     this.resetToPage(pageId, options);    
   }-*/;
   
+  public final int getActualPageCount() {
+    int count = 0;
+    JsArray<Page> pages = getPages();
+    for (int it = 0; it < pages.length(); it++) {
+      Page page = pages.get(it);
+      if (page.getName() != null && page.getName().trim().length() > 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+  
   public final JsArray<Page> getPages() {
     return getPagesImpl().cast();
   }
@@ -145,6 +157,7 @@ public class Navigator extends JavaScriptObject {
 
   public final void log(String prompt) {
     JsArray<Page> pages = getPages();
+    PhgUtils.log("NAVIGATOR ACTUAL PAGE COUNT = " + getActualPageCount());
     for (int it = 0; it < pages.length(); it++) {
       Page page = pages.get(it);
       String pageName = page.getName();

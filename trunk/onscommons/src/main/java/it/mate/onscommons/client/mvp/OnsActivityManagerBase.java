@@ -36,7 +36,13 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
   private List<OnsTemplate> templates;
   
   private Map<String, Place> placesMap = new HashMap<String, Place>();
+  
+  public static OnsActivityManagerBase IMPL;
 
+  protected HasToken lastProcessedPlace;
+  
+  protected HasToken activePlace;
+  
   public OnsActivityManagerBase(ActivityMapper mapper, EventBus eventBus) {
     super(mapper, eventBus);
     this.eventBus = eventBus;
@@ -50,6 +56,7 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
     setAfterPagePushHandler();
     setBeforePagePopHandler();
     setDisplay(new SimplePanel());
+    IMPL = this;
   }
 
   protected abstract void setAfterPagePushHandler();
@@ -70,6 +77,7 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
   protected boolean setActivePanelFromTemplate(Place newPlace) {
     boolean preventPush = false;
     HasToken hasToken = (HasToken)newPlace;
+    this.activePlace = hasToken;
     String newToken = hasToken.getToken();
     if (getCurrentPage() != null && newToken.equals(getCurrentPage().getName())) {
       setActivePanelFromCurrentPage(newPlace);
@@ -148,6 +156,14 @@ public abstract class OnsActivityManagerBase extends ActivityManager {
   
   protected Place getPlace(String token) {
     return placesMap.get(token);
+  }
+  
+  public void setLastProcessedPlace(HasToken lastProcessedPlace) {
+    this.lastProcessedPlace = lastProcessedPlace;
+  }
+  
+  public HasToken getActivePlace() {
+    return activePlace;
   }
   
 }
