@@ -67,39 +67,21 @@ ons-toolbar *, .ons-toolbar .navigation-bar__title {
   display: inline;
 }
 
+.ons-button-waiting span {
+  opacity: 0.9 !important;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+}
+
 .ons-toolbar-button-waiting span {
   opacity: 0.9 !important;
 }
 
 .ons-toolbar-button-waiting-icon {
-	
-  /*
-  width: 23px;
-  height: 23px;
-  padding-top: 2px;
-  padding-right: 3.5px;
-  */
-
-  /*  
-  width: 24px;
-  height: 23.5px;
-  padding-right: 3.5px;
-  padding-top: 4px;
-  font-size: 1.2em;
-  */
-
-  /*   
-  width: 1em;
-  height: 1em;
-  font-size: 1.6em;
-  -webkit-transform-origin: 50% 50%;
-  */
-  
-  /* versione con gif animata */
   width: 1.8em;
   height: 1.8em;
   padding-top: 0.3em;
-  
 }
 
 .ons-bottom-dialog .dialog {
@@ -141,5 +123,18 @@ ons-alert-dialog {
 
 .list__item--chevron:active {
   background-color: rgb(232, 242, 254);
+}
+
+.ons-waiting-div {
+  position: absolute;
+  border: none;
+  right: 12px;
+  padding-top: 2px;
+  width: 40px;
+}
+
+.ons-waiting-div-icon {
+  width: 36px;
+  height: 36px;
 }
 
