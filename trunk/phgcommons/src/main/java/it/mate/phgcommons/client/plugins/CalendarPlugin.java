@@ -3,7 +3,6 @@ package it.mate.phgcommons.client.plugins;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.phgcommons.client.utils.JSONUtils;
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class CalendarPlugin {
     JSONUtils.ensureStringify();
     PhgUtils.log("creating event " + event);
     
-    callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), new JSOSuccess() {
+    callPluginWithOptionsImpl("createEventWithOptions", event.getTitle(), event.getLocation(), event.getNotes(), event.getStartDate().getTime(), event.getEndDate().getTime(), event.getFirstReminderMinutes(),  new JSOSuccess() {
       public void handleEvent(JavaScriptObject results) {
         PhgUtils.log("Success - " + JSONUtils.stringify(results));
       }
@@ -182,7 +181,7 @@ public class CalendarPlugin {
     }]);
   }-*/;
 
-  private static native void callPluginWithOptionsImpl (String methodName, String title, String location, String notes, double startTime, double endTime, JSOSuccess success, JSOFailure failure) /*-{
+  private static native void callPluginWithOptionsImpl (String methodName, String title, String location, String notes, double startTime, double endTime, int firstReminderMinutes, JSOSuccess success, JSOFailure failure) /*-{
     var jsSuccess = $entry(function(message) {
       success.@it.mate.phgcommons.client.plugins.CalendarPlugin.JSOSuccess::handleEvent(Lcom/google/gwt/core/client/JavaScriptObject;)(message);
     });
@@ -198,7 +197,7 @@ public class CalendarPlugin {
         "endTime": endTime,
         "options": {
           "calendarName": null,
-          "firstReminderMinutes": 0,
+          "firstReminderMinutes": firstReminderMinutes,
           "secondReminderMinutes": 0,
           "recurrence": null,
           "recurrenceEndTime": null
