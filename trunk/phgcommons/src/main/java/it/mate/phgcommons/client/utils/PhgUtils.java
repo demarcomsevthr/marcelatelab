@@ -179,6 +179,14 @@ public class PhgUtils {
     return value;
   }
   
+  public static String getLocalStorageItem(String name, String defaultValue) {
+    String value = getLocalStorageItem(name);
+    if (value == null) {
+      value = defaultValue;
+    }
+    return value;
+  }
+  
   public static native String getLocalStorageItem(String name) /*-{
     return $wnd.localStorage[name];
   }-*/;
