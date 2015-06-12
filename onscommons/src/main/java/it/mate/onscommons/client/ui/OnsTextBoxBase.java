@@ -1,11 +1,11 @@
 package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
+import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.event.NativeGestureEvent;
 import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
-import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -22,6 +22,8 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
   
   private String actualType = "text";
   
+  private Element inputElement;
+  
   protected OnsTextBoxBase(String type) {
     this(DOM.createInputText(), type, "ons-textbox");
   }
@@ -36,6 +38,17 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
     if (className != null) {
       element.addClassName(className);
     }
+    
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        OnsTextBoxBase.this.inputElement = element;
+      }
+    });
+    
+  }
+  
+  public Element getInputElement() {
+    return inputElement;
   }
   
   public void setPlaceholder(String placeholder) {
@@ -90,6 +103,12 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
       OnsenUi.onAvailableElement(this, new Delegate<Element>() {
         public void execute(Element element) {
           element.setAttribute("disabled", "");
+        }
+      });
+    } else {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.removeAttribute("disabled");
         }
       });
     }
@@ -163,9 +182,9 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
         public void execute(Element element) {
           onsChangeHandler = OnsEventUtils.addChangeHandler(element, new NativeGestureHandler() {
             public void on(NativeGestureEvent event) {
-              PhgUtils.log("ONS CHANGE EVENT ");
+//            PhgUtils.log("ONS CHANGE EVENT ");
               String value = event.getTarget().getPropertyString("value");
-              PhgUtils.log("ONS CHANGE EVENT " + value);
+//            PhgUtils.log("ONS CHANGE EVENT " + value);
               ValueChangeEvent.fire(OnsTextBoxBase.this, value);
             }
           });
@@ -175,4 +194,12 @@ public abstract class OnsTextBoxBase extends /* Widget */ ValueBoxBase<String>{
     return super.addValueChangeHandler(handler);
   }
   
+  public void setWidth(final String width) {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        GwtUtils.setJsPropertyString(element.getStyle(), "width", width); 
+      }
+    });
+  }
+
 }
