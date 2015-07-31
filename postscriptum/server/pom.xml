@@ -119,6 +119,10 @@
             <jvmFlag>-Xdebug</jvmFlag>
             <jvmFlag>-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</jvmFlag>
           </jvmFlags>
+          
+          <!-- 22/04/2015 GWT 2.7.0 UPGRADE -->
+          <enableJarSplitting>true</enableJarSplitting>
+          
         </configuration>
         <dependencies>
           <dependency>

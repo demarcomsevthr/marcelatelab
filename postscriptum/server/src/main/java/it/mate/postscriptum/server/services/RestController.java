@@ -40,13 +40,23 @@ public class RestController implements ApplicationContextAware {
     response.getOutputStream().print("Finish");
   }
   
+  /*
+   * COMMENTATA IL 31/07/2015 PER VIA DELLA CRISI SUL SERVER (100% read ops alle 9,40!)
+   * 
   @RequestMapping ("/updateUserInfos")
   public void updateUserInfos(HttpServletResponse response) throws Exception {
-    /*
-    adapter.updateUserInfos();
-    */
     UpdateUserInfosTask.enqueue();
     response.getOutputStream().print("Task enqueued");
+  }
+   */
+  
+  /*
+   * TODO: DA PROVARE
+   */
+  @RequestMapping ("/purgeMessages")
+  public void purgeMessages(HttpServletResponse response) throws Exception {
+    adapter.purgeNotifiedSMSs();
+    response.getOutputStream().print("Finish");
   }
   
 }
