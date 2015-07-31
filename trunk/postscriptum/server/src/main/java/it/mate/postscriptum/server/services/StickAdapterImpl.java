@@ -460,6 +460,21 @@ public class StickAdapterImpl implements StickAdapter {
     }
   }
   
+  //TODO
+  public void purgeNotifiedSMSs() {
+    Date NOW = new Date();
+    LoggingUtils.debug(getClass(), "NOW IS " + NOW);
+    Date limitDate = DateUtils.addDaysToDate(NOW, -180);
+    LoggingUtils.debug(getClass(), "PURGING SMS NOTIFIED BEFORE " + limitDate);
+    List<StickSmsDs> smss = findSmsScheduledBefore(limitDate);
+    for (StickSmsDs sms : smss) {
+      if (StickSms.STATE_NOTIFIED.equals(sms.getState())) {
+        LoggingUtils.debug(getClass(), "purging sms " + sms);
+        dao.delete(sms);
+      }
+    }
+  }
+  
   @SuppressWarnings("deprecation")
   public List<StickSms> findAllSMSs() {
     List<StickSmsDs> smss = dao.findAll(StickSmsDs.class);
@@ -473,6 +488,15 @@ public class StickAdapterImpl implements StickAdapter {
         }), 
         null, StickSms.STATE_SCHEDULED );
     return CloneUtils.clone(results, StickSmsTx2.class, StickSms.class);
+  }
+  
+  private List<StickSmsDs> findSmsScheduledBefore(Date date) {
+    List<StickSmsDs> results = dao.findList(StickSmsDs.class, "scheduled < scheduledParam", 
+        Dao.Utils.buildParameters(new ParameterDefinition[] {
+            new ParameterDefinition(Date.class, "scheduledParam")
+        }), 
+        null, date );
+    return results;
   }
   
   public StickSms update(StickSms entity) {

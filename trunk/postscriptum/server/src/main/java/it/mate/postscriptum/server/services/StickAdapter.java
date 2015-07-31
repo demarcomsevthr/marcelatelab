@@ -47,4 +47,6 @@ public interface StickAdapter {
   
   public void updateUserInfos();
   
+  public void purgeNotifiedSMSs();
+  
 }
