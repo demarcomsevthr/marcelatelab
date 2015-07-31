@@ -2,7 +2,9 @@ package it.mate.commons.server.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateUtils {
   
@@ -22,6 +24,13 @@ public class DateUtils {
     } catch (ParseException e) {
       return null;
     }
+  }
+  
+  public static Date addDaysToDate(Date date, int amount) {
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTime(date);
+    cal.add(Calendar.DAY_OF_YEAR, amount);
+    return cal.getTime();
   }
 
 }
