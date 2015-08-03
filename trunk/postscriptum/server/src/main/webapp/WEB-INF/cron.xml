@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <!-- 
   <cron>
     <url>/rest/checkMessages</url>
     <description>Check Scheduled Messages</description>
     <schedule>every 1 minutes</schedule>
   </cron>
+  <!-- 
   <cron>
     <url>/rest/updateUserInfos</url>
     <description>Update User Infos</description>
