@@ -10,7 +10,7 @@
       
     <g:HTML HTML="Settings" addStyleNames="ui-view-header"/>
     
-    <g:HTMLPanel ui:field="debugPanel" visible="true">
+    <g:HTMLPanel ui:field="debugPanel" visible="false">
     
       <g:HorizontalPanel addStyleNames="ui-setting-row">
         <g:HTML HTML="Debug" addStyleNames="ui-settings-label ui-app-online-mode-label"/>
