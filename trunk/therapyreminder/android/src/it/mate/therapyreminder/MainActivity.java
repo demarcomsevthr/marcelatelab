@@ -19,30 +19,16 @@
 
 package it.mate.therapyreminder;
 
-import org.apache.cordova.Config;
-import org.apache.cordova.CordovaActivity;
-
-import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
-import android.webkit.WebView;
+import org.apache.cordova.*;
 
-public class TherapyReminder extends CordovaActivity {
-
-  @Override
-  @SuppressLint("NewApi")
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    super.init();
-    super.loadUrl(Config.getStartUrl());
-
-    /*
-     * SE SERVE IL REMOTE DEBUGGING NELL'EMULATORE OCCORRE SCOMMENTARE QUI:
-     */
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      WebView.setWebContentsDebuggingEnabled(true);
+public class MainActivity extends CordovaActivity
+{
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // Set by <content src="index.html" /> in config.xml
+        loadUrl(launchUrl);
     }
-    
-  }
-  
 }
