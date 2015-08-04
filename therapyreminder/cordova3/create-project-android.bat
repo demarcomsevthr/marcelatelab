@@ -13,7 +13,7 @@ echo     AND_SDK\tools
 echo.
 echo.
 
-SET JAVA_HOME=D:\OPT\jdk1.7.0_21
+SET JAVA_HOME=P:\OPT\java\jdk1.7.0_67
 
 echo PATH VARIABLE
 echo %path%
@@ -51,10 +51,11 @@ echo.
 echo.
 echo adding plugins
 pause
-call cordova plugin add org.apache.cordova.device
-call cordova plugin add org.apache.cordova.inappbrowser
-call cordova plugin add org.apache.cordova.console
-call cordova plugin add org.apache.cordova.globalization
+call cordova plugin add cordova-plugin-device
+call cordova plugin add cordova-plugin-inappbrowser
+call cordova plugin add cordova-plugin-console
+call cordova plugin add cordova-plugin-globalization
+
 call cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications.git
 
 echo.
