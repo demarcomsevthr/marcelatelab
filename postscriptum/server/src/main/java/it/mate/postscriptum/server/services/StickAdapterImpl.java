@@ -46,18 +46,8 @@ import com.twilio.sdk.resource.factory.SmsFactory;
 import com.twilio.sdk.resource.instance.Message;
 import com.twilio.sdk.resource.instance.Sms;
 
-/**
- * TODO
- * 
- * [03/08/2015
- * 
- * SERVIZIO SOSPESO CAUSA DISALLINEAMENTO SERVER / CLIENT
- * 
- * PER RIPRENDER OCCORRE PROCEDERE CON L'AGGIORNAMENTO A GWT 2.7, QUINDI ONSEN
- *
- */
 
-/* @Service */
+@Service
 public class StickAdapterImpl implements StickAdapter {
   
   private static Logger logger = Logger.getLogger(StickFacadeImpl.class);
