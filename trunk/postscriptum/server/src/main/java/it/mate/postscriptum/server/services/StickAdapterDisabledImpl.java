@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-@Service
+/* @Service */
 public class StickAdapterDisabledImpl implements StickAdapter {
 
   @Override

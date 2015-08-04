@@ -4,7 +4,7 @@
   <application>postscriptumsrv</application>
   <!-- <version>7</version>  -->  
   <!-- <version>7nocron</version> -->
-  <version>8servicedisabled</version>
+  <version>8</version>
   
   <static-files>
     <include path="**" />
