@@ -1,5 +1,4 @@
-cordova.define("org.apache.cordova.globalization.GlobalizationError", function(require, exports, module) { /*
- *
+cordova.define("cordova-plugin-whitelist.whitelist", function(require, exports, module) { /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -19,25 +18,12 @@ cordova.define("org.apache.cordova.globalization.GlobalizationError", function(r
  *
 */
 
-
-/**
- * Globalization error object
- *
- * @constructor
- * @param code
- * @param message
- */
-var GlobalizationError = function(code, message) {
-    this.code = code || null;
-    this.message = message || '';
-};
-
-// Globalization error codes
-GlobalizationError.UNKNOWN_ERROR = 0;
-GlobalizationError.FORMATTING_ERROR = 1;
-GlobalizationError.PARSING_ERROR = 2;
-GlobalizationError.PATTERN_ERROR = 3;
-
-module.exports = GlobalizationError;
+if (!document.querySelector('meta[http-equiv=Content-Security-Policy]')) {
+    var msg = 'No Content-Security-Policy meta tag found. Please add one when using the cordova-plugin-whitelist plugin.';
+    console.error(msg);
+    setInterval(function() {
+        console.warn(msg);
+    }, 10000);
+}
 
 });
