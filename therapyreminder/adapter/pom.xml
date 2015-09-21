@@ -11,6 +11,10 @@
     <appengine.target.version>1.8.7</appengine.target.version>
     <spring.version>3.2.4.RELEASE</spring.version>
     <log4j.version>1.2.14</log4j.version>
+    
+    <gwt.version>2.5.1</gwt.version>
+    <gin.version>1.5.0</gin.version>
+    
   </properties>
   
   <repositories>
@@ -24,6 +28,29 @@
 
   <dependencies>
 
+    <!-- GWT -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${gwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${gwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt.inject</groupId>
+      <artifactId>gin</artifactId>
+      <version>${gin.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>it.mate</groupId>
       <artifactId>gwtcommons</artifactId>
