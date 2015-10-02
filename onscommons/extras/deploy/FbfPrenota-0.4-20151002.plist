@@ -11,7 +11,7 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>https://github.com/demarcomsevthr/marcelatelab/blob/master/onscommons/extras/deploy/FBFPrenota-0.4-20151002.ipa?raw=true</string>
+					<string>https://raw.githubusercontent.com/demarcomsevthr/marcelatelab/master/onscommons/extras/deploy/FBFPrenota-0.4-20151002.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
