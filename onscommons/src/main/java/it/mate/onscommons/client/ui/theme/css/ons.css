@@ -138,3 +138,6 @@ ons-alert-dialog {
   height: 36px;
 }
 
+.ons-list-noborder {
+  border: none;
+}
