@@ -82,6 +82,10 @@ public class SlidingMenu extends JavaScriptObject {
     this.toggleMenu();    
   }-*/;
 
+  public final native boolean isMenuOpened() /*-{
+    return this.isMenuOpened();    
+  }-*/;
+
   public final void closeMenu() {
     closeMenuImpl();
   }

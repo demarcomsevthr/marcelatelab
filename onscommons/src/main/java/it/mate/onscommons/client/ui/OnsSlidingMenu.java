@@ -15,6 +15,7 @@ public class OnsSlidingMenu extends ComplexPanel implements HasWidgets {
   public OnsSlidingMenu() {
     this(DOM.createElement("ons-sliding-menu"));
     getElement().setAttribute("var", "app.menu");
+    getElement().setAttribute("max-slide-distance", "85%");
 //  getElement().setAttribute("type", "overlay");
   }
   

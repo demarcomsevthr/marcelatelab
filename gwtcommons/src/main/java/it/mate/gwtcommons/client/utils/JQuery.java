@@ -309,4 +309,8 @@ public class JQuery extends JavaScriptObject {
     return this.focus(jsHandler);
   }-*/;
 
+  public final native JQuery trigger(String eventType) /*-{
+    return this.trigger(eventType);
+  }-*/;
+
 }
