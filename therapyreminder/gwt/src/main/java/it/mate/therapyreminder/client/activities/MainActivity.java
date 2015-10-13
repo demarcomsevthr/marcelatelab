@@ -102,7 +102,7 @@ public class MainActivity extends MGWTAbstractActivity implements
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
 
     if (place.getToken().equals(MainPlace.HOME)) {
-      PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_3INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
+      PhgUtils.setDesktopDebugBorder(OsDetectionUtils.IPHONE_WIDTH, OsDetectionUtils.IPHONE_4INCH_HEIGHT - OsDetectionUtils.IOS_MARGIN_TOP);
     }
 
     if (AppClientFactory.USE_BACKGROUND_TASKS) {

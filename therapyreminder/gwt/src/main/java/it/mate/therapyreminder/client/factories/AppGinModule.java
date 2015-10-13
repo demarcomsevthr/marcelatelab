@@ -15,8 +15,13 @@ import com.googlecode.gwtphonegap.client.util.PhonegapUtil;
 
 public class AppGinModule extends AbstractGinModule {
 
+  // [13/10/2015]
+  // AGGIORNAMENTO SERVER CON I NUOVI RPC POLICY FILE >> https://therapyremindersrv2015.appspot.com/
+  
   private final static String NAT_PROP_FACADE_MODULE_URL = "remoteFacadeModuleUrl";
-  private final static String DEFAULT_FACADE_MODULE_URL = "https://therapyremindersrv.appspot.com/main/";
+  //private final static String DEFAULT_FACADE_MODULE_URL = "https://therapyremindersrv.appspot.com/main/";
+  private final static String DEFAULT_FACADE_MODULE_URL = "https://therapyremindersrv2015.appspot.com/main/";
+  
   private final static String NAT_PROP_FACADE_RELATIVE_PATH = "remoteFacadeRelativePath";
   private final static String DEFAULT_FACADE_RELATIVE_PATH = ".remoteFacade";
   
@@ -24,7 +29,8 @@ public class AppGinModule extends AbstractGinModule {
   // HO DOVUTO CREARE UNA DOPPIA VERISONE SUL SERVER PER ANDROID 
   // PER POTER FARE L'AGGIORNAMENTO DI CDV
   // NOTA: NON FUNZIONA SU SSL
-  private final static String ANDROID_FACADE_MODULE_URL = "http://2.therapyremindersrv.appspot.com/main/";
+  //private final static String ANDROID_FACADE_MODULE_URL = "http://2.therapyremindersrv.appspot.com/main/";
+  private final static String ANDROID_FACADE_MODULE_URL = DEFAULT_FACADE_MODULE_URL;
   
   private static MainDao appSqlDao;
   

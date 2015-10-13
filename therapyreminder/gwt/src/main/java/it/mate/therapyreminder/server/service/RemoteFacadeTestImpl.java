@@ -30,10 +30,15 @@ public class RemoteFacadeTestImpl extends RemoteServiceServlet implements Remote
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
-    moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "https://therapyremindersrv.appspot.com/main/"; 
+    
+    // [13/10/2015]
+    moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "https://therapyremindersrv2015.appspot.com/main/"; 
+    //moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "https://therapyremindersrv.appspot.com/main/"; 
+    
     /* PROVA DOPPIA VERSIONE SERVER
     moduleBaseUrl = LOCALTEST ? "http://127.0.0.1:8080/main/" : "http://2.therapyremindersrv.appspot.com/main/";
     */ 
+    
     remoteFacade = (RemoteFacade)SyncProxy.newProxyInstance(RemoteFacade.class, moduleBaseUrl, REMOTE_SERVICE_RELATIVE_PATH);
     logger.debug("initialized " + this);
     logger.debug("moduleBaseUrl = " + moduleBaseUrl);
