@@ -27,6 +27,8 @@ public class OnsDialogUtils {
   
   private static boolean synchronizedConfirm = false;
   
+  private static int synchronizedAlertRetry = -1;
+  
   public static void alert(String message) {
     alert(null, message);
   }
@@ -55,15 +57,29 @@ public class OnsDialogUtils {
     alert(title, message, messageHtml, buttonLabel, animation, null);
   }
   
-  public static void alert(String title, String message, String messageHtml, String buttonLabel, String animation, final Delegate<Void> delegate) {
+  public static void alert(final String title, final String message, final String messageHtml, final String buttonLabel, final String animation, final Delegate<Void> delegate) {
     if (synchronizedAlert) {
+      if (synchronizedAlertRetry < 10) {
+        synchronizedAlertRetry ++;
+        GwtUtils.deferredExecution(500, new Delegate<Void>() {
+          public void execute(Void element) {
+            alert(title, message, messageHtml, buttonLabel, animation, delegate);
+          }
+        });
+      } else {
+        if (delegate != null) {
+          delegate.execute(null);
+        }
+      }
       return;
     }
     synchronizedAlert = true;
+    synchronizedAlertRetry = -1;
     alertImpl(Options.create().setTitle(title).setMessage(message).setMessageHtml(messageHtml)
       .setButtonLabel(buttonLabel).setAnimation(animation).setCallback(new JSOCallback() {
         public void handle(JavaScriptObject jso) {
           synchronizedAlert = false;
+          synchronizedAlertRetry = -1;
           if (delegate != null) {
             delegate.execute(null);
           }
@@ -268,7 +284,12 @@ public class OnsDialogUtils {
   
   public static void hideWaitingDialog() {
     if (synchronizedWaitingDialog != null) {
-      synchronizedWaitingDialog.hide();
+      try {
+        PhgUtils.log("hinding synchronized waiting dialog...");
+        synchronizedWaitingDialog.hide();
+      } catch (Throwable th) {
+        PhgUtils.log("hinding synchronized waiting dialog exception, proceed");
+      }
       synchronizedWaitingDialog = null;
     }
   }

@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, navigation*, span, dialog*, list*;
+@external ons*, gwt*, navigation*, span, dialog*, list*, picker*;
 
 @def TOOLBAR_COLOR rgb(255, 255, 255);
 
@@ -140,4 +140,8 @@ ons-alert-dialog {
 
 .ons-list-noborder {
   border: none;
+}
+
+.ons-page .picker__select--month, .ons-page .picker__select--year {
+  height: 2.2em;
 }

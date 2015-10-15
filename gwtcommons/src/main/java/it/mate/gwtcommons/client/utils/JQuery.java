@@ -313,4 +313,23 @@ public class JQuery extends JavaScriptObject {
     return this.trigger(eventType);
   }-*/;
 
+  public final native JQuery pickdate(String format, String container, boolean closeOnSelect, boolean closeOnClear) /*-{
+    var options = {};
+    if (format != null) {
+      options['format'] = format;
+      options['formatSubmit'] = format;
+    }
+    if (container != null) {
+      options['container'] = container;
+    }
+    options['closeOnSelect'] = closeOnSelect;
+    options['closeOnClear'] = closeOnClear;
+    options['selectYears'] = 40;
+    options['selectMonths'] = true;
+    options['monthsFull'] = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+    options['weekdaysShort'] = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+    options['today'] = 'Oggi';
+    return this.pickadate(options);
+  }-*/;
+
 }
