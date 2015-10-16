@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 
 import java.util.Date;
 
@@ -12,7 +13,8 @@ import com.google.gwt.dom.client.Element;
 
 public class OnsDateBox extends OnsTextBox {
   
-  private static boolean USE_JS_DATEPICKER = true; 
+//private static boolean USE_JS_DATEPICKER = true; 
+  private static boolean USE_JS_DATEPICKER = OsDetectionUtils.isAndroid(); 
   
   private static String JS_FORMAT = "dd/MM/yyyy";
   
