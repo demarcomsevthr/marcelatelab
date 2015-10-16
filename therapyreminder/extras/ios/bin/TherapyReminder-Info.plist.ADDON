@@ -1,5 +1,5 @@
 
-    <!-- DA AGGIUNGERE DENTRO dict IN FONDO -->
+    <!-- DA AGGIUNGERE DENTRO il dict piu' esterno IN FONDO -->
     <array>
         <dict>
             <key>CFBundleURLSchemes</key>

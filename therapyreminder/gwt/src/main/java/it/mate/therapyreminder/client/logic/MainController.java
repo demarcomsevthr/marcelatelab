@@ -63,11 +63,13 @@ public class MainController {
 
     if (!OsDetectionUtils.isDesktop()) {
       checkOrphanNotifications();
-      LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
-        public void handleEvent(String id, String state, String json) {
-          PhgUtils.log("RECEIVED CANCEL NOTIFICATION EVENT: id="+id);
-        }
-      });
+      if (LocalNotificationsPlugin.isInstalled()) {
+        LocalNotificationsPlugin.setOnCancel(new LocalNotificationsPlugin.JSOEventCallback() {
+          public void handleEvent(String id, String state, String json) {
+            PhgUtils.log("RECEIVED CANCEL NOTIFICATION EVENT: id="+id);
+          }
+        });
+      }
     }
   }
   
@@ -79,11 +81,13 @@ public class MainController {
           timer.get().cancel();
           
           // purge orphan notifications
-          LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
-            public void execute(List<String> ids) {
-              MainController.getInstance().purgeNotificationIds(ids);
-            }
-          });
+          if (LocalNotificationsPlugin.isInstalled()) {
+            LocalNotificationsPlugin.getScheduledIds(new Delegate<List<String>>() {
+              public void execute(List<String> ids) {
+                MainController.getInstance().purgeNotificationIds(ids);
+              }
+            });
+          }
           
         }
       }
@@ -995,7 +999,9 @@ public class MainController {
               PhgUtils.log("deleting notification with id " + notificationId);
               CalendarEvent calEvent = new CalendarEvent();
               calEvent.setNotificationId(notificationId);
-              LocalNotificationsPlugin.deleteEvent(calEvent);
+              if (LocalNotificationsPlugin.isInstalled()) {
+                LocalNotificationsPlugin.deleteEvent(calEvent);
+              }
             }
           }
         });
