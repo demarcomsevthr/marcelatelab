@@ -22,6 +22,8 @@ public class MainEntryPoint implements EntryPoint {
       PhgUtils.startTrace();
     }
     
+    GwtUtils.setEnableLogInProductionMode(true);
+    
     PhgUtils.log("***********    STARTING NEW APP INSTANCE   ***********");
     GwtUtils.logEnvironment(getClass(), "onModuleLoad");
     PhgUtils.logEnvironment();

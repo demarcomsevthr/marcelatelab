@@ -143,6 +143,9 @@ public class AppClientFactoryImpl extends BaseClientFactoryImpl<AppGinjector> im
 
     // 07/07/2014: bug fix 
     if (PhgUtils.getAppLocalLanguageImpl() == null) {
+      
+      PhgUtils.log("Locale language from locale info = " + PhgUtils.getLocaleLanguageFromLocaleInfo());
+      
       if (Window.Location.getHref().contains("index.html")) {
         if ("it".equals(PhgUtils.getLocaleLanguageFromLocaleInfo())) {
           PhgUtils.setAppLocalLanguageAndReload("it");
