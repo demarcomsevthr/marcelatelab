@@ -18,4 +18,14 @@ https://raw.githubusercontent.com/demarcomsevthr/marcelatelab/master/therapyremi
 > Download url da mandare al tester:
 	
 itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/demarcomsevthr/marcelatelab/master/therapyreminder/extras/deploy/THR-1.1.0-110.plist
+
+
+    >>>>   HISTORY   <<<<
+    
+    
+itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/demarcomsevthr/marcelatelab/master/therapyreminder/extras/deploy/THR-1.1.0-110.plist
+
+itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/demarcomsevthr/marcelatelab/master/therapyreminder/extras/deploy/THR-1.1.0-RC5.plist
+
+    
 	
