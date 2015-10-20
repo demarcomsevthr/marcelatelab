@@ -453,12 +453,15 @@ public class PhgUtils {
   
   public static String getLocaleLanguageFromLocaleInfo() {
     String language = LocaleInfo.getCurrentLocale().getLocaleName();
+    PhgUtils.log("getLocaleLanguageFromLocaleInfo#1: " + language);
     if ("default".equals(language)) {
       language = getLocaleLanguageFromNavigator();
+      PhgUtils.log("getLocaleLanguageFromLocaleInfo#2: " + language);
     }
     if (language != null) {
       language = getCountryFromLocaleName(language);
     }
+    PhgUtils.log("getLocaleLanguageFromLocaleInfo#3: " + language);
     return language;
   }
   
