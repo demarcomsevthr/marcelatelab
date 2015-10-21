@@ -8,6 +8,8 @@
     
     360 x 640 (NEXUS 5, HTC ONE, LG G2, GALAXY S5, S6, MOTO G, X, SONY XPERIA] 
     
+    360 x 567 (NEXUS 5 - DA SIMULATORE!] 
+    
     384 x 567 (NEXUS 4 - DA SIMULATORE!] 
     
     384 x 640 (NEXUS 4!] 
