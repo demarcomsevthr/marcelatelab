@@ -62,7 +62,11 @@ public class JQuery extends JavaScriptObject {
   }
   
   public final Element firstElement() {
-    return toElements().get(0);
+    List<Element> elements = toElements();
+    if (elements == null || elements.size() == 0) {
+      return null;
+    }
+    return elements.get(0);
   }
   
   public final List<Element> toElements() {

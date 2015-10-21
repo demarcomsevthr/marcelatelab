@@ -5,10 +5,12 @@ import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.Date;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Timer;
 
 
 public class OnsDateBox extends OnsTextBox {
@@ -22,11 +24,7 @@ public class OnsDateBox extends OnsTextBox {
     super("date");
     addStyleName("text-input");
     if (USE_JS_DATEPICKER) {
-      GwtUtils.deferredExecution(400, new Delegate<Void>() {
-        public void execute(Void element) {
-          resetPickdater();
-        }
-      });
+      initializeDatepicker();
     }
   }
   
@@ -56,17 +54,62 @@ public class OnsDateBox extends OnsTextBox {
     OnsenUi.onAvailableElement(this, new Delegate<Element>() {
       public void execute(Element element) {
         element.setAttribute("data-value", dataValue);
-        resetPickdater();
+        initializeDatepicker();
       }
     });
   }
   
-  private void resetPickdater() {
-    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
-      public void execute(Element element) {
-        JQuery.withElement(element).pickdate(JS_FORMAT.toLowerCase(), null, true, true);
+  private void initializeDatepicker() {
+    GwtUtils.deferredExecution(400, new Delegate<Void>() {
+      public void execute(Void element) {
+        OnsenUi.onAvailableElement(OnsDateBox.this, new Delegate<Element>() {
+          public void execute(Element element) {
+
+            String containerId = null;
+            
+            /*
+            if (OnsToolbar.getGlobalToolbarElement() != null) {
+              containerId = OnsToolbar.getGlobalToolbarElement().getId();
+              PhgUtils.log("******* Datepicker container = " + containerId);
+            }
+            */
+            
+            // 21/10/2015 WORKAROUND: a volte il picker non compare, con questo sembra che funzioni meglio (non togliere le get) 
+            GwtUtils.deferredExecution(500, new Delegate<Void>() {
+              public void execute(Void element) {
+                onAvailableElementByClassname("picker", new Delegate<Element>() {
+                  public void execute(Element element) {
+                    String msg = "Found picker element " + element.getClassName() + " " + element.getAbsoluteTop() + " " + element.getAbsoluteLeft() + " " + element.getClientHeight() + " " + element.getClientWidth() + " " + element.getStyle().getVisibility();
+                    if (element.getClassName().contains("focus")) {
+                      element.focus();
+                      PhgUtils.log("focusing picker element");
+                    }
+                    //PhgUtils.log(msg);
+                  }
+                });
+              }
+            });
+            
+            JQuery.withElement(element).pickdate(JS_FORMAT.toLowerCase(), containerId, true, true);
+          }
+        });
       }
     });
+  }
+  
+  private static void onAvailableElementByClassname (final String classname, final Delegate<Element> delegate) {
+    new Timer() {
+      public void run() {
+        Element element = JQuery.selectFirstElement("." + classname);
+        if (element != null) {
+//        this.cancel();
+          delegate.execute(element);
+        } else {
+          PhgUtils.log("Picker element timer cancel");
+          this.cancel();
+        }
+      }
+    }.scheduleRepeating(1000);
   }
   
 }

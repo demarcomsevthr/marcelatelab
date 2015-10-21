@@ -17,6 +17,8 @@ public class OnsToolbar extends HTMLPanel {
   
   private static boolean waitingButtonVisible = false;
   
+  private static Element toolbarElement = null;
+  
   public OnsToolbar() {
     this(TAG_NAME, "");
   }
@@ -30,6 +32,7 @@ public class OnsToolbar extends HTMLPanel {
     getElement().addClassName("ons-toolbar");
     OnsenUi.ensureId(getElement());
     createWaitingIcon();
+    toolbarElement = getElement();
   }
 
   @Override
@@ -110,5 +113,9 @@ public class OnsToolbar extends HTMLPanel {
       $wnd._onsToolbarButtonWaiting._element[0].style.opacity = opacity;
     }
   }-*/;
+  
+  public static Element getGlobalToolbarElement() {
+    return toolbarElement;
+  }
 
 }
