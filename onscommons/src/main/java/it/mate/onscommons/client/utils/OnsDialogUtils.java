@@ -38,7 +38,7 @@ public class OnsDialogUtils {
   }
   
   public static void alert(String title, String message) {
-    alert(title, message, null, null);
+    alert(title, message, null, null, null, null);
   }
   
   public static void alert(String title, String message, Delegate<Void> delegate) {
@@ -46,11 +46,15 @@ public class OnsDialogUtils {
   }
   
   public static void alert(String title, String message, String messageHtml) {
-    alert(title, message, messageHtml, null);
+    alert(title, message, messageHtml, null, null, null);
   }
   
   public static void alert(String title, String message, String messageHtml, String buttonLabel) {
     alert(title, message, messageHtml, buttonLabel, null);
+  }
+  
+  public static void alert(String title, String message, String messageHtml, Delegate<Void> delegate) {
+    alert(title, message, messageHtml, null, null, delegate);
   }
   
   public static void alert(String title, String message, String messageHtml, String buttonLabel, String animation) {
