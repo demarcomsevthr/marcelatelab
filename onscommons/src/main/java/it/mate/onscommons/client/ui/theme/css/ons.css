@@ -125,12 +125,16 @@ ons-alert-dialog {
   background-color: rgb(232, 242, 254);
 }
 
+@eval waitingDivWidth it.mate.onscommons.client.ui.theme.DefaultTheme.getWaitingDivWidth();
+
 .ons-waiting-div {
   position: absolute;
   border: none;
   right: 12px;
   padding-top: 2px;
-  width: 40px;
+  width: waitingDivWidth;
+  background-color: #167ac6;
+  background: #167ac6;
 }
 
 .ons-waiting-div-icon {

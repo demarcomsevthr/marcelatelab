@@ -6,6 +6,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.DataResource;
+import com.google.gwt.user.client.Window;
 
 public class DefaultTheme {
 
@@ -21,6 +22,18 @@ public class DefaultTheme {
       }
       return bundle;
     }
+  }
+  
+  public static String getWaitingDivWidth() {
+    String res = "40px";
+    if (Window.getClientWidth() < 768) {
+      res = "40px"; 
+    } else if (Window.getClientWidth() < 1024) {
+      res = "60px";
+    } else {
+      res = "80px";
+    }
+    return res;
   }
   
   public interface ThemeBundle extends ClientBundle {

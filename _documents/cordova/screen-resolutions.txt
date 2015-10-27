@@ -46,15 +46,17 @@
 
   IOS IPHONE
   
-    320 x 480 (iPhone 4)
+    320 x 480 (iPhone 4 - 3,5")
     
-    320 x 568 (iPhone 5)
+    320 x 568 (iPhone 5/5C/5S - 4,0")
     
-    375 x 667 (iPhone 6)
+    375 x 667 (iPhone 6/6S - 4,7")
 
-    414 x 736 (iPhone 6+)
+    414 x 736 (iPhone 6+ - 5,5")
     
-    768 x 1024 (iPad)
+    768 x 1024 (iPad 1/2 - 9.7")
+
+    768 x 1024 (iPad 3/4/Air - 9.7")
 
 
 
