@@ -52,6 +52,10 @@ public class OnsEventUtils {
     return internalAddHandler(element, "change", handler, attachHandlerToElement);
   }
   
+  public static HandlerRegistration addHandler(Element element, String eventName, NativeGestureHandler handler) {
+    return addHandler(element, eventName, true, handler);
+  }
+  
   public static HandlerRegistration addHandler(Element element, String eventName, boolean attachHandlerToElement, final NativeGestureHandler handler) {
     return internalAddHandler(element, eventName, handler, attachHandlerToElement);
   }

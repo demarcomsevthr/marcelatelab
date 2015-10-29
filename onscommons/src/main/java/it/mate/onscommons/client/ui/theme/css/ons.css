@@ -149,3 +149,14 @@ ons-alert-dialog {
 .ons-page .picker__select--month, .ons-page .picker__select--year {
   height: 2.2em;
 }
+
+@eval onsDatePickerHeight it.mate.onscommons.client.utils.OnsDatePickerYearDialog.getDialogHeight();
+
+.ons-date-picker-year-dialog .dialog {
+  min-height: onsDatePickerHeight;
+}
+
+.ons-date-picker-year-dialog-carousel {
+  height: 100%;
+}
+
