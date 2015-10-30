@@ -150,13 +150,13 @@ ons-alert-dialog {
   height: 2.2em;
 }
 
-@eval onsDatePickerHeight it.mate.onscommons.client.utils.OnsDatePickerYearDialog.getDialogHeight();
+@eval onsDialogComboHeight it.mate.onscommons.client.ui.OnsDialogCombo.getDialogHeight();
 
-.ons-date-picker-year-dialog .dialog {
-  min-height: onsDatePickerHeight;
+.ons-combo-dialog .dialog {
+  min-height: onsDialogComboHeight;
 }
 
-.ons-date-picker-year-dialog-carousel {
+.ons-combo-dialog-carousel {
   height: 100%;
 }
 

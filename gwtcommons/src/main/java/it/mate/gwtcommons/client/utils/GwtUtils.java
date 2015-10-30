@@ -239,6 +239,10 @@ public class GwtUtils {
     }
   }
   
+  public static boolean isNumber(String text) {
+    return StringUtils.isNumber(text);
+  }
+  
   public static NumberFormat getDefaultCurrencyFmt() {
     return currencyFMT;
   }

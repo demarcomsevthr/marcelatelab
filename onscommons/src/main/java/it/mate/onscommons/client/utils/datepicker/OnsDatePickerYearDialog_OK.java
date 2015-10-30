@@ -1,4 +1,4 @@
-package it.mate.onscommons.client.utils;
+package it.mate.onscommons.client.utils.datepicker;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -7,6 +7,7 @@ import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsDialog;
+import it.mate.onscommons.client.utils.OnsDialogUtils;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
@@ -16,7 +17,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 
-public class OnsDatePickerYearDialog {
+public class OnsDatePickerYearDialog_OK {
 
   private OnsDialog dialog;
   
@@ -34,7 +35,7 @@ public class OnsDatePickerYearDialog {
   
   private static final int VISIBLE_YEARS_AFTER = 20; 
   
-  public OnsDatePickerYearDialog(int currentYear) {
+  public OnsDatePickerYearDialog_OK(int currentYear) {
     this.currentYear = currentYear;
     createYearDialog();
   }
