@@ -8,7 +8,6 @@ import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
-import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
@@ -27,9 +26,9 @@ public abstract class OnsDialogCombo {
   
   private String carouselId;
   
-  private int internalActiveIndex;
+  private int carouselActiveIndex;
   
-  private int externalActiveIndex;
+  private int currentItemIndex = -1;
   
   private int itemCount;
   
@@ -37,15 +36,11 @@ public abstract class OnsDialogCombo {
   
   private List<Item> items = null;
   
-  private int visibleItemsBefore = 10; 
+  private int loadedItemsBefore = 10; 
   
-  private int visibleItemsAfter = 20; 
+  private int loadedItemsAfter = 20; 
   
   private boolean lazyLoading = false;
-  
-  private static final String TOUCHSTART = OsDetectionUtils.isDesktop() ? "mousedown" : "touchstart"; 
-  
-  private static final String TOUCHEND = OsDetectionUtils.isDesktop() ? "mouseup" : "touchend"; 
   
   public static interface ItemDelegate {
     public Item getItem(int index);
@@ -67,41 +62,43 @@ public abstract class OnsDialogCombo {
   }
 
   public OnsDialogCombo(List<Item> items) {
-    this(items, items.size(), null, -1, -1);
+    this(items, items.size(), null, 0, items.size());
   }
   
   public OnsDialogCombo(int itemCount, ItemDelegate itemDelegate) {
-    this(null, itemCount, itemDelegate, -1, -1);
+    this(null, itemCount, itemDelegate, 0, itemCount);
   }
   
-  public OnsDialogCombo(int visibleItemsBefore, int visibleItemsAfter, ItemDelegate itemDelegate) {
-    this(null, (visibleItemsBefore + visibleItemsAfter), itemDelegate, visibleItemsBefore, visibleItemsAfter);
+  public OnsDialogCombo(int loadedItemsBefore, int loadedItemsAfter, ItemDelegate itemDelegate) {
+    this(null, (loadedItemsBefore + loadedItemsAfter), itemDelegate, loadedItemsBefore, loadedItemsAfter);
   }
   
   protected void setLazyLoading(boolean lazyLoading) {
     this.lazyLoading = lazyLoading;
   }
   
-  protected OnsDialogCombo(List<Item> items, int itemCount, ItemDelegate itemDelegate, int visibleItemsBefore, int visibleItemsAfter) {
+  protected void setInitialIndex(int initialIndex) {
+    this.currentItemIndex = initialIndex;
+  }
+  
+  protected OnsDialogCombo(List<Item> items, int itemCount, ItemDelegate itemDelegate, int loadedItemsBefore, int loadedItemsAfter) {
     this.items = items;
     this.itemCount = itemCount;
     this.itemDelegate = itemDelegate;
-    if (visibleItemsBefore > -1) {
-      this.visibleItemsBefore = visibleItemsBefore; 
+    if (loadedItemsBefore > -1) {
+      this.loadedItemsBefore = loadedItemsBefore; 
     } else {
-      this.visibleItemsBefore = itemCount / 2; 
+      this.loadedItemsBefore = itemCount / 2; 
     }
-    if (visibleItemsAfter > -1) {
-      this.visibleItemsAfter = visibleItemsAfter; 
+    if (loadedItemsAfter > -1) {
+      this.loadedItemsAfter = loadedItemsAfter; 
     } else {
-      this.visibleItemsAfter = itemCount / 2; 
+      this.loadedItemsAfter = itemCount / 2; 
     }
     createDialog();
   }
   
-  protected OnsDialogCombo() {
-
-  }
+  protected OnsDialogCombo() { }
   
   public abstract void onItemSelected(Item item);
   
@@ -116,7 +113,7 @@ public abstract class OnsDialogCombo {
         html += "</ons-carousel-item>";
         html += "</ons-carousel>";
         html += "</ons-page>";
-        dialog = OnsDialogUtils.createDialog(html, false, null, "ons-combo-dialog");
+        dialog = OnsDialogUtils.createDialog(html, true, null, "ons-combo-dialog");
         populateCarousel();
       }
     });
@@ -130,25 +127,26 @@ public abstract class OnsDialogCombo {
   private void populateCarousel() {
     OnsenUi.onAvailableElement(carouselId, new Delegate<Element>() {
       public void execute(Element carouselElement) {
-        
         carouselElement.setInnerHTML("");
-        
         if (items != null) {
           for (int index = 0; index < items.size(); index++) {
             Item item = items.get(index);
-            carouselElement.appendChild(createCarouselItemElement(item.getHtml(), item.getValue(), null));
+            carouselElement.appendChild(createCarouselItemElement(item, index));
           }
         } else {
           for (int index = 0; index < itemCount; index++) {
-            Item item = itemDelegate.getItem(index - visibleItemsBefore);
-            carouselElement.appendChild(createCarouselItemElement(item.getHtml(), item.getValue(), null));
+            Item item = itemDelegate.getItem(index - loadedItemsBefore);
+            carouselElement.appendChild(createCarouselItemElement(item, null));
           }
         }
-        
         GwtUtils.deferredExecution(100, new Delegate<Void>() {
           public void execute(Void element) {
-            externalActiveIndex = 0;
-            setActiveIndex(visibleItemsBefore);
+            if (currentItemIndex < 0) {
+              currentItemIndex = 0;
+              setCarouselActiveIndex(loadedItemsBefore);
+            } else {
+              setCarouselActiveIndex(currentItemIndex);
+            }
             refreshCarousel();
             if (lazyLoading) {
               setOnPostchange(new JSOCallback() {
@@ -159,77 +157,45 @@ public abstract class OnsDialogCombo {
             }
           }
         });
-        
       }
     });
   }
   
-  private void onPostchange(JavaScriptObject event) {
-    PhgUtils.log("OnPostchange: event {"+
-        " carousel="+ GwtUtils.getJsPropertyObject(event, "carousel") +
-        ", activeIndex="+ GwtUtils.getJsPropertyInt(event, "activeIndex") +
-        ", lastActiveIndex="+ GwtUtils.getJsPropertyInt(event, "lastActiveIndex") +
-        ", internalActiveIndex="+ internalActiveIndex
-        +"}");
-    final int newActiveIndex = GwtUtils.getJsPropertyInt(event, "activeIndex");
-    if (newActiveIndex != internalActiveIndex) {
-      OnsenUi.onAvailableElement(carouselId, new Delegate<Element>() {
-        public void execute(Element carouselElement) {
-          if (newActiveIndex < internalActiveIndex) {
-            int diff = internalActiveIndex - newActiveIndex;
-            for (int it = 0; it < diff; it++) {
-              externalActiveIndex -= 1;
-              Item item = itemDelegate.getItem(externalActiveIndex - visibleItemsBefore);
-              carouselElement.insertFirst(createCarouselItemElement(item.getHtml(), item.getValue(), null));
-              carouselElement.getLastChild().removeFromParent();
-            }
-          } else if (newActiveIndex > internalActiveIndex) {
-            int diff = newActiveIndex - internalActiveIndex;
-            for (int it = 0; it < diff; it++) {
-              externalActiveIndex += 1;
-              Item item = itemDelegate.getItem(externalActiveIndex + visibleItemsAfter - 1);
-              carouselElement.appendChild(createCarouselItemElement(item.getHtml(), item.getValue(), null));
-              carouselElement.getFirstChild().removeFromParent();
-            }
-          }
-          setActiveIndex(visibleItemsBefore);
-          refreshCarousel();
-        }
-      });
-    }
-  }
-  
-  private Element createCarouselItemElement(SafeHtml html, String dataValue, Integer index) {
+  private Element createCarouselItemElement(Item item, Integer index) {
     String id = OnsenUi.createUniqueElementId();
     Element carouselItemElem = DOM.createElement("ons-carousel-item");
     carouselItemElem.setId(id);
-    carouselItemElem.setAttribute("data-value", dataValue);
+    carouselItemElem.setAttribute("data-value", item.getValue());
     if (index != null) {
       carouselItemElem.setAttribute("data-item-index", ""+index);
     }
-    carouselItemElem.setInnerHTML(html.asString());
+    carouselItemElem.setInnerHTML(item.getHtml().asString());
     OnsenUi.onAvailableElement(id, new Delegate<Element>() {
       public void execute(Element carouselItemElement) {
-        OnsEventUtils.addHandler(carouselItemElement, TOUCHSTART, new NativeGestureHandler() {
+        OnsEventUtils.addTouchStartHandler(carouselItemElement, new NativeGestureHandler() {
           public void on(NativeGestureEvent event) {
             event.getTarget().setPropertyInt("lastX", event.getTarget().getAbsoluteLeft());
             event.getTarget().setPropertyInt("lastY", event.getTarget().getAbsoluteTop());
           }
         });
-        OnsEventUtils.addHandler(carouselItemElement, TOUCHEND, new NativeGestureHandler() {
+        OnsEventUtils.addTouchEndHandler(carouselItemElement, new NativeGestureHandler() {
           public void on(NativeGestureEvent event) {
             int lastX = event.getTarget().getPropertyInt("lastX");
             int lastY = event.getTarget().getPropertyInt("lastY");
             if (lastX == event.getTarget().getAbsoluteLeft() && lastY == event.getTarget().getAbsoluteTop()) {
               String dataValue = event.getTarget().getAttribute("data-value");
-              String dataItemIndex = event.getTarget().getAttribute("data-item-inex");
+              String dataItemIndex = event.getTarget().getAttribute("data-item-index");
               PhgUtils.log("SELECTED ITEM: " + event.getTarget());
               PhgUtils.log("SELECTED ITEM DATA-VALUE: " + dataValue);
               PhgUtils.log("SELECTED ITEM INDEX: " + dataItemIndex);
               dialog.hide();
               if (StringUtils.isNumber(dataItemIndex) && items != null) {
                 int index = Integer.parseInt(dataItemIndex);
-                onItemSelected(items.get(index));
+                if (index < items.size()) {
+                  onItemSelected(items.get(index));
+                } else {
+                  onItemSelected(new Item(SafeHtmlUtils.fromString(event.getTarget().getInnerHTML()), dataValue));
+                }
               } else {
                 onItemSelected(new Item(SafeHtmlUtils.fromString(event.getTarget().getInnerHTML()), dataValue));
               }
@@ -239,6 +205,41 @@ public abstract class OnsDialogCombo {
       }
     });
     return carouselItemElem;
+  }
+  
+  private void onPostchange(JavaScriptObject event) {
+    PhgUtils.log("OnPostchange: event {"+
+        " carousel="+ GwtUtils.getJsPropertyObject(event, "carousel") +
+        ", activeIndex="+ GwtUtils.getJsPropertyInt(event, "activeIndex") +
+        ", lastActiveIndex="+ GwtUtils.getJsPropertyInt(event, "lastActiveIndex") +
+        ", carouselActiveIndex="+ carouselActiveIndex
+        +"}");
+    final int newActiveIndex = GwtUtils.getJsPropertyInt(event, "activeIndex");
+    if (newActiveIndex != carouselActiveIndex) {
+      OnsenUi.onAvailableElement(carouselId, new Delegate<Element>() {
+        public void execute(Element carouselElement) {
+          if (newActiveIndex < carouselActiveIndex) {
+            int diff = carouselActiveIndex - newActiveIndex;
+            for (int it = 0; it < diff; it++) {
+              currentItemIndex -= 1;
+              Item item = itemDelegate.getItem(currentItemIndex - loadedItemsBefore);
+              carouselElement.insertFirst(createCarouselItemElement(item, null));
+              carouselElement.getLastChild().removeFromParent();
+            }
+          } else if (newActiveIndex > carouselActiveIndex) {
+            int diff = newActiveIndex - carouselActiveIndex;
+            for (int it = 0; it < diff; it++) {
+              currentItemIndex += 1;
+              Item item = itemDelegate.getItem(currentItemIndex + loadedItemsAfter - 1);
+              carouselElement.appendChild(createCarouselItemElement(item, null));
+              carouselElement.getFirstChild().removeFromParent();
+            }
+          }
+          setCarouselActiveIndex(loadedItemsBefore);
+          refreshCarousel();
+        }
+      });
+    }
   }
   
   protected final native void refreshCarousel() /*-{
@@ -252,9 +253,9 @@ public abstract class OnsDialogCombo {
     $wnd.onsComboDialogCarousel.on("postchange", jsOnPostchange);
   }-*/;
   
-  protected void setActiveIndex(int index) {
-    internalActiveIndex = index;
-    _setActiveIndex(internalActiveIndex);
+  protected void setCarouselActiveIndex(int index) {
+    carouselActiveIndex = index;
+    _setActiveIndex(carouselActiveIndex);
   }
     
   protected final native void _setActiveIndex(int index) /*-{

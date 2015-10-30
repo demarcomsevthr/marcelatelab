@@ -10,7 +10,7 @@ public class StringUtils {
   }
   
   public static boolean isNumber(String text) {
-    return text != null && text.matches("[0-9]*");
+    return text != null && text.trim().length() > 0 && text.matches("[0-9]*");
   }
   
 }

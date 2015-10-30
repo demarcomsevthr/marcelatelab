@@ -250,6 +250,21 @@ public class OnsDialogUtils {
     return synchronizedDialog;
   }
   
+  public static OnsDialog createDialogMulti(String html, boolean cancelable, String stylename) {
+    Widget widget = new HTML(html);
+    final OnsDialog dialog = new OnsDialog();
+    if (stylename != null) {
+      dialog.addStyleName(stylename);
+    }
+    dialog.show(widget, Options.create().setAnimation(null), cancelable);
+    dialog.addOnHideDelegate(new Delegate<JavaScriptObject>() {
+      public void execute(JavaScriptObject element) {
+        PhgUtils.log("CLOSING DIALOG " + dialog);
+      }
+    });
+    return dialog;
+  }
+  
   public static void showWaitingDialog() {
     showWaitingDialog("Attendere prego", 30000);
   }

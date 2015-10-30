@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, navigation*, span, dialog*, list*, picker*;
+@external ons*, gwt*, navigation*, span, dialog*, list*, picker*, page*;
 
 @def TOOLBAR_COLOR rgb(255, 255, 255);
 
@@ -150,6 +150,10 @@ ons-alert-dialog {
   height: 2.2em;
 }
 
+ons-dialog .page__content.ons-page-inner {
+  background-color: white !important;
+}
+
 @eval onsDialogComboHeight it.mate.onscommons.client.ui.OnsDialogCombo.getDialogHeight();
 
 .ons-combo-dialog .dialog {
@@ -160,3 +164,50 @@ ons-alert-dialog {
   height: 100%;
 }
 
+@eval onsDatePickerHeight it.mate.onscommons.client.utils.OnsDatePicker.getDialogHeight();
+
+@eval onsDatePickerWidth it.mate.onscommons.client.utils.OnsDatePicker.getDialogWidth();
+
+.ons-date-picker-dialog .dialog {
+  min-width: onsDatePickerWidth;
+  min-height: onsDatePickerHeight;
+}
+
+.ons-date-picker-dialog .page__content.ons-page-inner {
+  padding: 0.5em 1em;
+}
+
+.ons-date-picker-carousel {
+  width: 100%;
+  height: 80%;
+}
+
+.ons-date-picker-header {
+  width: 100%;
+}
+
+.ons-date-picker-header input {
+  width: 8em;
+  margin-bottom: 0.2em;
+  margin: 0em 1em;
+}
+
+.ons-date-picker-header-left, .ons-date-picker-header-right {
+  width: 15%;
+}
+
+.ons-date-picker-header-month, .ons-date-picker-header-year {
+  width: 30%;
+}
+
+.ons-date-picker-month-days-header td {
+  padding-top: 0.5em;
+}
+
+.ons-date-picker-month-table {
+  width: 100%;
+}
+
+.ons-date-picker-month-day.ons-date-picker-selected {
+  background-color: #61CEF3;
+}
