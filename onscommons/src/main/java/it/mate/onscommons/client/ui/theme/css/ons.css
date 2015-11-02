@@ -162,8 +162,11 @@ ons-dialog .dialog.dialog_anti_font_blur_correction {
 
 @eval onsDialogComboHeight it.mate.onscommons.client.ui.OnsDialogCombo.getDialogHeight();
 
+@eval onsDialogComboWidth it.mate.onscommons.client.ui.OnsDialogCombo.getDialogWidth();
+
 .ons-combo-dialog .dialog {
   min-height: onsDialogComboHeight;
+  min-width: onsDialogComboWidth;
   border: 2px solid #38F4FA;
 }
 
@@ -186,7 +189,11 @@ ons-dialog .dialog.dialog_anti_font_blur_correction {
 }
 
 .ons-date-picker-dialog .page__content.ons-page-inner {
-  padding: 0.5em 1em;
+  padding: 0.5em 0.2em;
+}
+
+.ons-date-picker-dialog table {
+  text-align: center;
 }
 
 .ons-date-picker-carousel {
@@ -242,7 +249,10 @@ ons-dialog .dialog.dialog_anti_font_blur_correction {
 }
 
 .ons-date-picker-footer {
-	width: 100%;
+  width: 92%;
+  position: absolute;
+  height: 12%;
+  bottom: 0;
 }
 
 .ons-date-picker-footer span {

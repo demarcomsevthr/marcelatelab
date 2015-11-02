@@ -17,8 +17,8 @@ public class OsDetectionUtils {
   public static int IOS_HEADER_PANEL_HEIGHT = 40;
   public static int IOS_MARGIN_TOP = 18;
   
-  public final static int APAD_PORT_WIDTH = 526;
-  public final static int APAD_PORT_HEIGHT = 951;
+  public final static int APAD_PORT_WIDTH = 600;
+  public final static int APAD_PORT_HEIGHT = 1024;
   public final static int APAD_LAND_WIDTH = APAD_PORT_HEIGHT;
   public final static int APAD_LAND_HEIGHT = APAD_PORT_WIDTH;
   
@@ -32,6 +32,10 @@ public class OsDetectionUtils {
   
   public static boolean isPhone() {
     return !isTablet();
+  }
+  
+  public static boolean isPhoneLandscape() {
+    return isPhone() && (Window.getClientHeight() < Window.getClientWidth());
   }
   
   public static boolean isTablet() {

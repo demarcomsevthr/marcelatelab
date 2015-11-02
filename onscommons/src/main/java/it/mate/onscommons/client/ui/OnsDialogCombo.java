@@ -8,6 +8,7 @@ import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.utils.OnsDialogUtils;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
@@ -107,7 +108,11 @@ public abstract class OnsDialogCombo {
       public void execute(Void element) {
         carouselId = OnsenUi.createUniqueElementId();
         String html = "<ons-page>";
-        html += "<ons-carousel id='"+carouselId+"' var='onsComboDialogCarousel' direction='vertical' class='ons-combo-dialog-carousel' item-height='12%' swipeable>";
+        String itemHeight="12%";
+        if (OsDetectionUtils.isTabletPortrait()) {
+          itemHeight = "8%";
+        }
+        html += "<ons-carousel id='"+carouselId+"' var='onsComboDialogCarousel' direction='vertical' class='ons-combo-dialog-carousel' item-height='"+itemHeight+"' swipeable>";
         // il primo item vuoto serve per And4.2
         html += "<ons-carousel-item>";
         html += "</ons-carousel-item>";
@@ -122,6 +127,14 @@ public abstract class OnsDialogCombo {
   public static String getDialogHeight() {
     int height = Window.getClientHeight() - Window.getClientHeight() / 6;
     return ""+height+"px";
+  }
+
+  public static String getDialogWidth() {
+    int width = 280;
+    if (OsDetectionUtils.isTabletPortrait()) {
+      width = 400;
+    }
+    return ""+width+"px";
   }
 
   private void populateCarousel() {

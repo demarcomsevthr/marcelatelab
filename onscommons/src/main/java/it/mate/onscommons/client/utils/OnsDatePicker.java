@@ -9,6 +9,7 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsDateBox;
 import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsDialogCombo;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
 import java.util.ArrayList;
@@ -473,7 +474,15 @@ public class OnsDatePicker {
   }
   
   protected static int getDialogHeightPx() {
-    return (int)(Window.getClientHeight() * 0.75);
+    int res = 0;
+    if (OsDetectionUtils.isTabletPortrait()) {
+      res = (int)(Window.getClientHeight() * 0.50);
+    } else if (OsDetectionUtils.isPhoneLandscape()) {
+      res = (int)(Window.getClientHeight() * 0.90);
+    } else {
+      res = (int)(Window.getClientHeight() * 0.75);
+    }
+    return res;
   }
 
   public static String getDialogHeight() {
