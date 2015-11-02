@@ -6,6 +6,7 @@ import it.mate.onscommons.client.event.NativeGestureEvent;
 import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.ui.OnsDateBox;
 import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsDialogCombo;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -23,6 +24,26 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 @SuppressWarnings("deprecation")
 public class OnsDatePicker {
   
+  public final static String[] MONTHS_IT = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+  
+  public final static String[] MONTHS_EN = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+  
+  private static String[] monthNames; 
+  
+  public final static String[] DAYS_IT = {"Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"};
+  
+  public final static String[] DAYS_EN = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+  
+  private static String[] dayNames; 
+  
+  public final static String[] BUTTONS_IT = {"Oggi", "Imposta", "Annulla"};
+  
+  public final static String[] BUTTONS_EN = {"Today", "Set", "Close"};
+  
+  private static String[] buttons; 
+  
+  private Delegate<Date> onSelectedDateDelegate;
+  
   private String carouselId;
   private String monthBoxId;
   private String yearBoxId;
@@ -33,30 +54,44 @@ public class OnsDatePicker {
 
   private Date selectedDate;
 
-  public final static String[] MONTHS_IT = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-  
-  public final static String[] MONTHS_EN = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-  
-  private static String[] monthNames; 
-  
-  public final static String[] DAYS_IT = {"Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"};
-  
-  public final static String[] DAYS_EN = {"Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"};
-  
-  private static String[] dayNames; 
-  
-  private Delegate<Date> onSelectedDateDelegate;
+  public OnsDatePicker(final OnsDateBox dateBox, String language) {
+    this(dateBox.getValueAsDate(), language, false);
+    dateBox.setReadonly("true");
+    OnsEventUtils.addTapHandler(dateBox.getElement().getId(), new NativeGestureHandler() {
+      public void on(NativeGestureEvent event) {
+        resetDates(dateBox.getValueAsDate());
+        createDialog();
+      }
+    });
+    setOnSelectedDateDelegate(new Delegate<Date>() {
+      public void execute(Date selectedDate) {
+        dateBox.setValueAsDate(selectedDate);
+      }
+    });
+  }
   
   public OnsDatePicker(Date date, String language) {
+    this(date, language, true);
+  }
+  
+  public OnsDatePicker(Date date, String language, boolean createDialog) {
+    initLabels(language);
     resetDates(date);
+    if (createDialog) {
+      createDialog();
+    }
+  }
+  
+  private void initLabels(String language) {
     if ("it".equalsIgnoreCase(language)) {
       monthNames = MONTHS_IT;
       dayNames = DAYS_IT;
+      buttons = BUTTONS_IT;
     } else {
       monthNames = MONTHS_EN;
       dayNames = DAYS_EN;
+      buttons = BUTTONS_EN;
     }
-    createDialog();
   }
   
   public void setOnSelectedDateDelegate(Delegate<Date> onSelectedDateDelegate) {
@@ -64,6 +99,9 @@ public class OnsDatePicker {
   }
   
   private void resetDates(Date date) {
+    if (date == null) {
+      date = new Date();
+    }
     this.selectedDate = CalendarUtil.copyDate(date);
     this.firstDayOfCurrentMonth = CalendarUtil.copyDate(date);
     this.firstDayOfCurrentMonth = getFirstDateOfMonth(this.firstDayOfCurrentMonth);
@@ -78,6 +116,8 @@ public class OnsDatePicker {
         final String leftId = OnsenUi.createUniqueElementId();
         final String rightId = OnsenUi.createUniqueElementId();
         final String todayId = OnsenUi.createUniqueElementId();
+        final String setId = OnsenUi.createUniqueElementId();
+        final String clearId = OnsenUi.createUniqueElementId();
         String html = "<ons-page>";
         html += "<table cellspacing='0' class='ons-date-picker-header'>";
         html += "<tr>";
@@ -101,19 +141,20 @@ public class OnsDatePicker {
         html += "</ons-carousel>";
         html += "<table cellspacing='0' class='ons-date-picker-footer'>";
         html += "<tr>";
-        html += "<td class='ons-date-picker-footer-today'>";
-        html += "<span id='"+todayId+"'>Oggi</span>";
+        html += "<td width='35%' class='ons-date-picker-footer-today'>";
+        html += "<span><ons-icon icon='fa-caret-right' size='15px'></ons-icon></span><span id='"+todayId+"'>"+buttons[0]+"</span>";
         html += "</td>";
-        html += "<td class='ons-date-picker-footer-clear'>";
-        html += "<span>Imposta</span>";
+        html += "<td width='35%' class='ons-date-picker-footer-set'>";
+        html += "<span><ons-icon icon='fa-check' size='15px'></ons-icon></span><span id='"+setId+"'>"+buttons[1]+"</span>";
         html += "</td>";
-        html += "<td class='ons-date-picker-footer-close'>";
-        html += "<span>Annulla</span>";
+        html += "<td width='30%' class='ons-date-picker-footer-close'>";
+        html += "<span><ons-icon icon='fa-close' size='15px'></ons-icon></span><span id='"+clearId+"'>"+buttons[2]+"</span>";
         html += "</td>";
         html += "</tr>";
         html += "</table>";
         html += "</ons-page>";
-        dialog = OnsDialogUtils.createDialogMulti(html, false, "ons-date-picker-dialog");
+        
+        dialog = OnsDialogUtils.createDialogMulti(html, true, "ons-date-picker-dialog");
 
         refreshDate();
         
@@ -181,6 +222,25 @@ public class OnsDatePicker {
           }
         });
         
+        OnsenUi.onAvailableElement(setId, new Delegate<Element>() {
+          public void execute(Element element) {
+            OnsEventUtils.addTapHandler(element, new NativeGestureHandler() {
+              public void on(NativeGestureEvent event) {
+                closeDialog(true);
+              }
+            });
+          }
+        });
+        
+        OnsenUi.onAvailableElement(clearId, new Delegate<Element>() {
+          public void execute(Element element) {
+            OnsEventUtils.addTapHandler(element, new NativeGestureHandler() {
+              public void on(NativeGestureEvent event) {
+                closeDialog(false);
+              }
+            });
+          }
+        });
         
       }
     });
@@ -238,6 +298,7 @@ public class OnsDatePicker {
         GwtUtils.deferredExecution(100, new Delegate<Void>() {
           public void execute(Void element) {
             refreshCarousel();
+            dialog.applyAntiFontBlurCorrection();
           }
         });
         
@@ -292,7 +353,7 @@ public class OnsDatePicker {
               selectedClass = "ons-date-picker-selected";
             }
             String dayCellId = OnsenUi.createUniqueElementId();
-            html += "<td><div id='"+dayCellId+"' class='ons-date-picker-month-day "+selectedClass+"' "+dayColStyle+">"+day+"</div>";
+            html += "<td><div id='"+dayCellId+"' class='ons-date-picker-month-day "+selectedClass+"' "+dayColStyle+"><span>"+day+"</span></div>";
             
             final int fDay = day;
             OnsenUi.onAvailableElement(dayCellId, new Delegate<Element>() {
@@ -340,22 +401,6 @@ public class OnsDatePicker {
     }
   }
   
-  protected static int getDialogHeightPx() {
-    return Window.getClientHeight() - (int)(Window.getClientHeight() * 0.25);
-  }
-
-  public static String getDialogHeight() {
-    return ""+getDialogHeightPx()+"px";
-  }
-
-  protected static int getDialogWidthPx() {
-    return Window.getClientWidth() - (int)(Window.getClientWidth() * 0.025);
-  }
-  
-  public static String getDialogWidth() {
-    return ""+getDialogWidthPx()+"px";
-  }
-
   protected final native void refreshCarousel() /*-{
     $wnd.onsDatePickerCarousel.refresh();
   }-*/;
@@ -427,4 +472,20 @@ public class OnsDatePicker {
     PhgUtils.log("tmp date = "+ tmp +" current date = " + date);
   }
   
+  protected static int getDialogHeightPx() {
+    return (int)(Window.getClientHeight() * 0.75);
+  }
+
+  public static String getDialogHeight() {
+    return ""+getDialogHeightPx()+"px";
+  }
+
+  protected static int getDialogWidthPx() {
+    return (int)(Window.getClientWidth() * 0.975);
+  }
+  
+  public static String getDialogWidth() {
+    return ""+getDialogWidthPx()+"px";
+  }
+
 }

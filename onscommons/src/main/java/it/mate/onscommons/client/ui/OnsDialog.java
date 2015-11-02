@@ -2,6 +2,7 @@ package it.mate.onscommons.client.ui;
 
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
+import it.mate.gwtcommons.client.utils.JQuery;
 import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Dialog;
 import it.mate.phgcommons.client.utils.PhgUtils;
@@ -9,6 +10,7 @@ import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -140,6 +142,7 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
         onHideDialogImpl(getControllerId(), new JSOCallback() {
           public void handle(JavaScriptObject event) {
             delegate.execute(event);
+            removeDialogFromParent();
           }
         });
       }
@@ -163,7 +166,16 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   
   public void hide() {
     getDialogObject().hide();
+    removeDialogFromParent();
   }  
+  
+  private void removeDialogFromParent() {
+    OnsenUi.onAvailableElement(getElement(), new Delegate<Element>() {
+      public void execute(Element element) {
+        element.removeFromParent();
+      }
+    });
+  }
   
   protected static native void createDialogImpl(String templateId) /*-{
     $wnd.ons.createDialog(templateId).then(function(dialog) {
@@ -191,5 +203,24 @@ public class OnsDialog extends HTMLPanel implements AcceptsOneWidget {
   protected static native Dialog getDialogObjectImpl(String varName) /*-{
     return $wnd[varName];
   }-*/;
+  
+  
+  public void applyAntiFontBlurCorrection() {
+    OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+      public void execute(Element element) {
+        final Element dialogElem = JQuery.select("#"+getElement().getId()+" .dialog").firstElement();
+        final int antiFontBlurCorrectionTop = dialogElem.getAbsoluteTop();
+        final int antiFontBlurCorrectionLeft = dialogElem.getAbsoluteLeft();
+        GwtUtils.deferredExecution(200, new Delegate<Void>() {
+          public void execute(Void _v) {
+            PhgUtils.log("applyAntiFontBlurCorrection: setting top="+antiFontBlurCorrectionTop + " left="+antiFontBlurCorrectionLeft);
+            dialogElem.getStyle().setTop(antiFontBlurCorrectionTop, Unit.PX);
+            dialogElem.getStyle().setLeft(antiFontBlurCorrectionLeft, Unit.PX);
+            dialogElem.addClassName("dialog_anti_font_blur_correction");
+          }
+        });
+      }
+    });
+  }
   
 }

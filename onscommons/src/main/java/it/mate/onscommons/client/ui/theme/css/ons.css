@@ -154,10 +154,21 @@ ons-dialog .page__content.ons-page-inner {
   background-color: white !important;
 }
 
+ons-dialog .dialog.dialog_anti_font_blur_correction {
+  position: absolute;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
+
 @eval onsDialogComboHeight it.mate.onscommons.client.ui.OnsDialogCombo.getDialogHeight();
 
 .ons-combo-dialog .dialog {
   min-height: onsDialogComboHeight;
+  border: 2px solid #38F4FA;
+}
+
+.ons-combo-dialog ons-page.page {
+  margin: 0.2em;
 }
 
 .ons-combo-dialog-carousel {
@@ -171,6 +182,7 @@ ons-dialog .page__content.ons-page-inner {
 .ons-date-picker-dialog .dialog {
   min-width: onsDatePickerWidth;
   min-height: onsDatePickerHeight;
+  background-color: #fff;
 }
 
 .ons-date-picker-dialog .page__content.ons-page-inner {
@@ -200,6 +212,10 @@ ons-dialog .page__content.ons-page-inner {
   width: 30%;
 }
 
+.ons-date-picker-header ons-icon {
+  color: #777;
+}
+
 .ons-date-picker-month-days-header td {
   padding-top: 0.5em;
 }
@@ -208,6 +224,40 @@ ons-dialog .page__content.ons-page-inner {
   width: 100%;
 }
 
+.ons-date-picker-month-day {
+  font-size: 1.2em;
+  /* font-weight: bold; */
+  text-align: center;
+  color: #000;
+}
+
+.ons-date-picker-month-day span {
+  position: relative;
+  top: 20%;
+}
+
 .ons-date-picker-month-day.ons-date-picker-selected {
   background-color: #61CEF3;
+  color: #fff;
 }
+
+.ons-date-picker-footer {
+	width: 100%;
+}
+
+.ons-date-picker-footer span {
+  padding-left: 0.1em;
+}
+
+.ons-date-picker-footer-today ons-icon {
+  color: #00f;
+}
+
+.ons-date-picker-footer-set ons-icon {
+  color: #0f0;
+}
+
+.ons-date-picker-footer-close ons-icon {
+  color: #444;
+}
+

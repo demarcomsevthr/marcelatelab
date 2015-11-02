@@ -7,6 +7,7 @@ import it.mate.onscommons.client.event.NativeGestureEvent;
 import it.mate.onscommons.client.event.NativeGestureHandler;
 import it.mate.onscommons.client.event.OnsEventUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.onscommons.client.utils.OnsDatePicker;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 
@@ -18,16 +19,21 @@ import com.google.gwt.user.client.Timer;
 
 public class OnsDateBox extends OnsTextBox {
   
-//private static boolean USE_JS_DATEPICKER = true; 
 
-  // 27/10/2015 - TORNO INDIETRO, ANCORA PERSISTE IL PROBLEMA DELLA SOVRAPPOSIZIONE SUL GLASS PANEL
-//private static boolean USE_JS_DATEPICKER = false; 
-
+  // 02/11/2015
+  private static boolean USE_ONS_DATEPICKER = OsDetectionUtils.isAndroid() || OsDetectionUtils.isDesktop(); 
+  private static boolean USE_JS_DATEPICKER = false; 
+  /////////////
+  
+      
+  /*
   // 28/10/2015 - SEMBRA FUNZIONARE CON LA PATCH IN pickadate.js/compressed/themes/default.css
   private static boolean USE_JS_DATEPICKER = OsDetectionUtils.isAndroid() && 
       !PhgUtils.getDeviceVersion().startsWith("4.0") && 
       !PhgUtils.getDeviceVersion().startsWith("4.1") && 
       !PhgUtils.getDeviceVersion().startsWith("4.2"); 
+      */
+  
   
   private static boolean applyAndroidPatch1 = false;
   
@@ -35,13 +41,29 @@ public class OnsDateBox extends OnsTextBox {
   
   private static String JS_FORMAT = "dd/MM/yyyy";
   
+  private String actualFormat = "dd/MM/yyyy";
+  
+  private String language;
+  
   public OnsDateBox() {
-    super("date");
+    super( USE_ONS_DATEPICKER ? "text" : "date");
+    language = PhgUtils.getAppLocalLanguage();
+    if ("it".equalsIgnoreCase(language)) {
+      actualFormat = "dd/MM/yyyy";
+    } else {
+      actualFormat = "yyyy/MM/dd";
+    }
     addStyleName("text-input");
-    PhgUtils.log("OnsDateBox: USE_JS_DATEPICKER = " + USE_JS_DATEPICKER);
+    PhgUtils.log("OnsDateBox: USE_JS_DATEPICKER=" + USE_JS_DATEPICKER + " USE_ONS_DATEPICKER="+USE_ONS_DATEPICKER + " language="+language + " actualFormat="+actualFormat);
     if (USE_JS_DATEPICKER) {
       initializeDatepicker();
       androidPatch2();
+    } else if (USE_ONS_DATEPICKER) {
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          new OnsDatePicker(OnsDateBox.this, language);
+        }
+      });
     }
   }
   
@@ -54,12 +76,24 @@ public class OnsDateBox extends OnsTextBox {
     if (USE_JS_DATEPICKER) {
       result = GwtUtils.stringToDate(text, JS_FORMAT);
     } else {
-      result = tryParseDate("yyyy-MM-dd");
+      String tryFormat = "yyyy-MM-dd";
+      result = tryParseDate(tryFormat);
+      actualFormat = tryFormat;
       if (result == null) {
-        result = tryParseDate("dd/MM/yyyy");
+        tryFormat = "dd/MM/yyyy";
+        result = tryParseDate(tryFormat);
+        actualFormat = tryFormat;
       }
     }
     return result;
+  }
+  
+  public void setValueAsDate(Date date) {
+    setValue(GwtUtils.dateToString(date, actualFormat));
+  }
+  
+  public String getActualFormat() {
+    return actualFormat;
   }
   
   private Date tryParseDate(String pattern) {
@@ -75,6 +109,13 @@ public class OnsDateBox extends OnsTextBox {
     super.setValue(value, fireEvents);
     if (USE_JS_DATEPICKER) {
       setDataValue(value);
+    } else if (USE_ONS_DATEPICKER) {
+      final String fValue = value;
+      OnsenUi.onAvailableElement(this, new Delegate<Element>() {
+        public void execute(Element element) {
+          element.setInnerText(fValue);
+        }
+      });
     }
   }
 

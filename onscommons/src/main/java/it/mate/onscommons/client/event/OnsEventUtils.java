@@ -60,6 +60,10 @@ public class OnsEventUtils {
     return internalAddHandler(element, null, TAP, handler, true);
   }
   
+  public static HandlerRegistration addTapHandler(String elementId, final NativeGestureHandler handler) {
+    return internalAddHandler(null, elementId, TAP, handler, false);
+  }
+  
   public static HandlerRegistration addTouchStartHandler(Element element, final NativeGestureHandler handler) {
     return internalAddHandler(element, null, TOUCHSTART, handler, true);
   }
