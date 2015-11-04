@@ -205,18 +205,27 @@ ons-dialog .dialog.dialog_anti_font_blur_correction {
   width: 100%;
 }
 
-.ons-date-picker-header input {
-  width: 8em;
+.ons-date-picker-header table {
   margin-bottom: 0.2em;
-  margin: 0em 1em;
+  margin: 0em 0.8em;
 }
 
-.ons-date-picker-header-left, .ons-date-picker-header-right {
-  width: 15%;
+.ons-date-picker-header table tr {
+  background-color: #eee;
 }
 
-.ons-date-picker-header-month, .ons-date-picker-header-year {
-  width: 30%;
+@if (it.mate.onscommons.client.ui.theme.DefaultTheme.isWidthLessThanOrEqualTo(320)) {
+  .ons-date-picker-header-month input {
+    width: 6em;
+  }
+} @else {
+  .ons-date-picker-header-month input {
+    width: 7em;
+  }
+}
+
+.ons-date-picker-header-year input {
+  width: 5em;
 }
 
 .ons-date-picker-header ons-icon {
@@ -233,7 +242,6 @@ ons-dialog .dialog.dialog_anti_font_blur_correction {
 
 .ons-date-picker-month-day {
   font-size: 1.2em;
-  /* font-weight: bold; */
   text-align: center;
   color: #000;
 }

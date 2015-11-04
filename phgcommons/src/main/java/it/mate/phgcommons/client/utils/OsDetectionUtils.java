@@ -96,4 +96,20 @@ public class OsDetectionUtils {
     return false;
   }
   
+  public static String getOsVersion() {
+    String ver = PhgUtils.getDeviceVersion();
+    if (ver == null) {
+      ver = "";
+    }
+    return ver;
+  }
+  
+  public static boolean isOsVersionLessThanOrEqual(String compares) {
+    return PhgUtils.getDeviceVersion().compareTo(compares) <= 0;
+  }
+  
+  public static boolean isOsVersionGreatThanOrEqual(String compares) {
+    return PhgUtils.getDeviceVersion().compareTo(compares) >= 0;
+  }
+  
 }

@@ -36,6 +36,22 @@ public class DefaultTheme {
     return res;
   }
   
+  public static String getWindowHeight() {
+    return Window.getClientHeight() + "px";
+  }
+  
+  public static String getWindowWidth() {
+    return Window.getClientWidth() + "px";
+  }
+  
+  public static boolean isHeightLessThanOrEqualTo(int maxHeight) {
+    return (Window.getClientHeight() <= maxHeight);
+  }
+  
+  public static boolean isWidthLessThanOrEqualTo(int maxWidth) {
+    return (Window.getClientWidth() <= maxWidth);
+  }
+  
   public interface ThemeBundle extends ClientBundle {
     @Source({"css/ons.css"})
     public CssResource css();

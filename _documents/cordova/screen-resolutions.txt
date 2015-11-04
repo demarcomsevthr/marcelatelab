@@ -2,9 +2,9 @@
 
   ANDROID PHONES [ IN DP (Density-indipendent pixel) OR MDPI (Medium DotXInch) Resolution ]
   
-    320 x 569 [ANDROID ONE]
+    320 x 567 [ANDROID ONE]
     
-    360 x 567 (NEXUS 5 - DA SIMULATORE!] 
+    360 x 567 (NEXUS 5 - DA SIMULATORE]
     
     360 x 573 [LG G3 CON HOME TOUCH BUTTONS!]
     
@@ -16,15 +16,7 @@
     
     411 x 731 [NEXUS 6]
     
-    480 x 800 [???]
-    
-    480 x 854 [LG G3?]
-    
     600 x 960 [NEXUS 7]
-    
-    1280 x 720
-    
-    1920 x 1080
   
   
 
