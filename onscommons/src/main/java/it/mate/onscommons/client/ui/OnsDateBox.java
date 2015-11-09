@@ -15,13 +15,6 @@ import com.google.gwt.dom.client.Element;
 
 public class OnsDateBox extends OnsTextBox {
   
-  /**
-   * REVISION DATE 09/11/2015
-   * 
-   * > ios test upgrades
-   * 
-   */
-  
 
   // 02/11/2015
   private static boolean USE_ONS_DATEPICKER = OsDetectionUtils.isAndroid() || OsDetectionUtils.isDesktop(); 
