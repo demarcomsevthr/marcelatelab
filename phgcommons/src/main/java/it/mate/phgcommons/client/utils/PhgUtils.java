@@ -225,6 +225,9 @@ public class PhgUtils {
   
   
   public static void log(String text) {
+    
+    createLogShortcut();
+    
     String logMsg = GwtUtils.log(text);
     
     if (logMsg != null && !OsDetectionUtils.isDesktop() && "true".equalsIgnoreCase(getWindowSetting("TraceLogToFile"))) {
@@ -246,6 +249,14 @@ public class PhgUtils {
   public static void log(JavaScriptObject elem) {
     PhgUtils.log(JSONUtils.stringify(elem));
   }
+
+  protected static native void createLogShortcut() /*-{
+    if ($wnd.phgLog === undefined) {
+      $wnd.phgLog = function(message) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)(message);
+      }
+    }
+  }-*/;
   
   public static native void logImpl(String text) /*-{
     $wnd.console.log(text);

@@ -85,10 +85,12 @@ public class OnsenUi {
   
   private static boolean usePlaceControllerHistory = false;
   
+  private static boolean checkReconfigurableAppModule;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
-      initOnsenImpl(handler);
+      initOnsenImpl(handler, checkReconfigurableAppModule);
       for (Delegate<Void> initHandler : initializationHandlers) {
         initHandler.execute(null);
       }
@@ -117,7 +119,20 @@ public class OnsenUi {
     return initialized;
   }
   
-  protected static native void initOnsenImpl(OnsenReadyHandler handler) /*-{
+  public static void setCheckReconfigurableAppModule(boolean checkReconfigurableAppModule) {
+    OnsenUi.checkReconfigurableAppModule = checkReconfigurableAppModule;
+  }
+  
+  protected static native void initOnsenImpl(OnsenReadyHandler handler, boolean checkReconfigurableAppModule) /*-{
+
+    if (checkReconfigurableAppModule) {
+      if ($wnd.ons.isReady() || $wnd.ngReconfigurableAppModule !== undefined) {
+        @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN ALREADY BOOTSTRAPPED - CONTINUE');
+        handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
+        return;
+      }
+    }    
+    
     @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('CALLING ONSEN BOOTSTRAP');
     $wnd.ons.bootstrap();
     var jsHandler = $entry(function() {
@@ -125,6 +140,7 @@ public class OnsenUi {
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
     $wnd.ons.ready(jsHandler);
+    
   }-*/;
   
   public static Navigator getNavigator() {
