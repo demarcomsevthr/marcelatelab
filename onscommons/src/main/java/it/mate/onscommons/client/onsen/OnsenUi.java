@@ -135,10 +135,12 @@ public class OnsenUi {
     
     @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('CALLING ONSEN BOOTSTRAP');
     $wnd.ons.bootstrap();
+    
     var jsHandler = $entry(function() {
       @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('ONSEN READY HANDLER');
       handler.@it.mate.onscommons.client.onsen.OnsenReadyHandler::onReady()();
     });
+    @it.mate.phgcommons.client.utils.PhgUtils::log(Ljava/lang/String;)('SETTING ONSEN READY');
     $wnd.ons.ready(jsHandler);
     
   }-*/;

@@ -1,6 +1,7 @@
 package it.mate.onscommons.client.ui;
 
 import it.mate.onscommons.client.onsen.OnsenUi;
+import it.mate.phgcommons.client.utils.PhgUtils;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -28,10 +29,18 @@ public class OnsPage extends HTMLPanel implements AcceptsOneWidget {
     getElement().addClassName("ons-page");
     lastPage = this;
     OnsenUi.setCurrentPageId(getElement().getId());
+    
+    PhgUtils.log(">>>>>>>> OnsPage::constructor - WITH html " + html);
+    
   }
   
   @Override
   public void add(Widget widget) {
+    
+    if (widget != null) {
+      PhgUtils.log(">>>>>>>> OnsPage::add - ADDING ELEMENT " + widget.getElement());
+    }
+    
     if (OnsenUi.isAddDirectWithPlainHtml()) {
       OnsenUi.appendInnerHtml(getElement(), OnsenUi.getPlainHtml(widget.getElement()));
     } else {

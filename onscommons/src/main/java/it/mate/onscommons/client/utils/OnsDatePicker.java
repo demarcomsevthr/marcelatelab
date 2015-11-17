@@ -60,8 +60,12 @@ public class OnsDatePicker {
     dateBox.setReadonly("true");
     OnsEventUtils.addTapHandler(dateBox.getElement().getId(), new NativeGestureHandler() {
       public void on(NativeGestureEvent event) {
-        resetDates(dateBox.getValueAsDate());
-        createDialog();
+        GwtUtils.deferredExecution(250, new Delegate<Void>() {
+          public void execute(Void element) {
+            resetDates(dateBox.getValueAsDate());
+            createDialog();
+          }
+        });
       }
     });
     setOnSelectedDateDelegate(new Delegate<Date>() {
