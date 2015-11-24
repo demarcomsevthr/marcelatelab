@@ -47,6 +47,7 @@ public class IOSPatches {
           Element body = RootPanel.getBodyElement();
           body.getStyle().setMarginTop(18, Unit.PX);
           iOS7HeaderBarPatchLastCheckTime = currentTime;
+//        PhgUtils.log(">>>>>>>>>>>>>> IOSPatches::applyIOS7HeaderBarPatch");
         }
         return true;
       }

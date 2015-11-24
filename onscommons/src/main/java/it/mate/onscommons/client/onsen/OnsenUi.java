@@ -530,7 +530,6 @@ public class OnsenUi {
   
 
   /**
-   * TODO
    * 
    * 25/05/2015
    * 
@@ -609,5 +608,16 @@ public class OnsenUi {
     innerHtml = innerHtml + newHtml;
     element.setInnerHTML(innerHtml);
   }
+  
+
+  // TODO
+  
+  public static String getOnsenUiVersion() {
+    
+    
+    
+    return null;
+  }
+  
 
 }

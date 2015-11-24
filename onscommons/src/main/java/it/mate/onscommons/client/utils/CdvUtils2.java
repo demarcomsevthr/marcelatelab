@@ -6,6 +6,7 @@ import it.mate.phgcommons.client.utils.callbacks.VoidCallback;
 import it.mate.phgcommons.client.plugins.GlobalizationPlugin;
 import it.mate.phgcommons.client.utils.LogPlugin;
 import it.mate.phgcommons.client.utils.OsDetectionUtils;
+import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.Time;
 
 import java.util.ArrayList;
@@ -282,6 +283,8 @@ public class CdvUtils2 {
       // Patch per IPhone per far funzionare le animazioni jquery
       
       int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
+      
+      PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>> CdvUtils2::adaptWrapperPanel");
       
       if (OsDetectionUtils.isIOs() && actualHeight < 380) {
         GwtUtils.deferredExecution(new Delegate<Void>() {

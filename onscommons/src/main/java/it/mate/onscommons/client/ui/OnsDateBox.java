@@ -17,7 +17,7 @@ public class OnsDateBox extends OnsTextBox {
   
 
   // 02/11/2015
-  private static boolean USE_ONS_DATEPICKER = OsDetectionUtils.isAndroid() || OsDetectionUtils.isDesktop(); 
+  private static boolean USE_ONS_DATEPICKER = OsDetectionUtils.isAndroid() /* || OsDetectionUtils.isDesktop() */; 
   private static boolean USE_JS_DATEPICKER = false; 
   /////////////
   
@@ -42,13 +42,21 @@ public class OnsDateBox extends OnsTextBox {
   public OnsDateBox() {
     super( actualInputType );
     language = PhgUtils.getAppLocalLanguage();
-    if ("it".equalsIgnoreCase(language)) {
-      actualFormat = "dd/MM/yyyy";
+    
+    if (actualInputType.equals("date")) {
+      actualFormat = "yyyy-MM-dd";
     } else {
-      actualFormat = "yyyy/MM/dd";
+      if ("it".equalsIgnoreCase(language)) {
+        actualFormat = "dd/MM/yyyy";
+      } else {
+        actualFormat = "yyyy/MM/dd";
+      }
     }
+    
     addStyleName("text-input");
+    
     PhgUtils.log("OnsDateBox: USE_JS_DATEPICKER=" + USE_JS_DATEPICKER + " USE_ONS_DATEPICKER="+USE_ONS_DATEPICKER + " language="+language + " actualFormat="+actualFormat + " actualInputType=" + actualInputType);
+    
     if (USE_JS_DATEPICKER) {
       initializeDatepicker();
     } else if (USE_ONS_DATEPICKER) {
@@ -58,6 +66,7 @@ public class OnsDateBox extends OnsTextBox {
         }
       });
     }
+    
   }
 
   public static String getActualInputType() {
