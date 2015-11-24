@@ -47,7 +47,7 @@ public class OsDetectionUtils {
   }
 
   public static boolean isAndroid() {
-    return PhgUtils.getDevicePlatform().toLowerCase().contains("android") || isDesktop();
+    return PhgUtils.getDevicePlatform().toLowerCase().contains("android");
   }
   
   public static boolean isDesktop() {

@@ -320,6 +320,8 @@ public class PhgUtils {
       
       int actualHeight = (Window.getClientHeight() - OsDetectionUtils.IOS_HEADER_PANEL_HEIGHT );
       
+      PhgUtils.log(">>>>>>>>>>>>>>>>>>>>>>>> PhgUtils::adaptWrapperPanel");
+      
       if (OsDetectionUtils.isIOs() && actualHeight < 380) {
         GwtUtils.deferredExecution(new Delegate<Void>() {
           public void execute(Void element) {
