@@ -14,17 +14,28 @@ public class FileSystemPlugin {
   
   
   /**
+   * 
    *  DOCUMENTATION
    *  
+   *    https://github.com/apache/cordova-plugin-file
+   *    
+   *    https://github.com/apache/cordova-plugin-file-transfer
+   * 
    *    https://github.com/apache/cordova-plugin-file/blob/master/doc/index.md
    *  
    *    http://docs.phonegap.com/en/3.3.0/cordova_file_file.md.html
    *    
    *    http://www.html5rocks.com/en/tutorials/file/filesystem/
    *    
-   *    https://github.com/apache/cordova-plugin-file-transfer
    * 
    * 
+   *  INSTALLATION
+   *    
+   *    cordova plugin add cordova-plugin-file
+   *    
+   *    cordova plugin add cordova-plugin-file-transfer
+   *  
+   *  
    */
   
   
@@ -109,9 +120,8 @@ public class FileSystemPlugin {
     downloadRemoteFileToTempDirImpl(sourceUrl, targetRelativePath, OsDetectionUtils.isAndroid(), new JSOSuccess() {
       public void handle(JavaScriptObject targetFileEntry) {
         PhgUtils.log("target file = " + JSONUtils.stringify(targetFileEntry));
-        String result = GwtUtils.getJsPropertyString(targetFileEntry, "fullPath");
-        double size = GwtUtils.getJsPropertyDouble(targetFileEntry, "size");
-        delegate.execute(result + " size = " + (long)size);
+        String result = GwtUtils.getJsPropertyString(targetFileEntry, "nativeURL");
+        delegate.execute(result);
       }
     }, failure);
   }
@@ -311,7 +321,7 @@ public class FileSystemPlugin {
     var fileTransfer = new $wnd.FileTransfer();
     var uri = $wnd.encodeURI(sourceUrl);
     var tempDir = isAndroid ? $wnd.cordova.file.dataDirectory : $wnd.cordova.file.tempDirectory;
-    fileTransfer.download(uri, tempDir + targetRelativePath, jsSuccess, jsFailure, false );    
+    fileTransfer.download(uri, tempDir + targetRelativePath, jsSuccess, jsFailure, true );    
     
   }-*/;
 
