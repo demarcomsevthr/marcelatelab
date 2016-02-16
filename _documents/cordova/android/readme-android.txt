@@ -122,7 +122,7 @@
     > platforms/android/assets/www/plugins                                              (MERGE)
     > platforms/android/assets/www/cordova.js                                           (UPDATE)
     > platforms/android/assets/www/cordova_plugins.js                                   (MERGE)
-    > platforms/android/CordovaLib/ant-build/classes.jar --> libs/CordovaLib.jar        (UPDATE)
+    > platforms/android/CordovaLib/build/outputs/aar/CordovaLib-debug.aar  -->  classes.jar  -->  libs/CordovaLib.jar   (UPDATE)
     > platforms/android/res/xml/config.xml                                              (MERGE)
     > platforms/android/res/values/strings.xml                                          (MERGE)
     > platforms/android/src/it/... <discendente di CordovaActivity>                     (MERGE)
