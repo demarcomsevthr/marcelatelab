@@ -1,5 +1,5 @@
 
-@external ons*, gwt*, navigation*, span, dialog*, list*, picker*, page*;
+@external ons*, gwt*, navigation*, span, dialog*, list*, picker*, page*, alert*;
 
 @def TOOLBAR_COLOR rgb(255, 255, 255);
 
@@ -114,6 +114,18 @@ ons-toolbar *, .ons-toolbar .navigation-bar__title {
 ons-alert-dialog {
   background-color: rgb(255, 255, 255) !important;
   background: rgb(255, 255, 255) !important;
+}
+
+.alert-dialog-title {
+  font-size: 19px;
+  font-weight: 600;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.alert-dialog-content {
+  padding-bottom: 14px;
 }
 
 .ons-searchbox:focus {
