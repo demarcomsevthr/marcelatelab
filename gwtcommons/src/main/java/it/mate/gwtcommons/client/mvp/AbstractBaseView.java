@@ -22,4 +22,8 @@ public abstract class AbstractBaseView <A extends BasePresenter> extends Composi
     
   }
   
+  public void onShowView() {
+    
+  }
+  
 }

@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.onsen;
 
+import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.gwtcommons.client.utils.ObjectWrapper;
@@ -87,6 +88,9 @@ public class OnsenUi {
   
   private static boolean checkReconfigurableAppModule;
   
+  @SuppressWarnings("rawtypes")
+  private static AbstractBaseView currentView;
+  
   public static void initializeOnsen(OnsenReadyHandler handler) {
     if (!initialized) {
       initialized = true;
@@ -157,7 +161,7 @@ public class OnsenUi {
   public static void setNavigator(Navigator navigator) {
     OnsenUi.navigator = navigator;
   }
-  
+
   public static boolean isNavigatorPresent() {
     return navigator != null;
   }
@@ -607,6 +611,14 @@ public class OnsenUi {
     String innerHtml = element.getInnerHTML();
     innerHtml = innerHtml + newHtml;
     element.setInnerHTML(innerHtml);
+  }
+  
+  public static void setCurrentView(AbstractBaseView currentView) {
+    OnsenUi.currentView = currentView;
+  }
+  
+  public static AbstractBaseView getCurrentView() {
+    return currentView;
   }
   
 

@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.onsen.dom;
 
+import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.onsen.OnsenUi;
 
@@ -49,5 +50,13 @@ public class Page extends JavaScriptObject {
   public final native void destroy() /*-{
     this.destroy();    
   }-*/;
+  
+  public final void setView(AbstractBaseView view) {
+    getInnerPageElement().setPropertyObject("_view", view);
+  }
+  
+  public final AbstractBaseView getView() {
+    return (AbstractBaseView)getInnerPageElement().getPropertyObject("_view");
+  }
   
 }

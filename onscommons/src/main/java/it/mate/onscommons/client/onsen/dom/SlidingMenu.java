@@ -5,6 +5,7 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.ui.OnsPage;
 import it.mate.phgcommons.client.utils.JSONUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
+import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
@@ -153,6 +154,22 @@ public class SlidingMenu extends JavaScriptObject {
         .play();
     }
     return animation;
+  }-*/;
+  
+  
+  public final void onMenuClose(final Delegate<SlidingMenuEvent> delegate) {
+    onEventImpl("postclose", new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((SlidingMenuEvent)jso.cast());
+      }
+    });
+  }
+  
+  protected final native void onEventImpl(String eventName, JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    this.on(eventName, jsCallback);    
   }-*/;
 
 }

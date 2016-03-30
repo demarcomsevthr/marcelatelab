@@ -1,5 +1,6 @@
 package it.mate.onscommons.client.mvp;
 
+import it.mate.gwtcommons.client.mvp.AbstractBaseView;
 import it.mate.gwtcommons.client.places.HasToken;
 import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
@@ -8,6 +9,7 @@ import it.mate.onscommons.client.onsen.OnsenUi;
 import it.mate.onscommons.client.onsen.dom.Navigator;
 import it.mate.onscommons.client.onsen.dom.NavigatorEvent;
 import it.mate.onscommons.client.onsen.dom.Page;
+import it.mate.onscommons.client.onsen.dom.SlidingMenuEvent;
 import it.mate.onscommons.client.ui.OnsLayoutView;
 import it.mate.onscommons.client.ui.OnsNavigator;
 import it.mate.onscommons.client.ui.OnsSlidingMenu;
@@ -118,11 +120,8 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     
     if (currentPage != null) {
       String currentPageName = currentPage.getName();
-      
       if (!newToken.equals(currentPageName)) {
-        
         if (insertIndex != null) {
-          
           navigator.log("BEFORE INSERT PAGE");
           navigator.insertPage(insertIndex, newToken);
           GwtUtils.deferredExecution(new Delegate<Void>() {
@@ -132,37 +131,28 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             }
           });
         } else {
-
           boolean found = false;
           for (int it = 0; it < navigator.getPages().length(); it++) {
             Page page = navigator.getPages().get(it);
             String pageName = page.getName();
-            
             if (pageName != null && ( pageName.equals(newToken) || pageName.trim().length() == 0)) {
-              
               found = true;
               navigator.resetToPage(newToken);
-              
               PhgUtils.log("------------------------------------");
               PhgUtils.log("AFTER RESET PAGE " + newToken);
               navigator.log("NAVIGATOR PAGE");
               PhgUtils.log("------------------------------------");
-              
             }
           }
           
           if (!found) {
-            
             checkAutoRefreshHome(null, newToken);
-            
             if ("home".equalsIgnoreCase(newToken)) {
               navigator.resetToPage(newToken);
             } else {
               navigator.pushPage(newToken, onPushTransitionEndDelegate);
             }
-            
           }
-          
           
         }
         pagePushed = true;
@@ -188,16 +178,68 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     } else {
       navigator.onAfterPagePush(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
+          PhgUtils.log("------------------------------------");
+          PhgUtils.log("AFTER PUSH PAGE");
           Page enteringPage = event.getEnterPage();
           if (enteringPage != null) {
             String enteringPageName = enteringPage.getName();
-            PhgUtils.log("------------------------------------");
-            PhgUtils.log("AFTER PUSH PAGE " + enteringPageName);
-            navigator.log("NAVIGATOR PAGE");
-            PhgUtils.log("------------------------------------");
+            PhgUtils.log("ENTERING PAGE = " + enteringPageName);
+            PhgUtils.log("setting current view in entering page");
+            enteringPage.setView(OnsenUi.getCurrentView());
+            onShowPage("ENTERING PAGE", enteringPage, false);
           }
+          navigator.log("NAVIGATOR PAGES");
+          PhgUtils.log("------------------------------------");
         }
       });
+      navigator.onAfterPagePop(new Delegate<NavigatorEvent>() {
+        public void execute(NavigatorEvent event) {
+          PhgUtils.log("------------------------------------");
+          PhgUtils.log("AFTER POP PAGE");
+          Page enteringPage = event.getEnterPage();
+          if (enteringPage != null) {
+            String enteringPageName = enteringPage.getName();
+            PhgUtils.log("ENTERING PAGE = " + enteringPageName);
+            onShowPage("ENTERING PAGE", enteringPage, false);
+          }
+          navigator.log("NAVIGATOR PAGE");
+          PhgUtils.log("------------------------------------");
+        }
+      });
+      
+      slidingMenu.getController().onMenuClose(new Delegate<SlidingMenuEvent>() {
+        public void execute(SlidingMenuEvent element) {
+          PhgUtils.log("------------------------------------");
+          PhgUtils.log("AFTER CLOSE MENU");
+          Page currentPage = navigator.getCurrentPage();
+          if (currentPage != null) {
+            String currentPageName = currentPage.getName();
+            PhgUtils.log("ENTERING PAGE = " + currentPageName);
+            onShowPage("ENTERING PAGE", currentPage, true);
+          }
+          PhgUtils.log("------------------------------------");
+        }
+      });
+      
+    }
+  }
+  
+  private void onShowPage(String logMsg, Page page, boolean tryCurrentView) {
+    String pageName = page.getName();
+    PhgUtils.log(logMsg+" NAME = " + pageName);
+    AbstractBaseView view = page.getView();
+    if (view != null) {
+      PhgUtils.log(">>> "+logMsg+" VIEW CLASS = " + view.getClass());
+      view.onShowView();
+    } else {
+      PhgUtils.log(">>> "+logMsg+" VIEW IS NULL");
+      if (tryCurrentView) {
+        PhgUtils.log("trying current view");
+        AbstractBaseView currentView = OnsenUi.getCurrentView();
+        if (currentView != null) {
+          currentView.onShowView();
+        }
+      }
     }
   }
   
@@ -209,17 +251,14 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
         }
       });
     } else {
-      
       navigator.onBeforePagePush(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           checkAutoRefreshHome(event, null);
         }
       });
-      
       navigator.onBeforePagePop(new Delegate<NavigatorEvent>() {
         public void execute(NavigatorEvent event) {
           checkAutoRefreshHome(event, null);
-          
           if (allowPagePoping) {
             allowPagePoping = allowNavigatorPoping;
             PhgUtils.log("CONTINUE POPING");
@@ -244,7 +283,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
             lastProcessedPlace = null;
             eventBus.fireEvent(new OnsPlaceChangeEvent(prevPlace, index));
           }
-          
         }
       });
     }
@@ -320,15 +358,12 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
   }
   
   private void checkAutoRefreshHome(NavigatorEvent event, String newPageName) {
-    
     if (!enableCheckAutoRefreshHome) {
       return;
     }
-    
     if (!OsDetectionUtils.isAndroid()) {
       return;
     }
-    
     boolean enteringHome = false;
     if ("home".equalsIgnoreCase(newPageName)) {
       enteringHome = true;
@@ -381,9 +416,6 @@ public abstract class OnsActivityManagerWithSlidingNavigator extends OnsActivity
     PhgUtils.log(">>>>>>>>>>>>>>>>> LAUNCHED NAVIGATOR.APP.RELOAD URL " + url);
   }
 
-  /*
-    $wnd.navigator.app.loadUrl(url, {wait:10, loadingDialog:"Wait please...", loadUrlTimeoutValue:60000, clearHistory:true});
-   */
   private static native void reloadAppImpl(String url) /*-{
     $wnd.navigator.app.loadUrl(url);
   }-*/;

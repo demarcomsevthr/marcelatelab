@@ -16,6 +16,10 @@ public class NavigatorEvent extends JavaScriptObject {
     return GwtUtils.getJsPropertyJso(this, "enterPage").cast();
   }
   
+  public final Page getLeavePage() {
+    return GwtUtils.getJsPropertyJso(this, "leavePage").cast();
+  }
+  
   public final native void cancel() /*-{
     this.cancel();
   }-*/;

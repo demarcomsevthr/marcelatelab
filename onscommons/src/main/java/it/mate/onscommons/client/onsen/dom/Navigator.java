@@ -126,6 +126,21 @@ public class Navigator extends JavaScriptObject {
     this.on('postpush', jsCallback);    
   }-*/;
 
+  public final void onAfterPagePop(final Delegate<NavigatorEvent> delegate) {
+    onAfterPagePopImpl(new JSOCallback() {
+      public void handle(JavaScriptObject jso) {
+        delegate.execute((NavigatorEvent)jso.cast());
+      }
+    });
+  }
+  
+  protected final native void onAfterPagePopImpl(JSOCallback callback) /*-{
+    var jsCallback = $entry(function(event) {
+      callback.@it.mate.phgcommons.client.utils.callbacks.JSOCallback::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(event);
+    });
+    this.on('postpop', jsCallback);    
+  }-*/;
+
   public final void onBeforePagePop(final Delegate<NavigatorEvent> delegate) {
     onBeforePagePopImpl(new JSOCallback() {
       public void handle(JavaScriptObject jso) {
