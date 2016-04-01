@@ -166,6 +166,12 @@ public class OnsenUi {
     return navigator != null;
   }
   
+  public static void resetHistory() {
+    if (navigator != null) {
+      navigator.resetHistory();
+    }
+  }
+  
   public static SlidingMenu getSlidingMenu() {
     if (slidingMenu == null) {
       OnsSlidingMenu slidingMenu = new OnsSlidingMenu();

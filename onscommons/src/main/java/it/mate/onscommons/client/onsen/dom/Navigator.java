@@ -169,6 +169,12 @@ public class Navigator extends JavaScriptObject {
     });
     this.on('prepush', jsCallback);    
   }-*/;
+  
+  public final void resetHistory() {
+    PhgUtils.log("resetting navigator history");
+    Page currentPage = getCurrentPage();
+    resetToPage(currentPage.getName());
+  }
 
   public final void log(String prompt) {
     JsArray<Page> pages = getPages();
@@ -181,4 +187,5 @@ public class Navigator extends JavaScriptObject {
     PhgUtils.log("CURRENT PAGE NAME = " + getCurrentPage().getName());
     PhgUtils.log("CURRENT PAGE INDEX = " + getCurrentPage().getIndex());
   }
+  
 }
