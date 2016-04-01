@@ -4,6 +4,7 @@ import it.mate.gwtcommons.client.utils.Delegate;
 import it.mate.gwtcommons.client.utils.GwtUtils;
 import it.mate.onscommons.client.ui.OnsDialog;
 import it.mate.onscommons.client.ui.OnsIcon;
+import it.mate.phgcommons.client.utils.OsDetectionUtils;
 import it.mate.phgcommons.client.utils.PhgUtils;
 import it.mate.phgcommons.client.utils.callbacks.JSOCallback;
 import it.mate.phgcommons.client.utils.callbacks.JSOIntCallback;
@@ -122,6 +123,7 @@ public class OnsDialogUtils {
     synchronizedConfirm = true;
     confirmImpl(Options.create().setTitle(title).setMessage(message).setMessageHtml(messageHtml)
       .setButtonLabels(buttonLabels).setAnimation(animation).setCancelable(cancelable != null ? cancelable : false)
+      .setMaterial(OsDetectionUtils.isAndroid() || OsDetectionUtils.isDesktop())
       .setCallback(new JSOIntCallback() {
         public void handle(int index) {
           synchronizedConfirm = false;
@@ -206,6 +208,12 @@ public class OnsDialogUtils {
           callback.@it.mate.phgcommons.client.utils.callbacks.JSOIntCallback::handle(I)(index);
         });
         this['callback'] = jsCallback;
+      }
+      return this;    
+    }-*/;
+    protected final native Options setMaterial(boolean flag) /*-{
+      if (flag) {
+        this['modifier'] = 'material';
       }
       return this;    
     }-*/;
