@@ -113,4 +113,26 @@
 
       > https://cordova.apache.org/announcements/2016/03/02/ios-4.1.0.html
 	  
+  ______________________________________________________________________________________
+
+    WHITE PAGE ISSUE	  
+	  
+	  > Può capitare che allo startup dell'app rimanga lo schermo vuoto (white blank page)
+	  > (Anche senza aver cambiato niente nel progetto!)
+	  > Nel log di Xcode si trova il seguente messaggio:
+	  
+	      ERROR Internal navigation rejected - <allow-navigation> not set for url='about:blank'
+	      
+	  >> WORKAROUND [08/04/2016]
+	  
+	     >> RESET DEL SIMULATOR (Simulator > Reset cont and settings)
+	     
+	     >> Sembra che questo risolva
+	     
+	     >> Ambiente provato:
+	         > Xcode 7.3
+	         > OS X 10.11.4 (El Capitan)
+	         > cordova-ios@4.1.1
+	         
+	  
 	  
