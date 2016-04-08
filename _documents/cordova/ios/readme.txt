@@ -45,11 +45,9 @@
 	
 	[17/10/2014]
 	
-	Ho dovuto ricreare il provisioning profile per App Store perchè su itunes connect dava il warning:
-	
-	"To use TestFlight Beta Testing, this build must contain the correct beta entitlement."
-	
-	see also http://stackoverflow.com/questions/25756669/app-does-not-contain-the-correct-beta-entitlement	
+      Ho dovuto ricreare il provisioning profile per App Store perchè su itunes connect dava il warning:
+      "To use TestFlight Beta Testing, this build must contain the correct beta entitlement."
+       see also http://stackoverflow.com/questions/25756669/app-does-not-contain-the-correct-beta-entitlement	
 	
   ______________________________________________________________________________________
 
@@ -57,17 +55,16 @@
 
     [30/10/2014]
     
-    XCODE 6 > SEMBRA CHE NON FUNZIONI BENE L'EXPORT DEL FILE IPA E LA SCELTA DEL PROVISIONING PROFILE
-    (vedi http://stackoverflow.com/questions/25056144/xcode-6-how-to-pick-signing-certificate-provisioning-profile-for-ad-hoc-distri)
+      XCODE 6 > SEMBRA CHE NON FUNZIONI BENE L'EXPORT DEL FILE IPA E LA SCELTA DEL PROVISIONING PROFILE
+      (vedi http://stackoverflow.com/questions/25056144/xcode-6-how-to-pick-signing-certificate-provisioning-profile-for-ad-hoc-distri)
     
-    WORKAROUND: utilizzare il comando xcodebuild
+      WORKAROUND: utilizzare il comando xcodebuild
     
-    (Es: /protoph/extras/ios/bin/protoph-xcodebuild.command)
-    
+      (Es: /protoph/extras/ios/bin/protoph-xcodebuild.command)
 	
   ______________________________________________________________________________________
 
-    INSTALLAZIONE MULTIPLA XCODE 6 E XCODE 5
+    INSTALLAZIONE MULTIPLA XCODE
     
 	> APPLE DOWNLOADS >> https://developer.apple.com/downloads/index.action
 	
@@ -96,6 +93,24 @@
 	  
 	  > SE NON FUNZIONA APRIRE XCODE (VERSIONE X) E DOVREBBE MOSTRARE I PROGETTI APERTI CON LA VERSIONE DI DEFAULT
 	  
-	  
-	  
 	
+  ______________________________________________________________________________________
+
+    AGGIORNAMENTO DI CORDOVA PLATFORM	  
+	  
+	  > SPECIFICARE LA VERSIONE NEL COMANDO cordova platform add, ES:
+	  
+	  cordova platform add ios@4.1.1
+	  
+	  (nella create del progetto)
+	  
+	  
+  ______________________________________________________________________________________
+
+    RELEASE NOTES CORDOVA PLATFORM	  
+	  
+	  > https://cordova.apache.org/announcements/2015/12/08/cordova-ios-4.0.0.html
+
+      > https://cordova.apache.org/announcements/2016/03/02/ios-4.1.0.html
+	  
+	  
