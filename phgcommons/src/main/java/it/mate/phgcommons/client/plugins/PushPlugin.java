@@ -16,7 +16,7 @@ public class PushPlugin {
    *  DOCUMENTATION
    *  
 
-      > PLUGIN >> https://github.com/phonegap-build/PushPlugin
+      > PLUGIN >> https://github.com/phonegap/phonegap-plugin-push
       
         >> IDS PER GCM: si ottengono dalla Google Developer Console
             >> Sender ID = Project ID
@@ -29,15 +29,17 @@ public class PushPlugin {
           4 > server invia messaggio a GCM con RegId e Server Key
           5 > device riceve notifica in onNotification callback
       
-        > http://www.androidhive.info/2012/10/android-push-notifications-using-google-cloud-messaging-gcm-php-and-mysql/
+        > ESEMPIO COMPLETO
+          > http://www.androidhive.info/2012/10/android-push-notifications-using-google-cloud-messaging-gcm-php-and-mysql/  (OLD)
+          > http://www.androidhive.info/2016/02/android-push-notifications-using-gcm-php-mysql-realtime-chat-app-part-2/  (NEW)
             >>> esempio completo in android / php (http)
             >>> come configurare Android Emulator (in fondo)
 
         > DOCUMENTAZIONE GCM:
-          > GCM Overview >> http://developer.android.com/google/gcm/gcm.html
-          > GCM Getting Started >> http://developer.android.com/google/gcm/gs.html
-          > GCM Implementing Server >> http://developer.android.com/google/gcm/server.html
-          > GCM HTTP Server Implementation (esempio con appengine) >> http://developer.android.com/google/gcm/http.html
+          > GCM Overview >> https://developers.google.com/cloud-messaging/gcm
+          > GCM Getting Started >> https://developers.google.com/cloud-messaging/android/start
+          > GCM Implementing Server >> https://developers.google.com/cloud-messaging/server
+          > GCM HTTP Server Implementation (esempio con appengine) >> https://developers.google.com/cloud-messaging/http
           
 
    *  
@@ -45,7 +47,7 @@ public class PushPlugin {
    */
   
   public static native boolean isInstalled () /*-{
-    return typeof ($wnd.plugins) != 'undefined' && typeof ($wnd.plugins.pushNotification) != 'undefined';
+    return typeof ($wnd.PushNotification) != 'undefined';
   }-*/;
 
   public static void register(String senderId, final Delegate<PushNotification> delegate) {
@@ -53,16 +55,18 @@ public class PushPlugin {
       PhgUtils.log("Push Plugin - registering android with " + senderId);
       registerAndroidImpl(senderId, new JSOCallback() {
         public void handle(JavaScriptObject e) {
-          PhgUtils.log("Push Plugin - Notification callback receive: " + JSONUtils.stringify(e));
-          delegate.execute(parseNotificationEvent(e));
+          PhgUtils.log("Push Plugin - Registration callback receive: " + JSONUtils.stringify(e));
+          delegate.execute(parseNotificationEvent(PushNotification.REGISTRATION_EVENT_NAME, e));
         } 
       }, new JSOCallback() {
-        public void handle(JavaScriptObject result) {
-          PhgUtils.log("Push Plugin - Success callback receive: " + JSONUtils.stringify(result));
+        public void handle(JavaScriptObject e) {
+          PhgUtils.log("Push Plugin - Notification callback receive: " + JSONUtils.stringify(e));
+          delegate.execute(parseNotificationEvent(PushNotification.NOTIFICATION_EVENT_NAME, e));
         }
       }, new JSOCallback() {
-        public void handle(JavaScriptObject error) {
-          PhgUtils.log("Push Plugin - Failure callback receive: " + JSONUtils.stringify(error));
+        public void handle(JavaScriptObject e) {
+          PhgUtils.log("Push Plugin - Error callback receive: " + JSONUtils.stringify(e));
+          delegate.execute(parseNotificationEvent(PushNotification.ERROR_EVENT_NAME, e));
         }
       });
     } else {
@@ -71,34 +75,44 @@ public class PushPlugin {
     }
   }
   
-  private static PushNotification parseNotificationEvent(JavaScriptObject e) {
+  private static PushNotification parseNotificationEvent(String eventName,JavaScriptObject data) {
     PushNotification notification = new PushNotification();
-    String event = GwtUtils.getJsPropertyString(e, "event");
-    notification.setEventName(event);
+    notification.setEventName(eventName);
     if (notification.isRegistrationEvent()) {
-      String regId = GwtUtils.getJsPropertyString(e, "regid");
+      String regId = GwtUtils.getJsPropertyString(data, "registrationId");
       notification.setRegId(regId);
-    } else if (notification.isMessageEvent()) {
-      String message = GwtUtils.getJsPropertyString(e, "message");
+    } else if (notification.isNotificationEvent()) {
+      String message = GwtUtils.getJsPropertyString(data, "message");
+      notification.setMessage(message);
+    } else if (notification.isErrorEvent()) {
+      String message = GwtUtils.getJsPropertyString(data, "message");
       notification.setMessage(message);
     }
     return notification;
   }
   
-  private static native void registerAndroidImpl(String senderId, JSOCallback notificationCallback, JSOCallback success, JSOCallback failure) /*-{
-    $wnd.globalPushNotificationCallback = $entry(function(e) {
-      notificationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
+  private static native void registerAndroidImpl(String senderId, JSOCallback registrationCallback, JSOCallback notificationCallback, JSOCallback errorCallback) /*-{
+    $wnd._push = $wnd.PushNotification.init({
+        android: {
+            senderID: senderId
+        },
+        ios: {},
+        windows: {}
     });
-    var jsSuccessHandler = $entry(function(result) {
-      success.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(result);
+    var jsRegistrationHandler = $entry(function(data) {
+      registrationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
     });
-    var jsErrorHandler = $entry(function(error) {
-      failure.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(error);
+    var jsNotificationHandler = $entry(function(data) {
+      notificationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
     });
-    $wnd.plugins.pushNotification.register(jsSuccessHandler, jsErrorHandler, {
-       "senderID" : senderId,
-       "ecb" : "globalPushNotificationCallback"
-      }); 
+    var jsErrorHandler = $entry(function(e) {
+      errorCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
+    });
+    
+    $wnd._push.on('error', jsErrorHandler);
+    $wnd._push.on('registration', jsRegistrationHandler);
+    $wnd._push.on('notification', jsNotificationHandler);
+    
   }-*/;
   
   private static native void registerIosImpl() /*-{

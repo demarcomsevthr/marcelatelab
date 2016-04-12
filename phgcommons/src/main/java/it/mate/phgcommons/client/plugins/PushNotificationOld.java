@@ -1,20 +1,16 @@
 package it.mate.phgcommons.client.plugins;
 
-public class PushNotification {
-  public static final String REGISTRATION_EVENT_NAME = "registration";
-  public static final String NOTIFICATION_EVENT_NAME = "notification";
-  public static final String ERROR_EVENT_NAME = "error";
+public class PushNotificationOld {
+  protected static final String REGISTERED_EVENT_NAME = "registered";
+  protected static final String MESSAGE_EVENT_NAME = "message";
   private String eventName;
   private String regId;
   private String message;
   public boolean isRegistrationEvent() {
-    return REGISTRATION_EVENT_NAME.equalsIgnoreCase(eventName);
+    return REGISTERED_EVENT_NAME.equalsIgnoreCase(eventName);
   }
-  public boolean isNotificationEvent() {
-    return NOTIFICATION_EVENT_NAME.equalsIgnoreCase(eventName);
-  }
-  public boolean isErrorEvent() {
-    return ERROR_EVENT_NAME.equalsIgnoreCase(eventName);
+  public boolean isMessageEvent() {
+    return MESSAGE_EVENT_NAME.equalsIgnoreCase(eventName);
   }
   protected void setEventName(String event) {
     this.eventName = event;
