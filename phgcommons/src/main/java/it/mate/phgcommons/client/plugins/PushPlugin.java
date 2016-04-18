@@ -50,30 +50,96 @@ public class PushPlugin {
     return typeof ($wnd.PushNotification) != 'undefined';
   }-*/;
 
-  public static void register(String senderId, final Delegate<PushNotification> delegate) {
+  public static void register(String senderId, boolean gcmSandbox, final Delegate<PushNotification> delegate) {
+    String osType = null;
     if (OsDetectionUtils.isAndroid()) {
-      PhgUtils.log("Push Plugin - registering android with " + senderId);
-      registerAndroidImpl(senderId, new JSOCallback() {
-        public void handle(JavaScriptObject e) {
-          PhgUtils.log("Push Plugin - Registration callback receive: " + JSONUtils.stringify(e));
-          delegate.execute(parseNotificationEvent(PushNotification.REGISTRATION_EVENT_NAME, e));
-        } 
-      }, new JSOCallback() {
-        public void handle(JavaScriptObject e) {
-          PhgUtils.log("Push Plugin - Notification callback receive: " + JSONUtils.stringify(e));
-          delegate.execute(parseNotificationEvent(PushNotification.NOTIFICATION_EVENT_NAME, e));
-        }
-      }, new JSOCallback() {
-        public void handle(JavaScriptObject e) {
-          PhgUtils.log("Push Plugin - Error callback receive: " + JSONUtils.stringify(e));
-          delegate.execute(parseNotificationEvent(PushNotification.ERROR_EVENT_NAME, e));
-        }
+      PhgUtils.log("Push Plugin - registering android");
+      osType = "android";
+    } else if (OsDetectionUtils.isIOs()) {
+      boolean gcmUseAPNSDirect = Boolean.parseBoolean(GwtUtils.getJSVar("gcmUseAPNSDirect", "false"));
+      if (gcmUseAPNSDirect) {
+        PhgUtils.log("Push Plugin - registering ios-apns");
+        osType = "ios-apns";
+      } else {
+        PhgUtils.log("Push Plugin - registering ios");
+        osType = "ios";
+      }
+    } else {
+      PhgUtils.log("Push Plugin - os type not allowed!");
+      return;
+    }
+    PhgUtils.log("Push Plugin - registering pluging with senderId " + senderId);
+    registerImpl(senderId, osType, gcmSandbox, new JSOCallback() {
+      public void handle(JavaScriptObject e) {
+        PhgUtils.log("Push Plugin - Registration callback receive: " + JSONUtils.stringify(e));
+        delegate.execute(parseNotificationEvent(PushNotification.REGISTRATION_EVENT_NAME, e));
+      } 
+    }, new JSOCallback() {
+      public void handle(JavaScriptObject e) {
+        PhgUtils.log("Push Plugin - Notification callback receive: " + JSONUtils.stringify(e));
+        delegate.execute(parseNotificationEvent(PushNotification.NOTIFICATION_EVENT_NAME, e));
+      }
+    }, new JSOCallback() {
+      public void handle(JavaScriptObject e) {
+        PhgUtils.log("Push Plugin - Error callback receive: " + JSONUtils.stringify(e));
+        delegate.execute(parseNotificationEvent(PushNotification.ERROR_EVENT_NAME, e));
+      }
+    });
+  }
+  
+  private static native void registerImpl(String senderId, String osType, boolean gcmSandbox, JSOCallback registrationCallback, JSOCallback notificationCallback, JSOCallback errorCallback) /*-{
+    if (osType == 'android') {
+      $wnd._push = $wnd.PushNotification.init({
+          android: {
+              senderID: senderId
+          },
+          ios: {
+              alert: "true",
+              badge: true,
+              sound: 'false'
+          },
+          windows: {}
+      });
+    } else if (osType == 'ios') {
+      $wnd._push = $wnd.PushNotification.init({
+          android: {},
+          ios: {
+              senderID: senderId,
+              gcmSandbox: gcmSandbox,
+              alert: "true",
+              badge: true,
+              sound: 'false'
+          },
+          windows: {}
+      });
+    } else if (osType == 'ios-apns') {
+      $wnd._push = $wnd.PushNotification.init({
+          android: {},
+          ios: {
+              alert: "true",
+              badge: true,
+              sound: 'false'
+          },
+          windows: {}
       });
     } else {
-      PhgUtils.log("Push Plugin - registering ios");
-      registerIosImpl();
+      return;
     }
-  }
+    var jsRegistrationHandler = $entry(function(data) {
+      registrationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
+    });
+    var jsNotificationHandler = $entry(function(data) {
+      notificationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
+    });
+    var jsErrorHandler = $entry(function(e) {
+      errorCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
+    });
+    
+    $wnd._push.on('error', jsErrorHandler);
+    $wnd._push.on('registration', jsRegistrationHandler);
+    $wnd._push.on('notification', jsNotificationHandler);
+    
+  }-*/;
   
   private static PushNotification parseNotificationEvent(String eventName,JavaScriptObject data) {
     PushNotification notification = new PushNotification();
@@ -90,30 +156,6 @@ public class PushPlugin {
     }
     return notification;
   }
-  
-  private static native void registerAndroidImpl(String senderId, JSOCallback registrationCallback, JSOCallback notificationCallback, JSOCallback errorCallback) /*-{
-    $wnd._push = $wnd.PushNotification.init({
-        android: {
-            senderID: senderId
-        },
-        ios: {},
-        windows: {}
-    });
-    var jsRegistrationHandler = $entry(function(data) {
-      registrationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
-    });
-    var jsNotificationHandler = $entry(function(data) {
-      notificationCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(data);
-    });
-    var jsErrorHandler = $entry(function(e) {
-      errorCallback.@it.mate.phgcommons.client.utils.callbacks.JSOSuccess::handle(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
-    });
-    
-    $wnd._push.on('error', jsErrorHandler);
-    $wnd._push.on('registration', jsRegistrationHandler);
-    $wnd._push.on('notification', jsNotificationHandler);
-    
-  }-*/;
   
   private static native void registerIosImpl() /*-{
     
